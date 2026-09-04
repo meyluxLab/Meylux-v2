@@ -1,0 +1,78 @@
+project:
+  name: Meylux V2
+  identity: AI Market Intelligence and Decision Support Platform
+  mission: AI-first, deterministic-baseline, read-only market intelligence and decision support
+  not_a_trading_bot: true
+
+source_of_truth:
+  durable_authority: GitHub repository and governed repository artifacts
+  chat_history_authoritative: false
+  hidden_ai_memory_authoritative: false
+
+formation:
+  PP-00: CLOSED
+  PP-01: CLOSED
+  PP-02: CLOSED
+  PP-03: CLOSED
+  PP-04: CLOSED
+  PP-05: CLOSED
+  PP-06: CLOSED
+  PP-07: CLOSED
+  PP-08: CLOSED
+  PP-09: CLOSED
+  PP-10: CLOSED
+  PP-11: CLOSED
+  PP-12: CLOSED
+  lifecycle_boundary: FROZEN
+
+gates:
+  G-0: CLOSED / VERIFIED
+  G-0R: RATIFIED / VERIFIED
+  phase_0: NOT AUTHORIZED
+
+registry:
+  status: INITIALIZED / VERIFIED
+  records_policy: no unauthorized population
+  stable_identity_authority: docs/registry/
+
+repository:
+  baseline_status: INSTALLED / VERIFIED
+  transfer_baseline_commit: 2e2415ffba14c253e1927f4214285639ffbdb214
+  commit_semantics: governing transfer baseline supplied by CONTROL
+  independent_verification_by_this_package_preparation: false
+
+environment:
+  VPS: NOT SET UP / UNTOUCHED
+  runtime_implementation: NOT_AUTHORIZED_BY_THIS_PACKAGE
+
+current_checkpoint:
+  authoritative_file: docs/state/CURRENT_CHECKPOINT.json
+  role: machine-readable current-state record
+  must_not_be_treated_as: architecture_or_governance_replacement
+
+continuation:
+  boundary: POST-G-0R / PRE-PHASE-0
+  next_authorized_action: reconstruct authoritative state, then continue the already-authorized workflow
+  phase_0_entry: requires formal Phase 0 authorization
+  ordinary_continuation: continue when repository state is internally consistent and authority already exists
+
+governance:
+  reviewer: governs, audits, authorizes within process, and controls gates
+  producer: designs/builds within Task Order and reports actual results
+  operator: human bridge and physical/environment execution authority
+
+evidence:
+  unsupported_claims: prohibited
+  completion_states: must be evidence-backed
+  conflict_rule: repository authority prevails; stop only affected action
+
+f003:
+  status: CLOSED / DEFERRED
+  active_blocking: false
+
+package_basis:
+  authoritative_architecture_basis: docs/architecture/MASTER_ARCHITECTURE_V2.md
+  continuation_basis: docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
+  checkpoint_basis: docs/state/CURRENT_CHECKPOINT.json
+  governance_basis: docs/governance/ROLE_CONTRACT_V2.md
+  artifact_basis: docs/governance/ARTIFACT_PROTOCOL_V2.md

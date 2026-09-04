@@ -7,6 +7,11 @@ docs/architecture/MASTER_ARCHITECTURE_V2.md
 docs/architecture/MEYLUX_V2_ARCHITECTURE_HARDENING_LESSONS_LEARNED.md
 docs/constitution/MEYLUX_CONSTITUTION_V2.md
 docs/constitution/README.md
+docs/continuity/MEYLUX_V2_BOOTSTRAP.md
+docs/continuity/MEYLUX_V2_CONTINUITY_VERIFICATION.md
+docs/continuity/MEYLUX_V2_TRANSFER_STATE.yaml
+docs/continuity/MEYLUX_V2_TRANSFER_USAGE.md
+docs/continuity/README.md
 docs/decisions/ADR_INDEX.md
 docs/environment/ENVIRONMENT_MANIFEST.yaml
 docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
