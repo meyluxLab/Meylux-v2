@@ -1,0 +1,13 @@
+schema_version: '0.1'
+status: DRAFT_PRE_PHASE_0
+project: meylux-v2
+environments:
+  dev:
+    status: to_be_frozen
+  staging:
+    status: to_be_frozen
+  production:
+    status: to_be_frozen
+rules:
+  environment_differences_must_be_explicit: true
+  policy_must_not_be_reported_as_guarantee: true
