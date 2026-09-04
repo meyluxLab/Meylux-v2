@@ -3,12 +3,12 @@
   "project_version": "V2",
   "phase": null,
   "step": null,
-  "gate": "G-0",
+  "gate": "G-0R",
   "status": "VERIFIED",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
-  "g0r_status": "NOT_RATIFIED",
+  "g0r_status": "RATIFIED",
   "phase_0_status": "NOT_AUTHORIZED",
   "registry_status": "INITIALIZED_VERIFIED",
   "github_status": "INSTALLED_VERIFIED",
@@ -23,5 +23,5 @@
   "active_assumptions": [],
   "deferred_decisions": [],
   "last_verified_commit": "7ffd7baa627271e5085dd6271e825b6c6ed25ee8",
-  "updated_at_utc": "2026-09-04T18:08:08.1730285Z"
+  "updated_at_utc": "2026-09-04T18:12:10.9618730Z"
 }
