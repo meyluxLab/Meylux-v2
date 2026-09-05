@@ -41,3 +41,27 @@ Information required to execute the next task:
 - the specific active/approved Task Order, its affected SIDs/paths, required evidence, and any Operator execution prerequisites.
 
 Do not require the entire historical chat when these are already available in authoritative artifacts.
+
+## Role Model Reconstruction
+
+The Continuity Reconstruction Report must include:
+
+```yaml
+role_artifacts_reviewed:
+  - CONTROL / REVIEWER
+  - PRODUCER RELAY
+  - PRODUCER / ARCHITECT-BUILDER
+  - MARKET INTELLIGENCE
+  - TROUBLESHOOTING
+  - PHASE CHAT
+  - PRE-PROJECT
+  - SHARED ROLE BOUNDARY
+
+role_model_understood:
+  YES
+
+The AI must not begin authorized project activity until it has reviewed the applicable role artifacts and reconstructed the role boundaries.
+
+Reading role artifacts does not grant authority.
+
+Role understanding does not replace governance authorization.
