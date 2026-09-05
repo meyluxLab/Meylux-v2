@@ -13,15 +13,17 @@
   "registry_status": "INITIALIZED_VERIFIED",
   "github_status": "INSTALLED_VERIFIED",
   "vps_status": "NOT_SET_UP",
-  "last_approved_task_order": null,
-  "last_build_report": null,
-  "last_audit_report": null,
+  "last_approved_task_order": "TO-ROLE-IDENTITY-001",
+  "last_build_report": "BUILD-REPORT:TO-ROLE-IDENTITY-001",
+  "last_audit_report": "AR-ROLE-IDENTITY-001",
   "last_execution_log": null,
-  "verified_artifacts": [],
+  "verified_artifacts": [
+    "AR-ROLE-IDENTITY-001"
+  ],
   "unverified_artifacts": [],
   "open_questions": [],
   "active_assumptions": [],
   "deferred_decisions": [],
-  "last_verified_commit": "7ffd7baa627271e5085dd6271e825b6c6ed25ee8",
-  "updated_at_utc": "2026-09-04T18:12:10.9618730Z"
+  "last_verified_commit": "527617f2722330bb98b9e0a413470acdc6409f13",
+  "updated_at_utc": "2026-09-05"
 }
