@@ -30,7 +30,9 @@ Read, in order:
 
 ### Role Governance Context
 
-Before producing the Continuity Reconstruction Report, the AI must read and understand the applicable role governance artifacts:
+Before producing the Continuity Reconstruction Report, the AI must first complete Role Familiarization: read and understand the applicable role governance artifacts, including the applicable Role Contract / Role Definition and Shared Role Boundary documents for its role and required interactions.
+
+Role Familiarization is a prerequisite to Continuity Reconstruction. It establishes role identity, responsibility, authority boundaries, and interaction boundaries; it does not grant authority or replace project authorization.
 
 4. `docs/governance/ROLE_CONTRACT_V2.md`
 5. `docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md`
@@ -41,12 +43,13 @@ Before producing the Continuity Reconstruction Report, the AI must read and unde
 10. `docs/governance/ROLE_DEFINITION_PHASE_CHAT_V2.md`
 11. `docs/governance/ROLE_DEFINITION_PRE_PROJECT_V2.md`
 12. `docs/governance/SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md`
+13. `docs/governance/SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PHASE_CHAT_V2.md`
 
 ### Role Identity Discovery
 
 After reading the applicable role artifacts, read the authoritative Role Registry records:
 
-13. `docs/registry/artifacts.yaml`
+14. `docs/registry/artifacts.yaml`
 
 The following seven existing logical Roles are registered under `ADR-ROLE-IDENTITY-001`:
 
@@ -60,25 +63,25 @@ The following seven existing logical Roles are registered under `ADR-ROLE-IDENTI
 | TROUBLESHOOTING | `ROL-V2-006` | `docs/governance/ROLE_CONTRACT_TROUBLESHOOTING_V2.md` |
 | OPERATOR | `ROL-V2-007` | `docs/governance/ROLE_CONTRACT_V2.md` |
 
-`SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md` is a governed artifact, not a Role, and has no `ROL-*` identity under `ADR-ROLE-IDENTITY-001`.
+`SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md` and `SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PHASE_CHAT_V2.md` are governed interaction-boundary artifacts, not Roles, and do not receive `ROL-*` identities under `ADR-ROLE-IDENTITY-001`.
 
-The AI must confirm that it has read the applicable Role Contracts / Role Definitions and the Role Registry before continuing project-state analysis.
+The AI must confirm that it has completed Role Familiarization by reading the applicable Role Contracts / Role Definitions, required Shared Role Boundary artifacts, and the Role Registry before continuing project-state analysis.
 
 ### Remaining Project Context
 
 Continue reading:
 
-14. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
-15. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
-16. `docs/state/OPEN_QUESTIONS.yaml`
-17. `docs/state/DEFERRED_DECISIONS.yaml`
-18. `docs/decisions/ADR/ADR-ROLE-IDENTITY-001.md` when Role identity context is relevant to the current task.
+15. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
+16. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
+17. `docs/state/OPEN_QUESTIONS.yaml`
+18. `docs/state/DEFERRED_DECISIONS.yaml`
+19. `docs/decisions/ADR/ADR-ROLE-IDENTITY-001.md` when Role identity context is relevant to the current task.
 
 Then produce exactly one concise Continuity Reconstruction Report using the fields defined in:
 
 `docs/continuity/MEYLUX_V2_CONTINUITY_VERIFICATION.md`
 
-The report must explicitly confirm that the AI has reviewed the applicable role artifacts and Role Registry before continuing project work.
+The report must explicitly confirm that the AI has completed Role Familiarization and reviewed the applicable Role artifacts, Shared Role Boundary artifacts, and Role Registry before continuing project work.
 
 Do not read the entire repository unless the next authorized action requires additional context.
 
