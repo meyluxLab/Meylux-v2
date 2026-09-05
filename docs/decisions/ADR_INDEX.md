@@ -2,6 +2,8 @@
 
 Status: Draft — Pre-Phase-0
 
-No ratified ADRs yet.
+ADRs:
 
-ADRs will record architecture decisions, rationale, affected SIDs, alternatives considered, approval status, and consequences.
+- `ADR-ROLE-IDENTITY-001` — V2 Role Stable Identity Basis — APPROVED GOVERNANCE DECISION (limited scope)
+
+ADRs record architecture/governance decisions, rationale, affected SIDs, alternatives where applicable, approval status, and consequences.
