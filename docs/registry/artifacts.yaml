@@ -1,3 +1,45 @@
 schema_version: '0.1'
 status: DRAFT_PRE_PHASE_0
-records: []
+records:
+  - stable_id: ROL-V2-001
+    canonical_name: CONTROL / REVIEWER
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-002
+    canonical_name: PRODUCER / ARCHITECT-BUILDER
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-003
+    canonical_name: PRODUCER RELAY
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-004
+    canonical_name: MARKET INTELLIGENCE
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-005
+    canonical_name: PHASE CHAT
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_DEFINITION_PHASE_CHAT_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-006
+    canonical_name: TROUBLESHOOTING
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_CONTRACT_TROUBLESHOOTING_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-007
+    canonical_name: OPERATOR
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_CONTRACT_V2.md
+    traceability: ADR-ROLE-IDENTITY-001
+    status: DRAFT_PRE_PHASE_0
