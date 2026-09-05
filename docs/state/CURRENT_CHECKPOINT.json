@@ -15,15 +15,19 @@
   "vps_status": "NOT_SET_UP",
   "last_approved_task_order": "TO-ROLE-IDENTITY-001",
   "last_build_report": "BUILD-REPORT:TO-ROLE-IDENTITY-001",
-  "last_audit_report": "AR-ROLE-IDENTITY-001",
+  "last_audit_report": "AR-ARCH-CONTENT-001",
   "last_execution_log": null,
   "verified_artifacts": [
-    "AR-ROLE-IDENTITY-001"
+    "AR-ROLE-IDENTITY-001",
+    "AR-ARCH-CONTENT-001"
   ],
   "unverified_artifacts": [],
   "open_questions": [],
-  "active_assumptions": [],
+  "active_assumptions": [
+    "Master Architecture content replacement commit cbdbd0d4a12f8e7cfff1fa1fb2fc439a0c2a0a2c is verified for content integrity only; the architecture remains DESIGN BASELINE — PENDING RATIFICATION.",
+    "The checkpoint synchronization commit itself is a state-record update and does not ratify the Master Architecture or authorize Phase 0."
+  ],
   "deferred_decisions": [],
-  "last_verified_commit": "527617f2722330bb98b9e0a413470acdc6409f13",
+  "last_verified_commit": "cbdbd0d4a12f8e7cfff1fa1fb2fc439a0c2a0a2c",
   "updated_at_utc": "2026-09-05"
 }
