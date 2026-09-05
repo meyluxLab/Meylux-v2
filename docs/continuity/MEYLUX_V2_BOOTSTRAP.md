@@ -42,20 +42,43 @@ Before producing the Continuity Reconstruction Report, the AI must read and unde
 11. `docs/governance/ROLE_DEFINITION_PRE_PROJECT_V2.md`
 12. `docs/governance/SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md`
 
+### Role Identity Discovery
+
+After reading the applicable role artifacts, read the authoritative Role Registry records:
+
+13. `docs/registry/artifacts.yaml`
+
+The following seven existing logical Roles are registered under `ADR-ROLE-IDENTITY-001`:
+
+| Role | Stable ID | Authoritative Role Artifact |
+|---|---|---|
+| CONTROL / REVIEWER | `ROL-V2-001` | `docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md` |
+| PRODUCER / ARCHITECT-BUILDER | `ROL-V2-002` | `docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md` |
+| PRODUCER RELAY | `ROL-V2-003` | `docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md` |
+| MARKET INTELLIGENCE | `ROL-V2-004` | `docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md` |
+| PHASE CHAT | `ROL-V2-005` | `docs/governance/ROLE_DEFINITION_PHASE_CHAT_V2.md` |
+| TROUBLESHOOTING | `ROL-V2-006` | `docs/governance/ROLE_CONTRACT_TROUBLESHOOTING_V2.md` |
+| OPERATOR | `ROL-V2-007` | `docs/governance/ROLE_CONTRACT_V2.md` |
+
+`SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md` is a governed artifact, not a Role, and has no `ROL-*` identity under `ADR-ROLE-IDENTITY-001`.
+
+The AI must confirm that it has read the applicable Role Contracts / Role Definitions and the Role Registry before continuing project-state analysis.
+
 ### Remaining Project Context
 
 Continue reading:
 
-13. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
-14. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
-15. `docs/state/OPEN_QUESTIONS.yaml`
-16. `docs/state/DEFERRED_DECISIONS.yaml`
+14. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
+15. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
+16. `docs/state/OPEN_QUESTIONS.yaml`
+17. `docs/state/DEFERRED_DECISIONS.yaml`
+18. `docs/decisions/ADR/ADR-ROLE-IDENTITY-001.md` when Role identity context is relevant to the current task.
 
 Then produce exactly one concise Continuity Reconstruction Report using the fields defined in:
 
 `docs/continuity/MEYLUX_V2_CONTINUITY_VERIFICATION.md`
 
-The report must explicitly confirm that the AI has reviewed the applicable role artifacts before continuing project work.
+The report must explicitly confirm that the AI has reviewed the applicable role artifacts and Role Registry before continuing project work.
 
 Do not read the entire repository unless the next authorized action requires additional context.
 
