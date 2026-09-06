@@ -108,4 +108,4 @@ records:
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-ARCHITECTURE-001.md
     traceability: PH-P0 / STEP-P0-001 / Project Owner ratification authority
-    status: PROPOSED / PENDING PROJECT OWNER RATIFICATION
+    status: RATIFIED
