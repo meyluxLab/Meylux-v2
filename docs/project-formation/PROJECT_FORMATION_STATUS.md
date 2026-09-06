@@ -3,7 +3,7 @@
 **Formation status:** PP-12 APPROVED / CLOSED  
 **Current formation boundary:** Formation complete; G-0 CLOSED / VERIFIED  
 **G-0R:** RATIFIED / VERIFIED  
-**Phase 0:** NOT AUTHORIZED
+**Phase 0:** AUTHORIZED / ACTIVE
 
 ## Formation Chain
 
@@ -29,25 +29,23 @@ G-0 is CLOSED / VERIFIED and G-0R is RATIFIED / VERIFIED.
 
 G-0R is **V2 Formation Ratification**. It ratifies completion and governance of the Pre-Project formation boundary; it does **not** by itself ratify or freeze the Master Architecture document.
 
+## Phase 0 Authorization
+
+The formal Phase 0 Entry Review `AR-P0-ENTRY-001` has been approved by CONTROL / REVIEWER.
+
 Therefore:
 
-- `docs/architecture/MASTER_ARCHITECTURE_V2.md` intentionally remains a **DRAFT DESIGN BASELINE / PENDING RATIFICATION** at this boundary;
-- the architecture is not to be treated as frozen merely because G-0R is ratified;
-- formal architecture reconciliation and final architecture freeze remain Phase 0 governance work under the approved Phase 0 sequence;
-- Phase 0 remains **NOT AUTHORIZED** until its formal authorization exists.
+- `PH-P0` is `AUTHORIZED / ACTIVE`;
+- `STEP-P0-001` is `AUTHORIZED / ACTIVE`;
+- active Task Order is `TO-P0-001`;
+- the Master Architecture remains a **DRAFT DESIGN BASELINE / PENDING RATIFICATION**;
+- Phase 0 authorization does not authorize runtime implementation, environment/VPS work, or V1 mutation.
 
-## Boundary
+## Phase 0 Boundary
 
-Completion of Pre-Project formation and G-0R ratification do not themselves mean:
+`STEP-P0-001` is the first Phase 0 Step and performs the formal Master Architecture reconciliation required before final architecture ratification/freeze.
 
-- the Master Architecture V2 is ratified/frozen;
-- Phase 0 is authorized;
-- runtime implementation exists;
-- VPS/environment setup has occurred.
-
-## Repository Baseline Purpose
-
-This repository contains the V2 formation baseline and subsequent verified continuity artifacts. Repository state is authoritative according to the established V2 Source-of-Truth and governance rules.
+The Master Architecture is not ratified merely by entering Phase 0. Any material architectural change must follow the established ADR/ACR/change-control process.
 
 ## Legacy V1
 
