@@ -55,3 +55,9 @@ records:
     artifact_path: docs/task-orders/TO-P0-001.md
     traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001
     status: AUTHORIZED TO START
+  - stable_id: BR-P0-001
+    canonical_name: Build Report — Master Architecture Reconciliation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P0-001.md
+    traceability: TO-P0-001 / PH-P0 / STEP-P0-001
+    status: RESERVED / NOT YET PRODUCED
