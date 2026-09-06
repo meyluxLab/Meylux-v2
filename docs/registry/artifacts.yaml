@@ -120,4 +120,22 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-003.md
     traceability: TO-P0-003 / PH-P0 / STEP-P0-002
+    status: VERIFIED — BLOCKED EXECUTION RECORD
+  - stable_id: AR-P0-AUDIT-004
+    canonical_name: BR-P0-003 Control Audit (Corrective Mapping Superseded)
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-004.md
+    traceability: BR-P0-003 / TO-P0-003 / PH-P0 / STEP-P0-002
+    status: HISTORICAL / CORRECTED BY AR-P0-AUDIT-005
+  - stable_id: AR-P0-AUDIT-005
+    canonical_name: Correction / Reconciliation of AR-P0-AUDIT-004
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-005.md
+    traceability: AR-P0-AUDIT-004 / TO-P0-003 / PH-P0 / STEP-P0-002
+    status: APPROVED / VERIFIED — CORRECTIVE GOVERNANCE RECORD
+  - stable_id: BR-P0-004
+    canonical_name: Build Report — Constitution Correction Evidence
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P0-004.md
+    traceability: TO-P0-003 / PH-P0 / STEP-P0-002 / AR-P0-AUDIT-005
     status: ALLOCATED / NOT YET PRODUCED
