@@ -14,38 +14,14 @@
   "github_status": "INSTALLED_VERIFIED",
   "vps_status": "NOT_SET_UP",
   "last_approved_task_order": "TO-P0-003",
-  "last_build_report": "BR-P0-002",
-  "last_audit_report": "AR-P0-AUDIT-003",
+  "last_build_report": "BR-P0-003",
+  "last_audit_report": "AR-P0-AUDIT-005",
   "last_execution_log": null,
-  "verified_artifacts": [
-    "AR-ROLE-IDENTITY-001",
-    "AR-ARCH-CONTENT-001",
-    "AR-ROLE-BOUNDARY-001",
-    "AR-P0-ENTRY-001",
-    "AR-P0-RECON-001",
-    "BR-P0-001",
-    "TO-P0-001",
-    "AR-P0-AUDIT-002",
-    "BR-P0-002",
-    "TO-P0-002",
-    "AR-P0-AUDIT-003",
-    "ADR-GOVERNANCE-001",
-    "ADR-ARCHITECTURE-001"
-  ],
-  "unverified_artifacts": [
-    "TO-P0-003"
-  ],
+  "verified_artifacts": ["AR-ROLE-IDENTITY-001","AR-ARCH-CONTENT-001","AR-ROLE-BOUNDARY-001","AR-P0-ENTRY-001","AR-P0-RECON-001","BR-P0-001","TO-P0-001","AR-P0-AUDIT-002","BR-P0-002","TO-P0-002","AR-P0-AUDIT-003","ADR-GOVERNANCE-001","ADR-ARCHITECTURE-001","BR-P0-003","AR-P0-AUDIT-005"],
+  "unverified_artifacts": ["TO-P0-003","BR-P0-004"],
   "open_questions": [],
-  "active_assumptions": [
-    "Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION.",
-    "STEP-P0-001 remains COMPLETE / VERIFIED and its historical identity is immutable.",
-    "ADR-ARCHITECTURE-001 is RATIFIED and establishes the authoritative ten-Step Phase 0 sequence.",
-    "STEP-P0-002 — Constitution Ratification is the sole currently activated Step.",
-    "STEP-P0-003 through STEP-P0-010 remain defined but not authorized.",
-    "The Producer-side CURRENT_CHECKPOINT mutation from the earlier Phase 0 cycle remains recorded as a historical governance-boundary deviation and was not retrospectively authorized.",
-    "No future Step Task Order, execution detail, Build Report, or runtime/environment/V1 activity is authorized merely by the ratified roadmap."
-  ],
+  "active_assumptions": ["Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION.","STEP-P0-001 remains COMPLETE / VERIFIED and its historical identity is immutable.","ADR-ARCHITECTURE-001 is RATIFIED and establishes the authoritative ten-Step Phase 0 sequence.","STEP-P0-002 — Constitution Ratification is the sole currently activated Step.","STEP-P0-003 through STEP-P0-010 remain defined but not authorized.","The Producer-side CURRENT_CHECKPOINT mutation from the earlier Phase 0 cycle remains recorded as a historical governance-boundary deviation and was not retrospectively authorized.","AR-P0-AUDIT-004 remains historical; its incorrect INV-V2-005 Provider Isolation mapping is superseded for execution purposes by AR-P0-AUDIT-005.","Corrected constitutional correction scope is limited to INV-V2-008 Provider Isolation, INV-V2-007 Single Authoritative Persistence, INV-V2-009 Zero Lookahead, and INV-V2-010 Evidence-Backed State.","BR-P0-004 is the formally allocated next Build Report for the constitutional correction evidence and has not yet been produced.","No future Step Task Order, execution detail, or runtime/environment/V1 activity is authorized merely by the ratified roadmap."],
   "deferred_decisions": [],
-  "last_verified_commit": "8d34a874dbaea7d85f9eb8f82126607c3e0556af",
-  "updated_at_utc": "2026-09-07T20:00:00Z"
+  "last_verified_commit": "6ac733e430a39edd38dc582c67ed6bd293fb5593",
+  "updated_at_utc": "2026-09-07T23:59:00Z"
 }
