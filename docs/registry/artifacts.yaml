@@ -109,3 +109,9 @@ records:
     artifact_path: docs/decisions/ADR/ADR-ARCHITECTURE-001.md
     traceability: PH-P0 / STEP-P0-001 / Project Owner ratification authority
     status: RATIFIED
+  - stable_id: TO-P0-003
+    canonical_name: Constitution Ratification
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-003.md
+    traceability: PH-P0 / STEP-P0-002 / ADR-ARCHITECTURE-001
+    status: AUTHORIZED TO EXECUTE
