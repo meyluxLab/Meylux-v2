@@ -1,17 +1,19 @@
 schema_version: '0.1'
-status: DEFINED_PRE_AUTHORIZATION
+status: ACTIVE
 records:
   - sid: PH-P0
     logical_name: Phase 0
     entity_type: PH
-    status: DEFINED
+    status: AUTHORIZED / ACTIVE
     entry_gate: G-0R
     entry_gate_role: prerequisite
+    entry_approval: AR-P0-ENTRY-001
     entry_criteria:
       - PP-00 through PP-12 are APPROVED/CLOSED according to the formation status artifact.
       - G-0 is CLOSED/VERIFIED.
       - G-0R is RATIFIED/VERIFIED.
-      - Phase 0 remains NOT AUTHORIZED until a separate formal authorization is recorded.
+      - Phase 0 definition and first Step are present in the authoritative registry.
+      - CONTROL / REVIEWER formal Entry Review is APPROVED.
       - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
     first_step: STEP-P0-001
     authorization_criteria:
@@ -24,18 +26,19 @@ records:
       reconciliation: STEP-P0-001 is the first Phase 0 step and performs the formal reconciliation work required before final Master Architecture ratification/freeze.
       ratification: Master Architecture V2 is not ratified merely by entering Phase 0; ratification/freeze requires the subsequent governed reconciliation and approval evidence.
     scope_boundary:
-      - No runtime implementation is authorized by this boundary definition.
+      - No runtime implementation is authorized by Phase 0 entry authorization alone.
       - No V1 mutation or V1 runtime/VPS action is authorized.
 
   - sid: STEP-P0-001
     logical_name: Master Architecture Reconciliation
     entity_type: STEP
     phase: PH-P0
-    status: DEFINED
-    purpose: Formal reconciliation of the Master Architecture V2 draft against the approved V2 formation knowledge and governance evidence before architecture ratification/freeze.
+    status: AUTHORIZED / ACTIVE
+    authorization_state: AUTHORIZED
     entry_gate: G-0R
-    entry_gate_role: prerequisite
-    authorization_state: NOT_AUTHORIZED
+    entry_approval: AR-P0-ENTRY-001
+    active_task_order: TO-P0-001
+    purpose: Formal reconciliation of the Master Architecture V2 draft against the approved V2 formation knowledge and governance evidence before architecture ratification/freeze.
     completion_requires:
       - Reconciliation evidence covering the approved formation inputs and relevant post-baseline governance decisions.
       - Explicit identification and governed disposition of conflicts, omissions, and unresolved architectural matters.
