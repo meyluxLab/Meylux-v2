@@ -101,7 +101,6 @@ records:
   - stable_id: ADR-GOVERNANCE-001
     canonical_name: Final Governance / Architecture / Ratification Authority
     entity_type: ADR
-    artifact_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-001.md
     traceability: Project Owner ratification / ADR identity convention
     status: RATIFIED
