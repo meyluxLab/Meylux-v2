@@ -6,7 +6,7 @@ ADRs:
 
 - `ADR-ROLE-IDENTITY-001` — V2 Role Stable Identity Basis — APPROVED GOVERNANCE DECISION (limited scope)
 - `ADR-GOVERNANCE-001` — Final Governance / Architecture / Ratification Authority — RATIFIED GOVERNANCE DECISION
-- `ADR-ARCHITECTURE-001` — Phase 0 Sequence Reconciliation — PROPOSED / PENDING PROJECT OWNER RATIFICATION
+- `ADR-ARCHITECTURE-001` — Phase 0 Sequence Reconciliation — RATIFIED
 
 ADR identity convention:
 
