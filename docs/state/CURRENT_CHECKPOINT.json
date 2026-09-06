@@ -15,23 +15,27 @@
   "vps_status": "NOT_SET_UP",
   "last_approved_task_order": "TO-P0-001",
   "last_build_report": null,
-  "last_audit_report": "AR-P0-ENTRY-001",
+  "last_audit_report": "AR-P0-RECON-001",
   "last_execution_log": null,
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
     "AR-ROLE-BOUNDARY-001",
-    "AR-P0-ENTRY-001"
+    "AR-P0-ENTRY-001",
+    "AR-P0-RECON-001"
   ],
   "unverified_artifacts": [
-    "TO-P0-001"
+    "TO-P0-001",
+    "BR-P0-001"
   ],
   "open_questions": [],
   "active_assumptions": [
     "Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION until STEP-P0-001 reconciliation and required governance approval/evidence are complete.",
-    "Phase 0 authorization does not authorize runtime implementation, environment/VPS work, or V1 mutation."
+    "Phase 0 authorization does not authorize runtime implementation, environment/VPS work, or V1 mutation.",
+    "F-001 and F-002 are controlled reconciliation findings; current operational Phase/Step and Gate state is not reopened or silently redefined.",
+    "BR-P0-001 identity and path are reserved by CONTROL; the actual Build Report remains unproduced until created by the Producer."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "f75dee4b496930ef192723e8e0245c1ae27daf35",
-  "updated_at_utc": "2026-09-06T21:10:00+03:30"
+  "last_verified_commit": "ec4dab1d9f95dce4de334a4068623ed0388fd624",
+  "updated_at_utc": "2026-09-06T21:44:00+03:30"
 }
