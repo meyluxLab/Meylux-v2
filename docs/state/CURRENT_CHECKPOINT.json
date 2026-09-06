@@ -1,35 +1,37 @@
 {
   "schema_version": "2.0",
   "project_version": "V2",
-  "phase": null,
-  "step": null,
+  "phase": "PH-P0",
+  "step": "STEP-P0-001",
   "gate": "G-0R",
-  "status": "VERIFIED",
+  "status": "IN_PROGRESS",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
   "g0r_status": "RATIFIED",
-  "phase_0_status": "NOT_AUTHORIZED",
+  "phase_0_status": "AUTHORIZED / ACTIVE",
   "registry_status": "INITIALIZED_VERIFIED",
   "github_status": "INSTALLED_VERIFIED",
   "vps_status": "NOT_SET_UP",
-  "last_approved_task_order": "TO-ROLE-IDENTITY-001",
-  "last_build_report": "BUILD-REPORT:TO-ROLE-IDENTITY-001",
-  "last_audit_report": "AR-ROLE-BOUNDARY-001",
+  "last_approved_task_order": "TO-P0-001",
+  "last_build_report": null,
+  "last_audit_report": "AR-P0-ENTRY-001",
   "last_execution_log": null,
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
-    "AR-ROLE-BOUNDARY-001"
+    "AR-ROLE-BOUNDARY-001",
+    "AR-P0-ENTRY-001"
   ],
-  "unverified_artifacts": [],
+  "unverified_artifacts": [
+    "TO-P0-001"
+  ],
   "open_questions": [],
   "active_assumptions": [
-    "Master Architecture content replacement commit cbdbd0d4a12f8e7cfff1fa1fb2fc439a0c2a0a2c is verified for content integrity only; the architecture remains DESIGN BASELINE — PENDING RATIFICATION.",
-    "The Shared Role Boundary correction was directly user-authorized and is formally disclosed in AR-ROLE-BOUNDARY-001 as a process deviation because it preceded a dedicated Task Order / Producer Build Report for this exact change.",
-    "The checkpoint synchronization commit itself is a state-record update and does not ratify the Master Architecture or authorize Phase 0."
+    "Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION until STEP-P0-001 reconciliation and required governance approval/evidence are complete.",
+    "Phase 0 authorization does not authorize runtime implementation, environment/VPS work, or V1 mutation."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "9be5cde25d129294d1172b59cbecf2fb987b24bd",
-  "updated_at_utc": "2026-09-06"
+  "last_verified_commit": "f75dee4b496930ef192723e8e0245c1ae27daf35",
+  "updated_at_utc": "2026-09-06T21:10:00+03:30"
 }
