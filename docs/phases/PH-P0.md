@@ -5,7 +5,7 @@
 **Entry prerequisite:** `G-0R` (`RATIFIED / VERIFIED`)  
 **First official Step:** `STEP-P0-001`  
 **Entry Review:** `AR-P0-ENTRY-001`  
-**Active Task Order:** `TO-P0-001`
+**Active Task Order:** `null` — `STEP-P0-001` is complete/verified; no subsequent Step is currently defined.
 
 ## 1. Purpose
 
@@ -27,7 +27,7 @@ Phase 0 has been formally authorized after the formation boundary was reviewed a
 
 ### `STEP-P0-001` — Master Architecture Reconciliation
 
-**Status:** `AUTHORIZED / ACTIVE`
+**Status:** `COMPLETE / VERIFIED`
 
 This Step reconciles `DOC-V2-ARCH-001` against the approved V2 formation knowledge, governance artifacts, relevant ADR/ACR decisions, Open Questions/Deferred Decisions state, and relevant post-baseline project evidence.
 
@@ -48,3 +48,13 @@ It does not authorize runtime implementation, environment/VPS work, or V1 mutati
 ## 6. Scope Control
 
 No future-phase implementation may be introduced through Phase 0 reconciliation. Any material architectural change follows the established ADR/ACR/change-control process.
+
+## 7. Continuation Boundary After STEP-P0-001
+
+`STEP-P0-001` is now `COMPLETE / VERIFIED`.
+
+The authoritative Phase Registry and this Phase Definition currently define no subsequent Phase 0 Step. The draft Master Architecture contains sequencing material that conflicts with the current Phase Registry, but that draft material is not authority for activating a new Step.
+
+Therefore CONTROL / REVIEWER must not invent or implicitly activate a new `STEP-P0-*` identity or Task Order. Before Phase 0 can advance beyond `STEP-P0-001`, a subsequent Step must be formally defined and authorized through the applicable governance/architecture decision mechanism, with the resulting definition recorded in the authoritative Phase Registry and Phase Definition.
+
+This boundary does not close or suspend `PH-P0`; Phase 0 remains `AUTHORIZED / ACTIVE`. It records only that no executable subsequent Step currently exists in the authoritative governance layer.
