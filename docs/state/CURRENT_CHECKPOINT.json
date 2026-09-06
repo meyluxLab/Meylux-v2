@@ -2,7 +2,7 @@
   "schema_version": "2.0",
   "project_version": "V2",
   "phase": "PH-P0",
-  "step": "STEP-P0-001",
+  "step": "STEP-P0-002",
   "gate": "G-0R",
   "status": "IN_PROGRESS",
   "formation_stage": "PP-12",
@@ -13,7 +13,7 @@
   "registry_status": "INITIALIZED_VERIFIED",
   "github_status": "INSTALLED_VERIFIED",
   "vps_status": "NOT_SET_UP",
-  "last_approved_task_order": "TO-P0-002",
+  "last_approved_task_order": "TO-P0-003",
   "last_build_report": "BR-P0-002",
   "last_audit_report": "AR-P0-AUDIT-003",
   "last_execution_log": null,
@@ -28,24 +28,24 @@
     "AR-P0-AUDIT-002",
     "BR-P0-002",
     "TO-P0-002",
-    "AR-P0-AUDIT-003"
+    "AR-P0-AUDIT-003",
+    "ADR-GOVERNANCE-001",
+    "ADR-ARCHITECTURE-001"
   ],
-  "unverified_artifacts": [],
-  "open_questions": [
-    "What formal governance/architecture decision establishes the complete authoritative Phase 0 Step Sequence, and how is that sequence reconciled with the already-completed STEP-P0-001? The Draft Master Architecture defines ten P0 Steps, but its STEP-P0-001 is Constitution ratification while the authoritative Phase Registry and Phase Definition record STEP-P0-001 as Master Architecture Reconciliation and COMPLETE / VERIFIED. The draft sequence therefore cannot be promoted to an authoritative execution roadmap by Reviewer assertion."
+  "unverified_artifacts": [
+    "TO-P0-003"
   ],
+  "open_questions": [],
   "active_assumptions": [
     "Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION.",
-    "Phase 0 remains AUTHORIZED / ACTIVE; completion of STEP-P0-001 does not ratify or freeze the Master Architecture.",
-    "F-001 and F-002 remain controlled reconciliation findings for later governed architecture reconciliation.",
-    "F-003 and F-004 remain non-blocking reconciliation/documentation findings for later governed action.",
-    "The Producer-side CURRENT_CHECKPOINT mutation occurred before independent audit without identified authorization; it remains recorded as historical governance-boundary deviation and was not retrospectively authorized.",
-    "AR-P0-AUDIT-002 independently verified BR-P0-001 and authorized the prior CONTROL-side checkpoint transition.",
-    "BR-P0-002 and TO-P0-002 have been independently verified through AR-P0-AUDIT-003; this verifies the sequence-formalization work only and does not establish the unresolved Phase 0 sequence as authoritative.",
-    "The complete Phase 0 roadmap is not yet authoritative; a formal architecture/governance decision must establish the sequence and reconcile it with the already-completed STEP-P0-001 before another Step is activated.",
-    "No future Step Task Order, execution detail, Build Report, or runtime/environment/V1 activity is authorized merely by the draft roadmap or by AR-P0-AUDIT-003."
+    "STEP-P0-001 remains COMPLETE / VERIFIED and its historical identity is immutable.",
+    "ADR-ARCHITECTURE-001 is RATIFIED and establishes the authoritative ten-Step Phase 0 sequence.",
+    "STEP-P0-002 — Constitution Ratification is the sole currently activated Step.",
+    "STEP-P0-003 through STEP-P0-010 remain defined but not authorized.",
+    "The Producer-side CURRENT_CHECKPOINT mutation from the earlier Phase 0 cycle remains recorded as a historical governance-boundary deviation and was not retrospectively authorized.",
+    "No future Step Task Order, execution detail, Build Report, or runtime/environment/V1 activity is authorized merely by the ratified roadmap."
   ],
   "deferred_decisions": [],
   "last_verified_commit": "8d34a874dbaea7d85f9eb8f82126607c3e0556af",
-  "updated_at_utc": "2026-09-06T22:10:00Z"
+  "updated_at_utc": "2026-09-07T20:00:00Z"
 }
