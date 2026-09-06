@@ -66,4 +66,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-001.md
     traceability: TO-P0-001 / PH-P0 / STEP-P0-001
-    status: RESERVED / NOT YET PRODUCED
+    status: PRODUCED / UNVERIFIED
