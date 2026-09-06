@@ -4,8 +4,9 @@
 **Status:** `AUTHORIZED / ACTIVE`  
 **Entry prerequisite:** `G-0R` (`RATIFIED / VERIFIED`)  
 **First official Step:** `STEP-P0-001`  
+**Current Step:** `STEP-P0-002`  
 **Entry Review:** `AR-P0-ENTRY-001`  
-**Active Task Order:** `null` — `STEP-P0-001` is complete/verified; no subsequent Step is currently defined.
+**Active Task Order:** `TO-P0-003` — `STEP-P0-002` Constitution Ratification
 
 ## 1. Purpose
 
@@ -23,42 +24,60 @@ Phase 0 has been formally authorized after the formation boundary was reviewed a
 
 `G-0R` is the prerequisite entry gate; it is not itself the authorization decision.
 
-## 3. First Step
+## 3. Ratified Phase 0 Sequence
+
+`ADR-ARCHITECTURE-001` is `RATIFIED` by the Project Owner and establishes the authoritative Phase 0 sequence:
+
+1. `STEP-P0-001` — Master Architecture Reconciliation — `COMPLETE / VERIFIED`
+2. `STEP-P0-002` — Constitution Ratification — `AUTHORIZED / ACTIVE`
+3. `STEP-P0-003` — V1 Lessons Integration — `DEFINED / NOT AUTHORIZED`
+4. `STEP-P0-004` — Stable Identity / Registry — `DEFINED / NOT AUTHORIZED`
+5. `STEP-P0-005` — Governance / Artifact Protocol — `DEFINED / NOT AUTHORIZED`
+6. `STEP-P0-006` — AI Continuation Protocol — `DEFINED / NOT AUTHORIZED`
+7. `STEP-P0-007` — Environment Contract — `DEFINED / NOT AUTHORIZED`
+8. `STEP-P0-008` — Verification / Evidence / Gates — `DEFINED / NOT AUTHORIZED`
+9. `STEP-P0-009` — Dependency and Boundary Graph — `DEFINED / NOT AUTHORIZED`
+10. `STEP-P0-010` — Master Architecture Freeze — `DEFINED / NOT AUTHORIZED`
+
+The sequence is authoritative for Phase 0 ordering. Only the currently activated Step may be executed.
+
+## 4. Completed Step
 
 ### `STEP-P0-001` — Master Architecture Reconciliation
 
 **Status:** `COMPLETE / VERIFIED`
 
-This Step reconciles `DOC-V2-ARCH-001` against the approved V2 formation knowledge, governance artifacts, relevant ADR/ACR decisions, Open Questions/Deferred Decisions state, and relevant post-baseline project evidence.
+This historical Step is preserved exactly. It is not reopened, renamed, or renumbered.
 
-The Step must identify and govern the disposition of material conflicts, omissions, assumptions, and architectural inconsistencies before final architecture ratification/freeze.
+## 5. Current Step
 
-## 4. Architecture Relationship
+### `STEP-P0-002` — Constitution Ratification
 
-Entering Phase 0 does not ratify or freeze `MASTER_ARCHITECTURE_V2.md`.
+**Status:** `AUTHORIZED / ACTIVE`  
+**Task Order:** `TO-P0-003`
 
-The Master Architecture remains `DESIGN BASELINE — PENDING RATIFICATION` until the reconciliation work is completed and the required governance approval/evidence is recorded.
+This Step performs the previously uncompleted Constitution Ratification boundary using the V2 Constitution and the evidence/reconciliation state established by completed `STEP-P0-001`.
 
-## 5. Authorization Boundary
+The Constitution remains `DRAFT — PENDING RATIFICATION` until this Step is actually executed and the required ratification evidence is recorded.
 
-Phase 0 authorization permits only the governed Phase 0 work defined by the registry and active Task Order.
+No later Phase 0 Step is activated by this definition.
 
-It does not authorize runtime implementation, environment/VPS work, or V1 mutation.
+## 6. Architecture Relationship
 
-## 6. Scope Control
+Entering Phase 0 did not ratify or freeze `MASTER_ARCHITECTURE_V2.md`.
 
-No future-phase implementation may be introduced through Phase 0 reconciliation. Any material architectural change follows the established ADR/ACR/change-control process.
+The Master Architecture remains `DESIGN BASELINE — PENDING RATIFICATION`. The ratified sequence establishes ordering only; final Master Architecture ratification/freeze remains bounded by `STEP-P0-010` and its required evidence.
 
-## 7. Continuation Boundary After STEP-P0-001
+## 7. Authorization Boundary
 
-`STEP-P0-001` is now `COMPLETE / VERIFIED`.
+Phase 0 authorization and sequence ratification permit only the currently activated Phase 0 work defined by the registry and active Task Order.
 
-The Draft Master Architecture explicitly contains a ten-Step P0 roadmap, but its first Step is named `Constitution ratification`, whereas the authoritative Phase Registry and this Phase Definition establish `STEP-P0-001` as `Master Architecture Reconciliation` and record it as complete/verified. Because the Master Architecture is still `DESIGN BASELINE — PENDING RATIFICATION`, its draft sequence cannot be promoted to the authoritative execution roadmap by Reviewer assertion.
+They do not authorize runtime implementation, environment/VPS work, or V1 mutation.
 
-Accordingly, the current boundary is broader than merely selecting `STEP-P0-002`: the project requires a formal architecture/governance decision that establishes the authoritative complete Phase 0 sequence and reconciles that sequence with the already-completed `STEP-P0-001` without retroactively rewriting its verified history.
+## 8. Scope Control
 
-CONTROL / REVIEWER may record this boundary, inspect the proposed roadmap, preserve the existing evidence, and prepare the required decision path. CONTROL / REVIEWER must not invent or implicitly activate a new `STEP-P0-*` identity, promote the draft architecture to ratified status, or issue a Task Order for a future Step before the authoritative sequence and current Step are validly established.
+No future-phase implementation may be introduced through Phase 0. Any material architectural change follows the established ADR/ACR/change-control process.
 
-Once the formal decision is recorded, the authoritative Phase Registry and this Phase Definition must be updated with the approved sequence and dependencies. Only then may the next valid Step be activated and its Task Order issued if Producer execution is required.
+## 9. Completion Boundary
 
-This boundary does not close or suspend `PH-P0`; Phase 0 remains `AUTHORIZED / ACTIVE`. It records only that the complete Phase 0 roadmap is not yet authoritative and therefore no executable subsequent Step may be activated at this time.
+`STEP-P0-010` is the final Phase 0 Step. Phase 0 becomes complete only when the final Step is executed, verified, and the required Master Architecture ratification/freeze evidence exists.
