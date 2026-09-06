@@ -1,14 +1,16 @@
 schema_version: '0.1'
 items:
-  - question: "What formally defines and authorizes the subsequent Phase 0 Step after STEP-P0-001?"
+  - question: "What formal governance/architecture decision establishes the complete authoritative Phase 0 Step Sequence, and how is that sequence reconciled with the already-completed STEP-P0-001?"
     status: OPEN
     affected_phase: PH-P0
     completed_step: STEP-P0-001
-    current_boundary: "The authoritative Phase Registry and Phase 0 Definition contain no subsequent STEP-P0-* definition. The draft Master Architecture contains conflicting sequencing material, but is not authority for activating a new Step."
-    authority_required: "Formal governance/architecture decision establishing the next Phase 0 Step, its scope, acceptance boundary, and authorization."
-    required_record: "Update the authoritative Phase Registry and Phase 0 Definition before activating the new Step; issue a governed Task Order only after a valid Step exists and Producer execution is required."
+    current_boundary: "The Draft Master Architecture defines a ten-Step P0 sequence: STEP-P0-001 Constitution ratification; STEP-P0-002 Architecture reconciliation; STEP-P0-003 V1 lessons integration; STEP-P0-004 Stable identity / registry; STEP-P0-005 Governance / artifact protocol; STEP-P0-006 AI continuation protocol; STEP-P0-007 Environment contract; STEP-P0-008 Verification / evidence / gates; STEP-P0-009 Dependency and boundary graph; STEP-P0-010 Master Architecture freeze. However, the same document is DESIGN BASELINE — PENDING RATIFICATION, while the authoritative Phase Registry and Phase Definition record STEP-P0-001 as Master Architecture Reconciliation and COMPLETE / VERIFIED. Therefore the draft sequence cannot be promoted to an authoritative execution roadmap by Reviewer assertion without resolving this material sequencing/history conflict."
+    authority_required: "A formal architecture/governance decision under the applicable ACR/ratification/change-control mechanism must determine the authoritative Phase 0 sequence and its relationship to the already-completed STEP-P0-001. The decision must establish the sequence, ordering, scope boundary, and completion boundary without silently rewriting history."
+    required_record: "Record the formal decision in the applicable decision artifact; then update the authoritative Phase Registry and Phase 0 Definition to contain the approved sequence and dependencies. Only after a valid current Step is established may CONTROL activate it and issue its Task Order if Producer execution is required."
     constraints:
-      - "Do not invent a Step ID or Task Order."
-      - "Do not treat draft Master Architecture sequencing as authoritative."
-      - "Do not ratify or freeze the Master Architecture implicitly."
-      - "Do not authorize runtime, VPS/environment, or V1 work through this continuation decision."
+      - "Do not invent a replacement Step ID, Task Order, or architectural decision."
+      - "Do not treat the Draft Master Architecture sequence as authoritative before formal ratification/reconciliation."
+      - "Do not retroactively redefine STEP-P0-001 or erase its verified history."
+      - "Do not ratify or freeze the Master Architecture implicitly through a registry edit."
+      - "Do not authorize runtime, VPS/environment, market-data, trading, or V1 work through this sequence decision."
+      - "Future Step Task Orders, execution details, Build Reports, and evidence are created only when the corresponding Step is legitimately current."
