@@ -70,7 +70,6 @@ records:
   - stable_id: TO-P0-001
     canonical_name: Master Architecture Reconciliation
     entity_type: TO
-    artifact_type: TO
     artifact_path: docs/task-orders/TO-P0-001.md
     traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001 / AR-P0-RECON-001 / AR-P0-AUDIT-002
     status: VERIFIED / COMPLETE
