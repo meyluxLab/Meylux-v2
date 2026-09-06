@@ -49,12 +49,18 @@ records:
     artifact_path: docs/audits/AR-P0-ENTRY-001.md
     traceability: PH-P0 / STEP-P0-001
     status: APPROVED
+  - stable_id: AR-P0-RECON-001
+    canonical_name: TO-P0-001 Reconciliation Disposition Audit
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-RECON-001.md
+    traceability: TO-P0-001 / PH-P0 / STEP-P0-001
+    status: APPROVED / CONTINUATION AUTHORIZED
   - stable_id: TO-P0-001
     canonical_name: Master Architecture Reconciliation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-001.md
-    traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001
-    status: AUTHORIZED TO START
+    traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001 / AR-P0-RECON-001
+    status: AUTHORIZED TO START / CONTINUATION AUTHORIZED
   - stable_id: BR-P0-001
     canonical_name: Build Report — Master Architecture Reconciliation
     entity_type: BR
