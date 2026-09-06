@@ -97,3 +97,9 @@ records:
     artifact_path: docs/audits/AR-P0-AUDIT-003.md
     traceability: BR-P0-002 / TO-P0-002 / PH-P0
     status: APPROVED / VERIFIED
+  - stable_id: ADR-GOVERNANCE-001
+    canonical_name: Final Governance / Architecture / Ratification Authority
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-001.md
+    traceability: Project Owner ratification / ADR identity convention
+    status: RATIFIED
