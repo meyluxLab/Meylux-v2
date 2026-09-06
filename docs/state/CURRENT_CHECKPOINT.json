@@ -13,9 +13,9 @@
   "registry_status": "INITIALIZED_VERIFIED",
   "github_status": "INSTALLED_VERIFIED",
   "vps_status": "NOT_SET_UP",
-  "last_approved_task_order": "TO-P0-001",
-  "last_build_report": "BR-P0-001",
-  "last_audit_report": "AR-P0-AUDIT-002",
+  "last_approved_task_order": "TO-P0-002",
+  "last_build_report": "BR-P0-002",
+  "last_audit_report": "AR-P0-AUDIT-003",
   "last_execution_log": null,
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
@@ -25,7 +25,10 @@
     "AR-P0-RECON-001",
     "BR-P0-001",
     "TO-P0-001",
-    "AR-P0-AUDIT-002"
+    "AR-P0-AUDIT-002",
+    "BR-P0-002",
+    "TO-P0-002",
+    "AR-P0-AUDIT-003"
   ],
   "unverified_artifacts": [],
   "open_questions": [
@@ -38,10 +41,11 @@
     "F-003 and F-004 remain non-blocking reconciliation/documentation findings for later governed action.",
     "The Producer-side CURRENT_CHECKPOINT mutation occurred before independent audit without identified authorization; it remains recorded as historical governance-boundary deviation and was not retrospectively authorized.",
     "AR-P0-AUDIT-002 independently verified BR-P0-001 and authorized the prior CONTROL-side checkpoint transition.",
+    "BR-P0-002 and TO-P0-002 have been independently verified through AR-P0-AUDIT-003; this verifies the sequence-formalization work only and does not establish the unresolved Phase 0 sequence as authoritative.",
     "The complete Phase 0 roadmap is not yet authoritative; a formal architecture/governance decision must establish the sequence and reconcile it with the already-completed STEP-P0-001 before another Step is activated.",
-    "No future Step Task Order, execution detail, Build Report, or runtime/environment/V1 activity is authorized merely by the draft roadmap."
+    "No future Step Task Order, execution detail, Build Report, or runtime/environment/V1 activity is authorized merely by the draft roadmap or by AR-P0-AUDIT-003."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "80ff3dc90efd055abb7fa2871f7ceb31d41acee8",
-  "updated_at_utc": "2026-09-06T23:55:00+03:30"
+  "last_verified_commit": "8d34a874dbaea7d85f9eb8f82126607c3e0556af",
+  "updated_at_utc": "2026-09-06T22:10:00Z"
 }
