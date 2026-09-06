@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
+status: ACTIVE
 records:
   - stable_id: ROL-V2-001
     canonical_name: CONTROL / REVIEWER
@@ -43,3 +43,15 @@ records:
     artifact_path: docs/governance/ROLE_CONTRACT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+  - stable_id: AR-P0-ENTRY-001
+    canonical_name: Phase 0 Entry Review
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-ENTRY-001.md
+    traceability: PH-P0 / STEP-P0-001
+    status: APPROVED
+  - stable_id: TO-P0-001
+    canonical_name: Master Architecture Reconciliation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-001.md
+    traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001
+    status: AUTHORIZED TO START
