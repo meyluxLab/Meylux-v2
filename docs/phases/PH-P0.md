@@ -53,8 +53,12 @@ No future-phase implementation may be introduced through Phase 0 reconciliation.
 
 `STEP-P0-001` is now `COMPLETE / VERIFIED`.
 
-The authoritative Phase Registry and this Phase Definition currently define no subsequent Phase 0 Step. The draft Master Architecture contains sequencing material that conflicts with the current Phase Registry, but that draft material is not authority for activating a new Step.
+The Draft Master Architecture explicitly contains a ten-Step P0 roadmap, but its first Step is named `Constitution ratification`, whereas the authoritative Phase Registry and this Phase Definition establish `STEP-P0-001` as `Master Architecture Reconciliation` and record it as complete/verified. Because the Master Architecture is still `DESIGN BASELINE — PENDING RATIFICATION`, its draft sequence cannot be promoted to the authoritative execution roadmap by Reviewer assertion.
 
-Therefore CONTROL / REVIEWER must not invent or implicitly activate a new `STEP-P0-*` identity or Task Order. Before Phase 0 can advance beyond `STEP-P0-001`, a subsequent Step must be formally defined and authorized through the applicable governance/architecture decision mechanism, with the resulting definition recorded in the authoritative Phase Registry and Phase Definition.
+Accordingly, the current boundary is broader than merely selecting `STEP-P0-002`: the project requires a formal architecture/governance decision that establishes the authoritative complete Phase 0 sequence and reconciles that sequence with the already-completed `STEP-P0-001` without retroactively rewriting its verified history.
 
-This boundary does not close or suspend `PH-P0`; Phase 0 remains `AUTHORIZED / ACTIVE`. It records only that no executable subsequent Step currently exists in the authoritative governance layer.
+CONTROL / REVIEWER may record this boundary, inspect the proposed roadmap, preserve the existing evidence, and prepare the required decision path. CONTROL / REVIEWER must not invent or implicitly activate a new `STEP-P0-*` identity, promote the draft architecture to ratified status, or issue a Task Order for a future Step before the authoritative sequence and current Step are validly established.
+
+Once the formal decision is recorded, the authoritative Phase Registry and this Phase Definition must be updated with the approved sequence and dependencies. Only then may the next valid Step be activated and its Task Order issued if Producer execution is required.
+
+This boundary does not close or suspend `PH-P0`; Phase 0 remains `AUTHORIZED / ACTIVE`. It records only that the complete Phase 0 roadmap is not yet authoritative and therefore no executable subsequent Step may be activated at this time.
