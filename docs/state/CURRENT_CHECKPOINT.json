@@ -29,7 +29,7 @@
   ],
   "unverified_artifacts": [],
   "open_questions": [
-    "PH-P0 next-step boundary: the authoritative Phase Registry and Phase 0 Definition currently define STEP-P0-001 as the first/only formally registered Phase 0 Step. No STEP-P0-002 or subsequent Phase 0 Step is currently defined in the authoritative registry/phase definition. The draft Master Architecture contains conflicting sequencing material, but it is not authoritative for activating a new Step. A subsequent governed Step definition and authorization is therefore required before Phase 0 can advance beyond STEP-P0-001. No new Step ID or Task Order is to be invented or activated implicitly."
+    "What formally defines and authorizes the subsequent Phase 0 Step after STEP-P0-001? The authoritative Phase Registry and Phase 0 Definition contain no subsequent STEP-P0-* definition. The draft Master Architecture contains conflicting sequencing material, but is not authority for activating a new Step. A formal governance/architecture decision must establish the next Step, its scope, acceptance boundary, and authorization before activation."
   ],
   "active_assumptions": [
     "Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION.",
@@ -42,5 +42,5 @@
   ],
   "deferred_decisions": [],
   "last_verified_commit": "80ff3dc90efd055abb7fa2871f7ceb31d41acee8",
-  "updated_at_utc": "2026-09-06T23:30:00+03:30"
+  "updated_at_utc": "2026-09-06T23:45:00+03:30"
 }
