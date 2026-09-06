@@ -70,6 +70,7 @@ records:
   - stable_id: TO-P0-001
     canonical_name: Master Architecture Reconciliation
     entity_type: TO
+    artifact_type: TO
     artifact_path: docs/task-orders/TO-P0-001.md
     traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001 / AR-P0-RECON-001 / AR-P0-AUDIT-002
     status: VERIFIED / COMPLETE
@@ -100,6 +101,7 @@ records:
   - stable_id: ADR-GOVERNANCE-001
     canonical_name: Final Governance / Architecture / Ratification Authority
     entity_type: ADR
+    artifact_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-001.md
     traceability: Project Owner ratification / ADR identity convention
     status: RATIFIED
@@ -115,3 +117,9 @@ records:
     artifact_path: docs/task-orders/TO-P0-003.md
     traceability: PH-P0 / STEP-P0-002 / ADR-ARCHITECTURE-001
     status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P0-003
+    canonical_name: Build Report — Constitution Ratification (Stopped / Blocked Execution)
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P0-003.md
+    traceability: TO-P0-003 / PH-P0 / STEP-P0-002
+    status: ALLOCATED / NOT YET PRODUCED
