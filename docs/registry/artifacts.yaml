@@ -22,7 +22,7 @@ records:
   - stable_id: ROL-V2-004
     canonical_name: MARKET INTELLIGENCE
     entity_type: ROLE
-    artifact_path: docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md
+    artifact_path: docs/governance/ROLE_CONTRACT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
   - stable_id: ROL-V2-005
@@ -56,20 +56,26 @@ records:
     traceability: TO-P0-001 / PH-P0 / STEP-P0-001
     status: APPROVED / CONTINUATION AUTHORIZED
   - stable_id: AR-P0-AUDIT-001
-    canonical_name: BR-P0-001 Control Audit
+    canonical_name: BR-P0-001 Control Audit (Prior)
     entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-001.md
     traceability: BR-P0-001 / TO-P0-001 / PH-P0 / STEP-P0-001
     status: REVISE / CORRECTION REQUIRED
+  - stable_id: AR-P0-AUDIT-002
+    canonical_name: BR-P0-001 Control Re-Audit
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-002.md
+    traceability: BR-P0-001 / TO-P0-001 / PH-P0 / STEP-P0-001
+    status: APPROVED / VERIFIED — WITH RECORDED GOVERNANCE DEVIATION
   - stable_id: TO-P0-001
     canonical_name: Master Architecture Reconciliation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-001.md
-    traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001 / AR-P0-RECON-001
-    status: AUTHORIZED TO START / CONTINUATION AUTHORIZED
+    traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001 / AR-P0-RECON-001 / AR-P0-AUDIT-002
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P0-001
     canonical_name: Build Report — Master Architecture Reconciliation
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-001.md
-    traceability: TO-P0-001 / PH-P0 / STEP-P0-001
-    status: PRODUCED / UNVERIFIED
+    traceability: TO-P0-001 / PH-P0 / STEP-P0-001 / AR-P0-AUDIT-002
+    status: VERIFIED
