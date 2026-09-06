@@ -1,9 +1,11 @@
 # Meylux V2 — Phase 0 Definition
 
 **Phase ID:** `PH-P0`  
-**Status:** `DEFINED / NOT AUTHORIZED`  
+**Status:** `AUTHORIZED / ACTIVE`  
 **Entry prerequisite:** `G-0R` (`RATIFIED / VERIFIED`)  
-**First official Step:** `STEP-P0-001`
+**First official Step:** `STEP-P0-001`  
+**Entry Review:** `AR-P0-ENTRY-001`  
+**Active Task Order:** `TO-P0-001`
 
 ## 1. Purpose
 
@@ -11,19 +13,21 @@ Phase 0 establishes and ratifies the final V2 architectural baseline before impl
 
 ## 2. Entry Boundary
 
-Phase 0 may be formally authorized only after the formation boundary is complete and verified:
+Phase 0 has been formally authorized after the formation boundary was reviewed and verified:
 
 - PP-00 through PP-12 are `APPROVED / CLOSED` as recorded by the formation status artifact.
 - `G-0` is `CLOSED / VERIFIED`.
 - `G-0R` is `RATIFIED / VERIFIED`.
 - The Phase 0 definition and first Step are present in the authoritative registry.
-- CONTROL / REVIEWER completes and records the formal Phase 0 Entry Review.
+- CONTROL / REVIEWER completed and recorded the formal Phase 0 Entry Review.
 
-`G-0R` is the prerequisite entry gate; it does not itself authorize Phase 0.
+`G-0R` is the prerequisite entry gate; it is not itself the authorization decision.
 
 ## 3. First Step
 
 ### `STEP-P0-001` — Master Architecture Reconciliation
+
+**Status:** `AUTHORIZED / ACTIVE`
 
 This Step reconciles `DOC-V2-ARCH-001` against the approved V2 formation knowledge, governance artifacts, relevant ADR/ACR decisions, Open Questions/Deferred Decisions state, and relevant post-baseline project evidence.
 
@@ -37,9 +41,9 @@ The Master Architecture remains `DESIGN BASELINE — PENDING RATIFICATION` until
 
 ## 5. Authorization Boundary
 
-This definition establishes the authoritative Phase 0 boundary only. It does **not** authorize Phase 0 execution and does **not** authorize runtime implementation, environment/VPS work, or V1 mutation.
+Phase 0 authorization permits only the governed Phase 0 work defined by the registry and active Task Order.
 
-A separate CONTROL / REVIEWER authorization transition is required after this boundary has been verified.
+It does not authorize runtime implementation, environment/VPS work, or V1 mutation.
 
 ## 6. Scope Control
 
