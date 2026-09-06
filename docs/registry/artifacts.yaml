@@ -84,10 +84,16 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-002.md
     traceability: PH-P0 / post-STEP-P0-001 continuation boundary
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P0-002
     canonical_name: Build Report — Phase 0 Sequence Formalization
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-002.md
-    traceability: TO-P0-002 / PH-P0 / sequence formalization
-    status: PRODUCED / UNVERIFIED
+    traceability: TO-P0-002 / PH-P0 / sequence formalization / AR-P0-AUDIT-003
+    status: VERIFIED
+  - stable_id: AR-P0-AUDIT-003
+    canonical_name: BR-P0-002 Control Audit
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-003.md
+    traceability: BR-P0-002 / TO-P0-002 / PH-P0
+    status: APPROVED / VERIFIED
