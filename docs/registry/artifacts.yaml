@@ -79,3 +79,9 @@ records:
     artifact_path: docs/build-reports/BR-P0-001.md
     traceability: TO-P0-001 / PH-P0 / STEP-P0-001 / AR-P0-AUDIT-002
     status: VERIFIED
+  - stable_id: TO-P0-002
+    canonical_name: Phase 0 Sequence Formalization
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-002.md
+    traceability: PH-P0 / post-STEP-P0-001 continuation boundary
+    status: AUTHORIZED TO EXECUTE
