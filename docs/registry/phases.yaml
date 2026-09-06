@@ -33,11 +33,13 @@ records:
     logical_name: Master Architecture Reconciliation
     entity_type: STEP
     phase: PH-P0
-    status: AUTHORIZED / ACTIVE
-    authorization_state: AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     entry_gate: G-0R
     entry_approval: AR-P0-ENTRY-001
-    active_task_order: TO-P0-001
+    active_task_order: null
+    completed_task_order: TO-P0-001
+    completion_audit: AR-P0-AUDIT-002
     purpose: Formal reconciliation of the Master Architecture V2 draft against the approved V2 formation knowledge and governance evidence before architecture ratification/freeze.
     completion_requires:
       - Reconciliation evidence covering the approved formation inputs and relevant post-baseline governance decisions.
