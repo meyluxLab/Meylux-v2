@@ -1,2 +1,14 @@
 schema_version: '0.1'
-items: []
+items:
+  - question: "What formally defines and authorizes the subsequent Phase 0 Step after STEP-P0-001?"
+    status: OPEN
+    affected_phase: PH-P0
+    completed_step: STEP-P0-001
+    current_boundary: "The authoritative Phase Registry and Phase 0 Definition contain no subsequent STEP-P0-* definition. The draft Master Architecture contains conflicting sequencing material, but is not authority for activating a new Step."
+    authority_required: "Formal governance/architecture decision establishing the next Phase 0 Step, its scope, acceptance boundary, and authorization."
+    required_record: "Update the authoritative Phase Registry and Phase 0 Definition before activating the new Step; issue a governed Task Order only after a valid Step exists and Producer execution is required."
+    constraints:
+      - "Do not invent a Step ID or Task Order."
+      - "Do not treat draft Master Architecture sequencing as authoritative."
+      - "Do not ratify or freeze the Master Architecture implicitly."
+      - "Do not authorize runtime, VPS/environment, or V1 work through this continuation decision."
