@@ -1,3 +1,43 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-records: []
+status: DEFINED_PRE_AUTHORIZATION
+records:
+  - sid: PH-P0
+    logical_name: Phase 0
+    entity_type: PH
+    status: DEFINED
+    entry_gate: G-0R
+    entry_gate_role: prerequisite
+    entry_criteria:
+      - PP-00 through PP-12 are APPROVED/CLOSED according to the formation status artifact.
+      - G-0 is CLOSED/VERIFIED.
+      - G-0R is RATIFIED/VERIFIED.
+      - Phase 0 remains NOT AUTHORIZED until a separate formal authorization is recorded.
+      - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
+    first_step: STEP-P0-001
+    authorization_criteria:
+      - Phase 0 registry record and first-step definition exist in the GitHub Source of Truth.
+      - Entry prerequisite G-0R is verified in the authoritative checkpoint/evidence chain.
+      - The first-step scope and acceptance boundary are explicitly recorded.
+      - CONTROL / REVIEWER performs and records the formal Phase 0 Entry Review.
+      - Phase 0 authorization is recorded separately from formation ratification and does not imply architecture ratification.
+    architecture_relationship:
+      reconciliation: STEP-P0-001 is the first Phase 0 step and performs the formal reconciliation work required before final Master Architecture ratification/freeze.
+      ratification: Master Architecture V2 is not ratified merely by entering Phase 0; ratification/freeze requires the subsequent governed reconciliation and approval evidence.
+    scope_boundary:
+      - No runtime implementation is authorized by this boundary definition.
+      - No V1 mutation or V1 runtime/VPS action is authorized.
+
+  - sid: STEP-P0-001
+    logical_name: Master Architecture Reconciliation
+    entity_type: STEP
+    phase: PH-P0
+    status: DEFINED
+    purpose: Formal reconciliation of the Master Architecture V2 draft against the approved V2 formation knowledge and governance evidence before architecture ratification/freeze.
+    entry_gate: G-0R
+    entry_gate_role: prerequisite
+    authorization_state: NOT_AUTHORIZED
+    completion_requires:
+      - Reconciliation evidence covering the approved formation inputs and relevant post-baseline governance decisions.
+      - Explicit identification and governed disposition of conflicts, omissions, and unresolved architectural matters.
+      - CONTROL / REVIEWER audit and approval according to the governed artifact chain.
+      - No silent architecture change or scope expansion.
