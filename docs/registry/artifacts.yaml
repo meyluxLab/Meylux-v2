@@ -247,3 +247,9 @@ records:
     artifact_path: docs/task-orders/TO-P0-008.md
     traceability: PH-P0 / STEP-P0-007 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P0-009
+    canonical_name: Build Report — Environment Contract
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P0-009.md
+    traceability: TO-P0-008 / PH-P0 / STEP-P0-007
+    status: ALLOCATED / NOT YET PRODUCED
