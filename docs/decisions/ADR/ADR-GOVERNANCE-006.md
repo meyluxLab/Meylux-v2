@@ -1,12 +1,13 @@
 # ADR-GOVERNANCE-006 — Post-Freeze Governance Build Report Identity Convention
 
-**Status:** PROPOSED — RATIFICATION REQUIRED
+**Status:** RATIFIED / FROZEN
 **Decision ID:** `ADR-GOVERNANCE-006`
 **Decision Authority:** PROJECT OWNER
+**Ratifying Authority:** PROJECT OWNER
 
-## Decision Proposal
+## Decision
 
-The Project Owner is requested to ratify the following permanent identity convention for Build Reports produced for formally governed post-freeze Task Orders that do not belong to an active Phase:
+The Project Owner formally ratifies the following permanent identity convention for Build Reports produced for formally governed post-freeze Task Orders that do not belong to an active Phase:
 
 ```text
 BR-GOV-<NNN>
