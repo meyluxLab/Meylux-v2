@@ -210,10 +210,16 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-006.md
     traceability: PH-P0 / STEP-P0-005 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P0-007
     canonical_name: Build Report — Governance / Artifact Protocol
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-007.md
     traceability: TO-P0-006 / PH-P0 / STEP-P0-005
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
+  - stable_id: AR-P0-AUDIT-009
+    canonical_name: BR-P0-007 Control Audit — Governance / Artifact Protocol
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-009.md
+    traceability: BR-P0-007 / TO-P0-006 / PH-P0 / STEP-P0-005
+    status: APPROVED / VERIFIED
