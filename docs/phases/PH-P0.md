@@ -1,12 +1,13 @@
 # Meylux V2 — Phase 0 Definition
 
 **Phase ID:** `PH-P0`  
-**Status:** `AUTHORIZED / ACTIVE`  
+**Status:** `CLOSED / VERIFIED`  
 **Entry prerequisite:** `G-0R` (`RATIFIED / VERIFIED`)  
 **First official Step:** `STEP-P0-001`  
-**Current Step:** `STEP-P0-002`  
+**Final Step:** `STEP-P0-010`  
 **Entry Review:** `AR-P0-ENTRY-001`  
-**Active Task Order:** `TO-P0-003` — `STEP-P0-002` Constitution Ratification
+**Final Audit:** `AR-P0-AUDIT-015`  
+**Active Task Order:** `NONE`  
 
 ## 1. Purpose
 
@@ -29,19 +30,21 @@ Phase 0 has been formally authorized after the formation boundary was reviewed a
 `ADR-ARCHITECTURE-001` is `RATIFIED` by the Project Owner and establishes the authoritative Phase 0 sequence:
 
 1. `STEP-P0-001` — Master Architecture Reconciliation — `COMPLETE / VERIFIED`
-2. `STEP-P0-002` — Constitution Ratification — `AUTHORIZED / ACTIVE`
-3. `STEP-P0-003` — V1 Lessons Integration — `DEFINED / NOT AUTHORIZED`
-4. `STEP-P0-004` — Stable Identity / Registry — `DEFINED / NOT AUTHORIZED`
-5. `STEP-P0-005` — Governance / Artifact Protocol — `DEFINED / NOT AUTHORIZED`
-6. `STEP-P0-006` — AI Continuation Protocol — `DEFINED / NOT AUTHORIZED`
-7. `STEP-P0-007` — Environment Contract — `DEFINED / NOT AUTHORIZED`
-8. `STEP-P0-008` — Verification / Evidence / Gates — `DEFINED / NOT AUTHORIZED`
-9. `STEP-P0-009` — Dependency and Boundary Graph — `DEFINED / NOT AUTHORIZED`
-10. `STEP-P0-010` — Master Architecture Freeze — `DEFINED / NOT AUTHORIZED`
+2. `STEP-P0-002` — Constitution Ratification — `COMPLETE / VERIFIED`
+3. `STEP-P0-003` — V1 Lessons Integration — `COMPLETE / VERIFIED`
+4. `STEP-P0-004` — Stable Identity / Registry — `COMPLETE / VERIFIED`
+5. `STEP-P0-005` — Governance / Artifact Protocol — `COMPLETE / VERIFIED`
+6. `STEP-P0-006` — AI Continuation Protocol — `COMPLETE / VERIFIED`
+7. `STEP-P0-007` — Environment Contract — `COMPLETE / VERIFIED`
+8. `STEP-P0-008` — Verification / Evidence / Gates — `COMPLETE / VERIFIED`
+9. `STEP-P0-009` — Dependency and Boundary Graph — `COMPLETE / VERIFIED`
+10. `STEP-P0-010` — Master Architecture Freeze — `COMPLETE / VERIFIED`
 
 The sequence is authoritative for Phase 0 ordering. Only the currently activated Step may be executed.
 
-## 4. Completed Step
+## 4. Completed Step Chain
+
+All ten Phase 0 Steps have now been executed and independently verified.
 
 ### `STEP-P0-001` — Master Architecture Reconciliation
 
@@ -49,35 +52,90 @@ The sequence is authoritative for Phase 0 ordering. Only the currently activated
 
 This historical Step is preserved exactly. It is not reopened, renamed, or renumbered.
 
-## 5. Current Step
-
 ### `STEP-P0-002` — Constitution Ratification
 
-**Status:** `AUTHORIZED / ACTIVE`  
-**Task Order:** `TO-P0-003`
+**Status:** `COMPLETE / VERIFIED`
 
-This Step performs the previously uncompleted Constitution Ratification boundary using the V2 Constitution and the evidence/reconciliation state established by completed `STEP-P0-001`.
+The V2 Constitution was formally ratified by the Project Owner under the recorded governance decision.
 
-The Constitution remains `DRAFT — PENDING RATIFICATION` until this Step is actually executed and the required ratification evidence is recorded.
+### `STEP-P0-003` — V1 Lessons Integration
 
-No later Phase 0 Step is activated by this definition.
+**Status:** `COMPLETE / VERIFIED`
+
+V1 lessons were integrated as explicit V2 controls without importing V1 runtime or implementation dependencies.
+
+### `STEP-P0-004` — Stable Identity / Registry
+
+**Status:** `COMPLETE / VERIFIED`
+
+Stable identity and registry reconciliation was completed without reassignment or reuse of historical IDs.
+
+### `STEP-P0-005` — Governance / Artifact Protocol
+
+**Status:** `COMPLETE / VERIFIED`
+
+Governance and artifact lifecycle controls were reconciled and independently verified.
+
+### `STEP-P0-006` — AI Continuation Protocol
+
+**Status:** `COMPLETE / VERIFIED`
+
+AI-to-AI continuation and repository-grounded resumability were established and independently verified.
+
+### `STEP-P0-007` — Environment Contract
+
+**Status:** `COMPLETE / VERIFIED`
+
+The V2 environment contract and associated boundaries were established and independently verified.
+
+### `STEP-P0-008` — Verification / Evidence / Gates
+
+**Status:** `COMPLETE / VERIFIED`
+
+Verification, evidence provenance, lifecycle distinctions, and gate semantics were formalized and independently verified.
+
+### `STEP-P0-009` — Dependency and Boundary Graph
+
+**Status:** `COMPLETE / VERIFIED`
+
+The dependency and boundary graph was established and independently verified.
+
+### `STEP-P0-010` — Master Architecture Freeze
+
+**Status:** `COMPLETE / VERIFIED`
+
+The Master Architecture was prepared by the Producer, independently audited by CONTROL, and formally ratified/frozen by the Project Owner through `ADR-GOVERNANCE-004`. Final closure was independently verified by `AR-P0-AUDIT-015`.
+
+## 5. Current State
+
+Phase 0 is closed. There is no active Step and no active Task Order.
+
+**Current Step:** `NONE`  
+**Active Task Order:** `NONE`  
+**Phase Status:** `CLOSED / VERIFIED`
 
 ## 6. Architecture Relationship
 
-Entering Phase 0 did not ratify or freeze `MASTER_ARCHITECTURE_V2.md`.
+`DOC-V2-ARCH-001` is `RATIFIED / FROZEN` by `ADR-GOVERNANCE-004`.
 
-The Master Architecture remains `DESIGN BASELINE — PENDING RATIFICATION`. The ratified sequence establishes ordering only; final Master Architecture ratification/freeze remains bounded by `STEP-P0-010` and its required evidence.
+This governance state is the result of the completed Phase 0 reconciliation and final Project Owner ratification/freeze act. It does not authorize runtime implementation by itself; implementation remains governed by subsequent Phase, Step, Task Order, and gate authorization.
 
-## 7. Authorization Boundary
+## 7. Closure Boundary
 
-Phase 0 authorization and sequence ratification permit only the currently activated Phase 0 work defined by the registry and active Task Order.
+Phase 0 closure requires the final Step to be executed, independently verified, and the required Master Architecture ratification/freeze decision to be durably recorded.
 
-They do not authorize runtime implementation, environment/VPS work, or V1 mutation.
+These conditions have been satisfied and independently recorded by `AR-P0-AUDIT-015` and the current checkpoint.
 
 ## 8. Scope Control
 
-No future-phase implementation may be introduced through Phase 0. Any material architectural change follows the established ADR/ACR/change-control process.
+No future-phase implementation was introduced through Phase 0. Any material architectural change after the freeze follows the established ADR/ACR/change-control process.
 
-## 9. Completion Boundary
+## 9. Phase 1 Boundary
 
-`STEP-P0-010` is the final Phase 0 Step. Phase 0 becomes complete only when the final Step is executed, verified, and the required Master Architecture ratification/freeze evidence exists.
+Phase 1 has not been activated by this document. No Phase 1 Step or Task Order is implicitly authorized by Phase 0 closure.
+
+A Phase 1 start requires a formally defined and authorized Phase 1 Step, its governing Task Order, and the applicable entry gate/evidence under the ratified architecture and governance model.
+
+## 10. Known Repository Synchronization Note
+
+The repository previously contained stale Phase 0 document metadata. This Phase 0 definition is now synchronized with the verified closure state. Historical execution and audit artifacts remain unchanged.
