@@ -96,6 +96,7 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: ADR-GOVERNANCE-001
     canonical_name: Final Governance / Architecture / Ratification Authority
+    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-001.md
     traceability: Project Owner ratification / ADR identity convention
     status: RATIFIED
@@ -157,7 +158,6 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-007
     canonical_name: BR-P0-005 Control Audit — V1 Lessons Integration
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-007.md
     traceability: BR-P0-005 / TO-P0-004 / PH-P0 / STEP-P0-003
     status: APPROVED / VERIFIED
@@ -200,7 +200,6 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-009
     canonical_name: BR-P0-007 Control Audit — Governance / Artifact Protocol
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-009.md
     traceability: BR-P0-007 / TO-P0-006 / PH-P0 / STEP-P0-005
     status: APPROVED / VERIFIED
@@ -216,7 +215,6 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-010
     canonical_name: BR-P0-008 Control Audit — AI Continuation Protocol
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-010.md
     traceability: BR-P0-008 / TO-P0-007 / PH-P0 / STEP-P0-006
     status: APPROVED / VERIFIED
@@ -258,10 +256,22 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-010.md
     traceability: PH-P0 / STEP-P0-009 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P0-011
     canonical_name: Build Report — Dependency and Boundary Graph
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-011.md
-    traceability: TO-P0-010 / PH-P0 / STEP-P0-009
-    status: PRODUCED / UNVERIFIED
+    traceability: TO-P0-010 / PH-P0 / STEP-P0-009 / AR-P0-AUDIT-013
+    status: VERIFIED
+  - stable_id: AR-P0-AUDIT-013
+    canonical_name: BR-P0-011 Control Audit — Dependency and Boundary Graph
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-013.md
+    traceability: BR-P0-011 / TO-P0-010 / PH-P0 / STEP-P0-009
+    status: APPROVED / VERIFIED
+  - stable_id: TO-P0-011
+    canonical_name: Master Architecture Freeze
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-011.md
+    traceability: PH-P0 / STEP-P0-010 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    status: AUTHORIZED TO EXECUTE
