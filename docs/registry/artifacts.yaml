@@ -241,3 +241,9 @@ records:
     artifact_path: docs/audits/AR-P0-AUDIT-010.md
     traceability: BR-P0-008 / TO-P0-007 / PH-P0 / STEP-P0-006
     status: APPROVED / VERIFIED
+  - stable_id: TO-P0-008
+    canonical_name: Environment Contract
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-008.md
+    traceability: PH-P0 / STEP-P0-007 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    status: AUTHORIZED TO EXECUTE
