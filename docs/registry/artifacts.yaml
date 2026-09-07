@@ -85,6 +85,12 @@ records:
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-008.md
     traceability: Project Owner ratification / post-freeze Audit Report identity convention
     status: RATIFIED / FROZEN
+  - stable_id: ADR-GOVERNANCE-009
+    canonical_name: Project Owner Ratification and Freeze of AI Continuation Protocol V2
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-009.md
+    traceability: Project Owner ratification / AI Continuation Protocol V2
+    status: RATIFIED / FROZEN
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
     entity_type: BR
@@ -109,6 +115,12 @@ records:
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
+  - stable_id: AI-CONTINUATION-PROTOCOL-V2
+    canonical_name: AI Continuation Protocol V2
+    entity_type: GOVERNANCE
+    artifact_path: docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
+    traceability: ADR-GOVERNANCE-009 / TO-GOV-002
+    status: RATIFIED / FROZEN — AUDIT PENDING
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
