@@ -246,10 +246,16 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-008.md
     traceability: PH-P0 / STEP-P0-007 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P0-009
     canonical_name: Build Report — Environment Contract
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-009.md
     traceability: TO-P0-008 / PH-P0 / STEP-P0-007
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
+  - stable_id: AR-P0-AUDIT-011
+    canonical_name: BR-P0-009 Control Audit — Environment Contract
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-011.md
+    traceability: BR-P0-009 / TO-P0-008 / PH-P0 / STEP-P0-007
+    status: APPROVED / VERIFIED
