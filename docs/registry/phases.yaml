@@ -1,10 +1,10 @@
 schema_version: '0.1'
-status: ACTIVE
+status: CLOSED / VERIFIED
 records:
   - sid: PH-P0
     logical_name: Phase 0
     entity_type: PH
-    status: AUTHORIZED / ACTIVE
+    status: CLOSED / VERIFIED
     entry_gate: G-0R
     entry_gate_role: prerequisite
     entry_approval: AR-P0-ENTRY-001
@@ -16,7 +16,7 @@ records:
       - CONTROL / REVIEWER formal Entry Review is APPROVED.
       - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
     first_step: STEP-P0-001
-    next_valid_step: STEP-P0-010
+    next_valid_step: null
     final_step: STEP-P0-010
     authorization_criteria:
       - Phase 0 registry record and first-step definition exist in the GitHub Source of Truth.
@@ -28,11 +28,13 @@ records:
     architecture_relationship:
       reconciliation: STEP-P0-001 is the first Phase 0 step and is COMPLETE / VERIFIED.
       sequence_authority: ADR-ARCHITECTURE-001 establishes the authoritative ten-Step Phase 0 sequence.
-      ratification: Master Architecture V2 is not ratified merely by sequence reconciliation; final ratification/freeze remains bounded by STEP-P0-010 and required evidence.
+      ratification: ADR-GOVERNANCE-004 records the Project Owner's final ratification/freeze of Master Architecture V2.
+      final_closure_verification: AR-P0-AUDIT-015 independently verifies the final closure boundary.
     scope_boundary:
       - No runtime implementation is authorized by Phase 0 entry authorization alone.
       - No V1 mutation or V1 runtime/VPS action is authorized.
       - Only the currently activated Step may be executed.
+      - Phase 0 is closed; no subsequent Phase 0 Step exists or is authorized.
 
   - sid: STEP-P0-001
     logical_name: Master Architecture Reconciliation
@@ -170,10 +172,12 @@ records:
     logical_name: Master Architecture Freeze
     entity_type: STEP
     phase: PH-P0
-    status: AUTHORIZED / ACTIVE
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 10
     predecessor: STEP-P0-009
     activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: TO-P0-011
+    active_task_order: null
+    completed_task_order: TO-P0-011
+    completion_audit: AR-P0-AUDIT-015
     purpose: Execute the final required Master Architecture ratification/freeze boundary and establish the Phase 0 completion boundary only after all prerequisite Steps and evidence are verified.
