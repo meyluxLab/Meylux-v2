@@ -223,3 +223,9 @@ records:
     artifact_path: docs/audits/AR-P0-AUDIT-009.md
     traceability: BR-P0-007 / TO-P0-006 / PH-P0 / STEP-P0-005
     status: APPROVED / VERIFIED
+  - stable_id: TO-P0-007
+    canonical_name: AI Continuation Protocol
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-007.md
+    traceability: PH-P0 / STEP-P0-006 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    status: AUTHORIZED TO EXECUTE
