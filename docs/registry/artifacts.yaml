@@ -216,4 +216,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-007.md
     traceability: TO-P0-006 / PH-P0 / STEP-P0-005
-    status: ALLOCATED / NOT YET PRODUCED
+    status: PRODUCED / UNVERIFIED
