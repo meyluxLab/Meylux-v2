@@ -81,7 +81,6 @@ records:
     status: VERIFIED
   - stable_id: TO-P0-002
     canonical_name: Phase 0 Sequence Formalization
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-002.md
     traceability: PH-P0 / post-STEP-P0-001 continuation boundary
     status: VERIFIED / COMPLETE
@@ -111,55 +110,46 @@ records:
     status: RATIFIED
   - stable_id: TO-P0-003
     canonical_name: Constitution Ratification
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-003.md
     traceability: PH-P0 / STEP-P0-002 / ADR-ARCHITECTURE-001
     status: VERIFIED / COMPLETE
   - stable_id: BR-P0-003
     canonical_name: Build Report — Constitution Ratification (Stopped / Blocked Execution)
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-003.md
     traceability: TO-P0-003 / PH-P0 / STEP-P0-002
     status: VERIFIED — BLOCKED EXECUTION RECORD
   - stable_id: AR-P0-AUDIT-004
     canonical_name: BR-P0-003 Control Audit (Corrective Mapping Superseded)
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-004.md
     traceability: BR-P0-003 / TO-P0-003 / PH-P0 / STEP-P0-002
     status: HISTORICAL / CORRECTED BY AR-P0-AUDIT-005
   - stable_id: AR-P0-AUDIT-005
     canonical_name: Correction / Reconciliation of AR-P0-AUDIT-004
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-005.md
     traceability: AR-P0-AUDIT-004 / TO-P0-003 / PH-P0 / STEP-P0-002
     status: APPROVED / VERIFIED — CORRECTIVE GOVERNANCE RECORD
   - stable_id: BR-P0-004
     canonical_name: Build Report — Constitution Correction Evidence
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-004.md
     traceability: TO-P0-003 / PH-P0 / STEP-P0-002 / AR-P0-AUDIT-005
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-006
     canonical_name: BR-P0-004 Control Audit — Constitution Correction
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-006.md
     traceability: BR-P0-004 / TO-P0-003 / PH-P0 / STEP-P0-002 / AR-P0-AUDIT-005
     status: APPROVED / VERIFIED — RATIFICATION READY
   - stable_id: ADR-GOVERNANCE-002
     canonical_name: Project Owner Ratification of V2 Constitution
-    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-002.md
     traceability: TO-P0-003 / BR-P0-004 / AR-P0-AUDIT-006 / STEP-P0-002
     status: RATIFIED
   - stable_id: TO-P0-004
     canonical_name: V1 Lessons Integration
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-004.md
     traceability: PH-P0 / STEP-P0-003 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-002
     status: VERIFIED / COMPLETE
   - stable_id: ADR-GOVERNANCE-003
     canonical_name: Producer Build Report Allocation Delegation
-    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-003.md
     traceability: Project Owner ratification / ARTIFACT_PROTOCOL_V2 / TO-P0-004
     status: RATIFIED
@@ -171,13 +161,11 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-007
     canonical_name: BR-P0-005 Control Audit — V1 Lessons Integration
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-007.md
     traceability: BR-P0-005 / TO-P0-004 / PH-P0 / STEP-P0-003
     status: APPROVED / VERIFIED
   - stable_id: TO-P0-005
     canonical_name: Stable Identity / Registry
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-005.md
     traceability: PH-P0 / STEP-P0-004 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: VERIFIED / COMPLETE
@@ -207,61 +195,57 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: TO-P0-006
     canonical_name: Governance / Artifact Protocol
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-006.md
     traceability: PH-P0 / STEP-P0-005 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: VERIFIED / COMPLETE
   - stable_id: BR-P0-007
     canonical_name: Build Report — Governance / Artifact Protocol
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-007.md
     traceability: TO-P0-006 / PH-P0 / STEP-P0-005
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-009
     canonical_name: BR-P0-007 Control Audit — Governance / Artifact Protocol
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-009.md
     traceability: BR-P0-007 / TO-P0-006 / PH-P0 / STEP-P0-005
     status: APPROVED / VERIFIED
   - stable_id: TO-P0-007
     canonical_name: AI Continuation Protocol
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-007.md
     traceability: PH-P0 / STEP-P0-006 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: VERIFIED / COMPLETE
   - stable_id: BR-P0-008
     canonical_name: Build Report — AI Continuation Protocol
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-008.md
     traceability: TO-P0-007 / PH-P0 / STEP-P0-006
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-010
     canonical_name: BR-P0-008 Control Audit — AI Continuation Protocol
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-010.md
     traceability: BR-P0-008 / TO-P0-007 / PH-P0 / STEP-P0-006
     status: APPROVED / VERIFIED
   - stable_id: TO-P0-008
     canonical_name: Environment Contract
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-008.md
     traceability: PH-P0 / STEP-P0-007 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: VERIFIED / COMPLETE
   - stable_id: BR-P0-009
     canonical_name: Build Report — Environment Contract
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-009.md
     traceability: TO-P0-008 / PH-P0 / STEP-P0-007
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-011
     canonical_name: BR-P0-009 Control Audit — Environment Contract
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-011.md
     traceability: BR-P0-009 / TO-P0-008 / PH-P0 / STEP-P0-007
     status: APPROVED / VERIFIED
   - stable_id: TO-P0-009
     canonical_name: Verification / Evidence / Gates
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-009.md
     traceability: PH-P0 / STEP-P0-008 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P0-010
+    canonical_name: Build Report — Verification / Evidence / Gates
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P0-010.md
+    traceability: TO-P0-009 / PH-P0 / STEP-P0-008
+    status: ALLOCATED / NOT YET PRODUCED
