@@ -290,7 +290,18 @@ records:
     status: RATIFIED / FROZEN
   - stable_id: AR-P0-AUDIT-015
     canonical_name: Final Phase 0 Closure Verification
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
     traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / STEP-P0-010 / PH-P0
     status: APPROVED / VERIFIED
+  - stable_id: ADR-GOVERNANCE-005
+    canonical_name: Post-Freeze Governance Task Order Identity Convention
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-005.md
+    traceability: Project Owner ratification / post-freeze Task Order identity convention
+    status: RATIFIED / FROZEN
+  - stable_id: TO-GOV-001
+    canonical_name: PROJECT GUIDE Role Establishment
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-001.md
+    traceability: ADR-GOVERNANCE-005 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    status: AUTHORIZED TO EXECUTE
