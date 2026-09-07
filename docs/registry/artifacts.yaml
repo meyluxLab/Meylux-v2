@@ -159,6 +159,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-007
     canonical_name: BR-P0-005 Control Audit — V1 Lessons Integration
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-007.md
     traceability: BR-P0-005 / TO-P0-004 / PH-P0 / STEP-P0-003
     status: APPROVED / VERIFIED
@@ -250,3 +251,9 @@ records:
     artifact_path: docs/audits/AR-P0-AUDIT-012.md
     traceability: BR-P0-010 / TO-P0-009 / PH-P0 / STEP-P0-008
     status: APPROVED / VERIFIED
+  - stable_id: TO-P0-010
+    canonical_name: Dependency and Boundary Graph
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-010.md
+    traceability: PH-P0 / STEP-P0-009 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    status: AUTHORIZED TO EXECUTE
