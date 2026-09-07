@@ -16,7 +16,7 @@ records:
       - CONTROL / REVIEWER formal Entry Review is APPROVED.
       - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
     first_step: STEP-P0-001
-    next_valid_step: STEP-P0-004
+    next_valid_step: STEP-P0-005
     final_step: STEP-P0-010
     authorization_criteria:
       - Phase 0 registry record and first-step definition exist in the GitHub Source of Truth.
@@ -86,23 +86,26 @@ records:
     logical_name: Stable Identity / Registry
     entity_type: STEP
     phase: PH-P0
-    status: AUTHORIZED / ACTIVE
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 4
     predecessor: STEP-P0-003
     activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: TO-P0-005
+    active_task_order: null
+    completed_task_order: TO-P0-005
+    completion_audit: AR-P0-AUDIT-008
     purpose: Establish and reconcile stable identity and registry completeness required by the ratified V2 baseline.
 
   - sid: STEP-P0-005
     logical_name: Governance / Artifact Protocol
     entity_type: STEP
     phase: PH-P0
-    status: DEFINED / NOT AUTHORIZED
-    authorization_state: NOT AUTHORIZED
+    status: AUTHORIZED / ACTIVE
+    authorization_state: AUTHORIZED / ACTIVE
     order: 5
     predecessor: STEP-P0-004
     activation_basis: ADR-ARCHITECTURE-001
+    active_task_order: TO-P0-006
     purpose: Establish and reconcile the governed artifact lifecycle, authority boundaries, and evidence protocol required for V2 operation.
 
   - sid: STEP-P0-006
