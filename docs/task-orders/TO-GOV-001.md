@@ -9,8 +9,9 @@
 **Issuer:** CONTROL / REVIEWER (`ROL-V2-001`)
 **Recipient:** PRODUCER / ARCHITECT-BUILDER (`ROL-V2-002`)
 **Status:** `AUTHORIZED TO EXECUTE`
-**Authority:** `ADR-GOVERNANCE-001`; `ADR-GOVERNANCE-003`; `ADR-GOVERNANCE-005`; `ADR-GOVERNANCE-006`
+**Authority:** `ADR-GOVERNANCE-001`; `ADR-GOVERNANCE-003`; `ADR-GOVERNANCE-005`; `ADR-GOVERNANCE-006`; `ADR-GOVERNANCE-007`
 **Target Role:** `PROJECT GUIDE`
+**Stable ID:** `ROL-V2-008`
 **Canonical Role Contract Path:** `docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md`
 **Build Report ID:** `BR-GOV-001`
 **Build Report Path:** `docs/build-reports/BR-GOV-001.md`
@@ -23,7 +24,7 @@ This Task Order establishes only the work required to produce and evidence the p
 
 ## 2. Authoritative Basis
 
-This Task Order is issued under the ratified post-freeze Task Order identity convention established by `ADR-GOVERNANCE-005` and the ratified post-freeze Build Report identity convention established by `ADR-GOVERNANCE-006`.
+This Task Order is issued under the ratified post-freeze Task Order identity convention established by `ADR-GOVERNANCE-005`, the ratified post-freeze Build Report identity convention established by `ADR-GOVERNANCE-006`, and the ratified PROJECT GUIDE Stable Identity Extension established by `ADR-GOVERNANCE-007`.
 
 The applicable Project Guide role contract requirements have been reviewed as the authorized design input for this Task Order. The role contract must preserve the previously approved role boundary, including:
 
