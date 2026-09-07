@@ -90,7 +90,7 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-002.md
     traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
-    status: RESERVED / NOT YET PRODUCED
+    status: PRODUCED / UNVERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
