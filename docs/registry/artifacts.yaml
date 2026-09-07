@@ -48,13 +48,13 @@ records:
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md
     traceability: ADR-GOVERNANCE-007 / TO-GOV-001
-    status: RATIFIED / FROZEN — VERIFICATION PENDING
+    status: RATIFIED / FROZEN — VERIFIED
   - stable_id: TO-GOV-001
     canonical_name: PROJECT GUIDE Role Establishment
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-001.md
     traceability: ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: TO-GOV-002
     canonical_name: PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
     entity_type: TO
@@ -90,7 +90,7 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-001.md
     traceability: TO-GOV-001 / ADR-GOVERNANCE-006
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
   - stable_id: BR-GOV-002
     canonical_name: Build Report — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
     entity_type: BR
@@ -102,7 +102,7 @@ records:
     entity_type: AR
     artifact_path: docs/audits/AR-GOV-001.md
     traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
-    status: RESERVED / NOT YET PRODUCED
+    status: APPROVED / VERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
