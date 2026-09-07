@@ -101,7 +101,7 @@ A successor AI operating as PROJECT GUIDE must be able to reconstruct at minimum
 
 - project identity and mission;
 - Source of Truth;
-- frozen/r ratified architecture state;
+- frozen/ratified architecture state;
 - governance state;
 - current gate and phase state;
 - current checkpoint;
