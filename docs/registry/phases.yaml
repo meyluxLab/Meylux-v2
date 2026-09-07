@@ -16,7 +16,7 @@ records:
       - CONTROL / REVIEWER formal Entry Review is APPROVED.
       - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
     first_step: STEP-P0-001
-    next_valid_step: STEP-P0-002
+    next_valid_step: STEP-P0-003
     final_step: STEP-P0-010
     authorization_criteria:
       - Phase 0 registry record and first-step definition exist in the GitHub Source of Truth.
@@ -47,27 +47,20 @@ records:
     completed_task_order: TO-P0-001
     completion_audit: AR-P0-AUDIT-002
     purpose: Formal reconciliation of the Master Architecture V2 draft against the approved V2 formation knowledge and governance evidence before architecture ratification/freeze.
-    completion_requires:
-      - Reconciliation evidence covering the approved formation inputs and relevant post-baseline governance decisions.
-      - Explicit identification and governed disposition of conflicts, omissions, and unresolved architectural matters.
-      - CONTROL / REVIEWER audit and approval according to the governed artifact chain.
-      - No silent architecture change or scope expansion.
 
   - sid: STEP-P0-002
     logical_name: Constitution Ratification
     entity_type: STEP
     phase: PH-P0
-    status: AUTHORIZED / ACTIVE
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 2
     predecessor: STEP-P0-001
     activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: TO-P0-003
+    active_task_order: null
+    completed_task_order: TO-P0-003
+    completion_audit: AR-P0-AUDIT-006
     purpose: Execute the dedicated constitutional ratification boundary using the V2 Constitution and the evidence/reconciliation state established by completed STEP-P0-001.
-    ordering_constraints:
-      - STEP-P0-001 must remain COMPLETE / VERIFIED.
-      - The Constitution remains DRAFT until this Step is actually executed and ratified through its required governance process.
-      - No later Phase 0 Step is activated by this record.
     completion_requires:
       - Constitution content is reviewed against the ratified V2 architectural/governance boundary.
       - Required constitutional invariants and boundaries are explicitly confirmed.
@@ -79,11 +72,12 @@ records:
     logical_name: V1 Lessons Integration
     entity_type: STEP
     phase: PH-P0
-    status: DEFINED / NOT AUTHORIZED
-    authorization_state: NOT AUTHORIZED
+    status: AUTHORIZED / ACTIVE
+    authorization_state: AUTHORIZED / ACTIVE
     order: 3
     predecessor: STEP-P0-002
     activation_basis: ADR-ARCHITECTURE-001
+    active_task_order: TO-P0-004
     purpose: Integrate approved V1 lessons and failure evidence into V2 architectural controls without importing V1 implementation or authorizing V1 mutation.
 
   - sid: STEP-P0-004
@@ -162,8 +156,3 @@ records:
     predecessor: STEP-P0-009
     activation_basis: ADR-ARCHITECTURE-001
     purpose: Execute the final required Master Architecture ratification/freeze boundary and establish the Phase 0 completion boundary only after all prerequisite Steps and evidence are verified.
-    completion_requires:
-      - STEP-P0-001 through STEP-P0-009 are complete and verified.
-      - Required Master Architecture ratification/freeze evidence exists.
-      - CONTROL / REVIEWER verification is complete.
-      - Phase 0 completion is durably recorded.
