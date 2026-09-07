@@ -10,7 +10,7 @@ records:
   - stable_id: ROL-V2-002
     canonical_name: PRODUCER / ARCHITECT-BUILDER
     entity_type: ROLE
-    artifact_path: docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md
+    artifact_path: docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT-BUILDER_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
   - stable_id: ROL-V2-003
@@ -120,7 +120,7 @@ records:
     entity_type: GOVERNANCE
     artifact_path: docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
     traceability: ADR-GOVERNANCE-009 / TO-GOV-002
-    status: RATIFIED / FROZEN — AUDIT PENDING
+    status: RATIFIED / FROZEN — VERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
