@@ -1,13 +1,111 @@
-schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
+schema_version: '0.2'
+status: RECONCILED / PENDING CONTROL VERIFICATION
 project: meylux-v2
-environments:
-  dev:
-    status: to_be_frozen
-  staging:
-    status: to_be_frozen
-  production:
-    status: to_be_frozen
+purpose: >-
+  Governed V2 environment contract defining logical environment boundaries and
+  separation from runtime/deployment authorization.
+
+contract:
+  source_of_truth: GitHub repository and governed repository artifacts
+  architecture_status: DESIGN BASELINE — PENDING RATIFICATION
+  runtime_authorization: separate_and_not_granted_by_environment_contract
+  deployment_authorization: separate_and_not_granted_by_environment_contract
+  operator_execution_authority: required_for_physical_or_environment_execution
+
+  environments:
+    dev:
+      purpose: development, local build, and controlled developer testing
+      status: defined_not_deployed
+      requirements:
+        - reproducible dependency/configuration inputs
+        - isolated test data and credentials handling
+        - no production authoritative-state ownership
+    staging:
+      purpose: controlled integration, contract, regression, and pre-deployment validation
+      status: defined_not_deployed
+      requirements:
+        - explicit environment-specific configuration
+        - isolated non-production state
+        - evidence-producing validation before any later deployment decision
+    production:
+      purpose: future V2 runtime environment
+      status: defined_not_deployed
+      requirements:
+        - explicit deployment authorization through the governed workflow
+        - authoritative persistence boundary explicitly designated before runtime use
+        - production secrets supplied only through approved secret-handling mechanisms
+        - operational evidence captured through the Operator / execution-log path
+
+  build_test_boundary:
+    build_and_test_work_must_be_reproducible: true
+    test_execution_must_not_be_misrepresented_as_runtime_deployment: true
+    test_state_must_not_become_production_authoritative_state: true
+
+  runtime_deployment_boundary:
+    runtime_not_authorized_by_this_contract: true
+    deployment_not_authorized_by_this_contract: true
+    physical_environment_changes_require_explicit_authorization: true
+    operator_execution_required_for_approved_physical_environment_actions: true
+
+  persistence_boundary:
+    durable_project_authority: governed_repository_artifacts
+    durable_runtime_market_intelligence_authority: designated_authoritative_database
+    cache_transport_infrastructure: ephemeral_and_non_authoritative
+    redis_must_not_become_permanent_source_of_truth: true
+    competing_authoritative_persistence_is_prohibited: true
+
+  provider_boundary:
+    provider_specific_behavior_must_remain_behind_provider_abstraction: true
+    provider_runtime_isolation_required: true
+    provider_failure_must_not_silently_corrupt_unrelated_provider_state: true
+    provider_runtime_activity_not_authorized_by_this_contract: true
+
+  v1_boundary:
+    v1_status: FROZEN
+    v1_vps_mutation_authorized: false
+    v1_runtime_activity_authorized: false
+    v1_must_not_become_a_v2_environment_dependency: true
+
+  security_boundary:
+    secrets_in_repository: prohibited
+    credentials_in_chat_or_build_reports: prohibited
+    environment_specific_secret_material_must_use_approved_secret_handling: true
+
+  resource_reliability_boundary:
+    environment_contract_must_account_for: 
+      - bounded_resource_usage
+      - disk_growth
+      - memory_pressure
+      - queue_or_stream_growth
+      - reconnect_and_retry_behavior
+      - rate_limits
+      - observability
+      - recovery
+    observed_runtime_behavior_must_not_be_promoted_to_architecture_without_evidence: true
+
+  state_and_evidence:
+    environment_definition_does_not_equal_implementation: true
+    implementation_does_not_equal_verification: true
+    verification_does_not_equal_acceptance: true
+    unsupported_environment_state_must_remain_explicit: true
+
+  operator_prerequisites:
+    applicable_only_when_later_physical_execution_is_authorized: true
+    prerequisites_include:
+      - approved_execution_command_pack
+      - target_environment_identification
+      - authorized_scope_and_change_boundary
+      - required_secrets_available_through_approved_handling
+      - rollback_or_recovery_instructions_where_applicable
+      - execution_output_returned_as_evidence
+
 rules:
   environment_differences_must_be_explicit: true
   policy_must_not_be_reported_as_guarantee: true
+  environment_definition_must_not_grant_runtime_authority: true
+  no_future_step_activation: true
+  no_v1_vps_runtime_activity: true
+  no_market_trading_or_capital_activity: true
+  no_provider_runtime_activity_without_explicit_authorization: true
+  no_speculative_stable_ids: true
+  repository_is_authoritative: true
