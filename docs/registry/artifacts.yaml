@@ -259,3 +259,9 @@ records:
     artifact_path: docs/audits/AR-P0-AUDIT-011.md
     traceability: BR-P0-009 / TO-P0-008 / PH-P0 / STEP-P0-007
     status: APPROVED / VERIFIED
+  - stable_id: TO-P0-009
+    canonical_name: Verification / Evidence / Gates
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P0-009.md
+    traceability: PH-P0 / STEP-P0-008 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    status: AUTHORIZED TO EXECUTE
