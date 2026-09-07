@@ -17,7 +17,7 @@ The successor AI MUST read the following in order, stopping only the affected ac
 1. `docs/continuity/MEYLUX_V2_TRANSFER_STATE.yaml`
 2. `docs/state/CURRENT_CHECKPOINT.json`
 3. `docs/governance/AI_CONTINUATION_PROTOCOL_V2.md`
-4. Applicable Role Contract / Role Definition artifacts.
+4. Applicable Role Contract / Role Definition artifacts for the declared role.
 5. Required Shared Role Boundary artifacts.
 6. `docs/registry/artifacts.yaml`
 7. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
@@ -32,23 +32,41 @@ The bootstrap sequence is a minimum reconstruction path, not permission to read 
 
 ## 3. Role Familiarization
 
-Before authorized project work, the successor AI MUST reconstruct the applicable role model from repository artifacts.
+Before Continuity Reconstruction and before authorized project work, the successor AI MUST reconstruct the applicable role model from repository artifacts.
 
-For the V2 role model, the seven registered logical Roles are:
+When `PROJECT GUIDE` is declared, the role-specific familiarization sequence MUST be:
 
-- `ROL-V2-001` — CONTROL / REVIEWER
-- `ROL-V2-002` — PRODUCER / ARCHITECT-BUILDER
-- `ROL-V2-003` — PRODUCER RELAY
-- `ROL-V2-004` — MARKET INTELLIGENCE
-- `ROL-V2-005` — PHASE CHAT
-- `ROL-V2-006` — TROUBLESHOOTING
-- `ROL-V2-007` — OPERATOR
+```text
+PROJECT GUIDE ROLE DECLARED
+        ↓
+READ PROJECT GUIDE ROLE CONTRACT
+        ↓
+CONFIRM ROL-V2-008 FROM AUTHORITATIVE REGISTRY
+        ↓
+READ CURRENT CONTINUITY / CHECKPOINT ARTIFACTS
+        ↓
+RECONSTRUCT AUTHORITATIVE PROJECT STATE
+        ↓
+IDENTIFY CURRENT AUTHORITY / BOUNDARIES
+        ↓
+IDENTIFY ACTIVE WORK AND NEXT AUTHORIZED ACTION
+        ↓
+CONTINUE ONLY WITH ESTABLISHED AUTHORITY
+```
+
+The PROJECT GUIDE role is:
+
+- Stable ID: `ROL-V2-008`
+- Canonical Role Contract: `docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md`
+- Canonical Chat: `MEYLUX V2 — PROJECT GUIDE`
 
 The authoritative Role Registry is `docs/registry/artifacts.yaml`. Role identity is independent of filename, path, chat name, or model identity.
 
-Shared Role Boundary artifacts are governed artifacts, not additional Roles, and must not receive competing `ROL-*` identities.
+The PROJECT GUIDE Role Contract is the authoritative role-specific behavior source. Continuity artifacts must not duplicate, weaken, or override its substantive authority boundary.
 
-Role familiarization establishes understanding only. It does not grant authority or replace a Task Order, gate, or formal authorization.
+Role familiarization establishes understanding only. It does not grant authority, replace a Task Order, gate, formal authorization, ratification, approval, or verification.
+
+For other declared roles, read the applicable Role Contract / Role Definition and required Shared Role Boundary artifacts before state reconstruction.
 
 ## 4. State Reconstruction Requirements
 
@@ -56,15 +74,15 @@ The successor AI MUST reconstruct, from authoritative artifacts and evidence, at
 
 - project identity and mission;
 - Source of Truth;
-- architecture status;
+- frozen/ratified architecture state;
 - governance state;
-- formation/gate state;
-- current Phase and Step;
-- active/approved Task Order;
+- current gate and phase state;
+- current checkpoint;
+- active or most recently authorized Task Order;
 - Stable IDs and registry state;
-- ratified decisions;
+- ratified ADRs / governance decisions;
+- open questions;
 - deferred decisions;
-- Open Questions / blockers;
 - verified and unverified evidence;
 - latest verified commit where authoritative;
 - next authorized action;
@@ -96,6 +114,8 @@ A transfer package transfers state; it does not grant new authority.
 
 A prior transfer baseline remains historical when superseded by a newer authoritative checkpoint/evidence chain.
 
+Role declaration and Role Familiarization likewise do not grant authority.
+
 ## 6. Current Continuation Boundary
 
 Continuation is allowed only when:
@@ -109,7 +129,10 @@ The successor AI MUST NOT infer authorization from:
 - model memory;
 - an old transfer package;
 - architecture text alone;
-- the existence of a future Step.
+- the existence of a future Step;
+- role declaration;
+- Role Familiarization;
+- continuity reconstruction itself.
 
 If a genuine architecture, governance, identity, scope, or authority conflict is found:
 
@@ -194,22 +217,7 @@ NEXT AUTHORIZED ACTION:
 CONTINUITY STATUS:
 ```
 
-The report MUST also include the required role-model reconstruction confirmation:
-
-```yaml
-role_artifacts_reviewed:
-  - CONTROL / REVIEWER
-  - PRODUCER RELAY
-  - PRODUCER / ARCHITECT-BUILDER
-  - MARKET INTELLIGENCE
-  - TROUBLESHOOTING
-  - PHASE CHAT
-  - PRE-PROJECT
-  - SHARED ROLE BOUNDARY
-
-role_model_understood:
-  YES
-```
+The report MUST also include the required role-model reconstruction confirmation. For PROJECT GUIDE, this confirmation must identify `ROL-V2-008` and confirm that `docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md` was read before Continuity Reconstruction.
 
 The report must state facts established by authoritative artifacts only. It must not claim independent verification merely because a transfer package or prior AI prepared the material.
 
@@ -233,10 +241,10 @@ Do not require the entire historical chat when the governed repository already c
 The successor AI MUST NOT:
 
 - replace repository authority with hidden memory;
-- reopen completed Pre-Project work without authorization;
+- reopen completed Pre-Project or closed Phase 0 work without authorization;
 - activate future Steps;
 - issue future Task Orders without Reviewer authority;
-- ratify or freeze the Master Architecture outside its formal process;
+- ratify or freeze architecture outside its formal process;
 - change Stable IDs or historical identities;
 - create competing continuity, governance, checkpoint, registry, or approval systems;
 - fabricate execution, verification, runtime, market, provider, or repository state;
@@ -248,4 +256,4 @@ The successor AI MUST NOT:
 
 Continuity is successful when a successor AI can reconstruct authoritative project state, identify what is current versus historical/unverified, understand the applicable role boundaries, identify the active authorized work, and determine the next authorized action without requiring hidden chat memory.
 
-This protocol candidate does not authorize Phase progression, runtime implementation, V1 activity, market/trading/capital activity, or Master Architecture ratification/freeze.
+This protocol candidate does not authorize Phase progression, runtime implementation, V1 activity, market/trading/capital activity, or architecture ratification/freeze.
