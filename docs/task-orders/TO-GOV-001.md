@@ -9,9 +9,11 @@
 **Issuer:** CONTROL / REVIEWER (`ROL-V2-001`)
 **Recipient:** PRODUCER / ARCHITECT-BUILDER (`ROL-V2-002`)
 **Status:** `AUTHORIZED TO EXECUTE`
-**Authority:** `ADR-GOVERNANCE-001`; `ADR-GOVERNANCE-003`; `ADR-GOVERNANCE-005`
+**Authority:** `ADR-GOVERNANCE-001`; `ADR-GOVERNANCE-003`; `ADR-GOVERNANCE-005`; `ADR-GOVERNANCE-006`
 **Target Role:** `PROJECT GUIDE`
 **Canonical Role Contract Path:** `docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md`
+**Build Report ID:** `BR-GOV-001`
+**Build Report Path:** `docs/build-reports/BR-GOV-001.md`
 
 ## 1. Sole Objective
 
@@ -21,7 +23,7 @@ This Task Order establishes only the work required to produce and evidence the p
 
 ## 2. Authoritative Basis
 
-This Task Order is issued under the ratified post-freeze Task Order identity convention established by `ADR-GOVERNANCE-005`.
+This Task Order is issued under the ratified post-freeze Task Order identity convention established by `ADR-GOVERNANCE-005` and the ratified post-freeze Build Report identity convention established by `ADR-GOVERNANCE-006`.
 
 The applicable Project Guide role contract requirements have been reviewed as the authorized design input for this Task Order. The role contract must preserve the previously approved role boundary, including:
 
@@ -54,7 +56,7 @@ The Producer shall, within this Task Order only:
 4. Define the role lifecycle so that `DRAFT → REVIEWED → RATIFIED → FROZEN` is distinct from formal establishment, with authoritative registry entry required for formal establishment.
 5. Include explicit Source-of-Truth, freshness, uncertainty, evidence, continuity, role-routing, conflict-handling, scope-control, and V1/V2 boundary requirements appropriate to the approved Project Guide contract.
 6. Preserve the distinction between FACT and ASSESSMENT and between evidence assessment and formal verification authority.
-7. Produce a complete Build Report containing actual work performed, changed artifacts, self-test/evidence results, deviations, open questions, and explicit non-claims.
+7. Produce Build Report `BR-GOV-001` at `docs/build-reports/BR-GOV-001.md`, containing actual work performed, changed artifacts, self-test/evidence results, deviations, open questions, and explicit non-claims.
 8. Keep the Build Report unverified until independent CONTROL audit.
 
 ## 4. Scope Out / Explicit Prohibitions
@@ -91,7 +93,7 @@ TO-GOV-001
     ↓
 PRODUCER ROLE CONTRACT
     ↓
-BUILD REPORT
+BR-GOV-001 BUILD REPORT
     ↓
 CONTROL AUDIT
     ↓
@@ -106,13 +108,23 @@ INDEPENDENT VERIFICATION
 
 No step in this Task Order may be represented as completing a later stage without the actual evidence and authority for that stage.
 
-## 6. Build Report Identity Boundary
+## 6. Build Report Identity
 
-A Build Report is required for the Producer's work under this Task Order.
+The Build Report for this Task Order is formally allocated as:
 
-The existing ratified Build Report allocation delegation in `ADR-GOVERNANCE-003` is scoped to the Producer's own currently authorized Task Order and does not itself establish a post-freeze `BR-GOV-<NNN>` naming convention.
+```text
+BR-GOV-001
+```
 
-Therefore the Producer MUST NOT invent a new Build Report identity convention. If no applicable ratified Build Report identity/path can be established under the existing governance mechanism, the Producer MUST stop at that allocation boundary and report the exact blocker to CONTROL rather than fabricate or repurpose an identity.
+Canonical path:
+
+```text
+docs/build-reports/BR-GOV-001.md
+```
+
+This allocation is authorized by ratified `ADR-GOVERNANCE-006`. The Producer shall use this identity for the Build Report produced under `TO-GOV-001` and must not create an alternative identity for the same Build Report.
+
+The Build Report remains a Producer artifact and is not itself approval or verification evidence until independently audited.
 
 ## 7. Acceptance Criteria
 
@@ -143,7 +155,7 @@ Producer completion under this Task Order means only:
 ```text
 ROLE CONTRACT PRODUCED
 +
-BUILD REPORT PRODUCED
+BR-GOV-001 PRODUCED
 +
 ACTUAL EVIDENCE REPORTED
 ```
@@ -175,7 +187,6 @@ The Producer MUST stop the affected portion and report to CONTROL if:
 
 - the approved Project Guide contract cannot be implemented without changing frozen architecture or ratified governance;
 - a required identity cannot be established without invention;
-- a required Build Report identity has no applicable ratified allocation mechanism;
 - an authority conflict is discovered;
 - a requested change would exceed this Task Order's scope;
 - required evidence is unavailable;
