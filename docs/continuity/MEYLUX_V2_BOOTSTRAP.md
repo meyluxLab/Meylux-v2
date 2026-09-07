@@ -11,14 +11,15 @@ FIRST RECONSTRUCT THE PROJECT STATE FROM THE AUTHORITATIVE REPOSITORY.
 1. Treat the GitHub repository and governed repository artifacts as the durable Source of Truth.
 2. Do not use hidden chat memory, prior-AI identity, or user recollection as authoritative project state.
 3. Read only the minimum bootstrap artifacts listed in the Continuation Package before requesting clarification.
-4. Do not reopen completed Pre-Project work.
+4. Do not reopen completed Pre-Project work or closed Phase 0 work.
 5. Do not invent architecture, Stable IDs, task IDs, execution evidence, verification evidence, or runtime state.
-6. Do not start Phase 0 merely because the continuation package describes its next boundary.
-7. Preserve the existing Reviewer / Producer / Operator governance model.
+6. Do not activate Phase 1 or any future work merely because continuation material describes it.
+7. Preserve the existing Reviewer / Producer / Operator governance model and all established role boundaries.
 8. If authoritative repository state is internally consistent and the next action is already authorized, CONTINUE.
 9. If a genuine repository/package conflict exists, report it concisely and stop only the affected action. Do not independently reconcile or redesign it.
 10. Distinguish information needed to understand state from information needed to execute the next task.
 11. Ask the user only for information that cannot be established from authoritative artifacts and is genuinely required for the next authorized action.
+12. Role Familiarization establishes understanding only; it never grants authorization.
 
 ## First action
 
@@ -30,52 +31,42 @@ Read, in order:
 
 ### Role Governance Context
 
-Before producing the Continuity Reconstruction Report, the AI must first complete Role Familiarization: read and understand the applicable role governance artifacts, including the applicable Role Contract / Role Definition and Shared Role Boundary documents for its role and required interactions.
+When a role is declared, first complete Role Familiarization for that role. For PROJECT GUIDE, read the canonical PROJECT GUIDE Role Contract before continuing project-state analysis.
 
 Role Familiarization is a prerequisite to Continuity Reconstruction. It establishes role identity, responsibility, authority boundaries, and interaction boundaries; it does not grant authority or replace project authorization.
 
-4. `docs/governance/ROLE_CONTRACT_V2.md`
-5. `docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md`
-6. `docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md`
-7. `docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md`
-8. `docs/governance/ROLE_CONTRACT_TROUBLESHOOTING_V2.md`
-9. `docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md`
-10. `docs/governance/ROLE_DEFINITION_PHASE_CHAT_V2.md`
-11. `docs/governance/ROLE_DEFINITION_PRE_PROJECT_V2.md`
-12. `docs/governance/SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md`
-13. `docs/governance/SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PHASE_CHAT_V2.md`
+4. `docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md` when `PROJECT GUIDE` / `ROL-V2-008` is declared
+5. Applicable other Role Contract / Role Definition artifacts and required Shared Role Boundary documents for the declared role and required interactions
 
 ### Role Identity Discovery
 
-After reading the applicable role artifacts, read the authoritative Role Registry records:
+After Role Familiarization, read the authoritative Role Registry records:
 
-14. `docs/registry/artifacts.yaml`
+6. `docs/registry/artifacts.yaml`
 
-The following seven existing logical Roles are registered under `ADR-ROLE-IDENTITY-001`:
+The authoritative PROJECT GUIDE identity is:
 
-| Role | Stable ID | Authoritative Role Artifact |
-|---|---|---|
-| CONTROL / REVIEWER | `ROL-V2-001` | `docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md` |
-| PRODUCER / ARCHITECT-BUILDER | `ROL-V2-002` | `docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md` |
-| PRODUCER RELAY | `ROL-V2-003` | `docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md` |
-| MARKET INTELLIGENCE | `ROL-V2-004` | `docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md` |
-| PHASE CHAT | `ROL-V2-005` | `docs/governance/ROLE_DEFINITION_PHASE_CHAT_V2.md` |
-| TROUBLESHOOTING | `ROL-V2-006` | `docs/governance/ROLE_CONTRACT_TROUBLESHOOTING_V2.md` |
-| OPERATOR | `ROL-V2-007` | `docs/governance/ROLE_CONTRACT_V2.md` |
+```text
+PROJECT GUIDE
+Stable ID: ROL-V2-008
+Role Contract: docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md
+Canonical Chat: MEYLUX V2 — PROJECT GUIDE
+```
 
-`SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md` and `SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PHASE_CHAT_V2.md` are governed interaction-boundary artifacts, not Roles, and do not receive `ROL-*` identities under `ADR-ROLE-IDENTITY-001`.
+Role identity is independent of chat name, filename, repository path, or model identity. The Role Registry remains authoritative for Stable ID and role-to-artifact mapping.
 
-The AI must confirm that it has completed Role Familiarization by reading the applicable Role Contracts / Role Definitions, required Shared Role Boundary artifacts, and the Role Registry before continuing project-state analysis.
+The AI must confirm that it has completed Role Familiarization by reading the applicable Role Contract / Role Definition, required Shared Role Boundary artifacts, and the Role Registry before continuing project-state analysis.
 
 ### Remaining Project Context
 
 Continue reading:
 
-15. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
-16. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
-17. `docs/state/OPEN_QUESTIONS.yaml`
-18. `docs/state/DEFERRED_DECISIONS.yaml`
-19. `docs/decisions/ADR/ADR-ROLE-IDENTITY-001.md` when Role identity context is relevant to the current task.
+7. `docs/governance/ARTIFACT_PROTOCOL_V2.md`
+8. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
+9. `docs/state/OPEN_QUESTIONS.yaml`
+10. `docs/state/DEFERRED_DECISIONS.yaml`
+11. Relevant ADRs / ACRs when required by the current task or role context
+12. Latest approved artifact and evidence chain relevant to the current boundary
 
 Then produce exactly one concise Continuity Reconstruction Report using the fields defined in:
 
@@ -85,16 +76,45 @@ The report must explicitly confirm that the AI has completed Role Familiarizatio
 
 Do not read the entire repository unless the next authorized action requires additional context.
 
+## Required PROJECT GUIDE continuity sequence
+
+When `PROJECT GUIDE` / `ROL-V2-008` is declared, the successor AI must follow this sequence:
+
+```text
+PROJECT GUIDE ROLE DECLARED
+        ↓
+READ PROJECT GUIDE ROLE CONTRACT
+        ↓
+CONFIRM ROL-V2-008 FROM AUTHORITATIVE REGISTRY
+        ↓
+READ CURRENT CONTINUITY / CHECKPOINT ARTIFACTS
+        ↓
+RECONSTRUCT AUTHORITATIVE PROJECT STATE
+        ↓
+IDENTIFY CURRENT AUTHORITY / BOUNDARIES
+        ↓
+IDENTIFY ACTIVE WORK AND NEXT AUTHORIZED ACTION
+        ↓
+CONTINUE ONLY WITH ESTABLISHED AUTHORITY
+```
+
+Role Familiarization must precede Continuity Reconstruction and must never be treated as authorization.
+
 ## Continuation boundary
 
-The current transfer baseline is post-G-0R and pre-Phase-0:
+The repository current-state record is authoritative for current continuation. The historical transfer baseline must not override newer authoritative repository state.
 
-- PP-00 … PP-12: CLOSED / FROZEN
+At the current governed boundary:
+
+- Pre-Project PP-00 … PP-12: CLOSED / FROZEN
 - G-0: CLOSED / VERIFIED
 - G-0R: RATIFIED / VERIFIED
-- Phase 0: NOT AUTHORIZED
-- Registry Foundation: INITIALIZED / VERIFIED
-- GitHub baseline: INSTALLED / VERIFIED
+- Phase 0: CLOSED / VERIFIED
+- `PH-P0`: CLOSED / VERIFIED; no subsequent Phase 0 Step exists
+- Project Guide: `ROL-V2-008`, RATIFIED / FROZEN — VERIFICATION PENDING according to the authoritative Registry
 - VPS: NOT SET UP / UNTOUCHED
+- Runtime, V1, market, trading, capital, and provider-runtime activity remain unauthorized unless separately authorized through the governing process
 
-After continuity reconstruction, continue only within the authority actually established by the repository. Phase 0 remains blocked until formal Phase 0 authorization exists.
+The current checkpoint is current-state evidence, not a replacement for architecture or governance authority.
+
+After continuity reconstruction, continue only within authority actually established by the repository. Do not infer authorization from role declaration, continuity material, historical transfer state, or sequence position alone.
