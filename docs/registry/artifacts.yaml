@@ -39,7 +39,7 @@ records:
     status: DRAFT_PRE_PHASE_0
   - stable_id: ROL-V2-007
     canonical_name: OPERATOR
-    artifact_type: ROLE
+    entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
@@ -184,6 +184,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-008
     canonical_name: BR-P0-006 Control Audit — Stable Identity / Registry
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-008.md
     traceability: BR-P0-006 / TO-P0-005 / PH-P0 / STEP-P0-004
     status: APPROVED / VERIFIED
@@ -199,6 +200,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-009
     canonical_name: BR-P0-007 Control Audit — Governance / Artifact Protocol
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-009.md
     traceability: BR-P0-007 / TO-P0-006 / PH-P0 / STEP-P0-005
     status: APPROVED / VERIFIED
@@ -262,4 +264,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-011.md
     traceability: TO-P0-010 / PH-P0 / STEP-P0-009
-    status: ALLOCATED / NOT YET PRODUCED
+    status: PRODUCED / UNVERIFIED
