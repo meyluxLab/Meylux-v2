@@ -55,6 +55,12 @@ records:
     artifact_path: docs/task-orders/TO-GOV-001.md
     traceability: ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: AUTHORIZED TO EXECUTE
+  - stable_id: TO-GOV-002
+    canonical_name: PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-002.md
+    traceability: ADR-GOVERNANCE-001 / ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
+    status: AUTHORIZED TO EXECUTE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
@@ -79,6 +85,12 @@ records:
     artifact_path: docs/build-reports/BR-GOV-001.md
     traceability: TO-GOV-001 / ADR-GOVERNANCE-006
     status: PRODUCED / UNVERIFIED
+  - stable_id: BR-GOV-002
+    canonical_name: Build Report — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-GOV-002.md
+    traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
+    status: RESERVED / NOT YET PRODUCED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
