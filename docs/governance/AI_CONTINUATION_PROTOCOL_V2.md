@@ -1,8 +1,8 @@
 # Meylux V2 — AI Continuation Protocol
 
-**Status:** DRAFT — RECONCILED BY PRODUCER / PENDING CONTROL APPROVAL
+**Status:** RATIFIED / FROZEN
 **Scope:** V2 AI-to-AI continuation and resumability
-**Authority boundary:** This document defines the continuation protocol candidate; it does not itself ratify architecture, authorize Steps, close gates, or authorize runtime activity.
+**Authority boundary:** This document defines the authoritative continuation protocol; it does not itself ratify architecture, authorize Steps, close gates, or authorize runtime activity.
 
 ## 1. Purpose
 
@@ -256,4 +256,4 @@ The successor AI MUST NOT:
 
 Continuity is successful when a successor AI can reconstruct authoritative project state, identify what is current versus historical/unverified, understand the applicable role boundaries, identify the active authorized work, and determine the next authorized action without requiring hidden chat memory.
 
-This protocol candidate does not authorize Phase progression, runtime implementation, V1 activity, market/trading/capital activity, or architecture ratification/freeze.
+This authoritative protocol does not authorize Phase progression, runtime implementation, V1 activity, market/trading/capital activity, or architecture ratification/freeze.
