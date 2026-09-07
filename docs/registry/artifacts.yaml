@@ -156,7 +156,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P0-004.md
     traceability: PH-P0 / STEP-P0-003 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-002
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: ADR-GOVERNANCE-003
     canonical_name: Producer Build Report Allocation Delegation
     entity_type: ADR
@@ -168,4 +168,10 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-005.md
     traceability: TO-P0-004 / PH-P0 / STEP-P0-003
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
+  - stable_id: AR-P0-AUDIT-007
+    canonical_name: BR-P0-005 Control Audit — V1 Lessons Integration
+    entity_type: AR
+    artifact_path: docs/audits/AR-P0-AUDIT-007.md
+    traceability: BR-P0-005 / TO-P0-004 / PH-P0 / STEP-P0-003
+    status: APPROVED / VERIFIED
