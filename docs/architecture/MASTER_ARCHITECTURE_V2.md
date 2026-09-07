@@ -2,9 +2,9 @@
 
 **Document ID:** DOC-V2-ARCH-001  
 **Project:** Meylux AI Market Intelligence Platform  
-**Version:** 2.0.0-DRAFT-ARCHITECTURAL-BASELINE  
-**Status:** DESIGN BASELINE — PENDING RATIFICATION  
-**Classification:** Authoritative Target Architecture Candidate / Pre-Implementation  
+**Version:** 2.0.0  
+**Status:** RATIFIED / FROZEN  
+**Classification:** Authoritative Target Architecture / Frozen V2 Baseline  
 **Scope:** Meylux V2 only  
 **Legacy V1:** FROZEN; this document grants no permission to mutate or resume V1  
 **Supersedes for V2:** `MEYLUX MASTER TARGET ARCHITECTURE v5.1.1` as the target architecture after formal ratification  
@@ -1125,7 +1125,7 @@ Use AI for reasoning and synthesis over validated evidence.
 
 ## Provider abstraction
 
-Model vendor and model identity are configuration-level implementation choices unless explicitly elevated by architecture. Provider strings must not leak into generic business logic.
+Model vendor and model identity are configuration-level implementation choices unless explicitly elevated by ADR. Provider strings must not leak into generic business logic.
 
 ## Prompt isolation
 
@@ -2326,17 +2326,9 @@ No skipped gate. No “parallel build” that creates an unverified dependency o
 
 # 54. RATIFICATION RULE
 
-This document becomes the **Master Target Architecture V2** only after:
+This document became the **Master Target Architecture V2** through formal Reviewer audit, resolution of blocking Open Questions at the ratification boundary, registry/state synchronization, and the Project Owner ratification/freeze decision recorded in `ADR-GOVERNANCE-004`.
 
-- formal Reviewer audit;
-- blocking Open Questions resolved;
-- Operator ratification;
-- registry initialization;
-- version tag/commit recorded;
-- CURRENT_CHECKPOINT updated;
-- G-0 closed.
-
-Before that event, this file is a target architecture candidate and must not be treated as a runtime implementation authorization.
+The architecture is now a frozen V2 governance baseline. Changes to protected architectural content require the established ADR/ACR/change-control process and may invalidate dependent verification evidence as defined by that process.
 
 ---
 
@@ -2482,7 +2474,8 @@ NO UNVERIFIED COMPLETION
 NO UNDOCUMENTED ARCHITECTURAL DRIFT
 ```
 
-**Document Status:** `DESIGN BASELINE — PENDING RATIFICATION`  
-**Next Gate:** `G-0 — Architecture Freeze`  
-**V1 Mutation Permission:** `NO`  
-**Implementation Permission Before G-0:** `NO`
+**Document Status:** `RATIFIED / FROZEN`  
+**Ratification Authority:** `PROJECT OWNER`  
+**Ratification Record:** `ADR-GOVERNANCE-004`  
+**Freeze State:** `FROZEN`  
+**V1 Mutation Permission:** `NO`
