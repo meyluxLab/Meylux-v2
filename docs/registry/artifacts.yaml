@@ -43,11 +43,17 @@ records:
     artifact_path: docs/governance/ROLE_CONTRACT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+  - stable_id: ROL-V2-008
+    canonical_name: PROJECT GUIDE
+    entity_type: ROLE
+    artifact_path: docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md
+    traceability: ADR-GOVERNANCE-007 / TO-GOV-001
+    status: RATIFIED / FROZEN — VERIFICATION PENDING
   - stable_id: TO-GOV-001
     canonical_name: PROJECT GUIDE Role Establishment
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-001.md
-    traceability: ADR-GOVERNANCE-005 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
+    traceability: ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: AUTHORIZED TO EXECUTE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
@@ -61,12 +67,18 @@ records:
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-006.md
     traceability: Project Owner ratification / post-freeze Build Report identity convention
     status: RATIFIED / FROZEN
+  - stable_id: ADR-GOVERNANCE-007
+    canonical_name: PROJECT GUIDE Stable Identity Extension
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-007.md
+    traceability: Project Owner ratification / PROJECT GUIDE Stable Identity Extension
+    status: RATIFIED / FROZEN
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
     entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-001.md
     traceability: TO-GOV-001 / ADR-GOVERNANCE-006
-    status: RESERVED / NOT YET PRODUCED
+    status: PRODUCED / UNVERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
