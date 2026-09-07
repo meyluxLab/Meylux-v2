@@ -15,11 +15,12 @@ The existing AI-to-AI Continuity / Bootstrap mechanism was updated to integrate 
 
 ## 2. Changed Artifacts
 
-Exactly the following two existing continuity/governance artifacts were updated, plus this required Build Report:
+The following repository artifacts were changed as part of execution:
 
-1. `docs/continuity/MEYLUX_V2_BOOTSTRAP.md`
-2. `docs/governance/AI_CONTINUATION_PROTOCOL_V2.md`
-3. `docs/build-reports/BR-GOV-002.md`
+1. `docs/continuity/MEYLUX_V2_BOOTSTRAP.md` — updated continuity bootstrap.
+2. `docs/governance/AI_CONTINUATION_PROTOCOL_V2.md` — updated continuation protocol.
+3. `docs/registry/artifacts.yaml` — existing `BR-GOV-002` record status changed from `RESERVED / NOT YET PRODUCED` to `PRODUCED / UNVERIFIED` to keep the authoritative registry consistent with the required Build Report production. No Stable ID, identity, path, or existing role record was created, renumbered, or changed.
+4. `docs/build-reports/BR-GOV-002.md` — required Build Report produced.
 
 No other project artifact was intentionally modified by this Task Order.
 
@@ -90,22 +91,23 @@ Producer self-test performed against the Task Order acceptance requirements:
 - no Phase 0 artifact, frozen architecture, or Constitution modified: **PASS**
 - no Phase 1 implementation or runtime activity performed: **PASS**
 - no V1/VPS/market/trading/capital/provider-runtime activity performed: **PASS**
+- registry change was limited to recording the already-reserved `BR-GOV-002` as `PRODUCED / UNVERIFIED`: **PASS**
 
 These are Producer self-test results only and are not independent verification.
 
 ## 6. Scope / Boundary Check
 
-The following were not modified as part of this Task Order:
+The following were not substantively modified as part of this Task Order:
 
 - PROJECT GUIDE Role Contract substantive content;
 - `docs/architecture/MASTER_ARCHITECTURE_V2.md`;
 - Constitution;
 - `docs/state/CURRENT_CHECKPOINT.json`;
 - Phase 0 artifacts;
-- Stable ID definitions or existing identity records;
+- existing Stable ID definitions or role identities;
 - runtime/VPS/provider/market/trading/capital/V1 functionality.
 
-No competing continuity, checkpoint, registry, governance, or approval system was created.
+No competing continuity, checkpoint, registry, governance, or approval system was created. The registry was updated only to record production of the pre-existing reserved `BR-GOV-002` record.
 
 ## 7. Deviations
 
