@@ -16,7 +16,7 @@ records:
       - CONTROL / REVIEWER formal Entry Review is APPROVED.
       - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
     first_step: STEP-P0-001
-    next_valid_step: STEP-P0-009
+    next_valid_step: STEP-P0-010
     final_step: STEP-P0-010
     authorization_criteria:
       - Phase 0 registry record and first-step definition exist in the GitHub Source of Truth.
@@ -156,21 +156,24 @@ records:
     logical_name: Dependency and Boundary Graph
     entity_type: STEP
     phase: PH-P0
-    status: AUTHORIZED / ACTIVE
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 9
     predecessor: STEP-P0-008
     activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: TO-P0-010
+    active_task_order: null
+    completed_task_order: TO-P0-010
+    completion_audit: AR-P0-AUDIT-013
     purpose: Establish the authoritative dependency and boundary graph for the reconciled V2 architecture.
 
   - sid: STEP-P0-010
     logical_name: Master Architecture Freeze
     entity_type: STEP
     phase: PH-P0
-    status: DEFINED / NOT AUTHORIZED
-    authorization_state: NOT AUTHORIZED
+    status: AUTHORIZED / ACTIVE
+    authorization_state: AUTHORIZED / ACTIVE
     order: 10
     predecessor: STEP-P0-009
     activation_basis: ADR-ARCHITECTURE-001
+    active_task_order: TO-P0-011
     purpose: Execute the final required Master Architecture ratification/freeze boundary and establish the Phase 0 completion boundary only after all prerequisite Steps and evidence are verified.
