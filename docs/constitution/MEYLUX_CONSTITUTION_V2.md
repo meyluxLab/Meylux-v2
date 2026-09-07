@@ -1,6 +1,6 @@
 # Meylux V2 — Constitution
 
-**Status:** DRAFT — PENDING RATIFICATION  
+**Status:** RATIFIED  
 **Scope:** Meylux V2 only  
 **Legacy V1:** FROZEN and outside V2
 
@@ -48,12 +48,10 @@ No party silently edits another party's artifact. Durable project authority resi
 
 ## 5. Ratification Boundary
 
-This constitution is a draft repository artifact pending the formal V2 formation ratification process.
+This constitution has been formally ratified by the Project Owner under `ADR-GOVERNANCE-001`, with the durable ratification decision recorded as `ADR-GOVERNANCE-002`.
 
-This baseline revision does not:
-- close G-0;
-- ratify G-0R;
-- authorize Phase 0;
-- initialize the Registry;
-- install the package into GitHub;
+This ratification does not:
+- ratify or freeze the Master Architecture;
+- activate future Phase 0 Steps;
+- reopen G-0 or G-0R;
 - establish runtime implementation or execution evidence.
