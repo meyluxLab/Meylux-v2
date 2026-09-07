@@ -138,10 +138,10 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-004.md
     traceability: TO-P0-003 / PH-P0 / STEP-P0-002 / AR-P0-AUDIT-005
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
   - stable_id: AR-P0-AUDIT-006
     canonical_name: BR-P0-004 Control Audit — Constitution Correction
     entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-006.md
     traceability: BR-P0-004 / TO-P0-003 / PH-P0 / STEP-P0-002 / AR-P0-AUDIT-005
-    status: ALLOCATED / NOT YET PRODUCED
+    status: APPROVED / VERIFIED — RATIFICATION READY
