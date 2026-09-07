@@ -39,7 +39,7 @@ records:
     status: DRAFT_PRE_PHASE_0
   - stable_id: ROL-V2-007
     canonical_name: OPERATOR
-    entity_type: ROLE
+    artifact_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
@@ -96,13 +96,11 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: ADR-GOVERNANCE-001
     canonical_name: Final Governance / Architecture / Ratification Authority
-    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-001.md
     traceability: Project Owner ratification / ADR identity convention
     status: RATIFIED
   - stable_id: ADR-ARCHITECTURE-001
     canonical_name: Phase 0 Sequence Reconciliation
-    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-ARCHITECTURE-001.md
     traceability: PH-P0 / STEP-P0-001 / Project Owner ratification authority
     status: RATIFIED
@@ -216,6 +214,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-010
     canonical_name: BR-P0-008 Control Audit — AI Continuation Protocol
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-010.md
     traceability: BR-P0-008 / TO-P0-007 / PH-P0 / STEP-P0-006
     status: APPROVED / VERIFIED
@@ -231,6 +230,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-011
     canonical_name: BR-P0-009 Control Audit — Environment Contract
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-011.md
     traceability: BR-P0-009 / TO-P0-008 / PH-P0 / STEP-P0-007
     status: APPROVED / VERIFIED
@@ -257,3 +257,9 @@ records:
     artifact_path: docs/task-orders/TO-P0-010.md
     traceability: PH-P0 / STEP-P0-009 / ADR-ARCHITECTURE-001 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P0-011
+    canonical_name: Build Report — Dependency and Boundary Graph
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P0-011.md
+    traceability: TO-P0-010 / PH-P0 / STEP-P0-009
+    status: ALLOCATED / NOT YET PRODUCED
