@@ -79,6 +79,12 @@ records:
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-007.md
     traceability: Project Owner ratification / PROJECT GUIDE Stable Identity Extension
     status: RATIFIED / FROZEN
+  - stable_id: ADR-GOVERNANCE-008
+    canonical_name: Post-Freeze Governance Audit Report Identity Convention
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-008.md
+    traceability: Project Owner ratification / post-freeze Audit Report identity convention
+    status: RATIFIED / FROZEN
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
     entity_type: BR
@@ -91,6 +97,12 @@ records:
     artifact_path: docs/build-reports/BR-GOV-002.md
     traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: PRODUCED / UNVERIFIED
+  - stable_id: AR-GOV-001
+    canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
+    entity_type: AR
+    artifact_path: docs/audits/AR-GOV-001.md
+    traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
+    status: RESERVED / NOT YET PRODUCED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
