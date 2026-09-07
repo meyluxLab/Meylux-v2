@@ -69,13 +69,11 @@ records:
     status: APPROVED / VERIFIED — WITH RECORDED GOVERNANCE DEVIATION
   - stable_id: TO-P0-001
     canonical_name: Master Architecture Reconciliation
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P0-001.md
     traceability: PH-P0 / STEP-P0-001 / AR-P0-ENTRY-001 / AR-P0-RECON-001 / AR-P0-AUDIT-002
     status: VERIFIED / COMPLETE
   - stable_id: BR-P0-001
     canonical_name: Build Report — Master Architecture Reconciliation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-001.md
     traceability: TO-P0-001 / PH-P0 / STEP-P0-001 / AR-P0-AUDIT-002
     status: VERIFIED
@@ -115,16 +113,19 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: BR-P0-003
     canonical_name: Build Report — Constitution Ratification (Stopped / Blocked Execution)
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-003.md
     traceability: TO-P0-003 / PH-P0 / STEP-P0-002
     status: VERIFIED — BLOCKED EXECUTION RECORD
   - stable_id: AR-P0-AUDIT-004
     canonical_name: BR-P0-003 Control Audit (Corrective Mapping Superseded)
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-004.md
     traceability: BR-P0-003 / TO-P0-003 / PH-P0 / STEP-P0-002
     status: HISTORICAL / CORRECTED BY AR-P0-AUDIT-005
   - stable_id: AR-P0-AUDIT-005
     canonical_name: Correction / Reconciliation of AR-P0-AUDIT-004
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-005.md
     traceability: AR-P0-AUDIT-004 / TO-P0-003 / PH-P0 / STEP-P0-002
     status: APPROVED / VERIFIED — CORRECTIVE GOVERNANCE RECORD
@@ -161,6 +162,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-007
     canonical_name: BR-P0-005 Control Audit — V1 Lessons Integration
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-007.md
     traceability: BR-P0-005 / TO-P0-004 / PH-P0 / STEP-P0-003
     status: APPROVED / VERIFIED
@@ -177,19 +179,16 @@ records:
     status: APPROVED GOVERNANCE DECISION — LIMITED SCOPE
   - stable_id: DOC-V2-ARCH-001
     canonical_name: MEYLUX MASTER TARGET ARCHITECTURE V2
-    entity_type: DOC
     artifact_path: docs/architecture/MASTER_ARCHITECTURE_V2.md
     traceability: V2 target architecture / Phase 0 / STEP-P0-001 through STEP-P0-010
     status: DESIGN BASELINE — PENDING RATIFICATION
   - stable_id: BR-P0-006
     canonical_name: Build Report — Stable Identity / Registry
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-006.md
     traceability: TO-P0-005 / PH-P0 / STEP-P0-004
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-008
     canonical_name: BR-P0-006 Control Audit — Stable Identity / Registry
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-008.md
     traceability: BR-P0-006 / TO-P0-005 / PH-P0 / STEP-P0-004
     status: APPROVED / VERIFIED
@@ -248,4 +247,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-010.md
     traceability: TO-P0-009 / PH-P0 / STEP-P0-008
-    status: ALLOCATED / NOT YET PRODUCED
+    status: PRODUCED / UNVERIFIED
