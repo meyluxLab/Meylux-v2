@@ -190,7 +190,7 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
     first_step: STEP-P1-001
-    next_valid_step: STEP-P1-001
+    next_valid_step: STEP-P1-002
     final_step: STEP-P1-008
     authorization_criteria:
       - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
@@ -211,11 +211,13 @@ records:
     logical_name: Repository Foundation
     entity_type: STEP
     phase: PH-P1
-    status: ACTIVE / IN_PROGRESS
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 1
     activation_basis: PROJECT-OWNER-CONTINUATION-2026-09-08 / PH-P1
-    active_task_order: TO-P1-001
+    active_task_order: null
+    completed_task_order: TO-P1-001
+    completion_audit: AR-P1-AUDIT-001
     purpose: Establish the governed V2 repository/project foundation required for subsequent P1 work.
     completion_requires:
       - Producer implementation within authorized scope.
@@ -227,12 +229,12 @@ records:
     logical_name: Docker Foundation
     entity_type: STEP
     phase: PH-P1
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / NOT_ACTIVATED
+    status: ACTIVE / IN_PROGRESS
+    authorization_state: ACTIVE / AUTHORIZED
     order: 2
     predecessor: STEP-P1-001
-    activation_basis: PH-P1
-    active_task_order: null
+    activation_basis: PH-P1 / AR-P1-AUDIT-001
+    active_task_order: TO-P1-002
     purpose: Establish the reproducible container/service foundation for the V2 runtime.
 
   - sid: STEP-P1-003
