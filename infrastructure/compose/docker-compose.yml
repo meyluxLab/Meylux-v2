@@ -1,0 +1,86 @@
+services:
+  db:
+    image: timescale/timescaledb:2.29.2-pg16
+    environment:
+      POSTGRES_DB: ${MEYLUX_DB_NAME:?MEYLUX_DB_NAME must be set}
+      POSTGRES_USER: ${MEYLUX_DB_USER:?MEYLUX_DB_USER must be set}
+      POSTGRES_PASSWORD: ${MEYLUX_DB_PASSWORD:?MEYLUX_DB_PASSWORD must be set}
+    volumes:
+      - meylux-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - meylux-net
+
+  redis:
+    image: redis:7.4.6-alpine
+    command: ["redis-server", "--appendonly", "no"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    networks:
+      - meylux-net
+
+  api:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    environment:
+      MEYLUX_SERVICE: api
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - meylux-net
+
+  collector:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    environment:
+      MEYLUX_SERVICE: collector
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - meylux-net
+
+  worker-quant:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    environment:
+      MEYLUX_SERVICE: worker-quant
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - meylux-net
+
+  worker-ai:
+    build:
+      context: ../..
+      dockerfile: infrastructure/docker/Dockerfile
+    environment:
+      MEYLUX_SERVICE: worker-ai
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - meylux-net
+
+networks:
+  meylux-net:
+    name: meylux-net
+    driver: bridge
+
+volumes:
+  meylux-db-data:
+    name: meylux-db-data
