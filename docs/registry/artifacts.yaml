@@ -159,7 +159,6 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: TO-P1-001
     canonical_name: Task Order — Repository Foundation
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P1-001.md
     traceability: PH-P1 / STEP-P1-001 / AR-P1-AUDIT-001
     status: VERIFIED / COMPLETE
@@ -167,7 +166,7 @@ records:
     canonical_name: Task Order — Docker Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-002.md
-    traceability: PH-P1 / STEP-P1-002 / AR-P1-AUDIT-001
+    traceability: PH-P1 / STEP-P1-002 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-002
     canonical_name: Build Report — Docker Foundation
@@ -187,3 +186,9 @@ records:
     artifact_path: docs/task-orders/TO-P1-003.md
     traceability: PH-P1 / STEP-P1-003 / AR-P1-AUDIT-002
     status: AUTHORIZED / ACTIVE
+  - stable_id: BR-P1-003
+    canonical_name: Build Report — Database Foundation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P1-003.md
+    traceability: TO-P1-003 / PH-P1 / STEP-P1-003
+    status: PRODUCED / UNVERIFIED
