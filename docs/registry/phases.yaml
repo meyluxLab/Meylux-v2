@@ -67,12 +67,14 @@ records:
     logical_name: Database Foundation
     entity_type: STEP
     phase: PH-P1
-    status: ACTIVE / IN_PROGRESS
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 3
     predecessor: STEP-P1-002
     activation_basis: PH-P1 / AR-P1-AUDIT-002
-    active_task_order: TO-P1-003
+    active_task_order: null
+    completed_task_order: TO-P1-003
+    completion_audit: AR-P1-AUDIT-003
     purpose: Establish the authoritative persistence foundation, migration harness, and least-privilege database boundary for V2.
 
   - sid: STEP-P1-004
