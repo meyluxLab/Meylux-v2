@@ -14,3 +14,25 @@ entries:
     architecture_effect: Master Architecture remains DESIGN BASELINE — PENDING RATIFICATION
     runtime_effect: none
     v1_effect: none
+
+  - id: CHG-P1-ENTRY-001
+    date_utc: '2026-09-08'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: Phase 1 establishment, complete step registration, and first-step activation
+    basis: Project Owner authorization + General Continuation and Phase Progression Authority
+    affected_ids:
+      - PH-P1
+      - STEP-P1-001
+      - STEP-P1-002
+      - STEP-P1-003
+      - STEP-P1-004
+      - STEP-P1-005
+      - STEP-P1-006
+      - STEP-P1-007
+      - STEP-P1-008
+      - TO-P1-001
+    from_state: PH-P1 undefined; STEP-P1-001 through STEP-P1-008 undefined; no active Task Order
+    to_state: PH-P1 ACTIVE / IN_PROGRESS; STEP-P1-001 ACTIVE / AUTHORIZED; STEP-P1-002 through STEP-P1-008 DEFINED / INACTIVE; TO-P1-001 AUTHORIZED / ACTIVE
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no runtime execution evidence; Operator execution not yet performed
+    v1_effect: none
