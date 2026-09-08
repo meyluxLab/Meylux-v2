@@ -9,6 +9,17 @@
 **Legacy V1:** FROZEN; this document grants no permission to mutate or resume V1  
 **Supersedes for V2:** `MEYLUX MASTER TARGET ARCHITECTURE v5.1.1` as the target architecture after formal ratification  
 
+> **Controlled Amendment — ADR-GOVERNANCE-010**
+>
+> This frozen architecture has been minimally amended pursuant to ADR-GOVERNANCE-010 and the formally ratified **CONTROL AUTONOMOUS VPS EXECUTION & VERIFICATION** change.
+>
+> This amendment:
+> - authorizes the CONTROL / REVIEWER role (`ROL-V2-001`) to perform bounded VPS/environment execution, bounded operational recovery, and verification within governed scope;
+> - removes the Operator role's exclusivity as VPS execution authority while preserving `ROL-V2-007` identity and historical lineage;
+> - preserves all Constitution, architectural invariants, security, read-only financial, Producer, V1-isolation, lifecycle, and evidence-separation constraints.
+>
+> No implementation technology, retry/timeout numeric parameter, root-access model, new role identity, new lifecycle state, or unrelated architecture has been introduced by this amendment.
+
 > Meylux protects its intelligence first, while protecting the host through safe resource management.
 
 ---
@@ -285,21 +296,118 @@ DoD
 
 ## 4.1 Logical roles
 
-### Reviewer
+### Reviewer / CONTROL — `ROL-V2-001`
 
-The Reviewer is the quality gate. The Reviewer interprets the ratified architecture, identifies required work, creates TASK-ORDERs, audits BUILD-REPORTs, issues APPROVE / REVISE / REJECT, and provides execution command packs to the Operator.
+The Reviewer is the quality gate. The Reviewer interprets the ratified architecture, identifies required work, creates TASK-ORDERs, audits BUILD-REPORTs, issues APPROVE / REVISE / REJECT, and governs the execution and verification boundary.
 
-The Reviewer does not claim execution evidence that only the Operator can provide.
+The Reviewer / CONTROL role is authorized to perform:
 
-### Producer
+- governance and review/audit;
+- authorized VPS/environment execution;
+- bounded operational recovery;
+- collection of actual runtime execution evidence; and
+- verification of executed work against the applicable acceptance criteria.
+
+This execution authority is bounded by:
+
+```text
+Constitution
+    → Ratified / Frozen Architecture
+    → Authorized Phase / Step
+    → Authorized TASK-ORDER
+    → Security Boundary
+    → Project Owner Reserved Authority
+```
+
+CONTROL MAY execute an authorized VPS/environment operation only within its defined execution context and applicable security boundary. CONTROL MAY collect actual runtime evidence, perform bounded R0/R1/R2 recovery, terminate an operation on a defined timeout boundary, and escalate R3/R4 conditions.
+
+CONTROL MUST NOT obtain or assume unrestricted infrastructure authority, bypass TASK-ORDER scope, cross a security boundary, modify the Constitution or ratified/frozen architecture through runtime action, perform trading or capital/custody/leverage actions, or silently repair Producer implementation defects.
+
+CONTROL does not claim execution evidence merely from authorization. Actual execution must produce governed execution evidence.
+
+### Producer — `ROL-V2-002`
 
 The Producer originates implementation content in the exact scope of the TASK-ORDER, self-tests what it is able to run, reports actual results, and surfaces deviations/questions without silently changing scope.
 
 The Producer does not change architecture, SIDs, contracts, or infrastructure scope without an explicit approved directive.
 
-### Operator
+### Operator — `ROL-V2-007`
 
-The Operator is the human bridge. The Operator relays artifacts verbatim and is the only role authorized to execute approved VPS or environment commands in this workflow.
+The Operator is a permanent logical role and retains its historical lineage as the human execution bridge. The Operator relays artifacts verbatim and may perform approved VPS or environment execution where explicitly assigned by the governed workflow.
+
+The Operator is no longer the exclusive VPS execution authority under the ratified V2 authority model. Where CONTROL has explicit authorized execution authority, the Operator is not required as a runtime command relay. This amendment does not create a new Operator identity or lifecycle state.
+
+### 4.1.1 CONTROL VPS Execution Authority
+
+CONTROL VPS/environment execution is an authorized capability, not unrestricted infrastructure authority. Every execution must have a defined execution context identifying at minimum:
+
+```text
+Role
+Task ID
+Step ID
+Objective
+Target
+Allowed Actions
+Must-Not Actions
+Failure / Recovery Policy
+Retry Boundary
+Timeout Boundary
+Escalation Boundary
+Required Evidence
+Authorization Reference
+```
+
+The execution context defines what CONTROL is authorized to do and what it must not do. Technology selection, root-access model, retry counts, and timeout values are not frozen by this architectural amendment unless separately authorized by an applicable decision or task.
+
+### 4.1.2 CONTROL Verification Authority
+
+CONTROL may perform verification after execution, including where CONTROL was the executor. Verification remains a distinct lifecycle event and must be based on recorded execution evidence and the applicable acceptance criteria.
+
+A verification context must identify at minimum:
+
+```text
+Role
+Task ID
+Step ID
+Verification Objective
+Mandatory Verification Baseline
+Task-Specific Acceptance Criteria
+Required Runtime Observations
+Required Evidence
+Escalation Conditions
+```
+
+### 4.1.3 Execution / Verification Separation
+
+CONTROL may perform both execution and verification as the same logical role, but the activities remain distinct lifecycle events.
+
+```text
+EXECUTED ≠ VERIFIED
+```
+
+Execution establishes what actually happened. Verification evaluates whether the execution satisfied the applicable acceptance criteria. Self-execution does not eliminate the evidence requirement and does not automatically establish verification.
+
+```text
+AUTHORIZED
+     ↓
+EXECUTED
+     ↓
+EXECUTION EVIDENCE
+     ↓
+VERIFIED
+```
+
+### 4.1.4 Bounded Operational Recovery
+
+For authorized runtime failures, CONTROL applies the following normative recovery levels:
+
+- **R0 — Transient:** bounded retry/recovery for a transient condition within the existing execution context.
+- **R1 — Ordinary Operational:** recovery within the same TASK-ORDER, authorized scope, and security boundary.
+- **R2 — Configuration / Environment:** bounded configuration or environment remediation only when authorized, in scope, non-architectural, and within the existing security boundary.
+- **R3 — Implementation Defect:** preserve evidence, stop implementation repair by CONTROL, and route the defect to the Producer for correction and a new BUILD-REPORT / subsequent audit cycle.
+- **R4 — Architecture / Governance / Security / Authority / Scope Conflict:** STOP THAT PART, preserve evidence, and escalate. CONTROL must not resolve the conflict through personal interpretation.
+
+Recovery remains subject to the general failure model and must not amplify failure.
 
 ## 4.2 Artifact chain
 
@@ -313,13 +421,19 @@ BUILD-REPORT
 AUDIT-REPORT
      |
      v
+AUTHORIZED EXECUTION
+     |
+     v
 EXEC-LOG
+     |
+     v
+SEPARATE VERIFICATION
      |
      v
 CURRENT_CHECKPOINT
 ```
 
-Every material transition references its parent artifact IDs and affected SIDs.
+Every material transition references its parent artifact IDs and affected SIDs. `EXEC-LOG` is authoritative operational execution evidence. The actual executor role MUST be recorded and may be CONTROL (`ROL-V2-001`) or the retained Operator (`ROL-V2-007`) where explicitly assigned. `EXEC-LOG` is not itself verification evidence; verification is a separate event that references the execution evidence.
 
 ## 4.3 No silent mutation
 
@@ -342,7 +456,7 @@ No party silently edits another party's artifact. Corrections happen through the
 | Environment | ENVIRONMENT_MANIFEST.yaml |
 | Source code | Git repository |
 | CI results | CI artifacts |
-| Runtime execution evidence | Operator EXEC-LOG |
+| Runtime execution evidence | Governed EXEC-LOG |
 | Durable market/intelligence data | Authoritative database |
 | Transport/cache | Redis / ephemeral infrastructure |
 
@@ -1493,6 +1607,24 @@ change procedure
 
 # 27. SECURITY AND READ-ONLY ENFORCEMENT
 
+## 27.1 Governed VPS execution security boundary
+
+Authorized CONTROL execution does not imply unrestricted infrastructure authority. Governed VPS/environment execution must preserve the following security principles:
+
+```text
+Authenticated Target Identity
+Authorized Session
+Scoped Operation Boundary
+Credential Isolation
+Privilege Boundary
+Timeout
+Auditability
+Controlled Termination
+Destructive Operation Handling
+```
+
+Secrets MUST NOT appear in TASK-ORDERs, Architecture, BUILD-REPORTs, EXEC-LOGs, Audit Reports, or Continuity Artifacts. No root-access model is established by this amendment.
+
 Read-only is enforced in layers:
 
 ```text
@@ -1745,7 +1877,7 @@ E-FAILURE     negative/failure evidence
 E-REPLAY      historical replay evidence
 E-LIVE        live market/runtime evidence
 E-CI          CI evidence
-E-OPS         operator execution evidence
+E-OPS         governed operational execution evidence
 E-SOAK        sustained runtime evidence
 ```
 
@@ -1885,9 +2017,19 @@ VERIFY
 RESUME
 ```
 
+For governed VPS/environment execution, the recovery classification is additionally constrained by the normative R0–R4 model defined in §4.1.4:
+
+```text
+R0 → bounded transient recovery
+R1 → ordinary operational recovery within scope
+R2 → bounded configuration/environment remediation
+R3 → implementation defect → Producer correction
+R4 → architecture/governance/security/authority/scope conflict → STOP / ESCALATE
+```
+
 ## 36.2 Recovery must not amplify failure
 
-Retries are not free. Recovery itself is a load source and therefore subject to resource and rate budgets.
+Retries are not free. Recovery itself is a load source and therefore subject to resource and rate budgets. No recovery action may silently expand task scope, security authority, architectural authority, or implementation responsibility.
 
 This rule directly incorporates V1's order-book resync/rate-limit lesson.
 
