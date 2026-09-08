@@ -105,3 +105,19 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged by this implementation continuation
     runtime_effect: no VPS execution, operational recovery execution, runtime EXEC-LOG, or VPS verification performed
     v1_effect: none
+
+  - id: CHG-GOV-004-001
+    date_utc: '2026-09-09'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: Authorization of CONTROL VPS execution and verification pilot
+    basis: AR-GOV-003 + ADR-GOVERNANCE-010 + General Continuation and Phase Progression Authority
+    affected_ids:
+      - TO-GOV-004
+      - AR-GOV-003
+      - ADR-GOVERNANCE-010
+      - ROL-V2-001
+    from_state: TO-GOV-004 not yet established; TO-GOV-003 VERIFIED / COMPLETE
+    to_state: TO-GOV-004 AUTHORIZED TO EXECUTE; no runtime execution yet
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS execution has occurred; no EXEC-LOG runtime evidence exists yet
+    v1_effect: none
