@@ -21,8 +21,12 @@ class DatabaseFoundationTests(unittest.TestCase):
         ):
             self.assertIn(required, text)
 
-    def test_application_role_has_no_delete_grant(self):
+    def test_application_role_cannot_write_migration_metadata_or_delete(self):
         text = MIGRATION.read_text(encoding="utf-8")
+        self.assertIn(
+            "REVOKE INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON meylux.schema_migrations FROM meylux_app",
+            text,
+        )
         self.assertIn("REVOKE DELETE, TRUNCATE, REFERENCES, TRIGGER", text)
         self.assertNotIn("GRANT DELETE", text)
 
