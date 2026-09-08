@@ -54,3 +54,21 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no production/runtime/VPS execution; repository foundation self-tests were reported and independently audited
     v1_effect: none
+
+  - id: CHG-P1-STEP-002
+    date_utc: '2026-09-08'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P1-002 verification and ordinary progression to STEP-P1-003
+    basis: AR-P1-AUDIT-002 + General Continuation and Phase Progression Authority
+    affected_ids:
+      - BR-P1-002
+      - TO-P1-002
+      - AR-P1-AUDIT-002
+      - STEP-P1-002
+      - STEP-P1-003
+      - TO-P1-003
+    from_state: STEP-P1-002 ACTIVE / AUTHORIZED; TO-P1-002 AUTHORIZED / ACTIVE; STEP-P1-003 DEFINED / INACTIVE
+    to_state: BR-P1-002 VERIFIED; TO-P1-002 VERIFIED / COMPLETE; STEP-P1-002 COMPLETE / VERIFIED; STEP-P1-003 ACTIVE / AUTHORIZED; TO-P1-003 AUTHORIZED / ACTIVE
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: Docker-specific CI execution evidence verified; no production/VPS deployment or live market/trading activity
+    v1_effect: none
