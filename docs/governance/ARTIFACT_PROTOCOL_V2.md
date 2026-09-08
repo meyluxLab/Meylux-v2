@@ -54,6 +54,44 @@ The Producer MAY allocate only a BR for the Producer's own currently authorized 
 - activate future Steps or issue future Task Orders;
 - perform runtime, V1/VPS, market-data, trading, capital, fund-transfer, or provider-runtime actions.
 
+## EXEC-LOG Operational Convention
+
+The existing `EXEC-LOG (EL)` element of the official artifact chain is operationalized by this repository convention. This section clarifies the concrete record convention without creating a new artifact class, governance subsystem, Stable ID, lifecycle state, or parallel execution/evidence framework.
+
+An actual EXEC-LOG record is created only when an authorized execution occurs. Its operational record identity is `execution_id`; this is execution/evidence identity and is not a Project Stable ID.
+
+The repository-backed EXEC-LOG record MUST be capable of representing, at minimum:
+
+```text
+execution_id
+ task_id
+ step_id
+ target
+ executor_role
+ start_time_utc
+ end_time_utc
+ actions
+ commands
+ outputs
+ exit_codes
+ failures
+ diagnosis
+ remediation
+ retries
+ final_result
+ evidence_references
+ escalation_status
+ authorization_reference
+ verification_reference
+ repository/version_context
+```
+
+The record MUST contain actual observed execution evidence only. No field may be populated with fabricated runtime values. Where a field is not applicable or not available from the actual execution, that fact remains explicit rather than being replaced by invented data.
+
+EXEC-LOG records MUST remain traceable to the applicable Task Order and repository/version context. They represent execution evidence and do not by themselves establish verification, approval, closure, ratification, or freeze.
+
+For the current TO-GOV-003 implementation activity, no EXEC-LOG runtime record is created because no VPS execution is performed. `CURRENT_CHECKPOINT` is not changed by establishing this convention.
+
 ## Independent Verification
 
 CONTROL / REVIEWER (`ROL-V2-001`) remains the independent audit and verification authority. A Producer allocation or Build Report production is never a `VERIFIED` state. Step completion requires the existing independent audit and verification process.
