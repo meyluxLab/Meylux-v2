@@ -59,6 +59,7 @@ jobs:
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: docker compose -f infrastructure/compose/docker-compose.yml up -d db
 
+      # Runtime validation commands must receive the same Compose interpolation environment as database startup.
       - name: Wait for database
         env:
           MEYLUX_DB_NAME: meylux_ci
