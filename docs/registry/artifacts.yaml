@@ -63,10 +63,9 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: TO-GOV-003
     canonical_name: CONTROL Autonomous VPS Execution & Verification Governance Amendment
-    entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-003.md
     traceability: ADR-GOVERNANCE-010 / Project Owner Ratification
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
@@ -120,7 +119,7 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-003.md
     traceability: TO-GOV-003 / ADR-GOVERNANCE-010
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
     entity_type: AR
@@ -132,6 +131,12 @@ records:
     entity_type: AR
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
+    status: APPROVED / VERIFIED
+  - stable_id: AR-GOV-003
+    canonical_name: CONTROL Independent Audit — TO-GOV-003 Governance Amendment
+    entity_type: AR
+    artifact_path: docs/audits/AR-GOV-003.md
+    traceability: BR-GOV-003 / TO-GOV-003 / ADR-GOVERNANCE-010
     status: APPROVED / VERIFIED
   - stable_id: AI-CONTINUATION-PROTOCOL-V2
     canonical_name: AI Continuation Protocol V2
@@ -210,6 +215,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-003
     canonical_name: BR-P1-003 Control Audit — Database Foundation
+    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-003.md
     traceability: BR-P1-003 / TO-P1-003 / PH-P1 / STEP-P1-003
     status: APPROVED / VERIFIED
