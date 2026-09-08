@@ -3,10 +3,14 @@ services:
     image: timescale/timescaledb:2.29.2-pg16
     environment:
       POSTGRES_DB: ${MEYLUX_DB_NAME:?MEYLUX_DB_NAME must be set}
-      POSTGRES_USER: ${MEYLUX_DB_USER:?MEYLUX_DB_USER must be set}
+      POSTGRES_USER: ${MEYLUX_DB_USER:-meylux_admin}
       POSTGRES_PASSWORD: ${MEYLUX_DB_PASSWORD:?MEYLUX_DB_PASSWORD must be set}
+      MEYLUX_APP_PASSWORD: ${MEYLUX_APP_PASSWORD:-}
+      MEYLUX_BACKUP_PASSWORD: ${MEYLUX_BACKUP_PASSWORD:-}
     volumes:
       - meylux-db-data:/var/lib/postgresql/data
+      - ../../migrations:/workspace/migrations:ro
+      - ../postgres:/workspace/infrastructure/postgres:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
