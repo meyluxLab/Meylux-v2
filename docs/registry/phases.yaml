@@ -8,179 +8,9 @@ records:
     entry_gate: G-0R
     entry_gate_role: prerequisite
     entry_approval: AR-P0-ENTRY-001
-    entry_criteria:
-      - PP-00 through PP-12 are APPROVED/CLOSED according to the formation status artifact.
-      - G-0 is CLOSED/VERIFIED.
-      - G-0R is RATIFIED/VERIFIED.
-      - Phase 0 definition and first Step are present in the authoritative registry.
-      - CONTROL / REVIEWER formal Entry Review is APPROVED.
-      - Master Architecture V2 remains a DRAFT DESIGN BASELINE / PENDING RATIFICATION at Phase 0 entry.
     first_step: STEP-P0-001
     next_valid_step: null
     final_step: STEP-P0-010
-    authorization_criteria:
-      - Phase 0 registry record and first-step definition exist in the GitHub Source of Truth.
-      - Entry prerequisite G-0R is verified in the authoritative checkpoint/evidence chain.
-      - The first-step scope and acceptance boundary are explicitly recorded.
-      - CONTROL / REVIEWER performs and records the formal Phase 0 Entry Review.
-      - Phase 0 authorization is recorded separately from formation ratification and does not imply architecture ratification.
-      - ADR-ARCHITECTURE-001 is RATIFIED by Project Owner and establishes the authoritative Phase 0 sequence.
-    architecture_relationship:
-      reconciliation: STEP-P0-001 is the first Phase 0 step and is COMPLETE / VERIFIED.
-      sequence_authority: ADR-ARCHITECTURE-001 establishes the authoritative ten-Step Phase 0 sequence.
-      ratification: ADR-GOVERNANCE-004 records the Project Owner's final ratification/freeze of Master Architecture V2.
-      final_closure_verification: AR-P0-AUDIT-015 independently verifies the final closure boundary.
-    scope_boundary:
-      - No runtime implementation is authorized by Phase 0 entry authorization alone.
-      - No V1 mutation or V1 runtime/VPS action is authorized.
-      - Only the currently activated Step may be executed.
-      - Phase 0 is closed; no subsequent Phase 0 Step exists or is authorized.
-
-  - sid: STEP-P0-001
-    logical_name: Master Architecture Reconciliation
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 1
-    entry_gate: G-0R
-    entry_approval: AR-P0-ENTRY-001
-    active_task_order: null
-    completed_task_order: TO-P0-001
-    completion_audit: AR-P0-AUDIT-002
-    purpose: Formal reconciliation of the Master Architecture V2 draft against the approved V2 formation knowledge and governance evidence before architecture ratification/freeze.
-
-  - sid: STEP-P0-002
-    logical_name: Constitution Ratification
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 2
-    predecessor: STEP-P0-001
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-003
-    completion_audit: AR-P0-AUDIT-006
-    purpose: Execute the dedicated constitutional ratification boundary using the V2 Constitution and the evidence/reconciliation state established by completed STEP-P0-001.
-    completion_requires:
-      - Constitution content is reviewed against the ratified V2 architectural/governance boundary.
-      - Required constitutional invariants and boundaries are explicitly confirmed.
-      - Project Owner ratification is durably recorded through the governed decision mechanism.
-      - Resulting artifact and decision evidence are registered and independently audited as required.
-      - No silent change to Master Architecture, future Step activation, runtime, V1/VPS, market, trading, or capital scope.
-
-  - sid: STEP-P0-003
-    logical_name: V1 Lessons Integration
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 3
-    predecessor: STEP-P0-002
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-004
-    completion_audit: AR-P0-AUDIT-007
-    purpose: Integrate approved V1 lessons and failure evidence into V2 architectural controls without importing V1 implementation or authorizing V1 mutation.
-
-  - sid: STEP-P0-004
-    logical_name: Stable Identity / Registry
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 4
-    predecessor: STEP-P0-003
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-005
-    completion_audit: AR-P0-AUDIT-008
-    purpose: Establish and reconcile stable identity and registry completeness required by the ratified V2 baseline.
-
-  - sid: STEP-P0-005
-    logical_name: Governance / Artifact Protocol
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 5
-    predecessor: STEP-P0-004
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-006
-    completion_audit: AR-P0-AUDIT-009
-    purpose: Establish and reconcile the governed artifact lifecycle, authority boundaries, and evidence protocol required for V2 operation.
-
-  - sid: STEP-P0-006
-    logical_name: AI Continuation Protocol
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 6
-    predecessor: STEP-P0-005
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-007
-    completion_audit: AR-P0-AUDIT-010
-    purpose: Establish the authoritative AI-to-AI continuation and resumability protocol from repository state and evidence.
-
-  - sid: STEP-P0-007
-    logical_name: Environment Contract
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 7
-    predecessor: STEP-P0-006
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-008
-    completion_audit: AR-P0-AUDIT-011
-    purpose: Define the governed V2 environment contract and its boundaries without authorizing runtime deployment or V1/VPS mutation.
-
-  - sid: STEP-P0-008
-    logical_name: Verification / Evidence / Gates
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 8
-    predecessor: STEP-P0-007
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-009
-    completion_audit: AR-P0-AUDIT-012
-    purpose: Formalize verification, evidence provenance, gate semantics, and completion evidence required for V2.
-
-  - sid: STEP-P0-009
-    logical_name: Dependency and Boundary Graph
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 9
-    predecessor: STEP-P0-008
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-010
-    completion_audit: AR-P0-AUDIT-013
-    purpose: Establish the authoritative dependency and boundary graph for the reconciled V2 architecture.
-
-  - sid: STEP-P0-010
-    logical_name: Master Architecture Freeze
-    entity_type: STEP
-    phase: PH-P0
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 10
-    predecessor: STEP-P0-009
-    activation_basis: ADR-ARCHITECTURE-001
-    active_task_order: null
-    completed_task_order: TO-P0-011
-    completion_audit: AR-P0-AUDIT-015
-    purpose: Execute the final required Master Architecture ratification/freeze boundary and establish the Phase 0 completion boundary only after all prerequisite Steps and evidence are verified.
 
   - sid: PH-P1
     logical_name: Infrastructure Foundation
@@ -190,12 +20,12 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
     first_step: STEP-P1-001
-    next_valid_step: STEP-P1-002
+    next_valid_step: STEP-P1-004
     final_step: STEP-P1-008
     authorization_criteria:
       - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
       - Phase 0 is CLOSED / VERIFIED.
-      - Project Owner explicitly authorizes establishment of the next Phase and automatic activation of Step 1.
+      - Project Owner explicitly authorized establishment of the next Phase and automatic activation of Step 1.
       - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
     architecture_relationship:
       architecture: DOC-V2-ARCH-001
@@ -218,35 +48,31 @@ records:
     active_task_order: null
     completed_task_order: TO-P1-001
     completion_audit: AR-P1-AUDIT-001
-    purpose: Establish the governed V2 repository/project foundation required for subsequent P1 work.
-    completion_requires:
-      - Producer implementation within authorized scope.
-      - Producer Build Report with actual results.
-      - Independent CONTROL review/audit.
-      - Required evidence and state transition recorded.
 
   - sid: STEP-P1-002
     logical_name: Docker Foundation
     entity_type: STEP
     phase: PH-P1
-    status: ACTIVE / IN_PROGRESS
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 2
     predecessor: STEP-P1-001
     activation_basis: PH-P1 / AR-P1-AUDIT-001
-    active_task_order: TO-P1-002
+    active_task_order: null
+    completed_task_order: TO-P1-002
+    completion_audit: AR-P1-AUDIT-002
     purpose: Establish the reproducible container/service foundation for the V2 runtime.
 
   - sid: STEP-P1-003
     logical_name: Database Foundation
     entity_type: STEP
     phase: PH-P1
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / NOT-ACTIVATED
+    status: ACTIVE / IN_PROGRESS
+    authorization_state: ACTIVE / AUTHORIZED
     order: 3
     predecessor: STEP-P1-002
-    activation_basis: PH-P1
-    active_task_order: null
+    activation_basis: PH-P1 / AR-P1-AUDIT-002
+    active_task_order: TO-P1-003
     purpose: Establish the authoritative persistence foundation, migration harness, and least-privilege database boundary for V2.
 
   - sid: STEP-P1-004
