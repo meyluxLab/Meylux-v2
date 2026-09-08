@@ -61,6 +61,12 @@ records:
     artifact_path: docs/task-orders/TO-GOV-002.md
     traceability: ADR-GOVERNANCE-001 / ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: VERIFIED / COMPLETE
+  - stable_id: TO-GOV-003
+    canonical_name: CONTROL Autonomous VPS Execution & Verification Governance Amendment
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-003.md
+    traceability: ADR-GOVERNANCE-010 / Project Owner Ratification
+    status: AUTHORIZED TO EXECUTE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
@@ -91,6 +97,12 @@ records:
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-009.md
     traceability: Project Owner ratification / AI Continuation Protocol V2
     status: RATIFIED / FROZEN
+  - stable_id: ADR-GOVERNANCE-010
+    canonical_name: CONTROL Autonomous VPS Execution & Verification
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-010.md
+    traceability: Project Owner Ratification / Formal Governed Change Package
+    status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
     entity_type: BR
@@ -176,25 +188,21 @@ records:
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-002
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
     status: APPROVED / VERIFIED
   - stable_id: TO-P1-003
     canonical_name: Task Order — Database Foundation
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P1-003.md
     traceability: PH-P1 / STEP-P1-003 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-003
     canonical_name: Build Report — Database Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-003.md
     traceability: TO-P1-003 / PH-P1 / STEP-P1-003
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-003
     canonical_name: BR-P1-003 Control Audit — Database Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-003.md
     traceability: BR-P1-003 / TO-P1-003 / PH-P1 / STEP-P1-003
     status: APPROVED / VERIFIED
