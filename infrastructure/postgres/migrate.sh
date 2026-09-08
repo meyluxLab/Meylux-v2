@@ -16,11 +16,13 @@ PSQL=(psql --host="${MEYLUX_DB_HOST}" --port="${MEYLUX_DB_PORT}" --username="${M
 "${PSQL[@]}" -f "${ROOT_DIR}/migrations/versions/0001_database_foundation.sql"
 
 if [[ -n "${MEYLUX_APP_PASSWORD:-}" ]]; then
-  "${PSQL[@]}" -v app_password="${MEYLUX_APP_PASSWORD}" -c "ALTER ROLE meylux_app LOGIN PASSWORD :'app_password';"
+  printf '%s\n' "ALTER ROLE meylux_app LOGIN PASSWORD :'app_password';" \
+    | "${PSQL[@]}" -v app_password="${MEYLUX_APP_PASSWORD}"
 fi
 
 if [[ -n "${MEYLUX_BACKUP_PASSWORD:-}" ]]; then
-  "${PSQL[@]}" -v backup_password="${MEYLUX_BACKUP_PASSWORD}" -c "ALTER ROLE meylux_backup LOGIN PASSWORD :'backup_password';"
+  printf '%s\n' "ALTER ROLE meylux_backup LOGIN PASSWORD :'backup_password';" \
+    | "${PSQL[@]}" -v backup_password="${MEYLUX_BACKUP_PASSWORD}"
 fi
 
 "${PSQL[@]}" -c "ALTER DATABASE \"${MEYLUX_DB_NAME//\"/\"\"}\" SET timezone TO 'UTC';"
