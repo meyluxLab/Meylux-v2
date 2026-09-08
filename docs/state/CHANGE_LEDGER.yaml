@@ -66,7 +66,7 @@ entries:
       - AR-P1-AUDIT-002
       - STEP-P1-002
       - STEP-P1-003
-      - TO-P1-003
+      - TO-P1-002
     from_state: STEP-P1-002 ACTIVE / AUTHORIZED; TO-P1-002 AUTHORIZED / ACTIVE; STEP-P1-003 DEFINED / INACTIVE
     to_state: BR-P1-002 VERIFIED; TO-P1-002 VERIFIED / COMPLETE; STEP-P1-002 COMPLETE / VERIFIED; STEP-P1-003 ACTIVE / AUTHORIZED; TO-P1-003 AUTHORIZED / ACTIVE
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
@@ -87,4 +87,21 @@ entries:
     to_state: BR-P1-003 VERIFIED; TO-P1-003 VERIFIED / COMPLETE; STEP-P1-003 COMPLETE / VERIFIED
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: corrected CI database runtime validation independently verified; no Target VPS execution performed
+    v1_effect: none
+
+  - id: CHG-GOV-003-001
+    date_utc: '2026-09-09'
+    change_type: GOVERNANCE_AMENDMENT_IMPLEMENTATION
+    subject: TO-GOV-003 implementation of CONTROL authorized VPS execution, bounded recovery, verification, and EXEC-LOG governance semantics
+    basis: ADR-GOVERNANCE-010 + TO-GOV-003 + BR-GOV-003
+    affected_ids:
+      - ROL-V2-001
+      - ROL-V2-007
+      - TO-GOV-003
+      - BR-GOV-003
+      - ADR-GOVERNANCE-010
+    from_state: Ratified change authorized; implementation not yet evidenced
+    to_state: Governance amendment implemented; BR-GOV-003 PRODUCED / UNVERIFIED pending CONTROL audit
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged by this implementation continuation
+    runtime_effect: no VPS execution, operational recovery execution, runtime EXEC-LOG, or VPS verification performed
     v1_effect: none
