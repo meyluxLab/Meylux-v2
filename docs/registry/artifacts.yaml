@@ -66,6 +66,12 @@ records:
     artifact_path: docs/task-orders/TO-GOV-003.md
     traceability: ADR-GOVERNANCE-010 / Project Owner Ratification
     status: VERIFIED / COMPLETE
+  - stable_id: TO-GOV-004
+    canonical_name: CONTROL Authorized VPS Execution & Verification Pilot
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-004.md
+    traceability: AR-GOV-003 / ADR-GOVERNANCE-010
+    status: AUTHORIZED TO EXECUTE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
