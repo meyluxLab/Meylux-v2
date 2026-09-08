@@ -110,7 +110,7 @@ records:
     traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-002
-    canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
+    canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Integration
     entity_type: AR
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
@@ -185,10 +185,16 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-003.md
     traceability: PH-P1 / STEP-P1-003 / AR-P1-AUDIT-002
-    status: AUTHORIZED / ACTIVE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P1-003
     canonical_name: Build Report — Database Foundation
     entity_type: BR
     artifact_path: docs/build-reports/BR-P1-003.md
     traceability: TO-P1-003 / PH-P1 / STEP-P1-003
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
+  - stable_id: AR-P1-AUDIT-003
+    canonical_name: BR-P1-003 Control Audit — Database Foundation
+    entity_type: AR
+    artifact_path: docs/audits/AR-P1-AUDIT-003.md
+    traceability: BR-P1-003 / TO-P1-003 / PH-P1 / STEP-P1-003
+    status: APPROVED / VERIFIED
