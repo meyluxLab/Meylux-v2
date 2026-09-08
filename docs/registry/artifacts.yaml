@@ -145,3 +145,9 @@ records:
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
     traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / STEP-P0-010 / PH-P0
     status: APPROVED / VERIFIED
+  - stable_id: BR-P1-001
+    canonical_name: Build Report — Repository Foundation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P1-001.md
+    traceability: TO-P1-001 / PH-P1 / STEP-P1-001
+    status: PRODUCED / UNVERIFIED
