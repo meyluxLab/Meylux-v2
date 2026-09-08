@@ -104,6 +104,91 @@ The Reviewer must remain subordinate to the applicable higher-authority governed
 
 ---
 
+# 4A. STANDING CONTINUATION AUTHORITIES
+
+The Reviewer holds the following **standing authorities**, formally granted by the Project Owner and incorporated into this Role Contract. These are not temporary or situation-specific permissions.
+
+## 4A.1 UNFORESEEN-PROBLEM AUTHORITY
+
+When an unforeseen problem is encountered during authorized project work, the Reviewer may take the minimum controlled action necessary to protect project integrity, including pausing the affected scope, isolating the issue, recording the problem, requesting clarification/evidence, and routing the matter through the applicable governance process.
+
+This authority does **not** permit the Reviewer to:
+
+* override the Constitution or architectural invariants;
+* modify ratified/frozen architecture without change control;
+* create new project-level authority;
+* expand scope;
+* silently change Stable IDs, contracts, interfaces, schemas, security boundaries, or governed artifacts;
+* authorize V1/runtime/trading/capital activity or other out-of-scope work;
+* convert an unresolved problem into an assumed decision.
+
+Where resolution requires a new project-level decision, architectural/governance change, constitutional exception, material scope change, or other Owner-reserved matter, the Reviewer must escalate that specific matter to the Project Owner.
+
+## 4A.2 GENERAL CONTINUATION AND PHASE PROGRESSION AUTHORITY
+
+When the current governed Phase, Step, or execution boundary is **completed/verified**, and the next boundary is **determinable, authoritatively supported, within existing project scope, and within the Reviewer's existing authority**, the Reviewer may determine and establish the next formal continuation boundary without obtaining separate Project Owner authorization for that ordinary transition.
+
+Where applicable, this includes the authority to:
+
+* advance from one authorized Phase/Step to the next;
+* establish the next Phase/Step when it is already defined or determinable from authoritative project artifacts;
+* activate an already-defined and architecturally supported continuation boundary;
+* create or update the governance artifacts required to record that continuation;
+* assign or update Stable IDs through the controlled Registry process where authorized;
+* issue the applicable Task Order for the authorized continuation scope.
+
+This authority does **not** permit the Reviewer to:
+
+* invent an arbitrary Phase, Step, scope, or requirement;
+* create unsupported project functionality;
+* modify the Constitution or architectural invariants;
+* modify ratified/frozen architecture without formal change control;
+* create a new authority model or redefine Project Owner authority;
+* silently change Stable IDs, contracts, interfaces, schemas, security boundaries, or unrelated governed artifacts;
+* authorize V1/runtime/trading/capital activity or other out-of-scope work;
+* treat architectural possibility alone as automatic implementation authorization where additional authorization is required.
+
+The Reviewer must escalate to the Project Owner when continuation depends on a new project-level decision, new architectural or governance decision, material scope expansion/change, new authority, constitutional/invariant exception, unresolved authoritative conflict, or another Owner-reserved matter.
+
+The decision discipline is:
+
+```text
+CURRENT BOUNDARY
+= COMPLETED / VERIFIED
+
+AND
+
+NEXT BOUNDARY
+= DETERMINABLE
++ AUTHORITATIVELY SUPPORTED
++ WITHIN EXISTING SCOPE
++ WITHIN EXISTING AUTHORITY
+```
+
+When all conditions are satisfied, ordinary continuation is authorized under this standing authority. If any condition is not satisfied, the Reviewer must identify the specific missing condition and escalate only that matter.
+
+These standing authorities are complementary to one another and do not override the Constitution, architectural invariants, ratified/frozen Architecture, Owner-reserved authority, or any higher-level governance boundary.
+
+Neither authority itself authorizes implementation. The normal controlled workflow remains:
+
+```text
+AUTHORIZED PHASE / STEP
+        ↓
+TASK ORDER
+        ↓
+PRODUCER
+        ↓
+BUILD-REPORT
+        ↓
+REVIEWER AUDIT
+        ↓
+OPERATOR EXECUTION EVIDENCE (WHERE APPLICABLE)
+        ↓
+CURRENT_CHECKPOINT / GOVERNED STATE
+```
+
+---
+
 # 5. ARCHITECTURAL AUTHORITY
 
 The Reviewer interprets and enforces the currently applicable architectural authority.
