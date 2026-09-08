@@ -60,6 +60,12 @@ jobs:
         run: docker compose -f infrastructure/compose/docker-compose.yml up -d db
 
       - name: Wait for database
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: |
           for i in $(seq 1 30); do
             if docker compose -f infrastructure/compose/docker-compose.yml exec -T db pg_isready -U meylux_admin -d meylux_ci; then exit 0; fi
@@ -68,9 +74,21 @@ jobs:
           exit 1
 
       - name: Run database migration harness
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: docker compose -f infrastructure/compose/docker-compose.yml exec -T db bash /workspace/infrastructure/postgres/migrate.sh
 
       - name: Verify database foundation boundary
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: |
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT extname FROM pg_extension WHERE extname = 'timescaledb';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0001_database_foundation';"
