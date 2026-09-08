@@ -77,7 +77,7 @@ records:
     canonical_name: PROJECT GUIDE Stable Identity Extension
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-007.md
-    traceability: Project Owner ratification / PROJECT GUIDE Stable Identity Extension
+    traceability: Project Owner ratification / post-freeze PROJECT GUIDE Stable Identity Extension
     status: RATIFIED / FROZEN
   - stable_id: ADR-GOVERNANCE-008
     canonical_name: Post-Freeze Governance Audit Report Identity Convention
@@ -143,7 +143,7 @@ records:
     canonical_name: Final Phase 0 Closure Verification
     entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
-    traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / STEP-P0-010 / PH-P0
+    traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / PH-P0
     status: APPROVED / VERIFIED
   - stable_id: BR-P1-001
     canonical_name: Build Report — Repository Foundation
@@ -169,3 +169,9 @@ records:
     artifact_path: docs/task-orders/TO-P1-002.md
     traceability: PH-P1 / STEP-P1-002 / AR-P1-AUDIT-001
     status: AUTHORIZED / ACTIVE
+  - stable_id: BR-P1-002
+    canonical_name: Build Report — Docker Foundation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P1-002.md
+    traceability: TO-P1-002 / PH-P1 / STEP-P1-002
+    status: PRODUCED / UNVERIFIED
