@@ -5,19 +5,29 @@ on:
     paths:
       - "infrastructure/docker/**"
       - "infrastructure/compose/**"
+      - "infrastructure/postgres/**"
+      - "migrations/**"
+      - "config/database.py"
       - "src/meylux/runtime/**"
       - "tests/test_docker_foundation.py"
+      - "tests/test_database_foundation.py"
       - "pyproject.toml"
       - ".dockerignore"
+      - ".env.example"
       - ".github/workflows/ci-docker.yml"
   pull_request:
     paths:
       - "infrastructure/docker/**"
       - "infrastructure/compose/**"
+      - "infrastructure/postgres/**"
+      - "migrations/**"
+      - "config/database.py"
       - "src/meylux/runtime/**"
       - "tests/test_docker_foundation.py"
+      - "tests/test_database_foundation.py"
       - "pyproject.toml"
       - ".dockerignore"
+      - ".env.example"
       - ".github/workflows/ci-docker.yml"
 
 jobs:
@@ -30,8 +40,8 @@ jobs:
       - name: Validate Compose configuration
         env:
           MEYLUX_DB_NAME: meylux_ci
-          MEYLUX_DB_USER: meylux_ci
-          MEYLUX_DB_PASSWORD: ci-placeholder
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
         run: docker compose -f infrastructure/compose/docker-compose.yml config --quiet
 
       - name: Build foundation image
@@ -39,3 +49,52 @@ jobs:
 
       - name: Run foundation self-checks
         run: python -m unittest discover -s tests -v
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
+      - name: Start database foundation
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+        run: docker compose -f infrastructure/compose/docker-compose.yml up -d db
+
+      - name: Wait for database
+        env:
+          PGPASSWORD: ci-admin-password
+        run: |
+          for i in $(seq 1 30); do
+            if pg_isready -h 127.0.0.1 -p 5432 -U meylux_admin -d meylux_ci; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+
+      - name: Run database migration harness
+        env:
+          MEYLUX_DB_HOST: 127.0.0.1
+          MEYLUX_DB_PORT: 5432
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: bash infrastructure/postgres/migrate.sh
+
+      - name: Verify database foundation boundary
+        env:
+          PGPASSWORD: ci-admin-password
+        run: |
+          psql -h 127.0.0.1 -p 5432 -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT extname FROM pg_extension WHERE extname = 'timescaledb';"
+          psql -h 127.0.0.1 -p 5432 -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0001_database_foundation';"
+          psql -h 127.0.0.1 -p 5432 -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT rolname, rolcanlogin FROM pg_roles WHERE rolname IN ('meylux_admin','meylux_app','meylux_backup') ORDER BY rolname;"
+          psql -h 127.0.0.1 -p 5432 -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app', 'meylux.schema_migrations', 'SELECT'), has_table_privilege('meylux_app', 'meylux.schema_migrations', 'INSERT'), has_table_privilege('meylux_app', 'meylux.schema_migrations', 'UPDATE'), has_table_privilege('meylux_app', 'meylux.schema_migrations', 'DELETE');"
+          test "$(psql -At -h 127.0.0.1 -p 5432 -U meylux_admin -d meylux_ci -c "SHOW timezone;")" = "UTC"
+
+      - name: Stop database foundation
+        if: always()
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+        run: docker compose -f infrastructure/compose/docker-compose.yml down -v
