@@ -64,26 +64,26 @@ The repository-backed EXEC-LOG record MUST be capable of representing, at minimu
 
 ```text
 execution_id
- task_id
- step_id
- target
- executor_role
- start_time_utc
- end_time_utc
- actions
- commands
- outputs
- exit_codes
- failures
- diagnosis
- remediation
- retries
- final_result
- evidence_references
- escalation_status
- authorization_reference
- verification_reference
- repository/version_context
+task_id
+step_id
+target
+executor_role
+start_time_utc
+end_time_utc
+actions
+commands
+outputs
+exit_codes
+failures
+diagnosis
+remediation
+retries
+final_result
+evidence_references
+escalation_status
+authorization_reference
+verification_reference
+repository/version_context
 ```
 
 The record MUST contain actual observed execution evidence only. No field may be populated with fabricated runtime values. Where a field is not applicable or not available from the actual execution, that fact remains explicit rather than being replaced by invented data.
