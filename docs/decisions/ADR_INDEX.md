@@ -9,6 +9,7 @@ ADRs:
 - `ADR-ARCHITECTURE-001` — Phase 0 Sequence Reconciliation — RATIFIED
 - `ADR-GOVERNANCE-002` — Project Owner Ratification of V2 Constitution — RATIFIED
 - `ADR-GOVERNANCE-003` — Producer Build Report Allocation Delegation — RATIFIED
+- `ADR-GOVERNANCE-010` — CONTROL Autonomous VPS Execution & Verification — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
 
 ADR identity convention:
 
