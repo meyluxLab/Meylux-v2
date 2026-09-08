@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: CLOSED / VERIFIED
+status: ACTIVE / IN_PROGRESS
 records:
   - sid: PH-P0
     logical_name: Phase 0
@@ -181,3 +181,128 @@ records:
     completed_task_order: TO-P0-011
     completion_audit: AR-P0-AUDIT-015
     purpose: Execute the final required Master Architecture ratification/freeze boundary and establish the Phase 0 completion boundary only after all prerequisite Steps and evidence are verified.
+
+  - sid: PH-P1
+    logical_name: Infrastructure Foundation
+    entity_type: PH
+    status: ACTIVE / IN_PROGRESS
+    entry_gate: G-1
+    entry_gate_role: phase boundary
+    entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
+    first_step: STEP-P1-001
+    next_valid_step: STEP-P1-001
+    final_step: STEP-P1-008
+    authorization_criteria:
+      - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
+      - Phase 0 is CLOSED / VERIFIED.
+      - Project Owner explicitly authorizes establishment of the next Phase and automatic activation of Step 1.
+      - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
+    architecture_relationship:
+      architecture: DOC-V2-ARCH-001
+      phase_model: Section 9 defines PH-P1 as runtime foundation, persistence, messaging, and reproducibility.
+      phase_specification: docs/phases/PH-P1.md
+    scope_boundary:
+      - P1 is limited to infrastructure foundation.
+      - No V1/VPS mutation or V1 runtime activity is authorized.
+      - No market/provider runtime, trading, capital control, or autonomous execution is authorized.
+      - Only the currently activated Step may be executed.
+
+  - sid: STEP-P1-001
+    logical_name: Repository Foundation
+    entity_type: STEP
+    phase: PH-P1
+    status: ACTIVE / IN_PROGRESS
+    authorization_state: ACTIVE / AUTHORIZED
+    order: 1
+    activation_basis: PROJECT-OWNER-CONTINUATION-2026-09-08 / PH-P1
+    active_task_order: TO-P1-001
+    purpose: Establish the governed V2 repository/project foundation required for subsequent P1 work.
+    completion_requires:
+      - Producer implementation within authorized scope.
+      - Producer Build Report with actual results.
+      - Independent CONTROL review/audit.
+      - Required evidence and state transition recorded.
+
+  - sid: STEP-P1-002
+    logical_name: Docker Foundation
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT_ACTIVATED
+    order: 2
+    predecessor: STEP-P1-001
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Establish the reproducible container/service foundation for the V2 runtime.
+
+  - sid: STEP-P1-003
+    logical_name: Database Foundation
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT-ACTIVATED
+    order: 3
+    predecessor: STEP-P1-002
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Establish the authoritative persistence foundation, migration harness, and least-privilege database boundary for V2.
+
+  - sid: STEP-P1-004
+    logical_name: Data Contracts
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT-ACTIVATED
+    order: 4
+    predecessor: STEP-P1-003
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Establish canonical V2 data contracts and their deterministic validation semantics.
+
+  - sid: STEP-P1-005
+    logical_name: Data Quality Foundation
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT-ACTIVATED
+    order: 5
+    predecessor: STEP-P1-004
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Establish foundational explicit data-quality states, validation boundaries, and degradation handling.
+
+  - sid: STEP-P1-006
+    logical_name: Async Worker & Queue Foundation
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT-ACTIVATED
+    order: 6
+    predecessor: STEP-P1-005
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Establish bounded asynchronous worker and messaging infrastructure with failure isolation and backpressure controls.
+
+  - sid: STEP-P1-007
+    logical_name: Observability Foundation
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT-ACTIVATED
+    order: 7
+    predecessor: STEP-P1-006
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Establish structured observability sufficient to diagnose, verify, and safely operate P1 behavior.
+
+  - sid: STEP-P1-008
+    logical_name: Disaster Recovery / Restore Verification & Phase 1 Closure
+    entity_type: STEP
+    phase: PH-P1
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / NOT-ACTIVATED
+    order: 8
+    predecessor: STEP-P1-007
+    activation_basis: PH-P1
+    active_task_order: null
+    purpose: Verify P1 recovery/restore behavior and establish the evidence boundary required for Phase 1 closure.
