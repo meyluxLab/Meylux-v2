@@ -115,6 +115,12 @@ records:
     artifact_path: docs/build-reports/BR-GOV-002.md
     traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: VERIFIED
+  - stable_id: BR-GOV-003
+    canonical_name: Build Report — CONTROL Autonomous VPS Execution & Verification Governance Amendment
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-GOV-003.md
+    traceability: TO-GOV-003 / ADR-GOVERNANCE-010
+    status: PRODUCED / UNVERIFIED
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
     entity_type: AR
@@ -188,6 +194,7 @@ records:
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-002
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
+    artifact_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
     status: APPROVED / VERIFIED
