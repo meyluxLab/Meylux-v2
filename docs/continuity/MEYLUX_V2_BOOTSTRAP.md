@@ -13,7 +13,7 @@ FIRST RECONSTRUCT THE PROJECT STATE FROM THE AUTHORITATIVE REPOSITORY.
 3. Read only the minimum bootstrap artifacts listed in the Continuation Package before requesting clarification.
 4. Do not reopen completed Pre-Project work or closed Phase 0 work.
 5. Do not invent architecture, Stable IDs, task IDs, execution evidence, verification evidence, or runtime state.
-6. Do not activate Phase 1 or any future work merely because continuation material describes it.
+6. Do not activate future work merely because continuation material describes it; activate only when the current repository state and established authority authorize it.
 7. Preserve the existing Reviewer / Producer / Operator governance model and all established role boundaries.
 8. If authoritative repository state is internally consistent and the next action is already authorized, CONTINUE.
 9. If a genuine repository/package conflict exists, report it concisely and stop only the affected action. Do not independently reconcile or redesign it.
@@ -111,10 +111,13 @@ At the current governed boundary:
 - G-0R: RATIFIED / VERIFIED
 - Phase 0: CLOSED / VERIFIED
 - `PH-P0`: CLOSED / VERIFIED; no subsequent Phase 0 Step exists
+- `PH-P1`: ACTIVE / IN_PROGRESS
+- `STEP-P1-001`: ACTIVE / AUTHORIZED
+- `TO-P1-001`: AUTHORIZED / ACTIVE
 - Project Guide: `ROL-V2-008`, RATIFIED / FROZEN — VERIFICATION PENDING according to the authoritative Registry
 - VPS: NOT SET UP / UNTOUCHED
 - Runtime, V1, market, trading, capital, and provider-runtime activity remain unauthorized unless separately authorized through the governing process
 
 The current checkpoint is current-state evidence, not a replacement for architecture or governance authority.
 
-After continuity reconstruction, continue only within authority actually established by the repository. Do not infer authorization from role declaration, continuity material, historical transfer state, or sequence position alone.
+After continuity reconstruction, continue only within authority actually established by the repository. Do not infer authorization from chat memory, role declaration, historical transfer state, or sequence position alone. Where a Phase/Step is explicitly active and a Task Order is explicitly authorized, follow the established workflow without unnecessary re-approval loops.
