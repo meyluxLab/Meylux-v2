@@ -1,0 +1,41 @@
+name: CI Docker Foundation
+
+on:
+  push:
+    paths:
+      - "infrastructure/docker/**"
+      - "infrastructure/compose/**"
+      - "src/meylux/runtime/**"
+      - "tests/test_docker_foundation.py"
+      - "pyproject.toml"
+      - ".dockerignore"
+      - ".github/workflows/ci-docker.yml"
+  pull_request:
+    paths:
+      - "infrastructure/docker/**"
+      - "infrastructure/compose/**"
+      - "src/meylux/runtime/**"
+      - "tests/test_docker_foundation.py"
+      - "pyproject.toml"
+      - ".dockerignore"
+      - ".github/workflows/ci-docker.yml"
+
+jobs:
+  docker-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate Compose configuration
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_ci
+          MEYLUX_DB_PASSWORD: ci-placeholder
+        run: docker compose -f infrastructure/compose/docker-compose.yml config --quiet
+
+      - name: Build foundation image
+        run: docker build -f infrastructure/docker/Dockerfile -t meylux-v2-foundation:ci .
+
+      - name: Run foundation self-checks
+        run: python -m unittest discover -s tests -v
