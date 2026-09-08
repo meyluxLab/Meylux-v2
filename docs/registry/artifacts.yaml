@@ -110,7 +110,7 @@ records:
     traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-002
-    canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Integration
+    canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
     entity_type: AR
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
