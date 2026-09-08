@@ -81,7 +81,7 @@ jobs:
           MEYLUX_DB_PASSWORD: ci-admin-password
           MEYLUX_APP_PASSWORD: ci-app-password
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
-        run: docker compose -f infrastructure/compose/docker-compose.yml exec -T db bash /workspace/infrastructure/postgres/migrate.sh
+        run: docker compose -f infrastructure/compose/docker-compose.yml exec -T -e MEYLUX_DB_NAME="$MEYLUX_DB_NAME" -e MEYLUX_DB_USER="$MEYLUX_DB_USER" -e MEYLUX_DB_PASSWORD="$MEYLUX_DB_PASSWORD" -e MEYLUX_APP_PASSWORD="$MEYLUX_APP_PASSWORD" -e MEYLUX_BACKUP_PASSWORD="$MEYLUX_BACKUP_PASSWORD" db bash /workspace/infrastructure/postgres/migrate.sh
 
       - name: Verify database foundation boundary
         env:
