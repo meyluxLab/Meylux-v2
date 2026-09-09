@@ -112,8 +112,7 @@ contract:
     unsupported_environment_state_must_remain_explicit: true
 
   operator_prerequisites:
-    applicable_only_when_later_physical_execution_is_authorized:
-      - true
+    applicable_only_when_later_physical_execution_is_authorized: true
     prerequisites_include:
       - approved_execution_command_pack
       - target_environment_identification
