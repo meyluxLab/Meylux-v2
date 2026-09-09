@@ -130,7 +130,7 @@ records:
     canonical_name: Build Report — CONTROL Autonomous VPS Execution & Verification Governance Amendment
     entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-003.md
-    traceability: TO-GOV-003 / ADR-GOVERNANCE-010
+    traceability: TO-GOV-003 / ADR-GOVERNANCE-006
     status: VERIFIED
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
@@ -156,6 +156,12 @@ records:
     artifact_path: docs/audits/AR-GOV-004.md
     traceability: TO-GOV-004 / EXEC-LOG-TO-GOV-004-20260909T204147Z / ADR-GOVERNANCE-008 / ADR-GOVERNANCE-011
     status: APPROVED / VERIFIED
+  - stable_id: TO-P1-004
+    canonical_name: Task Order — Data Contracts
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P1-004.md
+    traceability: PH-P1 / STEP-P1-004 / AR-P1-AUDIT-003
+    status: AUTHORIZED TO EXECUTE
   - stable_id: AI-CONTINUATION-PROTOCOL-V2
     canonical_name: AI Continuation Protocol V2
     entity_type: GOVERNANCE
