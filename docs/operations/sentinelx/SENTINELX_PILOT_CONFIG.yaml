@@ -1,0 +1,150 @@
+# Meylux V2 — SentinelX Pilot Runtime Configuration
+# Status: APPROVED DESIGN / NOT YET DEPLOYED
+# Basis: ADR-GOVERNANCE-011 / TO-GOV-004
+# Target runtime path: /etc/sentinelx/config.yaml
+#
+# IMPORTANT:
+# - This file contains no host credentials or enrollment identity.
+# - The target host must be authenticated before deployment.
+# - This template intentionally grants broad operational capability because
+#   the Project Owner approved the Broad Operational Access model.
+# - The three Meylux hard governance exclusions are enforced by CONTROL
+#   governance, not by pretending that a broad shell allowlist is narrow.
+
+allowed_commands:
+  - bash -lc
+  - sudo bash -lc
+  - sh -lc
+  - sudo sh -lc
+  - python3
+  - sudo python3
+  - git
+  - sudo git
+  - docker
+  - sudo docker
+  - systemctl
+  - sudo systemctl
+  - journalctl
+  - sudo journalctl
+  - apt
+  - sudo apt
+  - apt-get
+  - sudo apt-get
+  - dpkg
+  - sudo dpkg
+  - pip
+  - pip3
+  - sudo pip
+  - sudo pip3
+  - curl
+  - wget
+  - ssh
+  - sudo ssh
+  - scp
+  - sudo scp
+  - rsync
+  - sudo rsync
+  - tar
+  - gzip
+  - unzip
+  - zip
+  - ls
+  - tree
+  - cat
+  - sudo cat
+  - head
+  - tail
+  - less
+  - grep
+  - sudo grep
+  - find
+  - sudo find
+  - sed
+  - sudo sed
+  - awk
+  - sort
+  - wc
+  - stat
+  - namei
+  - realpath
+  - diff
+  - cmp
+  - jq
+  - touch
+  - sudo touch
+  - echo
+  - printf
+  - tee
+  - sudo tee
+  - cp
+  - sudo cp
+  - mv
+  - sudo mv
+  - rm
+  - sudo rm
+  - mkdir
+  - sudo mkdir
+  - ln
+  - sudo ln
+  - unlink
+  - sudo unlink
+  - chmod
+  - sudo chmod
+  - chown
+  - sudo chown
+  - ip
+  - sudo ip
+  - ss
+  - sudo ss
+  - netstat
+  - ping
+  - traceroute
+  - tcpdump
+  - sudo tcpdump
+  - dig
+  - nslookup
+  - lsof
+  - sudo lsof
+  - ps
+  - sudo ps
+  - top
+  - htop
+  - uptime
+  - whoami
+  - id
+  - pwd
+  - du
+  - df
+  - free
+  - hostname
+  - uname
+  - env
+  - printenv
+
+services:
+  docker:
+    actions: [status, start, stop, restart, reload, is-active, is-enabled]
+    requires_sudo: true
+    description: "Full operational control of the Docker service."
+
+  sentinelx-cloud-core:
+    actions: [status, restart, is-active, is-enabled]
+    requires_sudo: true
+    description: "Inspect and reload SentinelX policy without remote start/stop."
+
+file_ops:
+  paths:
+    - path: /
+      access: rw
+  max_read_bytes: 1048576
+  max_list_entries: 5000
+  max_search_results: 1000
+
+log:
+  path: /var/log/sentinelx/core.log
+  level: INFO
+
+security:
+  trusted_fetch_hosts:
+    - get.sentinelx.app
+  file_url_timeout_seconds: 15
