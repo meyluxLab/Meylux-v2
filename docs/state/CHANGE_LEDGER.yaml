@@ -151,3 +151,20 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: bounded CONTROL VPS execution and verification pilot completed on the authorized V2 target; no Phase 1 step activation; no V1/trading/capital activity
     v1_effect: none
+
+  - id: CHG-P1-STEP-004
+    date_utc: '2026-09-09'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P1-004 activation and TO-P1-004 authorization following STEP-P1-003 verification
+    basis: AR-P1-AUDIT-003 + PH-P1 + General Continuation and Phase Progression Authority
+    affected_ids:
+      - STEP-P1-003
+      - STEP-P1-004
+      - TO-P1-003
+      - TO-P1-004
+      - AR-P1-AUDIT-003
+    from_state: STEP-P1-003 COMPLETE / VERIFIED; STEP-P1-004 DEFINED / INACTIVE; TO-P1-004 not active
+    to_state: STEP-P1-004 ACTIVE / IN PROGRESS; TO-P1-004 AUTHORIZED TO EXECUTE; STEP-P1-003 remains COMPLETE / VERIFIED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no V2 application deployment or market/provider runtime activity authorized by this transition
+    v1_effect: none
