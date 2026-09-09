@@ -20,7 +20,7 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
     first_step: STEP-P1-001
-    next_valid_step: STEP-P1-004
+    next_valid_step: STEP-P1-005
     final_step: STEP-P1-008
     authorization_criteria:
       - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
@@ -81,12 +81,12 @@ records:
     logical_name: Data Contracts
     entity_type: STEP
     phase: PH-P1
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / NOT-ACTIVATED
+    status: ACTIVE / IN PROGRESS
+    authorization_state: AUTHORIZED / ACTIVE
     order: 4
     predecessor: STEP-P1-003
-    activation_basis: PH-P1
-    active_task_order: null
+    activation_basis: AR-P1-AUDIT-003 / General Continuation and Phase Progression Authority
+    active_task_order: TO-P1-004
     purpose: Establish canonical V2 data contracts and their deterministic validation semantics.
 
   - sid: STEP-P1-005
