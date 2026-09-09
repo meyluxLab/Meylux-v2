@@ -88,7 +88,7 @@ records:
     canonical_name: PROJECT GUIDE Stable Identity Extension
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-007.md
-    traceability: Project Owner ratification / post-freeze PROJECT GUIDE Stable Identity extension
+    traceability: Project Owner ratification / post-freeze PROJECT GUIDE Stable Identity Extension
     status: RATIFIED / FROZEN
   - stable_id: ADR-GOVERNANCE-008
     canonical_name: Post-Freeze Governance Audit Report Identity Convention
@@ -242,7 +242,7 @@ records:
     canonical_name: BR-P1-003 Control Audit — Database Foundation
     entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-003.md
-    traceability: BR-P1-003 / TO-P1-003 / PH-P1
+    traceability: BR-P1-003 / TO-P1-003 / PH-P1 / STEP-P1-003
     status: APPROVED / VERIFIED
   - stable_id: SENTINELX-PILOT-CONFIG-V1
     canonical_name: SentinelX Pilot Runtime Configuration
