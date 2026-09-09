@@ -1,16 +1,17 @@
-schema_version: '0.2'
-status: RECONCILED / PENDING CONTROL VERIFICATION
+schema_version: '0.3'
+status: RECONCILED / CONTROL VERIFIED
 project: meylux-v2
 purpose: >-
-  Governed V2 environment contract defining logical environment boundaries and
-  separation from runtime/deployment authorization.
+  Governed V2 environment contract defining logical environment boundaries,
+  secret-handling requirements, and separation from runtime/deployment
+  authorization.
 
 contract:
   source_of_truth: GitHub repository and governed repository artifacts
   architecture_status: DESIGN BASELINE — PENDING RATIFICATION
-  runtime_authorization: separate_and_not_granted_by_environment_contract
-  deployment_authorization: separate_and_not_granted_by_environment_contract
-  operator_execution_authority: required_for_physical_or_environment_execution
+  runtime_authorization: separate_governed_authorization_required
+  deployment_authorization: separate_governed_authorization_required
+  operator_execution_authority: required_for_physical_or_environment_execution_and_must_be_backed_by_explicit_governed_authorization
 
   environments:
     dev:
@@ -20,6 +21,7 @@ contract:
         - reproducible dependency/configuration inputs
         - isolated test data and credentials handling
         - no production authoritative-state ownership
+        - foundation-only local secret material may use the approved local secret-handling mechanism defined below
     staging:
       purpose: controlled integration, contract, regression, and pre-deployment validation
       status: defined_not_deployed
@@ -27,6 +29,7 @@ contract:
         - explicit environment-specific configuration
         - isolated non-production state
         - evidence-producing validation before any later deployment decision
+        - secrets supplied through an approved environment-specific secret-handling mechanism
     production:
       purpose: future V2 runtime environment
       status: defined_not_deployed
@@ -36,14 +39,33 @@ contract:
         - production secrets supplied only through approved secret-handling mechanisms
         - operational evidence captured through the Operator / execution-log path
 
+  secret_handling:
+    repository_or_chat_storage_prohibited: true
+    approved_foundation_local_mechanism:
+      scope: current_v2_foundation_and_non_production_runtime_configuration_only
+      mechanism: root_owned_local_environment_file_outside_version_control
+      required_path: /srv/meylux-v2/.env
+      required_owner: root
+      required_mode: '0600'
+      values: locally_generated_non_production_runtime_secrets_only
+      provider_or_market_credentials_allowed: false
+      must_be_untracked_and_ignored: true
+    staging_and_production:
+      mechanism: approved_environment_specific_secret_handling_mechanism
+      external_secret_manager_or_equivalent: required_before_staging_or_production_secret_use
+      mechanism_selection: must_be_explicitly_governed_before_use
+    secret_values_must_never_be_recorded_in_repository_chat_or_execution_reports: true
+
   build_test_boundary:
     build_and_test_work_must_be_reproducible: true
     test_execution_must_not_be_misrepresented_as_runtime_deployment: true
     test_state_must_not_become_production_authoritative_state: true
 
   runtime_deployment_boundary:
-    runtime_not_authorized_by_this_contract: true
-    deployment_not_authorized_by_this_contract: true
+    runtime_authorization_is_separate_from_this_contract: true
+    deployment_authorization_is_separate_from_this_contract: true
+    this_contract_does_not_grant_runtime_or_deployment_authority: true
+    explicit_governed_authorization_required_for_runtime_or_deployment_execution: true
     physical_environment_changes_require_explicit_authorization: true
     operator_execution_required_for_approved_physical_environment_actions: true
 
@@ -72,7 +94,7 @@ contract:
     environment_specific_secret_material_must_use_approved_secret_handling: true
 
   resource_reliability_boundary:
-    environment_contract_must_account_for: 
+    environment_contract_must_account_for:
       - bounded_resource_usage
       - disk_growth
       - memory_pressure
@@ -90,7 +112,8 @@ contract:
     unsupported_environment_state_must_remain_explicit: true
 
   operator_prerequisites:
-    applicable_only_when_later_physical_execution_is_authorized: true
+    applicable_only_when_later_physical_execution_is_authorized:
+      - true
     prerequisites_include:
       - approved_execution_command_pack
       - target_environment_identification
