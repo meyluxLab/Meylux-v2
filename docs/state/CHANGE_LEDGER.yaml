@@ -65,7 +65,6 @@ entries:
       - TO-P1-002
       - AR-P1-AUDIT-002
       - STEP-P1-002
-      - STEP-P1-003
       - TO-P1-003
     from_state: STEP-P1-002 ACTIVE / AUTHORIZED; TO-P1-002 AUTHORIZED / ACTIVE; STEP-P1-003 DEFINED / INACTIVE
     to_state: BR-P1-002 VERIFIED; TO-P1-002 VERIFIED / COMPLETE; STEP-P1-002 COMPLETE / VERIFIED; STEP-P1-003 ACTIVE / AUTHORIZED; TO-P1-003 AUTHORIZED / ACTIVE
@@ -120,4 +119,20 @@ entries:
     to_state: TO-GOV-004 AUTHORIZED TO EXECUTE; no runtime execution yet
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no VPS execution has occurred; no EXEC-LOG runtime evidence exists yet
+    v1_effect: none
+
+  - id: CHG-GOV-004-002
+    date_utc: '2026-09-09'
+    change_type: GOVERNANCE_AMENDMENT
+    subject: Project Owner approval of SentinelX broad operational privilege model and TO-GOV-004 alignment
+    basis: ADR-GOVERNANCE-011 + Project Owner explicit approval
+    affected_ids:
+      - ADR-GOVERNANCE-011
+      - TO-GOV-004
+      - SENTINELX-PILOT-CONFIG-V1
+      - SENTINELX-SUDO-POLICY-V1
+    from_state: TO-GOV-004 AUTHORIZED with narrow/non-root privilege wording
+    to_state: TO-GOV-004 AUTHORIZED TO EXECUTE under approved broad SentinelX operational privilege model; deployment not yet executed
+    architecture_effect: No unrelated frozen architecture changed; privilege model is governed by ADR-GOVERNANCE-011
+    runtime_effect: no VPS installation, SentinelX connection, execution, EXEC-LOG, or verification has occurred
     v1_effect: none
