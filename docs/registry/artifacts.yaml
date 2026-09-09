@@ -70,7 +70,7 @@ records:
     canonical_name: CONTROL Authorized VPS Execution & Verification Pilot
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-004.md
-    traceability: AR-GOV-003 / ADR-GOVERNANCE-010
+    traceability: AR-GOV-003 / ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011
     status: AUTHORIZED TO EXECUTE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
@@ -107,6 +107,12 @@ records:
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-010.md
     traceability: Project Owner Ratification / Formal Governed Change Package
+    status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+  - stable_id: ADR-GOVERNANCE-011
+    canonical_name: SentinelX Broad Operational Privilege Model
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-011.md
+    traceability: Project Owner Ratification / ADR-GOVERNANCE-010 / TO-GOV-004
     status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
@@ -225,3 +231,15 @@ records:
     artifact_path: docs/audits/AR-P1-AUDIT-003.md
     traceability: BR-P1-003 / TO-P1-003 / PH-P1 / STEP-P1-003
     status: APPROVED / VERIFIED
+  - stable_id: SENTINELX-PILOT-CONFIG-V1
+    canonical_name: SentinelX Pilot Runtime Configuration
+    entity_type: CONFIGURATION
+    artifact_path: docs/operations/sentinelx/SENTINELX_PILOT_CONFIG.yaml
+    traceability: ADR-GOVERNANCE-011 / TO-GOV-004
+    status: APPROVED DESIGN / NOT DEPLOYED
+  - stable_id: SENTINELX-SUDO-POLICY-V1
+    canonical_name: SentinelX Full Operational Sudo Policy Template
+    entity_type: CONFIGURATION
+    artifact_path: docs/operations/sentinelx/sudoers/sentinelx
+    traceability: ADR-GOVERNANCE-011 / TO-GOV-004
+    status: APPROVED DESIGN / NOT DEPLOYED
