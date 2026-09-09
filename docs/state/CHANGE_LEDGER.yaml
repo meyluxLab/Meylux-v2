@@ -136,3 +136,18 @@ entries:
     architecture_effect: No unrelated frozen architecture changed; privilege model is governed by ADR-GOVERNANCE-011
     runtime_effect: no VPS installation, SentinelX connection, execution, EXEC-LOG, or verification has occurred
     v1_effect: none
+
+  - id: CHG-GOV-004-003
+    date_utc: '2026-09-09'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: TO-GOV-004 execution, separate CONTROL verification, and governance pilot closure
+    basis: AR-GOV-004 + TO-GOV-004 + ADR-GOVERNANCE-010 + ADR-GOVERNANCE-011
+    affected_ids:
+      - TO-GOV-004
+      - AR-GOV-004
+      - ROL-V2-001
+    from_state: TO-GOV-004 AUTHORIZED TO EXECUTE; no verified runtime execution
+    to_state: TO-GOV-004 VERIFIED / COMPLETE; AR-GOV-004 APPROVED / VERIFIED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: bounded CONTROL VPS execution and verification pilot completed on the authorized V2 target; no Phase 1 step activation; no V1/trading/capital activity
+    v1_effect: none
