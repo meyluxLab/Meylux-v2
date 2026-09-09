@@ -9,15 +9,15 @@
 **Issuer:** CONTROL / REVIEWER (`ROL-V2-001`)  
 **Executor:** CONTROL / REVIEWER (`ROL-V2-001`)  
 **Status:** `AUTHORIZED TO EXECUTE`  
-**Authority:** `ADR-GOVERNANCE-010` + `AR-GOV-003` + existing CONTROL standing execution authority
+**Authority:** `ADR-GOVERNANCE-010` + `ADR-GOVERNANCE-011` + `AR-GOV-003` + existing CONTROL standing execution authority
 
 ## 1. Objective
 
 Execute the first bounded VPS/environment pilot enabled by the ratified CONTROL authority amendment and verify that the governed execution, evidence, recovery, and security boundaries operate as defined.
 
-This Task Order is the authorized execution boundary following the independent approval of `TO-GOV-003`.
+This Task Order is the authorized execution boundary following the independent approval of `TO-GOV-003` and the subsequent Project Owner ratification of the SentinelX broad operational privilege model in `ADR-GOVERNANCE-011`.
 
-It does not authorize application feature development, unrestricted infrastructure administration, trading activity, capital movement, V1 activity, or any scope expansion.
+It does not authorize application feature development, trading activity, capital movement, V1 activity, governance override, or scope expansion.
 
 ## 2. Target and Execution Boundary
 
@@ -36,7 +36,7 @@ Execution is permitted only when:
 
 ## 3. Allowed Pilot Scope
 
-The pilot shall exercise the minimum governed execution capabilities required by the ratified package:
+The pilot shall exercise the minimum governed execution capabilities required by the ratified package and approved SentinelX privilege model:
 
 ### T1 — Connection
 
@@ -48,7 +48,7 @@ Confirm that the active session and requested operation are attributable to `ROL
 
 ### T3 — Allowed Execution
 
-Perform only a bounded, non-destructive operation explicitly within the pilot objective and target environment.
+Perform bounded operational administration required to install/configure/validate the SentinelX execution path and exercise the first governed CONTROL operation. Broad operational capability is authorized by `ADR-GOVERNANCE-011`; it must still be used only for the Meylux V2 execution objective and applicable governance boundaries.
 
 ### T4 — Execution Evidence
 
@@ -93,7 +93,7 @@ Confirm that credentials/secrets are isolated from Task Orders, EXEC-LOGs, repos
 
 ### T12 — Privilege Boundary
 
-Confirm that the execution session operates only with the privilege required for the authorized pilot operation and cannot silently expand to unrestricted infrastructure authority.
+Confirm that the active SentinelX execution session matches the Project Owner-approved broad operational privilege model and that its use remains attributable to `ROL-V2-001` and bounded by the Task Order and governance constraints. The approved host privilege is `sentinelx ALL=(ALL) NOPASSWD: ALL`; this is intentional and governed by `ADR-GOVERNANCE-011`.
 
 ## 4. Execution Context
 
@@ -105,14 +105,14 @@ Task ID: TO-GOV-004
 Step ID: NONE
 Objective: bounded CONTROL VPS execution and governance pilot
 Target: authenticated authorized target VPS/environment
-Allowed Actions: only actions explicitly required by this pilot
-Must-Not Actions: trading/capital/V1/unrestricted infrastructure/destructive out-of-scope actions
-Failure / Recovery Policy: R0–R4 as governed by ADR-GOVERNANCE-010 and CONTROL Role Contract
+Allowed Actions: broad operational administration required by the pilot, subject to ADR-GOVERNANCE-011 and this Task Order
+Must-Not Actions: trading/capital/V1/governance override/irreversible whole-host destruction as an ordinary autonomous operation
+Failure / Recovery Policy: R0–R4 as governed by ADR-GOVERNANCE-010, ADR-GOVERNANCE-011, and CONTROL Role Contract
 Retry Boundary: bounded by the active execution context
 Timeout Boundary: bounded by the active execution context
 Escalation Boundary: Task Order / security / Owner authority boundary
 Required Evidence: actual execution evidence and EXEC-LOG
-Authorization Reference: TO-GOV-004 / ADR-GOVERNANCE-010 / AR-GOV-003
+Authorization Reference: TO-GOV-004 / ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011 / AR-GOV-003
 ```
 
 No credentials or secrets belong in the execution context artifact.
@@ -175,7 +175,7 @@ Only actual runtime values may be recorded.
 - R2 requires explicit in-scope authorization and must remain non-architectural.
 - R3 returns implementation defects to Producer.
 - R4 stops the affected operation and escalates.
-- Any destructive action requires explicit authorization within the applicable security boundary; no destructive action is authorized merely because it could be useful for testing.
+- Irreversible destruction of the entire host is outside ordinary autonomous recovery; it is not authorized merely because it could be useful for testing.
 - No passwords, tokens, private keys, or other secrets may be written to repository artifacts or evidence.
 
 ## 8. Pilot Acceptance Criteria
@@ -190,7 +190,7 @@ The pilot may be submitted for separate CONTROL verification only when actual ev
 6. applicable recovery boundary behavior is respected;
 7. R3/R4 stop boundaries are preserved if encountered;
 8. credential isolation is preserved;
-9. privilege boundary is preserved;
+9. approved privilege model is correctly applied and evidenced;
 10. timeout/termination behavior is evidenced;
 11. no prohibited trading/capital/V1 activity occurred;
 12. EXEC-LOG is complete for the actual execution;
@@ -205,12 +205,13 @@ This Task Order does NOT authorize:
 - trading or order execution;
 - capital movement, custody, withdrawals, deposits, or leverage control;
 - V1 access or modification;
-- unrestricted root/shell/infrastructure administration;
-- architectural changes;
-- implementation repair by CONTROL;
+- governance or architecture override through runtime actions;
+- silent Producer implementation repair;
 - deployment outside the authorized pilot scope;
-- destructive testing without separate explicit authorization;
+- irreversible whole-host destruction as ordinary autonomous activity;
 - secrets in repository artifacts or evidence.
+
+The Project Owner-approved SentinelX broad operational privilege model, including passwordless sudo for the `sentinelx` host user, is expressly authorized by `ADR-GOVERNANCE-011` and is not considered an out-of-scope privilege for this pilot.
 
 ## 10. Evidence and Lifecycle Boundary
 
