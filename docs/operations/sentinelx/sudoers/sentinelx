@@ -1,0 +1,8 @@
+# Meylux V2 — SentinelX full operational privilege policy
+# Basis: ADR-GOVERNANCE-011 / TO-GOV-004
+# Target runtime path: /etc/sudoers.d/sentinelx
+#
+# This is an intentionally broad Project Owner-approved policy for the
+# private Meylux V2 VPS. Validate with visudo before installation.
+
+sentinelx ALL=(ALL) NOPASSWD: ALL
