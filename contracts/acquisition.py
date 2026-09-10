@@ -12,6 +12,7 @@ from decimal import Decimal
 from enum import Enum
 import hashlib
 import json
+from types import MappingProxyType
 from typing import Any, Mapping, Optional, Sequence
 
 
@@ -140,8 +141,11 @@ class AcquisitionEnvelope:
     def __post_init__(self) -> None:
         _utc(self.event_time, "event_time")
         _utc(self.received_at, "received_at")
+        if not isinstance(self.event_type, EventType):
+            raise TypeError("event_type must be an EventType")
         if not isinstance(self.payload, Mapping):
             raise TypeError("payload must be a mapping")
+        object.__setattr__(self, "payload", _freeze(self.payload))
         if not isinstance(self.state, AcquisitionState):
             raise TypeError("state must be an AcquisitionState")
         if self.source_sequence is not None and (
@@ -220,6 +224,25 @@ def _utc(value: datetime, field: str) -> None:
         raise ValueError(f"{field} must be timezone-aware")
     if value.utcoffset() != timezone.utc.utcoffset(value):
         raise ValueError(f"{field} must use UTC")
+
+
+def _freeze(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        frozen = {}
+        for key, item in value.items():
+            if not isinstance(key, str):
+                raise TypeError("payload mapping keys must be strings")
+            frozen[key] = _freeze(item)
+        return MappingProxyType(frozen)
+    if isinstance(value, list):
+        return tuple(_freeze(item) for item in value)
+    if isinstance(value, tuple):
+        return tuple(_freeze(item) for item in value)
+    if isinstance(value, (str, int, bool, type(None), Decimal, datetime, Enum)):
+        return value
+    if isinstance(value, float):
+        raise TypeError("binary floating-point values are not allowed")
+    raise TypeError(f"unsupported payload type: {type(value).__name__}")
 
 
 def _canonical_json(value: Any) -> bytes:
