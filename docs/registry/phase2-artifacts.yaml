@@ -1,0 +1,31 @@
+schema_version: '0.1'
+status: SUPPLEMENTAL / ACTIVE
+purpose: >-
+  Supplemental Phase 2 traceability index. This file does not replace or override
+  docs/registry/artifacts.yaml; it records newly created Phase 2 artifacts until
+  the canonical artifact registry is reconciled through its normal governed update.
+records:
+  - stable_id: PH-P2
+    entity_type: PH
+    canonical_name: Data Acquisition & Market Data Foundation
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / DOC-V2-ARCH-001
+    status: ACTIVE / AUTHORIZED
+  - stable_id: STEP-P2-001
+    entity_type: STEP
+    canonical_name: Provider Boundary & Acquisition Contracts
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / DOC-V2-ARCH-001
+    status: ACTIVE / AUTHORIZED
+  - stable_id: TO-P2-001
+    entity_type: TO
+    canonical_name: Task Order — Provider Boundary & Acquisition Contracts
+    artifact_path: docs/task-orders/TO-P2-001.md
+    traceability: PH-P2 / STEP-P2-001 / PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11
+    status: AUTHORIZED TO EXECUTE
+  - stable_id: DOC-P2-001
+    entity_type: DOC
+    canonical_name: Phase 2 Determination Report
+    artifact_path: docs/operations/PH-P2-DETERMINATION-REPORT.md
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001
+    status: DETERMINED / ACTIVE
