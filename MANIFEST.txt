@@ -19,13 +19,14 @@ docs/governance/ARTIFACT_PROTOCOL_V2.md
 docs/governance/ROLE_CONTRACT_V2.md
 docs/project-formation/PROJECT_FORMATION_STATUS.md
 docs/registry/artifacts.yaml
+docs/registry/phase2-artifacts.yaml
+docs/registry/phases.yaml
 docs/registry/components.yaml
 docs/registry/configuration.yaml
 docs/registry/contracts.yaml
 docs/registry/database.yaml
 docs/registry/observability.yaml
 docs/registry/performance.yaml
-docs/registry/phases.yaml
 docs/registry/requirements.yaml
 docs/registry/runtime.yaml
 docs/registry/security.yaml
@@ -34,6 +35,9 @@ docs/state/CHANGE_LEDGER.yaml
 docs/state/CURRENT_CHECKPOINT.json
 docs/state/DEFERRED_DECISIONS.yaml
 docs/state/OPEN_QUESTIONS.yaml
+docs/phases/PH-P2.md
+docs/task-orders/TO-P2-001.md
+docs/operations/PH-P2-DETERMINATION-REPORT.md
 docs/testing/TEST_STRATEGY_V2.md
 docs/verification/EVIDENCE_POLICY.md
 docs/verification/GATE_DEFINITIONS.md
