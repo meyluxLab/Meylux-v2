@@ -193,8 +193,8 @@ class AcquisitionEnvelope:
 
         Receive time, error detail, and capability state are intentionally
         excluded so retransmission of the same source event keeps its identity.
-        Payload remains part of identity when no trustworthy source sequence
-        exists and also protects against same-timestamp collisions.
+        Payload remains part of identity and protects against same-timestamp
+        collisions when a trustworthy source sequence is unavailable.
         """
         return _canonical_json(
             {
@@ -238,7 +238,11 @@ def _freeze(value: Any) -> Any:
         return tuple(_freeze(item) for item in value)
     if isinstance(value, tuple):
         return tuple(_freeze(item) for item in value)
-    if isinstance(value, (str, int, bool, type(None), Decimal, datetime, Enum)):
+    if isinstance(value, Decimal):
+        if not value.is_finite():
+            raise ValueError("non-finite Decimal values are not allowed")
+        return value
+    if isinstance(value, (str, int, bool, type(None), datetime, Enum)):
         return value
     if isinstance(value, float):
         raise TypeError("binary floating-point values are not allowed")
