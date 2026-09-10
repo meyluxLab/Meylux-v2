@@ -15,7 +15,7 @@ records:
   - sid: PH-P1
     logical_name: Infrastructure Foundation
     entity_type: PH
-    status: ACTIVE / IN_PROGRESS
+    status: ACTIVE / IN PROGRESS
     entry_gate: G-1
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
@@ -123,12 +123,14 @@ records:
     logical_name: Observability Foundation
     entity_type: STEP
     phase: PH-P1
-    status: ACTIVE / IN PROGRESS
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 7
     predecessor: STEP-P1-006
     activation_basis: AR-P1-AUDIT-006 / General Continuation and Phase Progression Authority
-    active_task_order: TO-P1-007
+    active_task_order: null
+    completed_task_order: TO-P1-007
+    completion_audit: AR-P1-AUDIT-007
     purpose: Establish structured observability sufficient to diagnose, verify, and safely operate P1 behavior.
 
   - sid: STEP-P1-008
@@ -139,6 +141,6 @@ records:
     authorization_state: DEFINED / NOT-ACTIVATED
     order: 8
     predecessor: STEP-P1-007
-    activation_basis: PH-P1
+    activation_basis: PH-P1 / AR-P1-AUDIT-007
     active_task_order: null
     purpose: Verify P1 recovery/restore behavior and establish the evidence boundary required for Phase 1 closure.
