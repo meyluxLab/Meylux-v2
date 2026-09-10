@@ -36,41 +36,123 @@ records:
     lifecycle_status: IMPLEMENTED / SELF-TESTED
 
   - sid: CTR-V2-CANONICAL-INSTRUMENT
+    version: 1.0.0
     logical_name: CanonicalInstrument
     entity_type: CTR
     phase: PH-P1
     step: STEP-P1-004
     tier: REQ-BEHAVIOR
     purpose: Canonical instrument identity and market-instrument metadata boundary
-    responsibility: Validation/Normalization boundary
-    lifecycle_status: PLANNED
+    producer: Validation/Normalization boundary
+    consumers:
+      - Canonical market-data processing
+      - Venue semantic mapping
+    fields:
+      - instrument_id
+      - base_asset
+      - quote_asset
+      - market_type
+      - contract_type
+      - unit
+      - as_of
+      - price_precision
+      - quantity_precision
+      - contract_multiplier
+      - active
+      - provenance_id
+    type_semantics: Non-empty strings for semantic identity and classification fields; timezone-aware UTC datetime for as_of; non-negative int for precision fields; positive Decimal for optional contract_multiplier; bool for active
+    precision_semantics: Decimal is authoritative for contract_multiplier; binary floating-point is rejected; precision metadata is an integer semantic count and is not used for implicit rounding
+    timestamp_semantics: as_of must be timezone-aware UTC and represents the metadata observation/effective reference time
+    validation: Reject invalid types, empty identity/classification/provenance strings, naive/non-UTC timestamps, negative precision metadata, non-finite/non-positive contract multipliers
+    immutability: Frozen dataclass; field mutation is rejected after construction
+    provenance: provenance_id is mandatory and identifies the upstream evidence lineage reference
+    compatibility: Provider-neutral semantic metadata; provider aliases/wire identifiers are not part of the contract
+    lifecycle_status: IMPLEMENTED / SELF-TESTED
 
   - sid: CTR-V2-CANONICAL-TRADE
+    version: 1.0.0
     logical_name: CanonicalTrade
     entity_type: CTR
     phase: PH-P1
     step: STEP-P1-004
     tier: REQ-BEHAVIOR
     purpose: Canonical normalized trade-event boundary
-    responsibility: Validation/Normalization boundary
-    lifecycle_status: PLANNED
+    producer: Validation/Normalization boundary
+    consumers:
+      - Canonical order-flow processing
+      - Deterministic downstream analysis
+    fields:
+      - trade_id
+      - instrument_id
+      - timestamp
+      - price
+      - quantity
+      - aggressor_side
+      - quote_quantity
+      - provenance_id
+    type_semantics: Non-empty strings for canonical identity/instrument/provenance; timezone-aware UTC datetime for timestamp; Decimal for authoritative price/quantity/optional quote_quantity; aggressor_side is optional semantic BUY or SELL
+    precision_semantics: Decimal is authoritative for trade price and quantities; binary floating-point values are rejected; no implicit rounding or quantization
+    timestamp_semantics: timestamp must be timezone-aware UTC and identifies the canonical trade observation time
+    validation: Reject invalid types, non-finite decimals, non-positive price/quantity/quote_quantity, invalid timestamp/provenance, and unsupported aggressor_side values
+    immutability: Frozen dataclass; field mutation is rejected after construction
+    provenance: provenance_id is mandatory; provider-specific event IDs are not modeled as canonical semantics
+    compatibility: Provider-neutral trade event; provider wire/event identifiers remain outside the canonical contract
+    lifecycle_status: IMPLEMENTED / SELF-TESTED
 
   - sid: CTR-V2-CANONICAL-ORDERBOOK
+    version: 1.0.0
     logical_name: CanonicalOrderBook
     entity_type: CTR
     phase: PH-P1
     step: STEP-P1-004
     tier: REQ-BEHAVIOR
-    purpose: Canonical normalized order-book boundary
-    responsibility: Validation/Normalization boundary
-    lifecycle_status: PLANNED
+    purpose: Canonical normalized order-book snapshot boundary
+    producer: Validation/Normalization boundary
+    consumers:
+      - Market-structure processing
+      - Order-flow processing
+    fields:
+      - instrument_id
+      - timestamp
+      - bids
+      - asks
+      - provenance_id
+    type_semantics: Non-empty strings for identity/provenance; timezone-aware UTC datetime; bids/asks immutable tuples of Decimal price/quantity pairs
+    precision_semantics: Decimal is authoritative for prices and quantities; binary floating-point values and non-finite decimals are rejected; no implicit rounding or quantization
+    timestamp_semantics: timestamp must be timezone-aware UTC and identifies the canonical book observation time
+    validation: Reject invalid types, non-finite/non-positive levels, duplicate price levels, non-monotonic side ordering, empty books, and crossed best bid/ask
+    immutability: Frozen dataclass with tuple-based immutable book levels; field mutation is rejected after construction
+    provenance: provenance_id is mandatory; provider sequence numbers and wire event IDs are excluded from canonical semantics
+    compatibility: Provider-neutral snapshot representation; provider sequence/event details remain outside the canonical contract
+    lifecycle_status: IMPLEMENTED / SELF-TESTED
 
   - sid: CTR-V2-CANONICAL-DERIVATIVES
+    version: 1.0.0
     logical_name: CanonicalDerivatives
     entity_type: CTR
     phase: PH-P1
     step: STEP-P1-004
     tier: REQ-BEHAVIOR
     purpose: Canonical normalized derivatives-market-data boundary
-    responsibility: Validation/Normalization boundary
-    lifecycle_status: PLANNED
+    producer: Validation/Normalization boundary
+    consumers:
+      - Deterministic derivatives analysis
+      - Market-intelligence evidence processing
+    fields:
+      - instrument_id
+      - timestamp
+      - funding_rate
+      - funding_change
+      - funding_velocity
+      - open_interest
+      - open_interest_delta
+      - basis
+      - provenance_id
+    type_semantics: Non-empty strings for identity/provenance; timezone-aware UTC datetime; optional Decimal values for funding, open-interest, delta, and basis metrics
+    precision_semantics: Decimal is authoritative for all supplied derivatives numeric values; binary floating-point and non-finite decimals are rejected; no implicit rounding or quantization
+    timestamp_semantics: timestamp must be timezone-aware UTC and identifies the derivatives evidence observation time
+    validation: Reject invalid types and non-finite decimals; open_interest, when supplied, must be non-negative; signed rates, deltas, and basis are permitted
+    immutability: Frozen dataclass; field mutation is rejected after construction
+    provenance: provenance_id is mandatory; unavailable optional evidence is represented as None rather than fabricated
+    compatibility: Provider-neutral derivatives evidence; provider-specific wire fields remain outside the canonical contract
+    lifecycle_status: IMPLEMENTED / SELF-TESTED
