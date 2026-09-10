@@ -13,3 +13,15 @@ items:
       - "Do not activate STEP-P0-003 through STEP-P0-010 until each becomes validly current under the ratified sequence and its required governance/authorization is recorded."
       - "Do not ratify or freeze the Master Architecture implicitly through the sequence decision."
       - "Do not authorize runtime, VPS/environment, market-data, trading, or V1 work through this sequence decision."
+
+  - question: "OQ-P1-004-01 — Additional Canonical Contract Stable-ID Allocation"
+    status: RESOLVED
+    affected_phase: PH-P1
+    affected_step: STEP-P1-004
+    resolution: "CONTROL allocated CTR-V2-CANONICAL-INSTRUMENT, CTR-V2-CANONICAL-TRADE, CTR-V2-CANONICAL-ORDERBOOK, and CTR-V2-CANONICAL-DERIVATIVES in the governed Master Registry for the remaining canonical contract objects required by the authorized TO-P1-004 boundary."
+    authority: "CONTROL / REVIEWER (ROL-V2-001), under TO-P1-004 registry requirements and the frozen CTR identity convention."
+    required_record: "docs/registry/contracts.yaml and docs/state/CHANGE_LEDGER.yaml"
+    constraints:
+      - "Do not alter DOC-V2-ARCH-001 through this allocation."
+      - "Producer must implement only the corresponding contract objects within TO-P1-004."
+      - "No competing Stable IDs may be created for these logical contract identities."

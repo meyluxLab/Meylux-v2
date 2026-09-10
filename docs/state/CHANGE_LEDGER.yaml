@@ -168,3 +168,20 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no V2 application deployment or market/provider runtime activity authorized by this transition
     v1_effect: none
+
+  - id: CHG-P1-CONTRACT-001
+    date_utc: '2026-09-10'
+    change_type: GOVERNED_REGISTRY_ALLOCATION
+    subject: Allocation of remaining canonical P1 contract Stable IDs for TO-P1-004 continuation
+    basis: TO-P1-004 + DOC-V2-ARCH-001 + BR-P1-004 / OQ-P1-004-01
+    affected_ids:
+      - CTR-V2-CANONICAL-INSTRUMENT
+      - CTR-V2-CANONICAL-TRADE
+      - CTR-V2-CANONICAL-ORDERBOOK
+      - CTR-V2-CANONICAL-DERIVATIVES
+      - OQ-P1-004-01
+    from_state: Remaining canonical P1 contract identities unallocated; Producer blocked from continuing those contract objects without inventing Stable IDs
+    to_state: Four canonical P1 contract Stable IDs allocated in the governed Master Registry; Producer authorized to implement the corresponding contract objects within TO-P1-004
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged; allocation follows the existing CTR identity convention and does not alter architectural semantics
+    runtime_effect: none
+    v1_effect: none

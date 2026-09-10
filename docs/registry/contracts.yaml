@@ -34,3 +34,43 @@ records:
     provenance: provenance_id is mandatory and identifies the upstream evidence lineage reference
     compatibility: Pure standard-library contract; no provider, network, database, filesystem, clock, or runtime-service dependency
     lifecycle_status: IMPLEMENTED / SELF-TESTED
+
+  - sid: CTR-V2-CANONICAL-INSTRUMENT
+    logical_name: CanonicalInstrument
+    entity_type: CTR
+    phase: PH-P1
+    step: STEP-P1-004
+    tier: REQ-BEHAVIOR
+    purpose: Canonical instrument identity and market-instrument metadata boundary
+    responsibility: Validation/Normalization boundary
+    lifecycle_status: PLANNED
+
+  - sid: CTR-V2-CANONICAL-TRADE
+    logical_name: CanonicalTrade
+    entity_type: CTR
+    phase: PH-P1
+    step: STEP-P1-004
+    tier: REQ-BEHAVIOR
+    purpose: Canonical normalized trade-event boundary
+    responsibility: Validation/Normalization boundary
+    lifecycle_status: PLANNED
+
+  - sid: CTR-V2-CANONICAL-ORDERBOOK
+    logical_name: CanonicalOrderBook
+    entity_type: CTR
+    phase: PH-P1
+    step: STEP-P1-004
+    tier: REQ-BEHAVIOR
+    purpose: Canonical normalized order-book boundary
+    responsibility: Validation/Normalization boundary
+    lifecycle_status: PLANNED
+
+  - sid: CTR-V2-CANONICAL-DERIVATIVES
+    logical_name: CanonicalDerivatives
+    entity_type: CTR
+    phase: PH-P1
+    step: STEP-P1-004
+    tier: REQ-BEHAVIOR
+    purpose: Canonical normalized derivatives-market-data boundary
+    responsibility: Validation/Normalization boundary
+    lifecycle_status: PLANNED
