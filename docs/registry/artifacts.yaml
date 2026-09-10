@@ -245,6 +245,12 @@ records:
     artifact_path: docs/build-reports/BR-P1-003.md
     traceability: TO-P1-003 / PH-P1 / STEP-P1-003
     status: VERIFIED
+  - stable_id: BR-P1-004
+    canonical_name: Build Report — Data Contracts
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P1-004.md
+    traceability: TO-P1-004 / PH-P1 / STEP-P1-004
+    status: PRODUCED / UNVERIFIED
   - stable_id: AR-P1-AUDIT-003
     canonical_name: BR-P1-003 Control Audit — Database Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-003.md

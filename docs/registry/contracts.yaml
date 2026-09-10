@@ -1,3 +1,36 @@
 schema_version: '0.1'
 status: DRAFT_PRE_PHASE_0
-records: []
+records:
+  - sid: CTR-V2-CANONICAL-CANDLE
+    version: 1.0.0
+    logical_name: CanonicalCandle
+    entity_type: CTR
+    phase: PH-P1
+    step: STEP-P1-004
+    tier: REQ-BEHAVIOR
+    purpose: Validated immutable canonical OHLCV candle boundary
+    producer: Validation/Normalization boundary
+    consumers:
+      - Deterministic quantitative processing
+    fields:
+      - instrument_id
+      - timeframe
+      - open_time
+      - close_time
+      - open
+      - high
+      - low
+      - close
+      - volume
+      - quote_volume
+      - trade_count
+      - is_closed
+      - provenance_id
+    type_semantics: Decimal for price/volume values; int for trade_count; bool for is_closed; timezone-aware UTC datetime for timestamps; non-empty strings for identity/timeframe/provenance
+    precision_semantics: Decimal is authoritative; binary floating-point values are rejected; source decimal scale is preserved without implicit rounding or quantization
+    timestamp_semantics: Both timestamps must be timezone-aware UTC; close_time must be later than open_time
+    validation: Reject invalid types, non-finite decimals, non-positive OHLC prices, negative volume/counts, invalid OHLC relationships, invalid temporal ordering, missing identity/timeframe/provenance
+    immutability: Frozen dataclass; field mutation is rejected after construction
+    provenance: provenance_id is mandatory and identifies the upstream evidence lineage reference
+    compatibility: Pure standard-library contract; no provider, network, database, filesystem, clock, or runtime-service dependency
+    lifecycle_status: IMPLEMENTED / SELF-TESTED
