@@ -86,7 +86,7 @@ Direct inspection of the actual V2 VPS established:
 - Root filesystem: 76 GiB total, approximately 68 GiB available at inspection.
 - Repository: `/srv/meylux-v2`.
 - VPS repository HEAD: `1a2c28f29016454dc396a6872e64e6976575f558` (`governance: correct P1 audit registry path`).
-- VPS local branch reports `main...origin/main [ahead 22]`; the local tracking ref is stale and is not treated as a current authoritative GitHub divergence.
+- After a non-destructive `git fetch origin main`, the VPS local branch is exactly `ahead 22, behind 36` relative to the current GitHub `origin/main` tracking ref. This is a genuine repository-history divergence, not a reliable basis for destructive synchronization. No force reset, force push, merge, rebase, or destructive synchronization was performed.
 - Docker Compose runtime services present and running: `api`, `collector`, `db`, `redis`, `worker-ai`, `worker-quant`.
 - DB: TimescaleDB `2.29.2-pg16`, healthy.
 - Redis: `7.4.6-alpine`, healthy.
@@ -96,7 +96,7 @@ Direct inspection of the actual V2 VPS established:
 
 ## 12. Repository ↔ VPS drift findings
 
-The VPS is not treated as a second source of truth. The observed `ahead 22` state is explicitly classified as **non-authoritative tracking-ref drift** because the VPS has not performed an authenticated fetch against the current GitHub main during this determination. No force reset, force push, destructive synchronization, or apparent-consistency operation was performed.
+The VPS is not treated as a second source of truth. The repository-history divergence is classified as **Phase-2-relevant but non-blocking for `STEP-P2-001`**, because Step 1 requires repository implementation and VPS inspection only. It **must be reconciled safely before any Phase 2 Step that deploys or activates provider/runtime changes**. The reconciliation must preserve history and must not use force reset/push merely to create apparent consistency.
 
 Material Phase-2 finding: the current VPS runtime contains the Phase-1 foundation and a running collector service, but the Phase-2 provider acquisition implementation is not present. This is expected and is not a Phase-1 defect.
 
@@ -109,6 +109,7 @@ No provider credentials are currently present or required for `STEP-P2-001`.
 ## 14. Required repository changes before Phase 2 runtime
 
 - Complete `STEP-P2-001`.
+- Reconcile the VPS Repository/Runtime checkout safely against the authoritative GitHub state before any provider runtime deployment. This is a prerequisite for the first Phase 2 Step that changes the running VPS.
 - Implement and verify Binance and MEXC adapters only in their authorized Steps.
 - Establish raw/staging persistence and collector runtime only in the authorized Step.
 - Reconcile any stale governance/environment wording that materially affects a later runtime boundary before that boundary is activated.
