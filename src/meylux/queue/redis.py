@@ -5,6 +5,9 @@ import asyncio
 from collections.abc import Awaitable, Callable
 from typing import Any
 import uuid
+from meylux.observability import HealthState, Severity, clear_context, configure_logging, emit, new_correlation_id, set_context
+
+_LOG = configure_logging(logger_name="meylux.queue")
 
 from .model import DuplicateMessage, ProcessingOutcome, QueueEnvelope, QueueOverloaded, QueuePolicy
 
@@ -111,10 +114,14 @@ class RedisQueue:
             '1' if self.policy.idempotency_required else '0',
         )
         if result in (0, b"0", "0"):
+            emit(_LOG, Severity.WARNING, "queue.overload", health_state=HealthState.OVERLOAD.value, queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, max_backlog=self.policy.max_backlog)
             raise QueueOverloaded(self.policy.name)
         if result in (-1, b"-1", "-1"):
+            emit(_LOG, Severity.INFO, "queue.duplicate", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="DUPLICATE")
             raise DuplicateMessage(envelope.idempotency_key)
-        return _decode(result)
+        entry_id = _decode(result)
+        emit(_LOG, Severity.INFO, "queue.published", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="ENQUEUED", entry_id=entry_id)
+        return entry_id
 
     async def read(self, consumer: str, block_ms: int = 1000) -> tuple[str, QueueEnvelope] | None:
         rows = await self._client.xreadgroup(
@@ -125,13 +132,17 @@ class RedisQueue:
         _, entries = rows[0]
         entry_id, fields = entries[0]
         body = fields.get(b"body", fields.get("body"))
-        return _decode(entry_id), QueueEnvelope.from_json(_decode(body))
+        envelope = QueueEnvelope.from_json(_decode(body))
+        emit(_LOG, Severity.DEBUG, "queue.delivered", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="DELIVERED", entry_id=_decode(entry_id), attempt=envelope.attempt)
+        return _decode(entry_id), envelope
 
     async def ack(self, entry_id: str, envelope: QueueEnvelope | None = None) -> None:
         retry_key = ""
         if envelope is not None and envelope.attempt > 1:
             retry_key = self.retry_prefix + envelope.idempotency_key
         await self._client.eval(_ACK_LUA, 2, self.stream, self.backlog_key, self.group, entry_id, retry_key)
+        if envelope is not None:
+            emit(_LOG, Severity.INFO, "queue.acked", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="ACKED", entry_id=entry_id)
 
     async def retry_or_dlq(self, entry_id: str, envelope: QueueEnvelope, reason: str) -> ProcessingOutcome:
         if envelope.attempt < self.policy.max_attempts:
@@ -160,7 +171,9 @@ class RedisQueue:
             )
             state = int(result[0]) if isinstance(result, (list, tuple)) else int(result)
             if state == 0:
+                emit(_LOG, Severity.WARNING, "queue.retry", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="BACKPRESSURE", reason=reason, attempt=envelope.attempt)
                 return ProcessingOutcome("RETRY", envelope.attempt, "BACKPRESSURE")
+            emit(_LOG, Severity.INFO, "queue.retry", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="RETRY", reason=reason, attempt=envelope.attempt)
             return ProcessingOutcome("RETRY", envelope.attempt, reason)
 
         now = await self._client.time()
@@ -178,6 +191,7 @@ class RedisQueue:
             reason,
             f"{cutoff}-0",
         )
+        emit(_LOG, Severity.ERROR, "queue.dlq", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="DLQ", reason=reason, attempt=envelope.attempt)
         return ProcessingOutcome("DLQ", envelope.attempt, reason)
 
     async def recover_stale(self, consumer: str, min_idle_ms: int) -> list[tuple[str, QueueEnvelope]]:
@@ -195,6 +209,9 @@ class RedisQueue:
             fields = claimed[0][1]
             body = fields.get(b"body", fields.get("body"))
             recovered.append((entry_id, QueueEnvelope.from_json(_decode(body))))
+        if recovered:
+            for _, recovered_envelope in recovered:
+                emit(_LOG, Severity.WARNING, "queue.recovered_stale", queue=self.policy.name, message_id=recovered_envelope.message_id, correlation_key=recovered_envelope.message_id, outcome="RECOVERED", consumer=consumer)
         return recovered
 
     async def recover_retry(self, entry_id: str, envelope: QueueEnvelope) -> ProcessingOutcome:
@@ -223,7 +240,9 @@ class RedisQueue:
         )
         state = int(result[0]) if isinstance(result, (list, tuple)) else int(result)
         if state in {1, 2}:
+            emit(_LOG, Severity.WARNING, "queue.retry.recovered", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="RECOVERED_RETRY", attempt=envelope.attempt)
             return ProcessingOutcome("RETRY", envelope.attempt, "RECOVERED_RETRY")
+        emit(_LOG, Severity.WARNING, "queue.retry.recovered", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="BACKPRESSURE", attempt=envelope.attempt)
         return ProcessingOutcome("RETRY", envelope.attempt, "BACKPRESSURE")
 
     async def retention_sweep(self) -> int:
@@ -255,6 +274,18 @@ class RedisQueue:
 Handler = Callable[[QueueEnvelope], Awaitable[None]]
 
 
+class _Context:
+    def __init__(self, values: dict[str, str]):
+        self.values = values
+        self.token = None
+    def __enter__(self):
+        self.token = set_context(**self.values)
+        return self
+    def __exit__(self, exc_type, exc, tb):
+        clear_context(self.token)
+        return False
+
+
 class AsyncWorker:
     """Bounded worker execution loop around one queue and one handler."""
 
@@ -269,17 +300,21 @@ class AsyncWorker:
 
     async def run_once(self) -> ProcessingOutcome | None:
         item = await self.queue.read(self.consumer)
-        if item is None:
-            return None
+        if item is None: return None
         entry_id, envelope = item
-        try:
-            await asyncio.wait_for(self.handler(envelope), timeout=self.queue.policy.timeout_seconds)
-        except asyncio.TimeoutError:
-            return await self.queue.retry_or_dlq(entry_id, envelope, "TIMEOUT")
-        except Exception as exc:
-            return await self.queue.retry_or_dlq(entry_id, envelope, f"FAILURE:{type(exc).__name__}")
-        await self.queue.ack(entry_id, envelope)
-        return ProcessingOutcome("ACKED", envelope.attempt)
+        with _Context({"correlation_id": new_correlation_id(), "queue": self.queue.policy.name, "queue_operation": "worker", "consumer": self.consumer, "message_id": envelope.message_id, "correlation_key": envelope.message_id}):
+            emit(_LOG, Severity.DEBUG, "worker.started", outcome="STARTED", entry_id=entry_id, attempt=envelope.attempt)
+            try:
+                await asyncio.wait_for(self.handler(envelope), timeout=self.queue.policy.timeout_seconds)
+            except asyncio.TimeoutError:
+                emit(_LOG, Severity.ERROR, "worker.timeout", health_state=HealthState.DEGRADED.value, entry_id=entry_id, attempt=envelope.attempt)
+                return await self.queue.retry_or_dlq(entry_id, envelope, "TIMEOUT")
+            except Exception as exc:
+                emit(_LOG, Severity.ERROR, "worker.failure", health_state=HealthState.DEGRADED.value, entry_id=entry_id, error_type=type(exc).__name__)
+                return await self.queue.retry_or_dlq(entry_id, envelope, f"FAILURE:{type(exc).__name__}")
+            await self.queue.ack(entry_id, envelope)
+            emit(_LOG, Severity.INFO, "worker.completed", outcome="ACKED", entry_id=entry_id, attempt=envelope.attempt)
+            return ProcessingOutcome("ACKED", envelope.attempt)
 
     async def run(self) -> None:
         await self.queue.ensure_group()
