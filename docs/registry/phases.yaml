@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: ACTIVE / IN_PROGRESS
+status: CLOSED / VERIFIED
 records:
   - sid: PH-P0
     logical_name: Phase 0
@@ -15,12 +15,12 @@ records:
   - sid: PH-P1
     logical_name: Infrastructure Foundation
     entity_type: PH
-    status: ACTIVE / IN PROGRESS
+    status: CLOSED / VERIFIED
     entry_gate: G-1
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
     first_step: STEP-P1-001
-    next_valid_step: STEP-P1-008
+    next_valid_step: null
     final_step: STEP-P1-008
     authorization_criteria:
       - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
@@ -137,10 +137,12 @@ records:
     logical_name: Disaster Recovery / Restore Verification & Phase 1 Closure
     entity_type: STEP
     phase: PH-P1
-    status: ACTIVE / IN PROGRESS
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 8
     predecessor: STEP-P1-007
     activation_basis: AR-P1-AUDIT-007 / General Continuation and Phase Progression Authority
-    active_task_order: TO-P1-008
+    active_task_order: null
+    completed_task_order: TO-P1-008
+    completion_audit: AR-P1-AUDIT-008
     purpose: Verify P1 recovery/restore behavior and establish the evidence boundary required for Phase 1 closure.

@@ -78,7 +78,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-005.md
     traceability: ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011 / AR-GOV-004 / Project Owner direction
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
@@ -179,8 +179,8 @@ records:
     canonical_name: Task Order — Async Worker & Queue Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-006.md
-    traceability: PH-P1 / STEP-P1-006 / AR-P1-AUDIT-005
-    status: AUTHORIZED TO EXECUTE
+    traceability: PH-P1 / STEP-P1-006 / AR-P1-AUDIT-006
+    status: VERIFIED / COMPLETE
   - stable_id: AI-CONTINUATION-PROTOCOL-V2
     canonical_name: AI Continuation Protocol V2
     entity_type: GOVERNANCE
@@ -225,6 +225,7 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: TO-P1-001
     canonical_name: Task Order — Repository Foundation
+    entity_type: TO
     artifact_path: docs/task-orders/TO-P1-001.md
     traceability: PH-P1 / STEP-P1-001 / AR-P1-AUDIT-001
     status: VERIFIED / COMPLETE
@@ -272,7 +273,7 @@ records:
   - stable_id: AR-P1-AUDIT-004
     canonical_name: BR-P1-004 Control Audit — Data Contracts
     entity_type: AR
-    artifact_path: docs/audits/AR-P1-AUDIT-004.md
+    artifact_path: docs/audit-reports/AR-P1-AUDIT-004.md
     traceability: BR-P1-004 / TO-P1-004 / PH-P1 / STEP-P1-004
     status: APPROVED / VERIFIED
   - stable_id: AR-P1-AUDIT-005
@@ -299,3 +300,45 @@ records:
     artifact_path: docs/operations/sentinelx/sudoers/sentinelx
     traceability: ADR-GOVERNANCE-011 / TO-GOV-004
     status: APPROVED DESIGN / NOT DEPLOYED
+
+  - stable_id: TO-P1-007
+    canonical_name: Task Order — Observability Foundation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P1-007.md
+    traceability: PH-P1 / STEP-P1-007 / AR-P1-AUDIT-007
+    status: VERIFIED / COMPLETE
+
+  - stable_id: BR-P1-007
+    canonical_name: Build Report — Observability Foundation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P1-007.md
+    traceability: TO-P1-007 / PH-P1 / STEP-P1-007
+    status: VERIFIED
+
+  - stable_id: AR-P1-AUDIT-007
+    canonical_name: BR-P1-007 Control Audit — Observability Foundation
+    entity_type: AR
+    artifact_path: docs/audits/AR-P1-AUDIT-007.md
+    traceability: BR-P1-007 / TO-P1-007 / PH-P1 / STEP-P1-007
+    status: APPROVED / VERIFIED
+
+  - stable_id: TO-P1-008
+    canonical_name: Task Order — Disaster Recovery / Restore Verification & Phase 1 Closure
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P1-008.md
+    traceability: PH-P1 / STEP-P1-008 / AR-P1-AUDIT-008
+    status: VERIFIED / COMPLETE
+
+  - stable_id: BR-P1-008
+    canonical_name: Build Report — Disaster Recovery / Restore Verification
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P1-008.md
+    traceability: TO-P1-008 / PH-P1 / STEP-P1-008
+    status: VERIFIED
+
+  - stable_id: AR-P1-AUDIT-008
+    canonical_name: BR-P1-008 Control Audit — Disaster Recovery / Restore Verification & Phase 1 Closure
+    entity_type: AR
+    artifact_path: docs/audits/AR-P1-AUDIT-008.md
+    traceability: BR-P1-008 / TO-P1-008 / PH-P1 / STEP-P1-008
+    status: APPROVED / VERIFIED
