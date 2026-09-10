@@ -185,3 +185,21 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged; allocation follows the existing CTR identity convention and does not alter architectural semantics
     runtime_effect: none
     v1_effect: none
+
+  - id: CHG-P1-STEP-007
+    date_utc: '2026-09-10'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P1-007 verification and ordinary progression to STEP-P1-008
+    basis: AR-P1-AUDIT-007 + General Continuation and Phase Progression Authority
+    affected_ids:
+      - BR-P1-007
+      - TO-P1-007
+      - AR-P1-AUDIT-007
+      - STEP-P1-007
+      - STEP-P1-008
+      - TO-P1-008
+    from_state: STEP-P1-007 ACTIVE / IN PROGRESS; TO-P1-007 AUTHORIZED TO EXECUTE; STEP-P1-008 DEFINED / INACTIVE
+    to_state: BR-P1-007 VERIFIED; TO-P1-007 VERIFIED / COMPLETE; STEP-P1-007 COMPLETE / VERIFIED; STEP-P1-008 AUTHORIZED / ACTIVE; TO-P1-008 AUTHORIZED TO EXECUTE
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: P1-007 repository implementation was independently verified; no market/provider/trading/capital/V1 runtime activity
+    v1_effect: none
