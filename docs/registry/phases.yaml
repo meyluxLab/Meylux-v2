@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: CLOSED / VERIFIED
+status: ACTIVE / AUTHORIZED
 records:
   - sid: PH-P0
     logical_name: Phase 0
@@ -146,3 +146,116 @@ records:
     completed_task_order: TO-P1-008
     completion_audit: AR-P1-AUDIT-008
     purpose: Verify P1 recovery/restore behavior and establish the evidence boundary required for Phase 1 closure.
+
+  - sid: PH-P2
+    logical_name: Data Acquisition & Market Data Foundation
+    entity_type: PH
+    status: ACTIVE / AUTHORIZED
+    entry_gate: Phase progression authority
+    entry_gate_role: phase boundary
+    entry_approval: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11
+    first_step: STEP-P2-001
+    next_valid_step: STEP-P2-002
+    final_step: STEP-P2-006
+    authorization_criteria:
+      - Phase 1 is CLOSED / VERIFIED.
+      - Project Owner explicitly authorized formal Phase 2 determination and continuation.
+      - Phase 2 definition and complete Step sequence are recorded in the GitHub Source of Truth.
+      - CONTROL / REVIEWER exercises existing General Continuation and Phase Progression Authority.
+    architecture_relationship:
+      architecture: DOC-V2-ARCH-001
+      phase_specification: docs/phases/PH-P2.md
+      upstream_foundation: PH-P1 CLOSED / VERIFIED
+      downstream_boundary: Phase 3 Validation, Normalization & Data Quality Engine
+    scope_boundary:
+      - Establish provider-isolated market-data acquisition for Binance and MEXC.
+      - Establish acquisition contracts, raw/staging handling, transport, replay/idempotency, collector integration, and operational hardening.
+      - Preserve canonical validation/normalization ownership for Phase 3.
+      - No trading, capital, custody, leverage, V1 mutation, or autonomous execution.
+      - Only the currently activated Step may be executed.
+
+  - sid: STEP-P2-001
+    logical_name: Provider Boundary & Acquisition Contracts
+    entity_type: STEP
+    phase: PH-P2
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED TO EXECUTE
+    order: 1
+    predecessor: STEP-P1-008
+    activation_basis: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / PH-P2
+    active_task_order: TO-P2-001
+    completed_task_order: null
+    completion_audit: null
+    purpose: Establish the provider-neutral acquisition boundary and deterministic acquisition contracts required by later provider adapters.
+    repository_scope: provider abstraction, acquisition contracts/envelopes, provenance/error/degradation semantics, deterministic identity/sequence requirements, tests, and traceability artifacts.
+    vps_scope: inspection only; no provider runtime activation.
+
+  - sid: STEP-P2-002
+    logical_name: Binance Acquisition Adapter
+    entity_type: STEP
+    phase: PH-P2
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 2
+    predecessor: STEP-P2-001
+    activation_basis: PH-P2 / STEP-P2-001 verification
+    active_task_order: null
+    completed_task_order: null
+    completion_audit: null
+    purpose: Implement Binance acquisition against the approved provider boundary, including required bootstrap/live acquisition behavior and provider-isolated failure handling.
+
+  - sid: STEP-P2-003
+    logical_name: MEXC Acquisition Adapter
+    entity_type: STEP
+    phase: PH-P2
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 3
+    predecessor: STEP-P2-002
+    activation_basis: PH-P2 / STEP-P2-002 verification
+    active_task_order: null
+    completed_task_order: null
+    completion_audit: null
+    purpose: Implement MEXC acquisition against the same provider boundary with independent failure behavior.
+
+  - sid: STEP-P2-004
+    logical_name: Live Collector, Raw/Staging Persistence & Replay Safety
+    entity_type: STEP
+    phase: PH-P2
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 4
+    predecessor: STEP-P2-003
+    activation_basis: PH-P2 / STEP-P2-003 verification
+    active_task_order: null
+    completed_task_order: null
+    completion_audit: null
+    purpose: Integrate live acquisition with the collector and establish raw/staging persistence, bounded transport, deduplication/idempotency, sequencing, reconnect, and replay-safe behavior.
+
+  - sid: STEP-P2-005
+    logical_name: Dual-Provider Operational Hardening
+    entity_type: STEP
+    phase: PH-P2
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 5
+    predecessor: STEP-P2-004
+    activation_basis: PH-P2 / STEP-P2-004 verification
+    active_task_order: null
+    completed_task_order: null
+    completion_audit: null
+    purpose: Harden provider isolation, rate-limit/reconnect behavior, bounded resource growth, observability, degradation, and operational recovery.
+
+  - sid: STEP-P2-006
+    logical_name: End-to-End Acquisition Verification & Phase 2 Closure
+    entity_type: STEP
+    phase: PH-P2
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 6
+    predecessor: STEP-P2-005
+    activation_basis: PH-P2 / STEP-P2-005 verification
+    active_task_order: null
+    completed_task_order: null
+    completion_audit: null
+    purpose: Verify the complete Phase 2 acquisition boundary using real provider/runtime evidence and establish Phase 2 closure evidence.
