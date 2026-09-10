@@ -156,3 +156,40 @@ records:
     provenance: provenance_id is mandatory; unavailable optional evidence is represented as None rather than fabricated
     compatibility: Provider-neutral derivatives evidence; provider-specific wire fields remain outside the canonical contract
     lifecycle_status: IMPLEMENTED / SELF-TESTED
+
+  - sid: CTR-P2-001
+    version: 1.0.0
+    logical_name: AcquisitionEnvelope
+    entity_type: CTR
+    phase: PH-P2
+    step: STEP-P2-001
+    tier: REQ-BEHAVIOR
+    purpose: Provider-neutral raw/staging acquisition envelope and deterministic replay identity boundary
+    producer: Provider Acquisition boundary
+    consumers:
+      - Phase 3 Validation / Normalization / Data Quality boundary
+    fields:
+      - provider
+      - instrument
+      - provenance
+      - event_type
+      - event_time
+      - received_at
+      - state
+      - payload
+      - source_sequence
+      - provider_error
+      - capability
+      - event_id
+      - deduplication_key
+    type_semantics: Immutable provider/instrument/provenance identities; explicit event type and acquisition state enums; timezone-aware UTC event/receive timestamps; JSON-like immutable payload; optional source sequence, structured provider error, and capability state
+    precision_semantics: Provider payload is not numerically normalized by this contract; Decimal values are serialized as exact strings and binary floating-point values are rejected
+    timestamp_semantics: event_time and received_at must be timezone-aware UTC; receive time is observational metadata and is excluded from replay identity
+    validation: Reject missing identities/provenance, non-UTC timestamps, invalid event/state types, invalid source sequence, provider/provenance mismatch, synthetic success with provider error, and required degraded/failure states without structured provider error
+    immutability: Frozen dataclasses with recursively immutable payload representation
+    provenance: provenance_id plus provider identity and acquisition method preserve upstream evidence lineage
+    compatibility: Provider-neutral; no Binance/MEXC-specific behavior or provider wire identifiers are required by the contract
+    deterministic_identity: canonical JSON uses sorted keys and compact separators; event_id is SHA-256 of provider/instrument/event/time/sequence/payload identity material
+    replay_deduplication: receive time, error detail, and capability state do not change event identity; source sequence is included when available and payload protects same-timestamp collisions
+    phase_boundary: envelope is raw/staging acquisition output; validation, normalization, and data-quality ownership remains in Phase 3
+    lifecycle_status: IMPLEMENTED / SELF-TESTED
