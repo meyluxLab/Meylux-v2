@@ -8,10 +8,10 @@ purpose: >-
 
 contract:
   source_of_truth: GitHub repository and governed repository artifacts
-  architecture_status: DESIGN BASELINE — PENDING RATIFICATION
+  architecture_status: RATIFIED / FROZEN
   runtime_authorization: separate_governed_authorization_required
   deployment_authorization: separate_governed_authorization_required
-  operator_execution_authority: required_for_physical_or_environment_execution_and_must_be_backed_by_explicit_governed_authorization
+  operator_execution_authority: retained_historical_role; CONTROL may execute when explicitly authorized under ADR-GOVERNANCE-010 and the applicable execution context
 
   environments:
     dev:
@@ -37,7 +37,7 @@ contract:
         - explicit deployment authorization through the governed workflow
         - authoritative persistence boundary explicitly designated before runtime use
         - production secrets supplied only through approved secret-handling mechanisms
-        - operational evidence captured through the Operator / execution-log path
+        - operational evidence captured through the governed EXEC-LOG path
 
   secret_handling:
     repository_or_chat_storage_prohibited: true
@@ -66,8 +66,10 @@ contract:
     deployment_authorization_is_separate_from_this_contract: true
     this_contract_does_not_grant_runtime_or_deployment_authority: true
     explicit_governed_authorization_required_for_runtime_or_deployment_execution: true
-    physical_environment_changes_require_explicit_authorization: true
-    operator_execution_required_for_approved_physical_environment_actions: true
+    physical_environment_changes_require explicit_governed_authorization: true
+    operator_execution_required_for_approved_physical_environment_actions: false
+    control_execution_allowed_when_explicitly_authorized: true
+    execution_evidence_required: true
 
   persistence_boundary:
     durable_project_authority: governed_repository_artifacts
