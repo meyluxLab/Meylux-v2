@@ -1,3 +1,32 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-records: []
+status: VERIFIED
+records:
+  - stable_id: STEP-P1-007
+    canonical_name: Observability Foundation
+    entity_type: STEP
+    phase: PH-P1
+    task_order: TO-P1-007
+    build_report: BR-P1-007
+    audit_report: AR-P1-AUDIT-007
+    status: COMPLETE / VERIFIED
+    implementation_paths:
+      - src/meylux/observability/__init__.py
+      - src/meylux/observability/core.py
+      - src/meylux/observability/diagnostics.py
+      - src/meylux/queue/redis.py
+      - tests/test_observability_foundation.py
+    invariants:
+      - structured_machine_readable_events
+      - correlation_context_propagation
+      - mandatory_secret_scrubbing
+      - bounded_event_size_and_rate
+      - deterministic_health_states
+      - bounded_error_critical_reservations
+      - separate_observability_persistence_boundary
+    verification:
+      dedicated_tests: 12/12 PASS
+      full_tests: 86/86 PASS
+      compileall: PASS
+      diff_check: PASS
+      deterministic_rate_stress: PASS
+      final_verified_commit: 9d0b71a7cf818aa8e39102cbce6a2458cab31866
