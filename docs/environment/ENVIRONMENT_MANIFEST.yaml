@@ -66,7 +66,7 @@ contract:
     deployment_authorization_is_separate_from_this_contract: true
     this_contract_does_not_grant_runtime_or_deployment_authority: true
     explicit_governed_authorization_required_for_runtime_or_deployment_execution: true
-    physical_environment_changes_require explicit_governed_authorization: true
+    physical_environment_changes_require_explicit_governed_authorization: true
     operator_execution_required_for_approved_physical_environment_actions: false
     control_execution_allowed_when_explicitly_authorized: true
     execution_evidence_required: true
