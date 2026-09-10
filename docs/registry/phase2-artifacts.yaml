@@ -29,3 +29,27 @@ records:
     artifact_path: docs/operations/PH-P2-DETERMINATION-REPORT.md
     traceability: PH-P2 / STEP-P2-001 / TO-P2-001
     status: DETERMINED / ACTIVE
+  - stable_id: CMP-P2-001
+    entity_type: CMP
+    canonical_name: Provider-Neutral Acquisition Boundary
+    artifact_path: src/meylux/acquisition/provider.py
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001
+    status: IMPLEMENTED / SELF-TESTED
+  - stable_id: CTR-P2-001
+    entity_type: CTR
+    canonical_name: AcquisitionEnvelope Provider-Neutral Acquisition Contract
+    artifact_path: contracts/acquisition.py
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001
+    status: IMPLEMENTED / SELF-TESTED
+  - stable_id: TST-P2-001
+    entity_type: TST
+    canonical_name: Provider-Neutral Acquisition Contract Tests
+    artifact_path: tests/test_contracts/test_acquisition_contract.py
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CTR-P2-001
+    status: IMPLEMENTED / SELF-TESTED
+  - stable_id: BR-P2-001
+    entity_type: BR
+    canonical_name: Build Report — Provider Boundary & Acquisition Contracts
+    artifact_path: docs/build-reports/BR-P2-001.md
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CMP-P2-001 / CTR-P2-001 / TST-P2-001
+    status: PRODUCER EVIDENCE
