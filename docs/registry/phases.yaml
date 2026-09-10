@@ -20,7 +20,7 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
     first_step: STEP-P1-001
-    next_valid_step: STEP-P1-007
+    next_valid_step: STEP-P1-008
     final_step: STEP-P1-008
     authorization_criteria:
       - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
@@ -109,24 +109,26 @@ records:
     logical_name: Async Worker & Queue Foundation
     entity_type: STEP
     phase: PH-P1
-    status: ACTIVE / IN PROGRESS
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 6
     predecessor: STEP-P1-005
     activation_basis: AR-P1-AUDIT-005 / General Continuation and Phase Progression Authority
-    active_task_order: TO-P1-006
+    active_task_order: null
+    completed_task_order: TO-P1-006
+    completion_audit: AR-P1-AUDIT-006
     purpose: Establish bounded asynchronous worker and messaging infrastructure with failure isolation and backpressure controls.
 
   - sid: STEP-P1-007
     logical_name: Observability Foundation
     entity_type: STEP
     phase: PH-P1
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / NOT-ACTIVATED
+    status: ACTIVE / IN PROGRESS
+    authorization_state: AUTHORIZED / ACTIVE
     order: 7
     predecessor: STEP-P1-006
-    activation_basis: PH-P1
-    active_task_order: null
+    activation_basis: AR-P1-AUDIT-006 / General Continuation and Phase Progression Authority
+    active_task_order: TO-P1-007
     purpose: Establish structured observability sufficient to diagnose, verify, and safely operate P1 behavior.
 
   - sid: STEP-P1-008
