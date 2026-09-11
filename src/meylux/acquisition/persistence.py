@@ -95,8 +95,9 @@ class RawStagingRepository:
         row = await self.fetch(event_id)
         if row is None:
             return None
-        if isinstance(row, MappingRow):
-            return RawAcquisitionRecord(**row)
+        values = dict(row) if hasattr(row, "keys") else None
+        if values is not None:
+            return RawAcquisitionRecord(**values)
         return RawAcquisitionRecord(
             event_id=row[0], provider_id=row[1], adapter_id=row[2], adapter_version=row[3],
             canonical_instrument_id=row[4], provider_instrument_id=row[5], event_type=row[6],
@@ -104,10 +105,3 @@ class RawStagingRepository:
             provenance_id=row[11], acquisition_method=row[12], payload_json=row[13],
             canonical_bytes=row[14], identity_hash=row[15], persisted_at=row[16],
         )
-
-
-class MappingRow:
-    """Marker for dict-like asyncpg rows; kept dependency-free for tests/imports."""
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        raise TypeError("MappingRow is a typing marker only")
