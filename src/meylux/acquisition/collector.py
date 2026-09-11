@@ -7,8 +7,10 @@ from typing import Any, AsyncIterator, Mapping, Protocol, Sequence
 
 from contracts.acquisition import AcquisitionEnvelope
 from meylux.acquisition.persistence import PersistenceResult, RawStagingRepository
+from meylux.observability import Severity, configure_logging, emit
 
 SID = "STEP-P2-004"
+_LOG = configure_logging(logger_name="meylux.acquisition.collector")
 
 
 class StreamAdapter(Protocol):
@@ -71,6 +73,15 @@ class AcquisitionCollector:
 
     async def publish(self, envelope: AcquisitionEnvelope) -> None:
         """Block rather than drop when the bounded collector queue is full."""
+        if self._queue.full():
+            self._stats = CollectorStats(
+                self._stats.published,
+                self._stats.persisted,
+                self._stats.duplicates,
+                self._stats.failures,
+                self._stats.overloaded + 1,
+            )
+            emit(_LOG, Severity.WARNING, "collector.backpressure", provider=envelope.provider.provider_id, event_id=envelope.event_id, queue_size=self.queue_size, max_queue_size=self.max_queue_size)
         await self._queue.put(envelope)
         self._stats = CollectorStats(
             self._stats.published + 1,
@@ -94,7 +105,8 @@ class AcquisitionCollector:
                     self._stats.failures,
                     self._stats.overloaded,
                 )
-            except Exception:
+                emit(_LOG, Severity.INFO, "collector.persisted", provider=envelope.provider.provider_id, event_id=envelope.event_id, outcome="INSERTED" if result.inserted else "DUPLICATE")
+            except Exception as exc:
                 self._stats = CollectorStats(
                     self._stats.published,
                     self._stats.persisted,
@@ -102,9 +114,10 @@ class AcquisitionCollector:
                     self._stats.failures + 1,
                     self._stats.overloaded,
                 )
-                # Persistence errors are isolated to this event. A database
-                # repository is expected to expose its own bounded retry/transaction
-                # policy; the collector must not spin indefinitely on a poison event.
+                emit(_LOG, Severity.ERROR, "collector.persistence_failure", provider=envelope.provider.provider_id if envelope else "unknown", event_id=envelope.event_id if envelope else None, error_type=type(exc).__name__)
+                # Persistence errors are isolated to this event. The repository
+                # owns its transaction/retry policy; the collector must not spin
+                # indefinitely on a poison event.
             finally:
                 self._queue.task_done()
 
@@ -115,11 +128,7 @@ class AcquisitionCollector:
         max_messages_per_provider: int = 1,
         max_reconnects: int = 0,
     ) -> CollectorStats:
-        """Collect a finite sample from every configured provider.
-
-        The method is deliberately bounded for development/validation runs and
-        never creates an uncontrolled long-running collector process.
-        """
+        """Collect a finite sample from every configured provider."""
         if not symbols:
             raise ValueError("symbols must not be empty")
         if max_messages_per_provider < 1 or max_reconnects < 0:
@@ -137,9 +146,7 @@ class AcquisitionCollector:
                     await self.publish(envelope)
             except asyncio.CancelledError:
                 raise
-            except Exception:
-                # Provider failures are isolated. A healthy provider continues
-                # even when another provider's stream terminates unexpectedly.
+            except Exception as exc:
                 self._stats = CollectorStats(
                     self._stats.published,
                     self._stats.persisted,
@@ -147,10 +154,12 @@ class AcquisitionCollector:
                     self._stats.failures + 1,
                     self._stats.overloaded,
                 )
+                emit(_LOG, Severity.ERROR, "collector.provider_failure", provider=getattr(adapter.identity, "provider_id", "unknown"), error_type=type(exc).__name__)
 
         try:
             await asyncio.gather(*(run_provider(adapter) for adapter in self._adapters.values()))
             await self._queue.join()
+            emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded)
             return self._stats
         finally:
             self._stop.set()
