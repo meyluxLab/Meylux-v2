@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 2 authorized; correction cycle active
+**Status:** AUTHORIZED / ACTIVE — Step 2 verified; Step 3 ready for governed authorization
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -46,7 +46,7 @@ Completion requires: implementation is within frozen architecture; provider-spec
 ### `STEP-P2-002` — Binance Acquisition Adapter
 
 **Order:** 2  
-**Status:** ACTIVE / CORRECTION REQUIRED  
+**Status:** VERIFIED / COMPLETE  
 **Predecessor:** `STEP-P2-001`  
 **Task Order:** `TO-P2-002`  
 **Audit:** `AR-P2-AUDIT-002`
