@@ -11,7 +11,7 @@ import json
 import time
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Any, AsyncIterator, Callable, Mapping, Optional, Sequence
+from typing import Any, AsyncIterator, Callable, Mapping, Sequence
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -28,7 +28,6 @@ from contracts.acquisition import (
     Provenance,
 )
 from meylux.acquisition.provider import ProviderAdapter
-
 
 SID = "STEP-P2-002"
 VERSION = "1.0.0"
@@ -106,11 +105,7 @@ class BinanceAdapter(ProviderAdapter):
 
     @property
     def identity(self) -> ProviderIdentity:
-        return ProviderIdentity(
-            provider_id=PROVIDER_ID,
-            adapter_id=ADAPTER_ID,
-            adapter_version=VERSION,
-        )
+        return ProviderIdentity(PROVIDER_ID, ADAPTER_ID, VERSION)
 
     def capabilities(self) -> Sequence[ProviderCapability]:
         return (
@@ -123,22 +118,14 @@ class BinanceAdapter(ProviderAdapter):
         )
 
     def fetch_exchange_info(self, symbol: str | None = None) -> AcquisitionEnvelope:
-        """Fetch Binance spot exchange metadata as raw/staging acquisition."""
         symbol = self._normalize_symbol(symbol) if symbol is not None else None
-        params = {"symbol": symbol} if symbol else {}
         try:
-            payload = self._request_json("/api/v3/exchangeInfo", params)
+            payload = self._request_json("/api/v3/exchangeInfo", {"symbol": symbol} if symbol else {})
         except _BinanceProviderFailure as exc:
-            return self._failure_envelope(
-                instrument=self._exchange_info_instrument(symbol),
-                event_type=EventType.INSTRUMENT,
-                failure=exc,
-            )
+            return self._failure_envelope(self._exchange_info_instrument(symbol), EventType.INSTRUMENT, exc)
         now = self._utc_now()
-        provider_symbol = symbol or "*"
-        canonical_symbol = symbol or "BINANCE:EXCHANGE_INFO"
         return self._envelope(
-            instrument=InstrumentIdentity(canonical_symbol, provider_symbol),
+            instrument=self._exchange_info_instrument(symbol),
             event_type=EventType.INSTRUMENT,
             event_time=now,
             received_at=now,
@@ -147,21 +134,23 @@ class BinanceAdapter(ProviderAdapter):
         )
 
     def fetch_order_book(self, symbol: str, *, limit: int = 100) -> AcquisitionEnvelope:
-        """Fetch a Binance order-book snapshot without normalizing its values."""
         symbol = self._normalize_symbol(symbol)
         if limit not in {5, 10, 20, 50, 100, 500, 1000, 5000}:
             raise ValueError("limit must be one of Binance's supported depth limits")
         try:
             payload = self._request_json("/api/v3/depth", {"symbol": symbol, "limit": limit})
         except _BinanceProviderFailure as exc:
-            return self._failure_envelope(
-                instrument=self._instrument(symbol),
-                event_type=EventType.ORDER_BOOK,
-                failure=exc,
-            )
+            return self._failure_envelope(self._instrument(symbol), EventType.ORDER_BOOK, exc)
         now = self._utc_now()
         event_ms = payload.get("E") or payload.get("T")
-        event_time = self._epoch_ms(event_ms) if event_ms is not None else now
+        try:
+            event_time = self._epoch_ms(event_ms) if event_ms is not None else now
+        except BinanceTransportError as exc:
+            failure = _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError("BINANCE_INVALID_DEPTH_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
+            )
+            return self._failure_envelope(self._instrument(symbol), EventType.ORDER_BOOK, failure)
         sequence = payload.get("lastUpdateId")
         return self._envelope(
             instrument=self._instrument(symbol),
@@ -174,20 +163,19 @@ class BinanceAdapter(ProviderAdapter):
         )
 
     def fetch_trades(self, symbol: str, *, limit: int = 100) -> tuple[AcquisitionEnvelope, ...]:
-        """Fetch recent Binance trades as provider-neutral trade envelopes."""
         symbol = self._normalize_symbol(symbol)
         if not 1 <= limit <= 1000:
             raise ValueError("limit must be between 1 and 1000")
         try:
             rows = self._request_json("/api/v3/trades", {"symbol": symbol, "limit": limit})
         except _BinanceProviderFailure as exc:
-            return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.TRADE, failure=exc),)
+            return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, exc),)
         if not isinstance(rows, list):
             failure = _BinanceProviderFailure(
                 AcquisitionState.INVALID,
                 ProviderError("BINANCE_INVALID_TRADES_PAYLOAD", "INVALID_PAYLOAD", "Binance trades response was not a list"),
             )
-            return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.TRADE, failure=failure),)
+            return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, failure),)
         received = self._utc_now()
         envelopes: list[AcquisitionEnvelope] = []
         for row in rows:
@@ -196,46 +184,42 @@ class BinanceAdapter(ProviderAdapter):
                     AcquisitionState.INVALID,
                     ProviderError("BINANCE_INVALID_TRADES_PAYLOAD", "INVALID_PAYLOAD", "Binance trade row is malformed"),
                 )
-                return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.TRADE, failure=failure),)
-            envelopes.append(
-                self._envelope(
-                    instrument=self._instrument(symbol),
-                    event_type=EventType.TRADE,
-                    event_time=self._epoch_ms(row.get("time")) if row.get("time") is not None else received,
-                    received_at=received,
-                    payload=row,
-                    source_sequence=str(row["id"]) if row.get("id") is not None else None,
-                    state=AcquisitionState.AVAILABLE,
+                return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, failure),)
+            try:
+                event_time = self._epoch_ms(row.get("time")) if row.get("time") is not None else received
+            except BinanceTransportError as exc:
+                failure = _BinanceProviderFailure(
+                    AcquisitionState.INVALID,
+                    ProviderError("BINANCE_INVALID_TRADE_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
                 )
-            )
+                return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, failure),)
+            envelopes.append(self._envelope(
+                instrument=self._instrument(symbol),
+                event_type=EventType.TRADE,
+                event_time=event_time,
+                received_at=received,
+                payload=row,
+                source_sequence=str(row["id"]) if row.get("id") is not None else None,
+                state=AcquisitionState.AVAILABLE,
+            ))
         return tuple(envelopes)
 
-    def fetch_klines(
-        self,
-        symbol: str,
-        interval: str,
-        *,
-        limit: int = 500,
-    ) -> tuple[AcquisitionEnvelope, ...]:
-        """Fetch Binance candlesticks without assigning Phase 3 semantics."""
+    def fetch_klines(self, symbol: str, interval: str, *, limit: int = 500) -> tuple[AcquisitionEnvelope, ...]:
         symbol = self._normalize_symbol(symbol)
         if not interval or any(ch.isspace() for ch in interval):
             raise ValueError("interval must be a non-empty Binance interval")
         if not 1 <= limit <= 1000:
             raise ValueError("limit must be between 1 and 1000")
         try:
-            rows = self._request_json(
-                "/api/v3/klines",
-                {"symbol": symbol, "interval": interval, "limit": limit},
-            )
+            rows = self._request_json("/api/v3/klines", {"symbol": symbol, "interval": interval, "limit": limit})
         except _BinanceProviderFailure as exc:
-            return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.CANDLE, failure=exc),)
+            return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, exc),)
         if not isinstance(rows, list):
             failure = _BinanceProviderFailure(
                 AcquisitionState.INVALID,
                 ProviderError("BINANCE_INVALID_KLINES_PAYLOAD", "INVALID_PAYLOAD", "Binance klines response was not a list"),
             )
-            return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.CANDLE, failure=failure),)
+            return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
         received = self._utc_now()
         envelopes: list[AcquisitionEnvelope] = []
         for row in rows:
@@ -244,31 +228,27 @@ class BinanceAdapter(ProviderAdapter):
                     AcquisitionState.INVALID,
                     ProviderError("BINANCE_INVALID_KLINE_ROW", "INVALID_PAYLOAD", "Binance kline row is malformed"),
                 )
-                return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.CANDLE, failure=failure),)
-            open_time = row[0]
+                return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
             try:
-                event_time = self._epoch_ms(open_time)
-            except BinanceTransportError:
+                event_time = self._epoch_ms(row[0])
+            except BinanceTransportError as exc:
                 failure = _BinanceProviderFailure(
                     AcquisitionState.INVALID,
-                    ProviderError("BINANCE_INVALID_KLINE_TIMESTAMP", "INVALID_PAYLOAD", "Binance kline timestamp is invalid"),
+                    ProviderError("BINANCE_INVALID_KLINE_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
                 )
-                return (self._failure_envelope(instrument=self._instrument(symbol), event_type=EventType.CANDLE, failure=failure),)
-            envelopes.append(
-                self._envelope(
-                    instrument=self._instrument(symbol),
-                    event_type=EventType.CANDLE,
-                    event_time=event_time,
-                    received_at=received,
-                    payload=row,
-                    source_sequence=str(open_time),
-                    state=AcquisitionState.AVAILABLE,
-                )
-            )
+                return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
+            envelopes.append(self._envelope(
+                instrument=self._instrument(symbol),
+                event_type=EventType.CANDLE,
+                event_time=event_time,
+                received_at=received,
+                payload=row,
+                source_sequence=str(row[0]),
+                state=AcquisitionState.AVAILABLE,
+            ))
         return tuple(envelopes)
 
     def bootstrap(self, symbol: str, *, depth_limit: int = 100) -> tuple[AcquisitionEnvelope, AcquisitionEnvelope]:
-        """Acquire exchange metadata and an order-book snapshot for one symbol."""
         info = self.fetch_exchange_info(symbol)
         depth = self.fetch_order_book(symbol, limit=depth_limit)
         if info.state is AcquisitionState.AVAILABLE and depth.state is AcquisitionState.AVAILABLE:
@@ -283,13 +263,7 @@ class BinanceAdapter(ProviderAdapter):
         max_messages: int | None = None,
         max_reconnects: int = 3,
     ) -> AsyncIterator[AcquisitionEnvelope]:
-        """Yield live Binance market-stream events with bounded reconnects.
-
-        ``max_reconnects`` is a hard upper bound for a single invocation; a
-        caller must explicitly invoke ``stream`` again to start another cycle.
-        Both exceptional and clean connection termination consume one reconnect
-        attempt, so no disconnect path can bypass the configured bound.
-        """
+        """Yield live events; every exceptional or clean termination consumes one reconnect."""
         if not symbols:
             raise ValueError("symbols must not be empty")
         if max_reconnects < 0:
@@ -319,61 +293,38 @@ class BinanceAdapter(ProviderAdapter):
                 self._telemetry("binance.stream.disconnected", reconnect=reconnects + 1)
                 reconnects += 1
                 if reconnects > max_reconnects:
-                    failure = _BinanceProviderFailure(
-                        AcquisitionState.DISCONNECTED,
-                        ProviderError(
-                            "BINANCE_RECONNECT_EXHAUSTED",
-                            "DISCONNECTED",
-                            "Binance WebSocket connection terminated and reconnect limit was exhausted",
-                            retryable=False,
-                        ),
-                    )
-                    self._telemetry("binance.stream.stopped", reason="reconnect_exhausted", reconnects=reconnects)
-                    yield self._failure_envelope(
-                        instrument=self._instrument(normalized_symbols[0].upper()),
-                        event_type=EventType.UPDATE,
-                        failure=failure,
-                    )
+                    yield self._reconnect_failure(normalized_symbols[0].upper())
                     return
                 self._telemetry("binance.stream.reconnect", attempt=reconnects)
                 await self._async_sleeper(self._retry_policy.delay(reconnects))
             except asyncio.CancelledError:
                 self._telemetry("binance.stream.cancelled")
                 raise
+            except _BinanceProviderFailure as exc:
+                self._telemetry("binance.stream.error", error_type="canonical_provider_failure", state=exc.state.value, reconnect=reconnects)
+                yield self._failure_envelope(self._instrument(normalized_symbols[0].upper()), EventType.UPDATE, exc)
+                return
             except Exception as exc:
-                self._telemetry(
-                    "binance.stream.error",
-                    error_type=type(exc).__name__,
-                    reconnect=reconnects,
-                )
+                self._telemetry("binance.stream.error", error_type=type(exc).__name__, reconnect=reconnects)
                 reconnects += 1
                 if reconnects > max_reconnects:
-                    failure = _BinanceProviderFailure(
-                        AcquisitionState.DISCONNECTED,
-                        ProviderError(
-                            "BINANCE_RECONNECT_EXHAUSTED",
-                            "DISCONNECTED",
-                            "Binance WebSocket failure and reconnect limit was exhausted",
-                            retryable=False,
-                        ),
-                    )
-                    self._telemetry("binance.stream.stopped", reason="reconnect_exhausted", reconnects=reconnects)
-                    yield self._failure_envelope(
-                        instrument=self._instrument(normalized_symbols[0].upper()),
-                        event_type=EventType.UPDATE,
-                        failure=failure,
-                    )
+                    yield self._reconnect_failure(normalized_symbols[0].upper())
                     return
                 self._telemetry("binance.stream.reconnect", attempt=reconnects)
                 await self._async_sleeper(self._retry_policy.delay(reconnects))
 
     def parse_stream_message(self, raw_message: str | bytes) -> AcquisitionEnvelope | None:
-        """Map a Binance raw/combined stream message into AcquisitionEnvelope."""
         if isinstance(raw_message, bytes):
-            raw_message = raw_message.decode("utf-8")
+            try:
+                raw_message = raw_message.decode("utf-8")
+            except UnicodeDecodeError as exc:
+                raise _BinanceProviderFailure(
+                    AcquisitionState.INVALID,
+                    ProviderError("BINANCE_INVALID_STREAM_PAYLOAD", "INVALID_PAYLOAD", "Binance stream message is not UTF-8"),
+                ) from exc
         try:
             message = json.loads(raw_message)
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        except json.JSONDecodeError as exc:
             raise _BinanceProviderFailure(
                 AcquisitionState.INVALID,
                 ProviderError("BINANCE_INVALID_STREAM_PAYLOAD", "INVALID_PAYLOAD", "Binance stream message is not valid JSON"),
@@ -394,7 +345,13 @@ class BinanceAdapter(ProviderAdapter):
         if not isinstance(event, str) or not isinstance(symbol, str):
             return None
         symbol = self._normalize_symbol(symbol)
-        event_time = self._epoch_ms(data.get("E")) if data.get("E") is not None else self._utc_now()
+        try:
+            event_time = self._epoch_ms(data.get("E")) if data.get("E") is not None else self._utc_now()
+        except BinanceTransportError as exc:
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError("BINANCE_INVALID_STREAM_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
+            ) from exc
         sequence = self._sequence_for_stream_event(event, data)
         event_type = {
             "trade": EventType.TRADE,
@@ -513,13 +470,7 @@ class BinanceAdapter(ProviderAdapter):
             provider_error=provider_error,
         )
 
-    def _failure_envelope(
-        self,
-        *,
-        instrument: InstrumentIdentity,
-        event_type: EventType,
-        failure: _BinanceProviderFailure,
-    ) -> AcquisitionEnvelope:
+    def _failure_envelope(self, instrument: InstrumentIdentity, event_type: EventType, failure: _BinanceProviderFailure) -> AcquisitionEnvelope:
         now = self._utc_now()
         return self._envelope(
             instrument=instrument,
@@ -530,6 +481,19 @@ class BinanceAdapter(ProviderAdapter):
             state=failure.state,
             provider_error=failure.provider_error,
         )
+
+    def _reconnect_failure(self, symbol: str) -> AcquisitionEnvelope:
+        failure = _BinanceProviderFailure(
+            AcquisitionState.DISCONNECTED,
+            ProviderError(
+                "BINANCE_RECONNECT_EXHAUSTED",
+                "DISCONNECTED",
+                "Binance WebSocket reconnect limit was exhausted",
+                retryable=False,
+            ),
+        )
+        self._telemetry("binance.stream.stopped", reason="reconnect_exhausted")
+        return self._failure_envelope(self._instrument(symbol), EventType.UPDATE, failure)
 
     def _telemetry(self, event: str, **fields: Any) -> None:
         if self._logger is None:
@@ -548,16 +512,12 @@ class BinanceAdapter(ProviderAdapter):
 
     @staticmethod
     def _instrument(symbol: str) -> InstrumentIdentity:
-        return InstrumentIdentity(
-            canonical_instrument_id=f"BINANCE:{symbol}",
-            provider_instrument_id=symbol,
-        )
+        return InstrumentIdentity(f"BINANCE:{symbol}", symbol)
 
     @staticmethod
     def _exchange_info_instrument(symbol: str | None) -> InstrumentIdentity:
         provider_symbol = symbol or "*"
-        canonical_symbol = symbol or "BINANCE:EXCHANGE_INFO"
-        return InstrumentIdentity(canonical_symbol, provider_symbol)
+        return InstrumentIdentity(symbol or "BINANCE:EXCHANGE_INFO", provider_symbol)
 
     @staticmethod
     def _epoch_ms(value: Any) -> datetime:
@@ -568,7 +528,7 @@ class BinanceAdapter(ProviderAdapter):
     @staticmethod
     def _stream_name(symbol: str, stream: str) -> str:
         if not isinstance(stream, str) or not stream.strip():
-            raise ValueError("stream must be a non-empty string")
+            raise ValueError("stream must be a non-empty Binance stream suffix")
         normalized = stream.strip().lower()
         if "@" in normalized or any(ch.isspace() for ch in normalized):
             raise ValueError("stream must be a Binance stream suffix without '@'")
