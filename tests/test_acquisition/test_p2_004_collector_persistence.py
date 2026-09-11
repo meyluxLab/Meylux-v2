@@ -273,9 +273,16 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         migration = Path("migrations/versions/0002_raw_acquisition_staging.sql").read_text()
         self.assertLess(harness.index("0001_database_foundation.sql"), harness.index("0002_raw_acquisition_staging.sql"))
         self.assertIn("CREATE TABLE IF NOT EXISTS meylux.raw_acquisition_events", migration)
-        self.assertIn("ON CONFLICT (event_id) DO NOTHING", migration)
+        self.assertIn("INSERT INTO meylux.schema_migrations (version)", migration)
+        self.assertIn("VALUES ('0002_raw_acquisition_staging')", migration)
+        self.assertIn("ON CONFLICT (version) DO NOTHING", migration)
         self.assertIn("Raw/staging is evidence only", migration)
         self.assertIn("identity_hash", migration)
+        self.assertIn("UNIQUE (identity_hash)", migration)
+        self.assertIn("canonical_bytes", migration)
+        self.assertIn("Deterministic AcquisitionEnvelope canonical serialization", migration)
+        self.assertIn("SHA-256 of deterministic AcquisitionEnvelope identity bytes", migration)
+        self.assertIn("never authoritative analytical truth", migration)
 
     async def test_collector_is_finite_and_bounded_shutdown(self):
         collector = AcquisitionCollector({"binance": FakeAdapter("binance")}, FakeSink())
