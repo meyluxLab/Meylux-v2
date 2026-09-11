@@ -66,7 +66,8 @@ Continue reading:
 9. `docs/state/OPEN_QUESTIONS.yaml`
 10. `docs/state/DEFERRED_DECISIONS.yaml`
 11. Relevant ADRs / ACRs when required by the current task or role context
-12. Latest approved artifact and evidence chain relevant to the current boundary
+12. Phase-specific execution/continuity reports discoverable from the authoritative Registry and/or phase directory, for every completed or currently relevant Phase. These reports MUST be read when present, even when their filenames were not supplied externally.
+13. Latest approved artifact and evidence chain relevant to the current boundary
 
 Then produce exactly one concise Continuity Reconstruction Report using the fields defined in:
 
@@ -75,6 +76,14 @@ Then produce exactly one concise Continuity Reconstruction Report using the fiel
 The report must explicitly confirm that the AI has completed Role Familiarization and reviewed the applicable Role artifacts, Shared Role Boundary artifacts, and Role Registry before continuing project work.
 
 Do not read the entire repository unless the next authorized action requires additional context.
+
+### Phase Execution / Continuity Auto-Discovery
+
+The successor AI MUST NOT depend on the user supplying the name or path of a Phase Execution/Continuity Report. After reading the authoritative Registry and current checkpoint, discover applicable Phase Execution/Continuity Reports from repository metadata, Registry entries, and the relevant `docs/operations/` / phase artifact areas.
+
+When such a report exists for a completed or currently relevant Phase, read it as a continuity/execution companion and reconcile it against the authoritative Phase definition, Audit Reports, Registry, and CURRENT_CHECKPOINT. It provides consolidated historical/execution context but MUST NOT override higher-authority artifacts.
+
+This rule is generic and applies to all Meylux V2 Phases; it is not specific to Phase 2 or to any single filename.
 
 ## Required PROJECT GUIDE continuity sequence
 
@@ -102,22 +111,10 @@ Role Familiarization must precede Continuity Reconstruction and must never be tr
 
 ## Continuation boundary
 
-The repository current-state record is authoritative for current continuation. The historical transfer baseline must not override newer authoritative repository state.
+The repository current-state record is authoritative for current continuation. The historical transfer baseline and any older bootstrap snapshot must not override newer authoritative repository state.
 
-At the current governed boundary:
+The bootstrap MUST NOT contain a hardcoded lifecycle snapshot that can silently become stale. Current phase, step, task, gate, VPS, runtime, and authorization state MUST be reconstructed from `CURRENT_CHECKPOINT.json`, the authoritative Registry, applicable Phase definition, governance decisions, and current evidence.
 
-- Pre-Project PP-00 … PP-12: CLOSED / FROZEN
-- G-0: CLOSED / VERIFIED
-- G-0R: RATIFIED / VERIFIED
-- Phase 0: CLOSED / VERIFIED
-- `PH-P0`: CLOSED / VERIFIED; no subsequent Phase 0 Step exists
-- `PH-P1`: ACTIVE / IN_PROGRESS
-- `STEP-P1-001`: ACTIVE / AUTHORIZED
-- `TO-P1-001`: AUTHORIZED / ACTIVE
-- Project Guide: `ROL-V2-008`, RATIFIED / FROZEN — VERIFICATION PENDING according to the authoritative Registry
-- VPS: NOT SET UP / UNTOUCHED
-- Runtime, V1, market, trading, capital, and provider-runtime activity remain unauthorized unless separately authorized through the governing process
-
-The current checkpoint is current-state evidence, not a replacement for architecture or governance authority.
+Phase Execution/Continuity Reports are historical/execution companions: they are mandatory context when applicable, but they do not grant authority and do not replace the current checkpoint, Phase definition, Audit Reports, or governance decisions.
 
 After continuity reconstruction, continue only within authority actually established by the repository. Do not infer authorization from chat memory, role declaration, historical transfer state, or sequence position alone. Where a Phase/Step is explicitly active and a Task Order is explicitly authorized, follow the established workflow without unnecessary re-approval loops.
