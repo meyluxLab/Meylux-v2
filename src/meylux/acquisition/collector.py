@@ -37,7 +37,11 @@ class CollectorStats:
 
 
 class PersistenceRecoveryOverflow(RuntimeError):
-    """Raised instead of silently discarding an unrecoverable acquisition event."""
+    """Raised when bounded recovery is exhausted without silently dropping evidence."""
+
+    def __init__(self, message: str, unresolved_items: tuple[AcquisitionEnvelope, ...] = ()) -> None:
+        super().__init__(message)
+        self.unresolved_items = unresolved_items
 
 
 class AcquisitionCollector:
@@ -47,6 +51,10 @@ class AcquisitionCollector:
     independently supervised; a provider failure cannot stop the other stream.
     Persistence failures receive bounded retries and, if still unsuccessful,
     are retained in a bounded recovery buffer for explicit replay.
+    Recovery-capacity exhaustion is a terminal, explicit handoff: the current
+    and still-queued envelopes are retained in a bounded overflow handoff and
+    surfaced after the queue is drained, so shutdown cannot hang or silently
+    discard acquisition evidence.
     """
 
     def __init__(
@@ -74,6 +82,7 @@ class AcquisitionCollector:
         self._max_persistence_retries = max_persistence_retries
         self._max_recovery_size = max_recovery_size if max_recovery_size is not None else max_queue_size
         self._recovery: Deque[AcquisitionEnvelope] = deque()
+        self._overflow_unresolved: Deque[AcquisitionEnvelope] = deque()
         self._retry_counts: dict[str, int] = {}
         self._stats = CollectorStats()
         self._stop = asyncio.Event()
@@ -97,6 +106,10 @@ class AcquisitionCollector:
     @property
     def recovery_items(self) -> tuple[AcquisitionEnvelope, ...]:
         return tuple(self._recovery)
+
+    @property
+    def overflow_unresolved_items(self) -> tuple[AcquisitionEnvelope, ...]:
+        return tuple(self._overflow_unresolved)
 
     @property
     def stats(self) -> CollectorStats:
@@ -123,6 +136,28 @@ class AcquisitionCollector:
         await self._queue.put(envelope)
         self._set_stats(published=self._stats.published + 1)
 
+    def _retain_overflow(self, envelope: AcquisitionEnvelope) -> None:
+        """Retain the terminal event and all queued work for explicit handoff."""
+        self._overflow_unresolved.append(envelope)
+        while True:
+            try:
+                queued = self._queue.get_nowait()
+            except asyncio.QueueEmpty:
+                break
+            if queued is not None:
+                self._overflow_unresolved.append(queued)
+            self._queue.task_done()
+        self._stop.set()
+        emit(
+            _LOG,
+            Severity.CRITICAL,
+            "collector.recovery_overflow_handoff",
+            event_id=envelope.event_id,
+            unresolved_count=len(self._overflow_unresolved),
+            recovery_size=self.recovery_size,
+            max_recovery_size=self.max_recovery_size,
+        )
+
     async def _persist_with_recovery(self, envelope: AcquisitionEnvelope) -> bool:
         """Persist once with bounded retries; return whether the event resolved."""
         event_id = envelope.event_id
@@ -145,8 +180,6 @@ class AcquisitionCollector:
                     emit(_LOG, Severity.WARNING, "collector.persistence_retry", provider=envelope.provider.provider_id, event_id=event_id, attempt=attempt + 1, max_retries=self._max_persistence_retries, error_type=type(exc).__name__)
                     continue
                 if len(self._recovery) >= self._max_recovery_size:
-                    emit(_LOG, Severity.CRITICAL, "collector.recovery_overflow", provider=envelope.provider.provider_id, event_id=event_id, recovery_size=self.recovery_size, max_recovery_size=self.max_recovery_size, error_type=type(exc).__name__)
-                    self._stop.set()
                     raise PersistenceRecoveryOverflow(
                         f"bounded persistence recovery capacity exhausted for event {event_id}"
                     ) from exc
@@ -163,7 +196,15 @@ class AcquisitionCollector:
             try:
                 if envelope is None:
                     return
-                await self._persist_with_recovery(envelope)
+                try:
+                    await self._persist_with_recovery(envelope)
+                except PersistenceRecoveryOverflow as exc:
+                    self._retain_overflow(envelope)
+                    raise PersistenceRecoveryOverflow(
+                        str(exc), tuple(self._overflow_unresolved)
+                    ) from exc
+            except PersistenceRecoveryOverflow:
+                return
             finally:
                 self._queue.task_done()
 
@@ -192,6 +233,7 @@ class AcquisitionCollector:
         if max_messages_per_provider < 1 or max_reconnects < 0:
             raise ValueError("message/reconnect bounds are invalid")
         self._stop.clear()
+        self._overflow_unresolved.clear()
         consumers = [asyncio.create_task(self._consume()) for _ in range(self._max_concurrency)]
 
         async def run_provider(adapter: StreamAdapter) -> None:
@@ -208,16 +250,26 @@ class AcquisitionCollector:
                 self._set_stats(failures=self._stats.failures + 1)
                 emit(_LOG, Severity.ERROR, "collector.provider_failure", provider=getattr(getattr(adapter, "identity", None), "provider_id", "unknown"), error_type=type(exc).__name__)
 
+        overflow: PersistenceRecoveryOverflow | None = None
         try:
             await asyncio.gather(*(run_provider(adapter) for adapter in self._adapters.values()))
             await self._queue.join()
-            emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded, recovery_pending=self.recovery_size)
-            return self._stats
+            if self._overflow_unresolved:
+                overflow = PersistenceRecoveryOverflow(
+                    "bounded persistence recovery overflow; explicit unresolved acquisition handoff required",
+                    tuple(self._overflow_unresolved),
+                )
+            else:
+                emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded, recovery_pending=self.recovery_size)
+                return self._stats
         finally:
             self._stop.set()
             for _ in consumers:
                 await self._queue.put(None)
             await asyncio.gather(*consumers, return_exceptions=True)
+        if overflow is not None:
+            raise overflow
+        return self._stats
 
 
 __all__ = ["AcquisitionCollector", "CollectorStats", "PersistenceRecoveryOverflow", "RawStagingRepository"]
