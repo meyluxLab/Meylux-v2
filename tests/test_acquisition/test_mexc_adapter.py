@@ -168,6 +168,33 @@ class MEXCAdapterTests(unittest.TestCase):
         self.assertEqual(envelope.payload["data"]["openingPrice"], "100")
         self.assertEqual(envelope.payload["data"]["interval"], "Min1")
 
+    def test_subscription_ack_is_control_information_and_does_not_fail(self):
+        ack = json.dumps({"id": 0, "code": 0, "msg": "spot@public.aggre.deals.v3.api.pb@100ms@BTCUSDT"})
+        self.assertIsNone(adapter().parse_stream_message(ack))
+
+    def test_subscription_ack_then_protobuf_continues_normal_stream_loop(self):
+        ack = json.dumps({"id": 0, "code": 0, "msg": "spot@public.aggre.deals.v3.api.pb@100ms@BTCUSDT"})
+        ws = FakeWebSocket([ack, trade_proto()])
+
+        async def run():
+            items = []
+            async for item in adapter(websocket_connect=lambda _url: ws).stream(["BTCUSDT"], streams=("trade",), max_messages=1):
+                items.append(item)
+            return items
+
+        items = asyncio.run(run())
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].state, AcquisitionState.AVAILABLE)
+        self.assertEqual(items[0].event_type, EventType.TRADE)
+        self.assertEqual(items[0].source_sequence, "trade-7")
+        self.assertEqual(len(ws.sent), 1)
+
+    def test_malformed_json_market_control_shape_remains_invalid(self):
+        malformed = json.dumps({"id": 0, "code": 1, "msg": "subscription failed"})
+        with self.assertRaises(Exception) as raised:
+            adapter().parse_stream_message(malformed)
+        self.assertEqual(raised.exception.state, AcquisitionState.INVALID)
+
     def test_legacy_json_market_payload_is_rejected(self):
         legacy = json.dumps({"channel": "spot@public.deals.v3.api@BTCUSDT", "symbol": "BTCUSDT", "data": {}})
         with self.assertRaises(Exception) as raised:
