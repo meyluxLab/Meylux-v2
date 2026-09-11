@@ -13,7 +13,7 @@ from enum import Enum
 import hashlib
 import json
 from types import MappingProxyType
-from typing import Any, Mapping, Optional, Sequence
+from typing import Any, Mapping, Optional
 
 
 SID = "CTR-P2-001"
@@ -171,7 +171,6 @@ class AcquisitionEnvelope:
             raise ValueError(f"{self.state.value} acquisition requires provider_error")
 
     def canonical_bytes(self) -> bytes:
-        """Return stable JSON bytes for the complete envelope representation."""
         return _canonical_json(
             {
                 "provider": self.provider,
@@ -189,13 +188,6 @@ class AcquisitionEnvelope:
         )
 
     def identity_bytes(self) -> bytes:
-        """Return stable replay/deduplication identity material.
-
-        Receive time, error detail, and capability state are intentionally
-        excluded so retransmission of the same source event keeps its identity.
-        Payload remains part of identity and protects against same-timestamp
-        collisions when a trustworthy source sequence is unavailable.
-        """
         return _canonical_json(
             {
                 "provider_id": self.provider.provider_id,
@@ -242,10 +234,15 @@ def _freeze(value: Any) -> Any:
         if not value.is_finite():
             raise ValueError("non-finite Decimal values are not allowed")
         return value
-    if isinstance(value, (str, int, bool, type(None), datetime, Enum)):
-        return value
     if isinstance(value, float):
         raise TypeError("binary floating-point values are not allowed")
+    if isinstance(value, Enum):
+        frozen_value = value.value
+        if isinstance(frozen_value, float):
+            raise TypeError("binary floating-point values are not allowed")
+        return value
+    if isinstance(value, (str, int, bool, type(None), datetime)):
+        return value
     raise TypeError(f"unsupported payload type: {type(value).__name__}")
 
 
@@ -261,7 +258,10 @@ def _canonical_json(value: Any) -> bytes:
 
 def _normalize(value: Any) -> Any:
     if isinstance(value, Enum):
-        return value.value
+        normalized_value = value.value
+        if isinstance(normalized_value, float):
+            raise TypeError("binary floating-point values are not allowed")
+        return _normalize(normalized_value)
     if isinstance(value, datetime):
         _utc(value, "datetime")
         return value.isoformat().replace("+00:00", "Z")
