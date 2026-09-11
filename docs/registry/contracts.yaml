@@ -119,7 +119,7 @@ records:
       - provenance_id
     type_semantics: Non-empty strings for identity/provenance; timezone-aware UTC datetime; bids/asks immutable tuples of Decimal price/quantity pairs
     precision_semantics: Decimal is authoritative for prices and quantities; binary floating-point values and non-finite decimals are rejected; no implicit rounding or quantization
-    timestamp_semantics: timestamp must be timezone-aware UTC and identifies the canonical book observation time
+    timestamp_semantics: timestamp must be timezone-aware UTC and identifies the book observation time
     validation: Reject invalid types, non-finite/non-positive levels, duplicate price levels, non-monotonic side ordering, empty books, and crossed best bid/ask
     immutability: Frozen dataclass with tuple-based immutable book levels; field mutation is rejected after construction
     provenance: provenance_id is mandatory; provider sequence numbers and wire event IDs are excluded from canonical semantics
@@ -192,4 +192,4 @@ records:
     deterministic_identity: canonical JSON uses sorted keys and compact separators; event_id is SHA-256 of provider/instrument/event/time/sequence/payload identity material
     replay_deduplication: receive time, error detail, and capability state do not change event identity; source sequence is included when available and payload protects same-timestamp collisions
     phase_boundary: envelope is raw/staging acquisition output; validation, normalization, and data-quality ownership remains in Phase 3
-    lifecycle_status: IMPLEMENTED / SELF-TESTED
+    lifecycle_status: IMPLEMENTED / TESTED / UNVERIFIED
