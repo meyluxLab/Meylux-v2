@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
+from enum import Enum
 import unittest
 
 from contracts.acquisition import (
@@ -20,6 +21,10 @@ from contracts.acquisition import (
 UTC = timezone.utc
 EVENT_TIME = datetime(2026, 1, 1, 0, 0, tzinfo=UTC)
 RECEIVED_AT = datetime(2026, 1, 1, 0, 0, 1, tzinfo=UTC)
+
+
+class FloatPayloadEnum(Enum):
+    PRICE = 100.25
 
 
 class AcquisitionContractTests(unittest.TestCase):
@@ -60,6 +65,10 @@ class AcquisitionContractTests(unittest.TestCase):
             envelope.payload["price"] = Decimal("101")
         with self.assertRaises(TypeError):
             self.make_envelope(payload={"price": 100.25})
+
+    def test_float_valued_enum_payload_is_rejected(self):
+        with self.assertRaises(TypeError):
+            self.make_envelope(payload={"price": FloatPayloadEnum.PRICE})
 
     def test_missing_identity_fields_are_rejected(self):
         with self.assertRaises(ValueError):
