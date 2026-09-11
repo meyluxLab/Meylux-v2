@@ -77,3 +77,9 @@ records:
     artifact_path: docs/audits/AR-P2-AUDIT-002.md
     traceability: BR-P2-002 / TO-P2-002 / STEP-P2-002 / PH-P2
     status: APPROVED / VERIFIED
+  - stable_id: TO-P2-003
+    entity_type: TO
+    canonical_name: Task Order — MEXC Acquisition Adapter
+    artifact_path: docs/task-orders/TO-P2-003.md
+    traceability: PH-P2 / STEP-P2-003 / TO-P2-002 / AR-P2-AUDIT-002 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: AUTHORIZED TO EXECUTE
