@@ -4,7 +4,7 @@
 **Step:** `STEP-P2-002`
 **Task Order:** `TO-P2-002`
 **Auditor:** `ROL-V2-001 — CONTROL / REVIEWER`
-**Status:** `CORRECTIONS RESOLVED BY RE-AUDIT / VERIFICATION PENDING EXECUTION EVIDENCE`
+**Status:** `CORRECTION REQUIRED / NOT VERIFIED`
 **Verification date:** `2026-09-11`
 
 ## 1. Audit Scope
@@ -17,88 +17,116 @@ CONTROL independently reviewed the authoritative Repository implementation and P
 - `CTR-P2-001` — AcquisitionEnvelope Provider-Neutral Acquisition Contract;
 - `GOV-BOUNDARY-001`;
 - the previously verified `AR-P2-AUDIT-001` baseline;
-- the corrected Producer evidence recorded in `BR-P2-002`.
+- the Producer evidence recorded in `BR-P2-002`.
 
-The audit is based on direct Repository inspection. The Producer's reported external Binance transport probes remain Producer execution evidence and are not converted into independent CONTROL execution evidence.
+The audit is based on direct Repository inspection. The Producer's reported external Binance transport probes are treated as Producer execution evidence and are not converted into independent CONTROL execution evidence.
 
-## 2. Re-Audit Result — F1
+## 2. Current Producer Disposition
 
-The previously identified F1 defect is resolved in the authoritative Repository implementation.
+The Producer correctly reports:
 
-The corrected `stream()` path increments reconnect accounting after normal/clean WebSocket context termination as well as after exceptional connection failure. It checks the incremented value against `max_reconnects`, emits canonical `DISCONNECTED` exhaustion, and terminates the invocation when the bound is exhausted. The corresponding regression tests explicitly exercise repeated clean termination and zero-reconnect behavior. fileciteturn200file0L2-L2 fileciteturn195file0L2-L2
+`IMPLEMENTED / TESTED / UNVERIFIED`
 
-**F1 disposition: RESOLVED by Repository inspection.**
+The Build Report also correctly states that the authoritative repository unit tests were not executed during the Producer cycle and that the stale VPS checkout prevented a truthful repository-suite execution claim.
 
-## 3. Re-Audit Result — F2
+CONTROL accepts that evidence boundary. No repository test pass count or CI success is claimed by this audit.
 
-The previously identified F2 defect is resolved in the authoritative Repository implementation.
+## 3. Findings
 
-The corrected adapter uses the existing `ProviderError` and canonical `AcquisitionState` semantics. REST rate-limit conditions map to `RATE_LIMITED`; transport/server exhaustion maps to `UNAVAILABLE`; malformed REST/WebSocket payloads map to `INVALID`; and WebSocket reconnect exhaustion maps to `DISCONNECTED`. The existing `CTR-P2-001` contract remains unchanged. fileciteturn199file0L2-L2 fileciteturn200file0L2-L2
+### F1 — Bounded WebSocket reconnect is not actually bounded across clean disconnects
 
-The implementation therefore no longer relies on Binance-specific exceptions as the sole externally visible failure semantics where a canonical acquisition envelope is required.
+**Classification: BLOCKING / CORRECTION REQUIRED**
 
-**F2 disposition: RESOLVED by Repository inspection.**
+The implementation documents `max_reconnects` as a hard upper bound for one `stream()` invocation. However, the implementation increments `reconnects` only inside the exception path. A normal WebSocket context exit reaches the `binance.stream.disconnected` telemetry call and then immediately enters the outer `while True` again without incrementing the reconnect counter.
 
-## 4. Re-Audit Result — Scope / Contract / Isolation
+Therefore a clean provider-side disconnect can produce an unlimited reconnect cycle within a single `stream()` invocation, despite the documented `max_reconnects` contract.
 
-The corrected implementation continues to use the existing provider-neutral boundary and does not modify `CTR-P2-001`. The provider-specific Binance transport and parsing remain inside the Binance adapter. No MEXC implementation was introduced, and no trading/account/capital behavior, Phase 3 validation/normalization, Phase 4 computation, or V1 activity was introduced. fileciteturn193file0L2-L2
+This is a direct correctness failure against the Task Order requirement for bounded reconnect behavior and is especially material because Binance documents that a market-stream connection is valid for 24 hours and should be expected to disconnect at that boundary. citeturn0search0
 
-The existing CI definition confirms that the authoritative repository-level validation boundary is:
+Required correction:
 
-```text
-python -m compileall -q src config tests
-python -m unittest discover -s tests -v
-```
+- make the reconnect accounting cover both exceptional disconnects and normal/clean connection termination;
+- ensure the configured bound is a true hard upper bound for the entire invocation;
+- ensure bounded delay/telemetry remain deterministic and observable;
+- add a regression test that simulates clean connection termination repeatedly and proves the configured bound is enforced.
 
-The CI workflow itself is present and defines those commands, but no completed workflow run is available for the correction commit. fileciteturn203file0L2-L2
+Do not redesign the provider-neutral contract to solve this.
 
-**Scope/contract disposition: ACCEPTED.**
+### F2 — Provider failure/degradation is not mapped into the canonical acquisition failure semantics
 
-## 5. Remaining Verification Limitation — F3
+**Classification: BLOCKING / CORRECTION REQUIRED**
 
-F1 and F2 are resolved by direct Repository inspection, and the required regression coverage is present. However, the Producer has not supplied actual execution output for the authoritative current Repository test suite or compilation command, and GitHub Actions has no completed workflow run for the correction commit. The current main HEAD is the governed Build Report update `5332e33885c2b0003daae56892b60793af850601`, whose parent is `f81b467c6e84dd03be4316fd61d3768188c26088`. fileciteturn210file0L2-L2
+`CTR-P2-001` explicitly defines canonical acquisition failure states and a `ProviderError` structure. The current Binance implementation imports `ProviderError` but does not construct or emit a canonical failure envelope. REST transport/HTTP/JSON failures and exhausted WebSocket reconnect failures are instead surfaced as `BinanceTransportError` exceptions.
 
-CONTROL independently attempted to obtain an executable Repository checkout in the current audit environment, but external network access to GitHub was unavailable. This is CONTROL environment evidence only and is not represented as project execution evidence.
+This leaves the adapter without the required provider-specific-to-canonical failure/degradation mapping required by `TO-P2-002`, while the canonical contract already provides the necessary states (`DEGRADED`, `UNAVAILABLE`, `DISCONNECTED`, `RATE_LIMITED`, etc.) and requires `provider_error` for those states. fileciteturn178file0L2-L2
 
-Accordingly, CONTROL will not claim that the repository-wide compile/test commands passed.
+Required correction:
 
-**F3 disposition: EXECUTION EVIDENCE PENDING.**
+- map applicable Binance provider failure/degradation conditions into the existing `AcquisitionEnvelope` failure semantics and `ProviderError` structure;
+- preserve exception behavior only where it is appropriate as an internal/transport mechanism, without allowing provider-specific exceptions to be the sole externally visible failure semantics where a canonical acquisition state is required;
+- distinguish at minimum rate-limit, unavailable/transport, disconnected/reconnect-exhausted, and malformed/invalid provider payload conditions where the existing contract supports them;
+- add deterministic tests for the mapping and required `provider_error` presence.
 
-## 6. No New Architecture Decision Required
+No new canonical enum/state/contract is authorized by this finding. Use the existing P2-001 contract.
 
-No new architecture, canonical contract, Stable ID, provider model, or authority decision is required to close the remaining verification limitation.
+### F3 — Producer self-tests are incomplete for the authorized acceptance boundary
 
-The remaining action is evidence acquisition only: execute the already-defined repository validation boundary against the authoritative current Repository state and return the actual output to CONTROL.
+**Classification: BLOCKING FOR VERIFICATION / CORRECTION REQUIRED**
 
-No code redesign is authorized or required by this audit.
+The repository test file exists and provides useful coverage, but the Producer explicitly did not execute it against the authoritative repository checkout. Therefore CONTROL cannot verify the implementation through the required repository test evidence.
 
-## 7. Current Governed State
+In addition, inspection shows that the current test file does not adequately cover the two material findings above, including clean-disconnect reconnect bounding and canonical provider-error/failure-state mapping. Coverage also remains incomplete for several implemented stream mappings and malformed/degraded cases required by the Task Order.
 
-- `TO-P2-002` → **ACTIVE / VERIFICATION PENDING EXECUTION EVIDENCE**
-- `STEP-P2-002` → **ACTIVE / VERIFICATION PENDING EXECUTION EVIDENCE**
-- `BR-P2-002` → **IMPLEMENTED / TESTED / UNVERIFIED**
-- `AR-P2-AUDIT-002` → **CORRECTIONS RESOLVED / VERIFICATION PENDING EXECUTION EVIDENCE**
+Required correction/validation:
+
+- add the regression tests required by F1 and F2;
+- execute the authoritative repository test suite relevant to the changed acquisition contracts/adapter from a checkout that contains the authoritative current implementation;
+- report exact commands and actual results;
+- execute compilation/static validation for the changed code;
+- keep external-network probes explicitly separate from local deterministic test evidence.
+
+The stale VPS checkout limitation is accepted as an evidence fact; it is not itself a reason to fabricate repository test results or to modify credentials/governance to bypass the limitation.
+
+## 4. Non-Findings / Accepted Matters
+
+The following were inspected and are accepted as non-blocking for this audit:
+
+- Binance-specific transport and wire parsing remain inside the provider adapter implementation. fileciteturn176file0L2-L2
+- The existing `AcquisitionEnvelope` is reused rather than replaced by a competing canonical envelope. fileciteturn178file0L2-L2
+- No MEXC implementation was introduced.
+- No trading, account, leverage, capital, withdrawal, or custody behavior was introduced.
+- No Phase 3 validation/normalization or Phase 4 quantitative computation was introduced.
+- REST retry attempts are bounded by the configured `RetryPolicy`.
+- The Producer correctly separated external-network probes from repository unit-test evidence in `BR-P2-002`. fileciteturn182file0L2-L2
+- The current Phase 2 state correctly keeps `STEP-P2-003` inactive. fileciteturn181file0L2-L2
+
+## 5. Governance / Scope Decision
+
+No new architecture decision is required to resolve F1, F2, or F3.
+
+The corrections must remain inside `TO-P2-002` and must use the already-established provider-neutral boundary and canonical acquisition contract. No redesign, new Stable ID, MEXC activation, production deployment, or future-step implementation is authorized by this audit.
+
+`STEP-P2-003` remains `DEFINED / INACTIVE / NOT AUTHORIZED` until `TO-P2-002` is independently verified and the normal governed progression occurs.
+
+## 6. Final Audit Decision
+
+The implementation is **not independently verified** at this time.
+
+Current governed state:
+
+- `TO-P2-002` → **CORRECTION REQUIRED / ACTIVE**
+- `STEP-P2-002` → **ACTIVE / CORRECTION REQUIRED**
+- `BR-P2-002` → **PRODUCER EVIDENCE / VALIDATION INCOMPLETE / UNVERIFIED**
+- `AR-P2-AUDIT-002` → **CORRECTION REQUIRED / NOT VERIFIED**
 - `PH-P2` → **ACTIVE / AUTHORIZED**
 - `STEP-P2-003` → **DEFINED / INACTIVE / NOT AUTHORIZED**
 
-`IMPLEMENTED != EXECUTED != VERIFIED` remains mandatory.
+No closure, verification, or progression to `STEP-P2-003` is authorized by this audit.
 
-## 8. Verification Handoff
+## 7. Correction Handoff
 
-The Producer is directed to perform **no further implementation correction** unless execution reveals an actual defect.
+The Producer is directed to perform only the bounded corrections identified in F1–F3 under the existing `TO-P2-002` authority and then return an updated Producer Completion Report / Build Report evidence package to CONTROL.
 
-The immediate remaining task is:
+The correction cycle does not require new Owner authorization because it remains within the already-authorized Task Order boundary and standing continuation authority.
 
-1. use an authoritative checkout containing the current Repository HEAD;
-2. execute:
-   - `python -m compileall -q src config tests`
-   - `python -m unittest discover -s tests -v`
-3. return the exact commands and actual outputs/results;
-4. clearly distinguish repository-local deterministic validation from previously performed external Binance connectivity probes;
-5. do not claim CI success unless an actual completed GitHub Actions run exists;
-6. update `BR-P2-002` only with actual execution evidence;
-7. hand the evidence back to CONTROL.
-
-No VPS credential installation, destructive synchronization, production deployment, or architecture change is required.
-
-After actual execution evidence is available, CONTROL will perform the final independent verification decision for `TO-P2-002` / `STEP-P2-002` and, if all acceptance criteria are satisfied, proceed directly to the governed authorization of `STEP-P2-003` without unnecessary intermediate cycles.
+CONTROL will re-audit the corrected implementation and, if all material findings are resolved with actual evidence, may advance the Step to independent verification and normal Phase 2 progression.
