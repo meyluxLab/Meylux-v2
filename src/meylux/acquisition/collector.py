@@ -167,16 +167,16 @@ class AcquisitionCollector:
 
     async def replay_recovery(self) -> int:
         """Replay retained failed events through the same bounded persistence path."""
-        if not self._recovery:
-            return 0
-        items = tuple(self._recovery)
-        replayed = 0
-        for item in items:
-            await self._queue.put(item)
-            self._recovery.popleft()
-            replayed += 1
+        resolved = 0
+        while self._recovery:
+            item = self._recovery.popleft()
+            self._set_stats(recovery_pending=len(self._recovery))
+            before_failures = self._stats.failures
+            await self._persist_with_recovery(item)
+            if self._stats.failures == before_failures or self._stats.persisted + self._stats.duplicates >= 1:
+                resolved += 1
         self._set_stats(recovery_pending=len(self._recovery))
-        return replayed
+        return resolved
 
     async def collect_once(
         self,

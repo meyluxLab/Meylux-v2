@@ -201,9 +201,20 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(collector.recovery_size, 1)
         self.assertEqual(collector.max_recovery_size, 1)
 
+    async def test_retained_failure_can_be_explicitly_replayed(self):
+        sink = FakeSink(always_fail=True)
+        item = envelope("binance")
+        collector = AcquisitionCollector({"binance": FakeAdapter("binance")}, sink, max_persistence_retries=1, max_recovery_size=1)
+        await collector.collect_once(["BTCUSDT"])
+        self.assertEqual(collector.recovery_items, (item,))
+        sink.always_fail = False
+        resolved = await collector.replay_recovery()
+        self.assertEqual(resolved, 1)
+        self.assertEqual(collector.recovery_size, 0)
+        self.assertEqual(sink.seen, [item.event_id])
+
     async def test_malformed_acquisition_state_is_rejected_by_contract(self):
         with self.assertRaises(TypeError):
-            envelope("binance")
             AcquisitionEnvelope(
                 provider=ProviderIdentity("binance", "binance-acquisition", "1.0.0"),
                 instrument=InstrumentIdentity("BTCUSDT", "BTCUSDT"),
