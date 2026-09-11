@@ -195,9 +195,8 @@ class AcquisitionCollector:
                     return
                 try:
                     await self._persist_with_recovery(envelope)
-                except PersistenceRecoveryOverflow as exc:
+                except PersistenceRecoveryOverflow:
                     self._retain_overflow(envelope)
-                    _ = exc
             finally:
                 self._queue.task_done()
 
@@ -258,8 +257,9 @@ class AcquisitionCollector:
                 return self._stats
         finally:
             self._stop.set()
-            for _ in consumers:
-                await self._queue.put(None)
+            for consumer in consumers:
+                if not consumer.done():
+                    await self._queue.put(None)
             await asyncio.gather(*consumers, return_exceptions=True)
         if overflow is not None:
             raise overflow
