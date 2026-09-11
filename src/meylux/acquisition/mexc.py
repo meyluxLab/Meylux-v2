@@ -336,6 +336,17 @@ class MEXCAdapter(ProviderAdapter):
                 raise _MEXCProviderFailure(AcquisitionState.INVALID, ProviderError("MEXC_INVALID_STREAM_PAYLOAD", "INVALID_PAYLOAD", "stream control message is not valid JSON")) from exc
             if isinstance(message, Mapping) and (message.get("msg") == "PONG" or message.get("channel") in {"pong", "PONG"}):
                 return None
+            # MEXC Spot protobuf subscriptions acknowledge with a JSON control
+            # response before the first protobuf market-data frame. This is
+            # provider control information, not a market-data payload.
+            if (
+                isinstance(message, Mapping)
+                and "id" in message
+                and message.get("code") == 0
+                and isinstance(message.get("msg"), str)
+                and message.get("msg")
+            ):
+                return None
             raise _MEXCProviderFailure(AcquisitionState.INVALID, ProviderError("MEXC_INVALID_STREAM_PAYLOAD", "INVALID_PAYLOAD", "MEXC market-data stream payload must be protobuf bytes"))
         if not isinstance(raw_message, (bytes, bytearray)):
             raise _MEXCProviderFailure(AcquisitionState.INVALID, ProviderError("MEXC_INVALID_STREAM_PAYLOAD", "INVALID_PAYLOAD", "unsupported websocket payload type"))
