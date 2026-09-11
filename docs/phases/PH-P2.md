@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 1 authorized; implementation not yet evidenced
+**Status:** AUTHORIZED / ACTIVE — Step 2 authorized; implementation not yet evidenced
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -30,9 +30,10 @@ Phase 2 output is acquisition evidence and raw/staging data suitable for the Pha
 ### `STEP-P2-001` — Provider Boundary & Acquisition Contracts
 
 **Order:** 1  
-**Status:** AUTHORIZED / ACTIVE  
+**Status:** VERIFIED / COMPLETE  
 **Predecessor:** `PH-P1` / `STEP-P1-008`  
-**Task Order:** `TO-P2-001`
+**Task Order:** `TO-P2-001`  
+**Audit:** `AR-P2-AUDIT-001`
 
 Objective: define and implement the provider-neutral acquisition boundary and contracts required by later provider adapters.
 
@@ -45,12 +46,17 @@ Completion requires: implementation is within frozen architecture; provider-spec
 ### `STEP-P2-002` — Binance Acquisition Adapter
 
 **Order:** 2  
-**Status:** DEFINED / INACTIVE  
-**Predecessor:** `STEP-P2-001`
+**Status:** AUTHORIZED / ACTIVE  
+**Predecessor:** `STEP-P2-001`  
+**Task Order:** `TO-P2-002`
 
 Objective: implement the Binance adapter against the approved provider boundary for the Phase 2 acquisition scope, including required REST/bootstrap and live-stream capabilities, bounded retry/reconnect behavior, provider isolation, and evidence-compatible telemetry.
 
-VPS scope: deployment/configuration only after Producer implementation and CONTROL authorization for the Step; provider credentials, if later required, must use approved secret handling and must never enter repository artifacts.
+Repository scope: Binance provider adapter implementation and the governed tests/traceability artifacts required to demonstrate integration with the existing provider-neutral acquisition boundary. Provider-specific wire/API behavior must remain behind the provider boundary.
+
+VPS scope: deployment/configuration only after Producer implementation and within the authorized development/validation context established by `TO-P2-002`; provider credentials, if later required, must use approved secret handling and must never enter repository artifacts.
+
+Completion requires: Binance behavior is implemented within the frozen architecture and approved acquisition contracts; required REST/bootstrap and live-stream capabilities are exercised to the authorized extent; retry/reconnect behavior is bounded; provider isolation is demonstrated; evidence-compatible telemetry is present; no trading/capital activity occurs; Build Report exists and CONTROL can independently verify the result.
 
 ### `STEP-P2-003` — MEXC Acquisition Adapter
 
