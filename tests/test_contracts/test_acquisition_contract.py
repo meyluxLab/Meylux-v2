@@ -27,6 +27,18 @@ class FloatPayloadEnum(Enum):
     PRICE = 100.25
 
 
+class MutablePayloadEnum(Enum):
+    VALUE = {"nested": [1, 2]}
+
+
+class NonFiniteDecimalEnum(Enum):
+    PRICE = Decimal("NaN")
+
+
+class DecimalPayloadEnum(Enum):
+    PRICE = Decimal("100.25")
+
+
 class AcquisitionContractTests(unittest.TestCase):
     def setUp(self):
         self.provider = ProviderIdentity("provider-a", "adapter-a", "1.0.0")
@@ -69,6 +81,21 @@ class AcquisitionContractTests(unittest.TestCase):
     def test_float_valued_enum_payload_is_rejected(self):
         with self.assertRaises(TypeError):
             self.make_envelope(payload={"price": FloatPayloadEnum.PRICE})
+
+    def test_mutable_enum_payload_is_rejected_at_construction(self):
+        with self.assertRaises(TypeError):
+            self.make_envelope(payload={"value": MutablePayloadEnum.VALUE})
+
+    def test_non_finite_decimal_inside_enum_is_rejected_at_construction(self):
+        with self.assertRaises(ValueError):
+            self.make_envelope(payload={"price": NonFiniteDecimalEnum.PRICE})
+
+    def test_valid_decimal_enum_has_deterministic_serialization_and_identity(self):
+        first = self.make_envelope(payload={"price": DecimalPayloadEnum.PRICE})
+        second = self.make_envelope(payload={"price": DecimalPayloadEnum.PRICE})
+        self.assertEqual(first.canonical_bytes(), second.canonical_bytes())
+        self.assertEqual(first.event_id, second.event_id)
+        self.assertEqual(first.deduplication_key, second.deduplication_key)
 
     def test_missing_identity_fields_are_rejected(self):
         with self.assertRaises(ValueError):
