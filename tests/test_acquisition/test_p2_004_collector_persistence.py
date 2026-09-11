@@ -13,7 +13,7 @@ from contracts.acquisition import (
     ProviderError,
     Provenance,
 )
-from meylux.acquisition.collector import AcquisitionCollector
+from meylux.acquisition.collector import AcquisitionCollector, PersistenceRecoveryOverflow
 from meylux.acquisition.persistence import PersistenceResult, RawStagingRepository
 from meylux.acquisition.transport import AcquisitionQueuePublisher
 
@@ -32,6 +32,7 @@ def envelope(provider: str, sequence: str = "1", state: AcquisitionState = Acqui
         event_time=datetime(2026, 1, 1, tzinfo=UTC),
         received_at=datetime(2026, 1, 1, 0, 0, 1, tzinfo=UTC),
         state=state,
+        provider_error=provider_error,
         payload={"price": "100.00", "qty": "1.0"},
         source_sequence=sequence,
     )
@@ -223,6 +224,26 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(collector.recovery_items, (item,))
         self.assertEqual(sink.attempts[item.event_id], 4)
 
+    async def test_recovery_overflow_drains_pending_queue_and_terminates_boundedly(self):
+        sink = FakeSink(always_fail=True)
+        items = tuple(envelope("binance", sequence=str(i)) for i in range(1, 4))
+        collector = AcquisitionCollector(
+            {"binance": FakeAdapter("binance", sequences=("1", "2", "3"))},
+            sink,
+            max_queue_size=3,
+            max_persistence_retries=1,
+            max_recovery_size=1,
+        )
+        with self.assertRaises(PersistenceRecoveryOverflow) as raised:
+            await asyncio.wait_for(collector.collect_once(["BTCUSDT"], max_messages_per_provider=3), timeout=1.0)
+        self.assertLessEqual(sink.attempts[items[0].event_id], 2)
+        self.assertEqual(collector.queue_size, 0)
+        self.assertEqual(collector.recovery_size, 1)
+        self.assertGreaterEqual(len(collector.overflow_unresolved_items), 1)
+        self.assertEqual(raised.exception.unresolved_items, collector.overflow_unresolved_items)
+        self.assertEqual(len(collector.overflow_unresolved_items), len(set(item.event_id for item in collector.overflow_unresolved_items)))
+        self.assertEqual(collector.stats.failures, sum(sink.attempts.values()))
+
     async def test_malformed_acquisition_state_is_rejected_by_contract(self):
         with self.assertRaises(TypeError):
             AcquisitionEnvelope(
@@ -240,6 +261,8 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         connection = FakeConnection()
         repo = RawStagingRepository(connection)
         item = envelope("mexc", state=AcquisitionState.INVALID)
+        self.assertIsNotNone(item.provider_error)
+        self.assertEqual(item.state, AcquisitionState.INVALID)
         result = await repo.persist(item)
         self.assertTrue(result.inserted)
         self.assertEqual(connection.rows[item.event_id]["payload_json"], '{"price":"100.00","qty":"1.0"}')
