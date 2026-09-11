@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 2 verified; Step 3 ready for governed authorization
+**Status:** AUTHORIZED / ACTIVE — Step 3 authorized; implementation active
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -62,12 +62,15 @@ Completion requires: Binance behavior is implemented within the frozen architect
 ### `STEP-P2-003` — MEXC Acquisition Adapter
 
 **Order:** 3  
-**Status:** DEFINED / INACTIVE  
-**Predecessor:** `STEP-P2-002`
+**Status:** AUTHORIZED / ACTIVE  
+**Predecessor:** `STEP-P2-002`  
+**Task Order:** `TO-P2-003`
 
 Objective: implement the MEXC adapter against the same provider boundary with equivalent acquisition semantics and independent failure handling.
 
 VPS scope: same governed deployment/configuration boundary as Step 2.
+
+Completion requires: implementation remains within the frozen architecture and approved acquisition contracts; MEXC-specific behavior remains behind the provider boundary; required public REST/bootstrap and live-stream capabilities are implemented and exercised to the authorized extent; retry/reconnect behavior is bounded; provider isolation and canonical failure mapping are demonstrated; no trading/capital activity occurs; Build Report exists and CONTROL can independently verify the result.
 
 ### `STEP-P2-004` — Live Collector, Raw/Staging Persistence & Replay Safety
 
