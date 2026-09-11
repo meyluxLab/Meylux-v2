@@ -35,8 +35,7 @@ class AcquisitionCollector:
     """Provider-isolated, bounded fan-in collector.
 
     The collector never normalizes provider payloads. Each provider stream is
-    independently supervised; a provider failure becomes a failure envelope or
-    a local failure count and cannot stop the other provider stream.
+    independently supervised; a provider failure cannot stop the other stream.
     """
 
     def __init__(
@@ -103,7 +102,9 @@ class AcquisitionCollector:
                     self._stats.failures + 1,
                     self._stats.overloaded,
                 )
-                raise
+                # Persistence errors are isolated to this event. A database
+                # repository is expected to expose its own bounded retry/transaction
+                # policy; the collector must not spin indefinitely on a poison event.
             finally:
                 self._queue.task_done()
 
@@ -114,10 +115,10 @@ class AcquisitionCollector:
         max_messages_per_provider: int = 1,
         max_reconnects: int = 0,
     ) -> CollectorStats:
-        """Collect a bounded sample from every configured provider.
+        """Collect a finite sample from every configured provider.
 
-        This method is deliberately finite and suitable for validation runs; it
-        does not create an uncontrolled long-running process.
+        The method is deliberately bounded for development/validation runs and
+        never creates an uncontrolled long-running collector process.
         """
         if not symbols:
             raise ValueError("symbols must not be empty")
@@ -126,7 +127,7 @@ class AcquisitionCollector:
         self._stop.clear()
         consumers = [asyncio.create_task(self._consume()) for _ in range(self._max_concurrency)]
 
-        async def run_provider(name: str, adapter: StreamAdapter) -> None:
+        async def run_provider(adapter: StreamAdapter) -> None:
             try:
                 async for envelope in adapter.stream(
                     symbols,
@@ -137,6 +138,8 @@ class AcquisitionCollector:
             except asyncio.CancelledError:
                 raise
             except Exception:
+                # Provider failures are isolated. A healthy provider continues
+                # even when another provider's stream terminates unexpectedly.
                 self._stats = CollectorStats(
                     self._stats.published,
                     self._stats.persisted,
@@ -146,7 +149,7 @@ class AcquisitionCollector:
                 )
 
         try:
-            await asyncio.gather(*(run_provider(name, adapter) for name, adapter in self._adapters.items()))
+            await asyncio.gather(*(run_provider(adapter) for adapter in self._adapters.values()))
             await self._queue.join()
             return self._stats
         finally:
