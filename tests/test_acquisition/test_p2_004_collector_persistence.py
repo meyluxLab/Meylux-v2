@@ -129,13 +129,15 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         collector._stop.set()
         await collector._queue.put(None)
         await consumer
-        await collector.publish(item)
+
         collector._stop.clear()
+        await collector.publish(item)
         consumer = asyncio.create_task(collector._consume())
         await collector._queue.join()
         collector._stop.set()
         await collector._queue.put(None)
         await consumer
+
         self.assertEqual(sink.seen, [item.event_id])
         self.assertEqual(collector.stats.duplicates, 1)
 
