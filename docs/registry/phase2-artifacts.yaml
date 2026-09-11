@@ -59,3 +59,15 @@ records:
     artifact_path: docs/audits/AR-P2-AUDIT-001.md
     traceability: BR-P2-001 / TO-P2-001 / STEP-P2-001 / GOV-BOUNDARY-001
     status: APPROVED / VERIFIED
+  - stable_id: TO-P2-002
+    entity_type: TO
+    canonical_name: Task Order — Binance Acquisition Adapter
+    artifact_path: docs/task-orders/TO-P2-002.md
+    traceability: PH-P2 / STEP-P2-002 / TO-P2-001 / AR-P2-AUDIT-001 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P2-002
+    entity_type: BR
+    canonical_name: Build Report — Binance Acquisition Adapter
+    artifact_path: docs/build-reports/BR-P2-002.md
+    traceability: TO-P2-002 / PH-P2 / STEP-P2-002
+    status: PLANNED
