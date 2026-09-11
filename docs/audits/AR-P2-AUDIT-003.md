@@ -4,95 +4,69 @@
 **Step:** `STEP-P2-003`
 **Task Order:** `TO-P2-003`
 **Auditor:** `ROL-V2-001 — CONTROL / REVIEWER`
-**Status:** `CORRECTION REQUIRED / VERIFICATION BLOCKED`
+**Status:** `APPROVED / VERIFIED`
 **Verification date:** `2026-09-11`
 
 ## 1. Audit Scope
 
-CONTROL independently reviewed the authoritative Repository PR #14, Producer Build Report `BR-P2-003`, MEXC adapter implementation, MEXC adapter tests, and available CI execution evidence against:
+CONTROL independently re-audited the corrected authoritative Repository implementation in PR #14, `BR-P2-003`, MEXC adapter implementation/tests, and completed GitHub Actions execution evidence against `PH-P2`, `TO-P2-003`, `CMP-P2-001`, `CTR-P2-001`, `GOV-BOUNDARY-001`, and the verified Phase 2 acquisition baseline.
 
-- `PH-P2`;
-- `TO-P2-003`;
-- `CMP-P2-001` — Provider-Neutral Acquisition Boundary;
-- `CTR-P2-001` — AcquisitionEnvelope Provider-Neutral Acquisition Contract;
-- `GOV-BOUNDARY-001`;
-- previously verified Phase 2 acquisition baseline.
+## 2. F1 Correction — Current MEXC WebSocket Protocol
 
-## 2. Execution Evidence
+The previously identified blocking F1 is resolved.
 
-The claimed CI execution evidence is real and independently discoverable for implementation commit `849be42d60e422a27e861b337ca3c103b2feedd9`.
+The corrected adapter uses the current documented MEXC Spot public WebSocket endpoint and current `.pb` subscription forms for the authorized trade, incremental-depth, and kline streams. The implementation now expects binary Protocol Buffers market-data payloads and deterministically decodes the governed wrapper/body structures. Legacy JSON market-data payloads are explicitly rejected rather than silently treated as current market data.
+
+CONTROL inspected the correction diff and the corrected tests. The implementation remains provider-isolated and the provider-specific protobuf handling remains behind the MEXC adapter boundary. `CMP-P2-001` and `CTR-P2-001` remain unchanged.
+
+**F1 disposition: RESOLVED.**
+
+## 3. Execution Evidence
+
+Fresh authoritative CI execution evidence is independently discoverable:
 
 - Workflow: `CI Core`
-- Run #209: `34624254253` — `SUCCESS`
-- Run #210: `34624278495` — `SUCCESS`
-- Required compile/test commands completed successfully in the reported repository-foundation validation boundary.
+- Run: `#218`
+- Run ID: `34626462032`
+- Job: `repository-foundation`
+- Required compile command → `SUCCESS`
+- Required unittest discovery command → `SUCCESS`
+- Reported result: `Ran 104 tests in 0.720s` / `OK`
+- Tested Producer correction commit: `947caef206b3b37dfe13d79606caf182618f39fa`
+- PR merge ref reported by Producer for that execution: `c5a6939a9f8e2c7eab4231ba9c4141ce7628ceb1`
 
-This establishes compilation/test execution evidence for the tested tree. It does not by itself establish live compatibility with the current MEXC WebSocket service.
+The CI evidence establishes repository compilation and deterministic test execution for the corrected implementation. No live MEXC network execution is claimed.
 
-## 3. Scope / Contract / Isolation Disposition
+## 4. Scope / Contract / Isolation
 
-The submitted implementation is materially within the authorized P2-003 scope. No modification of `CTR-P2-001` or `CMP-P2-001` was identified in the PR diff. The MEXC adapter remains provider-isolated, public-market-data-only, and does not introduce trading/account/capital behavior or later Phase 2 work.
+CONTROL found no material scope violation in the corrected implementation. The correction does not modify the provider-neutral contract, frozen architecture, Binance behavior, Phase 3/4 ownership, or later Phase 2 Steps. No credentials, trading/account/capital behavior, V1 activity, or production deployment was introduced.
 
-**Disposition: ACCEPTED subject to the WebSocket correctness blocker below.**
+**Disposition: ACCEPTED.**
 
-## 4. Material Finding — Current MEXC WebSocket Protocol Mismatch
+## 5. External-Network Evidence
 
-The implementation's public WebSocket path is not compatible with the current MEXC Spot V3 WebSocket service.
+Live MEXC REST/WebSocket execution remains unavailable in the reported development environment because outbound DNS/network connectivity is unavailable. This remains explicitly UNVERIFIED and is not converted into a false PASS. Official MEXC documentation/protobuf definitions are specification evidence only.
 
-The authoritative MEXC Spot V3 API documentation states that the current WebSocket push uses Protocol Buffers and documents `.pb` channels, including examples such as:
-
-- `spot@public.aggre.deals.v3.api.pb@100ms@BTCUSDT`
-- `spot@public.kline.v3.api.pb@BTCUSDT@Min15`
-- `spot@public.limit.depth.v3.api.pb@BTCUSDT@5`
-
-The same documentation describes the current WebSocket push as protobuf and requires protobuf deserialization. MEXC's March 4, 2025 service-replacement announcement states that the upgraded WebSocket access uses Protocol Buffers and that the legacy daily URL `wss://wbs.mexc.com/ws` was discontinued for Open API users on August 4, 2025.
-
-The submitted adapter instead constructs non-`.pb` JSON subscription channels and parses the legacy JSON message representation. The submitted tests reproduce those same non-`.pb` JSON assumptions. Consequently, the green CI result validates the local implementation against its own legacy protocol fixtures, but does not establish compatibility with the current MEXC public WebSocket service.
-
-This is a material correctness defect because live WebSocket acquisition is explicitly within the authorized P2-003 capability and is part of the provider adapter's required acquisition behavior.
-
-**Finding disposition: BLOCKING — STOP THAT PART.**
-
-## 5. Required Correction Boundary
-
-The Producer must correct the MEXC WebSocket portion only, preserving the existing architecture and contracts.
-
-Required:
-
-1. Implement the current documented public MEXC WebSocket protocol, including protobuf transport/deserialization and current `.pb` channel forms required for the authorized trade/depth/kline capabilities.
-2. Update deterministic local tests so they exercise the current wire/protocol representation rather than the obsolete JSON assumptions.
-3. Preserve bounded reconnect behavior and canonical `AcquisitionState` / `ProviderError` failure mapping.
-4. Preserve provider-neutral envelope identity, provenance, timestamps, sequencing, and deterministic serialization semantics.
-5. Update `BR-P2-003` with the corrected scope and actual CI evidence.
-
-Not authorized:
-
-- changes to `CMP-P2-001` or `CTR-P2-001`;
-- new competing Stable IDs;
-- credentials/private API behavior;
-- trading/account/capital behavior;
-- `STEP-P2-004` or later Steps;
-- V1 activity;
-- production deployment.
+This limitation does not block repository-level verification of the Step because the required implementation/test evidence is complete and the external limitation is explicitly represented.
 
 ## 6. Verification Decision
 
-CONTROL cannot verify `TO-P2-003` / `STEP-P2-003` in its current state.
+The previous blocking WebSocket protocol defect is corrected. The corrected implementation is within the authorized Step boundary, uses the existing provider-neutral acquisition boundary, preserves bounded failure/reconnect semantics and deterministic envelope behavior, and has successful authoritative CI execution evidence.
 
-The REST/bootstrap portion and repository execution evidence are not being rejected merely because live external probing was unavailable. The blocker is specifically the current MEXC WebSocket protocol incompatibility.
+**CONTROL DECISION: APPROVED / VERIFIED.**
 
-**CONTROL DECISION: CORRECTION REQUIRED / VERIFICATION BLOCKED.**
+## 7. Governed State Transition
 
-## 7. Governed State
+- `TO-P2-003` → **VERIFIED / COMPLETE**
+- `STEP-P2-003` → **VERIFIED / COMPLETE**
+- `BR-P2-003` → **VERIFIED**
+- `AR-P2-AUDIT-003` → **APPROVED / VERIFIED**
+- `PH-P2` → **ACTIVE / AUTHORIZED**
 
-- `TO-P2-003` → `AUTHORIZED / ACTIVE` — remains active; not verified.
-- `STEP-P2-003` → `AUTHORIZED / ACTIVE` — remains active; not verified.
-- `BR-P2-003` → `PRODUCER EVIDENCE / PENDING CORRECTION AND CONTROL VERIFICATION`.
-- `AR-P2-AUDIT-003` → `CORRECTION REQUIRED / VERIFICATION BLOCKED`.
-- `PH-P2` → `ACTIVE / AUTHORIZED`.
+`IMPLEMENTED != EXECUTED != VERIFIED` remains mandatory. No claim of live MEXC runtime execution is made by this audit.
 
-No Phase 2 progression to `STEP-P2-004` is authorized by this audit.
+## 8. Next Governed Action
 
-## 8. External Evidence Basis
+Under the standing General Continuation / Phase Progression Authority, CONTROL may now authorize the next defined predecessor-dependent Step: `STEP-P2-004 — Live Collector, Raw/Staging Persistence & Replay Safety`.
 
-Current MEXC official API documentation was consulted for the protocol assessment. MEXC's official March 4, 2025 WebSocket service replacement announcement was also consulted. External documentation is used here as current protocol evidence, not as runtime execution evidence.
+No later Step is authorized by this audit itself.
