@@ -69,17 +69,11 @@ records:
     entity_type: BR
     canonical_name: Build Report — Binance Acquisition Adapter
     artifact_path: docs/build-reports/BR-P2-002.md
-    traceability: TO-P2-002 / PH-P2 / STEP-P2-002 / AR-P2-AUDIT-002 / CI-P2-002-001
+    traceability: TO-P2-002 / PH-P2 / STEP-P2-002 / AR-P2-AUDIT-002
     status: VERIFIED
   - stable_id: AR-P2-AUDIT-002
     entity_type: AR
     canonical_name: CONTROL Independent Audit — TO-P2-002
     artifact_path: docs/audits/AR-P2-AUDIT-002.md
-    traceability: BR-P2-002 / TO-P2-002 / STEP-P2-002 / PH-P2 / CI-P2-002-001
+    traceability: BR-P2-002 / TO-P2-002 / STEP-P2-002 / PH-P2
     status: APPROVED / VERIFIED
-  - stable_id: CI-P2-002-001
-    entity_type: CI
-    canonical_name: CI Core — P2-002 repository validation run #196
-    artifact_path: .github/workflows/ci-core.yml
-    traceability: TO-P2-002 / BR-P2-002 / AR-P2-AUDIT-002
-    status: EXECUTED / PASSED
