@@ -82,10 +82,22 @@ records:
     canonical_name: Task Order — MEXC Acquisition Adapter
     artifact_path: docs/task-orders/TO-P2-003.md
     traceability: PH-P2 / STEP-P2-003 / TO-P2-002 / AR-P2-AUDIT-002 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P2-003
     entity_type: BR
     canonical_name: Build Report — MEXC Acquisition Adapter
     artifact_path: docs/build-reports/BR-P2-003.md
     traceability: TO-P2-003 / PH-P2 / STEP-P2-003 / CMP-P2-001 / CTR-P2-001 / AR-P2-AUDIT-003
-    status: PRODUCER CORRECTED / PENDING CONTROL RE-AUDIT
+    status: VERIFIED
+  - stable_id: AR-P2-AUDIT-003
+    entity_type: AR
+    canonical_name: CONTROL Independent Audit — TO-P2-003
+    artifact_path: docs/audits/AR-P2-AUDIT-003.md
+    traceability: BR-P2-003 / TO-P2-003 / STEP-P2-003 / PH-P2 / GOV-BOUNDARY-001
+    status: APPROVED / VERIFIED
+  - stable_id: TO-P2-004
+    entity_type: TO
+    canonical_name: Task Order — Live Collector, Raw/Staging Persistence & Replay Safety
+    artifact_path: docs/task-orders/TO-P2-004.md
+    traceability: PH-P2 / STEP-P2-004 / TO-P2-003 / AR-P2-AUDIT-003 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: AUTHORIZED TO EXECUTE
