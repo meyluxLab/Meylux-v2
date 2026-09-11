@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 3 authorized; implementation active
+**Status:** AUTHORIZED / ACTIVE — Step 4 authorized; implementation active
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -37,12 +37,6 @@ Phase 2 output is acquisition evidence and raw/staging data suitable for the Pha
 
 Objective: define and implement the provider-neutral acquisition boundary and contracts required by later provider adapters.
 
-Repository scope: provider abstraction package, acquisition envelopes/contracts, capability/error/degradation semantics, provider-neutral identity/time/sequence fields, deterministic serialization requirements, tests, and required registry/traceability updates.
-
-VPS scope: inspection only for this Step. No provider runtime is activated by this Step.
-
-Completion requires: implementation is within frozen architecture; provider-specific behavior remains behind the boundary; contracts are deterministic and testable; missing/stale/unavailable/error states are explicit; no network/provider runtime execution is claimed; Build Report exists and CONTROL audit can objectively verify the result.
-
 ### `STEP-P2-002` — Binance Acquisition Adapter
 
 **Order:** 2  
@@ -53,34 +47,32 @@ Completion requires: implementation is within frozen architecture; provider-spec
 
 Objective: implement the Binance adapter against the approved provider boundary for the Phase 2 acquisition scope, including required REST/bootstrap and live-stream capabilities, bounded retry/reconnect behavior, provider isolation, and evidence-compatible telemetry.
 
-Repository scope: Binance provider adapter implementation and the governed tests/traceability artifacts required to demonstrate integration with the existing provider-neutral acquisition boundary. Provider-specific wire/API behavior must remain behind the provider boundary.
-
-VPS scope: deployment/configuration only after Producer implementation and within the authorized development/validation context established by `TO-P2-002`; provider credentials, if later required, must use approved secret handling and must never enter repository artifacts.
-
-Completion requires: Binance behavior is implemented within the frozen architecture and approved acquisition contracts; required REST/bootstrap and live-stream capabilities are exercised to the authorized extent; retry/reconnect behavior is bounded; provider isolation is demonstrated; evidence-compatible telemetry is present; no trading/capital activity occurs; Build Report exists and CONTROL can independently verify the result.
-
 ### `STEP-P2-003` — MEXC Acquisition Adapter
 
 **Order:** 3  
-**Status:** AUTHORIZED / ACTIVE  
+**Status:** VERIFIED / COMPLETE  
 **Predecessor:** `STEP-P2-002`  
-**Task Order:** `TO-P2-003`
+**Task Order:** `TO-P2-003`  
+**Audit:** `AR-P2-AUDIT-003`
 
 Objective: implement the MEXC adapter against the same provider boundary with equivalent acquisition semantics and independent failure handling.
 
-VPS scope: same governed deployment/configuration boundary as Step 2.
-
-Completion requires: implementation remains within the frozen architecture and approved acquisition contracts; MEXC-specific behavior remains behind the provider boundary; required public REST/bootstrap and live-stream capabilities are implemented and exercised to the authorized extent; retry/reconnect behavior is bounded; provider isolation and canonical failure mapping are demonstrated; no trading/capital activity occurs; Build Report exists and CONTROL can independently verify the result.
+CONTROL verified the corrected current Spot protobuf WebSocket implementation and successful repository CI evidence. Live external MEXC connectivity remains explicitly unverified because no live network probe was available; this does not negate repository-level Step verification.
 
 ### `STEP-P2-004` — Live Collector, Raw/Staging Persistence & Replay Safety
 
 **Order:** 4  
-**Status:** DEFINED / INACTIVE  
-**Predecessor:** `STEP-P2-003`
+**Status:** AUTHORIZED / ACTIVE  
+**Predecessor:** `STEP-P2-003`  
+**Task Order:** `TO-P2-004`
 
 Objective: integrate provider acquisition into the collector, establish raw/staging persistence and transport semantics, bounded queue/backpressure behavior, duplicate/idempotency controls, sequence/reconnect handling, and replay-safe acquisition behavior.
 
-VPS scope: deployment, migration where required, runtime restart/recreation, service activation, persistence initialization, and runtime evidence are required where authorized by the Step Task Order.
+Repository scope: collector integration, raw/staging persistence schema/models/repositories, bounded acquisition transport, duplicate/idempotency and replay controls, sequencing/recovery handling, observability, deterministic tests, migrations, and required traceability/build evidence.
+
+VPS scope: deployment, migration where required, runtime restart/recreation, service activation, persistence initialization, and runtime evidence are permitted only within the authorized development/validation boundary of `TO-P2-004`.
+
+Completion requires: collector and persistence behavior are implemented within the frozen architecture; raw/staging remains non-authoritative analytical truth; replay/idempotency and backpressure are bounded and evidence-backed; provider isolation is preserved; required Build Report exists and CONTROL can independently verify the result.
 
 ### `STEP-P2-005` — Dual-Provider Operational Hardening
 
