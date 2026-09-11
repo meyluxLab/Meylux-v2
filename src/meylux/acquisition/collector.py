@@ -50,17 +50,7 @@ class PersistenceRecoveryOverflow(RuntimeError):
 
 
 class AcquisitionCollector:
-    """Provider-isolated, bounded fan-in collector.
-
-    The collector never normalizes provider payloads. Each provider stream is
-    independently supervised; a provider failure cannot stop the other stream.
-    Persistence failures receive bounded retries and, if still unsuccessful,
-    are retained in a bounded recovery buffer for explicit replay.
-    Recovery-capacity exhaustion enters a terminal drain mode: the current and
-    queued envelopes are retained as an explicit bounded handoff, consumers
-    continue until the queue is empty, and collect_once raises after join so
-    shutdown cannot hang or silently discard acquisition evidence.
-    """
+    """Provider-isolated, bounded fan-in collector."""
 
     def __init__(
         self,
@@ -86,8 +76,9 @@ class AcquisitionCollector:
         self._max_concurrency = max_concurrency
         self._max_persistence_retries = max_persistence_retries
         self._max_recovery_size = max_recovery_size if max_recovery_size is not None else max_queue_size
+        self._overflow_capacity = max_queue_size + max_concurrency + len(self._adapters)
         self._recovery: Deque[AcquisitionEnvelope] = deque()
-        self._overflow_unresolved: Deque[AcquisitionEnvelope] = deque(maxlen=max_queue_size)
+        self._overflow_unresolved: Deque[AcquisitionEnvelope] = deque(maxlen=self._overflow_capacity)
         self._retry_counts: dict[str, int] = {}
         self._stats = CollectorStats()
         self._stop = asyncio.Event()
@@ -128,7 +119,7 @@ class AcquisitionCollector:
             "recovery_size": self.recovery_size,
             "max_recovery_size": self.max_recovery_size,
             "overflow_unresolved": len(self._overflow_unresolved),
-            "overflow_capacity": self.max_queue_size,
+            "overflow_capacity": self._overflow_capacity,
             "stopped": self._stop.is_set(),
             "published": self._stats.published,
             "persisted": self._stats.persisted,
@@ -193,14 +184,14 @@ class AcquisitionCollector:
         """Block rather than drop; after terminal stop, retain for explicit handoff."""
         self._record_operational_state(envelope)
         if self._stop.is_set():
-            if len(self._overflow_unresolved) >= self.max_queue_size:
+            if len(self._overflow_unresolved) >= self._overflow_capacity:
                 self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
                 raise PersistenceRecoveryOverflow(
                     "bounded post-stop acquisition handoff capacity exhausted",
                     tuple(self._overflow_unresolved),
                 )
             self._overflow_unresolved.append(envelope)
-            emit(_LOG, Severity.CRITICAL, "collector.post_stop_handoff", provider=envelope.provider.provider_id, event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved))
+            emit(_LOG, Severity.CRITICAL, "collector.post_stop_handoff", provider=envelope.provider.provider_id, event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved), overflow_capacity=self._overflow_capacity)
             return False
         if self._queue.full():
             self._set_stats(overloaded=self._stats.overloaded + 1)
@@ -211,14 +202,11 @@ class AcquisitionCollector:
 
     def _retain_overflow(self, envelope: AcquisitionEnvelope) -> None:
         """Enter terminal drain mode while preserving the current envelope."""
-        if len(self._overflow_unresolved) >= self.max_queue_size:
+        if len(self._overflow_unresolved) >= self._overflow_capacity:
             self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
             self._stop.set()
-            emit(_LOG, Severity.CRITICAL, "collector.recovery_overflow_capacity_exhausted", event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved), overflow_capacity=self.max_queue_size)
-            raise PersistenceRecoveryOverflow(
-                "bounded recovery overflow handoff capacity exhausted",
-                tuple(self._overflow_unresolved),
-            )
+            emit(_LOG, Severity.CRITICAL, "collector.recovery_overflow_capacity_exhausted", event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved), overflow_capacity=self._overflow_capacity)
+            return
         self._overflow_unresolved.append(envelope)
         self._stop.set()
         self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
