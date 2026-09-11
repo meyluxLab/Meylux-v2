@@ -15,14 +15,14 @@ records:
     entity_type: STEP
     canonical_name: Provider Boundary & Acquisition Contracts
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / DOC-V2-ARCH-001
-    status: ACTIVE / AUTHORIZED
+    traceability: PH-P2 / DOC-V2-ARCH-001 / AR-P2-AUDIT-001
+    status: VERIFIED / COMPLETE
   - stable_id: TO-P2-001
     entity_type: TO
     canonical_name: Task Order — Provider Boundary & Acquisition Contracts
     artifact_path: docs/task-orders/TO-P2-001.md
-    traceability: PH-P2 / STEP-P2-001 / PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11
-    status: AUTHORIZED TO EXECUTE
+    traceability: PH-P2 / STEP-P2-001 / PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / AR-P2-AUDIT-001
+    status: VERIFIED / COMPLETE
   - stable_id: DOC-P2-001
     entity_type: DOC
     canonical_name: Phase 2 Determination Report
@@ -33,23 +33,29 @@ records:
     entity_type: CMP
     canonical_name: Provider-Neutral Acquisition Boundary
     artifact_path: src/meylux/acquisition/provider.py
-    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001
-    status: IMPLEMENTED / SELF-TESTED
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001 / AR-P2-AUDIT-001
+    status: VERIFIED
   - stable_id: CTR-P2-001
     entity_type: CTR
     canonical_name: AcquisitionEnvelope Provider-Neutral Acquisition Contract
     artifact_path: contracts/acquisition.py
-    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001
-    status: IMPLEMENTED / SELF-TESTED
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001 / AR-P2-AUDIT-001
+    status: VERIFIED
   - stable_id: TST-P2-001
     entity_type: TST
     canonical_name: Provider-Neutral Acquisition Contract Tests
     artifact_path: tests/test_contracts/test_acquisition_contract.py
-    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CTR-P2-001
-    status: IMPLEMENTED / SELF-TESTED
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CTR-P2-001 / AR-P2-AUDIT-001
+    status: VERIFIED
   - stable_id: BR-P2-001
     entity_type: BR
     canonical_name: Build Report — Provider Boundary & Acquisition Contracts
     artifact_path: docs/build-reports/BR-P2-001.md
-    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CMP-P2-001 / CTR-P2-001 / TST-P2-001
-    status: PRODUCER EVIDENCE
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CMP-P2-001 / CTR-P2-001 / TST-P2-001 / AR-P2-AUDIT-001
+    status: PRODUCER EVIDENCE + CONTROL RECONCILIATION
+  - stable_id: AR-P2-AUDIT-001
+    entity_type: AR
+    canonical_name: CONTROL Independent Verification — TO-P2-001
+    artifact_path: docs/audits/AR-P2-AUDIT-001.md
+    traceability: BR-P2-001 / TO-P2-001 / STEP-P2-001 / GOV-BOUNDARY-001
+    status: APPROVED / VERIFIED
