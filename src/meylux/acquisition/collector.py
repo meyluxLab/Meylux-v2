@@ -6,11 +6,11 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any, AsyncIterator, Deque, Mapping, Protocol, Sequence
 
-from contracts.acquisition import AcquisitionEnvelope
+from contracts.acquisition import AcquisitionEnvelope, AcquisitionState
 from meylux.acquisition.persistence import PersistenceResult, RawStagingRepository
 from meylux.observability import Severity, configure_logging, emit
 
-SID = "STEP-P2-004"
+SID = "STEP-P2-005"
 _LOG = configure_logging(logger_name="meylux.acquisition.collector")
 
 
@@ -34,6 +34,11 @@ class CollectorStats:
     overloaded: int = 0
     recovered: int = 0
     recovery_pending: int = 0
+    degraded: int = 0
+    rate_limited: int = 0
+    disconnected: int = 0
+    sequence_gaps: int = 0
+    terminal_failures: int = 0
 
 
 class PersistenceRecoveryOverflow(RuntimeError):
@@ -82,7 +87,7 @@ class AcquisitionCollector:
         self._max_persistence_retries = max_persistence_retries
         self._max_recovery_size = max_recovery_size if max_recovery_size is not None else max_queue_size
         self._recovery: Deque[AcquisitionEnvelope] = deque()
-        self._overflow_unresolved: Deque[AcquisitionEnvelope] = deque()
+        self._overflow_unresolved: Deque[AcquisitionEnvelope] = deque(maxlen=self._max_recovery_size)
         self._retry_counts: dict[str, int] = {}
         self._stats = CollectorStats()
         self._stop = asyncio.Event()
@@ -124,13 +129,54 @@ class AcquisitionCollector:
             "overloaded": self._stats.overloaded,
             "recovered": self._stats.recovered,
             "recovery_pending": self._stats.recovery_pending,
+            "degraded": self._stats.degraded,
+            "rate_limited": self._stats.rate_limited,
+            "disconnected": self._stats.disconnected,
+            "sequence_gaps": self._stats.sequence_gaps,
+            "terminal_failures": self._stats.terminal_failures,
         }
         values.update(changes)
         self._stats = CollectorStats(**values)
 
+    def _record_operational_state(self, envelope: AcquisitionEnvelope) -> None:
+        changes: dict[str, int] = {}
+        severity = Severity.INFO
+        if envelope.state is AcquisitionState.DEGRADED:
+            changes["degraded"] = self._stats.degraded + 1
+            severity = Severity.WARNING
+        elif envelope.state is AcquisitionState.RATE_LIMITED:
+            changes["rate_limited"] = self._stats.rate_limited + 1
+            severity = Severity.WARNING
+        elif envelope.state is AcquisitionState.DISCONNECTED:
+            changes["disconnected"] = self._stats.disconnected + 1
+            severity = Severity.ERROR
+        elif envelope.state is AcquisitionState.SEQUENCE_GAP:
+            changes["sequence_gaps"] = self._stats.sequence_gaps + 1
+            severity = Severity.ERROR
+        if envelope.state is not AcquisitionState.AVAILABLE:
+            changes["terminal_failures"] = self._stats.terminal_failures + 1
+            self._set_stats(**changes)
+            emit(
+                _LOG,
+                severity,
+                "collector.operational_state",
+                provider=envelope.provider.provider_id,
+                event_id=envelope.event_id,
+                state=envelope.state.value,
+                error_code=envelope.provider_error.code if envelope.provider_error else None,
+                retryable=envelope.provider_error.retryable if envelope.provider_error else None,
+            )
+
     async def publish(self, envelope: AcquisitionEnvelope) -> bool:
         """Block rather than drop; after terminal stop, retain for explicit handoff."""
+        self._record_operational_state(envelope)
         if self._stop.is_set():
+            if len(self._overflow_unresolved) >= self._max_recovery_size:
+                self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
+                raise PersistenceRecoveryOverflow(
+                    "bounded post-stop acquisition handoff capacity exhausted",
+                    tuple(self._overflow_unresolved),
+                )
             self._overflow_unresolved.append(envelope)
             emit(_LOG, Severity.CRITICAL, "collector.post_stop_handoff", provider=envelope.provider.provider_id, event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved))
             return False
@@ -143,8 +189,13 @@ class AcquisitionCollector:
 
     def _retain_overflow(self, envelope: AcquisitionEnvelope) -> None:
         """Enter terminal drain mode while preserving the current envelope."""
+        if len(self._overflow_unresolved) >= self._max_recovery_size:
+            self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
+            emit(_LOG, Severity.CRITICAL, "collector.recovery_overflow_capacity_exhausted", event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved), max_recovery_size=self.max_recovery_size)
+            return
         self._overflow_unresolved.append(envelope)
         self._stop.set()
+        self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
         emit(
             _LOG,
             Severity.CRITICAL,
@@ -229,6 +280,8 @@ class AcquisitionCollector:
         consumers = [asyncio.create_task(self._consume()) for _ in range(self._max_concurrency)]
 
         async def run_provider(adapter: StreamAdapter) -> None:
+            provider_id = getattr(getattr(adapter, "identity", None), "provider_id", "unknown")
+            emit(_LOG, Severity.INFO, "collector.provider_started", provider=provider_id)
             try:
                 async for envelope in adapter.stream(
                     symbols,
@@ -237,11 +290,17 @@ class AcquisitionCollector:
                 ):
                     if not await self.publish(envelope):
                         break
+                emit(_LOG, Severity.INFO, "collector.provider_stopped", provider=provider_id)
             except asyncio.CancelledError:
+                emit(_LOG, Severity.WARNING, "collector.provider_cancelled", provider=provider_id)
+                raise
+            except PersistenceRecoveryOverflow:
+                self._set_stats(terminal_failures=self._stats.terminal_failures + 1)
+                emit(_LOG, Severity.CRITICAL, "collector.provider_terminal_failure", provider=provider_id, reason="handoff_capacity_exhausted")
                 raise
             except Exception as exc:
-                self._set_stats(failures=self._stats.failures + 1)
-                emit(_LOG, Severity.ERROR, "collector.provider_failure", provider=getattr(getattr(adapter, "identity", None), "provider_id", "unknown"), error_type=type(exc).__name__)
+                self._set_stats(failures=self._stats.failures + 1, terminal_failures=self._stats.terminal_failures + 1)
+                emit(_LOG, Severity.ERROR, "collector.provider_failure", provider=provider_id, error_type=type(exc).__name__)
 
         overflow: PersistenceRecoveryOverflow | None = None
         try:
@@ -253,7 +312,7 @@ class AcquisitionCollector:
                     tuple(self._overflow_unresolved),
                 )
             else:
-                emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded, recovery_pending=self.recovery_size)
+                emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded, degraded=self._stats.degraded, rate_limited=self._stats.rate_limited, disconnected=self._stats.disconnected, sequence_gaps=self._stats.sequence_gaps, terminal_failures=self._stats.terminal_failures, recovery_pending=self.recovery_size)
                 return self._stats
         finally:
             self._stop.set()
