@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 4 authorized; implementation active
+**Status:** AUTHORIZED / ACTIVE — Step 5 authorized; implementation pending Producer execution
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -62,23 +62,21 @@ CONTROL verified the corrected current Spot protobuf WebSocket implementation an
 ### `STEP-P2-004` — Live Collector, Raw/Staging Persistence & Replay Safety
 
 **Order:** 4  
-**Status:** AUTHORIZED / ACTIVE  
+**Status:** VERIFIED / COMPLETE  
 **Predecessor:** `STEP-P2-003`  
-**Task Order:** `TO-P2-004`
+**Task Order:** `TO-P2-004`  
+**Audit:** `AR-P2-AUDIT-004`
 
 Objective: integrate provider acquisition into the collector, establish raw/staging persistence and transport semantics, bounded queue/backpressure behavior, duplicate/idempotency controls, sequence/reconnect handling, and replay-safe acquisition behavior.
 
-Repository scope: collector integration, raw/staging persistence schema/models/repositories, bounded acquisition transport, duplicate/idempotency and replay controls, sequencing/recovery handling, observability, deterministic tests, migrations, and required traceability/build evidence.
-
-VPS scope: deployment, migration where required, runtime restart/recreation, service activation, persistence initialization, and runtime evidence are permitted only within the authorized development/validation boundary of `TO-P2-004`.
-
-Completion requires: collector and persistence behavior are implemented within the frozen architecture; raw/staging remains non-authoritative analytical truth; replay/idempotency and backpressure are bounded and evidence-backed; provider isolation is preserved; required Build Report exists and CONTROL can independently verify the result.
+CONTROL independently verified the final repository implementation and evidence. PR #15 was merged after final traceability correction. Final evidence included CI Core #253 (`154 tests ... OK`, with explicit Binance and P2-004 suites each `16 OK`) and Docker Foundation #56 (`SUCCESS`). Raw/staging remains non-authoritative analytical evidence. No live provider network execution or production deployment is claimed.
 
 ### `STEP-P2-005` — Dual-Provider Operational Hardening
 
 **Order:** 5  
-**Status:** DEFINED / INACTIVE  
-**Predecessor:** `STEP-P2-004`
+**Status:** AUTHORIZED / ACTIVE  
+**Predecessor:** `STEP-P2-004`  
+**Task Order:** `TO-P2-005`
 
 Objective: harden acquisition for provider isolation, rate-limit behavior, bounded reconnects, resource growth, observability, degraded-provider behavior, and operational recovery without changing higher-level architecture.
 
