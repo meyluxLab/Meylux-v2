@@ -15,13 +15,13 @@ records:
     entity_type: STEP
     canonical_name: Provider Boundary & Acquisition Contracts
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / DOC-V2-ARCH-001 / AR-P2-AUDIT-001
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / AR-P2-AUDIT-001
     status: VERIFIED / COMPLETE
   - stable_id: TO-P2-001
     entity_type: TO
     canonical_name: Task Order — Provider Boundary & Acquisition Contracts
     artifact_path: docs/task-orders/TO-P2-001.md
-    traceability: PH-P2 / STEP-P2-001 / PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / AR-P2-AUDIT-001
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / AR-P2-AUDIT-001
     status: VERIFIED / COMPLETE
   - stable_id: DOC-P2-001
     entity_type: DOC
@@ -87,5 +87,5 @@ records:
     entity_type: BR
     canonical_name: Build Report — MEXC Acquisition Adapter
     artifact_path: docs/build-reports/BR-P2-003.md
-    traceability: TO-P2-003 / PH-P2 / STEP-P2-003 / CMP-P2-001 / CTR-P2-001
-    status: PRODUCER EVIDENCE / PENDING CONTROL VERIFICATION
+    traceability: TO-P2-003 / PH-P2 / STEP-P2-003 / CMP-P2-001 / CTR-P2-001 / AR-P2-AUDIT-003
+    status: PRODUCER CORRECTED / PENDING CONTROL RE-AUDIT
