@@ -101,3 +101,9 @@ records:
     artifact_path: docs/task-orders/TO-P2-004.md
     traceability: PH-P2 / STEP-P2-004 / TO-P2-003 / AR-P2-AUDIT-003 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
     status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P2-004
+    entity_type: BR
+    canonical_name: Build Report — Live Collector, Raw/Staging Persistence & Replay Safety
+    artifact_path: docs/build-reports/BR-P2-004.md
+    traceability: TO-P2-004 / PH-P2 / STEP-P2-004 / CMP-P2-001 / CTR-P2-001 / GOV-BOUNDARY-001
+    status: PRODUCER EVIDENCE / PENDING EXECUTION AND CONTROL VERIFICATION
