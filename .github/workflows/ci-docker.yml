@@ -72,7 +72,7 @@ jobs:
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: |
           for i in $(seq 1 30); do
-            if docker compose -f infrastructure/compose/docker-compose.yml exec -T db pg_isready -U meylux_admin -d meylux_ci; then exit 0; fi
+            if docker compose -f infrastructure/compose/docker-compose.yml exec -T db pg_isready -h 127.0.0.1 -U meylux_admin -d meylux_ci; then exit 0; fi
             sleep 2
           done
           exit 1
