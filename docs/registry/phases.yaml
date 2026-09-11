@@ -178,14 +178,14 @@ records:
     logical_name: Provider Boundary & Acquisition Contracts
     entity_type: STEP
     phase: PH-P2
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 1
     predecessor: STEP-P1-008
     activation_basis: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / PH-P2
-    active_task_order: TO-P2-001
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P2-001
+    completion_audit: AR-P2-AUDIT-001
     purpose: Establish the provider-neutral acquisition boundary and deterministic acquisition contracts required by later provider adapters.
     repository_scope: provider abstraction, acquisition contracts/envelopes, provenance/error/degradation semantics, deterministic identity/sequence requirements, tests, and traceability artifacts.
     vps_scope: inspection only; no provider runtime activation.
@@ -194,15 +194,17 @@ records:
     logical_name: Binance Acquisition Adapter
     entity_type: STEP
     phase: PH-P2
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
+    status: AUTHORIZED / ACTIVE
+    authorization_state: AUTHORIZED TO EXECUTE
     order: 2
     predecessor: STEP-P2-001
-    activation_basis: PH-P2 / STEP-P2-001 verification
-    active_task_order: null
+    activation_basis: AR-P2-AUDIT-001 / General Continuation and Phase Progression Authority
+    active_task_order: TO-P2-002
     completed_task_order: null
     completion_audit: null
-    purpose: Implement Binance acquisition against the approved provider boundary, including required bootstrap/live acquisition behavior and provider-isolated failure handling.
+    purpose: Implement Binance acquisition against the approved provider boundary, including required REST/bootstrap and live-stream capabilities, bounded retry/reconnect behavior, provider isolation, and evidence-compatible telemetry.
+    repository_scope: Binance provider adapter implementation and governed tests/traceability artifacts required to demonstrate integration with the provider-neutral acquisition boundary.
+    vps_scope: governed development/validation deployment and configuration only within TO-P2-002; no unrestricted production authority.
 
   - sid: STEP-P2-003
     logical_name: MEXC Acquisition Adapter
