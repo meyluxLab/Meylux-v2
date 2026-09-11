@@ -229,19 +229,20 @@ records:
     traceability: PH-P1 / STEP-P1-002 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-002
-    canonical_name: Build Report — Docker Foundation
     entity_type: BR
+    canonical_name: Build Report — Docker Foundation
     artifact_path: docs/build-reports/BR-P1-002.md
     traceability: TO-P1-002 / PH-P1 / STEP-P1-002
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-002
+    entity_type: AR
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
-    artifact_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
     status: APPROVED / VERIFIED
   - stable_id: TO-P1-003
     canonical_name: Task Order — Database Foundation
+    entity_type: TO
     artifact_path: docs/task-orders/TO-P1-003.md
     traceability: PH-P1 / STEP-P1-003 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
@@ -358,3 +359,87 @@ records:
     artifact_path: docs/build-reports/BR-P2-002.md
     traceability: TO-P2-002 / PH-P2 / STEP-P2-002
     status: PLANNED
+
+  - stable_id: AR-P2-AUDIT-003
+    canonical_name: BR-P2-003 Control Audit — MEXC Acquisition Adapter
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-003.md
+    traceability: BR-P2-003 / TO-P2-003 / PH-P2 / STEP-P2-003
+    status: APPROVED / VERIFIED
+
+  - stable_id: BR-P2-003
+    canonical_name: Build Report — MEXC Acquisition Adapter
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-003.md
+    traceability: TO-P2-003 / PH-P2 / STEP-P2-003
+    status: VERIFIED
+
+  - stable_id: TO-P2-003
+    canonical_name: Task Order — MEXC Acquisition Adapter
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-003.md
+    traceability: PH-P2 / STEP-P2-003 / AR-P2-AUDIT-003 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE
+
+  - stable_id: STEP-P2-003
+    canonical_name: MEXC Acquisition Adapter
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / TO-P2-003 / AR-P2-AUDIT-003
+    status: VERIFIED / COMPLETE
+
+  - stable_id: AR-P2-AUDIT-004
+    canonical_name: BR-P2-004 Control Audit — Live Collector, Raw/Staging Persistence & Replay Safety
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-004.md
+    traceability: BR-P2-004 / TO-P2-004 / PH-P2 / STEP-P2-004
+    status: APPROVED / VERIFIED
+
+  - stable_id: BR-P2-004
+    canonical_name: Build Report — Live Collector, Raw/Staging Persistence & Replay Safety
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-004.md
+    traceability: TO-P2-004 / PH-P2 / STEP-P2-004
+    status: VERIFIED
+
+  - stable_id: TO-P2-004
+    canonical_name: Task Order — Live Collector, Raw/Staging Persistence & Replay Safety
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-004.md
+    traceability: PH-P2 / STEP-P2-004 / AR-P2-AUDIT-004 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE
+
+  - stable_id: STEP-P2-004
+    canonical_name: Live Collector, Raw/Staging Persistence & Replay Safety
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
+    status: VERIFIED / COMPLETE
+
+  - stable_id: AR-P2-AUDIT-005
+    canonical_name: CONTROL Independent Verification — TO-P2-005
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-005.md
+    traceability: BR-P2-005 / TO-P2-005 / PH-P2 / STEP-P2-005
+    status: APPROVED / VERIFIED
+
+  - stable_id: BR-P2-005
+    canonical_name: Build Report — Dual-Provider Operational Hardening
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-005.md
+    traceability: TO-P2-005 / PH-P2 / STEP-P2-005
+    status: VERIFIED
+
+  - stable_id: TO-P2-005
+    canonical_name: Task Order — Dual-Provider Operational Hardening
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-005.md
+    traceability: PH-P2 / STEP-P2-005 / TO-P2-004 / AR-P2-AUDIT-005 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE
+
+  - stable_id: STEP-P2-005
+    canonical_name: Dual-Provider Operational Hardening
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / TO-P2-005 / AR-P2-AUDIT-005 / STEP-P2-004
+    status: VERIFIED / COMPLETE

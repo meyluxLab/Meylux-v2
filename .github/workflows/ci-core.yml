@@ -21,5 +21,7 @@ jobs:
         run: python -m unittest discover -s tests/test_acquisition -p 'test_binance_adapter.py' -v
       - name: Run P2-004 acquisition tests
         run: python -m unittest discover -s tests/test_acquisition -p 'test_p2_004_collector_persistence.py' -v
+      - name: Run P2-005 operational hardening tests
+        run: python -m unittest discover -s tests/test_acquisition -p 'test_p2_005_operational_hardening.py' -v
       - name: Run foundation tests
         run: python -m unittest discover -s tests -v
