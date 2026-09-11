@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 6 defined; Step 5 verified/complete
+**Status:** AUTHORIZED / ACTIVE — Step 6 authorized
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -86,8 +86,9 @@ CONTROL independently verified the repository implementation and execution evide
 ### `STEP-P2-006` — End-to-End Acquisition Verification & Phase 2 Closure
 
 **Order:** 6  
-**Status:** DEFINED / INACTIVE  
-**Predecessor:** `STEP-P2-005`
+**Status:** AUTHORIZED / ACTIVE  
+**Predecessor:** `STEP-P2-005`  
+**Task Order:** `TO-P2-006`
 
 Objective: prove the Phase 2 acquisition boundary end-to-end using real provider/runtime evidence, replay/idempotency evidence, persistence evidence, dual-provider isolation evidence, and the required exit criteria.
 
