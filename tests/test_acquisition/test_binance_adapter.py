@@ -3,7 +3,7 @@ import io
 import json
 import unittest
 from datetime import datetime, timezone
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 
 from contracts.acquisition import AcquisitionState, EventType
 from meylux.acquisition.binance import BinanceAdapter, BinanceTransportError, RetryPolicy
@@ -111,10 +111,49 @@ class BinanceAdapterTests(unittest.TestCase):
         http = FakeHTTP([URLError("temporary")] * 10)
         sleeps = []
         adapter = self.make_adapter(http_get=http, sleeper=sleeps.append)
-        with self.assertRaises(BinanceTransportError):
-            adapter.fetch_order_book("BTCUSDT")
+        envelope = adapter.fetch_order_book("BTCUSDT")
+        self.assertEqual(envelope.state, AcquisitionState.UNAVAILABLE)
+        self.assertEqual(envelope.provider_error.category, "TRANSPORT")
+        self.assertFalse(envelope.provider_error.retryable)
         self.assertEqual(len(http.calls), 3)
         self.assertEqual(len(sleeps), 2)
+
+    def test_rate_limit_maps_to_canonical_state(self):
+        error = HTTPError("https://api.binance.com/api/v3/depth", 429, "rate limit", {}, None)
+        http = FakeHTTP([error] * 10)
+        adapter = self.make_adapter(http_get=http)
+        envelope = adapter.fetch_order_book("BTCUSDT")
+        self.assertEqual(envelope.state, AcquisitionState.RATE_LIMITED)
+        self.assertEqual(envelope.provider_error.code, "BINANCE_HTTP_429")
+        self.assertEqual(envelope.provider_error.category, "RATE_LIMIT")
+        self.assertIsNotNone(envelope.provider_error)
+        self.assertEqual(len(http.calls), 3)
+
+    def test_http_invalid_response_maps_to_invalid_state(self):
+        error = HTTPError("https://api.binance.com/api/v3/depth", 400, "bad request", {}, None)
+        http = FakeHTTP([error])
+        adapter = self.make_adapter(http_get=http)
+        envelope = adapter.fetch_order_book("BTCUSDT")
+        self.assertEqual(envelope.state, AcquisitionState.INVALID)
+        self.assertEqual(envelope.provider_error.code, "BINANCE_HTTP_400")
+        self.assertEqual(envelope.provider_error.category, "HTTP_ERROR")
+        self.assertEqual(len(http.calls), 1)
+
+    def test_malformed_json_maps_to_invalid_state(self):
+        class InvalidJsonHTTP:
+            def __init__(self):
+                self.calls = 0
+            def __call__(self, url, timeout):
+                self.calls += 1
+                return b"not-json"
+
+        http = InvalidJsonHTTP()
+        adapter = self.make_adapter(http_get=http)
+        envelope = adapter.fetch_order_book("BTCUSDT")
+        self.assertEqual(envelope.state, AcquisitionState.INVALID)
+        self.assertEqual(envelope.provider_error.code, "BINANCE_INVALID_REST_PAYLOAD")
+        self.assertEqual(envelope.provider_error.category, "INVALID_PAYLOAD")
+        self.assertEqual(http.calls, 1)
 
     def test_invalid_request_is_rejected_before_network(self):
         http = FakeHTTP([])
@@ -132,7 +171,6 @@ class BinanceAdapterTests(unittest.TestCase):
         trade = adapter.fetch_trades("BTCUSDT")[0]
         candle = adapter.fetch_klines("BTCUSDT", "1m")[0]
         self.assertEqual(trade.event_id, trade.deduplication_key)
-        self.assertEqual(trade.event_id, adapter.fetch_trades("BTCUSDT")[-1].event_id if False else trade.event_id)
         self.assertEqual(candle.source_sequence, "1778155200000")
         self.assertEqual(candle.canonical_bytes(), candle.canonical_bytes())
 
@@ -158,7 +196,7 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(result[0].provenance.provider.provider_id, "binance")
         self.assertIn("btcusdt@trade", connector.urls[0])
 
-    def test_stream_reconnect_is_bounded(self):
+    def test_stream_reconnect_exception_is_bounded_and_canonical(self):
         class FailingConnector:
             def __init__(self):
                 self.calls = 0
@@ -170,12 +208,76 @@ class BinanceAdapterTests(unittest.TestCase):
         adapter = self.make_adapter(websocket_connect=connector)
 
         async def consume():
-            async for _ in adapter.stream(["BTCUSDT"], streams=["trade"], max_reconnects=2):
-                pass
+            result = []
+            async for envelope in adapter.stream(["BTCUSDT"], streams=["trade"], max_reconnects=2):
+                result.append(envelope)
+            return result
 
-        with self.assertRaises(BinanceTransportError):
-            asyncio.run(consume())
+        result = asyncio.run(consume())
         self.assertEqual(connector.calls, 3)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].state, AcquisitionState.DISCONNECTED)
+        self.assertEqual(result[0].provider_error.code, "BINANCE_RECONNECT_EXHAUSTED")
+        self.assertEqual(result[0].provider_error.category, "DISCONNECTED")
+
+    def test_stream_clean_disconnect_is_hard_bounded(self):
+        class CleanDisconnectConnector:
+            def __init__(self):
+                self.calls = 0
+            def __call__(self, url):
+                self.calls += 1
+                return FakeWebSocket([])
+
+        connector = CleanDisconnectConnector()
+        adapter = self.make_adapter(websocket_connect=connector)
+
+        async def consume():
+            result = []
+            async for envelope in adapter.stream(["BTCUSDT"], streams=["trade"], max_reconnects=2):
+                result.append(envelope)
+            return result
+
+        result = asyncio.run(consume())
+        self.assertEqual(connector.calls, 3)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].state, AcquisitionState.DISCONNECTED)
+        self.assertEqual(result[0].provider_error.code, "BINANCE_RECONNECT_EXHAUSTED")
+
+    def test_stream_clean_disconnect_with_zero_reconnects_stops_after_initial_connection(self):
+        class CleanDisconnectConnector:
+            def __init__(self):
+                self.calls = 0
+            def __call__(self, url):
+                self.calls += 1
+                return FakeWebSocket([])
+
+        connector = CleanDisconnectConnector()
+        adapter = self.make_adapter(websocket_connect=connector)
+
+        async def consume():
+            result = []
+            async for envelope in adapter.stream(["BTCUSDT"], streams=["trade"], max_reconnects=0):
+                result.append(envelope)
+            return result
+
+        result = asyncio.run(consume())
+        self.assertEqual(connector.calls, 1)
+        self.assertEqual(result[0].state, AcquisitionState.DISCONNECTED)
+
+    def test_stream_malformed_payload_maps_to_invalid_state(self):
+        connector = FakeConnector(["not-json"])
+        adapter = self.make_adapter(websocket_connect=connector)
+
+        async def consume():
+            result = []
+            async for envelope in adapter.stream(["BTCUSDT"], streams=["trade"], max_reconnects=0):
+                result.append(envelope)
+            return result
+
+        result = asyncio.run(consume())
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0].state, AcquisitionState.INVALID)
+        self.assertEqual(result[0].provider_error.code, "BINANCE_INVALID_STREAM_PAYLOAD")
 
     def test_provider_isolation_has_no_shared_mutable_state(self):
         first_http = FakeHTTP([{ "lastUpdateId": 1, "E": 1778155200000, "bids": [], "asks": [] }])
@@ -193,7 +295,7 @@ class BinanceAdapterTests(unittest.TestCase):
         logger = configure_logging(stream=output, logger_name="test.binance", limits=ObservabilityLimits(max_events_per_second=10))
         http = FakeHTTP([{ "lastUpdateId": 1, "E": 1778155200000, "bids": [], "asks": [] }])
         adapter = self.make_adapter(http_get=http, logger=logger)
-        adapter.bootstrap("BTCUSDT") if False else adapter.fetch_order_book("BTCUSDT")
+        adapter.fetch_order_book("BTCUSDT")
         self.assertIn("binance", output.getvalue())
         self.assertNotIn("api_key", output.getvalue().lower())
         self.assertNotIn("authorization", output.getvalue().lower())
