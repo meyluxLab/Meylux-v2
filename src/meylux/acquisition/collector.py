@@ -2,8 +2,9 @@
 from __future__ import annotations
 
 import asyncio
+from collections import deque
 from dataclasses import dataclass
-from typing import Any, AsyncIterator, Mapping, Protocol, Sequence
+from typing import Any, AsyncIterator, Deque, Mapping, Protocol, Sequence
 
 from contracts.acquisition import AcquisitionEnvelope
 from meylux.acquisition.persistence import PersistenceResult, RawStagingRepository
@@ -31,6 +32,12 @@ class CollectorStats:
     duplicates: int = 0
     failures: int = 0
     overloaded: int = 0
+    recovered: int = 0
+    recovery_pending: int = 0
+
+
+class PersistenceRecoveryOverflow(RuntimeError):
+    """Raised instead of silently discarding an unrecoverable acquisition event."""
 
 
 class AcquisitionCollector:
@@ -38,6 +45,8 @@ class AcquisitionCollector:
 
     The collector never normalizes provider payloads. Each provider stream is
     independently supervised; a provider failure cannot stop the other stream.
+    Persistence failures receive bounded retries and, if still unsuccessful,
+    are retained in a bounded recovery buffer for explicit replay.
     """
 
     def __init__(
@@ -47,15 +56,25 @@ class AcquisitionCollector:
         *,
         max_queue_size: int = 256,
         max_concurrency: int = 1,
+        max_persistence_retries: int = 2,
+        max_recovery_size: int | None = None,
     ) -> None:
         if not adapters:
             raise ValueError("at least one provider adapter is required")
         if max_queue_size < 1 or max_concurrency < 1:
             raise ValueError("queue and concurrency bounds must be positive")
+        if max_persistence_retries < 0:
+            raise ValueError("max_persistence_retries must be non-negative")
+        if max_recovery_size is not None and max_recovery_size < 1:
+            raise ValueError("max_recovery_size must be positive")
         self._adapters = dict(adapters)
         self._sink = sink
         self._queue: asyncio.Queue[AcquisitionEnvelope | None] = asyncio.Queue(maxsize=max_queue_size)
         self._max_concurrency = max_concurrency
+        self._max_persistence_retries = max_persistence_retries
+        self._max_recovery_size = max_recovery_size if max_recovery_size is not None else max_queue_size
+        self._recovery: Deque[AcquisitionEnvelope] = deque()
+        self._retry_counts: dict[str, int] = {}
         self._stats = CollectorStats()
         self._stop = asyncio.Event()
 
@@ -68,28 +87,73 @@ class AcquisitionCollector:
         return self._queue.maxsize
 
     @property
+    def recovery_size(self) -> int:
+        return len(self._recovery)
+
+    @property
+    def max_recovery_size(self) -> int:
+        return self._max_recovery_size
+
+    @property
+    def recovery_items(self) -> tuple[AcquisitionEnvelope, ...]:
+        return tuple(self._recovery)
+
+    @property
     def stats(self) -> CollectorStats:
         return self._stats
+
+    def _set_stats(self, **changes: int) -> None:
+        values = {
+            "published": self._stats.published,
+            "persisted": self._stats.persisted,
+            "duplicates": self._stats.duplicates,
+            "failures": self._stats.failures,
+            "overloaded": self._stats.overloaded,
+            "recovered": self._stats.recovered,
+            "recovery_pending": self._stats.recovery_pending,
+        }
+        values.update(changes)
+        self._stats = CollectorStats(**values)
 
     async def publish(self, envelope: AcquisitionEnvelope) -> None:
         """Block rather than drop when the bounded collector queue is full."""
         if self._queue.full():
-            self._stats = CollectorStats(
-                self._stats.published,
-                self._stats.persisted,
-                self._stats.duplicates,
-                self._stats.failures,
-                self._stats.overloaded + 1,
-            )
+            self._set_stats(overloaded=self._stats.overloaded + 1)
             emit(_LOG, Severity.WARNING, "collector.backpressure", provider=envelope.provider.provider_id, event_id=envelope.event_id, queue_size=self.queue_size, max_queue_size=self.max_queue_size)
         await self._queue.put(envelope)
-        self._stats = CollectorStats(
-            self._stats.published + 1,
-            self._stats.persisted,
-            self._stats.duplicates,
-            self._stats.failures,
-            self._stats.overloaded,
-        )
+        self._set_stats(published=self._stats.published + 1)
+
+    async def _persist_with_recovery(self, envelope: AcquisitionEnvelope) -> None:
+        event_id = envelope.event_id
+        for attempt in range(self._max_persistence_retries + 1):
+            try:
+                result = await self._sink.persist(envelope)
+                self._retry_counts.pop(event_id, None)
+                self._set_stats(
+                    persisted=self._stats.persisted + int(result.inserted),
+                    duplicates=self._stats.duplicates + int(not result.inserted),
+                    recovered=self._stats.recovered + int(attempt > 0),
+                    recovery_pending=len(self._recovery),
+                )
+                emit(_LOG, Severity.INFO, "collector.persisted", provider=envelope.provider.provider_id, event_id=event_id, outcome="INSERTED" if result.inserted else "DUPLICATE", attempts=attempt + 1)
+                return
+            except Exception as exc:
+                self._set_stats(failures=self._stats.failures + 1)
+                if attempt < self._max_persistence_retries:
+                    self._retry_counts[event_id] = attempt + 1
+                    emit(_LOG, Severity.WARNING, "collector.persistence_retry", provider=envelope.provider.provider_id, event_id=event_id, attempt=attempt + 1, max_retries=self._max_persistence_retries, error_type=type(exc).__name__)
+                    continue
+                if len(self._recovery) >= self._max_recovery_size:
+                    emit(_LOG, Severity.CRITICAL, "collector.recovery_overflow", provider=envelope.provider.provider_id, event_id=event_id, recovery_size=self.recovery_size, max_recovery_size=self.max_recovery_size, error_type=type(exc).__name__)
+                    self._stop.set()
+                    raise PersistenceRecoveryOverflow(
+                        f"bounded persistence recovery capacity exhausted for event {event_id}"
+                    ) from exc
+                self._recovery.append(envelope)
+                self._retry_counts.pop(event_id, None)
+                self._set_stats(recovery_pending=len(self._recovery))
+                emit(_LOG, Severity.ERROR, "collector.persistence_recovery_pending", provider=envelope.provider.provider_id, event_id=event_id, attempts=attempt + 1)
+                return
 
     async def _consume(self) -> None:
         while not self._stop.is_set():
@@ -97,29 +161,22 @@ class AcquisitionCollector:
             try:
                 if envelope is None:
                     return
-                result = await self._sink.persist(envelope)
-                self._stats = CollectorStats(
-                    self._stats.published,
-                    self._stats.persisted + int(result.inserted),
-                    self._stats.duplicates + int(not result.inserted),
-                    self._stats.failures,
-                    self._stats.overloaded,
-                )
-                emit(_LOG, Severity.INFO, "collector.persisted", provider=envelope.provider.provider_id, event_id=envelope.event_id, outcome="INSERTED" if result.inserted else "DUPLICATE")
-            except Exception as exc:
-                self._stats = CollectorStats(
-                    self._stats.published,
-                    self._stats.persisted,
-                    self._stats.duplicates,
-                    self._stats.failures + 1,
-                    self._stats.overloaded,
-                )
-                emit(_LOG, Severity.ERROR, "collector.persistence_failure", provider=envelope.provider.provider_id if envelope else "unknown", event_id=envelope.event_id if envelope else None, error_type=type(exc).__name__)
-                # Persistence errors are isolated to this event. The repository
-                # owns its transaction/retry policy; the collector must not spin
-                # indefinitely on a poison event.
+                await self._persist_with_recovery(envelope)
             finally:
                 self._queue.task_done()
+
+    async def replay_recovery(self) -> int:
+        """Replay retained failed events through the same bounded persistence path."""
+        if not self._recovery:
+            return 0
+        items = tuple(self._recovery)
+        replayed = 0
+        for item in items:
+            await self._queue.put(item)
+            self._recovery.popleft()
+            replayed += 1
+        self._set_stats(recovery_pending=len(self._recovery))
+        return replayed
 
     async def collect_once(
         self,
@@ -147,19 +204,13 @@ class AcquisitionCollector:
             except asyncio.CancelledError:
                 raise
             except Exception as exc:
-                self._stats = CollectorStats(
-                    self._stats.published,
-                    self._stats.persisted,
-                    self._stats.duplicates,
-                    self._stats.failures + 1,
-                    self._stats.overloaded,
-                )
-                emit(_LOG, Severity.ERROR, "collector.provider_failure", provider=getattr(adapter.identity, "provider_id", "unknown"), error_type=type(exc).__name__)
+                self._set_stats(failures=self._stats.failures + 1)
+                emit(_LOG, Severity.ERROR, "collector.provider_failure", provider=getattr(getattr(adapter, "identity", None), "provider_id", "unknown"), error_type=type(exc).__name__)
 
         try:
             await asyncio.gather(*(run_provider(adapter) for adapter in self._adapters.values()))
             await self._queue.join()
-            emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded)
+            emit(_LOG, Severity.INFO, "collector.run_complete", providers=len(self._adapters), published=self._stats.published, persisted=self._stats.persisted, duplicates=self._stats.duplicates, failures=self._stats.failures, overloaded=self._stats.overloaded, recovery_pending=self.recovery_size)
             return self._stats
         finally:
             self._stop.set()
@@ -168,4 +219,4 @@ class AcquisitionCollector:
             await asyncio.gather(*consumers, return_exceptions=True)
 
 
-__all__ = ["AcquisitionCollector", "CollectorStats", "RawStagingRepository"]
+__all__ = ["AcquisitionCollector", "CollectorStats", "PersistenceRecoveryOverflow", "RawStagingRepository"]
