@@ -4,6 +4,7 @@ import json
 import unittest
 from datetime import datetime, timezone
 from urllib.error import HTTPError, URLError
+from urllib.parse import parse_qs, urlparse
 
 from contracts.acquisition import AcquisitionState, EventType
 from meylux.acquisition.binance import BinanceAdapter, BinanceTransportError, RetryPolicy
@@ -114,7 +115,10 @@ class BinanceAdapterTests(unittest.TestCase):
         envelope = adapter.fetch_order_book("BTCUSDT")
         self.assertEqual(envelope.state, AcquisitionState.UNAVAILABLE)
         self.assertEqual(envelope.provider_error.category, "TRANSPORT")
-        self.assertFalse(envelope.provider_error.retryable)
+        # retryable describes whether the acquisition condition may be retried
+        # by the caller; bounded internal retries do not make a transport
+        # condition intrinsically non-retryable after the local budget ends.
+        self.assertTrue(envelope.provider_error.retryable)
         self.assertEqual(len(http.calls), 3)
         self.assertEqual(len(sleeps), 2)
 
@@ -194,7 +198,10 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(result[0].event_type, EventType.TRADE)
         self.assertEqual(result[0].source_sequence, "12345")
         self.assertEqual(result[0].provenance.provider.provider_id, "binance")
-        self.assertIn("btcusdt@trade", connector.urls[0])
+        # Validate the semantic query value; URL encoding of '@' as '%40' is
+        # transport-equivalent and is produced by urllib.parse.urlencode.
+        query = parse_qs(urlparse(connector.urls[0]).query)
+        self.assertEqual(query["streams"], ["btcusdt@trade"])
 
     def test_stream_reconnect_exception_is_bounded_and_canonical(self):
         class FailingConnector:
@@ -293,9 +300,12 @@ class BinanceAdapterTests(unittest.TestCase):
     def test_telemetry_uses_existing_structured_observability(self):
         output = io.StringIO()
         logger = configure_logging(stream=output, logger_name="test.binance", limits=ObservabilityLimits(max_events_per_second=10))
-        http = FakeHTTP([{ "lastUpdateId": 1, "E": 1778155200000, "bids": [], "asks": [] }])
+        http = FakeHTTP([
+            {"timezone": "UTC", "symbols": [{"symbol": "BTCUSDT", "status": "TRADING"}]},
+            {"lastUpdateId": 1, "E": 1778155200000, "bids": [], "asks": []},
+        ])
         adapter = self.make_adapter(http_get=http, logger=logger)
-        adapter.fetch_order_book("BTCUSDT")
+        adapter.bootstrap("BTCUSDT")
         self.assertIn("binance", output.getvalue())
         self.assertNotIn("api_key", output.getvalue().lower())
         self.assertNotIn("authorization", output.getvalue().lower())
