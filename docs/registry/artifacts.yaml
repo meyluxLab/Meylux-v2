@@ -450,18 +450,32 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-006.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-005 / AR-P2-AUDIT-005 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
 
   - stable_id: STEP-P2-006
     canonical_name: End-to-End Acquisition Verification & Phase 2 Closure
     entity_type: STEP
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / TO-P2-006 / STEP-P2-005
-    status: AUTHORIZED / ACTIVE
+    traceability: PH-P2 / TO-P2-006 / TO-P2-007 / AR-P2-AUDIT-007
+    status: VERIFIED / COMPLETE
 
   - stable_id: BR-P2-006
     canonical_name: Build Report — End-to-End Acquisition Verification & Phase 2 Closure
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-006.md
     traceability: TO-P2-006 / PH-P2 / STEP-P2-006 / CMP-P2-001 / CTR-P2-001 / GOV-BOUNDARY-001
-    status: PRODUCER EVIDENCE / CONTROL PENDING
+    status: PRODUCER EVIDENCE / CONTROL VERIFIED
+
+  - stable_id: AR-P2-AUDIT-007
+    canonical_name: CONTROL Final Verification & Phase 2 Closure
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-007.md
+    traceability: BR-P2-006 / TO-P2-007 / STEP-P2-006 / PH-P2 / GOV-BOUNDARY-001
+    status: APPROVED / VERIFIED
+
+  - stable_id: TO-P2-007
+    canonical_name: Task Order — MEXC Live WebSocket Subscription-Acknowledgement Correction & P2-006 Re-Verification
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-007.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-006 / AR-P2-AUDIT-006 / AR-P2-AUDIT-007 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE

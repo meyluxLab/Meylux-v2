@@ -1,6 +1,6 @@
 # PH-P2 — Data Acquisition & Market Data Foundation
 
-**Status:** AUTHORIZED / ACTIVE — Step 6 authorized
+**Status:** CLOSED / VERIFIED
 **Phase SID:** `PH-P2`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; Constitution and Architectural Invariants
 **Predecessor:** `PH-P1` CLOSED / VERIFIED
@@ -30,7 +30,7 @@ Phase 2 output is acquisition evidence and raw/staging data suitable for the Pha
 ### `STEP-P2-001` — Provider Boundary & Acquisition Contracts
 
 **Order:** 1  
-**Status:** VERIFIED / COMPLETE  
+**Status:** VERIFIED / COMPLETE
 **Predecessor:** `PH-P1` / `STEP-P1-008`  
 **Task Order:** `TO-P2-001`  
 **Audit:** `AR-P2-AUDIT-001`
@@ -40,7 +40,7 @@ Objective: define and implement the provider-neutral acquisition boundary and co
 ### `STEP-P2-002` — Binance Acquisition Adapter
 
 **Order:** 2  
-**Status:** VERIFIED / COMPLETE  
+**Status:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P2-001`  
 **Task Order:** `TO-P2-002`  
 **Audit:** `AR-P2-AUDIT-002`
@@ -50,7 +50,7 @@ Objective: implement the Binance adapter against the approved provider boundary 
 ### `STEP-P2-003` — MEXC Acquisition Adapter
 
 **Order:** 3  
-**Status:** VERIFIED / COMPLETE  
+**Status:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P2-002`  
 **Task Order:** `TO-P2-003`  
 **Audit:** `AR-P2-AUDIT-003`
@@ -62,7 +62,7 @@ CONTROL verified the corrected current Spot protobuf WebSocket implementation an
 ### `STEP-P2-004` — Live Collector, Raw/Staging Persistence & Replay Safety
 
 **Order:** 4  
-**Status:** VERIFIED / COMPLETE  
+**Status:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P2-003`  
 **Task Order:** `TO-P2-004`  
 **Audit:** `AR-P2-AUDIT-004`
@@ -74,7 +74,7 @@ CONTROL independently verified the final repository implementation and evidence.
 ### `STEP-P2-005` — Dual-Provider Operational Hardening
 
 **Order:** 5  
-**Status:** VERIFIED / COMPLETE  
+**Status:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P2-004`  
 **Task Order:** `TO-P2-005`  
 **Audit:** `AR-P2-AUDIT-005`
@@ -86,16 +86,19 @@ CONTROL independently verified the repository implementation and execution evide
 ### `STEP-P2-006` — End-to-End Acquisition Verification & Phase 2 Closure
 
 **Order:** 6  
-**Status:** AUTHORIZED / ACTIVE  
+**Status:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P2-005`  
-**Task Order:** `TO-P2-006`
+**Task Orders:** `TO-P2-006`, `TO-P2-007`
+**Audit:** `AR-P2-AUDIT-007`
 
 Objective: prove the Phase 2 acquisition boundary end-to-end using real provider/runtime evidence, replay/idempotency evidence, persistence evidence, dual-provider isolation evidence, and the required exit criteria.
 
-VPS scope: full authorized runtime verification for the Phase 2 boundary, followed by separate CONTROL verification and Phase 2 closure evidence.
+CONTROL verified the authorized MEXC subscription-acknowledgement correction, the post-correction live MEXC sequence through the normal adapter stream loop, dual-provider collector evidence, independent targeted and full regression, corrected remote CI, and repository publication/merge integrity. The material finding `D-P2-006-001` is closed and `OQ-P2-006-001` is resolved.
 
 ## Phase 2 completion boundary
 
 Phase 2 is complete only when all six Steps are `COMPLETE / VERIFIED`, all required Repository artifacts and tests exist, all required VPS/runtime operations have actual execution evidence, both first-class providers have been exercised within the authorized acquisition boundary, raw/staging persistence and replay safety are verified, provider isolation/degradation behavior is verified, and the Phase 2 exit audit and checkpoint are recorded.
+
+These exit criteria have been satisfied under `AR-P2-AUDIT-007`. Phase 2 is `CLOSED / VERIFIED`.
 
 `IMPLEMENTED != EXECUTED != VERIFIED` remains mandatory.
