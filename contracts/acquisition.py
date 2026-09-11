@@ -237,13 +237,38 @@ def _freeze(value: Any) -> Any:
     if isinstance(value, float):
         raise TypeError("binary floating-point values are not allowed")
     if isinstance(value, Enum):
-        frozen_value = value.value
-        if isinstance(frozen_value, float):
-            raise TypeError("binary floating-point values are not allowed")
+        _validate_enum_value(value.value)
         return value
     if isinstance(value, (str, int, bool, type(None), datetime)):
         return value
     raise TypeError(f"unsupported payload type: {type(value).__name__}")
+
+
+def _validate_enum_value(value: Any) -> None:
+    """Validate that an Enum's underlying value cannot mutate or become non-finite.
+
+    Enum instances are themselves immutable, but their ``.value`` may refer to a
+    mutable object. Such a value cannot be frozen in place without changing the
+    Enum member's identity, so mutable containers are rejected at construction.
+    """
+    if isinstance(value, Enum):
+        _validate_enum_value(value.value)
+        return
+    if isinstance(value, Mapping) or isinstance(value, list):
+        raise TypeError("mutable values are not allowed inside Enum payloads")
+    if isinstance(value, tuple):
+        for item in value:
+            _validate_enum_value(item)
+        return
+    if isinstance(value, Decimal):
+        if not value.is_finite():
+            raise ValueError("non-finite Decimal values are not allowed")
+        return
+    if isinstance(value, float):
+        raise TypeError("binary floating-point values are not allowed")
+    if isinstance(value, (str, int, bool, type(None), datetime)):
+        return
+    raise TypeError(f"unsupported Enum payload type: {type(value).__name__}")
 
 
 def _canonical_json(value: Any) -> bytes:
@@ -258,10 +283,8 @@ def _canonical_json(value: Any) -> bytes:
 
 def _normalize(value: Any) -> Any:
     if isinstance(value, Enum):
-        normalized_value = value.value
-        if isinstance(normalized_value, float):
-            raise TypeError("binary floating-point values are not allowed")
-        return _normalize(normalized_value)
+        _validate_enum_value(value.value)
+        return _normalize(value.value)
     if isinstance(value, datetime):
         _utc(value, "datetime")
         return value.isoformat().replace("+00:00", "Z")
