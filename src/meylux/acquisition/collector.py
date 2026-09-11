@@ -51,10 +51,10 @@ class AcquisitionCollector:
     independently supervised; a provider failure cannot stop the other stream.
     Persistence failures receive bounded retries and, if still unsuccessful,
     are retained in a bounded recovery buffer for explicit replay.
-    Recovery-capacity exhaustion is a terminal, explicit handoff: the current
-    and still-queued envelopes are retained in a bounded overflow handoff and
-    surfaced after the queue is drained, so shutdown cannot hang or silently
-    discard acquisition evidence.
+    Recovery-capacity exhaustion enters a terminal drain mode: the current and
+    queued envelopes are retained as an explicit bounded handoff, consumers
+    continue until the queue is empty, and collect_once raises after join so
+    shutdown cannot hang or silently discard acquisition evidence.
     """
 
     def __init__(
@@ -128,25 +128,22 @@ class AcquisitionCollector:
         values.update(changes)
         self._stats = CollectorStats(**values)
 
-    async def publish(self, envelope: AcquisitionEnvelope) -> None:
-        """Block rather than drop when the bounded collector queue is full."""
+    async def publish(self, envelope: AcquisitionEnvelope) -> bool:
+        """Block rather than drop; after terminal stop, retain for explicit handoff."""
+        if self._stop.is_set():
+            self._overflow_unresolved.append(envelope)
+            emit(_LOG, Severity.CRITICAL, "collector.post_stop_handoff", provider=envelope.provider.provider_id, event_id=envelope.event_id, unresolved_count=len(self._overflow_unresolved))
+            return False
         if self._queue.full():
             self._set_stats(overloaded=self._stats.overloaded + 1)
             emit(_LOG, Severity.WARNING, "collector.backpressure", provider=envelope.provider.provider_id, event_id=envelope.event_id, queue_size=self.queue_size, max_queue_size=self.max_queue_size)
         await self._queue.put(envelope)
         self._set_stats(published=self._stats.published + 1)
+        return True
 
     def _retain_overflow(self, envelope: AcquisitionEnvelope) -> None:
-        """Retain the terminal event and all queued work for explicit handoff."""
+        """Enter terminal drain mode while preserving the current envelope."""
         self._overflow_unresolved.append(envelope)
-        while True:
-            try:
-                queued = self._queue.get_nowait()
-            except asyncio.QueueEmpty:
-                break
-            if queued is not None:
-                self._overflow_unresolved.append(queued)
-            self._queue.task_done()
         self._stop.set()
         emit(
             _LOG,
@@ -191,7 +188,7 @@ class AcquisitionCollector:
         return False
 
     async def _consume(self) -> None:
-        while not self._stop.is_set():
+        while not self._stop.is_set() or not self._queue.empty():
             envelope = await self._queue.get()
             try:
                 if envelope is None:
@@ -200,11 +197,7 @@ class AcquisitionCollector:
                     await self._persist_with_recovery(envelope)
                 except PersistenceRecoveryOverflow as exc:
                     self._retain_overflow(envelope)
-                    raise PersistenceRecoveryOverflow(
-                        str(exc), tuple(self._overflow_unresolved)
-                    ) from exc
-            except PersistenceRecoveryOverflow:
-                return
+                    _ = exc
             finally:
                 self._queue.task_done()
 
@@ -243,7 +236,8 @@ class AcquisitionCollector:
                     max_messages=max_messages_per_provider,
                     max_reconnects=max_reconnects,
                 ):
-                    await self.publish(envelope)
+                    if not await self.publish(envelope):
+                        break
             except asyncio.CancelledError:
                 raise
             except Exception as exc:
