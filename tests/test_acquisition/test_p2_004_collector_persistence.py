@@ -213,6 +213,16 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(collector.recovery_size, 0)
         self.assertEqual(sink.seen, [item.event_id])
 
+    async def test_replay_does_not_spin_when_failure_remains(self):
+        sink = FakeSink(always_fail=True)
+        item = envelope("binance")
+        collector = AcquisitionCollector({"binance": FakeAdapter("binance")}, sink, max_persistence_retries=1, max_recovery_size=1)
+        await collector.collect_once(["BTCUSDT"])
+        resolved = await collector.replay_recovery()
+        self.assertEqual(resolved, 0)
+        self.assertEqual(collector.recovery_items, (item,))
+        self.assertEqual(sink.attempts[item.event_id], 4)
+
     async def test_malformed_acquisition_state_is_rejected_by_contract(self):
         with self.assertRaises(TypeError):
             AcquisitionEnvelope(

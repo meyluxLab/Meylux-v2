@@ -123,7 +123,8 @@ class AcquisitionCollector:
         await self._queue.put(envelope)
         self._set_stats(published=self._stats.published + 1)
 
-    async def _persist_with_recovery(self, envelope: AcquisitionEnvelope) -> None:
+    async def _persist_with_recovery(self, envelope: AcquisitionEnvelope) -> bool:
+        """Persist once with bounded retries; return whether the event resolved."""
         event_id = envelope.event_id
         for attempt in range(self._max_persistence_retries + 1):
             try:
@@ -136,7 +137,7 @@ class AcquisitionCollector:
                     recovery_pending=len(self._recovery),
                 )
                 emit(_LOG, Severity.INFO, "collector.persisted", provider=envelope.provider.provider_id, event_id=event_id, outcome="INSERTED" if result.inserted else "DUPLICATE", attempts=attempt + 1)
-                return
+                return True
             except Exception as exc:
                 self._set_stats(failures=self._stats.failures + 1)
                 if attempt < self._max_persistence_retries:
@@ -153,7 +154,8 @@ class AcquisitionCollector:
                 self._retry_counts.pop(event_id, None)
                 self._set_stats(recovery_pending=len(self._recovery))
                 emit(_LOG, Severity.ERROR, "collector.persistence_recovery_pending", provider=envelope.provider.provider_id, event_id=event_id, attempts=attempt + 1)
-                return
+                return False
+        return False
 
     async def _consume(self) -> None:
         while not self._stop.is_set():
@@ -166,14 +168,13 @@ class AcquisitionCollector:
                 self._queue.task_done()
 
     async def replay_recovery(self) -> int:
-        """Replay retained failed events through the same bounded persistence path."""
+        """Replay each currently retained failed event at most once."""
         resolved = 0
-        while self._recovery:
+        pending_at_start = len(self._recovery)
+        for _ in range(pending_at_start):
             item = self._recovery.popleft()
             self._set_stats(recovery_pending=len(self._recovery))
-            before_failures = self._stats.failures
-            await self._persist_with_recovery(item)
-            if self._stats.failures == before_failures or self._stats.persisted + self._stats.duplicates >= 1:
+            if await self._persist_with_recovery(item):
                 resolved += 1
         self._set_stats(recovery_pending=len(self._recovery))
         return resolved
