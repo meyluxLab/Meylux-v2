@@ -14,6 +14,7 @@ from contracts.acquisition import (
 )
 from meylux.acquisition.collector import AcquisitionCollector
 from meylux.acquisition.persistence import RawStagingRepository
+from meylux.acquisition.transport import AcquisitionQueuePublisher
 
 
 UTC = timezone.utc
@@ -84,6 +85,15 @@ class FakeAdapter:
             raise RuntimeError(f"{self.provider} stream failure")
 
 
+class FakeQueue:
+    def __init__(self) -> None:
+        self.messages = []
+
+    async def publish(self, message):
+        self.messages.append(message)
+        return "1-0"
+
+
 class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
     async def test_persistence_is_deterministic_and_idempotent(self):
         connection = FakeConnection()
@@ -135,6 +145,19 @@ class CollectorPersistenceTests(unittest.IsolatedAsyncioTestCase):
         stats = await collector.collect_once(["BTCUSDT"], max_messages_per_provider=1)
         self.assertEqual(stats.persisted, 1)
         self.assertEqual(collector.queue_size, 0)
+
+    async def test_queue_bridge_preserves_canonical_bytes_and_identity(self):
+        queue = FakeQueue()
+        publisher = AcquisitionQueuePublisher(queue)
+        item = envelope("mexc", "42")
+        entry = await publisher.publish(item)
+        self.assertEqual(entry, "1-0")
+        queued = queue.messages[0]
+        self.assertEqual(queued.message_id, item.event_id)
+        self.assertEqual(queued.idempotency_key, item.deduplication_key)
+        self.assertEqual(queued.payload["provider_id"], "mexc")
+        self.assertEqual(queued.payload["source_sequence"], "42")
+        self.assertTrue(queued.payload["canonical_b64"])
 
     async def test_migration_is_append_only_and_explicitly_staging(self):
         from pathlib import Path
