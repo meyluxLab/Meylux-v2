@@ -212,7 +212,6 @@ records:
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-001
     canonical_name: BR-P1-001 Control Audit — Repository Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-001.md
     traceability: BR-P1-001 / TO-P1-001 / PH-P1 / STEP-P1-001
     status: APPROVED / VERIFIED
@@ -235,7 +234,6 @@ records:
     traceability: TO-P1-002 / PH-P1 / STEP-P1-002
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-002
-    entity_type: AR
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
@@ -248,7 +246,6 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-003
     canonical_name: Build Report — Database Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-003.md
     traceability: TO-P1-003 / PH-P1 / STEP-P1-003
     status: VERIFIED
@@ -295,19 +292,17 @@ records:
     canonical_name: Task Order — Observability Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-007.md
-    traceability: PH-P1 / STEP-P1-007 / AR-P1-AUDIT-007
+    traceability: TO-P1-007 / PH-P1 / STEP-P1-007 / AR-P1-AUDIT-007
     status: VERIFIED / COMPLETE
 
   - stable_id: BR-P1-007
     canonical_name: Build Report — Observability Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-007.md
     traceability: TO-P1-007 / PH-P1 / STEP-P1-007
     status: VERIFIED
 
   - stable_id: AR-P1-AUDIT-007
     canonical_name: BR-P1-007 Control Audit — Observability Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-007.md
     traceability: BR-P1-007 / TO-P1-007 / PH-P1 / STEP-P1-007
     status: APPROVED / VERIFIED
@@ -321,14 +316,12 @@ records:
 
   - stable_id: BR-P1-008
     canonical_name: Build Report — Disaster Recovery / Restore Verification
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-008.md
     traceability: TO-P1-008 / PH-P1 / STEP-P1-008
     status: VERIFIED
 
   - stable_id: AR-P1-AUDIT-008
     canonical_name: BR-P1-008 Control Audit — Disaster Recovery / Restore Verification & Phase 1 Closure
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-008.md
     traceability: BR-P1-008 / TO-P1-008 / PH-P1 / STEP-P1-008
     status: APPROVED / VERIFIED
@@ -486,3 +479,19 @@ records:
     artifact_path: docs/task-orders/TO-P2-007.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-006 / AR-P2-AUDIT-006 / AR-P2-AUDIT-007 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
     status: VERIFIED / COMPLETE
+
+  - stable_id: DOC-P3-001
+    canonical_name: Phase 3 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE3_ROADMAP.md
+    traceability: PH-P3 / DOC-V2-ARCH-001 / G-3
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+
+  - stable_id: DOC-P4-001
+    canonical_name: Phase 4 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE4_ROADMAP.md
+    traceability: PH-P4 / DOC-V2-ARCH-001 / G-4
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
