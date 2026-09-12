@@ -1,0 +1,18 @@
+schema_version: '0.1'
+status: ACTIVE / VERIFIED
+purpose: Official Roadmap Reference registration for future phase planning and continuity.
+records:
+  - stable_id: DOC-P3-001
+    canonical_name: Phase 3 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE3_ROADMAP.md
+    traceability: PH-P3 / DOC-V2-ARCH-001 / G-3
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+  - stable_id: DOC-P4-001
+    canonical_name: Phase 4 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE4_ROADMAP.md
+    traceability: PH-P4 / DOC-V2-ARCH-001 / G-4
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
