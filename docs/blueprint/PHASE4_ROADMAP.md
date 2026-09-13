@@ -1,931 +1,363 @@
-بله. این بار بررسی را صرفاً برای «تأیید شش Step موجود» انجام ندادم؛ سعی کردم ببینم اگر هدف نهایی Meylux V2 این است که در پایان پروژه یک موتور Market Intelligence واقعاً قابل اعتماد، قابل بازپخش، قابل توضیح و قابل استفاده بسازیم، آیا شش Step فعلی دقیقاً بهترین مرزبندی هستند یا باید درون آنها اصلاحات مهمی انجام شود.
-اسناد را دوباره در چند سطح cross-check کردم: Master Architecture، نقشه جامع اختصاصی Phase 4، جزئیات artifact/contract/database/test، invariantهای V2، Vertical Slice، G-4، و حتی شواهد مربوط به Stepهای قبلی Phase 4. نتایج نشان می‌دهد شش Step اساساً درست هستند، اما برای اینکه roadmap واقعاً «نقشه راه نهایی و حداکثری» باشد، باید محتوای درونی آنها بسیار دقیق‌تر از نسخه CONTROL تعریف شود.
-یک نکته هم از همین ابتدا مهم است: بعضی اسناد File Library، Stepهای 1 تا 5 را در مقاطعی COMPLETE یا DONE گزارش کرده‌اند، در حالی که اسناد دیگری صراحتاً می‌گویند G-4 هنوز با evidence عملیاتی بسته نشده است. بنابراین من وضعیت فعلی اجرا را از roadmap جدا نگه می‌دارم و هیچ‌کدام از آن گزارش‌های تاریخی را به‌عنوان مجوز اجرای امروز تلقی نمی‌کنم. خود اسناد نیز برای Step 5 تأکید کرده‌اند که وضعیت live باید مجدداً بررسی شود. 
+# PHASE 4 ROADMAP — Deterministic Quantitative & Market Structure Engine
+
+**Document type:** Blueprint / Execution Roadmap (planning input for formal Phase Establishment)
+**Phase SID (proposed):** `PH-P4`
+**Predecessor:** `PH-P3` — Validation, Normalization & Data Quality
+**Successor:** `PH-P5` — Specialist Analytical Layer
+**Architectural basis:** `DOC-V2-ARCH-001` (RATIFIED / FROZEN), §14 (PHASE P4), `INV-V2-002`, `INV-V2-009`, §15 (Venue Intelligence Track / `CMP-V2-VENUE-001`)
+**Governance status:** این سند یک **Roadmap/Blueprint** است، نه یک `PH-P4.md` رسمی. هیچ Stable ID جدید، Task Order یا authorization اجرایی از طریق این سند صادر نمی‌شود. تبدیل این نقشه به Phase Definition رسمی و صدور Task Order باید از طریق فرآیند Governance موجود انجام شود.
 
 ---
 
-# نتیجه نهایی من
-من شش Step Phase 4 را حفظ می‌کنم، اما با یک اصلاح اساسی:
-شش Step فعلی تعداد و مرزبندی مناسبی دارند؛ مشکل در خود Stepها نیست، بلکه در این است که نسخه قبلی آنها بعضی مسئولیت‌های بسیار مهم را بیش از حد فشرده کرده بود.
-بنابراین پیشنهاد نهایی من:
-text
-PH-P4
-│
-├── STEP 1
-│   Quantitative Foundation,
-│   Contracts, Numeric Policy & Golden Vector Freeze
-│
-├── STEP 2
-│   Technical Indicators,
-│   Statistical & Volatility Engine
-│
-├── STEP 3
-│   Deterministic Market Structure Engine
-│
-├── STEP 4
-│   Volume Profile,
-│   Order Flow & Derivatives Engine
-│
-├── STEP 5
-│   Deterministic Market Regime Engine
-│   + Venue-Aware Quantitative Track
-│
-└── STEP 6
-    Quant Orchestration,
-    Multi-Timeframe Runtime,
-    Persistence, API,
-    Replay & G-4 Closure
+## 1. مأموریت واقعی Phase 4
 
-اما اجازه بدهید هرکدام را با دقت بسیار بیشتری باز کنیم.
+Phase 4 نباید صرفاً یک «Indicator Library» باشد. مأموریت واقعی آن:
 
----
+> تبدیل داده Canonical و Quality-Aware دریافتی از Phase 3 به مجموعه‌ای از **Facts** کمّی، آماری و ساختاری که deterministic، reproducible، provenance-aware باشند و توسط تمام لایه‌های بعدی Meylux قابل استفاده باشند.
 
-# PHASE 4 — مأموریت واقعی
-Phase 4 نباید صرفاً یک «Indicator Library» باشد.
-ماموریت واقعی آن این است:
-تبدیل Canonical, Quality-Aware Market Data به مجموعه‌ای از Facts کمی، آماری و ساختاری که deterministic، reproducible، provenance-aware و قابل استفاده توسط تمام لایه‌های بعدی Meylux باشند.
-این تعریف با معماری کاملاً منطبق است: ورودی Phase 4 داده Canonical Phase 3 است و خروجی آن indicator vectors، structural states، Volume Profile، Order Flow و Market Regime است. 
-در نتیجه:
-text
-P3 = Is this data trustworthy?
+```text
+P3 = این داده قابل اعتماد است؟
+P4 = از این داده قابل‌اعتماد چه واقعیت‌های deterministic استخراج می‌شود؟
+P5 = مجموعه این واقعیت‌ها چه چیزی دلالت دارد؟
+P6 = سیستم intelligence باید چه نتیجه‌ای بگیرد؟
+```
 
-P4 = What deterministic facts can be extracted
-     from this trustworthy data?
+این تفکیک یکی از مهم‌ترین نقاط موفقیت معماری V2 است و نباید در اجرا نقض شود.
 
-P5 = What does the collection of those facts imply?
+## 2. اصول غیرقابل‌مذاکره Phase 4
 
-P6 = What should the intelligence system conclude?
+این چهار اصل ستون فقرات تمام Stepهای Phase 4 هستند:
 
-این separation یکی از مهم‌ترین نقاط موفقیت Meylux است.
+| اصل | توضیح |
+|---|---|
+| **1. Determinism** (`INV-V2-002`) | همان ورودی باید همان خروجی را تولید کند؛ arithmetic/structure authoritative باید deterministic باشد |
+| **2. Purity** | هسته محاسباتی نباید به network، database، filesystem، wall clock یا mutable global state وابسته باشد |
+| **3. Zero NaN / Inf** | کمبود داده هرگز به `NaN`، `Inf` یا صفر مصنوعی تبدیل نمی‌شود؛ باید explicit باشد |
+| **4. Golden Vector Freeze** | هر تابع عمومی ریاضی باید reference input/output داشته باشد و تغییر عددی آن تحت change control باشد |
 
----
+## 3. Scope و Non-Scope
 
-# اصول غیرقابل مذاکره Phase 4
-چهار اصل موجود در نقشه جامع باید به‌عنوان ستون فقرات تمام شش Step حفظ شوند:
-1. Determinism
-همان input باید همان output را تولید کند.
-2. Purity
-هسته محاسباتی نباید به:
-• network
-• database
-• filesystem
-• wall clock
-• mutable global state
-وابسته باشد.
-3. Zero NaN / Inf
-کمبود داده نباید به:
-text
-NaN
-Inf
-0 مصنوعی
+### در Scope
+Technical Indicators، Statistical/Volatility Engine، Deterministic Market Structure، Volume Profile، Order Flow، Derivatives Analytics، Market Regime Classification، Quant Orchestration/Persistence/API/Replay.
 
-تبدیل شود.
-بلکه باید explicit باشد.
-4. Golden Vector Freeze
-هر تابع عمومی ریاضی باید reference input/output داشته باشد و تغییر عددی آن تحت change control قرار گیرد.
-این چهار اصل صریحاً در نقشه Phase 4 آمده‌اند. 
-و INV-V2-002 نیز deterministic baseline را الزام می‌کند. 
+### خارج از Scope (Hard Boundary)
+
+| خارج از P4 | متعلق به |
+|---|---|
+| AI reasoning، LLM calls، specialist interpretation | P5 / P6 |
+| Contradiction analysis، Scenario synthesis | P6 |
+| Opportunity Score، Analytical Confidence synthesis | P6 |
+| Final decision support، Trade signals as intelligence decisions | P6 و بعد از آن |
+| Order execution، Portfolio management | خارج از scope کل پلتفرم (Read-only) |
+| Venue Intelligence / Opportunity Engine کامل (فراتر از venue-aware evidence) | `CMP-V2-VENUE-001` — track مستقل cross-cutting، نه بخشی از P4 |
+
+Phase 4 فقط **Fact Generation** است — این دقیقاً همان separation است که معماری V2 برای جلوگیری از واگذاری mathematical truth به AI ایجاد کرده است.
+
+## 4. ساختار پیشنهادی Step — نمای کلی
+
+بررسی مجدد نشان می‌دهد شش Step اصلی از نظر مرزهای معماری کاملاً مناسب هستند و نیازی به تجزیه بیشتر (که governance را سنگین می‌کند) یا ادغام بیشتر (که مرزهای حیاتی Mathematics / Indicators / Structure / Advanced Market Evidence / Regime / Operational Integration را از بین می‌برد) نیست. آنچه باید تغییر کند **عمق specification** هر Step است، نه تعداد آن‌ها.
+
+| # | Step SID (proposed) | عنوان | محور اصلی |
+|---|---|---|---|
+| 1 | `STEP-P4-001` | Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze | قرارداد، precision، primitives، vectors، مدل پایه |
+| 2 | `STEP-P4-002` | Technical Indicators, Statistical & Volatility Engine | MA، momentum، volatility، volume، VWAP |
+| 3 | `STEP-P4-003` | Deterministic Market Structure Engine | Swings، BOS، CHOCH، MSS، FVG، OB، Breakers، Liquidity |
+| 4 | `STEP-P4-004` | Volume Profile, Order Flow & Derivatives Engine | POC/VAH/VAL، HVN/LVN، Delta/CVD، Imbalance، Absorption، Funding/OI/Basis |
+| 5 | `STEP-P4-005` | Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence | Regime، hysteresis، multi-factor state، venue-aware evidence |
+| 6 | `STEP-P4-006` | Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure | Worker، persistence، stream، API، replay، performance، regression، G-4 |
+
+**وابستگی خطی حاکمیتی:**
+```text
+STEP-P4-001 → STEP-P4-002 → STEP-P4-003 → STEP-P4-004 → STEP-P4-005 → STEP-P4-006 → G-4 → PH-P5
+```
+این ترتیب governance dependency است، نه اینکه هر فایل باید کاملاً sequential ساخته شود: آماده‌سازی fixture، مستندسازی، و برخی unit testها می‌توانند موازی توسعه یابند؛ اما هیچ Step نباید روی contract یا رفتار تأییدنشده Step قبلی بنا شود.
 
 ---
 
-## STEP 1
-Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
-این Step در نسخه قبلی با عنوان:
-Feature Contracts + DB Models + Golden Vectors
-بیان شده بود.
-من این عنوان را کمی دقیق‌تر می‌کنم، چون Numeric Policy آن‌قدر مهم است که نباید در متن Step گم شود.
+## 5. STEP-P4-001 — Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
+
+**هدف:** ساخت «زمین بازی ریاضی» Phase 4. پیش از ساخت هر indicator، باید مشخص باشد: ورودی معتبر چیست، خروجی معتبر چیست، precision چگونه مدیریت می‌شود، insufficient history چگونه نمایش داده می‌شود، rounding چگونه انجام می‌شود، golden vector دقیقاً چه چیزی را freeze می‌کند، feature چگونه provenance خود را حفظ می‌کند، و خروجی چگونه version می‌شود.
+
+### 5.1 Quantitative Contracts
+حداقل contract domainها: **Indicator، Market Structure، Volume Profile، Order Flow، Regime**. Contract باید فقط type definition نباشد؛ باید semantics هر فیلد را نیز تثبیت کند: `value`، `status`، `reason`، `source_ref`، `timestamp`، `timeframe`، `symbol`، `venue/context`، `version`. هر فیلد فقط در صورت پشتیبانی قرارداد حاکم باید اضافه شود؛ در این مرحله SID جدید اختراع نمی‌شود.
+
+### 5.2 Numeric Policy
+یکی از مهم‌ترین نقاط کل Phase 4. سیاست پایه پیشنهادی: **Hybrid internals + Decimal boundary**، با Golden Vector به‌عنوان referee مقدار quantized. باید در formalization تعیین و ثبت شوند:
+- نمایش عددی داخلی
+- نمایش در مرز (boundary representation)
+- precision
+- rounding
+- quantization
+- comparison tolerance در جایی که مجاز است
+- serialization
+
+این بخش نباید implementation preference پنهان باشد.
+
+### 5.3 Mathematical Primitives
+پیش از indicatorها باید primitiveهای مشترک قابل اعتماد باشند: rolling calculations، averages، weighted calculations، smoothing، standard deviation، percentile/ranking، accumulation، normalization. این کار مانع از پیاده‌سازی متفاوت منطق پایه در هر indicator می‌شود.
+
+### 5.4 Insufficient History
+باید در foundation حل شود، نه در هر indicator جداگانه:
+```text
+NOT ENOUGH HISTORY → explicit status + reason + no numeric fabrication
+```
+سیاست پایه: `None + reason`، بدون fabrication عددی.
+
+### 5.5 Golden Vector System
+```text
+Input fixture → Function → Expected output → Exact comparison → Regression protection
+```
+باید برای توابع ریاضی عمومی قابل توسعه باشد؛ حداقل مجموعه اولیه vector و runner برای این Step باید مشخص شود.
+
+### 5.6 Golden Vector Freeze (Governance Boundary)
+```text
+تغییر ریاضی → ACR/change control → محاسبه reference جدید → بازبینی golden vector → تأیید
+```
+نه اینکه Producer صرفاً مقدار expected را برای سبز کردن تست تغییر دهد.
+
+### 5.7 Database Model Foundation
+مدل‌های persistence در این Step تعریف می‌شوند (بدون ورود به orchestration runtime، که در Step 6 است):
+
+| DB SID | نام |
+|---|---|
+| `DB-P4-001` | `calculated_indicator_vectors` |
+| `DB-P4-002` | `market_structure_events` |
+| `DB-P4-003` | `market_structure_zones` |
+| `DB-P4-004` | `volume_profile_sessions` |
+| `DB-P4-005` | `market_regime_states` |
+
+این آبجکت‌ها در معماری به‌عنوان authoritative outputs تعریف شده‌اند.
+
+### 5.8 خروجی نهایی Step 1
+Quantitative contracts + Numeric policy + Mathematical foundation + Golden vector infrastructure + Persistence model foundation + Deterministic output semantics. **در این مرحله هنوز pipeline کامل تولید indicator وجود ندارد.**
 
 ---
 
-# هدف Step 1
-ساخت «زمین بازی ریاضی» Phase 4.
-قبل از اینکه حتی یک indicator پیچیده ساخته شود، باید مشخص باشد:
-• ورودی معتبر چیست؟
-• خروجی معتبر چیست؟
-• precision چگونه مدیریت می‌شود؟
-• insufficient history چگونه نمایش داده می‌شود؟
-• rounding چگونه انجام می‌شود؟
-• golden vector دقیقاً چه چیزی را freeze می‌کند؟
-• feature چگونه provenance خود را حفظ می‌کند؟
-• خروجی چگونه version می‌شود؟
+## 6. STEP-P4-002 — Technical Indicators, Statistical & Volatility Engine
+
+**هدف:** تکمیل تمام quantitative features مبتنی بر price/time/volume.
+
+| دسته | موارد |
+|---|---|
+| **Moving Averages** | EMA 9, EMA 21, EMA 50, EMA 200, SMA, WMA, HMA |
+| **Momentum** | RSI 14, MACD 12/26/9 |
+| **Trend / Volatility** | ATR 14, ADX 14, Bollinger Bands 20/2, Supertrend |
+| **Volatility / Statistical** | Historical Volatility، محاسبات realized/related volatility، ATR percentile، ورودی‌های expansion/compression |
+| **Volume / Activity** | Volume SMA, RVOL, volume spike, volume climax |
+| **VWAP** | VWAP, Anchored VWAP (anchor باید ورودی صریح باشد؛ وابسته به clock پنهان سیستم نیست) |
+
+### الزامات رفتاری برای هر Indicator
+هر indicator باید موارد زیر را به‌صراحت تعریف کند:
+
+- Warm-up behavior
+- Missing input behavior
+- Zero-volume behavior
+- Invalid input behavior
+- Length alignment
+- Lookahead = صفر
+- Reproducibility قطعی
+- Golden vector موجود
+
+### خروجی Step 2
+```text
+Canonical candles → Technical / Statistical Engine → IndicatorVector
+```
+هنوز وارد Market Structure یا AI interpretation نشده است.
 
 ---
 
-### 1. Quantitative Contracts
-حداقل contract domains موجود در معماری:
-• Indicator
-• Market Structure
-• Volume Profile
-• Order Flow
-• Regime
-هستند. نقشه جامع نیز همین contractها را در Step 1 قرار داده است. 
-Contract باید فقط type definition نباشد؛ باید semantics را نیز تثبیت کند.
-مثلاً:
-text
-value
-status
-reason
-source_ref
-timestamp
-timeframe
-symbol
-venue/context
-version
+## 7. STEP-P4-003 — Deterministic Market Structure Engine
 
-البته هر فیلد فقط در صورت پشتیبانی توسط قرارداد حاکم باید اضافه شود؛ اینجا نباید SID جدید اختراع کنیم.
+**هدف:** حساس‌ترین Step محاسباتی Phase 4. برخلاف indicators که عمدتاً formula-driven هستند، market structure ابهام معنایی بیشتری دارد و به state-machine discipline جدی نیاز دارد.
 
----
+### 7.1 Swing Detection
+`HH / HL / LH / LL` با تشخیص fractal ۵/۵. **قاعده حیاتی:** تشخیص swing نباید باعث lookahead پنهان شود. اگر الگوریتم برای تأیید یک swing به کندل‌های آینده نیاز دارد، semantics آن باید صریحاً تعریف شود؛ یک swing تاریخی نباید طوری نمایش داده شود که گویی در همان لحظه قابل مشاهده بوده است. این مستقیماً به `INV-V2-009` (ZERO LOOKAHEAD) مرتبط است.
 
-### 2. Numeric Policy
-این یکی از مهم‌ترین نقاط کل Phase 4 است.
-اسناد Phase 4 صراحتاً یک Open Decision برای numeric policy دارند:
-Hybrid internals + Decimal boundary
-و Golden Vector باید مقدار quantized را referee قرار دهد. 
-پس در formalization باید این موارد تعیین و ثبت شوند:
-• internal numeric representation
-• boundary representation
-• precision
-• rounding
-• quantization
-• comparison tolerance در جایی که مجاز است
-• serialization
-این بخش نباید implementation preference مخفی باشد.
+### 7.2 Structure State
+```text
+HH / HL / LH / LL → تفسیر Trend / Range (باید deterministic باشد)
+```
 
----
+### 7.3 BOS (Break of Structure)
+باید دقیقاً مشخص شود: کدام level شکسته شده، close یا wick، چه timestampی رویداد محسوب می‌شود، جلوگیری از duplicate event، و نحوه invalidation.
 
-### 3. Mathematical Primitives
-قبل از indicatorها باید primitiveهای مشترک قابل اعتماد باشند:
-• rolling calculations
-• averages
-• weighted calculations
-• smoothing
-• standard deviation
-• percentile/ranking
-• accumulation
-• normalization
-این کار باعث می‌شود هر indicator مجدداً منطق پایه را به شکل متفاوت پیاده نکند.
+### 7.4 CHOCH
+همان discipline رفتاری BOS.
 
----
+### 7.5 MSS (Market Structure Shift)
+باید با state machine مشخص تعریف شود.
 
-### 4. Insufficient History
-این موضوع باید در foundation حل شود، نه اینکه هر indicator جداگانه تصمیم بگیرد.
-مثلاً:
-text
-NOT ENOUGH HISTORY
-        ↓
-explicit status
-        +
-reason
-        +
-no numeric fabrication
+### 7.6 Total State Machine
+هر bar باید یک state مشخص داشته باشد؛ ابهام نباید با حدس حل شود. در صورت ابهام:
+```text
+state = UNCONFIRMED
+```
+این یکی از تصمیمات کلیدی است که باید حفظ شود.
 
-نقشه Phase 4 صراحتاً None + reason را برای insufficient history مقرر کرده است. 
+### 7.7 Fair Value Gap
+Lifecycle: `ACTIVE → PARTIALLY_MITIGATED → FULLY_MITIGATED`، با transitionهای deterministic.
 
----
+### 7.8 Order Blocks
+Detection، lifecycle، invalidation، breaker transition.
 
-### 5. Golden Vector System
-Golden Vector فقط چند تست عددی نیست.
-باید تبدیل شود به:
-text
-Input fixture
-      ↓
-Function
-      ↓
-Expected output
-      ↓
-Exact comparison
-      ↓
-Regression protection
+### 7.9 Breakers
+باید نتیجه deterministic transition از structure/zone state باشد، نه interpretation AI.
 
-و برای public mathematical functions قابل توسعه باشد.
-در سند موجود، حتی 8 vector اولیه و runner برای Step 1 مشخص شده‌اند. 
+### 7.10 Liquidity Pools
+باید به‌عنوان structural facts ثبت شوند، نه opportunity signals.
 
----
-
-### 6. Golden Vector Freeze
-این باید یکی از مهم‌ترین governance boundaries کل P4 باشد:
-text
-Math changed
-     ↓
-ACR/change control
-     ↓
-new reference calculation
-     ↓
-golden vector review
-     ↓
-approval
-
-نه اینکه Producer صرفاً expected value را برای سبز کردن تست تغییر دهد.
-
----
-
-### 7. Database Model Foundation
-Step 1 باید مدل‌های persistence را نیز تعریف کند، ولی نباید orchestration runtime را هنوز وارد کند.
-Architecture پنج DB object اصلی دارد:
-text
-DB-P4-001 calculated_indicator_vectors
-DB-P4-002 market_structure_events
-DB-P4-003 market_structure_zones
-DB-P4-004 volume_profile_sessions
-DB-P4-005 market_regime_states
-
-این objects در معماری به‌عنوان authoritative outputs تعریف شده‌اند. 
-
----
-
-# خروجی واقعی Step 1
-در پایان Step 1 باید داشته باشیم:
-text
-Quantitative contracts
-+
-Numeric policy
-+
-Mathematical foundation
-+
-Golden vector infrastructure
-+
-Persistence model foundation
-+
-Deterministic output semantics
-
-اما هنوز:
-Indicator production pipeline کامل نداریم.
-
----
-
-## STEP 2
-Technical Indicators, Statistical & Volatility Engine
-این Step باید تمام quantitative features مبتنی بر price/time/volume را تکمیل کند.
-نسخه قبلی آن را فقط «Technical Indicators» نامیده بود. من Statistical & Volatility را عمداً به نام آن اضافه می‌کنم، چون در اسناد Phase 4 این بخش‌ها واقعاً جزو همین engine هستند.
-
----
-
-### A. Moving Averages
-طبق معماری:
-• EMA 9
-• EMA 21
-• EMA 50
-• EMA 200
-• SMA
-• WMA
-• HMA
-این موارد در architecture صریحاً آمده‌اند. 
-
----
-
-### B. Momentum
-• RSI 14
-• MACD 12/26/9
-
----
-
-### C. Trend / Volatility
-• ATR 14
-• ADX 14
-• Bollinger Bands 20/2
-• Supertrend
-
----
-
-### D. Volatility / Statistical Features
-از roadmap تفصیلی:
-• Historical Volatility
-• Realized/related volatility calculations
-• ATR percentile
-• volatility expansion/compression inputs
-
----
-
-### E. Volume / Activity
-• Volume SMA
-• RVOL
-• volume spike
-• volume climax
-اینها در Step 2 roadmap تفصیلی صراحتاً آمده‌اند. 
-
----
-
-### F. VWAP
-• VWAP
-• Anchored VWAP
-Anchored VWAP باید anchor را explicit input بگیرد؛ نباید وابسته به clock پنهان سیستم باشد.
-
----
-
-### G. مهم‌تر از خود Indicatorها: رفتار آنها
-برای هر indicator باید:
-Warm-up behavior
-مشخص باشد.
-Missing input behavior
-مشخص باشد.
-Zero-volume behavior
-مشخص باشد.
-Invalid input behavior
-مشخص باشد.
-Length alignment
-مشخص باشد.
-Lookahead
-صفر باشد.
-Reproducibility
-قطعی باشد.
-Golden vector
-وجود داشته باشد.
-
----
-
-# خروجی Step 2
-یک library کامل از quantitative price/volume/volatility facts:
-text
-Canonical candles
-      ↓
-Technical / Statistical Engine
-      ↓
-IndicatorVector
-
-که هنوز وارد Market Structure یا AI interpretation نشده است.
-
----
-
-## STEP 3
-Deterministic Market Structure Engine
-این Step از نظر من حساس‌ترین Step محاسباتی Phase 4 است.
-چون indicators معمولاً formula-driven هستند، اما market structure دارای semantic ambiguity بیشتری است.
-
----
-
-### 1. Swing Detection
-معماری برای swingها نیازمند:
-text
-HH
-HL
-LH
-LL
-
-است.
-Roadmap فعلی نیز 5/5 fractal swing detection را مشخص کرده است. 
-اما نکته مهم:
-تشخیص swing نباید باعث lookahead پنهان شود.
-اگر الگوریتم برای تأیید یک swing به candleهای آینده نیاز دارد، باید semantics آن explicitly تعریف شود.
-نباید یک swing تاریخی را طوری نمایش دهیم که گویی در همان لحظه قابل مشاهده بوده است.
-این مسئله مستقیماً با INV-V2-009 ZERO LOOKAHEAD مرتبط است. 
-
----
-
-### 2. Structure State
-سپس:
-text
-HH / HL / LH / LL
-        ↓
-Trend / Range interpretation
-
-اما این interpretation هنوز باید deterministic باشد.
-
----
-
-### 3. BOS
-Break of Structure.
-باید دقیقاً مشخص باشد:
-• چه levelی شکسته شده؟
-• close یا wick؟
-• چه timestampی event محسوب می‌شود؟
-• duplicate event چگونه جلوگیری می‌شود؟
-• invalidation چگونه رخ می‌دهد؟
-
----
-
-### 4. CHOCH
-همان discipline.
-
----
-
-### 5. MSS
-Market Structure Shift نیز باید با state machine مشخص شود.
-
----
-
-### 6. Total State Machine
-یکی از بهترین تصمیم‌های موجود در roadmap:
-هر bar باید یک state مشخص داشته باشد و ambiguity نباید با حدس حل شود.
-در صورت ambiguity:
-text
-UNCONFIRMED
-
-این موضوع در roadmap اختصاصی Phase 4 صریحاً آمده است. 
-این را من حتماً حفظ می‌کنم.
-
----
-
-### 7. Fair Value Gap
-FVG باید lifecycle داشته باشد:
-text
-ACTIVE
-   ↓
-PARTIALLY_MITIGATED
-   ↓
-FULLY_MITIGATED
-
-و transitionها deterministic باشند.
-
----
-
-### 8. Order Blocks
-• detection
-• lifecycle
-• invalidation
-• breaker transition
-
----
-
-### 9. Breakers
-Breaker باید نتیجه deterministic transition از structure/zone state باشد، نه یک interpretation AI.
-
----
-
-### 10. Liquidity Pools
-Liquidity zones/pools نیز باید به‌عنوان structural facts ثبت شوند، نه opportunity signals.
-
----
-
-# آزمون بسیار مهم Step 3
-دو سناریوی pinned در roadmap موجود است:
-text
+### 7.11 آزمون الزامی Step 3
+دو سناریوی pinned:
+```text
 60-candle trend-with-BOS
 60-candle reversal-with-CHOCH
-
-و باید event-by-event بازتولید شوند. 
-من پیشنهاد می‌کنم این نوع scenario test برای تمام stateful structure logic به یک اصل عمومی تبدیل شود:
-text
-input scenario
-→ every event
-→ every state transition
-→ exact expected result
-
-این برای جلوگیری از «درست بودن خروجی نهایی ولی غلط بودن مسیر» بسیار ارزشمند است.
+```
+که باید event-by-event بازتولید شوند. این نوع scenario test باید به یک اصل عمومی برای تمام stateful structure logic تبدیل شود:
+```text
+input scenario → every event → every state transition → exact expected result
+```
+این برای جلوگیری از «خروجی نهایی درست، اما مسیر غلط» حیاتی است.
 
 ---
 
-## STEP 4
-Volume Profile, Order Flow & Derivatives Engine
-این Step در roadmap فعلی کاملاً درست است و من آن را حفظ می‌کنم؛ ولی باید سه engine واقعاً مستقل داشته باشد.
-text
-## STEP 4
-│
+## 8. STEP-P4-004 — Volume Profile, Order Flow & Derivatives Engine
+
+**هدف:** سه engine مستقل ولی یک Step governed.
+
+```text
+STEP-P4-004
 ├── Volume Profile
 ├── Order Flow
 └── Derivatives
+```
 
+### 8.A Volume Profile
+معماری تأکید می‌کند Phase 4 مالک انحصاری ریاضیات Volume Profile است؛ این محاسبات نباید بعداً در P5/P6 تکرار شوند.
 
----
+محاسبات: POC، VAH، VAL، HVN، LVN، session profile، composite profile (در صورت وجود در contract).
 
-### A. Volume Profile
-Architecture تأکید می‌کند:
-Phase 4 sole owner of Volume Profile mathematics.
-بنابراین نباید همان math بعداً در P5 یا P6 دوباره محاسبه شود. 
-محاسبات:
-• POC
-• VAH
-• VAL
-• HVN
-• LVN
-و:
-• session profile
-• composite profile
-در صورت وجود در contract.
+**Value Area:** باید **۷۰٪** value area دقیقاً freeze شود؛ الگوریتم انتخاب bins، expansion و tie-breaking باید deterministic باشد. الزام تست: golden test برای یک session با ۲۰۰ trade با POC/VAH/VAL دقیق.
 
----
+### 8.B Order Flow
+حداقل: Bar Delta، CVD، Imbalance، Absorption.
 
-Value Area
-یکی از نقاطی که باید بسیار دقیق freeze شود:
-text
-70% value area
+- **CVD** باید deterministic، monotonicity-aware و replay-safe باشد؛ نیازمند pinned trade set و property test.
+- **Imbalance:** threshold باید configuration-driven و governed باشد، نه انتخاب سلیقه‌ای Producer.
+- **Absorption:** باید دقیقاً مشخص شود «absorption» یعنی چه و چه داده‌ای لازم است. اگر داده سطح trade کافی نیست: `UNAVAILABLE / LIMITED_DATA`، نه fabrication.
 
-و algorithm انتخاب bins / expansion / tie-breaking باید deterministic باشد.
-Roadmap صراحتاً golden test برای یک session با 200 trade و exact POC/VAH/VAL دارد. 
-این بسیار خوب است و باید حفظ شود.
+### 8.C Derivatives
+funding، funding velocity/acceleration، Open Interest، OI delta، Basis؛ رابطه mark/index. **قاعده حیاتی:** Phase 4 نباید داده derivatives را در نبود ورودی canonical آن، invent یا reconstruct کند.
+
+### خروجی Step 4
+سه خانواده مستقل evidence: Volume Evidence، Order Flow Evidence، Derivatives Evidence — که بعداً در P5 با سایر evidenceها ترکیب می‌شوند.
 
 ---
 
-### B. Order Flow
-حداقل:
-• Bar Delta
-• CVD
-• Imbalance
-• Absorption
-Architecture این موارد را صریحاً تعریف کرده است. 
+## 9. STEP-P4-005 — Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
+
+### 9.A بخش Market Regime
+باید deterministic باشد. هشت state:
+```text
+TRENDING · RANGING · EXPANSION · COMPRESSION
+HIGH_VOL · LOW_VOL · TRANSITION · ABNORMAL
+```
+عوامل ورودی: `EMA 50/200`، `ATR percentile`، `BB width`، `structure bias`.
+
+**Hysteresis (الزامی):** بدون hysteresis، دنباله `A B A B A` با کوچک‌ترین نوسان رخ می‌دهد. باید:
+```text
+candidate state → confirmation → official state
+```
+به‌صورت deterministic اعمال شود؛ حالت transient candidate باید قابل اثبات باشد (پوشش golden vector برای hysteresis گذرا).
+
+**Regime ≠ Forecast:** Regime Engine نمی‌گوید «بازار بالا خواهد رفت»؛ می‌گوید «بر اساس قوانین مصوب، وضعیت فعلی بازار در این state قرار دارد». این تفکیک برای P5 و P6 حیاتی است.
+
+### 9.B بخش Cross-Venue — تفکیک حیاتی از ACR-0008
+باید بین دو مفهوم فرق گذاشت:
+
+| مفهوم | جایگاه |
+|---|---|
+| **Venue-Aware Quantitative Evidence** | بخشی از `STEP-P4-005`؛ صرفاً evidence comparison بین venue |
+| **Venue Intelligence / Opportunity Engine** | موضوع `CMP-V2-VENUE-001` (ACR-0008)؛ **track مستقل، cross-cutting به‌عنوان rider روی P2/P3/P4/P5/P6/P9** — نه بخشی از PH-P4 |
+
+```text
+STEP-P4-005 = venue-aware quantitative evidence
+             NOT
+             full arbitrage / opportunity engine
+```
+این تفکیک مانع scope creep می‌شود. طبق معماری (§15)، Venue Intelligence Track دارای state model مستقل (`S0 OBSERVED_SPREAD` تا `S8 NO_OPPORTUNITY`) است و نباید در P4 ادغام شود.
 
 ---
 
-### CVD
-CVD باید:
-• deterministic
-• monotonicity-aware
-• replay-safe
-باشد.
-برای آن pinned trade set وجود دارد و property test نیز باید حفظ شود. 
+## 10. STEP-P4-006 — Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
 
----
+این Step صرفاً `Persistence + Worker + API` نیست؛ محل **اثبات operational integrity** کل Phase 4 است.
 
-### Imbalance
-Threshold باید configuration-driven و governed باشد.
-نباید Producer هنگام implementation آن را به‌صورت سلیقه‌ای انتخاب کند.
-
----
-
-### Absorption
-باید دقیقاً مشخص شود:
-text
-What constitutes absorption?
-
-و چه داده‌ای برای آن لازم است.
-اگر trade-level data کافی نباشد:
-text
-UNAVAILABLE / LIMITED_DATA
-
-نه fabrication.
-
----
-
-### D. Derivatives
-محاسبات شامل:
-• funding
-• funding velocity/acceleration
-• Open Interest
-• OI delta
-• basis
-• mark/index relationship
-است. معماری نیز funding velocity، OI delta و basis divergence را صریحاً آورده است. 
-نکته بسیار مهم:
-Phase 4 نباید خودش داده derivatives را invent یا reconstruct کند اگر input canonical آن موجود نیست.
-
----
-
-# Step 4 خروجی
-سه خانواده مستقل از evidence:
-text
-Volume Evidence
-Order Flow Evidence
-Derivatives Evidence
-
-که بعداً P5 آنها را با سایر evidenceها ترکیب خواهد کرد.
-
----
-
-## STEP 5
-Deterministic Market Regime Engine + Venue-Aware Quantitative Track
-اینجا یک اصلاح مهم نسبت به پیشنهاد قبلی CONTROL لازم است.
-در roadmap رسمی، Step 5 با:
-Market Regime Classifier & Cross-Venue Quantitative Engine
-تعریف شده است. 
-اما ACR-0008 هم‌زمان یک Venue Intelligence Track مستقل تعریف کرده که قرار است از P4 جدا بماند. سند ACR صریحاً می‌گوید این track در P4 ادغام نشود. 
-بنابراین باید این دو را تفکیک مفهومی کنیم.
-
----
-
-# بخش A — Market Regime
-Regime engine باید deterministic باشد.
-Roadmap فعلی 8 state را تعریف کرده:
-text
-TRENDING
-RANGING
-EXPANSION
-COMPRESSION
-HIGH_VOL
-LOW_VOL
-TRANSITION
-ABNORMAL
-
-و عوامل:
-text
-EMA 50/200
-ATR percentile
-BB width
-structure bias
-
-را ذکر کرده است. 
-
----
-
-Hysteresis
-این بخش برای من mandatory است.
-بدون hysteresis:
-text
-A
-B
-A
-B
-A
-
-با کوچک‌ترین تغییر رخ می‌دهد.
-بنابراین:
-text
-candidate state
-       ↓
-confirmation
-       ↓
-official state
-
-باید deterministic باشد.
-و transient candidate باید قابل اثبات باشد؛ حتی در Build Report مربوط به Step 5، برای این مسئله vectorهای اضافی برای transient hysteresis ثبت شده‌اند. 
-
----
-
-Regime نباید Forecast باشد
-این بسیار مهم است.
-Regime Engine نمی‌گوید:
-بازار بالا خواهد رفت.
-بلکه می‌گوید:
-بر اساس قوانین مصوب، وضعیت فعلی بازار در این state قرار دارد.
-این separation برای P5 و P6 حیاتی است.
-
----
-
-# بخش B — Cross-Venue
-اینجا باید بین دو مفهوم فرق بگذاریم:
-Cross-Venue Quantitative Evidence
-که می‌تواند در P4 برای evidence comparison وجود داشته باشد.
-اما:
-Venue Intelligence / Opportunity Engine
-موضوع ACR-0008 است و به‌عنوان track مستقل تعریف شده است.
-بنابراین:
-text
-P4 Step 5
-=
-venue-aware quantitative evidence
-
-NOT
-
-full arbitrage/opportunity engine
-
-این distinction جلوی scope creep را می‌گیرد.
-ACR-0008 نیز صراحتاً Venue Track را parallel و خارج از PH-P4 تعریف کرده است. 
-
----
-
-## STEP 6
-Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4
-به نظر من این Step مهم‌ترین جایی است که نسخه CONTROL قبلی کمی بیش از حد فشرده بود.
-چون Step 6 صرفاً:
-Persistence + Worker + API
-نیست.
-بلکه اثبات operational integrity کل Phase 4 است.
-
----
-
-# بخش A — Quant Engine Facade
-تمام engineهای Step 2 تا 5 باید از یک execution boundary قابل کنترل استفاده کنند.
-مثلاً:
-text
-Canonical Input
-      ↓
-Quant Engine Facade
-      ↓
-Technical
-Structure
-VP
-Order Flow
-Derivatives
-Regime
-      ↓
-Quantitative Evidence
-
+### 10.A Quant Engine Facade
+تمام engineهای Stepهای ۲ تا ۵ باید از یک execution boundary قابل کنترل استفاده کنند:
+```text
+Canonical Input → Quant Engine Facade → (Technical, Structure, VP, Order Flow, Derivatives, Regime) → Quantitative Evidence
+```
 این facade نباید خودش منطق جدید ریاضی ایجاد کند.
 
----
+### 10.B Candle-Close Trigger
+فقط رکوردهای `is_closed = True` وارد محاسبات authoritative می‌شوند. این باید هم unit test، هم integration test، هم runtime test داشته باشد.
 
-# بخش B — Candle-Close Trigger
-یکی از الزامات بسیار مهم:
-فقط is_closed=True وارد محاسبات authoritative شود.
-این در roadmap اختصاصی Phase 4 صریحاً آمده است. 
-این موضوع باید هم:
-• unit test
-• integration test
-• runtime test
-داشته باشد.
+### 10.C Multi-Timeframe
+Engine capability: `1M / 5M / 15M / 1H / 4H / 1D`. **Controlled Vertical Slice** پذیرشی: `BTCUSDT — 15M primary + 1H + 4H`. این دو (قابلیت engine در برابر slice پذیرش) نباید با هم اشتباه شوند.
 
----
+### 10.D Persistence
+پنج object authoritative Step 1 باید operationally وصل شوند و provenance، identity، idempotency، timestamp، symbol/timeframe context، و source linkage را حفظ کنند.
 
-# بخش C — Multi-Timeframe
-Architecture و roadmap:
-text
-1M
-5M
-15M
-1H
-4H
-1D
+### 10.E Append-Only Boundary
+برای canonical/quantitative truth authoritative: `UPDATE/DELETE` برای application role مجاز نیست (revoke شده).
 
-را برای worker و quantitative calculations مشخص کرده‌اند. 
-اما Controlled Vertical Slice در معماری نهایی:
-text
-15M primary
-1H
-4H HTF
+### 10.F Redis Boundary
+```text
+PostgreSQL / TimescaleDB = authoritative persistence
+Redis                    = queue / stream / coordination / cache
+```
+Redis هرگز نباید durable truth شود؛ این تفکیک باید در verification این Step آزمایش شود.
 
-است. 
-پس باید این دو را قاطی نکنیم:
-• engine capability: چند timeframe
-• acceptance slice: BTCUSDT 15M + 1H + 4H
+### 10.G Worker
+```text
+canonical closed candle event → quant computation → persistence → feature event
+```
+Queue/stream مرتبط: `stream:canonical:market_events`، `arq:queue:quant_heavy`، `stream:features:computed`. Worker باید مصرف‌کننده رویداد candle-close باشد.
 
----
+### 10.H API
+باید read-only، DB-backed، provenance-aware و صرفاً quantitative باشد. حداقل خانواده endpoint: `quant features`، `quant structure`.
 
-# بخش D — Persistence
-پنج authoritative object باید operationally وصل شوند:
-text
-calculated_indicator_vectors
-market_structure_events
-market_structure_zones
-volume_profile_sessions
-market_regime_states
-
-معماری اینها را authoritative می‌داند. 
-و باید:
-• provenance
-• identity
-• idempotency
-• timestamp
-• symbol/timeframe context
-• source linkage
-را حفظ کنند.
-
----
-
-# بخش E — Append-Only Boundary
-یکی از architecture invariants مهم:
-text
-UPDATE/DELETE
-     ↓
-not permitted for authoritative canonical/quantitative truth
-
-در معماری برای canonical data و Phase 4 persistence، append-oriented behavior و revoke UPDATE/DELETE برای application role ذکر شده است. 
-
----
-
-# بخش F — Redis
-Redis نباید تبدیل به durable truth شود.
-معماری:
-text
-PostgreSQL / TimescaleDB
-      = authoritative persistence
-
-Redis
-      = queue / stream / coordination / cache
-
-این distinction باید در Step 6 verification نیز آزمایش شود.
-
----
-
-# بخش G — Worker
-Worker باید:
-text
-canonical closed candle event
-        ↓
-quant computation
-        ↓
-persistence
-        ↓
-feature event
-
-را انجام دهد.
-در roadmap queue و stream نیز مشخص شده‌اند:
-text
-stream:canonical:market_events
-arq:queue:quant_heavy
-stream:features:computed
-
-و worker باید candle-close event را مصرف کند. 
-
----
-
-# بخش H — API
-API باید:
-• read-only
-• DB-backed
-• provenance-aware
-• quantitative-only
-باشد.
-حداقل خانواده endpointهای موجود در roadmap:
-text
-quant features
-quant structure
-
-است. 
-
----
-
-# بخش I — Replay
-من Replay را از Step 6 حذف نمی‌کنم.
-چرا؟
-چون purity Phase 4 عملاً برای Replay آینده P9 ساخته می‌شود.
-باید بتوانیم:
-text
-Historical Input
-      ↓
-P4
-      ↓
-Output A
-
-same Historical Input
-      ↓
-P4
-      ↓
-Output B
-
-و:
-text
+### 10.I Replay
+Purity Phase 4 عملاً برای Replay آینده (P9) ساخته می‌شود:
+```text
+Historical Input → P4 → Output A
+same Historical Input → P4 → Output B
 A == B
+```
+بدون وابستگی به wall clock، network، database state، mutable global state یا nondeterministic ordering.
 
-داشته باشیم.
-بدون:
-• wall clock
-• network
-• database state
-• mutable global state
-• nondeterministic ordering
+### 10.J Zero Lookahead Harness
+Replay باید ثابت کند که زمان `T` به `T+1, T+2, ...` دسترسی ندارد — برای indicators، swing detection، BOS، CHOCH، MSS، FVG و regime حیاتی است. `INV-V2-009` صراحتاً historical evaluation از future information را منع می‌کند.
 
----
+### 10.K Performance
+Targetهای پیشنهادی (باید با evidence اندازه‌گیری شوند، نه ادعا):
+```text
+< 5ms  / indicator / 1000 bars
+< 50ms / full multi-timeframe vector
+```
+```text
+TARGET ≠ GUARANTEE   (تا زمانی که evidence واقعی تولید نشده)
+```
 
-# بخش J — Zero Lookahead Harness
-Replay باید مشخصاً ثابت کند که:
-text
-T
+### 10.L Failure Testing
+حداقل سناریوهای الزامی: short history، zero volume، unsorted input، missing data، invalid values، duplicate input، boundary values، large values، tiny values. استراتژی تست: `unit + golden + property + replay + failure + regression`.
 
-به:
-text
-T+1
-T+2
-...
+### 10.M Security Boundary
+Quant computation باید: zero network egress، zero subprocess، no dynamic imports، no secrets — با پوشش trade-probe روی `meylux/quant/**`. این الزام برای پلتفرمی که باید strictly read-only باشد بسیار حیاتی است.
 
-دسترسی ندارد.
-این موضوع برای:
-• indicators
-• swing detection
-• BOS
-• CHOCH
-• MSS
-• FVG
-• regime
-حیاتی است.
-INV-V2-009 صراحتاً historical evaluation را از future information منع می‌کند. 
-
----
-
-# بخش K — Performance
-Performance باید measured باشد، نه ادعا.
-Roadmap فعلی:
-text
-<5ms / indicator / 1000 bars
-
-<50ms / full multi-timeframe vector
-
-را به‌عنوان target تعریف کرده است. 
-و این distinction بسیار مهم است:
-text
-TARGET
-≠
-GUARANTEE
-
-تا وقتی evidence واقعی تولید نشده است.
-
----
-
-# بخش L — Failure Testing
-Phase 4 باید فقط happy path نداشته باشد.
-حداقل:
-text
-short history
-zero volume
-unsorted input
-missing data
-invalid values
-duplicate input
-boundary values
-large values
-tiny values
-
-باید آزمایش شوند.
-Test architecture موجود نیز unit + golden + property + replay + failure + regression را مقرر کرده است. 
-
----
-
-# بخش M — Security Boundary
-نکته جالبی که در نقشه جامع آمده و به نظرم باید حتماً حفظ شود:
-Quant computation باید:
-• zero network egress
-• zero subprocess
-• no dynamic imports
-• no secrets
-داشته باشد و trade-probe coverage روی meylux/quant/** اعمال شود. 
-این برای پروژه‌ای که باید strictly read-only باشد بسیار ارزشمند است.
-
----
-
-# بخش N — G-4
-G-4 نباید فقط:
-unit tests green
-باشد.
-Architecture می‌گوید transition P4→P5 نیازمند math test suite کامل و zero deviation از math benchmarks است. 
-Roadmap تفصیلی نیز G-4 را با مجموعه‌ای بسیار قوی‌تر تعریف می‌کند:
-text
+### 10.N معیار G-4
+G-4 صرفاً «تست‌های واحد سبز» نیست. طبق معماری، گذار P4→P5 نیازمند math test suite کامل و صفر انحراف از math benchmarks است. مجموعه evidence الزامی پیشنهادی:
+```text
 100% math suite
 0 deviation
 0 NaN/Inf
@@ -936,422 +368,99 @@ persistence
 API
 full regression
 evidence bundle
-
-و در نسخه detailed حتی 167+N regression را به‌عنوان baseline evidence target ذکر کرده است. 
-البته عدد test count باید به‌عنوان evidence واقعی ثبت شود، نه اینکه از roadmap به‌صورت پیشاپیش guarantee شود.
-
----
-
-# یک نکته مهم درباره Step 5 و ACR-0008
-این مورد را عمداً جدا می‌کنم چون ممکن است در آینده باعث confusion شود.
-در یک سند، Cross-Venue Quantitative Engine داخل Step 5 آمده است؛ در ACR-0008، Venue Intelligence Track به‌صورت یک مسیر مستقل تعریف شده است.
-بنابراین تفسیر صحیح من:
-text
-PH-P4
-│
-└── Step 5
-      └── venue-aware quantitative evidence
-
-در کنار:
-text
-PH-V1
-│
-└── Cross-Venue Opportunity Intelligence
-
-و این دو نباید به یک engine تبدیل شوند.
-ACR-0008 صراحتاً می‌گوید Venue Track در P4 fold نشود و parallel باشد. 
-این separation از نظر معماری بسیار مهم است.
+```
+عدد دقیق regression count باید به‌عنوان evidence واقعی هنگام اجرا ثبت شود، نه اینکه از پیش در roadmap تضمین گردد.
 
 ---
 
-# حالا یک لایه مهم‌تر: Traceability
-اگر بخواهیم در پایان پروژه واقعاً مطمئن باشیم P4 چیزی را جا نگذاشته، هر capability باید دقیقاً در یکی از Stepها قابل ردیابی باشد.
+## 11. جدول Traceability — از Capability به Step
 
-Capability
-Step
-
-Quant contracts
-1
-
-Numeric policy
-1
-
-Mathematical primitives
-1
-
-Golden vectors
-1
-
-DB model foundation
-1
-
-Moving averages
-2
-
-Momentum
-2
-
-ATR / ADX
-2
-
-Bollinger
-2
-
-Supertrend
-2
-
-HV / volatility
-2
-
-RVOL / volume activity
-2
-
-VWAP / Anchored VWAP
-2
-
-Swing points
-3
-
-HH/HL/LH/LL
-3
-
-BOS
-3
-
-CHOCH
-3
-
-MSS
-3
-
-FVG
-3
-
-Order Blocks
-3
-
-Breakers
-3
-
-Liquidity Pools
-3
-
-POC
-4
-
-VAH / VAL
-4
-
-HVN / LVN
-4
-
-Delta
-4
-
-### CVD
-4
-
-### Imbalance
-4
-
-### Absorption
-4
-
-Funding analytics
-4
-
-OI analytics
-4
-
-Basis
-4
-
-Regime classifier
-5
-
-Hysteresis
-5
-
-Regime provenance
-5
-
-Venue-aware quantitative evidence
-5
-
-Quant facade
-6
-
-Candle-close execution
-6
-
-Multi-timeframe worker
-6
-
-Persistence
-6
-
-Redis event boundary
-6
-
-Read-only API
-6
-
-Replay
-6
-
-Zero-lookahead harness
-6
-
-Performance measurement
-6
-
-Regression
-6
-
-G-4 evidence
-6
-
-
-این جدول از نظر من یکی از مهم‌ترین خروجی‌های این بازبینی است.
+| Capability | Step |
+|---|---|
+| Quant contracts، Numeric policy، Mathematical primitives، Golden vectors، DB model foundation | 1 |
+| Moving averages، Momentum، ATR/ADX، Bollinger، Supertrend، HV/volatility، RVOL/volume activity، VWAP/Anchored VWAP | 2 |
+| Swing points، HH/HL/LH/LL، BOS، CHOCH، MSS، FVG، Order Blocks، Breakers، Liquidity Pools | 3 |
+| POC، VAH/VAL، HVN/LVN، Delta، CVD، Imbalance، Absorption، Funding analytics، OI analytics، Basis | 4 |
+| Regime classifier، Hysteresis، Regime provenance، Venue-aware quantitative evidence | 5 |
+| Quant facade، Candle-close execution، Multi-timeframe worker، Persistence، Redis event boundary، Read-only API، Replay، Zero-lookahead harness، Performance measurement، Regression، G-4 evidence | 6 |
 
 ---
 
-# وابستگی دقیق Stepها
-من ترتیب خطی زیر را حفظ می‌کنم:
-text
-## STEP 1
-   │
-   ▼
-## STEP 2
-   │
-   ▼
-## STEP 3
-   │
-   ▼
-## STEP 4
-   │
-   ▼
-## STEP 5
-   │
-   ▼
-## STEP 6
-   │
-   ▼
-G-4
-   │
-   ▼
-PHASE 5
+## 12. Definition of Done — شش دسته
 
-اما این به معنی آن نیست که هر فایل در repository باید کاملاً sequential ساخته شود.
-معنی آن این است که governance dependency این ترتیب را دارد.
-مثلاً:
-• test fixture preparation می‌تواند زودتر انجام شود؛
-• documentation می‌تواند parallel باشد؛
-• بعضی unit testها می‌توانند parallel توسعه یابند؛
-• اما Step بعدی نباید روی contract یا behavior تأییدنشده Step قبلی بنا شود.
-خود roadmap اختصاصی نیز همین execution order خطی را تعیین کرده است. 
+1. **Mathematical Integrity** — فرمول‌ها صحیح؛ golden vectors pinned؛ regression protected؛ numeric policy مشخص؛ بدون silent math drift.
+2. **Data Integrity** — ورودی فقط canonical؛ provenance حفظ‌شده؛ insufficient data صریح؛ بدون fabrication؛ بدون NaN/Inf.
+3. **Temporal Integrity** — semantics candle-close؛ zero lookahead؛ replay deterministic؛ صحت زمانی.
+4. **Structural Integrity** — state machineهای کامل؛ `UNCONFIRMED` صریح؛ lifecycle deterministic؛ بازتولیدپذیری رویداد-به-رویداد.
+5. **Operational Integrity** — persistence؛ worker؛ queueها؛ API؛ idempotency؛ مرز read-only؛ ایزوله‌سازی خطا.
+6. **Evidence Integrity** — unit، golden، property، failure، replay، regression، performance، real-data vertical slice، evidence bundle G-4.
+
+## 13. الزام Vertical Slice
+
+مسیر Controlled Vertical Slice نهایی معماری:
+```text
+Binance Futures BTCUSDT — 15M primary / 1H / 4H
+P2 Ingestion → P3 Normalization → P4 Quantitative/Structure → P5 Specialists → P6 AI → P8 Presentation
+```
+Phase 4 باید پیش از بستن خود اثبات کند که همین engine روی داده واقعی کار می‌کند، نه فقط روی fixtureهای مصنوعی. تفاوت بین «یک کتابخانه ریاضی خوب» و «Quantitative Engine واقعی Meylux» دقیقاً همین‌جاست.
 
 ---
 
-# Vertical Slice را هم باید داخل P4 جدی بگیریم
-Controlled Vertical Slice نهایی:
-text
-Binance Futures BTCUSDT
-15M primary
-1H
-4H
+## 14. نکات تکمیلی — شکاف‌های اجرایی که باید صریح شوند
 
-است.
-و مسیر:
-text
-P2 ingestion
-→ P3 normalization
-→ P4 quantitative/structure
-→ P5 specialists
-→ P6 AI
-→ P8 presentation
+بازبینی مجدد این Roadmap سه نقطه را شناسایی کرد که باید پیش از تبدیل به Phase Definition رسمی، به یکی از Stepهای مربوطه ضمیمه شوند.
 
-تعریف شده است. 
-پس P4 باید قبل از بسته‌شدن خود Phase ثابت کند که همین engine روی داده واقعی کار می‌کند، نه فقط روی fixture مصنوعی.
-این یکی از تفاوت‌های مهم بین:
-«کتابخانه ریاضی خوب»
-و
-«Quantitative Engine واقعی Meylux»
-است.
+### 14.1 رفتار Market Structure Engine در برابر Gap‌های Quarantine‌شده (مرتبط با `STEP-P4-003`)
 
----
+اگر یک یا چند کندل در `Phase 3` به دلیل نقض validation، quarantine شده باشند، ورودی `STEP-P4-003` (Swing/BOS/CHOCH/MSS/FVG) با یک **gap واقعی در داده canonical** مواجه می‌شود — نه صرفاً یک کندل معمولی. رفتار دقیق در این حالت باید صریح باشد؛ در حال حاضر مشخص نیست:
 
-# بنابراین Definition of Done واقعی Phase 4
-من DoD را به 6 دسته تقسیم می‌کنم.
-1. Mathematical Integrity
-• فرمول‌ها درست
-• golden vectors pinned
-• regression protected
-• numeric policy مشخص
-• no silent math drift
-2. Data Integrity
-• canonical-only input
-• provenance
-• explicit insufficient data
-• no fabrication
-• no NaN/Inf
-3. Temporal Integrity
-• candle-close semantics
-• zero lookahead
-• replay determinism
-• chronological correctness
-4. Structural Integrity
-• total state machines
-• explicit UNCONFIRMED
-• deterministic lifecycle
-• event-by-event reproducibility
-5. Operational Integrity
-• persistence
-• worker
-• queues
-• API
-• idempotency
-• read-only boundary
-• failure isolation
-6. Evidence Integrity
-• unit
-• golden
-• property
-• failure
-• replay
-• regression
-• performance
-• real-data vertical slice
-• G-4 evidence bundle
+```text
+گزینه A — Explicit Gap Halt:
+  Gap شناسایی شده → state engine برای بازه مربوطه = UNCONFIRMED (نه محاسبه با فرض تداوم)
+  → با بازگشت داده معتبر، engine از سر گرفته می‌شود، بدون آنکه گذشته را بازنویسی (backfill silent) کند
+
+گزینه B — Explicit Gap Skip با Provenance:
+  Gap شناسایی شده → آن بازه به‌طور کامل از محاسبه ساختار حذف می‌شود
+  → رویداد ساختاری بعدی، gap را در provenance خودش (source_ref/lineage) صریحاً ثبت می‌کند
+```
+
+**پیشنهاد:** گزینه A با اصل `UNCONFIRMED` که خود `STEP-P4-003` (بخش ۷.۶) از قبل برای ابهام state تعریف کرده هم‌راستاتر است — یعنی همان مکانیزم موجود Total State Machine برای این حالت هم استفاده شود، بدون معرفی حالت جدید. این باید به‌عنوان یک بند صریح («Behavior under Canonical Data Gaps») در `STEP-P4-003` اضافه و با یک Golden Vector اختصاصی (سناریوی gap در وسط دنباله BOS) پوشش داده شود — مشابه دو سناریوی pinned موجود در بخش ۷.۱۱.
+
+این نکته به `STEP-P4-002` (Indicators) نیز به‌طور محدودتر مرتبط است: رفتار indicatorهای rolling (مثل EMA/ATR) در برابر gap باید طبق همان الزام «Missing input behavior» بخش ۶ صریح باشد؛ اما دامنه اصلی تصمیم در `STEP-P4-003` است چون structure engine به تداوم توالی حساس‌تر است.
+
+### 14.2 Schema / Contract Versioning برای Quantitative Contracts (مرتبط با `STEP-P4-001`)
+
+مشابه نکته معادل در Phase 3، `STEP-P4-001` صرفاً **freeze** اولیه Quantitative Contracts (`Indicator`, `Market Structure`, `Volume Profile`, `Order Flow`, `Regime`) و Golden Vectorها را پوشش می‌دهد. مسیر تکامل بعدی این contracts صریح نیست. پیشنهاد الحاق به `STEP-P4-001`:
+
+```text
+تغییر Quantitative Contract یا فرمول مرجع:
+  Additive field غیرشکننده        →  version bump جزئی، بدون invalidation golden vectors موجود
+  تغییر در فرمول/منطق محاسباتی      →  الزاماً از مسیر Golden Vector Freeze (بخش ۵.۶) عبور می‌کند
+                                       (ACR/change control → محاسبه reference جدید → بازبینی → تأیید)
+  Breaking change در ساختار خروجی  →  Contract SID جدید یا versioned schema + قاعده migration دیتای persist‌شده
+                                       (`DB-P4-001` تا `DB-P4-005`)
+```
+
+این بند صرفاً تصریح چیزی است که بخش ۵.۶ (Golden Vector Freeze) از قبل به‌صورت ضمنی الزام کرده؛ افزودن آن جلوی این برداشت اشتباه را می‌گیرد که «freeze» یعنی «هرگز تغییر نمی‌کند» به‌جای «تغییر فقط از مسیر governed ممکن است».
+
+### 14.3 مقیاس چندنمادی/چندبازاری (مرتبط با معیار G-4)
+
+معیار G-4 فعلی (بخش ۱۰.N) صرفاً حول یک Vertical Slice تک‌نمادی (`BTCUSDT`) تعریف شده است. پیشنهاد می‌شود بند زیر به الزامات G-4 اضافه شود:
+
+> G-4 علاوه بر اثبات Vertical Slice تک‌نمادی روی `15M/1H/4H`، باید حداقل یک شاهد replay روی **یک نماد دوم با پروفایل نوسان/حجم متفاوت** ارائه دهد تا اطمینان حاصل شود Golden Vectorها و منطق determinism به‌صورت implicit برای یک نماد خاص tune نشده‌اند. این شاهد صرفاً یک non-regression check است و به‌معنای گسترش رسمی scope Phase 4 به پشتیبانی کامل چند-نماد/چند-بازار نیست؛ آن گسترش موضوع فازهای بعدی و تصمیم جداگانه Owner است.
 
 ---
 
-# چیزی که نباید در Phase 4 اتفاق بیفتد
-این‌ها را به‌عنوان hard scope boundary در roadmap نهایی نگه می‌دارم:
-خارج از P4:
-• AI reasoning
-• LLM calls
-• specialist interpretation
-• contradiction analysis
-• scenario synthesis
-• Opportunity Score
-• Analytical Confidence synthesis
-• final decision support
-• trade signals as intelligence decisions
-• order execution
-• portfolio management
-Phase 4 فقط:
-FACT GENERATION
-است.
-این دقیقاً همان separationای است که معماری V2 برای جلوگیری از واگذاری mathematical truth به AI ایجاد کرده است. 
+## 15. یادداشت حاکمیتی
 
----
+ساختار ۶ Step این سند به‌عنوان **Final Proposed Execution Structure** پیشنهاد می‌شود — نه یک Phase Definition رسمی، نه Registry entry، و نه authorization اجرایی. Stable IDهای `STEP-P4-*` در این سند **پیشنهادی** هستند.
 
-# نسخه نهایی پیشنهادی من
-اگر بخواهم این بررسی را در یک roadmap رسمی و فشرده خلاصه کنم، این نسخه را به‌عنوان بهترین candidate برای Formal Phase 4 Specification پیشنهاد می‌کنم:
+مرحله بعدی governance:
 
-Step
-عنوان نهایی پیشنهادی
-محور اصلی
+1. تبدیل این ساختار به `docs/phases/PH-P4.md` رسمی، با همان قالب `PH-P0.md`/`PH-P1.md`/`PH-P2.md`.
+2. ثبت Stable IDهای `STEP-P4-001` تا `STEP-P4-006` در Registry.
+3. تعریف Acceptance Criteria مستقل برای هر Step.
+4. تثبیت رسمی تفکیک `STEP-P4-005` (venue-aware evidence) از `CMP-V2-VENUE-001` (Venue Intelligence Track، ACR-0008) در سطح Registry/ADR تا از خلط این دو در اجرا جلوگیری شود.
+5. صدور Task Order رسمی برای اولین Step فقط پس از تصویب Owner **و** پس از تکمیل و بستن رسمی Phase 3.
 
-1
-Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
-قرارداد، precision، primitives، vectors، مدل‌های پایه
-
-2
-Technical Indicators, Statistical & Volatility Engine
-MA، momentum، volatility، volume، VWAP
-
-3
-Deterministic Market Structure Engine
-Swings، BOS، CHOCH، MSS، FVG، OB، Breakers، Liquidity
-
-4
-Volume Profile, Order Flow & Derivatives Engine
-POC/VAH/VAL، HVN/LVN، Delta/CVD، Imbalance، Absorption، Funding/OI/Basis
-
-5
-Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
-Regime، hysteresis، multi-factor state، venue-aware evidence
-
-6
-Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
-Worker، persistence، stream، API، replay، performance، regression، G-4
-
-
-
----
-
-و یک حکم مهم Reviewer
-بعد از این بازبینی، من توصیه نمی‌کنم Phase 4 را به 8، 10 یا 11 Step تبدیل کنیم.
-دلیلش این است که شش Step موجود از نظر architectural boundaries بسیار خوب عمل می‌کنند.
-اگر بیشتر خرد کنیم، احتمالاً همان مشکلی ایجاد می‌شود که در P2 دیدیم: capabilityها به Stepهای بیش از حد ریز تبدیل می‌شوند و governance سنگین می‌شود.
-در مقابل، اگر کمتر از شش Step کنیم، مرزهای بسیار مهمی مثل:
-text
-Mathematics
-vs
-Indicators
-vs
-Structure
-vs
-Advanced Market Evidence
-vs
-Regime
-vs
-Operational Integration
-
-از بین می‌روند.
-بنابراین ۶ Step بهترین نقطه تعادل است.
-
----
-
-# اما یک تفاوت مهم با Roadmap قبلی CONTROL
-Roadmap قبلی CONTROL را رد نمی‌کنم؛ اتفاقاً ساختار اصلی آن درست است.
-اصلاح من این است که:
-شش Step همان شش Step باقی بمانند، اما Specification هر Step باید با عمق بالا و با acceptance boundary مستقل نوشته شود.
-به‌خصوص:
-Step 1 نباید فقط «contracts + DB + vectors» باشد؛ Numeric Policy و deterministic foundation باید explicit باشند.
-Step 2 نباید فقط indicator list باشد؛ warm-up، precision، missing data، lookahead و golden behavior باید داخل آن باشد.
-Step 3 باید یک state-machine discipline بسیار جدی داشته باشد.
-Step 4 باید سه engine مستقل ولی یک Step governed باشد.
-Step 5 باید Regime را از Venue Intelligence Opportunity Engine جدا نگه دارد.
-Step 6 باید صرفاً integration نباشد؛ بلکه محل اثبات operational/replay/performance/G-4 کل Phase باشد.
-
----
-
-# و در نهایت، مهم‌ترین خروجی این بازبینی
-اگر این roadmap درست formalize و سپس واقعاً با evidence اجرا شود، Phase 4 در پایان نباید فقط بگوید:
-«Meylux اندیکاتورهای EMA، RSI، MACD و ... دارد.»
-بلکه باید بتوانیم بگوییم:
-text
-CANONICAL DATA
-                          │
-                          ▼
-              ┌─────────────────────┐
-              │ PHASE 4              │
-              │                     │
-              │ Mathematical Facts  │
-              │ Technical Facts     │
-              │ Structure Facts     │
-              │ Volume Facts        │
-              │ Flow Facts          │
-              │ Derivatives Facts   │
-              │ Regime Facts        │
-              └──────────┬──────────┘
-                         │
-                         ▼
-              DETERMINISTIC EVIDENCE
-                         │
-          ┌──────────────┼──────────────┐
-          ▼              ▼              ▼
-       P5              P6              P9
-   Specialists     AI Intelligence    Replay/
-                                   Evaluation
-
-و مهم‌تر از خود featureها:
-هر Fact باید قابل محاسبه مجدد، قابل آزمون، قابل ردیابی به داده Canonical، فاقد future leakage و مقاوم در برابر silent mathematical drift باشد.
-این دقیقاً همان چیزی است که Phase 4 را از یک technical-analysis library ساده به هسته کمی قابل اعتماد Meylux V2 تبدیل می‌کند.
-اسناد معماری نیز همین جایگاه را برای P4 تعیین کرده‌اند: P4 باید quantitative features و structure را به‌صورت deterministic تولید کند و این خروجی‌ها ورودی لایه Specialist بعدی باشند. 
-بنابراین verdict نهایی من:
-ساختار ۶ گانه Phase 4 تأیید می‌شود؛ اما نسخه‌ای که در بالا ارائه کردم، از نظر من نسخه دقیق‌تر و کامل‌ترِ مناسب برای Formal Phase Establishment است.
-این هنوز Phase Specification یا authorization اجرایی نیست؛ صرفاً بهترین execution roadmap پیشنهادی است. Stable IDهای جدید، Task Orderها، Artifactهای جدید، تغییر Contractها یا تغییر architecture باید در مرحله formal governance ایجاد/تأیید شوند.
+تا پیش از انجام این مراحل، طبق `docs/state/CURRENT_CHECKPOINT.json`، **هیچ اجرای Phase 3 یا Phase 4 مجاز نیست.**
