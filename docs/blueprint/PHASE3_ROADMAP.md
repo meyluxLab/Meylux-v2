@@ -1,1169 +1,437 @@
-Worked for 16s
+# PHASE 3 ROADMAP — Validation, Normalization & Data Quality Engine
 
-بله. با توجه به مجموعه‌ای که اکنون دوباره بررسی کردم، من این بار می‌خواهم یک جمع‌بندی نهاییِ معماری/اجرایی برای Phase 3 بدهم؛ نه صرفاً تکرار نقشه قبلی.
-
-من چهار منبع را هم‌زمان در نظر گرفتم:
-
-1. گام‌های استخراج‌شده از فایل‌های تفصیلی که فرستادی؛
-
-2. جزئیات Phase 3 در Master Architectureهای قبلی و V2؛
-
-3. ساختار و منطق واقعی Phase 0–2 پروژه؛
-
-4. هدف نهایی Meylux و نقش Phase 3 در زنجیره‌ی P2 → P3 → P4 → P5 → P6 و Controlled Vertical Slice.
-
-در نتیجه، به نظرم ۶ گام قبلی CONTROL کمی بیش از حد درشت بودند و ۱۴ گام اولیه نیز برای Step رسمی بیش از حد خرد بودند. بهترین نقطه تعادل برای Meylux V2، با حفظ تمام قابلیت‌های موردنیاز، ۸ Step اصلی است.
-
-این ۸ Step از نظر dependency، مرز مسئولیت، قابلیت تست، traceability، handoff و جلوگیری از Scope Creep بهترین ساختار را ایجاد می‌کنند.
+**Document type:** Blueprint / Execution Roadmap (planning input for formal Phase Establishment)
+**Phase SID (proposed):** `PH-P3`
+**Predecessor:** `PH-P2` — CLOSED / VERIFIED
+**Successor:** `PH-P4` — Deterministic Quantitative & Market Structure Engine
+**Architectural basis:** `DOC-V2-ARCH-001` (RATIFIED / FROZEN), §7–8 (Canonical Data & Quality), §13 (PHASE P3)
+**Governance status:** این سند یک **Roadmap/Blueprint** است، نه یک `PH-P3.md` رسمی. هیچ Stable ID، Task Order یا authorization اجرایی از طریق این سند صادر نمی‌شود. تبدیل این نقشه به Phase Definition رسمی، ثبت در Registry، و صدور Task Order باید از طریق فرآیند Governance موجود (ADR/ACR + Project Owner ratification) انجام شود.
 
 ---
 
-# PHASE 3 — FINAL PROPOSED EXECUTION STRUCTURE
+## 1. جایگاه Phase 3 در زنجیره پروژه
 
-PH-P3 — Validation, Normalization & Data Quality Engine
+```text
+PHASE 2 — "می‌توانیم داده را جمع‌آوری کنیم؟"
+   Provider Raw / Staging Data (Binance, MEXC)
+        │
+        ▼
+PHASE 3 — "می‌توانیم به این داده اعتماد کنیم؟"
+   Validate → Normalize → Classify Quality → Quarantine Invalid → Persist Canonical Truth
+        │
+        ▼
+PHASE 4 — "این داده از نظر ریاضی چه می‌گوید؟"
+   Deterministic Quantitative / Structure Engine
+```
 
-مأموریت Phase
+- **Phase 2** مالک Acquisition است.
+- **Phase 3** مالک Trust / Canonicalization / Quality است.
+- **Phase 4** مالک Mathematical Truth / Structure است.
 
-Phase 3 باید مرز اعتماد داده در Meylux را بسازد:
+این تفکیک یک اصل معماری صریح V2 است (§8.3، §8.4) و نباید در حین اجرا نقض شود.
 
-PHASE 2
-Provider Raw / Staging Data
-│
-▼
-PHASE 3
-Validate
-→ Normalize
-→ Classify Quality
-→ Quarantine Invalid Data
-→ Persist Canonical Truth
-│
-▼
-PHASE 4
-Deterministic Quantitative / Structure Engine
+## 2. مأموریت Phase 3
 
-این با معماری V2 کاملاً منطبق است: Phase 3 داده‌های staging را به canonical authoritative data، Data Quality Score و normalized event stream تبدیل می‌کند.
+Phase 3 مرز اعتماد داده Meylux را می‌سازد: داده خام/staging تحویل‌شده از Phase 2 را validate، normalize، quality-classify و در صورت نیاز quarantine می‌کند، و فقط داده validated semantic را به‌صورت canonical و authoritative در اختیار Phase 4 قرار می‌دهد.
 
-و مهم‌تر اینکه V2 صراحتاً می‌گوید canonical data فقط باید شامل validated semantic data باشد و داده rejected/unavailable هرگز نباید به‌صورت silent به canonical truth ارتقا پیدا کند.
+**قاعده بنیادین (Canonical Data Rule — §8.3):** Canonical contracts فقط شامل validated semantic data هستند. فیلدهای خاص provider (aliasها، event ID، جزئیات sequence، wire-format fields) در سطح provider adapter باقی می‌مانند مگر آنکه یک domain requirement صریح آن‌ها را semantic کند.
 
----
+**قاعده کیفیت داده (Data-Quality Rule — §8.4):** هر مصرف‌کننده downstream باید بتواند بین حالت‌های زیر تمایز قائل شود: کامل و تازه، ناقص، stale، degraded، متناقض، در دسترس نبودن، و پشتیبانی‌نشده.
 
-ساختار نهایی پیشنهادی
+## 3. اصول غیرقابل‌مذاکره Phase 3
 
-Step عنوان نقش
+| اصل | توضیح |
+|---|---|
+| **No Silent Fixing** | `Bad Data → Detect → Classify → Route` — نه `Bad Data → Guess → Silently Fix` |
+| **No Fabrication** | هیچ مقدار missing یا invalid با مقدار ساختگی پر نمی‌شود |
+| **Explicit Degradation** | هر رکورد باید وضعیت کیفیت صریح داشته باشد؛ ابهام هرگز silent نیست |
+| **Provider Isolation → Canonical Purity** | فرمت خاص provider هرگز وارد canonical نمی‌شود مگر با توجیه صریح domain |
+| **Quarantine, not Delete, not Promote** | داده خراب نه حذف می‌شود، نه canonical می‌شود؛ isolate می‌شود |
+| **Lineage** | هر رکورد canonical باید تا منبع و تاریخچه validation آن قابل ردیابی باشد |
 
-STEP-P3-001 Canonical Contracts, Identity & Validation Foundation تعریف دقیق مرز داده معتبر
-STEP-P3-002 Structural, Schema & Identity Validation کشف خطاهای ساختاری و هویتی
-STEP-P3-003 Temporal, Sequence & Completeness Validation کشف مشکلات زمانی، ترتیب و gap
-STEP-P3-004 Market Semantic, Price, Spread & Precision Validation اثبات صحت معنایی بازار
-STEP-P3-005 Canonical Normalization & Provider Mapping تبدیل معتبر Binance/MEXC به Canonical
-STEP-P3-006 Cross-Venue Consistency & Equivalence کنترل معنایی بین Binance/MEXC
-STEP-P3-007 Data Quality, Quarantine, DLQ & Lineage کیفیت، عدم قطعیت و جداسازی خطا
-STEP-P3-008 Authoritative Persistence, Event Handoff & G-3 Verification ساخت boundary نهایی و اثبات Phase
+## 4. Scope و Non-Scope
 
-این ساختار را بهترین candidate برای formal Phase Specification می‌دانم؛ نه اینکه همین حالا Stable IDهای Stepها را به‌عنوان Registry رسمی تلقی کنیم.
+### در Scope
+Schema validation، semantic validation، timestamp/sequence validation، price/spread integrity، tick/lot precision، duplicate detection، cross-venue equivalence، data-quality scoring، quarantine/DLQ، canonical persistence، normalized event handoff به Phase 4.
 
----
+### خارج از Scope (به‌صراحت متعلق به فازهای بعدی)
 
-## STEP-P3-001
+| قابلیت | فاز مالک |
+|---|---|
+| Technical Indicators (EMA, RSI, MACD, ATR, ADX, Bollinger) | P4 |
+| Market Structure (BOS, CHOCH, MSS, FVG, Order Blocks, Liquidity Pools) | P4 |
+| Volume Profile، Order Flow Analytics | P4 |
+| Regime Classification | P4 |
+| Specialist Intelligence | P5 |
+| AI Interpretation، Opportunity Score، Trade Idea Generation | P6 |
+| Natural Language Summary | P6 |
+| Arbitrage / Opportunity Analysis (فراتر از Cross-Venue Validation) | خارج از scope P3 |
 
-Canonical Contracts, Identity & Validation Foundation
+Cross-Venue Validation در P3 مجاز است؛ Opportunity Detection مجاز نیست.
 
-این Step باید اولین Step باشد، چون تمام Stepهای بعدی باید بدانند دقیقاً چه چیزی را معتبر می‌نامیم.
+## 5. ساختار پیشنهادی Step — نمای کلی
 
-مسئولیت‌ها
+تحلیل سه گزینه (۶ Step درشت، ۱۴ Step ریز، و نسخه بینابین) نشان می‌دهد که **۸ Step** بهترین تعادل بین dependency boundaries، قابلیت تست مستقل، traceability، و جلوگیری از Scope Creep را ایجاد می‌کند. هیچ capability‌ای نسبت به تحلیل تفصیلی‌تر (۱۴ مورد) حذف نشده؛ صرفاً به مرزهای اجرایی منطقی‌تری منتقل شده است (جدول تطبیق در بخش ۱۴).
 
-تثبیت Canonical Data Contracts
+| # | Step SID (proposed) | عنوان | محور اصلی |
+|---|---|---|---|
+| 1 | `STEP-P3-001` | Canonical Contracts, Identity & Validation Foundation | تعریف داده معتبر |
+| 2 | `STEP-P3-002` | Structural, Schema & Identity Validation | ساختار داده |
+| 3 | `STEP-P3-003` | Temporal, Sequence & Completeness Validation | زمان و ترتیب |
+| 4 | `STEP-P3-004` | Market Semantic, Price, Spread & Precision Validation | معنای بازار و اعداد |
+| 5 | `STEP-P3-005` | Canonical Normalization & Provider Mapping | تبدیل به زبان مشترک |
+| 6 | `STEP-P3-006` | Cross-Venue Consistency & Equivalence | مقایسه‌پذیری بین Venue |
+| 7 | `STEP-P3-007` | Data Quality, Quarantine, DLQ & Lineage | کیفیت و اعتمادپذیری |
+| 8 | `STEP-P3-008` | Authoritative Persistence, Event Handoff & G-3 Verification | تحویل نهایی به P4 |
 
-Canonical Instrument Identity
+**وابستگی خطی:** هر Step روی contract/behavior تأییدشده Step قبلی بنا می‌شود؛ Step بعدی نباید روی رفتار تأییدنشده Step قبل اجرا شود. (آماده‌سازی fixture، مستندسازی، و برخی unit testها می‌توانند موازی توسعه یابند.)
 
-Canonical Candle
-
-Canonical Trade
-
-Canonical Order Book
-
-Canonical Derivatives
-
-venue identity
-
-symbol identity
-
-market type
-
-contract type
-
-timeframe
-
-timestamp semantics
-
-required / optional fields
-
-null semantics
-
-Decimal representation
-
-precision/scale policy
-
-validation result taxonomy
-
-provenance requirements
-
-deterministic identity rules
-
-این Step باید ارتباط میان دو component معماری P3 را نیز مشخص کند:
-
-CMP-P3-001 — Normalization & Data Quality Subsystem
-
-CMP-P3-002 — Canonical Contract Registry
-
-که در معماری صراحتاً برای P3 تعریف شده‌اند.
-
-چرا این Step ضروری است؟
-
-اگر Canonical Contract قبل از Validation دقیق نباشد، بعداً:
-
-Validator
-Normalizer
-Database
-Quant Engine
-Specialists
-
-هرکدام ممکن است برداشت متفاوتی از «داده معتبر» داشته باشند.
-
-هدف P3 باید دقیقاً جلوگیری از همین مشکل باشد.
-
-خروجی
-
-یک Canonical Data Boundary Definition که تمام P3 بر اساس آن کار کند.
+```text
+PH-P2 (RAW/STAGING)
+        │
+        ▼
+ STEP-P3-001  Contracts / Identity / Validation Foundation
+        │
+        ▼
+ STEP-P3-002  Structural / Schema Validation
+        │
+        ▼
+ STEP-P3-003  Temporal / Sequence / Completeness
+        │
+        ▼
+ STEP-P3-004  Semantic / Price / Spread / Precision
+        │
+        ▼
+ STEP-P3-005  Canonical Normalization (Binance + MEXC)
+        │
+        ▼
+ STEP-P3-006  Cross-Venue Consistency
+        │
+   ┌────┴────┐
+   ▼         ▼
+ VALID   INVALID / DEGRADED
+   │         │
+   ▼         ▼
+ STEP-P3-007  Quality Scoring + Lineage   /   Quarantine + DLQ
+        │
+        ▼
+ STEP-P3-008  Authoritative Persistence + Event Handoff + API + E2E Verification
+        │
+        ▼
+       G-3
+        │
+        ▼
+      PH-P4
+```
 
 ---
 
-## STEP-P3-002
+## 6. STEP-P3-001 — Canonical Contracts, Identity & Validation Foundation
 
-Structural, Schema & Identity Validation
+**هدف:** پیش از هر validation، باید دقیقاً مشخص باشد «داده معتبر» یعنی چه.
 
-حالا باید بررسی کنیم که داده‌ی ورودی از نظر ساختاری اصلاً قابل پذیرش هست یا نه.
+**مسئولیت‌ها:**
+- تثبیت Canonical Data Contracts: Canonical Instrument Identity، Canonical Candle، Canonical Trade، Canonical Order Book، Canonical Derivatives
+- تعریف: venue identity، symbol identity، market type، contract type، timeframe، timestamp semantics، فیلدهای required/optional، null semantics، نمایش Decimal، سیاست precision/scale، taxonomy نتیجه validation، الزامات provenance، قواعد deterministic identity
+- تثبیت ارتباط با دو component معماری مرتبط: `CMP-P3-001` (Normalization & Data Quality Subsystem) و `CMP-P3-002` (Canonical Contract Registry)
 
-Validation
+**چرا ضروری است:** بدون یک Canonical Contract دقیق قبل از Validation، مصرف‌کنندگان بعدی (Validator، Normalizer، Database، Quant Engine، Specialists) ممکن است برداشت‌های متفاوتی از «داده معتبر» داشته باشند. هدف این Step دقیقاً جلوگیری از این ناهمخوانی است.
 
-required fields
-
-field types
-
-nullability
-
-enum values
-
-schema compliance
-
-malformed payloads
-
-symbol syntax
-
-timeframe validity
-
-venue identity
-
-market type
-
-contract type
-
-basic deterministic identity
-
-duplicate identity candidates
-
-مثلاً:
-
-price = "ABC"
-
-یا:
-
-timestamp = null
-
-یا:
-
-unknown market_type
-
-نباید وارد canonical analytical data شوند.
-
-اصل مهم
-
-این Step اصلاح‌کننده خاموش داده نیست.
-
-یعنی:
-
-Bad Data
-↓
-Detect
-↓
-Classify
-↓
-Route
-
-نه:
-
-Bad Data
-↓
-Guess
-↓
-Silently Fix
-
-این اصل برای هدف نهایی Meylux حیاتی است.
+**خروجی:** یک Canonical Data Boundary Definition که کل Phase 3 بر اساس آن کار می‌کند.
 
 ---
 
-## STEP-P3-003
+## 7. STEP-P3-002 — Structural, Schema & Identity Validation
 
-Temporal, Sequence & Completeness Validation
+**هدف:** بررسی پذیرش ساختاری داده ورودی، پیش از هر بررسی معنایی.
 
-این Step باید مستقل باشد، چون زمان در market intelligence یک مفهوم بنیادی است.
+**پوشش:** required fields، field types، nullability، enum values، schema compliance، payloadهای malformed، صحت syntax نماد (symbol)، اعتبار timeframe، venue identity، market type، contract type، شناسایی identity اولیه، duplicate identity candidates.
 
-مسئولیت‌ها
+نمونه موارد ردشدنی: `price = "ABC"`، `timestamp = null`، `unknown market_type`.
 
-Timestamp
+**اصل حاکم:**
 
-valid timestamp
+```text
+Bad Data → Detect → Classify → Route      (درست)
+Bad Data → Guess → Silently Fix           (ممنوع)
+```
 
-timezone semantics
-
-event timestamp
-
-receive timestamp
-
-future timestamp
-
-clock skew
-
-معماری موجود برای P3 مقدار 5000ms را به‌عنوان clock-skew configuration parameter در نظر گرفته است؛ این مقدار باید به‌عنوان config مورد governed validation قرار گیرد، نه یک عدد hard-coded و غیرقابل تغییر.
-
-Ordering
-
-monotonicity
-
-out-of-order events
-
-duplicate timestamps
-
-sequence consistency
-
-Candle continuity
-
-interval continuity
-
-missing candles
-
-unexpected gaps
-
-incomplete sequence
-
-Event sequence
-
-در مواردی که source sequence دارد:
-
-n
-n+1
-n+2
-
-نباید:
-
-n
-n+2
-
-به‌عنوان sequence سالم تلقی شود.
-
-خروجی
-
-هر داده باید بتواند به‌طور explicit یکی از وضعیت‌های:
-
-valid
-gap
-out-of-order
-duplicate
-stale
-incomplete
-
-را داشته باشد.
-
-این موضوع مستقیماً با Semantic & Monotonicity Validator موجود در معماری P3 منطبق است.
+این اصل برای هدف نهایی Meylux حیاتی است و در تمام Stepهای بعدی نیز اعمال می‌شود.
 
 ---
 
-## STEP-P3-004
+## 8. STEP-P3-003 — Temporal, Sequence & Completeness Validation
 
-Market Semantic, Price, Spread & Precision Validation
+**هدف:** زمان یک مفهوم بنیادین در market intelligence است؛ این Step به‌صورت مستقل به آن می‌پردازد.
 
-این Step قلب market-data correctness در P3 است.
+**پوشش:**
+- **Timestamp:** اعتبار timestamp، معنای timezone، event timestamp در برابر receive timestamp، timestamp آینده، clock skew (مقدار پیشنهادی معماری: **5000ms**، که باید به‌صورت configuration parameter مورد governed validation قرار گیرد، نه یک عدد hard-coded)
+- **Ordering:** monotonicity، رویدادهای out-of-order، timestampهای تکراری، سازگاری sequence
+- **Candle continuity:** پیوستگی interval، کندل‌های گمشده، gapهای غیرمنتظره، sequence ناقص
+- **Event sequence:** در صورت وجود sequence در منبع (`n, n+1, n+2, ...`)، الگوی `n, n+2` نباید به‌عنوان sequence سالم تلقی شود
 
-Schema درست به‌تنهایی کافی نیست.
-
-ممکن است تمام فیلدها datatype صحیح داشته باشند ولی معنای بازار اشتباه باشد.
-
-OHLC
-
-باید روابط منطقی بازار بررسی شوند:
-
-high >= open
-high >= close
-high >= low
-
-low <= open
-low <= close
-low <= high
-
-و موارد غیرممکن detect شوند.
-
-Price
-
-negative price
-
-impossible price
-
-invalid zero where semantically impossible
-
-malformed numeric values
-
-Quantity
-
-negative quantity
-
-invalid quantity
-
-impossible quantity semantics
-
-Volume
-
-negative volume
-
-invalid volume
-
-semantic inconsistency
-
-Spread
-
-bid/ask sanity
-
-negative spread
-
-impossible spread
-
-excessive spread
-
-Architecture برای P3 صراحتاً Price & Spread Integrity Validator را تعریف کرده و حتی Max allowable price spread: 5.0% را به‌عنوان configuration parameter مشخص کرده است.
-
-Precision
-
-tick size
-
-lot size
-
-instrument precision
-
-quantity precision
-
-price precision
-
-rounding policy
-
-invalid precision
-
-این بخش نیز صراحتاً با Tick & Lot Size Precision Validator منطبق است.
-
-نکته بسیار مهم
-
-P3 نباید price را «به زور» قابل‌قبول کند.
-
-اگر مقدار با instrument rules سازگار نیست:
-
-Reject / Quarantine / Quality Degradation
-
-باید اتفاق بیفتد، نه silent rounding مگر اینکه قانون rounding خودش به‌صورت صریح و governed تعریف شده باشد.
+**خروجی:** هر رکورد باید یکی از وضعیت‌های صریح زیر را داشته باشد: `valid`، `gap`، `out-of-order`، `duplicate`، `stale`، `incomplete`. این خروجی مستقیماً با Semantic & Monotonicity Validator تعریف‌شده در معماری P3 منطبق است.
 
 ---
 
-## STEP-P3-005
+## 9. STEP-P3-004 — Market Semantic, Price, Spread & Precision Validation
 
-Canonical Normalization & Provider Mapping
+**هدف:** قلب market-data correctness در Phase 3. سازگاری schema به‌تنهایی کافی نیست؛ معنای بازار نیز باید صحیح باشد.
 
-حالا داده‌ای که از validationهای لازم عبور کرده، باید به زبان مشترک Meylux تبدیل شود.
+**OHLC integrity:**
+```text
+high >= open, high >= close, high >= low
+low  <= open, low  <= close, low  <= high
+```
 
-وظایف
+**Price:** قیمت منفی، قیمت غیرممکن، صفر نامعتبر در جایی که از نظر معنایی غیرممکن است، مقادیر عددی malformed.
 
-Binance
-↓
-Provider Representation
-↓
-Canonical Mapping
+**Quantity / Volume:** مقدار/حجم منفی یا نامعتبر، ناسازگاری معنایی.
 
-و:
+**Spread:** سلامت bid/ask، spread منفی یا غیرممکن، spread بیش از حد — معماری صراحتاً **Price & Spread Integrity Validator** را تعریف کرده و **حداکثر spread مجاز: ۵٫۰٪** را به‌عنوان configuration parameter مشخص کرده است.
 
-MEXC
-↓
-Provider Representation
-↓
-Canonical Mapping
+**Precision:** tick size، lot size، دقت instrument، دقت مقدار و قیمت، سیاست rounding، دقت نامعتبر — این بخش با **Tick & Lot Size Precision Validator** تعریف‌شده در معماری منطبق است.
 
-Mapping areas
-
-instrument
-
-candle
-
-trade
-
-order book
-
-derivatives
-
-venue
-
-market type
-
-contract type
-
-timeframe
-
-timestamp
-
-price
-
-quantity
-
-volume
-
-side semantics
-
-provenance
-
-Architecture صراحتاً Canonical Mappers for Binance & MEXC را به‌عنوان requirement P3 تعریف کرده است.
-
-و source تفصیلی حتی mapperهای زیر را مشخص کرده:
-
-ART-P3-013 — Binance to Canonical Transformer
-
-ART-P3-014 — MEXC to Canonical Transformer.
-
-اصل بسیار مهم
-
-Provider-specific wire format نباید وارد Domain Canonical شود.
-
-V2 صراحتاً مقرر کرده provider-specific aliases، event IDs، sequence details و wire-format fields در provider boundary باقی بمانند مگر اینکه domain requirement مشخصی آن‌ها را semantic کند.
+**اصل حیاتی:** Phase 3 نباید قیمت را «به‌زور» قابل‌قبول کند. اگر مقدار با قواعد instrument سازگار نیست، باید `Reject / Quarantine / Quality Degradation` رخ دهد — نه rounding خاموش، مگر آنکه قاعده rounding خودش به‌صورت صریح و governed تعریف شده باشد.
 
 ---
 
-## STEP-P3-006
+## 10. STEP-P3-005 — Canonical Normalization & Provider Mapping
 
-Cross-Venue Consistency & Equivalence
+**هدف:** تبدیل داده validated به زبان مشترک (canonical) Meylux.
 
-این Step را عمداً مستقل کرده‌ام.
+```text
+Binance → Provider Representation → Canonical Mapping
+MEXC    → Provider Representation → Canonical Mapping
+```
 
-در پروژه‌ای که Binance و MEXC هر دو first-class providers هستند، Cross-Venue فقط یک جزئیات کوچک Validator نیست.
+**حوزه‌های mapping:** instrument، candle، trade، order book، derivatives، venue، market type، contract type، timeframe، timestamp، price، quantity، volume، side semantics، provenance.
 
-بلکه پایه مهمی برای Market Intelligence آینده است.
+**آرتیفکت‌های معماری مرتبط:** `ART-P3-013` (Binance to Canonical Transformer)، `ART-P3-014` (MEXC to Canonical Transformer). معماری صراحتاً Canonical Mappers برای Binance و MEXC را الزامی کرده است.
 
-باید بررسی شود:
-
-Identity
-
-same base asset?
-same quote asset?
-same symbol meaning?
-
-Market type
-
-Spot ≠ Futures
-
-Contract type
-
-Perpetual ≠ Delivery
-
-Unit semantics
-
-واحد volume یا quantity در دو provider نباید بدون اثبات معادل فرض شود.
-
-Timestamp alignment
-
-داده دو venue باید از نظر زمانی قابل مقایسه باشد.
-
-Freshness
-
-مقایسه:
-
-fresh Binance
-vs
-stale MEXC
-
-نباید به‌عنوان divergence معتبر تلقی شود.
-
-Bid/Ask sanity
-
-هر دو سمت باید از نظر market integrity معتبر باشند.
-
-Impossible values
-
-اختلاف ناشی از corruption نباید به‌عنوان market dislocation ثبت شود.
-
-Architecture V2 دقیقاً یک Cross-Venue Rider برای این موضوع تعریف کرده و instrument identity، base/quote، market type، contract type، unit semantics، timestamp، freshness و bid/ask sanity را mandatory می‌داند. همچنین می‌گوید mapping نامطمئن هرگز نباید silently فعال شود.
-
-اهمیت برای آینده
-
-این Step مستقیماً به قابلیت‌های آینده:
-
-Cross-Exchange Analyst
-Venue Intelligence
-Opportunity Analysis
-
-کمک می‌کند.
-
-اما خودش نباید وارد تحلیل فرصت یا arbitrage شود.
+**اصل حیاتی:** فرمت خاص wire هر provider نباید وارد Domain Canonical شود. V2 صراحتاً مقرر کرده که aliasهای خاص provider، event IDها، جزئیات sequence و فیلدهای wire-format در مرز provider باقی بمانند، مگر آنکه یک domain requirement مشخص آن‌ها را semantic کند.
 
 ---
 
-## STEP-P3-007
+## 11. STEP-P3-006 — Cross-Venue Consistency & Equivalence
 
-Data Quality, Quarantine, DLQ & Lineage
+**هدف:** در پروژه‌ای که Binance و MEXC هر دو first-class provider هستند، مقایسه بین venue صرفاً یک جزئیات کوچک Validator نیست؛ پایه‌ای برای Market Intelligence آینده (Cross-Exchange Analyst، Venue Intelligence، Opportunity Analysis) است — بدون آنکه خودش وارد تحلیل فرصت یا arbitrage شود.
 
-این Step را می‌توان قلب «اعتمادپذیری» Meylux دانست.
+**پوشش (Cross-Venue Rider — §13):**
+- **Identity:** یکسانی base asset، quote asset، معنای symbol
+- **Market type:** Spot ≠ Futures
+- **Contract type:** Perpetual ≠ Delivery
+- **Unit semantics:** واحد volume/quantity بین دو provider بدون اثبات نباید معادل فرض شود
+- **Timestamp alignment:** قابل‌مقایسه بودن داده دو venue از نظر زمانی
+- **Freshness:** مقایسه Binance تازه در برابر MEXC stale نباید به‌عنوان divergence معتبر ثبت شود
+- **Bid/Ask sanity:** هر دو سمت باید از نظر market integrity معتبر باشند
+- **Impossible values:** اختلاف ناشی از corruption نباید به‌عنوان market dislocation ثبت شود
 
-Validation فقط نباید بگوید:
-
-PASS / FAIL
-
-بلکه باید مشخص کند کیفیت داده برای مصرف‌کننده بعدی چقدر و چرا قابل اعتماد است.
-
----
-
-## Data Quality
-
-معماری P3 خروجی:
-
-Data Quality Score: 0.00 – 1.00
-
-با:
-
-Explanation Vector
-
-را تعریف کرده است.
-
-مولفه‌های اصلی:
-
-freshness
-
-completeness
-
-consistency
-
-feed health
-
-validation status
-
-provider capability
+**قاعده حیاتی:** mapping نامطمئن هرگز نباید به‌صورت silent فعال شود.
 
 ---
 
-## Stateهای کیفیت
+## 12. STEP-P3-007 — Data Quality, Quarantine, DLQ & Lineage
 
-باید حداقل وضعیت‌های معماری حفظ شوند:
+**هدف:** قلب اعتمادپذیری Meylux. Validation نباید فقط `PASS/FAIL` بگوید؛ باید مشخص کند کیفیت داده برای مصرف‌کننده بعدی چقدر و چرا قابل اعتماد است.
 
-VALID
-DEGRADED
-STALE
-INCOMPLETE
-CONTRADICTORY
-REJECTED
-UNAVAILABLE
+### 12.1 Data Quality Score
+خروجی: `Data Quality Score: 0.00 – 1.00` + `Explanation Vector`، با مؤلفه‌های: freshness، completeness، consistency، feed health، validation status، provider capability.
 
-اینها در Master Architecture V2 صراحتاً تعریف شده‌اند.
+### 12.2 وضعیت‌های کیفیت (سطح رکورد — معماری، §8.2)
+```text
+VALID · DEGRADED · STALE · INCOMPLETE · CONTRADICTORY · REJECTED · UNAVAILABLE
+```
 
-و در سطح data-flow نیز stateهای:
+### 12.3 وضعیت‌های data-flow (سطح pipeline)
+```text
+RAW · STAGED · VALIDATING · NORMALIZED · CANONICAL
+QUALITY_DEGRADED · REJECTED · QUARANTINED · EXPIRED · ARCHIVED
+```
 
-RAW
-STAGED
-VALIDATING
-NORMALIZED
-CANONICAL
-QUALITY_DEGRADED
-REJECTED
-QUARANTINED
-EXPIRED
-ARCHIVED
+### 12.4 Quarantine / DLQ
+```text
+Invalid → Quarantine / DLQ     (درست)
+Invalid → Delete                (ممنوع)
+Invalid → Canonical             (ممنوع)
+```
+معماری صراحتاً `normalization_dlq` را برای داده corrupt تعریف کرده و الزام کرده که این جداسازی بدون crash کردن worker انجام شود.
 
-وجود دارند.
-
----
-
-## Quarantine / DLQ
-
-اگر داده خراب باشد:
-
-Invalid
-↓
-## Quarantine / DLQ
-
-نه:
-
-Invalid
-↓
-Delete
-
-و نه:
-
-Invalid
-↓
-Canonical
-
-Architecture صراحتاً normalization_dlq را برای داده corrupt تعریف کرده و الزام کرده که این جداسازی بدون crash کردن worker انجام شود.
+### 12.5 Lineage
+برای هر رکورد canonical باید مسیر زیر قابل ردیابی باشد:
+```text
+Provider → Raw/Staging record → Validation result → Normalization → Quality result → Canonical record
+```
+این موضوع برای debugging، replay، audit، ارزیابی آینده و AI evidence provenance حیاتی است.
 
 ---
 
-## Lineage
+## 13. STEP-P3-008 — Authoritative Persistence, Event Handoff & G-3 Verification
 
-برای هر canonical record باید بتوانیم مسیر را دنبال کنیم:
+**هدف:** تحویل واقعی و end-to-end فاز به Phase 4.
 
-Provider
-↓
-Raw/Staging record
-↓
-Validation result
-↓
-Normalization
-↓
-Quality result
-↓
-Canonical record
+### 13.1 Canonical persistence — شش object اصلی معماری
 
-این موضوع برای:
+| DB SID | نام | Append-only |
+|---|---|---|
+| `DB-P3-001` | `canonical_instruments` | بله |
+| `DB-P3-002` | `canonical_candles` | بله |
+| `DB-P3-003` | `canonical_trades` | بله |
+| `DB-P3-004` | `canonical_orderbook_depth` | بله |
+| `DB-P3-005` | `canonical_derivatives` | بله |
+| `DB-P3-006` | `data_quality_logs` | بله |
 
-debugging
+جداول canonical باید authoritative boundary باشند و برای application، دسترسی `UPDATE`/`DELETE` نداشته باشند — این الزام در معماری صریح است.
 
-replay
+### 13.2 Normalized Event Stream
+```text
+Canonical Data → stream:canonical:market_events → Phase 4
+```
 
-audit
+### 13.3 Workers
+- `WRK-P3-001` — normalization-stream-worker
+- `WRK-P3-002` — data-quality-auditor
 
-future evaluation
+### 13.4 Quality API (Observability)
+- `GET /api/v1/quality/{exchange}/{symbol}`
+- `GET /api/v1/quality/summary`
 
-AI evidence provenance
+این APIها بخشی از مرز observable data-quality هستند، نه UI نهایی؛ باید در همین Step یا در مرز integration آن قرار گیرند.
 
-بسیار مهم است.
+### 13.5 معیار خروج (G-3)
+Phase 3 با «تست‌ها pass شدند» تمام نمی‌شود. باید ثابت شود که مسیر کامل زیر به‌صورت end-to-end کار می‌کند:
+```text
+P2 staging → Validation → Normalization → Quality → Quarantine → Canonical persistence → Canonical event stream → P4-ready data
+```
 
----
-
-## STEP-P3-008
-
-Authoritative Persistence, Event Handoff & G-3 Verification
-
-این Step باید Phase را به شکل واقعی به Phase 4 تحویل دهد.
-
-Canonical persistence
-
-Architecture شش object اصلی P3 را مشخص می‌کند:
-
-DB-P3-001 canonical_instruments
-DB-P3-002 canonical_candles
-DB-P3-003 canonical_trades
-DB-P3-004 canonical_orderbook_depth
-DB-P3-005 canonical_derivatives
-DB-P3-006 data_quality_logs
-
-این‌ها باید authoritative boundary شوند.
-
-Append-only
-
-Canonical tables باید append-only باشند و برای application، UPDATE/DELETE privilege نداشته باشند. این الزام در architecture صریح است.
-
----
-
-Normalized Event Stream
-
-P3 فقط database writer نیست.
-
-باید downstream event handoff نیز داشته باشد:
-
-Canonical Data
-↓
-stream:canonical:market_events
-↓
-Phase 4
-
-این queue/stream نیز در source architecture مشخص شده است.
-
----
-
-Workers
-
-معماری این دو worker را تعریف کرده:
-
-WRK-P3-001 normalization-stream-worker
-
-WRK-P3-002 data-quality-auditor
-
----
-
-Quality API
-
-برای مشاهده وضعیت کیفیت:
-
-GET /api/v1/quality/{exchange}/{symbol}
-
-GET /api/v1/quality/summary
-
-نیز در architecture آمده است.
-
-این APIها را باید در همین Step یا در مرز integration آن قرار داد، چون بخشی از observable data-quality boundary هستند، نه UI نهایی.
-
----
-
-## G-3 — مهم‌ترین بخش Step 8
-
-Phase 3 زمانی تمام نشده که:
-
-tests pass
-
-تنها.
-
-باید ثابت شود:
-
-P2 staging
-↓
-Validation
-↓
-Normalization
-↓
-Quality
-↓
-Quarantine
-↓
-Canonical persistence
-↓
-Canonical event stream
-↓
-P4-ready data
-
-به‌صورت end-to-end کار می‌کند.
-
-Gate رسمی:
-
-G-3
-Phase 3 → Phase 4
-
-و معیار architecture:
-
+**معیار رسمی معماری برای G-3:**
+```text
 Normalization pipeline pass
 100% canonical schema pass
 DLQ active
-
-است.
-
----
-
-## حالا مهم‌ترین قسمت: چه چیزهایی در P3 نباید باشند؟
-
-برای اینکه Phase 3 بیشترین بازده را داشته باشد، Scope آن باید به‌شدت محافظت شود.
-
-P3 نباید انجام دهد:
-
-❌ Technical Indicators
-
-مثل:
-
-EMA
-RSI
-MACD
-ATR
-ADX
-Bollinger
-
-اینها P4 هستند.
-
-❌ Market Structure
-
-BOS
-CHOCH
-MSS
-FVG
-Order Blocks
-Liquidity Pools
-
-P4.
-
-❌ Volume Profile
-
-P4.
-
-❌ Order Flow Analytics
-
-P4.
-
-❌ Regime Classification
-
-P4.
-
-❌ Specialist Intelligence
-
-P5.
-
-❌ AI Interpretation
-
-P6.
-
-❌ Opportunity Score
-
-P6.
-
-❌ Trade Idea Generation
-
-صراحتاً non-goal است.
-
-❌ Natural Language Summary
-
-P3 نباید وارد این حوزه شود.
-
-❌ Arbitrage / Opportunity Analysis
-
-Cross-venue validation بله؛ opportunity detection خیر.
+```
 
 ---
 
-## رابطه دقیق P2 → P3 → P4
+## 14. جدول تطبیق: از تحلیل تفصیلی (۱۴ Capability) به ساختار نهایی (۸ Step)
 
-این سه Phase باید مثل یک زنجیره کاملاً تمیز باشند:
+| Capability | Step نهایی |
+|---|---|
+| Schema / Contract Validation | P3-001 / P3-002 |
+| Semantic Validation | P3-003 / P3-004 |
+| Temporal Validation | P3-003 |
+| Sequence Validation | P3-003 |
+| Price / Quantity Integrity | P3-004 |
+| Precision | P3-004 |
+| Duplicate / Identity | P3-001 / P3-002 / P3-003 |
+| Missing / Stale / Incomplete | P3-003 / P3-007 |
+| Canonical Mapping | P3-005 |
+| Cross-Venue Consistency | P3-006 |
+| Data Quality Scoring | P3-007 |
+| Quarantine / DLQ | P3-007 |
+| Canonical Persistence | P3-008 |
+| Normalized Event Stream | P3-008 |
+| G-3 Verification | P3-008 |
 
-PHASE 2
-"Can we acquire it?"
-│
-▼
-Raw / Staging Data
-│
-▼
-PHASE 3
-"Can we trust it?"
-│
-┌───────┴────────┐
-│ │
-Valid Invalid
-│ │
-▼ ▼
-Normalize Quarantine
-│
-▼
-Canonical
-• Quality
-• Provenance
-│
-▼
-PHASE 4
-"What does the data
-mathematically say?"
-
-این تفکیک برای کل موفقیت Meylux بسیار مهم است.
-
-Phase 2 مالک Acquisition است.
-
-Phase 3 مالک Trust / Canonicalization / Quality است.
-
-Phase 4 مالک Mathematical Truth / Structure است.
+هیچ capability مهمی از تحلیل قبلی حذف نشده؛ فقط به مرزهای اجرایی منطقی‌تری منتقل شده است.
 
 ---
 
-## یک اصلاح مهم نسبت به نقشه ۶-Step قبلی
+## 15. Definition of Done — معیار خروج نهایی Phase 3
 
-من با بررسی مجدد sourceها، یک تغییر مهم نسبت به پیشنهاد قبلی CONTROL می‌دهم.
+Phase 3 فقط زمانی کامل تلقی می‌شود که همه موارد زیر با evidence واقعی اثبات شده باشند:
 
-در نقشه ۶-Step قبلی:
-
-Canonical Normalization & Decimal Boundary
-
-به‌صورت یک Step واحد آمده بود.
-
-اما برای Meylux، این کافی نیست.
-
-چون معماری موجود چهار خانواده‌ی validation مشخص دارد:
-
-Semantic & Monotonicity
-
-Price & Spread Integrity
-
-Tick & Lot Precision
-
-Cross-Venue Consistency
-
-و همچنین mapperهای Binance/MEXC و Quality Engine جدا هستند.
-
-اگر همه را در ۶ Step فشرده کنیم، Stepها بیش از حد سنگین می‌شوند و مرز verification مبهم خواهد شد.
-
-از طرف دیگر، ۱۴ Step اولیه نیز هر validation کوچک را تبدیل به یک execution Step می‌کرد که برای governance پروژه بیش از حد خرد است.
-
-بنابراین ۸ Step نقطه تعادل بهتری است.
+1. **Contract Integrity** — Canonical contracts مشخص، versioned و verified هستند.
+2. **Structural Integrity** — داده malformed هرگز وارد canonical نمی‌شود.
+3. **Temporal Integrity** — semantics مربوط به timestamp/sequence/gap اثبات شده‌اند.
+4. **Market Integrity** — OHLC، price، quantity، volume، spread و precision کنترل می‌شوند.
+5. **Provider Mapping** — Binance و MEXC هر دو به یک canonical semantic representation می‌رسند.
+6. **Cross-Venue Integrity** — مقایسه venueها فقط پس از اثبات semantic equivalence انجام می‌شود.
+7. **Quality Awareness** — هر مصرف‌کننده downstream می‌تواند بفهمد داده fresh، complete، degraded، stale، contradictory، unavailable یا unsupported است.
+8. **No Fabrication** — هیچ داده missing/invalid با مقدار ساختگی پر نمی‌شود.
+9. **Quarantine** — داده خراب isolate می‌شود و canonical را آلوده نمی‌کند.
+10. **Lineage** — هر رکورد canonical تا source و تاریخچه validation قابل ردیابی است.
+11. **Authoritative Persistence** — جداول canonical مرجع authoritative و append-only هستند.
+12. **Event Handoff** — Phase 4 می‌تواند رویدادهای canonical را دریافت کند.
+13. **Real-Time Quality** — quality scoring فقط batch تاریخی نیست؛ در جریان عملیاتی فعال است.
+14. **Replay / Determinism** — ورودی یکسان، خروجی validation/normalization قابل تکرار تولید می‌کند.
+15. **Performance** — هدف معماری برای batch normalization: **بیش از ۵٬۰۰۰ رویداد بر ثانیه به ازای هر core**؛ این هدف باید با evidence سنجیده شود، نه صرفاً «achieved» فرض شود.
+16. **G-3** — با evidence واقعی: `100% staging → canonical processing`، `DLQ active`، `zero canonical corruption`، `real-time quality scoring`.
 
 ---
 
-## Mapping کامل ۱۴ capability قبلی به ۸ Step نهایی
+## 16. الزام Vertical Slice
 
-Capability استخراج‌شده Step نهایی
+Phase 3 نباید صرفاً با چند fixture مصنوعی بسته شود. مسیر Controlled Vertical Slice نهایی معماری:
 
-Schema / Contract Validation P3-001 / P3-002
-Semantic Validation P3-003 / P3-004
-Temporal Validation P3-003
-Sequence Validation P3-003
-Price / Quantity Integrity P3-004
-Precision P3-004
-Duplicate / Identity P3-001 / P3-002 / P3-003
-Missing / Stale / Incomplete P3-003 / P3-007
-Canonical Mapping P3-005
-Cross-Venue Consistency P3-006
-Data Quality Scoring P3-007
-Quarantine / DLQ P3-007
-Canonical Persistence P3-008
-Normalized Event Stream P3-008
-G-3 Verification P3-008
+```text
+Binance Futures BTCUSDT — 15M Primary / 1H & 4H HTF
+P2 Ingestion → P3 Normalization → P4 Quantitative/Structure → P5 Specialists → P6 AI → P8 Persistence/API
+```
 
-در نتیجه هیچ capability مهمی از roadmap قبلی حذف نشده است.
-
-فقط به execution boundaries منطقی‌تر منتقل شده است.
+بنابراین Phase 3 باید حداقل یک مسیر evidence مبتنی بر داده واقعی (real-data vertical-slice) داشته باشد که نشان دهد داده واقعی Phase 2 می‌تواند بدون corruption از مرز Phase 3 عبور کرده و به ورودی معتبر Phase 4 تبدیل شود.
 
 ---
 
-## تمام اجزای P3 در یک نقشه واحد
+## 17. نکات تکمیلی — شکاف‌های اجرایی که باید صریح شوند
 
-PH-P2
-RAW / STAGING
-│
-▼
-┌────────────────────────┐
-│ P3-001 │
-│ Contracts / Identity │
-│ Validation Foundation │
-└────────────┬───────────┘
-│
-▼
-┌────────────────────────┐
-│ P3-002 │
-│ Schema / Structural │
-│ Validation │
-└────────────┬───────────┘
-│
-▼
-┌────────────────────────┐
-│ P3-003 │
-│ Temporal / Sequence │
-│ Completeness │
-└────────────┬───────────┘
-│
-▼
-┌────────────────────────┐
-│ P3-004 │
-│ Semantic / Price / │
-│ Spread / Precision │
-└────────────┬───────────┘
-│
-▼
-┌────────────────────────┐
-│ P3-005 │
-│ Canonical Normalization│
-│ Binance + MEXC │
-└────────────┬───────────┘
-│
-▼
-┌────────────────────────┐
-│ P3-006 │
-│ Cross-Venue Consistency│
-└────────────┬───────────┘
-│
-▼
-┌────────┴────────┐
-│ │
-VALID INVALID/DEGRADED
-│ │
-▼ ▼
-P3-007 QUALITY QUARANTINE / DLQ
-│ │
-├────────┬────────┘
-│ │
-▼ ▼
-Score + Lineage
-Explanation
-│
-▼
-P3-008
-Authoritative Persistence
-+ Event Handoff
-+ API/Observability
-+ E2E Verification
-│
-▼
-G-3
-│
-▼
-PH-P4
+بازبینی مجدد این Roadmap چهار نقطه را شناسایی کرد که در ساختار ۸ Step فعلی به‌صورت ضمنی حل شده‌اند اما باید پیش از تبدیل به Phase Definition رسمی، **صریح** و به یکی از Stepهای مربوطه ضمیمه شوند.
+
+### 17.1 Backfill تاریخی در برابر Stream زنده (مرتبط با `STEP-P3-002` تا `STEP-P3-005`)
+
+Stepهای فعلی صراحتاً بین دو مسیر ورودی تمایز قائل نمی‌شوند:
+
+```text
+مسیر A — Live Stream:      Provider WS/REST → Raw/Staging → Validation → Normalization  (کندل به کندل)
+مسیر B — Historical Backfill: Bulk Provider Export/REST → Raw/Staging (حجم بالا) → Validation → Normalization  (batch)
+```
+
+هر دو مسیر باید از **همان Canonical Contracts** (`STEP-P3-001`) و **همان قواعد Validation** (`STEP-P3-002` تا `STEP-P3-004`) عبور کنند تا خروجی canonical دچار دوگانگی معنایی نشود. اما تفاوت‌های عملیاتی زیر باید صریحاً در سطح Step (ترجیحاً `STEP-P3-005` یا به‌عنوان یک rider مستقل) مشخص شوند:
+
+- **Throughput profile متفاوت:** batch backfill معمولاً چند مرتبه حجیم‌تر از نرخ ورودی stream زنده است و نباید صف/normalization stream زنده را گرسنه (starve) کند — باید یا اولویت‌بندی صف مجزا داشته باشد، یا worker مستقل.
+- **Idempotency در تلاقی دو مسیر:** اگر بازه زمانی backfill با داده‌ای که از stream زنده قبلاً canonical شده هم‌پوشانی داشته باشد، قاعده باید صریح باشد: رکورد stream زنده برنده است یا رکورد backfill (بر اساس provenance و completeness)، و این تصمیم نباید silent باشد.
+- **Gap Recovery در برابر Cold Backfill:** وقتی Phase 2 یک gap شناسایی‌شده را با backfill پر می‌کند، Phase 3 باید بتواند این رکوردها را از نظر lineage به‌عنوان `SOURCE: BACKFILL` علامت‌گذاری کند تا از رکوردهای `SOURCE: LIVE` قابل تفکیک باشند (بدون تغییر در نتیجه validation).
+
+**پیشنهاد الحاق:** یک زیربخش صریح با عنوان «Backfill Ingestion Mode» در `STEP-P3-005` (Canonical Normalization & Provider Mapping) اضافه شود که provenance field موجود در `STEP-P3-001` را برای این تمایز استفاده کند — بدون نیاز به Contract جدید.
+
+### 17.2 Schema Versioning / Migration برای Canonical Contracts (مرتبط با `STEP-P3-001` و `STEP-P3-008`)
+
+`STEP-P3-001` صرفاً **freeze** اولیه Canonical Contracts را پوشش می‌دهد؛ مسیر **تکامل** بعدی این contracts (وقتی نیاز به افزودن/تغییر فیلد در آینده پیش بیاید) صریح نیست. پیشنهاد می‌شود این قاعده به‌عنوان یک بند مستقل در `STEP-P3-001` یا `STEP-P3-008` اضافه شود:
+
+```text
+تغییر Canonical Contract:
+  Additive field (backward-compatible)  →  version bump جزئی + مستندسازی، بدون migration اجباری داده قدیمی
+  Breaking change (تغییر معنایی/حذف)     →  ACR/change control + Contract SID جدید یا versioned schema
+                                            + قاعده صریح migration/backfill برای رکوردهای canonical قبلی
+```
+
+این با اصل `Golden Vector Freeze` در Phase 4 هم‌راستا است: تغییر contract نباید silent باشد و باید همان انضباط change-control را داشته باشد.
+
+### 17.3 Alerting روی Quarantine/DLQ Rate (مرتبط با `STEP-P3-007`)
+
+`STEP-P3-007` مکانیزم Quarantine/DLQ را تعریف می‌کند اما آستانه یا رفتار عملیاتی برای **نرخ غیرعادی quarantine** را مشخص نمی‌کند. پیشنهاد الحاق به `STEP-P3-007`:
+
+- یک **Quarantine Rate Baseline** به ازای هر `(venue, symbol, feed type)` باید در طول زمان قابل مشاهده باشد (از طریق `data_quality_logs` / Quality API موجود).
+- عبور نرخ quarantine از یک آستانه پیکربندی‌شده (configuration-driven، نه hard-coded) باید یک سیگنال عملیاتی صریح تولید کند — نه اینکه صرفاً در DLQ انباشته شود و کسی متوجه نشود.
+- این سیگنال می‌تواند از همان Observability Foundation (`CMP-P1-005`) تعریف‌شده در Phase 1 استفاده کند؛ نیازی به component جدید نیست.
+
+### 17.4 مقیاس چندنمادی/چندبازاری (مرتبط با معیار خروج G-3)
+
+معیار خروج فعلی صرفاً حول یک Vertical Slice تک‌نمادی (`Binance Futures BTCUSDT`) شده است. پیشنهاد می‌شود یک بند کوتاه به بخش ۱۵ (Definition of Done) اضافه شود:
+
+> G-3 علاوه بر اثبات Vertical Slice تک‌نمادی، باید حداقل یک شاهد (evidence) از صحت pipeline روی **بیش از یک نماد هم‌زمان** (مثلاً یک جفت نماد با نرخ رویداد متفاوت) ارائه دهد تا اطمینان حاصل شود منطق validation/normalization به‌صورت implicit به یک نماد خاص وابسته نشده است. این شاهد نباید به‌معنای گسترش رسمی scope Phase 3 به پشتیبانی کامل چند-نماد باشد؛ صرفاً یک non-regression check است.
 
 ---
 
-## معیار خروج نهایی Phase 3
+## 18. یادداشت حاکمیتی
 
-به نظر من این قسمت باید حتی از Stepها مهم‌تر باشد.
+این سند **Final Proposed Execution Structure** برای Phase 3 است — نه یک Phase Definition رسمی، نه Registry entry، و نه authorization اجرایی. Stable IDهای `STEP-P3-*` در این سند صرفاً **پیشنهادی** هستند و بدون ثبت رسمی در `docs/registry/artifacts.yaml` معتبر شناخته نمی‌شوند.
 
-P3 نباید با «کد نوشته شد» تمام شود.
+مرحله بعدی governance که باید توسط CONTROL/Project Owner از طریق فرآیند موجود انجام شود:
 
-باید بتوانیم در پایان بگوییم:
+1. تبدیل این ساختار به `docs/phases/PH-P3.md` رسمی (با همان قالب `PH-P0.md`/`PH-P1.md`/`PH-P2.md`).
+2. ثبت Stable IDهای `STEP-P3-001` تا `STEP-P3-008` در Registry.
+3. تعریف Acceptance Criteria مستقل برای هر Step.
+4. صدور Task Order رسمی برای اولین Step (`STEP-P3-001`) فقط پس از تصویب Owner.
 
-1. Contract Integrity
-
-Canonical contracts مشخص، versioned و verified هستند.
-
-2. Structural Integrity
-
-داده malformed وارد canonical نمی‌شود.
-
-3. Temporal Integrity
-
-timestamp/sequence/gap semantics اثبات شده‌اند.
-
-4. Market Integrity
-
-OHLC، price، quantity، volume، spread و precision کنترل می‌شوند.
-
-5. Provider Mapping
-
-Binance و MEXC هر دو به یک canonical semantic representation می‌رسند.
-
-6. Cross-Venue Integrity
-
-مقایسه venueها فقط وقتی انجام می‌شود که semantic equivalence ثابت شده باشد.
-
-7. Quality Awareness
-
-هر downstream consumer می‌تواند بفهمد:
-
-fresh?
-complete?
-degraded?
-stale?
-contradictory?
-unavailable?
-unsupported?
-
-8. No Fabrication
-
-هیچ داده‌ی missing یا invalid با مقدار ساختگی پر نمی‌شود.
-
-9. Quarantine
-
-داده خراب isolated می‌شود و canonical را آلوده نمی‌کند.
-
-10. Lineage
-
-canonical record به source و validation history قابل trace است.
-
-11. Authoritative Persistence
-
-canonical tables مرجع authoritative می‌شوند و append-only باقی می‌مانند.
-
-12. Event Handoff
-
-Phase 4 می‌تواند canonical events را دریافت کند.
-
-13. Real-Time Quality
-
-Quality scoring فقط batch تاریخی نیست؛ باید در operational flow فعال باشد.
-
-14. Replay / Determinism
-
-ورودی یکسان، normalization و validation قابل تکرار تولید کند.
-
-15. Performance
-
-معماری موجود برای batch normalization هدف >5,000 events/sec per core را مشخص کرده است. این باید به‌عنوان performance target ارزیابی شود، نه اینکه بدون evidence «achieved» فرض شود.
-
-16. G-3
-
-در نهایت:
-
-100% staging → canonical processing
-DLQ active
-zero canonical corruption
-real-time quality scoring
-
-باید با evidence واقعی اثبات شود.
-
----
-
-## یک نکته بسیار مهم درباره Vertical Slice
-
-P3 نباید صرفاً با چند fixture مصنوعی بسته شود.
-
-Controlled Vertical Slice معماری نهایی مشخص می‌کند:
-
-Binance Futures BTCUSDT
-15M Primary
-1H / 4H HTF
-
-و مسیر:
-
-P2 Ingestion
-→ P3 Normalization
-→ P4 Quantitative/Structure
-→ P5 Specialists
-→ P6 AI
-→ P8 persistence/API
-
-است.
-
-بنابراین در P3 باید حداقل یک real-data vertical-slice evidence path داشته باشیم که نشان دهد داده واقعی P2 می‌تواند بدون corruption از مرز P3 عبور کند و ورودی معتبر P4 شود.
-
----
-
-## نتیجه نهایی من
-
-بعد از این بررسی مجدد، من این را نسخه نهایی پیشنهادی roadmap Phase 3 می‌دانم:
-
-PH-P3
-Validation, Normalization & Data Quality Engine
-
-│
-├── STEP-P3-001
-│ Canonical Contracts, Identity & Validation Foundation
-│
-├── STEP-P3-002
-│ Structural, Schema & Identity Validation
-│
-├── STEP-P3-003
-│ Temporal, Sequence & Completeness Validation
-│
-├── STEP-P3-004
-│ Market Semantic, Price, Spread & Precision Validation
-│
-├── STEP-P3-005
-│ Canonical Normalization & Provider Mapping
-│
-├── STEP-P3-006
-│ Cross-Venue Consistency & Equivalence
-│
-├── STEP-P3-007
-│ Data Quality, Quarantine, DLQ & Lineage
-│
-└── STEP-P3-008
-Authoritative Persistence, Event Handoff
-& G-3 Verification
-
-و منطق آن:
-
-P3-001 تعیین می‌کند «داده معتبر چیست».
-
-P3-002 می‌گوید «ساختار داده درست است یا نه».
-
-P3-003 می‌گوید «زمان و sequence درست است یا نه».
-
-P3-004 می‌گوید «معنای بازار و اعداد درست هستند یا نه».
-
-P3-005 داده معتبر را به زبان مشترک Meylux تبدیل می‌کند.
-
-P3-006 اطمینان می‌دهد دو venue را واقعاً می‌توان با هم مقایسه کرد.
-
-P3-007 کیفیت، عدم قطعیت، خطا، quarantine و lineage را مدیریت می‌کند.
-
-P3-008 خروجی را authoritative می‌کند، به downstream تحویل می‌دهد و کل Phase را با G-3 اثبات می‌کند.
-
-و این ساختار از نظر من از هر دو نسخه قبلی بهتر است، چون نه capability مهمی را حذف می‌کند و نه Stepها را بی‌دلیل خرد می‌کند.
-
-در عین حال با معماری V2، dependency رسمی P2→P3→P4، componentهای CMP-P3-001/002، artifactهای P3، canonical DB objects، worker/queue/APIهای تعریف‌شده و G-3 هم‌راستا باقی می‌ماند.
-
-نکته حاکمیتی نهایی: این ۸ مورد در این لحظه Final Proposed Execution Structure هستند، نه اینکه من Stable IDهای STEP-P3-* را بدون ثبت رسمی در Registry به پروژه تحمیل کرده باشم. مرحله بعدی governance باید همین ساختار را به PH-P3.md، Registry، artifact traceability، acceptance criteria و سپس Task Orderهای رسمی تبدیل کند. GitHub نیز در جست‌وجوی فعلی هنوز نتیجه‌ای برای PH-P3 ندارد؛ بنابراین این distinction همچنان لازم است.
+تا پیش از انجام این مراحل، طبق `docs/state/CURRENT_CHECKPOINT.json`، **هیچ اجرای Phase 3 مجاز نیست.**
