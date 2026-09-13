@@ -79,6 +79,18 @@ records:
     artifact_path: docs/task-orders/TO-GOV-005.md
     traceability: ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011 / AR-GOV-004 / Project Owner direction
     status: VERIFIED / COMPLETE
+  - stable_id: TO-GOV-006
+    canonical_name: State / Registry Cleanup & Reconciliation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-006.md
+    traceability: BR-GOV-006 / GitHub Issue #18
+    status: APPROVED
+  - stable_id: TO-GOV-007
+    canonical_name: State and Registry Correction & Reconciliation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-007.md
+    traceability: TO-GOV-006 / BR-GOV-006
+    status: AUTHORIZED TO EXECUTE
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
@@ -136,6 +148,11 @@ records:
     artifact_path: docs/build-reports/BR-GOV-003.md
     traceability: TO-GOV-003 / ADR-GOVERNANCE-006
     status: VERIFIED
+  - stable_id: BR-GOV-006
+    canonical_name: Build Report — State / Registry Reconciliation
+    artifact_path: docs/build-reports/BR-GOV-006.md
+    traceability: TO-GOV-006 / GitHub Issue #18
+    status: APPROVED
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
     artifact_path: docs/audits/AR-GOV-001.md
@@ -182,31 +199,26 @@ records:
     status: RATIFIED / FROZEN — VERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-012.md
     traceability: TO-P0-011 / PH-P0 / STEP-P0-010 / AR-P0-AUDIT-014
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-014
     canonical_name: BR-P0-012 Control Audit — Architecture Ratification Readiness
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-014.md
     traceability: BR-P0-012 / TO-P0-011 / PH-P0 / STEP-P0-010
     status: APPROVED / VERIFIED — RATIFICATION READY
   - stable_id: ADR-GOVERNANCE-004
     canonical_name: Project Owner Ratification and Freeze of Master Architecture V2
-    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-004.md
     traceability: STEP-P0-010 / DOC-V2-ARCH-001 / Project Owner ratification
     status: RATIFIED / FROZEN
   - stable_id: AR-P0-AUDIT-015
     canonical_name: Final Phase 0 Closure Verification
-    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
     traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / PH-P0
     status: APPROVED / VERIFIED
   - stable_id: BR-P1-001
     canonical_name: Build Report — Repository Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-001.md
     traceability: TO-P1-001 / PH-P1 / STEP-P1-001
     status: VERIFIED
@@ -290,7 +302,6 @@ records:
 
   - stable_id: TO-P1-007
     canonical_name: Task Order — Observability Foundation
-    entity_type: TO
     artifact_path: docs/task-orders/TO-P1-007.md
     traceability: TO-P1-007 / PH-P1 / STEP-P1-007 / AR-P1-AUDIT-007
     status: VERIFIED / COMPLETE
@@ -340,19 +351,61 @@ records:
     traceability: GOV-BOUNDARY-001 / ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011 / Project Owner direction
     status: VERIFIED / COMPLETE
 
+  - stable_id: TO-P2-001
+    canonical_name: Task Order — Provider Boundary & Acquisition Contracts
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-001.md
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / AR-P2-AUDIT-001
+    status: VERIFIED / COMPLETE
+
+  - stable_id: BR-P2-001
+    canonical_name: Build Report — Provider Boundary & Acquisition Contracts
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-001.md
+    traceability: TO-P2-001 / PH-P2 / STEP-P2-001 / AR-P2-AUDIT-001
+    status: VERIFIED
+
+  - stable_id: AR-P2-AUDIT-001
+    canonical_name: CONTROL Independent Verification — TO-P2-001
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-001.md
+    traceability: BR-P2-001 / TO-P2-001 / STEP-P2-001 / PH-P2
+    status: APPROVED / VERIFIED
+
+  - stable_id: STEP-P2-001
+    canonical_name: Provider Boundary & Acquisition Contracts
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / TO-P2-001 / AR-P2-AUDIT-001
+    status: VERIFIED / COMPLETE
+
+  - stable_id: STEP-P2-002
+    canonical_name: Binance Acquisition Adapter
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / TO-P2-002 / AR-P2-AUDIT-002
+    status: VERIFIED / COMPLETE
+
+  - stable_id: AR-P2-AUDIT-002
+    entity_type: AR
+    canonical_name: CONTROL Independent Audit — TO-P2-002
+    artifact_path: docs/audits/AR-P2-AUDIT-002.md
+    traceability: BR-P2-002 / TO-P2-002 / STEP-P2-002 / PH-P2
+    status: APPROVED / VERIFIED
+
   - stable_id: TO-P2-002
     canonical_name: Task Order — Binance Acquisition Adapter
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-002.md
     traceability: PH-P2 / STEP-P2-002 / TO-P2-001 / AR-P2-AUDIT-001 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
 
   - stable_id: BR-P2-002
     canonical_name: Build Report — Binance Acquisition Adapter
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-002.md
-    traceability: TO-P2-002 / PH-P2 / STEP-P2-002
-    status: PLANNED
+    traceability: TO-P2-002 / PH-P2 / STEP-P2-002 / AR-P2-AUDIT-002
+    status: VERIFIED
 
   - stable_id: AR-P2-AUDIT-003
     canonical_name: BR-P2-003 Control Audit — MEXC Acquisition Adapter
@@ -457,7 +510,7 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-006.md
     traceability: TO-P2-006 / PH-P2 / STEP-P2-006 / CMP-P2-001 / CTR-P2-001 / GOV-BOUNDARY-001
-    status: PRODUCER EVIDENCE / CONTROL VERIFIED
+    status: VERIFIED
 
   - stable_id: AR-P2-AUDIT-007
     canonical_name: CONTROL Final Verification & Phase 2 Closure
@@ -479,6 +532,13 @@ records:
     artifact_path: docs/task-orders/TO-P2-007.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-006 / AR-P2-AUDIT-006 / AR-P2-AUDIT-007 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
     status: VERIFIED / COMPLETE
+
+  - stable_id: BR-GOV-007
+    canonical_name: Build Report — State and Registry Correction & Reconciliation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-GOV-007.md
+    traceability: TO-GOV-007 / TO-GOV-006 / BR-GOV-006
+    status: IMPLEMENTED / TESTED / UNVERIFIED
 
   - stable_id: DOC-P3-001
     canonical_name: Phase 3 Master Roadmap
