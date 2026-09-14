@@ -561,3 +561,10 @@ records:
     artifact_path: docs/blueprint/PHASE4_ROADMAP.md
     traceability: PH-P4 / DOC-V2-ARCH-001 / G-4
     status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+
+  - stable_id: TO-GOV-008
+    canonical_name: Governance / Documentation / Registry / Lifecycle Reconciliation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-008.md
+    traceability: TO-GOV-007 / BR-GOV-007 / ADR-GOVERNANCE-012
+    status: AUTHORIZED TO EXECUTE
