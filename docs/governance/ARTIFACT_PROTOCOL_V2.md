@@ -101,3 +101,62 @@ CONTROL / REVIEWER (`ROL-V2-001`) remains the independent audit and verification
 The delegation is established by `ADR-GOVERNANCE-003`, ratified by the Project Owner under `ADR-GOVERNANCE-001`. It is an operational clarification of this existing Artifact Protocol and does not create a new governance subsystem, role, artifact class, or approval mechanism.
 
 This protocol does not ratify/freeze the Master Architecture, alter the Phase 0 sequence, reopen G-0/G-0R, or authorize runtime or V1 activity.
+
+## Mandatory Peripheral Synchronization Checklist
+
+Established by `ADR-GOVERNANCE-012`, in direct response to the root-cause
+finding of `TO-GOV-008` (README and Registry status drift discovered
+after Phase 2 closure).
+
+Every Task Order that closes a Step or Phase MUST include the following
+checklist in its Required Output section, and the corresponding Build
+Report MUST report against each item individually before the Step/Phase
+may be declared `CLOSED / VERIFIED`:
+
+1. `README.md` — does its repository-status summary still match
+   `CURRENT_CHECKPOINT.json` after this closure? If not, correct it as
+   part of THIS Task Order, not a deferred cleanup task.
+
+2. `docs/registry/artifacts.yaml` — does the record for any Role,
+   Component, Contract, or other artifact that was exercised, created,
+   or verified in this Step still carry a stale pre-activation status
+   (e.g. `DRAFT_PRE_PHASE_0`)? If so, correct it now, using only
+   already-established repository vocabulary.
+
+3. Specialized registries (`components.yaml`, `contracts.yaml`,
+   `requirements.yaml`, `tests.yaml`, `runtime.yaml`, `database.yaml`,
+   `security.yaml`, `configuration.yaml`, `performance.yaml`,
+   `observability.yaml`) — did this Step produce evidence (test counts,
+   CI runs, schema changes, security controls, configuration records)
+   that belongs in one of these files but was only reported in the
+   Build Report? If so, transcribe it now with a direct evidence
+   reference. Do not defer to a future cleanup task, and do not
+   populate any record without a direct evidence reference.
+
+4. Any standalone status-bearing document referenced by this Step's
+   architecture basis (for example, a design/lessons-learned document
+   later absorbed into a ratified document) — does its own Status line
+   still reflect a pre-absorption state? If so, correct it when
+   evidence supports the correction, or raise it explicitly as an Open
+   Question when it does not. Do not leave it silently stale.
+
+5. Any supplemental/staging registry created earlier in the current
+   Phase (for example, a `SUPPLEMENTAL / ACTIVE` index) — has its
+   content now been fully absorbed into the canonical registry? If so,
+   mark it superseded/retired using existing vocabulary rather than
+   leaving it indefinitely active.
+
+A Step/Phase-closure Build Report that omits this checklist, or that
+addresses it without individually confirming each of the five items,
+is INCOMPLETE regardless of how correct its primary implementation
+evidence is, and must not be accepted as `CLOSED / VERIFIED` by CONTROL.
+
+This checklist does not expand CONTROL or Producer authority, does not
+create a new artifact class, role, or lifecycle state, and does not by
+itself authorize any Phase, Step, VPS, or runtime action. It is a
+reporting and consistency obligation attached to existing Step/Phase
+closure authority only.
+
+## Governance Basis — Checklist Amendment
+
+This checklist is established by `ADR-GOVERNANCE-012`, ratified by the Project Owner. It is an operational clarification of this existing Artifact Protocol and does not create a new governance subsystem, role, artifact class, or approval mechanism, consistent with the precedent already set by the "Governance Basis" section above for `ADR-GOVERNANCE-003`.
