@@ -1,6 +1,6 @@
 # Meylux V2 — Evidence Policy
 
-**Status:** RECONCILED / PENDING CONTROL VERIFICATION  
+**Status:** VERIFIED  
 **Scope:** V2 evidence provenance, classification, integrity, verification, acceptance, and governance boundaries
 
 ## 1. Purpose
@@ -239,4 +239,4 @@ Historical evidence must retain its lineage. Corrections occur through the gover
 
 ## 14. Current Status
 
-This policy is `RECONCILED / PENDING CONTROL VERIFICATION` as part of `TO-P0-009`. Independent CONTROL audit remains required before this policy or `STEP-P0-008` may be treated as verified/complete.
+This document was reconciled under `TO-P0-009` and independently verified by CONTROL / REVIEWER in `AR-P0-AUDIT-012`. The current file-level lifecycle status records that prior verification as `VERIFIED`; this Producer change does not constitute a new CONTROL verification.
