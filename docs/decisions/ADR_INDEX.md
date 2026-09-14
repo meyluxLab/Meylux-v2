@@ -11,6 +11,7 @@ ADRs:
 - `ADR-GOVERNANCE-003` — Producer Build Report Allocation Delegation — RATIFIED
 - `ADR-GOVERNANCE-010` — CONTROL Autonomous VPS Execution & Verification — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
 - `ADR-GOVERNANCE-011` — SentinelX Broad Operational Privilege Model — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+- `ADR-GOVERNANCE-012` — Mandatory Peripheral Synchronization Checklist — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
 
 ADR identity convention:
 
