@@ -171,10 +171,6 @@ class CanonicalFoundationTests(unittest.TestCase):
         }
         self.assertEqual(set(ValidationResult), expected)
         self.assertEqual(validation_outcome(()).result, ValidationResult.VALID)
-        self.assertEqual(
-            validation_outcome((ValidationCodeIssue := None,) if False else ()).result,
-            ValidationResult.VALID,
-        )
 
 
 if __name__ == "__main__":
