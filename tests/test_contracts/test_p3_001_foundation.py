@@ -15,8 +15,10 @@ from contracts.canonical.foundation import (
     require_decimal,
     validate_allowed,
     validate_decimal_scale,
+    validate_provenance,
     validate_required_fields,
     validate_timestamp,
+    validation_outcome,
 )
 from contracts.canonical.instrument import CanonicalInstrument
 from contracts.canonical.orderbook import CanonicalOrderBook
@@ -93,6 +95,9 @@ class CanonicalFoundationTests(unittest.TestCase):
             [issue.code for issue in issues],
             [ValidationCode.NULL_NOT_ALLOWED, ValidationCode.REQUIRED_MISSING],
         )
+        outcome = validation_outcome(issues)
+        self.assertEqual(outcome.result, ValidationResult.INCOMPLETE)
+        self.assertFalse(outcome.valid)
 
     def test_decimal_is_authoritative_and_float_is_rejected(self):
         self.assertEqual(require_decimal(Decimal("1.20"), "price"), Decimal("1.20"))
@@ -121,6 +126,7 @@ class CanonicalFoundationTests(unittest.TestCase):
         issue = validate_allowed("unknown", "market_type", allowed)
         self.assertIsNotNone(issue)
         self.assertEqual(issue.code, ValidationCode.INVALID_VALUE)
+        self.assertEqual(validation_outcome((issue,)).result, ValidationResult.REJECTED)
 
     def test_deterministic_identity_is_order_independent(self):
         left = deterministic_identity({"venue": "binance", "symbol": "BTCUSDT", "market": "spot"})
@@ -133,14 +139,42 @@ class CanonicalFoundationTests(unittest.TestCase):
         lineage = LineageRef("raw:fixture/1", "validation")
         self.assertEqual(provenance.provenance_id, "prov:fixture/1")
         self.assertEqual(lineage.parent_id, "raw:fixture/1")
+        self.assertIsNone(validate_provenance(provenance))
         with self.assertRaises((AttributeError, TypeError)):
             provenance.source = "other"  # type: ignore[misc]
 
-    def test_validation_result_taxonomy_is_explicit(self):
-        self.assertEqual(ValidationResult.VALID.value, "valid")
-        self.assertEqual(ValidationResult.QUARANTINED.value, "quarantined")
-        self.assertIn(ValidationResult.STALE, tuple(ValidationResult))
-        self.assertIn(ValidationResult.CONTRADICTORY, tuple(ValidationResult))
+    def test_missing_provenance_is_rejected_by_canonical_validation_boundary(self):
+        issue = validate_provenance(None)
+        self.assertIsNotNone(issue)
+        self.assertEqual(issue.code, ValidationCode.PROVENANCE_MISSING)
+        outcome = validation_outcome((issue,))
+        self.assertEqual(outcome.result, ValidationResult.INCOMPLETE)
+        self.assertFalse(outcome.valid)
+
+    def test_invalid_empty_provenance_is_rejected(self):
+        with self.assertRaises(ValueError):
+            ProvenanceRef("", "fixture", "test")
+        issue = validate_provenance("not-a-provenance-ref")
+        self.assertIsNotNone(issue)
+        self.assertEqual(issue.code, ValidationCode.INVALID_TYPE)
+        self.assertEqual(validation_outcome((issue,)).result, ValidationResult.REJECTED)
+
+    def test_validation_result_taxonomy_and_outcome_mapping_are_authoritative(self):
+        expected = {
+            ValidationResult.VALID,
+            ValidationResult.DEGRADED,
+            ValidationResult.STALE,
+            ValidationResult.INCOMPLETE,
+            ValidationResult.CONTRADICTORY,
+            ValidationResult.REJECTED,
+            ValidationResult.UNAVAILABLE,
+        }
+        self.assertEqual(set(ValidationResult), expected)
+        self.assertEqual(validation_outcome(()).result, ValidationResult.VALID)
+        self.assertEqual(
+            validation_outcome((ValidationCodeIssue := None,) if False else ()).result,
+            ValidationResult.VALID,
+        )
 
 
 if __name__ == "__main__":
