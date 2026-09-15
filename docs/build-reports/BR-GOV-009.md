@@ -190,3 +190,21 @@ The Producer does not claim independent CONTROL verification. Any remaining proj
 `COMPLETED — ALL IN-SCOPE CHANGES APPLIED AND VALIDATED`
 
 This declaration means the Producer completed the bounded C-01/C-02 corrections and repository-refetched the authorized F-05/F-07 results. It does not constitute CONTROL verification or approval.
+
+## 14. C-03 — Final Residual Correction
+
+CONTROL subsequently issued the final residual correction notice for `TO-GOV-009`.
+
+Applied exactly as authorized:
+
+- `AR-P1-AUDIT-008` restored to `entity_type: AR`.
+- `PH-P2` traceability restored exactly to `PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004`.
+- No F-05 change, supplemental-registry change, Stable ID change, lifecycle change, Phase activation/reopening, architecture/runtime/VPS/V1 action, or F-02/F-03/F-04/F-08 change was authorized or performed.
+
+The C-03 correction commit is:
+
+`7511c5d5e97f4c7f69b301ff30b38cd82adbdb28`
+
+The Producer remains `IMPLEMENTED / TESTED / UNVERIFIED`; CONTROL verification remains pending.
+
+The C-03 correction was independently bounded to `docs/registry/artifacts.yaml`. The exact net correction from the pre-C-03 Producer state is the restoration of the two authorized registry fields described above.
