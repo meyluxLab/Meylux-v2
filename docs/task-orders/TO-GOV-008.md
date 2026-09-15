@@ -6,12 +6,13 @@
 **Step:** `NONE`
 **Issuer:** CONTROL / REVIEWER (`ROL-V2-001`)
 **Recipient:** PRODUCER / ARCHITECT-BUILDER (`ROL-V2-002`)
-**Status:** `AUTHORIZED TO EXECUTE`
+**Status:** `VERIFIED / COMPLETE`
 **Predecessor:** `TO-GOV-007` / `BR-GOV-007`
 **Repository:** `meyluxLab/Meylux-v2`
 **Related ADR:** `ADR-GOVERNANCE-012`
 **Required Build Report:** `BR-GOV-008`
 **Build Report Path:** `docs/build-reports/BR-GOV-008.md`
+**Final CONTROL Audit:** `AR-GOV-005` — `APPROVED / VERIFIED`
 
 ## 1. Sole Objective
 
@@ -230,5 +231,11 @@ Registration of this Task Order and the related ADR is a governance/repository i
 Completion of this Task Order does not authorize Phase 3 or Phase 4, does not reopen Phase 2, and does not constitute implementation, VPS execution, architecture work, verification of the overall project, or project-wide reconciliation closure.
 
 After the Producer Build Report is submitted, CONTROL will independently audit and verify the execution evidence.
+
+## 13. Final CONTROL Closure
+
+`AR-GOV-005` records the final independent CONTROL verification of this Task Order.
+
+Final lifecycle: `VERIFIED / COMPLETE`.
 
 **End of Task Order.**
