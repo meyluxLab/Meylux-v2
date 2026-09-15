@@ -546,7 +546,7 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-007.md
     traceability: TO-GOV-007 / TO-GOV-006 / BR-GOV-006
-    status: IMPLEMENTED / TESTED / UNVERIFIED
+    status: VERIFIED / COMPLETE
 
   - stable_id: DOC-P3-001
     canonical_name: Phase 3 Master Roadmap
