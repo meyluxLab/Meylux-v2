@@ -96,8 +96,10 @@ Objective: establish structural, schema and initial identity validation for inco
 ### `STEP-P3-003` — Temporal, Sequence & Completeness Validation
 
 **Order:** 3
-**Status:** DEFINED / INACTIVE
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** ACTIVE / AUTHORIZED
 **Predecessor:** `STEP-P3-002`
+**Active Task Order:** `TO-P3-003`
 
 Objective: establish timestamp, ordering, sequence, continuity and completeness validation.
 
@@ -151,7 +153,7 @@ A later Step must not rely on unverified behavior from its predecessor. Preparat
 
 ## Registry Synchronization Rule
 
-Every Phase 3 Step that produces actual evidence in requirements, tests, database, configuration, security, components, contracts, runtime, performance, observability or data-quality domains must register the corresponding record in the applicable specialized registry in the same governed Task Order cycle, with direct evidence traceability. No speculative `CMP-P3-*`, `CTR-P3-*`, `REQ-*` or `TST-*` records are created merely from roadmap intent.
+Every Phase 3 Step that produces actual evidence in requirements, tests, database, configuration, security, components, contracts, runtime, performance, observability or data-quality domains must register the corresponding record in the applicable specialized registry in the same governed Task Order cycle, with direct evidence traceability. No speculative `CMP-P3-*`, `CTR-P3-*`, `REQ-*` or `TST-P3-*` records are created merely from roadmap intent.
 
 ## Standing Role Operating Rules — `ADR-GOVERNANCE-013`
 
@@ -160,7 +162,7 @@ The following rules apply to every governed role and every session:
 1. **Continuation Duty:** continue to the highest genuinely authorized boundary. Difficulty, ordinary implementation problems and normal test failures are not blockers. Stop only for (A) actual Owner decision/ratification, (B) an unresolved authoritative conflict requiring a decision rather than a guess, or (C) natural completion requiring independent verification. State A/B/C explicitly when stopping.
 2. **Same-Response Communication Duty:** whenever work requires text to be carried to another governed role, produce the complete forward-ready message in the same response. Substantive hand-offs use `FORMAL ENGLISH MESSAGE READY TO SEND` followed by `SIMPLE PERSIAN EXPLANATION`.
 3. **Large Artifact Retrieval:** use `Identify artifact → Obtain real Blob SHA → fetch_blob → Retrieve complete artifact → Read / search / verify`; never proceed from truncated content.
-4. **SentinelX-Only VPS Execution:** any work genuinely requiring VPS inspection/action must use SentinelX exclusively under `ADR-GOVERNANCE-011`; SentinelX availability does not create new authority.
+4. **SentinelX-Only VPS Execution:** any work genuinely requiring VPS inspection/action must use SentinelX exclusively under `ADR-GOVERNANCE-011`; SentinelX availability does not itself authorize runtime or VPS changes.
 
 Every substantive response must end with the `--- STANDING RULES CHECK ---` footer required by `ADR-GOVERNANCE-013`.
 
