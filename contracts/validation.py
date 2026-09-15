@@ -203,7 +203,8 @@ def validate_acquisition_structure(values: Mapping[str, Any]) -> StructuralValid
         "canonical_instrument_id": instrument.canonical_instrument_id,
         "provider_instrument_id": instrument.provider_instrument_id,
         "event_type": event_type.value,
-        "event_time": event_time,
+        # Match the already-authorized AcquisitionEnvelope identity serialization.
+        "event_time": event_time.isoformat().replace("+00:00", "Z"),
         "source_sequence": source_sequence,
         "payload": payload,
     }
