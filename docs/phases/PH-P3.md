@@ -74,9 +74,11 @@ Cross-Venue Validation is within Phase 3. Opportunity Detection is not.
 ### `STEP-P3-001` — Canonical Contracts, Identity & Validation Foundation
 
 **Order:** 1
-**Status:** ACTIVE / AUTHORIZED
-**Authorization state:** AUTHORIZED TO EXECUTE
-**Active Task Order:** `TO-P3-001`
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Active Task Order:** none
+**Completed Task Order:** `TO-P3-001`
+**Completion Audit:** `AR-P3-001`
 
 Objective: establish the canonical contract, identity, validation semantics and deterministic data-quality foundation required by the remaining Phase 3 Steps.
 
