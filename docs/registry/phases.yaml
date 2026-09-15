@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: CLOSED / VERIFIED
+status: ACTIVE / AUTHORIZED
 records:
   - sid: PH-P0
     logical_name: Phase 0
@@ -261,3 +261,117 @@ records:
     completed_task_order: TO-P2-006
     completion_audit: AR-P2-AUDIT-007
     purpose: Verify the complete Phase 2 acquisition boundary using real provider/runtime evidence and establish Phase 2 closure evidence.
+
+  - sid: PH-P3
+    logical_name: Validation, Normalization & Data Quality Engine
+    entity_type: PH
+    status: ACTIVE / AUTHORIZED
+    entry_gate: G-3
+    entry_gate_role: phase boundary
+    entry_approval: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15
+    first_step: STEP-P3-001
+    next_valid_step: STEP-P3-002
+    final_step: STEP-P3-008
+    authorization_criteria:
+      - Phase 2 is CLOSED / VERIFIED.
+      - Project Owner explicitly authorized Phase 3 establishment.
+      - Phase 3 definition and complete Step sequence are recorded in the GitHub Source of Truth.
+      - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
+    architecture_relationship:
+      architecture: DOC-V2-ARCH-001
+      phase_model: Section 13 defines PH-P3 as Validation, Normalization and Data Quality.
+      phase_specification: docs/phases/PH-P3.md
+      reference_roadmap: DOC-P3-001
+      upstream_foundation: PH-P2 CLOSED / VERIFIED
+      downstream_boundary: Phase 4 Deterministic Quantitative & Market Structure Engine
+    scope_boundary:
+      - Validation, normalization, canonicalization, data-quality classification, quarantine/DLQ, lineage, canonical persistence and normalized handoff.
+      - No deterministic quantitative or market-structure computation.
+      - No specialist intelligence or AI interpretation.
+      - No trading, capital control, custody, leverage, or autonomous execution.
+      - No V1 mutation or V1 runtime activity.
+      - Only the currently activated Step may be executed.
+
+  - sid: STEP-P3-001
+    logical_name: Canonical Contracts, Identity & Validation Foundation
+    entity_type: STEP
+    phase: PH-P3
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED TO EXECUTE
+    order: 1
+    predecessor: STEP-P2-006
+    activation_basis: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15 / PH-P3
+    active_task_order: TO-P3-001
+    completed_task_order: null
+    completion_audit: null
+    purpose: Establish the canonical contract, identity, validation semantics and deterministic data-quality foundation required by Phase 3.
+
+  - sid: STEP-P3-002
+    logical_name: Structural, Schema & Identity Validation
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 2
+    predecessor: STEP-P3-001
+    active_task_order: null
+
+  - sid: STEP-P3-003
+    logical_name: Temporal, Sequence & Completeness Validation
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 3
+    predecessor: STEP-P3-002
+    active_task_order: null
+
+  - sid: STEP-P3-004
+    logical_name: Market Semantic, Price, Spread & Precision Validation
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 4
+    predecessor: STEP-P3-003
+    active_task_order: null
+
+  - sid: STEP-P3-005
+    logical_name: Canonical Normalization & Provider Mapping
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 5
+    predecessor: STEP-P3-004
+    active_task_order: null
+
+  - sid: STEP-P3-006
+    logical_name: Cross-Venue Consistency & Equivalence
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 6
+    predecessor: STEP-P3-005
+    active_task_order: null
+
+  - sid: STEP-P3-007
+    logical_name: Data Quality, Quarantine, DLQ & Lineage
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 7
+    predecessor: STEP-P3-006
+    active_task_order: null
+
+  - sid: STEP-P3-008
+    logical_name: Authoritative Persistence, Event Handoff & G-3 Verification
+    entity_type: STEP
+    phase: PH-P3
+    status: DEFINED / INACTIVE
+    authorization_state: DEFINED / INACTIVE
+    order: 8
+    predecessor: STEP-P3-007
+    active_task_order: null
