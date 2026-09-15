@@ -33,7 +33,7 @@ entries:
       - TO-P1-001
     from_state: PH-P1 undefined; STEP-P1-001 through STEP-P1-008 undefined; no active Task Order
     to_state: PH-P1 ACTIVE / IN_PROGRESS; STEP-P1-001 ACTIVE / AUTHORIZED; STEP-P1-002 through STEP-P1-008 DEFINED / INACTIVE; TO-P1-001 AUTHORIZED / ACTIVE
-    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    architecture_effect: DOC-V2-ARCH-001 remains DESIGN BASELINE — PENDING RATIFICATION and unchanged
     runtime_effect: no runtime execution evidence; Operator execution not yet performed
     v1_effect: none
 
@@ -51,7 +51,7 @@ entries:
       - TO-P1-002
     from_state: STEP-P1-001 ACTIVE / AUTHORIZED; TO-P1-001 AUTHORIZED / ACTIVE; STEP-P1-002 DEFINED / INACTIVE
     to_state: BR-P1-001 VERIFIED; TO-P1-001 VERIFIED / COMPLETE; STEP-P1-001 COMPLETE / VERIFIED; STEP-P1-002 ACTIVE / AUTHORIZED; TO-P1-002 AUTHORIZED / ACTIVE
-    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    architecture_effect: DOC-V2-ARCH-001 remains DESIGN BASELINE — PENDING RATIFICATION and unchanged
     runtime_effect: no production/runtime/VPS execution; repository foundation self-tests were reported and independently audited
     v1_effect: none
 
@@ -65,10 +65,11 @@ entries:
       - TO-P1-002
       - AR-P1-AUDIT-002
       - STEP-P1-002
+      - STEP-P1-003
       - TO-P1-003
     from_state: STEP-P1-002 ACTIVE / AUTHORIZED; TO-P1-002 AUTHORIZED / ACTIVE; STEP-P1-003 DEFINED / INACTIVE
     to_state: BR-P1-002 VERIFIED; TO-P1-002 VERIFIED / COMPLETE; STEP-P1-002 COMPLETE / VERIFIED; STEP-P1-003 ACTIVE / AUTHORIZED; TO-P1-003 AUTHORIZED / ACTIVE
-    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    architecture_effect: DOC-V2-ARCH-001 remains DESIGN BASELINE — PENDING RATIFICATION and unchanged
     runtime_effect: Docker-specific CI execution evidence verified; no production/VPS deployment or live market/trading activity
     v1_effect: none
 
@@ -84,7 +85,7 @@ entries:
       - STEP-P1-003
     from_state: BR-P1-003 PRODUCED / UNVERIFIED; TO-P1-003 AUTHORIZED / ACTIVE; STEP-P1-003 ACTIVE / AUTHORIZED
     to_state: BR-P1-003 VERIFIED; TO-P1-003 VERIFIED / COMPLETE; STEP-P1-003 COMPLETE / VERIFIED
-    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    architecture_effect: DOC-V2-ARCH-001 remains DESIGN BASELINE — PENDING RATIFICATION and unchanged
     runtime_effect: corrected CI database runtime validation independently verified; no Target VPS execution performed
     v1_effect: none
 
@@ -219,4 +220,27 @@ entries:
     to_state: BR-P1-008 VERIFIED; TO-P1-008 VERIFIED / COMPLETE; STEP-P1-008 COMPLETE / VERIFIED; PH-P1 CLOSED / VERIFIED
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: independent backup/restore, database recovery, Redis Streams recovery, worker recovery, and P1 exit verification completed on the dedicated V2 VPS; no prohibited runtime activity
+    v1_effect: none
+
+  - id: CHG-P3-ENTRY-001
+    date_utc: '2026-09-15'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: Phase 3 establishment, complete Step registration, and first-step activation
+    basis: Project Owner Final Directive — Phase 3 Establishment + ADR-GOVERNANCE-013
+    affected_ids:
+      - ADR-GOVERNANCE-013
+      - PH-P3
+      - STEP-P3-001
+      - STEP-P3-002
+      - STEP-P3-003
+      - STEP-P3-004
+      - STEP-P3-005
+      - STEP-P3-006
+      - STEP-P3-007
+      - STEP-P3-008
+      - TO-P3-001
+    from_state: PH-P3 undefined; STEP-P3-001 through STEP-P3-008 undefined; no active Phase 3 Task Order
+    to_state: PH-P3 ACTIVE / AUTHORIZED; STEP-P3-001 ACTIVE / AUTHORIZED; STEP-P3-002 through STEP-P3-008 DEFINED / INACTIVE; TO-P3-001 AUTHORIZED TO EXECUTE; ADR-GOVERNANCE-013 RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS/runtime execution; SentinelX not used because Phase 3 establishment required no VPS action
     v1_effect: none
