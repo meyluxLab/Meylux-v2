@@ -135,49 +135,41 @@ records:
     status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
-    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-001.md
     traceability: TO-GOV-001 / ADR-GOVERNANCE-006
     status: VERIFIED
   - stable_id: BR-GOV-002
     canonical_name: Build Report — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
-    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-002.md
     traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: VERIFIED
   - stable_id: BR-GOV-003
     canonical_name: Build Report — CONTROL Autonomous VPS Execution & Verification Governance Amendment
-    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-003.md
     traceability: TO-GOV-003 / ADR-GOVERNANCE-006
     status: VERIFIED
   - stable_id: BR-GOV-006
     canonical_name: Build Report — State / Registry Reconciliation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-006.md
     traceability: TO-GOV-006 / GitHub Issue #18
     status: APPROVED
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
-    entity_type: AR
     artifact_path: docs/audits/AR-GOV-001.md
     traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-002
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
-    entity_type: AR
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-003
     canonical_name: CONTROL Independent Audit — TO-GOV-003 Governance Amendment
-    entity_type: AR
     artifact_path: docs/audits/AR-GOV-003.md
     traceability: BR-GOV-003 / TO-GOV-003 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-004
     canonical_name: CONTROL Independent Verification — TO-GOV-004 VPS Execution & Verification Pilot
-    entity_type: AR
     artifact_path: docs/audits/AR-GOV-004.md
     traceability: TO-GOV-004 / EXEC-LOG-TO-GOV-004-20260909T204147Z / ADR-GOVERNANCE-008 / ADR-GOVERNANCE-011
     status: APPROVED / VERIFIED
@@ -237,7 +229,6 @@ records:
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-001
     canonical_name: BR-P1-001 Control Audit — Repository Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-001.md
     traceability: BR-P1-001 / TO-P1-001 / PH-P1 / STEP-P1-001
     status: APPROVED / VERIFIED
@@ -273,31 +264,26 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-003
     canonical_name: Build Report — Database Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-003.md
     traceability: TO-P1-003 / PH-P1 / STEP-P1-003
     status: VERIFIED
   - stable_id: BR-P1-004
     canonical_name: Build Report — Data Contracts
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-004.md
     traceability: TO-P1-004 / PH-P1 / STEP-P1-004
     status: VERIFIED
   - stable_id: BR-P1-005
     canonical_name: Build Report — Data Quality Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-005.md
     traceability: TO-P1-005 / PH-P1 / STEP-P1-005
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-004
     canonical_name: BR-P1-004 Control Audit — Data Contracts
-    entity_type: AR
     artifact_path: docs/audit-reports/AR-P1-AUDIT-004.md
     traceability: BR-P1-004 / TO-P1-004 / PH-P1 / STEP-P1-004
     status: APPROVED / VERIFIED
   - stable_id: AR-P1-AUDIT-005
     canonical_name: BR-P1-005 Control Audit — Data Quality Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-005.md
     traceability: BR-P1-005 / TO-P1-005 / PH-P1 / STEP-P1-005
     status: APPROVED / VERIFIED
@@ -329,14 +315,12 @@ records:
 
   - stable_id: BR-P1-007
     canonical_name: Build Report — Observability Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-007.md
     traceability: TO-P1-007 / PH-P1 / STEP-P1-007
     status: VERIFIED
 
   - stable_id: AR-P1-AUDIT-007
     canonical_name: BR-P1-007 Control Audit — Observability Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-007.md
     traceability: BR-P1-007 / TO-P1-007 / PH-P1 / STEP-P1-007
     status: APPROVED / VERIFIED
@@ -350,14 +334,12 @@ records:
 
   - stable_id: BR-P1-008
     canonical_name: Build Report — Disaster Recovery / Restore Verification
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-008.md
     traceability: TO-P1-008 / PH-P1 / STEP-P1-008
     status: VERIFIED
 
   - stable_id: AR-P1-AUDIT-008
     canonical_name: BR-P1-008 Control Audit — Disaster Recovery / Restore Verification & Phase 1 Closure
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-008.md
     traceability: BR-P1-008 / TO-P1-008 / PH-P1 / STEP-P1-008
     status: APPROVED / VERIFIED
@@ -436,7 +418,7 @@ records:
     canonical_name: BR-P2-003 Control Audit — MEXC Acquisition Adapter
     entity_type: AR
     artifact_path: docs/audits/AR-P2-AUDIT-003.md
-    traceability: BR-P2-003 / TO-P2-003 / STEP-P2-003
+    traceability: BR-P2-003 / TO-P2-003 / PH-P2 / STEP-P2-003
     status: APPROVED / VERIFIED
 
   - stable_id: BR-P2-003
