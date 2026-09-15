@@ -1,6 +1,6 @@
 """Evidence tests for TO-P3-001 canonical contract foundation."""
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import unittest
 
@@ -113,7 +113,7 @@ class CanonicalFoundationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             validate_timestamp(datetime(2026, 1, 1), "timestamp")
         with self.assertRaises(ValueError):
-            validate_timestamp(datetime(2026, 1, 1, tzinfo=timezone.utc), "timestamp") if False else (_ for _ in ()).throw(ValueError())
+            validate_timestamp(datetime(2026, 1, 1, tzinfo=timezone(timedelta(hours=2))), "timestamp")
 
     def test_governed_vocabulary_is_explicit_and_provider_neutral(self):
         allowed = ("spot", "futures")
