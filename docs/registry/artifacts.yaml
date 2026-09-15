@@ -199,6 +199,7 @@ records:
     status: RATIFIED / FROZEN — VERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-012.md
     traceability: TO-P0-011 / PH-P0 / STEP-P0-010 / AR-P0-AUDIT-014
     status: VERIFIED
@@ -222,6 +223,7 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: BR-P1-001
     canonical_name: Build Report — Repository Foundation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-001.md
     traceability: TO-P1-001 / PH-P1 / STEP-P1-001
     status: VERIFIED
