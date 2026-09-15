@@ -18,7 +18,7 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P3-002",
+  "last_approved_task_order": "TO-P3-001",
   "last_build_report": "BR-P3-001",
   "last_audit_report": "AR-P3-001",
   "last_execution_log": "EXEC-LOG-TO-P1-008-20260910T181000Z",
