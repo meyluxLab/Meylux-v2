@@ -65,7 +65,7 @@ Continue reading:
 8. `docs/architecture/MASTER_ARCHITECTURE_V2.md`
 9. `docs/state/OPEN_QUESTIONS.yaml`
 10. `docs/state/DEFERRED_DECISIONS.yaml`
-11. Relevant ADRs / ACRs when required by the current task or role context
+11. Relevant ADRs / ACRs when required by the current task or role context, including `ADR-GOVERNANCE-013` when standing role operating rules are applicable
 12. Phase-specific execution/continuity reports discoverable from the authoritative Registry and/or phase directory, for every completed or currently relevant Phase. These reports MUST be read when present, even when their filenames were not supplied externally.
 13. Latest approved artifact and evidence chain relevant to the current boundary
 

@@ -160,3 +160,79 @@ closure authority only.
 ## Governance Basis — Checklist Amendment
 
 This checklist is established by `ADR-GOVERNANCE-012`, ratified by the Project Owner. It is an operational clarification of this existing Artifact Protocol and does not create a new governance subsystem, role, artifact class, or approval mechanism, consistent with the precedent already set by the "Governance Basis" section above for `ADR-GOVERNANCE-003`.
+
+## Standing Role Operating Rules
+
+Established by `ADR-GOVERNANCE-013`, ratified by the Project Owner.
+
+### Rule 1 — Continuation Duty
+
+A role must continue governed work to the highest genuinely authorized boundary available to it, without unnecessary re-authorization round-trips.
+
+Difficulty, additional required analysis, an ordinary implementation problem, or a normal test failure requiring diagnosis are not blockers.
+
+Stopping is justified only when one of exactly three conditions is met:
+
+- **(A)** an actual Project Owner decision or ratification is required;
+- **(B)** an actual conflict between authoritative sources exists that cannot be resolved without guessing;
+- **(C)** the governed unit of work has naturally ended and requires independent verification by another role.
+
+When stopping, the role must state explicitly which of A, B or C applies, and precisely what decision or evidence is required to resume. A role must never end a response with "Should I continue?" or an equivalent while authorized work remains within its own boundary.
+
+### Rule 2 — Same-Response Communication Duty
+
+This rule applies to every governed role without exception, including `ROL-V2-001`, `ROL-V2-002`, and `ROL-V2-008`. Whenever the outcome of a role's work requires any text to be carried to another governed role, the role must produce the complete, forward-ready text inside the same response. This includes formal artifacts, intermediate or informal messages, clarifications, escalations, conflict reports, scope questions, blocker notifications, partial-progress hand-offs, prompts, bootstrap texts, directives, and answers to role-to-role questions.
+
+The formality of the structure scales with the formality of the message, but the same-response obligation does not. For substantive hand-offs the required structure is:
+
+```text
+FORMAL ENGLISH MESSAGE READY TO SEND
+↓
+SIMPLE PERSIAN EXPLANATION
+```
+
+For brief intermediate messages, the English message may be correspondingly short but must remain self-contained and must not invent Architecture, Scope, Stable IDs, Contracts, or Requirements lacking repository basis. Formal governed artifacts must follow the applicable existing repository conventions.
+
+### Rule 3 — Large Artifact Retrieval Method
+
+For any repository artifact too large to be retrieved completely in a single ordinary read, the role must use:
+
+```text
+Identify artifact
+        ↓
+Obtain real Blob SHA
+        ↓
+fetch_blob
+        ↓
+Retrieve complete artifact
+        ↓
+Read / search / verify
+```
+
+This workflow has been empirically verified across `ROL-V2-001`, `ROL-V2-002`, and `ROL-V2-008` against `MASTER_ARCHITECTURE_V2.md`, `artifacts.yaml`, and `CURRENT_CHECKPOINT.json`.
+
+Proceeding on truncated content, or claiming an artifact was reviewed when only partial retrieval occurred, constitutes Fabrication under the existing Evidence Policy. Rule 3 provides the governed means to retrieve full content before an otherwise authorized complete write.
+
+This rule establishes a method, not new authority. It does not itself authorize any Phase, Step, Task Order, repository mutation, or VPS action.
+
+### Rule 4 — SentinelX-Only VPS Execution
+
+Any work that genuinely requires inspection or action on the VPS must be performed exclusively through the SentinelX tool under the existing privilege model established by `ADR-GOVERNANCE-011`. No alternative or manual VPS access path is permitted as a substitute.
+
+Availability of SentinelX does not by itself create new authority to change VPS or runtime state. It is the governed method for exercising VPS-related authority already existing within an authorized Task Order boundary.
+
+### Mandatory Standing Rules Footer
+
+Every substantive response from a governed role must terminate with this footer, regenerated from the role's current state rather than copied mechanically:
+
+```text
+--- STANDING RULES CHECK ---
+R1 Continuation: <CONTINUING | STOPPED(A) | STOPPED(B) | STOPPED(C)> — <one line>
+R2 Hand-off message: <NONE REQUIRED | INCLUDED ABOVE> — <recipient role + type>
+R3 Large artifacts: <N/A | fetch_blob used for: ...>
+R4 VPS/SentinelX: <N/A | used for: ...>
+G12 Peripheral sync: <N/A | CHECKED | PENDING AT STEP CLOSURE>
+Phase/Step: <current> | Active TO: <id or null>
+```
+
+The footer is a reporting device only. It does not grant authority, and `R2 INCLUDED ABOVE` is valid only when the required message was actually produced.
