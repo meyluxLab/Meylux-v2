@@ -291,11 +291,13 @@ records:
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-004
     canonical_name: BR-P1-004 Control Audit — Data Contracts
+    entity_type: AR
     artifact_path: docs/audit-reports/AR-P1-AUDIT-004.md
     traceability: BR-P1-004 / TO-P1-004 / PH-P1 / STEP-P1-004
     status: APPROVED / VERIFIED
   - stable_id: AR-P1-AUDIT-005
     canonical_name: BR-P1-005 Control Audit — Data Quality Foundation
+    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-005.md
     traceability: BR-P1-005 / TO-P1-005 / PH-P1 / STEP-P1-005
     status: APPROVED / VERIFIED
@@ -581,7 +583,7 @@ records:
     canonical_name: Provider-Neutral Acquisition Contract Tests
     entity_type: TST
     artifact_path: tests/test_contracts/test_acquisition_contract.py
-    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / CTR-P2-001 / AR-P2-AUDIT-001
+    traceability: TO-P2-001 / STEP-P2-001 / CTR-P2-001 / AR-P2-AUDIT-001
     status: VERIFIED
   - stable_id: ADR-GOVERNANCE-013
     canonical_name: Standing Role Operating Rules & Session Anti-Drift Mechanism
@@ -605,8 +607,8 @@ records:
     canonical_name: Structural, Schema & Identity Validation
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
-    traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001
-    status: DEFINED / INACTIVE
+    traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001 / PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15
+    status: ACTIVE / AUTHORIZED
   - stable_id: STEP-P3-003
     canonical_name: Temporal, Sequence & Completeness Validation
     entity_type: STEP
@@ -649,6 +651,12 @@ records:
     artifact_path: docs/task-orders/TO-P3-001.md
     traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-013
     status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-002
+    canonical_name: Task Order — Structural, Schema & Identity Validation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-002.md
+    traceability: PH-P3 / STEP-P3-002 / STEP-P3-001 / DOC-V2-ARCH-001 / PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
   - stable_id: BR-P3-001
     canonical_name: Build Report — Canonical Contracts, Identity & Validation Foundation
     entity_type: BR
