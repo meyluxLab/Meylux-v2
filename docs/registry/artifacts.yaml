@@ -467,7 +467,7 @@ records:
     canonical_name: Live Collector, Raw/Staging Persistence & Replay Safety
     entity_type: STEP
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / STEP-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
+    traceability: PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
     status: VERIFIED / COMPLETE
 
   - stable_id: AR-P2-AUDIT-005
