@@ -24,9 +24,13 @@ No Phase was activated, Phase 2 was not reopened, Phase 3/4 were not activated, 
 2. `f4d8af4cea20b350a16b71ede954c2aaeba8fe69` — F-07 Phase 2 supplemental registry lifecycle/status reconciliation.
 3. `cc0ae3e8c8a60cb5a2976b358c75c254de1444c9` — F-07 canonical registry reconciliation for the five missing records.
 4. `57e78f89695e5b2e7661b62ef503d453f7e5afa9` — initial creation of `BR-GOV-009`.
-5. This correction commit — final explicit commit record for `BR-GOV-009`.
+5. `1b1e0ba0c6eb5318fc4752d627c1318690aa6442` — Build Report traceability commit.
+6. `f6d7091eb10f0ae1957c9463c94bdf0d7e14d513` — C-01/C-02 correction commit restoring the authorized F-05 formatting and reversing the identified out-of-scope canonical-registry changes.
+7. `b8bbcdfe848dbc743fb182d0f1ddec3919b30c45` — follow-up canonical-registry correction preserving the pre-existing `AR-P1-AUDIT-002` state and removing the residual `AR-P1-AUDIT-008` out-of-scope change.
+8. `1a5952800f0855d62bd03e2e3f99dadccbd32355` — final repository correction state.
+9. This Build Report update commit — records the complete correction commit chain and final Producer evidence.
 
-The actual repository `main` head immediately before this Build Report correction was `57e78f89695e5b2e7661b62ef503d453f7e5afa9`.
+The current repository `main` head after the correction sequence is the commit containing this updated Build Report.
 
 ## 3. Exact Files Changed
 
@@ -158,9 +162,10 @@ No Producer action was taken to alter or resolve it.
 Post-change repository refetches confirmed:
 
 - `docs/architecture/MEYLUX_V2_ARCHITECTURE_HARDENING_LESSONS_LEARNED.md` now declares `Status: SUPERSEDED`.
-- `docs/registry/phase2-artifacts.yaml` now declares `status: RETIRED / SUPERSEDED` and `PH-P2` now declares `status: CLOSED / VERIFIED`.
-- `docs/registry/artifacts.yaml` contains the five reconciled records with the preserved Stable IDs and paths.
-- The repository `main` branch advanced through the exact Producer commits recorded above.
+- The six previously removed F-05 formatting blank lines are restored; no historical footer or other document content was changed.
+- `docs/registry/phase2-artifacts.yaml` declares `status: RETIRED / SUPERSEDED` and `PH-P2` declares `status: CLOSED / VERIFIED`.
+- `docs/registry/artifacts.yaml` contains the five reconciled records with the preserved Stable IDs and paths, while the unrelated canonical-registry changes identified by CONTROL were removed.
+- The repository `main` branch advanced through the exact Producer correction commits recorded above.
 
 No CI, runtime, VPS, or deployment verification was performed or claimed because none was authorized or required by `TO-GOV-009`.
 
@@ -176,7 +181,7 @@ No CI, runtime, VPS, or deployment verification was performed or claimed because
 
 ## 12. Remaining Blockers / Discrepancies
 
-No unresolved F-05 or F-07 repository reconciliation discrepancy remains within the authorized scope of `TO-GOV-009`.
+No unresolved C-01 or C-02 repository correction discrepancy remains within the authorized scope of the CONTROL correction notice.
 
 The Producer does not claim independent CONTROL verification. Any remaining project-level governance disposition belongs to CONTROL.
 
@@ -184,4 +189,4 @@ The Producer does not claim independent CONTROL verification. Any remaining proj
 
 `COMPLETED — ALL IN-SCOPE CHANGES APPLIED AND VALIDATED`
 
-This declaration means the Producer completed and repository-refetched the authorized F-05/F-07 changes. It does not constitute CONTROL verification or approval.
+This declaration means the Producer completed the bounded C-01/C-02 corrections and repository-refetched the authorized F-05/F-07 results. It does not constitute CONTROL verification or approval.
