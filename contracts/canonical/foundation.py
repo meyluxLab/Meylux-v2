@@ -17,17 +17,15 @@ from typing import Any, Iterable, Mapping
 
 
 class ValidationResult(str, Enum):
-    """Phase-3 quality outcome vocabulary."""
+    """Authoritative Phase-3 quality outcome vocabulary."""
 
     VALID = "valid"
-    INVALID = "invalid"
-    INCOMPLETE = "incomplete"
-    STALE = "stale"
     DEGRADED = "degraded"
+    STALE = "stale"
+    INCOMPLETE = "incomplete"
     CONTRADICTORY = "contradictory"
+    REJECTED = "rejected"
     UNAVAILABLE = "unavailable"
-    UNSUPPORTED = "unsupported"
-    QUARANTINED = "quarantined"
 
 
 class ValidationCode(str, Enum):
@@ -69,6 +67,32 @@ class ValidationOutcome:
     @property
     def valid(self) -> bool:
         return self.result is ValidationResult.VALID
+
+
+_INCOMPLETE_CODES = frozenset(
+    {
+        ValidationCode.REQUIRED_MISSING,
+        ValidationCode.NULL_NOT_ALLOWED,
+        ValidationCode.PROVENANCE_MISSING,
+        ValidationCode.LINEAGE_MISSING,
+    }
+)
+
+
+def validation_outcome(issues: Iterable[ValidationIssue]) -> ValidationOutcome:
+    """Map deterministic primitive findings to the authoritative outcome model.
+
+    Missing required evidence is INCOMPLETE. Any other validation finding is
+    REJECTED. An empty finding set is VALID. No repair, fallback, freshness,
+    contradiction, or provider-specific state is inferred here.
+    """
+
+    normalized = tuple(issues)
+    if not normalized:
+        return ValidationOutcome(ValidationResult.VALID)
+    if any(issue.code not in _INCOMPLETE_CODES for issue in normalized):
+        return ValidationOutcome(ValidationResult.REJECTED, normalized)
+    return ValidationOutcome(ValidationResult.INCOMPLETE, normalized)
 
 
 @dataclass(frozen=True, slots=True)
@@ -173,6 +197,16 @@ def validate_timestamp(value: object, field: str = "timestamp") -> datetime:
     if value.utcoffset() != timezone.utc.utcoffset(value):
         raise ValueError(f"{field} must use UTC")
     return value
+
+
+def validate_provenance(value: object, field: str = "provenance") -> ValidationIssue | None:
+    """Validate that canonical data carries a valid immutable provenance reference."""
+
+    if value is None:
+        return ValidationIssue(ValidationCode.PROVENANCE_MISSING, field, f"{field} is required")
+    if not isinstance(value, ProvenanceRef):
+        return ValidationIssue(ValidationCode.INVALID_TYPE, field, f"{field} must be ProvenanceRef")
+    return None
 
 
 def canonical_json(value: Mapping[str, Any]) -> str:
