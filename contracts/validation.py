@@ -9,13 +9,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
 from typing import Any, Iterable, Mapping
 
 from contracts.acquisition import (
     AcquisitionEnvelope,
     AcquisitionState,
-    CapabilityState,
     EventType,
     InstrumentIdentity,
     ProviderCapability,
@@ -27,7 +25,6 @@ from contracts.canonical.foundation import (
     ValidationCode,
     ValidationIssue,
     ValidationOutcome,
-    deterministic_identity,
     validate_semantic_token,
     validation_outcome,
 )
@@ -74,7 +71,7 @@ ACQUISITION_NULLABLE_FIELDS = frozenset(
 
 @dataclass(frozen=True, slots=True)
 class StructuralValidation:
-    """Deterministic structural validation result with optional identity digest."""
+    """Deterministic structural validation result with optional contract identity."""
 
     outcome: ValidationOutcome
     identity: str | None = None
@@ -168,8 +165,9 @@ def validate_acquisition_structure(values: Mapping[str, Any]) -> StructuralValid
     The function does not construct an AcquisitionEnvelope because doing so
     would invoke Phase-2 semantic constructor rules. It validates the already
     authorized field set, required/nullable rules, field types, and initial
-    provider-neutral identity syntax, then derives deterministic identity only
-    from the existing AcquisitionEnvelope identity material.
+    provider-neutral identity syntax. Authoritative acquisition identity is
+    obtained only from an existing AcquisitionEnvelope instance so its
+    established serialization semantics are neither duplicated nor changed.
     """
 
     if not isinstance(values, Mapping):
@@ -187,32 +185,11 @@ def validate_acquisition_structure(values: Mapping[str, Any]) -> StructuralValid
         *_identity_issues(values),
     ]
 
-    outcome = validation_outcome(issues)
-    if not outcome.valid:
-        return StructuralValidation(outcome)
-
-    provider = values["provider"]
-    instrument = values["instrument"]
-    event_type = values["event_type"]
-    event_time = values["event_time"]
-    source_sequence = values.get("source_sequence")
-    payload = values["payload"]
-
-    identity_material = {
-        "provider_id": provider.provider_id,
-        "canonical_instrument_id": instrument.canonical_instrument_id,
-        "provider_instrument_id": instrument.provider_instrument_id,
-        "event_type": event_type.value,
-        # Match the already-authorized AcquisitionEnvelope identity serialization.
-        "event_time": event_time.isoformat().replace("+00:00", "Z"),
-        "source_sequence": source_sequence,
-        "payload": payload,
-    }
-    return StructuralValidation(outcome, deterministic_identity(identity_material))
+    return StructuralValidation(validation_outcome(issues))
 
 
 def validate_acquisition_envelope(envelope: AcquisitionEnvelope) -> StructuralValidation:
-    """Validate an existing AcquisitionEnvelope instance without normalization."""
+    """Validate an existing AcquisitionEnvelope instance without reconstruction."""
 
     if not isinstance(envelope, AcquisitionEnvelope):
         issue = ValidationIssue(
@@ -235,4 +212,7 @@ def validate_acquisition_envelope(envelope: AcquisitionEnvelope) -> StructuralVa
         "provider_error": envelope.provider_error,
         "capability": envelope.capability,
     }
-    return validate_acquisition_structure(values)
+    result = validate_acquisition_structure(values)
+    if result.outcome.valid:
+        return StructuralValidation(result.outcome, envelope.event_id)
+    return result
