@@ -616,6 +616,7 @@ The Project-level instructions should contain only durable governance and role r
 ---
 
 ## 24. V2 Document Set Resulting from Hardening
+
 The minimum formal document set becomes:
 
 1. `MEYLUX_CONSTITUTION_V2.md`
@@ -639,6 +640,7 @@ The exact final filenames may be frozen during the next design step; this list i
 ---
 
 ## 25. What V2 Intentionally Does Not Do
+
 This hardening document does not:
 
 - implement runtime code
@@ -655,6 +657,7 @@ This hardening document does not:
 ---
 
 ## 26. Acceptance Criteria for Architecture Hardening
+
 Architecture Hardening is complete only when all of the following are true:
 
 - V1 lessons are mapped to explicit V2 controls.
@@ -681,6 +684,7 @@ Only after these conditions are met may the project enter implementation-oriente
 ---
 
 ## 27. Known Design Considerations
+
 The following are intentionally not blocking the current hardening step but must be revisited before their activating phase:
 
 - exact implementation technology for components where the architecture deliberately leaves alternatives open
@@ -695,6 +699,7 @@ These are not defects. They are controlled deferred choices.
 ---
 
 ## 28. Final V2 Design Principle
+
 Meylux V2 must be designed so that the system can answer, for every important capability:
 
 ```text
@@ -718,6 +723,7 @@ If any critical capability cannot answer these questions, it is not yet fully sp
 ---
 
 ## 29. Source Materials Used for This Hardening
+
 This document was derived from and reconciles the following Meylux source materials available at the time of drafting:
 
 - Meylux project understanding / Base Structure

@@ -211,16 +211,19 @@ records:
     status: APPROVED / VERIFIED — RATIFICATION READY
   - stable_id: ADR-GOVERNANCE-004
     canonical_name: Project Owner Ratification and Freeze of Master Architecture V2
+    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-004.md
     traceability: STEP-P0-010 / DOC-V2-ARCH-001 / Project Owner ratification
     status: RATIFIED / FROZEN
   - stable_id: AR-P0-AUDIT-015
     canonical_name: Final Phase 0 Closure Verification
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
     traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / PH-P0
     status: APPROVED / VERIFIED
   - stable_id: BR-P1-001
     canonical_name: Build Report — Repository Foundation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-001.md
     traceability: TO-P1-001 / PH-P1 / STEP-P1-001
     status: VERIFIED
@@ -248,6 +251,7 @@ records:
     traceability: TO-P1-002 / PH-P1 / STEP-P1-002
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-002
+    entity_type: AR
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
@@ -311,14 +315,12 @@ records:
 
   - stable_id: BR-P1-007
     canonical_name: Build Report — Observability Foundation
-    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-007.md
     traceability: TO-P1-007 / PH-P1 / STEP-P1-007
     status: VERIFIED
 
   - stable_id: AR-P1-AUDIT-007
     canonical_name: BR-P1-007 Control Audit — Observability Foundation
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-007.md
     traceability: BR-P1-007 / TO-P1-007 / PH-P1 / STEP-P1-007
     status: APPROVED / VERIFIED
@@ -338,7 +340,6 @@ records:
 
   - stable_id: AR-P1-AUDIT-008
     canonical_name: BR-P1-008 Control Audit — Disaster Recovery / Restore Verification & Phase 1 Closure
-    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-008.md
     traceability: BR-P1-008 / TO-P1-008 / PH-P1 / STEP-P1-008
     status: APPROVED / VERIFIED
@@ -407,8 +408,8 @@ records:
     status: VERIFIED / COMPLETE
 
   - stable_id: BR-P2-002
-    entity_type: BR
     canonical_name: Build Report — Binance Acquisition Adapter
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P2-002.md
     traceability: TO-P2-002 / PH-P2 / STEP-P2-002 / AR-P2-AUDIT-002
     status: VERIFIED
@@ -466,7 +467,7 @@ records:
     canonical_name: Live Collector, Raw/Staging Persistence & Replay Safety
     entity_type: STEP
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / STEP-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
+    traceability: PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
     status: VERIFIED / COMPLETE
 
   - stable_id: AR-P2-AUDIT-005
