@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: SUPPLEMENTAL / ACTIVE
+status: RETIRED / SUPERSEDED
 purpose: >-
   Supplemental Phase 2 traceability index. This file does not replace or override
   docs/registry/artifacts.yaml; it records newly created Phase 2 artifacts until
@@ -10,7 +10,7 @@ records:
     canonical_name: Data Acquisition & Market Data Foundation
     artifact_path: docs/phases/PH-P2.md
     traceability: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / DOC-V2-ARCH-001
-    status: ACTIVE / AUTHORIZED
+    status: CLOSED / VERIFIED
   - stable_id: STEP-P2-001
     entity_type: STEP
     canonical_name: Provider Boundary & Acquisition Contracts
