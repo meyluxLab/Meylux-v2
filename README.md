@@ -14,8 +14,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 0 — Constitution, Architecture, Specification Foundation:** `CLOSED / VERIFIED`.
 - **Phase 1 — Infrastructure Foundation:** `CLOSED / VERIFIED`.
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
-- **Phase 3 — Validation, Normalization & Data Quality Engine:** `ACTIVE / AUTHORIZED`. `STEP-P3-001` is `COMPLETE / VERIFIED`; `STEP-P3-002` through `STEP-P3-008` remain `DEFINED / INACTIVE`.
-- **Active Task Order:** none (`active_task_order: null`). Last approved: `TO-P3-001`.
+- **Phase 3 — Validation, Normalization & Data Quality Engine:** `ACTIVE / AUTHORIZED`. `STEP-P3-001` and `STEP-P3-002` are `COMPLETE / VERIFIED`; `STEP-P3-003` through `STEP-P3-008` remain `DEFINED / INACTIVE`.
+- **Active Task Order:** none (`active_task_order: null`). Last approved: `TO-P3-002`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.

@@ -608,7 +608,7 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
     traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001 / PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: STEP-P3-003
     canonical_name: Temporal, Sequence & Completeness Validation
     entity_type: STEP
@@ -656,7 +656,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-002.md
     traceability: PH-P3 / STEP-P3-002 / STEP-P3-001 / DOC-V2-ARCH-001 / PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P3-001
     canonical_name: Build Report — Canonical Contracts, Identity & Validation Foundation
     entity_type: BR
@@ -674,4 +674,22 @@ records:
     entity_type: TST
     artifact_path: tests/test_contracts/test_p3_001_foundation.py
     traceability: TO-P3-001 / STEP-P3-001 / BR-P3-001 / AR-P3-001
+    status: VERIFIED
+  - stable_id: BR-P3-002
+    canonical_name: Build Report — Structural, Schema & Identity Validation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-002.md
+    traceability: TO-P3-002 / PH-P3 / STEP-P3-002 / AR-P3-002
+    status: VERIFIED
+  - stable_id: AR-P3-002
+    canonical_name: CONTROL Independent Audit — TO-P3-002 / STEP-P3-002
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-002.md
+    traceability: BR-P3-002 / TO-P3-002 / PH-P3 / STEP-P3-002
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-002
+    canonical_name: Structural, Schema & Identity Validation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_002_structural.py
+    traceability: TO-P3-002 / STEP-P3-002 / BR-P3-002 / AR-P3-002
     status: VERIFIED
