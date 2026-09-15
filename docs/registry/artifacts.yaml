@@ -251,7 +251,6 @@ records:
     traceability: TO-P1-002 / PH-P1 / STEP-P1-002
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-002
-    entity_type: AR
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
@@ -340,6 +339,7 @@ records:
 
   - stable_id: AR-P1-AUDIT-008
     canonical_name: BR-P1-008 Control Audit — Disaster Recovery / Restore Verification & Phase 1 Closure
+    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-008.md
     traceability: BR-P1-008 / TO-P1-008 / PH-P1 / STEP-P1-008
     status: APPROVED / VERIFIED
@@ -467,7 +467,7 @@ records:
     canonical_name: Live Collector, Raw/Staging Persistence & Replay Safety
     entity_type: STEP
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
+    traceability: PH-P2 / STEP-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
     status: VERIFIED / COMPLETE
 
   - stable_id: AR-P2-AUDIT-005
