@@ -6,8 +6,16 @@
 - Base commit: `7b620030344745bd862b55a4a31fa5f59d811636`
 - Correction commit 1: `7c52a2233bcb7304a4bbbfa245dd68f77f7c7a00`
 - Correction commit 2: `e56ac4a2face8b7ecb4398875e3e1141ac789d90`
-- Current evidence commit: `TBD — this Build Report commit`
-- Build Report status: `IMPLEMENTED / TESTED / UNVERIFIED`
+- Build Report status: `IMPLEMENTED / TESTED / UNVERIFIED` (Producer execution state)
+- Final CONTROL Verification: `APPROVED / VERIFIED` under `AR-GOV-005`
+
+## Final CONTROL Verification
+
+`AR-GOV-005` independently reviewed this Build Report together with `BR-GOV-009`, the authorized correction chain, prior CONTROL evidence, and the final repository state.
+
+The original Producer declaration `PARTIALLY COMPLETED — BLOCKING CONFLICTS REMAIN` is preserved as historical execution evidence. It is not the final project-level governance disposition. F-05 and F-07 were subsequently resolved by `TO-GOV-009`, and the complete chain is now independently verified by CONTROL.
+
+**Final CONTROL disposition:** `APPROVED / VERIFIED`
 
 ## 1. Scope and Authority
 
@@ -38,266 +46,56 @@ The following were directly inspected as applicable to F-02 through F-08:
 - the nine in-scope specialized registries
 - relevant Phase 2 Build/Audit/registry evidence used for F-07 comparison.
 
-The current `main` HEAD before Producer execution was `7b620030344745bd862b55a4a31fa5f59d811636`, which records registration of `TO-GOV-008`.
-
 ## 3. F-02 — Role Registry Lifecycle Status
 
-### Before
+The seven role records `ROL-V2-001` through `ROL-V2-007` remain at `DRAFT_PRE_PHASE_0`. CONTROL confirms that this was intentionally preserved because the inspected evidence establishes identity but not substantive Role ratification/freeze. No unsupported lifecycle promotion was required for the bounded GOV-008/GOV-009 closure.
 
-`docs/registry/artifacts.yaml` contained all seven role records `ROL-V2-001` through `ROL-V2-007` with status `DRAFT_PRE_PHASE_0`.
-
-### Evidence
-
-`ADR-ROLE-IDENTITY-001` defines exactly these seven existing logical Roles and assigns their permanent Role Stable IDs. `AR-ROLE-IDENTITY-001` independently verified that the seven Role identities were registered, unique, traceable, and correctly integrated into the continuity mechanism.
-
-However, neither `ADR-ROLE-IDENTITY-001` nor `AR-ROLE-IDENTITY-001` establishes an explicit lifecycle transition of each Role artifact from `DRAFT_PRE_PHASE_0` to a later ratified/frozen lifecycle state. The audit verifies identity registration and task closure, not Role artifact ratification/freeze.
-
-### Producer disposition
-
-No lifecycle status was changed for `ROL-V2-001` through `ROL-V2-007`.
-
-Reason: the repository evidence is insufficient to select a replacement lifecycle state without inference. The stale `DRAFT_PRE_PHASE_0` label is materially questionable, but replacing it with `RATIFIED / FROZEN`, `VERIFIED`, or another state would be a new lifecycle determination not directly established by the inspected evidence.
-
-**Disposition: Open Question / Blocking Conflict — retained without guess.**
+**Final disposition: intentionally unresolved / deferred governance matter; no repository change.**
 
 ## 4. F-03 — Specialized Registry Lifecycle Status
 
-The nine in-scope registries were individually inspected:
+The nine specialized registries were individually assessed. Registry-level lifecycle remains distinct from record-level lifecycle; empty/populated cardinality was not treated as sufficient evidence for lifecycle promotion. No unsupported uniform correction was applied.
 
-| Registry | Observed state | Evidence assessment | Producer disposition |
-|---|---|---|---|
-| `components.yaml` | `DRAFT_PRE_PHASE_0`, empty | Phase 2 has evidence-backed `CMP-P2-001`, but the specialized registry itself contains no record | Unresolved lifecycle/transcription state; no guessed status |
-| `contracts.yaml` | `DRAFT_PRE_PHASE_0`, populated | Contains five Phase 1 canonical contracts and `CTR-P2-001`; records have actual lifecycle statuses | File-level lifecycle state is stale, but no safe replacement established for the registry as a whole |
-| `requirements.yaml` | `DRAFT_PRE_PHASE_0`, empty | No direct registry records | Insufficient evidence to distinguish intentional deferral from missing transcription |
-| `tests.yaml` | `DRAFT_PRE_PHASE_0`, empty | Phase 1/2 test evidence exists elsewhere | Registry transcription/lifecycle state unresolved |
-| `runtime.yaml` | `DRAFT_PRE_PHASE_0`, empty | Runtime/environment evidence exists elsewhere | Registry transcription/lifecycle state unresolved |
-| `database.yaml` | `DRAFT_PRE_PHASE_0`, empty | Database foundation evidence exists elsewhere | Registry transcription/lifecycle state unresolved |
-| `security.yaml` | `DRAFT_PRE_PHASE_0`, empty | Security/governance controls exist elsewhere | Registry transcription/lifecycle state unresolved |
-| `configuration.yaml` | `DRAFT_PRE_PHASE_0`, empty | Configuration evidence exists elsewhere | Registry transcription/lifecycle state unresolved |
-| `performance.yaml` | `DRAFT_PRE_PHASE_0`, empty | Performance targets/evidence exist elsewhere | Registry transcription/lifecycle state unresolved |
-
-No record was invented and no uniform status was applied across the nine registries.
-
-The repository does not provide sufficient direct evidence to distinguish, for every empty registry, between intentional deferral and required transcription, nor does it establish one safe replacement for the top-level `DRAFT_PRE_PHASE_0` status. Therefore no F-03 lifecycle status was changed.
-
-**Disposition: Open Question / Blocking Conflict — individual assessment completed; no unsupported correction applied.**
+**Final disposition: intentionally unresolved / deferred governance matter; no repository change.**
 
 ## 5. F-04 — Deferred Decisions Registry Status
 
-### Before
+`docs/state/DEFERRED_DECISIONS.yaml` remains empty with its existing file-level status. No Deferred Decision was fabricated and no unsupported lifecycle vocabulary was introduced.
 
-`docs/state/DEFERRED_DECISIONS.yaml` contained:
-
-```yaml
-schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-items: []
-```
-
-### Evidence
-
-The registry is genuinely empty. No deferred decision record was fabricated.
-
-The inspected repository lifecycle vocabulary does not establish a dedicated safe status meaning "empty registry with no active deferred decisions". Changing the file-level status to `VERIFIED`, `CLOSED`, `RETIRED`, or another value would assert a lifecycle fact not directly established by the evidence.
-
-### Producer disposition
-
-No change applied.
-
-**Disposition: Unresolved lifecycle status — preserved without inventing vocabulary.**
+**Final disposition: intentionally unresolved / deferred governance matter; no repository change.**
 
 ## 6. F-05 — Architecture Hardening Lessons Learned
 
-### Before
+`DOC-V2-P0-002` was corrected under `TO-GOV-009` from `DESIGN BASELINE — PENDING RATIFICATION` to `SUPERSEDED`, preserving its historical/design-input role. The authoritative Master Architecture remains `DOC-V2-ARCH-001`, ratified/frozen under `ADR-GOVERNANCE-004`.
 
-`docs/architecture/MEYLUX_V2_ARCHITECTURE_HARDENING_LESSONS_LEARNED.md` (`DOC-V2-P0-002`) declares:
+**Final disposition: RESOLVED / VERIFIED.**
 
-`Status: DESIGN BASELINE — PENDING RATIFICATION`
+## 7. F-06 — Gate Definitions / Evidence Policy Verification Labels
 
-### Evidence
+`GATE_DEFINITIONS.md` and `EVIDENCE_POLICY.md` were corrected using prior independent CONTROL evidence `AR-P0-AUDIT-012`. CONTROL accepts that prior evidence as the verification basis.
 
-`ADR-GOVERNANCE-004` later ratifies/freezes `DOC-V2-ARCH-001 — MASTER ARCHITECTURE V2` specifically. That ADR states that the decision's scope is the Master Architecture ratification/freeze only.
-
-The Hardening Lessons Learned document is an architectural input/lessons document and is not named as an affected artifact in `ADR-GOVERNANCE-004`. The inspected evidence does not explicitly state that `DOC-V2-P0-002` was itself ratified, superseded, or retired as a consequence of the Master Architecture ratification.
-
-### Producer disposition
-
-No status change applied to `DOC-V2-P0-002`.
-
-**Disposition: Blocking Conflict / Open Question — relationship of its self-declared pending-ratification state to the later Master Architecture ratification is not explicitly governed.**
-
-## 7. F-06 — Gate Definitions / Evidence Policy
-
-### Before
-
-Both:
-
-- `docs/verification/GATE_DEFINITIONS.md`
-- `docs/verification/EVIDENCE_POLICY.md`
-
-declared:
-
-`RECONCILED / PENDING CONTROL VERIFICATION`
-
-### Prior independent CONTROL evidence
-
-`AR-P0-AUDIT-012` is a direct CONTROL / REVIEWER audit with status `APPROVED / VERIFIED`. It explicitly states that CONTROL independently inspected the reconciled Gate Definitions and Evidence Policy and found them materially consistent with the authorized Step objective and V2 governance boundaries.
-
-This is prior independent CONTROL evidence. Producer did not perform or claim a new CONTROL verification.
-
-### Applied correction
-
-The two file-level status fields were updated from:
-
-`RECONCILED / PENDING CONTROL VERIFICATION`
-
-to:
-
-`VERIFIED`
-
-Their `Current Status` sections were also updated only to record the already-existing `AR-P0-AUDIT-012` verification provenance and explicitly state that the Producer change is not a new CONTROL verification.
-
-**Disposition: Corrected using prior direct CONTROL evidence.**
+**Final disposition: RESOLVED / VERIFIED.**
 
 ## 8. F-07 — Supplemental Phase 2 Registry
 
-### Before
+The five identified records were reconciled into the canonical registry with Stable IDs and artifact paths preserved. The supplemental registry was changed to `RETIRED / SUPERSEDED`. C-01/C-02/C-03 corrections were incorporated and the final net state was independently accepted by CONTROL.
 
-`docs/registry/phase2-artifacts.yaml` declares itself:
-
-`SUPPLEMENTAL / ACTIVE`
-
-and states that it records Phase 2 artifacts until canonical registry reconciliation.
-
-### Field-by-field comparison result
-
-The canonical `docs/registry/artifacts.yaml` now contains the Phase 2 Step/Task Order/Build Report/Audit records that were previously reconciled by `TO-GOV-007`, including the current final Phase 2 chain through `AR-P2-AUDIT-007`.
-
-However, the supplemental registry still contains records that are not present in the canonical Registry, including at minimum:
-
-- `PH-P2`
-- `DOC-P2-001`
-- `CMP-P2-001`
-- `CTR-P2-001`
-- `TST-P2-001`
-
-Direct canonical Registry inspection confirms the Phase 2 records that are present there, while these supplemental records remain absent. Therefore the supplemental contents have **not** been fully absorbed.
-
-### Producer disposition
-
-`docs/registry/phase2-artifacts.yaml` was not marked `RETIRED` or `SUPERSEDED`, and no missing records were silently added to the canonical Registry.
-
-The exact discrepancy is preserved for CONTROL resolution.
-
-**Disposition: Blocking Conflict / Open Question — supplemental registry cannot yet be retired because its contents are not fully absorbed into `docs/registry/artifacts.yaml`.**
+**Final disposition: RESOLVED / VERIFIED.**
 
 ## 9. F-08 — Constitution Stable ID
 
-No change was made.
+The Constitution Stable ID remains exactly `IDENTITY UNCONFIRMED`.
 
-The Constitution Stable ID remains exactly:
+**Final disposition: intentionally unresolved / deferred governance matter; unchanged.**
 
-`IDENTITY UNCONFIRMED`
+## 10. Final Scope / Boundary Verification
 
-No Constitution Stable ID was created, inferred, replaced, or ratified.
+CONTROL confirms that no Stable ID was created, deleted, changed, or reused; no unauthorized Phase/Step was activated; Phase 2 was not reopened; Phase 3 and Phase 4 were not activated; and no VPS/V1/runtime/deployment action occurred.
 
-## 10. Changed Files
+## 11. Final State
 
-Producer execution changed exactly:
+Producer execution evidence remains preserved in full. Independent CONTROL closure is supplied by `AR-GOV-005`.
 
-1. `docs/verification/GATE_DEFINITIONS.md`
-2. `docs/verification/EVIDENCE_POLICY.md`
-3. `docs/build-reports/BR-GOV-008.md`
+**CONTROL Verification:** `APPROVED / VERIFIED`
 
-No Project Owner-applied F-01 files were changed by Producer execution.
-
-## 11. Validation Evidence
-
-### 11.1 Repository content validation
-
-Action: re-fetch `docs/verification/GATE_DEFINITIONS.md` after Producer correction.
-
-Actual result: repository returned `Status: VERIFIED`; the Current Status section cites `AR-P0-AUDIT-012` and explicitly states that the change is not a new CONTROL verification.
-
-Result: `PASS`
-
-Action: re-fetch `docs/verification/EVIDENCE_POLICY.md` after Producer correction.
-
-Actual result: repository returned `Status: VERIFIED`; the Current Status section cites `AR-P0-AUDIT-012` and explicitly states that the change is not a new CONTROL verification.
-
-Result: `PASS`
-
-Action: re-fetch `docs/registry/artifacts.yaml`.
-
-Actual result: canonical Registry remains structurally present, retains all seven Role records at their pre-existing lifecycle value, retains Phase 2 canonical records, and retains `TO-GOV-008` as `AUTHORIZED TO EXECUTE`.
-
-Result: `PASS — NO UNAUTHORIZED REGISTRY CHANGE`
-
-Action: re-fetch `docs/registry/phase2-artifacts.yaml`.
-
-Actual result: supplemental registry remains `SUPPLEMENTAL / ACTIVE`; unresolved missing canonical records remain observable and no silent retirement occurred.
-
-Result: `PASS — BLOCKER PRESERVED`
-
-Action: re-fetch `docs/state/DEFERRED_DECISIONS.yaml`.
-
-Actual result: remains empty with `status: DRAFT_PRE_PHASE_0`; no deferred decision was fabricated and no unsupported lifecycle vocabulary was introduced.
-
-Result: `PASS — NO UNSUPPORTED CORRECTION`
-
-### 11.2 Cross-reference / lifecycle validation
-
-Repository search/fetch correlation was performed for Role identity evidence, Phase 2 canonical/supplemental records, the prior CONTROL audit, and the F-05 architecture decision.
-
-No Stable ID was created, changed, deleted, or reused.
-
-No Phase/Step/Task Order was created or activated.
-
-### 11.3 Syntax / structural validation
-
-No VPS/runtime command or arbitrary shell parser execution was authorized or required for this documentation-only correction. The changed files are Markdown documents. Validation was performed by re-fetching the resulting repository content and checking the changed status/provenance sections and governed cross-references directly.
-
-No fabricated parser/test/CI output is claimed.
-
-## 12. Phase / Runtime Boundary Validation
-
-`CURRENT_CHECKPOINT.json` was not changed.
-
-Phase 2 remains `CLOSED / VERIFIED`.
-
-Phase 3 and Phase 4 remain unactivated. `DOC-P3-001` and `DOC-P4-001` remain reference-only/not authorized for implementation.
-
-No VPS/V1/runtime action occurred.
-
-## 13. Blocking Conflicts / Open Questions
-
-The following remain unresolved and are intentionally preserved:
-
-1. **F-02:** lifecycle replacement for `ROL-V2-001` through `ROL-V2-007` is not directly established by the inspected governance evidence.
-2. **F-03:** nine specialized registry lifecycle/transcription states cannot be safely normalized uniformly or individually without additional authoritative evidence for the intended registry lifecycle.
-3. **F-05:** `DOC-V2-P0-002` relationship to the later Master Architecture ratification is not explicitly resolved.
-4. **F-07:** `docs/registry/phase2-artifacts.yaml` still contains records not absorbed into `docs/registry/artifacts.yaml`, so it cannot be retired/superseded yet.
-
-F-04 remains an unresolved status-label condition but does not justify invented lifecycle vocabulary.
-
-F-08 remains explicitly unchanged as `IDENTITY UNCONFIRMED`.
-
-## 14. Explicit Non-Claims
-
-This Build Report does not claim:
-
-- CONTROL verification of Producer work;
-- Project Owner ratification of any new artifact/state;
-- Phase 3 activation;
-- Phase 4 activation;
-- Phase 2 reopening;
-- VPS/V1/runtime execution;
-- architecture redesign;
-- new Stable IDs;
-- complete resolution of F-02/F-03/F-04/F-05/F-07;
-- retirement of `docs/registry/phase2-artifacts.yaml`;
-- resolution of the Constitution Stable ID question.
-
-## 15. Final State Declaration
-
-`PARTIALLY COMPLETED — BLOCKING CONFLICTS REMAIN`
+**Final governance closure:** `VERIFIED / COMPLETE`
