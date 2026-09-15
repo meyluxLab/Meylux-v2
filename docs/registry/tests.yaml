@@ -15,9 +15,9 @@ records:
     status: TESTED / UNVERIFIED
     evidence:
       ci_workflow: CI Core
-      workflow_run_id: 34969294977
-      workflow_run_number: 352
-      commit: 352f5c91b6229ab712d416d3fd9370d69c713cf2
+      workflow_run_id: 34975655857
+      workflow_run_number: 360
+      commit: 0f5570bd0f00fa02eb9fc7444ec5e71d70ae374f
       result: SUCCESS
-      full_regression: 171 tests OK
-      tested_foundation: 8 tests OK
+      full_regression: 173 tests OK
+      tested_foundation: 11 tests OK
