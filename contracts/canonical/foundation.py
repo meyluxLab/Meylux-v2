@@ -2,6 +2,8 @@
 
 This module is provider-neutral and side-effect free. It defines reusable
 semantics for STEP-P3-001 without introducing a new governed Stable ID.
+
+Correction evidence remains limited to the authorized STEP-P3-001 boundary.
 """
 
 from __future__ import annotations
