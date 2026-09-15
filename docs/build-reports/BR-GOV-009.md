@@ -23,9 +23,10 @@ No Phase was activated, Phase 2 was not reopened, Phase 3/4 were not activated, 
 1. `beac4e3cf958d8b30408d99e78dd34728f01ed5c` — F-05 lifecycle reconciliation of `DOC-V2-P0-002`.
 2. `f4d8af4cea20b350a16b71ede954c2aaeba8fe69` — F-07 Phase 2 supplemental registry lifecycle/status reconciliation.
 3. `cc0ae3e8c8a60cb5a2976b358c75c254de1444c9` — F-07 canonical registry reconciliation for the five missing records.
-4. This Build Report commit — records the complete Producer evidence for `TO-GOV-009`.
+4. `57e78f89695e5b2e7661b62ef503d453f7e5afa9` — initial creation of `BR-GOV-009`.
+5. This correction commit — final explicit commit record for `BR-GOV-009`.
 
-The actual current `main` head immediately before creation of this Build Report was `cc0ae3e8c8a60cb5a2976b358c75c254de1444c9`.
+The actual repository `main` head immediately before this Build Report correction was `57e78f89695e5b2e7661b62ef503d453f7e5afa9`.
 
 ## 3. Exact Files Changed
 
