@@ -569,7 +569,14 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-008.md
     traceability: TO-GOV-007 / BR-GOV-007 / ADR-GOVERNANCE-012
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+
+  - stable_id: TO-GOV-009
+    canonical_name: Governance / Documentation / Registry / Lifecycle Reconciliation — F-05/F-07 Closure
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-009.md
+    traceability: TO-GOV-008 / BR-GOV-008 / ADR-GOVERNANCE-012
+    status: VERIFIED / COMPLETE
 
   - stable_id: PH-P2
     canonical_name: Data Acquisition & Market Data Foundation
