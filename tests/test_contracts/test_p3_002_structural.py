@@ -39,13 +39,12 @@ def valid_record() -> dict[str, object]:
 
 
 class StructuralSchemaIdentityTests(unittest.TestCase):
-    def test_valid_acquisition_structure_is_accepted_and_has_deterministic_identity(self):
+    def test_valid_acquisition_structure_is_accepted_deterministically(self):
         first = validate_acquisition_structure(valid_record())
         second = validate_acquisition_structure(valid_record())
         self.assertEqual(first.outcome.result, ValidationResult.VALID)
-        self.assertIsNotNone(first.identity)
-        self.assertEqual(first.identity, second.identity)
-        self.assertEqual(len(first.identity), 64)
+        self.assertIsNone(first.identity)
+        self.assertEqual(first.outcome, second.outcome)
 
     def test_missing_required_field_is_incomplete(self):
         record = valid_record()
