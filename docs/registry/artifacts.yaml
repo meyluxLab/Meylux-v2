@@ -7,298 +7,350 @@ records:
     artifact_path: docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-002
     canonical_name: PRODUCER / ARCHITECT-BUILDER
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-003
     canonical_name: PRODUCER RELAY
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-004
     canonical_name: MARKET INTELLIGENCE
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-005
     canonical_name: PHASE CHAT
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_DEFINITION_PHASE_CHAT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-006
     canonical_name: TROUBLESHOOTING
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_TROUBLESHOOTING_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-007
     canonical_name: OPERATOR
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
+    
   - stable_id: ROL-V2-008
     canonical_name: PROJECT GUIDE
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md
     traceability: ADR-GOVERNANCE-007 / TO-GOV-001
     status: RATIFIED / FROZEN — VERIFIED
+    
   - stable_id: TO-GOV-001
     canonical_name: PROJECT GUIDE Role Establishment
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-001.md
     traceability: ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-003
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-GOV-002
     canonical_name: PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-002.md
     traceability: ADR-GOVERNANCE-001 / ADR-GOVERNANCE-005 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-GOV-003
     canonical_name: CONTROL Autonomous VPS Execution & Verification Governance Amendment
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-003.md
     traceability: ADR-GOVERNANCE-010 / Project Owner Ratification
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-GOV-004
     canonical_name: CONTROL Authorized VPS Execution & Verification Pilot
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-004.md
     traceability: AR-GOV-003 / ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-GOV-005
     canonical_name: V2 VPS Foundation Deployment & Verification
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-005.md
     traceability: ADR-GOVERNANCE-010 / ADR-GOVERNANCE-011 / AR-GOV-004 / Project Owner direction
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-GOV-006
     canonical_name: State / Registry Cleanup & Reconciliation
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-006.md
     traceability: BR-GOV-006 / GitHub Issue #18
     status: APPROVED
+    
   - stable_id: TO-GOV-007
     canonical_name: State and Registry Correction & Reconciliation
     entity_type: TO
     artifact_path: docs/task-orders/TO-GOV-007.md
     traceability: TO-GOV-006 / BR-GOV-006
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+    
   - stable_id: ADR-GOVERNANCE-005
     canonical_name: Post-Freeze Governance Task Order Identity Convention
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-005.md
     traceability: Project Owner ratification / post-freeze Task Order identity convention
     status: RATIFIED / FROZEN
+    
   - stable_id: ADR-GOVERNANCE-006
     canonical_name: Post-Freeze Governance Build Report Identity Convention
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-006.md
     traceability: Project Owner ratification / post-freeze Build Report identity convention
     status: RATIFIED / FROZEN
+    
   - stable_id: ADR-GOVERNANCE-007
     canonical_name: PROJECT GUIDE Stable Identity Extension
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-007.md
     traceability: Project Owner ratification / post-freeze PROJECT GUIDE Stable Identity Extension
     status: RATIFIED / FROZEN
+    
   - stable_id: ADR-GOVERNANCE-008
     canonical_name: Post-Freeze Governance Audit Report Identity Convention
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-008.md
     traceability: Project Owner ratification / post-freeze Audit Report identity convention
     status: RATIFIED / FROZEN
+    
   - stable_id: ADR-GOVERNANCE-009
     canonical_name: Project Owner Ratification and Freeze of AI Continuation Protocol V2
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-009.md
     traceability: Project Owner ratification / post-freeze AI Continuation Protocol V2
     status: RATIFIED / FROZEN
+    
   - stable_id: ADR-GOVERNANCE-010
     canonical_name: CONTROL Autonomous VPS Execution & Verification
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-010.md
     traceability: Project Owner Ratification / Formal Governed Change Package
     status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+    
   - stable_id: ADR-GOVERNANCE-011
     canonical_name: SentinelX Broad Operational Privilege Model
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-011.md
     traceability: Project Owner Ratification / ADR-GOVERNANCE-010 / TO-GOV-004
     status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+    
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
     artifact_path: docs/build-reports/BR-GOV-001.md
     traceability: TO-GOV-001 / ADR-GOVERNANCE-006
     status: VERIFIED
+    
   - stable_id: BR-GOV-002
     canonical_name: Build Report — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
     artifact_path: docs/build-reports/BR-GOV-002.md
     traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: VERIFIED
+    
   - stable_id: BR-GOV-003
     canonical_name: Build Report — CONTROL Autonomous VPS Execution & Verification Governance Amendment
     artifact_path: docs/build-reports/BR-GOV-003.md
     traceability: TO-GOV-003 / ADR-GOVERNANCE-006
     status: VERIFIED
+    
   - stable_id: BR-GOV-006
     canonical_name: Build Report — State / Registry Reconciliation
     artifact_path: docs/build-reports/BR-GOV-006.md
     traceability: TO-GOV-006 / GitHub Issue #18
     status: APPROVED
+    
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
     artifact_path: docs/audits/AR-GOV-001.md
     traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
+    
   - stable_id: AR-GOV-002
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
+    
   - stable_id: AR-GOV-003
     canonical_name: CONTROL Independent Audit — TO-GOV-003 Governance Amendment
     artifact_path: docs/audits/AR-GOV-003.md
     traceability: BR-GOV-003 / TO-GOV-003 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
+    
   - stable_id: AR-GOV-004
     canonical_name: CONTROL Independent Verification — TO-GOV-004 VPS Execution & Verification Pilot
     artifact_path: docs/audits/AR-GOV-004.md
     traceability: TO-GOV-004 / EXEC-LOG-TO-GOV-004-20260909T204147Z / ADR-GOVERNANCE-008 / ADR-GOVERNANCE-011
     status: APPROVED / VERIFIED
+    
   - stable_id: TO-P1-004
     canonical_name: Task Order — Data Contracts
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-004.md
     traceability: PH-P1 / STEP-P1-004 / AR-P1-AUDIT-004
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-P1-005
     canonical_name: Task Order — Data Quality Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-005.md
     traceability: PH-P1 / STEP-P1-005 / AR-P1-AUDIT-005
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-P1-006
     canonical_name: Task Order — Async Worker & Queue Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-006.md
     traceability: PH-P1 / STEP-P1-006 / AR-P1-AUDIT-006
     status: VERIFIED / COMPLETE
+    
   - stable_id: AI-CONTINUATION-PROTOCOL-V2
     canonical_name: AI Continuation Protocol V2
     entity_type: GOVERNANCE
     artifact_path: docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
     traceability: ADR-GOVERNANCE-009 / TO-GOV-002
     status: RATIFIED / FROZEN — VERIFIED
+    
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
     entity_type: BR
     artifact_path: docs/build-reports/BR-P0-012.md
     traceability: TO-P0-011 / PH-P0 / STEP-P0-010 / AR-P0-AUDIT-014
     status: VERIFIED
+    
   - stable_id: AR-P0-AUDIT-014
     canonical_name: BR-P0-012 Control Audit — Architecture Ratification Readiness
     entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-014.md
     traceability: BR-P0-012 / TO-P0-011 / PH-P0 / STEP-P0-010
     status: APPROVED / VERIFIED — RATIFICATION READY
+    
   - stable_id: ADR-GOVERNANCE-004
     canonical_name: Project Owner Ratification and Freeze of Master Architecture V2
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-004.md
     traceability: STEP-P0-010 / DOC-V2-ARCH-001 / Project Owner ratification
     status: RATIFIED / FROZEN
+    
   - stable_id: AR-P0-AUDIT-015
     canonical_name: Final Phase 0 Closure Verification
     entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
     traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / PH-P0
     status: APPROVED / VERIFIED
+    
   - stable_id: BR-P1-001
     canonical_name: Build Report — Repository Foundation
     entity_type: BR
     artifact_path: docs/build-reports/BR-P1-001.md
     traceability: TO-P1-001 / PH-P1 / STEP-P1-001
     status: VERIFIED
+    
   - stable_id: AR-P1-AUDIT-001
     canonical_name: BR-P1-001 Control Audit — Repository Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-001.md
     traceability: BR-P1-001 / TO-P1-001 / PH-P1 / STEP-P1-001
     status: APPROVED / VERIFIED
+    
   - stable_id: TO-P1-001
     canonical_name: Task Order — Repository Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-001.md
     traceability: PH-P1 / STEP-P1-001 / AR-P1-AUDIT-001
     status: VERIFIED / COMPLETE
+    
   - stable_id: TO-P1-002
     entity_type: TO
     canonical_name: Task Order — Docker Foundation
     artifact_path: docs/task-orders/TO-P1-002.md
     traceability: PH-P1 / STEP-P1-002 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
+    
   - stable_id: BR-P1-002
     entity_type: BR
     canonical_name: Build Report — Docker Foundation
     artifact_path: docs/build-reports/BR-P1-002.md
     traceability: TO-P1-002 / PH-P1 / STEP-P1-002
     status: VERIFIED
+    
   - stable_id: AR-P1-AUDIT-002
     entity_type: AR
     canonical_name: BR-P1-002 Control Audit — Docker Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-002.md
     traceability: BR-P1-002 / TO-P1-002 / PH-P1 / STEP-P1-002
     status: APPROVED / VERIFIED
+    
   - stable_id: TO-P1-003
     canonical_name: Task Order — Database Foundation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P1-003.md
     traceability: PH-P1 / STEP-P1-003 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
+    
   - stable_id: BR-P1-003
     canonical_name: Build Report — Database Foundation
     artifact_path: docs/build-reports/BR-P1-003.md
     traceability: TO-P1-003 / PH-P1 / STEP-P1-003
     status: VERIFIED
+    
   - stable_id: BR-P1-004
     canonical_name: Build Report — Data Contracts
     artifact_path: docs/build-reports/BR-P1-004.md
     traceability: TO-P1-004 / PH-P1 / STEP-P1-004
     status: VERIFIED
+    
   - stable_id: BR-P1-005
     canonical_name: Build Report — Data Quality Foundation
     artifact_path: docs/build-reports/BR-P1-005.md
     traceability: TO-P1-005 / PH-P1 / STEP-P1-005
     status: VERIFIED
+    
   - stable_id: AR-P1-AUDIT-004
     canonical_name: BR-P1-004 Control Audit — Data Contracts
     artifact_path: docs/audit-reports/AR-P1-AUDIT-004.md
     traceability: BR-P1-004 / TO-P1-004 / PH-P1 / STEP-P1-004
     status: APPROVED / VERIFIED
+    
   - stable_id: AR-P1-AUDIT-005
     canonical_name: BR-P1-005 Control Audit — Data Quality Foundation
     artifact_path: docs/audits/AR-P1-AUDIT-005.md
     traceability: BR-P1-005 / TO-P1-005 / PH-P1 / STEP-P1-005
     status: APPROVED / VERIFIED
+    
   - stable_id: AR-P1-AUDIT-003
     canonical_name: BR-P1-003 Control Audit — Database Foundation
     entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-003.md
     traceability: BR-P1-003 / TO-P1-003 / PH-P1 / STEP-P1-003
     status: APPROVED / VERIFIED
+    
   - stable_id: SENTINELX-PILOT-CONFIG-V1
     canonical_name: SentinelX Pilot Runtime Configuration
     entity_type: CONFIGURATION
     artifact_path: docs/operations/sentinelx/SENTINELX_PILOT_CONFIG.yaml
     traceability: ADR-GOVERNANCE-011 / TO-GOV-004
     status: APPROVED DESIGN / NOT DEPLOYED
+    
   - stable_id: SENTINELX-SUDO-POLICY-V1
     canonical_name: SentinelX Full Operational Sudo Policy Template
     entity_type: CONFIGURATION
