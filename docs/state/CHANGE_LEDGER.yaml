@@ -261,3 +261,19 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no VPS/runtime execution; closure consisted of repository state, evidence, registry and documentation synchronization only
     v1_effect: none
+
+  - id: CHG-P3-STEP-002-ACTIVATE
+    date_utc: '2026-09-15'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-002 activation and TO-P3-002 authorization following STEP-P3-001 closure
+    basis: Project Owner Authorization — STEP-P3-002 Activation & Phase 3 Progression + PH-P3 + AR-P3-001 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P3-001
+      - STEP-P3-002
+      - TO-P3-001
+      - TO-P3-002
+    from_state: STEP-P3-001 COMPLETE / VERIFIED; TO-P3-001 VERIFIED / COMPLETE; STEP-P3-002 DEFINED / INACTIVE; no active Task Order
+    to_state: STEP-P3-001 remains COMPLETE / VERIFIED; TO-P3-001 remains VERIFIED / COMPLETE; STEP-P3-002 ACTIVE / AUTHORIZED; TO-P3-002 AUTHORIZED TO EXECUTE
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS/runtime execution; activation consists of governed Repository Task Order and lifecycle synchronization only
+    v1_effect: none
