@@ -18,7 +18,7 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "last_approved_task_order": "TO-P2-007",
   "last_build_report": "BR-P2-006",
-  "last_audit_report": "AR-P2-AUDIT-007",
+  "last_audit_report": "AR-GOV-005",
   "last_execution_log": "EXEC-LOG-TO-P1-008-20260910T181000Z",
   "active_task_order": null,
   "verified_artifacts": [
@@ -119,7 +119,14 @@
     "AR-P2-AUDIT-007",
     "TO-P2-007",
     "STEP-P2-006",
-    "DOC-P2-002"
+    "DOC-P2-002",
+    "TO-GOV-007",
+    "BR-GOV-007",
+    "TO-GOV-008",
+    "BR-GOV-008",
+    "TO-GOV-009",
+    "BR-GOV-009",
+    "AR-GOV-005"
   ],
   "unverified_artifacts": [],
   "open_questions": [
@@ -135,9 +142,10 @@
     "STEP-P2-001 is COMPLETE / VERIFIED, STEP-P2-002 is COMPLETE / VERIFIED, STEP-P2-003 is COMPLETE / VERIFIED, STEP-P2-004 is COMPLETE / VERIFIED under AR-P2-AUDIT-004, and STEP-P2-005 is COMPLETE / VERIFIED under AR-P2-AUDIT-005.",
     "PR #16 was merged by CONTROL as merge commit 816d59a86468774f19a391d86cab4006a1c5d4e0.",
     "D-P2-006-001 was corrected and independently verified under TO-P2-007 and AR-P2-AUDIT-007.",
-    "No Phase 3/4 or later implementation is authorized."
+    "No Phase 3/4 or later implementation is authorized.",
+    "TO-GOV-008 and TO-GOV-009 are finally independently verified under AR-GOV-005; no Phase 3/4 activation occurred."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "c26d765a81de7ecd483c27454c481b56e9691191",
-  "updated_at_utc": "2026-09-12T00:00:00Z"
+  "last_verified_commit": "723effed27ee5b1e31017eeda332cc5a13c9978a",
+  "updated_at_utc": "2026-09-15T05:28:00Z"
 }
