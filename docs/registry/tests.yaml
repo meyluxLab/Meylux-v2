@@ -15,9 +15,9 @@ records:
     status: TESTED / UNVERIFIED
     evidence:
       ci_workflow: CI Core
-      workflow_run_id: 34975655857
-      workflow_run_number: 360
-      commit: 0f5570bd0f00fa02eb9fc7444ec5e71d70ae374f
+      workflow_run_id: 34975805503
+      workflow_run_number: 363
+      commit: eec11bff8879a4d4a0c06d662e4218e5ac60d751
       result: SUCCESS
-      full_regression: 173 tests OK
-      tested_foundation: 11 tests OK
+      workflow_steps: compile + Binance acquisition tests + P2-004 acquisition tests + P2-005 operational hardening tests + foundation tests all SUCCESS
+      detailed_test_counts_reference: Run 360 / Run ID 34975655857 / corrected Step-test commit 0f5570bd0f00fa02eb9fc7444ec5e71d70ae374f9 / 11 tests OK / full regression 173 tests OK
