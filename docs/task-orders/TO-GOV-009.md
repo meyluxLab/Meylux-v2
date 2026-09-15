@@ -6,9 +6,10 @@
 **Step:** `NONE`
 **Issuer:** CONTROL / REVIEWER (`ROL-V2-001`)
 **Recipient:** PRODUCER / ARCHITECT-BUILDER (`ROL-V2-002`)
-**Status:** `AUTHORIZED TO EXECUTE`
+**Status:** `VERIFIED / COMPLETE`
 **Predecessor:** `TO-GOV-008`
 **Related:** `ADR-GOVERNANCE-012`, `BR-GOV-008`
+**Final CONTROL Audit:** `AR-GOV-005` — `APPROVED / VERIFIED`
 
 ## Objective
 
@@ -113,3 +114,9 @@ The first declaration is permitted only if F-05 and all F-07 required records ar
 ## Completion Boundary
 
 Successful execution of this Task Order provides the remaining Producer evidence required for CONTROL to perform the final independent disposition of `TO-GOV-008`. It does not itself authorize any Phase implementation.
+
+## Final CONTROL Closure
+
+`AR-GOV-005` records the final independent CONTROL verification of this Task Order.
+
+Final lifecycle: `VERIFIED / COMPLETE`.
