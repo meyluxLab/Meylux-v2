@@ -14,8 +14,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 0 — Constitution, Architecture, Specification Foundation:** `CLOSED / VERIFIED`.
 - **Phase 1 — Infrastructure Foundation:** `CLOSED / VERIFIED`.
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
-- **Phase 3 through Phase 10:** `NOT AUTHORIZED`. Reference-only planning Blueprints exist for Phase 3 (`docs/blueprint/PHASE3_ROADMAP.md`) and Phase 4 (`docs/blueprint/PHASE4_ROADMAP.md`); these are explicitly `REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION` and do not by themselves authorize any Phase 3/4 work. No comparable Blueprint for Phase 5 and beyond has been formally registered in this repository as of this Checkpoint.
-- **Active Task Order:** none (`active_task_order: null`). Last approved: `TO-P2-007`.
+- **Phase 3 — Validation, Normalization & Data Quality Engine:** `ACTIVE / AUTHORIZED`. `STEP-P3-001` is `COMPLETE / VERIFIED`; `STEP-P3-002` through `STEP-P3-008` remain `DEFINED / INACTIVE`.
+- **Active Task Order:** none (`active_task_order: null`). Last approved: `TO-P3-001`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.

@@ -135,41 +135,49 @@ records:
     status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
   - stable_id: BR-GOV-001
     canonical_name: Build Report — PROJECT GUIDE Role Establishment
+    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-001.md
     traceability: TO-GOV-001 / ADR-GOVERNANCE-006
     status: VERIFIED
   - stable_id: BR-GOV-002
     canonical_name: Build Report — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
+    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-002.md
     traceability: TO-GOV-002 / ADR-GOVERNANCE-006 / ADR-GOVERNANCE-007
     status: VERIFIED
   - stable_id: BR-GOV-003
     canonical_name: Build Report — CONTROL Autonomous VPS Execution & Verification Governance Amendment
+    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-003.md
     traceability: TO-GOV-003 / ADR-GOVERNANCE-006
     status: VERIFIED
   - stable_id: BR-GOV-006
     canonical_name: Build Report — State / Registry Reconciliation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-006.md
     traceability: TO-GOV-006 / GitHub Issue #18
     status: APPROVED
   - stable_id: AR-GOV-001
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role Establishment
+    entity_type: AR
     artifact_path: docs/audits/AR-GOV-001.md
     traceability: BR-GOV-001 / TO-GOV-001 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-002
     canonical_name: CONTROL Independent Audit — PROJECT GUIDE Role-Aware Continuity Bootstrap Integration
+    entity_type: AR
     artifact_path: docs/audits/AR-GOV-002.md
     traceability: BR-GOV-002 / TO-GOV-002 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-003
     canonical_name: CONTROL Independent Audit — TO-GOV-003 Governance Amendment
+    entity_type: AR
     artifact_path: docs/audits/AR-GOV-003.md
     traceability: BR-GOV-003 / TO-GOV-003 / ADR-GOVERNANCE-008
     status: APPROVED / VERIFIED
   - stable_id: AR-GOV-004
     canonical_name: CONTROL Independent Verification — TO-GOV-004 VPS Execution & Verification Pilot
+    entity_type: AR
     artifact_path: docs/audits/AR-GOV-004.md
     traceability: TO-GOV-004 / EXEC-LOG-TO-GOV-004-20260909T204147Z / ADR-GOVERNANCE-008 / ADR-GOVERNANCE-011
     status: APPROVED / VERIFIED
@@ -199,31 +207,37 @@ records:
     status: RATIFIED / FROZEN — VERIFIED
   - stable_id: BR-P0-012
     canonical_name: Build Report — Master Architecture Freeze
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P0-012.md
     traceability: TO-P0-011 / PH-P0 / STEP-P0-010 / AR-P0-AUDIT-014
     status: VERIFIED
   - stable_id: AR-P0-AUDIT-014
     canonical_name: BR-P0-012 Control Audit — Architecture Ratification Readiness
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-014.md
     traceability: BR-P0-012 / TO-P0-011 / PH-P0 / STEP-P0-010
     status: APPROVED / VERIFIED — RATIFICATION READY
   - stable_id: ADR-GOVERNANCE-004
     canonical_name: Project Owner Ratification and Freeze of Master Architecture V2
+    entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-004.md
     traceability: STEP-P0-010 / DOC-V2-ARCH-001 / Project Owner ratification
     status: RATIFIED / FROZEN
   - stable_id: AR-P0-AUDIT-015
     canonical_name: Final Phase 0 Closure Verification
+    entity_type: AR
     artifact_path: docs/audits/AR-P0-AUDIT-015.md
     traceability: ADR-GOVERNANCE-004 / TO-P0-011 / BR-P0-012 / PH-P0
     status: APPROVED / VERIFIED
   - stable_id: BR-P1-001
     canonical_name: Build Report — Repository Foundation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-001.md
     traceability: TO-P1-001 / PH-P1 / STEP-P1-001
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-001
     canonical_name: BR-P1-001 Control Audit — Repository Foundation
+    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-001.md
     traceability: BR-P1-001 / TO-P1-001 / PH-P1 / STEP-P1-001
     status: APPROVED / VERIFIED
@@ -265,11 +279,13 @@ records:
     status: VERIFIED
   - stable_id: BR-P1-004
     canonical_name: Build Report — Data Contracts
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-004.md
     traceability: TO-P1-004 / PH-P1 / STEP-P1-004
     status: VERIFIED
   - stable_id: BR-P1-005
     canonical_name: Build Report — Data Quality Foundation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-005.md
     traceability: TO-P1-005 / PH-P1 / STEP-P1-005
     status: VERIFIED
@@ -309,11 +325,13 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-007
     canonical_name: Build Report — Observability Foundation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-007.md
     traceability: TO-P1-007 / PH-P1 / STEP-P1-007
     status: VERIFIED
   - stable_id: AR-P1-AUDIT-007
     canonical_name: BR-P1-007 Control Audit — Observability Foundation
+    entity_type: AR
     artifact_path: docs/audits/AR-P1-AUDIT-007.md
     traceability: BR-P1-007 / TO-P1-007 / PH-P1 / STEP-P1-007
     status: APPROVED / VERIFIED
@@ -325,6 +343,7 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-008
     canonical_name: Build Report — Disaster Recovery / Restore Verification
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-008.md
     traceability: TO-P1-008 / PH-P1 / STEP-P1-008
     status: VERIFIED
@@ -426,6 +445,7 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: BR-P2-004
     canonical_name: Build Report — Live Collector, Raw/Staging Persistence & Replay Safety
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P2-004.md
     traceability: TO-P2-004 / PH-P2 / STEP-P2-004
     status: VERIFIED
@@ -449,6 +469,7 @@ records:
     status: APPROVED / VERIFIED
   - stable_id: BR-P2-005
     canonical_name: Build Report — Dual-Provider Operational Hardening
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P2-005.md
     traceability: TO-P2-005 / PH-P2 / STEP-P2-005
     status: VERIFIED
@@ -474,7 +495,7 @@ records:
     canonical_name: End-to-End Acquisition Verification & Phase 2 Closure
     entity_type: STEP
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / TO-P2-006 / TO-P2-007 / AR-P2-AUDIT-007
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-006 / TO-P2-007 / AR-P2-AUDIT-007
     status: VERIFIED / COMPLETE
   - stable_id: BR-P2-006
     canonical_name: Build Report — End-to-End Acquisition Verification & Phase 2 Closure
@@ -502,6 +523,7 @@ records:
     status: VERIFIED / COMPLETE
   - stable_id: BR-GOV-007
     canonical_name: Build Report — State and Registry Correction & Reconciliation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-GOV-007.md
     traceability: TO-GOV-007 / TO-GOV-006 / BR-GOV-006
     status: VERIFIED / COMPLETE
@@ -578,7 +600,7 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
     traceability: PH-P3 / TO-P3-001 / DOC-V2-ARCH-001
-    status: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
   - stable_id: STEP-P3-002
     canonical_name: Structural, Schema & Identity Validation
     entity_type: STEP
@@ -626,16 +648,22 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-001.md
     traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P3-001
     canonical_name: Build Report — Canonical Contracts, Identity & Validation Foundation
     entity_type: BR
     artifact_path: docs/build-reports/BR-P3-001.md
     traceability: TO-P3-001 / PH-P3 / STEP-P3-001
-    status: IMPLEMENTED / TESTED / UNVERIFIED
+    status: VERIFIED
   - stable_id: AR-P3-001
     canonical_name: CONTROL Independent Audit — TO-P3-001 / STEP-P3-001
     entity_type: AR
     artifact_path: docs/audits/AR-P3-001.md
     traceability: BR-P3-001 / TO-P3-001 / PH-P3 / STEP-P3-001
-    status: REVISE REQUIRED / NOT VERIFIED
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-001
+    canonical_name: Canonical Contracts, Identity & Validation Foundation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_001_foundation.py
+    traceability: TO-P3-001 / STEP-P3-001 / BR-P3-001 / AR-P3-001
+    status: VERIFIED

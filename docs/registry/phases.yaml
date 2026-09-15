@@ -296,14 +296,14 @@ records:
     logical_name: Canonical Contracts, Identity & Validation Foundation
     entity_type: STEP
     phase: PH-P3
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 1
     predecessor: STEP-P2-006
     activation_basis: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15 / PH-P3
-    active_task_order: TO-P3-001
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P3-001
+    completion_audit: AR-P3-001
     purpose: Establish the canonical contract, identity, validation semantics and deterministic data-quality foundation required by Phase 3.
 
   - sid: STEP-P3-002
