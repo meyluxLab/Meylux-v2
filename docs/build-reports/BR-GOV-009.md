@@ -8,7 +8,8 @@
 **Phase:** `NONE`
 **Step:** `NONE`
 **Producer Status:** `IMPLEMENTED / TESTED / UNVERIFIED`
-**CONTROL Verification:** `PENDING`
+**CONTROL Verification:** `APPROVED / VERIFIED`
+**Final CONTROL Audit:** `AR-GOV-005`
 
 ## 1. Execution Scope
 
@@ -25,151 +26,69 @@ No Phase was activated, Phase 2 was not reopened, Phase 3/4 were not activated, 
 3. `cc0ae3e8c8a60cb5a2976b358c75c254de1444c9` — F-07 canonical registry reconciliation for the five missing records.
 4. `57e78f89695e5b2e7661b62ef503d453f7e5afa9` — initial creation of `BR-GOV-009`.
 5. `1b1e0ba0c6eb5318fc4752d627c1318690aa6442` — Build Report traceability commit.
-6. `f6d7091eb10f0ae1957c9463c94bdf0d7e14d513` — C-01/C-02 correction commit restoring the authorized F-05 formatting and reversing the identified out-of-scope canonical-registry changes.
-7. `b8bbcdfe848dbc743fb182d0f1ddec3919b30c45` — follow-up canonical-registry correction preserving the pre-existing `AR-P1-AUDIT-002` state and removing the residual `AR-P1-AUDIT-008` out-of-scope change.
+6. `f6d7091eb10f0ae1957c9463c94bdf0d7e14d513` — C-01/C-02 correction commit.
+7. `b8bbcdfe848dbc743fb182d0f1ddec3919b30c45` — follow-up canonical-registry correction.
 8. `1a5952800f0855d62bd03e2e3f99dadccbd32355` — final repository correction state.
-9. This Build Report update commit — records the complete correction commit chain and final Producer evidence.
+9. `7511c5d5e97f4c7f69b301ff30b38cd82adbdb28` — C-03 final residual correction.
 
-The current repository `main` head after the correction sequence is the commit containing this updated Build Report.
+The Producer correction chain is independently accepted by CONTROL under `AR-GOV-005`.
 
-## 3. Exact Files Changed
+## 3. Exact Files Changed by the Producer Task Order
 
 - `docs/architecture/MEYLUX_V2_ARCHITECTURE_HARDENING_LESSONS_LEARNED.md`
 - `docs/registry/artifacts.yaml`
 - `docs/registry/phase2-artifacts.yaml`
 - `docs/build-reports/BR-GOV-009.md`
 
-No other repository files were changed by this Task Order.
+No other repository files were changed by the Producer execution of this Task Order.
 
 ## 4. F-05 — Hardening Lessons Learned
 
-### Before
+`DOC-V2-P0-002` was changed from `DESIGN BASELINE — PENDING RATIFICATION` to `SUPERSEDED`. The document remains retained as historical/design-input material. The authoritative Master Architecture remains `DOC-V2-ARCH-001`, ratified/frozen under `ADR-GOVERNANCE-004`.
 
-`DOC-V2-P0-002` declared:
-
-`Status: DESIGN BASELINE — PENDING RATIFICATION`
-
-### After
-
-The status declaration was changed to:
-
-`Status: SUPERSEDED`
-
-No historical lesson content, Stable ID, filename, or document body was rewritten or deleted. The document remains retained as historical/design-input material. The existing historical footer statement `Document Status: Pending Ratification` was not rewritten because the Task Order authorized changing only the document's status declaration.
-
-The use of `SUPERSEDED` is an existing repository lifecycle vocabulary expression and indicates that the document is no longer the current architectural baseline while preserving it historically.
-
-The current architectural authority remains `DOC-V2-ARCH-001`, ratified/frozen under `ADR-GOVERNANCE-004`.
+**CONTROL final disposition: RESOLVED / VERIFIED.**
 
 ## 5. F-07 — Field-by-Field Reconciliation
 
-The supplemental registry `docs/registry/phase2-artifacts.yaml` was compared against canonical `docs/registry/artifacts.yaml` for the five records identified by CONTROL.
+The five CONTROL-identified records were reconciled into the canonical registry with Stable IDs and artifact paths preserved:
 
-### `PH-P2`
+- `PH-P2` → `CLOSED / VERIFIED`
+- `DOC-P2-001` → `DETERMINED / ACTIVE`
+- `CMP-P2-001` → `VERIFIED`
+- `CTR-P2-001` → `VERIFIED`
+- `TST-P2-001` → `VERIFIED`
 
-- Stable ID: preserved exactly.
-- Entity type: `PH` preserved.
-- Canonical name: `Data Acquisition & Market Data Foundation` preserved.
-- Artifact path: `docs/phases/PH-P2.md` preserved.
-- Traceability: preserved from the supplemental record and consistent with the canonical phase registry.
-- Lifecycle: corrected from `ACTIVE / AUTHORIZED` to `CLOSED / VERIFIED`.
-- Evidence: `docs/registry/phases.yaml` records `PH-P2` as `CLOSED / VERIFIED`; `STEP-P2-006` is `COMPLETE / VERIFIED` with completion audit `AR-P2-AUDIT-007`; the Phase 2 execution report also records the phase as `CLOSED / VERIFIED` with final audit `AR-P2-AUDIT-007`.
+The supplemental `docs/registry/phase2-artifacts.yaml` is `RETIRED / SUPERSEDED` and was preserved rather than deleted.
 
-### `DOC-P2-001`
+C-01/C-02/C-03 corrections were incorporated. The final residual C-03 correction restored `AR-P1-AUDIT-008` to `entity_type: AR` and restored exact `PH-P2` traceability to `PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004`.
 
-- Stable ID: preserved exactly.
-- Entity type: `DOC` preserved.
-- Canonical name: `Phase 2 Determination Report` preserved.
-- Artifact path: `docs/operations/PH-P2-DETERMINATION-REPORT.md` preserved.
-- Traceability: `PH-P2 / STEP-P2-001 / TO-P2-001` preserved.
-- Lifecycle: `DETERMINED / ACTIVE` preserved because the document itself directly declares that status and no evidence authorizes a different document lifecycle.
-- Evidence: the document itself identifies `DOC-P2-001` and its current status; the Phase 2 determination remains a historical/governance determination record even though the phase itself is now closed.
+**CONTROL final disposition: RESOLVED / VERIFIED.**
 
-### `CMP-P2-001`
+## 6. F-02 / F-03 / F-04
 
-- Stable ID: preserved exactly.
-- Entity type: `CMP` preserved.
-- Canonical name: `Provider-Neutral Acquisition Boundary` preserved.
-- Artifact path: `src/meylux/acquisition/provider.py` preserved.
-- Traceability: preserved from the supplemental record.
-- Lifecycle: `VERIFIED` preserved.
-- Evidence: the source file declares `SID = "CMP-P2-001"`; `AR-P2-AUDIT-001` records the component as `KEEP / ACCEPTED DISPOSITION` and independently verifies the provider-neutral boundary.
+No repository change was made to the CONTROL determinations:
 
-### `CTR-P2-001`
+- `F-02`: no Role lifecycle promotion performed; existing `DRAFT_PRE_PHASE_0` values preserved.
+- `F-03`: no specialized-registry lifecycle change performed; registry-level lifecycle was not inferred from empty/populated content.
+- `F-04`: `DEFERRED_DECISIONS.yaml` was not modified merely because `items: []`.
 
-- Stable ID: preserved exactly.
-- Entity type: `CTR` preserved.
-- Canonical name: `AcquisitionEnvelope Provider-Neutral Acquisition Contract` preserved.
-- Artifact path: `contracts/acquisition.py` preserved.
-- Traceability: preserved from the supplemental record.
-- Lifecycle: `VERIFIED` preserved.
-- Evidence: the source file declares `SID = "CTR-P2-001"`; the authoritative acquisition contract implementation is present; `AR-P2-AUDIT-001` independently verified the contract behavior and deterministic serialization/identity boundary.
+**CONTROL final disposition: intentionally unresolved / deferred governance matter.**
 
-### `TST-P2-001`
+## 7. F-08
 
-- Stable ID: preserved exactly.
-- Entity type: `TST` preserved.
-- Canonical name: `Provider-Neutral Acquisition Contract Tests` preserved.
-- Artifact path: `tests/test_contracts/test_acquisition_contract.py` preserved.
-- Traceability: preserved from the supplemental record.
-- Lifecycle: `VERIFIED` preserved.
-- Evidence: the authoritative test file contains the `CTR-P2-001` identity/version checks and the required acquisition-contract regression coverage; `AR-P2-AUDIT-001` records the adversarial coverage and relevant test evidence as verified/accepted evidence.
-
-## 6. Canonical Registry Insertions
-
-The five previously non-canonical records were inserted into `docs/registry/artifacts.yaml` exactly once, preserving their Stable IDs and artifact paths:
-
-- `PH-P2`
-- `DOC-P2-001`
-- `CMP-P2-001`
-- `CTR-P2-001`
-- `TST-P2-001`
-
-No competing Stable ID was created. The canonical registry already contained related Phase 2 records such as `STEP-P2-001`, `TO-P2-001`, `BR-P2-001`, `AR-P2-AUDIT-001`, and `DOC-P2-002`; those existing records were preserved without duplication.
-
-## 7. Supplemental Registry Disposition
-
-After the five required records were reconciled into the canonical registry, `docs/registry/phase2-artifacts.yaml` was retained for historical traceability and its file-level status was changed from:
-
-`SUPPLEMENTAL / ACTIVE`
-
-to:
-
-`RETIRED / SUPERSEDED`
-
-The file was not deleted.
-
-## 8. F-02 / F-03 / F-04
-
-No repository change was made to the resolutions already established by CONTROL:
-
-- `F-02`: left unchanged; no Role lifecycle promotion performed.
-- `F-03`: left unchanged; no specialized-registry lifecycle change performed.
-- `F-04`: left unchanged; `DEFERRED_DECISIONS.yaml` was not modified merely because `items: []`.
-
-## 9. F-08
-
-`F-08` remains unchanged.
-
-Constitution Stable ID remains:
+The Constitution Stable ID remains exactly:
 
 `IDENTITY UNCONFIRMED`
 
-No Producer action was taken to alter or resolve it.
+No Producer or CONTROL closure action altered this value.
 
-## 10. Validation / Refetch Evidence
+**CONTROL final disposition: intentionally unresolved / deferred governance matter.**
 
-Post-change repository refetches confirmed:
+## 8. Validation / Refetch Evidence
 
-- `docs/architecture/MEYLUX_V2_ARCHITECTURE_HARDENING_LESSONS_LEARNED.md` now declares `Status: SUPERSEDED`.
-- The six previously removed F-05 formatting blank lines are restored; no historical footer or other document content was changed.
-- `docs/registry/phase2-artifacts.yaml` declares `status: RETIRED / SUPERSEDED` and `PH-P2` declares `status: CLOSED / VERIFIED`.
-- `docs/registry/artifacts.yaml` contains the five reconciled records with the preserved Stable IDs and paths, while the unrelated canonical-registry changes identified by CONTROL were removed.
-- The repository `main` branch advanced through the exact Producer correction commits recorded above.
+Post-change repository evidence confirms the F-05 status, F-07 canonical records, supplemental registry retirement, preserved Stable IDs/paths, and final C-03 corrections. No CI, runtime, VPS, or deployment verification was performed or claimed because none was authorized or required.
 
-No CI, runtime, VPS, or deployment verification was performed or claimed because none was authorized or required by `TO-GOV-009`.
-
-## 11. Phase / Runtime Boundary Confirmation
+## 9. Phase / Runtime Boundary Confirmation
 
 - Phase 2 remains `CLOSED / VERIFIED`.
 - Phase 3 remains NOT ACTIVATED.
@@ -179,32 +98,16 @@ No CI, runtime, VPS, or deployment verification was performed or claimed because
 - No architecture redesign was performed.
 - No Stable ID was created, deleted, or changed.
 
-## 12. Remaining Blockers / Discrepancies
+## 10. Final CONTROL Closure
 
-No unresolved C-01 or C-02 repository correction discrepancy remains within the authorized scope of the CONTROL correction notice.
+`AR-GOV-005` independently verifies this Build Report and the underlying `TO-GOV-009` execution evidence.
 
-The Producer does not claim independent CONTROL verification. Any remaining project-level governance disposition belongs to CONTROL.
+The Producer status remains `IMPLEMENTED / TESTED / UNVERIFIED` as the historical Producer execution state. The independent CONTROL verification is:
 
-## 13. Final Declaration
+`APPROVED / VERIFIED`
+
+Final lifecycle: `VERIFIED / COMPLETE`.
+
+## 11. Final Declaration
 
 `COMPLETED — ALL IN-SCOPE CHANGES APPLIED AND VALIDATED`
-
-This declaration means the Producer completed the bounded C-01/C-02 corrections and repository-refetched the authorized F-05/F-07 results. It does not constitute CONTROL verification or approval.
-
-## 14. C-03 — Final Residual Correction
-
-CONTROL subsequently issued the final residual correction notice for `TO-GOV-009`.
-
-Applied exactly as authorized:
-
-- `AR-P1-AUDIT-008` restored to `entity_type: AR`.
-- `PH-P2` traceability restored exactly to `PH-P2 / TO-P2-004 / AR-P2-AUDIT-004 / BR-P2-004`.
-- No F-05 change, supplemental-registry change, Stable ID change, lifecycle change, Phase activation/reopening, architecture/runtime/VPS/V1 action, or F-02/F-03/F-04/F-08 change was authorized or performed.
-
-The C-03 correction commit is:
-
-`7511c5d5e97f4c7f69b301ff30b38cd82adbdb28`
-
-The Producer remains `IMPLEMENTED / TESTED / UNVERIFIED`; CONTROL verification remains pending.
-
-The C-03 correction was independently bounded to `docs/registry/artifacts.yaml`. The exact net correction from the pre-C-03 Producer state is the restoration of the two authorized registry fields described above.
