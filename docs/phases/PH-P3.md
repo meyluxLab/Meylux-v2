@@ -85,8 +85,10 @@ Objective: establish the canonical contract, identity, validation semantics and 
 ### `STEP-P3-002` — Structural, Schema & Identity Validation
 
 **Order:** 2
-**Status:** DEFINED / INACTIVE
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** AUTHORIZED TO EXECUTE
 **Predecessor:** `STEP-P3-001`
+**Active Task Order:** `TO-P3-002`
 
 Objective: establish structural, schema and initial identity validation for incoming acquisition data.
 
