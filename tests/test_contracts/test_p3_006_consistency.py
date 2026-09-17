@@ -9,17 +9,17 @@ T=datetime(2026,9,18,0,0,tzinfo=UTC)
 def instrument(venue, instrument_id=None, **kw):
     return CanonicalVenueEvidence(venue, CanonicalInstrument(instrument_id or f'{venue}:BTCUSDT', kw.get('base','BTC'), kw.get('quote','USDT'), kw.get('market','SPOT'), kw.get('contract','SPOT'), kw.get('unit','BTC'), T, contract_multiplier=kw.get('multiplier'), provenance_id=f'{venue}:test'))
 
-def trade(venue, price='100', qty='2', ts=T, side='BUY'):
-    return CanonicalVenueEvidence(venue, CanonicalTrade(f'{venue}-7', f'{venue}:BTCUSDT', ts, Decimal(price), Decimal(qty), side, provenance_id=f'{venue}:test'))
+def trade(venue, price='100', qty='2', ts=T, side='BUY', instrument_id=None):
+    return CanonicalVenueEvidence(venue, CanonicalTrade(f'{venue}-7', instrument_id or f'{venue}:BTCUSDT', ts, Decimal(price), Decimal(qty), side, provenance_id=f'{venue}:test'))
 
-def candle(venue, timeframe='1m', close='105', ot=T):
-    return CanonicalVenueEvidence(venue, CanonicalCandle(f'{venue}:BTCUSDT', timeframe, ot, ot+timedelta(minutes=1), Decimal('100'), Decimal('110'), Decimal('90'), Decimal(close), Decimal('12'), Decimal('1200'), 10, True, f'{venue}:test'))
+def candle(venue, timeframe='1m', close='105', ot=T, instrument_id=None):
+    return CanonicalVenueEvidence(venue, CanonicalCandle(instrument_id or f'{venue}:BTCUSDT', timeframe, ot, ot+timedelta(minutes=1), Decimal('100'), Decimal('110'), Decimal('90'), Decimal(close), Decimal('12'), Decimal('1200'), 10, True, f'{venue}:test'))
 
-def book(venue, bid='100', ask='101', ts=T):
-    return CanonicalVenueEvidence(venue, CanonicalOrderBook(f'{venue}:BTCUSDT', ts, ((Decimal(bid),Decimal('2')),), ((Decimal(ask),Decimal('1')),), f'{venue}:test'))
+def book(venue, bid='100', ask='101', ts=T, instrument_id=None):
+    return CanonicalVenueEvidence(venue, CanonicalOrderBook(instrument_id or f'{venue}:BTCUSDT', ts, ((Decimal(bid),Decimal('2')),), ((Decimal(ask),Decimal('1')),), f'{venue}:test'))
 
-def derivatives(venue, funding='0.001'):
-    return CanonicalVenueEvidence(venue, CanonicalDerivatives(f'{venue}:BTCUSDT', T, funding_rate=Decimal(funding), open_interest=Decimal('10'), provenance_id=f'{venue}:test'))
+def derivatives(venue, funding='0.001', instrument_id=None):
+    return CanonicalVenueEvidence(venue, CanonicalDerivatives(instrument_id or f'{venue}:BTCUSDT', T, funding_rate=Decimal(funding), open_interest=Decimal('10'), provenance_id=f'{venue}:test'))
 
 class P3006ConsistencyTests(unittest.TestCase):
     def test_identity(self): self.assertEqual((SID,VERSION),('STEP-P3-006','1.0.0'))
@@ -36,6 +36,22 @@ class P3006ConsistencyTests(unittest.TestCase):
     def test_equivalent_binance_mexc_trade(self):
         r=compare(trade('binance'),trade('mexc'),policy=ComparisonPolicy(max_timestamp_delta=timedelta(seconds=1),max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
         self.assertEqual(r.status,ComparisonStatus.EQUIVALENT)
+    def test_trade_semantic_instrument_identity_mismatch_blocks_equivalence(self):
+        r=compare(trade('binance'),trade('mexc',instrument_id='mexc:ETHUSDT'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
+        self.assertEqual(r.status,ComparisonStatus.INCONSISTENT); self.assertIn(ComparisonCode.INSTRUMENT_ID_MISMATCH,[x.code for x in r.issues])
+
+    def test_candle_semantic_instrument_identity_mismatch_blocks_equivalence(self):
+        r=compare(candle('binance'),candle('mexc',instrument_id='mexc:ETHUSDT'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
+        self.assertEqual(r.status,ComparisonStatus.INCONSISTENT); self.assertIn(ComparisonCode.INSTRUMENT_ID_MISMATCH,[x.code for x in r.issues])
+
+    def test_orderbook_semantic_instrument_identity_mismatch_blocks_equivalence(self):
+        r=compare(book('binance'),book('mexc',instrument_id='mexc:ETHUSDT'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
+        self.assertEqual(r.status,ComparisonStatus.INCONSISTENT); self.assertIn(ComparisonCode.INSTRUMENT_ID_MISMATCH,[x.code for x in r.issues])
+
+    def test_derivatives_semantic_instrument_identity_mismatch_blocks_equivalence(self):
+        r=compare(derivatives('binance'),derivatives('mexc',instrument_id='mexc:ETHUSDT'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
+        self.assertEqual(r.status,ComparisonStatus.INCONSISTENT); self.assertIn(ComparisonCode.INSTRUMENT_ID_MISMATCH,[x.code for x in r.issues])
+
     def test_trade_price_quantity_side_mismatch(self):
         r=compare(trade('binance',price='100'),trade('mexc',price='101',qty='3',side='SELL'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
         codes=[x.code for x in r.issues]
