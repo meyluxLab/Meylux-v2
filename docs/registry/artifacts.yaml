@@ -19,7 +19,7 @@ records:
     artifact_path: docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
-  - stable_id: ROL-V2-004
+  - id: ROL-V2-004
     canonical_name: MARKET INTELLIGENCE
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md
@@ -254,8 +254,8 @@ records:
     traceability: PH-P1 / STEP-P1-002 / AR-P1-AUDIT-002
     status: VERIFIED / COMPLETE
   - stable_id: BR-P1-002
-    entity_type: BR
     canonical_name: Build Report — Docker Foundation
+    entity_type: BR
     artifact_path: docs/build-reports/BR-P1-002.md
     traceability: TO-P1-002 / PH-P1 / STEP-P1-002
     status: VERIFIED
@@ -383,7 +383,7 @@ records:
     canonical_name: CONTROL Independent Verification — TO-P2-001
     entity_type: AR
     artifact_path: docs/audits/AR-P2-AUDIT-001.md
-    traceability: BR-P2-001 / TO-P2-001 / STEP-P2-001 / PH-P2
+    traceability: BR-P2-001 / TO-P2-001 / PH-P2 / STEP-P2-001 / PH-P2
     status: APPROVED / VERIFIED
   - stable_id: STEP-P2-001
     canonical_name: Provider Boundary & Acquisition Contracts
@@ -511,7 +511,7 @@ records:
     artifact_path: docs/audits/AR-P2-AUDIT-007.md
     traceability: BR-P2-006 / TO-P2-007 / STEP-P2-006 / PH-P2 / GOV-BOUNDARY-001
     status: APPROVED / VERIFIED
-  - stable_id: DOC-P2-002
+  - id: DOC-P2-002
     canonical_name: Phase 2 Execution & Continuity Report
     entity_type: DOCUMENT
     artifact_path: docs/operations/PH-P2-EXECUTION-REPORT.md
@@ -626,7 +626,7 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
     traceability: PH-P3 / STEP-P3-004 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / TO-P3-005 / ADR-GOVERNANCE-013
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: STEP-P3-006
     canonical_name: Cross-Venue Consistency & Equivalence
     entity_type: STEP
@@ -674,7 +674,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-005.md
     traceability: PH-P3 / STEP-P3-005 / STEP-P3-004 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P3-001
     canonical_name: Build Report — Canonical Contracts, Identity & Validation Foundation
     entity_type: BR
@@ -739,11 +739,29 @@ records:
     canonical_name: CONTROL Independent Audit — TO-P3-004 / STEP-P3-004
     entity_type: AR
     artifact_path: docs/audits/AR-P3-004.md
-    traceability: BR-P3-004 / TO-P3-004 / PH-P3 / STEP-P3-004
+    traceability: BR-P3-004 / TO-P3-004 / PH-P3-004 / STEP-P3-004
     status: APPROVED / VERIFIED
   - stable_id: TST-P3-004
     canonical_name: Market Semantic, Price, Spread & Precision Validation Tests
     entity_type: TST
     artifact_path: tests/test_contracts/test_p3_004_market_semantic.py
     traceability: TO-P3-004 / STEP-P3-004 / BR-P3-004 / AR-P3-004
+    status: VERIFIED
+  - stable_id: BR-P3-005
+    canonical_name: Build Report — Canonical Normalization & Provider Mapping
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-005.md
+    traceability: TO-P3-005 / PH-P3 / STEP-P3-005 / AR-P3-005
+    status: VERIFIED
+  - stable_id: AR-P3-005
+    canonical_name: CONTROL Independent Audit — Canonical Normalization & Provider Mapping
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-005.md
+    traceability: BR-P3-005 / TO-P3-005 / PH-P3 / STEP-P3-005
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-005
+    canonical_name: Canonical Normalization & Provider Mapping Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_005_normalization.py
+    traceability: TO-P3-005 / STEP-P3-005 / BR-P3-005 / AR-P3-005
     status: VERIFIED
