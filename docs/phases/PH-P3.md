@@ -118,23 +118,29 @@ Objective: establish market-semantic correctness including price, OHLC, quantity
 ### `STEP-P3-005` — Canonical Normalization & Provider Mapping
 
 **Order:** 5
-**Status:** IMPLEMENTED / TESTED / UNVERIFIED
-**Authorization state:** AUTHORIZED / ACTIVE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P3-004`
-**Active Task Order:** `TO-P3-005`
+**Completed Task Order:** `TO-P3-005`
+**Completion Audit:** `AR-P3-005`
 **Build Report:** `BR-P3-005`
 
 Objective: transform validated provider-normalized evidence into provider-neutral canonical semantics.
 
-Current Producer evidence covers Binance and MEXC mapping for supported instrument, candle, trade and order-book representations, provenance preservation, deterministic repeated mapping, explicit rejection of unsupported/ambiguous mappings, and non-promotion of malformed or non-AVAILABLE acquisition evidence. Independent CONTROL verification remains pending.
+P3-005 was independently verified by CONTROL under `AR-P3-005` and is the verified predecessor for P3-006.
 
 ### `STEP-P3-006` — Cross-Venue Consistency & Equivalence
 
 **Order:** 6
-**Status:** DEFINED / INACTIVE
+**Status:** IMPLEMENTED / TESTED / UNVERIFIED
+**Authorization state:** AUTHORIZED / ACTIVE
 **Predecessor:** `STEP-P3-005`
+**Active Task Order:** `TO-P3-006`
+**Build Report:** `BR-P3-006`
 
-Objective: establish cross-venue equivalence and consistency validation without introducing opportunity detection.
+Objective: establish reusable provider-neutral cross-venue equivalence and consistency validation without introducing opportunity detection.
+
+Current Producer evidence covers semantic instrument comparison, trade/candle/order-book/derivatives consistency, temporal alignment and caller-supplied freshness policy, explicit insufficient/inconsistent/rejected outcomes, provenance preservation, deterministic reason ordering, provider-wire isolation, and no-opportunity boundary enforcement. Independent CONTROL verification remains pending.
 
 ### `STEP-P3-007` — Data Quality, Quarantine, DLQ & Lineage
 
