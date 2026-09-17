@@ -35,3 +35,17 @@ records:
       result: SUCCESS
       workflow_steps: compile + Binance acquisition tests + P2-004 acquisition tests + P2-005 operational hardening tests + full foundation regression all SUCCESS
       test_counts: P3-002 suite 11 tests OK / full regression 184 tests OK
+  - stable_id: TST-P3-003
+    canonical_name: Temporal, Sequence & Completeness Validation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_003_temporal.py
+    traceability: PH-P3 / STEP-P3-003 / TO-P3-003 / BR-P3-003 / AR-P3-003
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 35028922381
+      workflow_run_number: 411
+      commit: 551f265acd1ff04f15bd16542db7546955b8511b
+      result: SUCCESS
+      test_counts: P3-003 suite 13 tests OK / full regression 197 tests OK
+      implementation_ci_reference: Run 409 / Run ID 35028829911 / implementation-test commit 4a77b1063fb6394e2d23d1491d39b6f5d132d55f / 13 tests OK / full regression 197 tests OK
