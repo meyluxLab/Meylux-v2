@@ -352,14 +352,14 @@ records:
     logical_name: Canonical Normalization & Provider Mapping
     entity_type: STEP
     phase: PH-P3
-    status: ACTIVE / AUTHORIZED
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 5
     predecessor: STEP-P3-004
     activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / PH-P3 / AR-P3-004 / ADR-GOVERNANCE-013
-    active_task_order: TO-P3-005
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P3-005
+    completion_audit: AR-P3-005
     purpose: Transform validated provider representations into provider-neutral Meylux canonical semantics while preserving provider isolation and traceability.
 
   - sid: STEP-P3-006
