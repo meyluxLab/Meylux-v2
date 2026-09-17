@@ -119,14 +119,36 @@ def _result(left,right,issues):
         status=ComparisonStatus.EQUIVALENT; issues=[ComparisonIssue(ComparisonCode.EQUIVALENT,"overall","canonical semantic evidence is equivalent")]
     return ComparisonResult(status,tuple(issues),left.venue_id,right.venue_id,_provenance_id(left.value),_provenance_id(right.value))
 
+def _semantic_instrument_id(value):
+    """Return the provider-neutral semantic portion of a canonical instrument ID."""
+    if not isinstance(value,str) or not value:
+        return None
+    namespace, separator, semantic = value.partition(":")
+    if separator and namespace and semantic:
+        return semantic
+    return value
+
+
 def _identity(left,right,issues):
-    if not isinstance(left,CanonicalInstrument): return
-    if not left.instrument_id or not right.instrument_id: issues.append(ComparisonIssue(ComparisonCode.INSTRUMENT_ID_MISSING,"instrument_id","canonical instrument identity must be explicit"))
-    elif left.instrument_id!=right.instrument_id: issues.append(ComparisonIssue(ComparisonCode.INSTRUMENT_ID_MISMATCH,"instrument_id","venue-specific canonical instrument identifiers differ; semantic identity fields govern equivalence"))
-    for field,code in (("base_asset",ComparisonCode.BASE_ASSET_MISMATCH),("quote_asset",ComparisonCode.QUOTE_ASSET_MISMATCH),("market_type",ComparisonCode.MARKET_TYPE_MISMATCH),("contract_type",ComparisonCode.CONTRACT_TYPE_MISMATCH),("unit",ComparisonCode.UNIT_MISMATCH)):
-        if getattr(left,field)!=getattr(right,field): issues.append(ComparisonIssue(code,field,f"{field} differs: {getattr(left,field)!r} != {getattr(right,field)!r}"))
-    if left.contract_multiplier!=right.contract_multiplier: issues.append(ComparisonIssue(ComparisonCode.MULTIPLIER_MISMATCH,"contract_multiplier",f"contract_multiplier differs: {left.contract_multiplier!r} != {right.contract_multiplier!r}"))
-    if left.active!=right.active: issues.append(ComparisonIssue(ComparisonCode.AVAILABILITY_MISMATCH,"active",f"instrument active state differs: {left.active!r} != {right.active!r}"))
+    if isinstance(left,CanonicalInstrument):
+        left_semantic=_semantic_instrument_id(left.instrument_id)
+        right_semantic=_semantic_instrument_id(right.instrument_id)
+        if left_semantic is None or right_semantic is None:
+            issues.append(ComparisonIssue(ComparisonCode.INSTRUMENT_ID_MISSING,"instrument_id","canonical instrument identity must be explicit"))
+        elif left_semantic!=right_semantic:
+            issues.append(ComparisonIssue(ComparisonCode.INSTRUMENT_ID_MISMATCH,"instrument_id","canonical semantic instrument identities differ"))
+        for field,code in (("base_asset",ComparisonCode.BASE_ASSET_MISMATCH),("quote_asset",ComparisonCode.QUOTE_ASSET_MISMATCH),("market_type",ComparisonCode.MARKET_TYPE_MISMATCH),("contract_type",ComparisonCode.CONTRACT_TYPE_MISMATCH),("unit",ComparisonCode.UNIT_MISMATCH)):
+            if getattr(left,field)!=getattr(right,field): issues.append(ComparisonIssue(code,field,f"{field} differs: {getattr(left,field)!r} != {getattr(right,field)!r}"))
+        if left.contract_multiplier!=right.contract_multiplier: issues.append(ComparisonIssue(ComparisonCode.MULTIPLIER_MISMATCH,"contract_multiplier",f"contract_multiplier differs: {left.contract_multiplier!r} != {right.contract_multiplier!r}"))
+        if left.active!=right.active: issues.append(ComparisonIssue(ComparisonCode.AVAILABILITY_MISMATCH,"active",f"instrument active state differs: {left.active!r} != {right.active!r}"))
+        return
+
+    left_semantic=_semantic_instrument_id(getattr(left,"instrument_id",None))
+    right_semantic=_semantic_instrument_id(getattr(right,"instrument_id",None))
+    if left_semantic is None or right_semantic is None:
+        issues.append(ComparisonIssue(ComparisonCode.INSTRUMENT_ID_MISSING,"instrument_id","canonical payload instrument identity must be explicit"))
+    elif left_semantic!=right_semantic:
+        issues.append(ComparisonIssue(ComparisonCode.INSTRUMENT_ID_MISMATCH,"instrument_id","canonical semantic instrument identities differ"))
 
 def _payload(left,right,issues):
     if isinstance(left,CanonicalInstrument): return
