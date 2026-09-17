@@ -437,7 +437,7 @@ records:
     canonical_name: MEXC Acquisition Adapter
     entity_type: STEP
     artifact_path: docs/phases/PH-P2.md
-    traceability: PH-P2 / TO-P2-003 / AR-P2-AUDIT-003
+    traceability: PH-P2 / STEP-P2-003 / AR-P2-AUDIT-003
     status: VERIFIED / COMPLETE
   - stable_id: AR-P2-AUDIT-004
     canonical_name: BR-P2-004 Control Audit — Live Collector, Raw/Staging Persistence & Replay Safety
@@ -625,8 +625,8 @@ records:
     canonical_name: Canonical Normalization & Provider Mapping
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
-    traceability: PH-P3 / STEP-P3-004 / DOC-V2-ARCH-001
-    status: DEFINED / INACTIVE
+    traceability: PH-P3 / STEP-P3-004 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / TO-P3-005 / ADR-GOVERNANCE-013
+    status: ACTIVE / AUTHORIZED
   - stable_id: STEP-P3-006
     canonical_name: Cross-Venue Consistency & Equivalence
     entity_type: STEP
@@ -669,6 +669,12 @@ records:
     artifact_path: docs/task-orders/TO-P3-004.md
     traceability: PH-P3 / STEP-P3-004 / STEP-P3-003 / DOC-V2-ARCH-001 / PROJECT OWNER DIRECTIVE — STEP-P3-004 AUTHORIZATION — 2026-09-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-005
+    canonical_name: Task Order — Canonical Normalization & Provider Mapping
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-005.md
+    traceability: PH-P3 / STEP-P3-005 / STEP-P3-004 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
   - stable_id: BR-P3-001
     canonical_name: Build Report — Canonical Contracts, Identity & Validation Foundation
     entity_type: BR
