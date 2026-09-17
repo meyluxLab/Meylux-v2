@@ -19,7 +19,7 @@ records:
     artifact_path: docs/governance/ROLE_CONTRACT_PRODUCER_RELAY_V2.md
     traceability: ADR-ROLE-IDENTITY-001
     status: DRAFT_PRE_PHASE_0
-  - stable_id: ROL-V2-004
+  - id: ROL-V2-004
     canonical_name: MARKET INTELLIGENCE
     entity_type: ROLE
     artifact_path: docs/governance/ROLE_CONTRACT_MARKET_INTELLIGENCE_V2.md
@@ -383,7 +383,7 @@ records:
     canonical_name: CONTROL Independent Verification — TO-P2-001
     entity_type: AR
     artifact_path: docs/audits/AR-P2-AUDIT-001.md
-    traceability: BR-P2-001 / TO-P2-001 / PH-P2 / STEP-P2-001
+    traceability: BR-P2-001 / TO-P2-001 / PH-P2 / STEP-P2-001 / PH-P2
     status: APPROVED / VERIFIED
   - stable_id: STEP-P2-001
     canonical_name: Provider Boundary & Acquisition Contracts
@@ -458,172 +458,310 @@ records:
     traceability: PH-P2 / STEP-P2-004 / AR-P2-AUDIT-004 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
     status: VERIFIED / COMPLETE
   - stable_id: STEP-P2-004
-    logical_name: Live Collector, Raw/Staging Persistence & Replay Safety
+    canonical_name: Live Collector, Raw/Staging Persistence & Replay Safety
     entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 4
-    predecessor: STEP-P2-003
-    active_task_order: null
-    completed_task_order: TO-P2-004
-    completion_audit: AR-P2-AUDIT-004
-    purpose: Integrate live acquisition with the collector and establish raw/staging persistence, bounded transport, deduplication/idempotency, sequencing, reconnect, and replay-safe behavior.
-
-  - sid: STEP-P2-005
-    logical_name: Dual-Provider Operational Hardening
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / STEP-P2-004 / AR-P2-AUDIT-004 / BR-P2-004
+    status: VERIFIED / COMPLETE
+  - stable_id: AR-P2-AUDIT-005
+    canonical_name: CONTROL Independent Verification — TO-P2-005
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-005.md
+    traceability: BR-P2-005 / TO-P2-005 / PH-P2 / STEP-P2-005
+    status: APPROVED / VERIFIED
+  - stable_id: BR-P2-005
+    canonical_name: Build Report — Dual-Provider Operational Hardening
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-005.md
+    traceability: TO-P2-005 / PH-P2 / STEP-P2-005
+    status: VERIFIED
+  - stable_id: TO-P2-005
+    canonical_name: Task Order — Dual-Provider Operational Hardening
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-005.md
+    traceability: PH-P2 / STEP-P2-005 / TO-P2-004 / AR-P2-AUDIT-005 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE
+  - stable_id: STEP-P2-005
+    canonical_name: Dual-Provider Operational Hardening
     entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 5
-    predecessor: STEP-P2-004
-    activation_basis: PH-P2 / STEP-P2-004 verification
-    active_task_order: null
-    completed_task_order: TO-P2-005
-    completion_audit: AR-P2-AUDIT-005
-    purpose: Harden provider isolation, rate-limit/reconnect behavior, bounded resource growth, observability, degradation, and operational recovery.
-
-  - sid: STEP-P2-006
-    logical_name: End-to-End Acquisition Verification & Phase 2 Closure
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / STEP-P2-005 / AR-P2-AUDIT-005 / STEP-P2-004
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-P2-006
+    canonical_name: Task Order — End-to-End Acquisition Verification & Phase 2 Closure
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-006.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-005 / AR-P2-AUDIT-005 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE
+  - stable_id: STEP-P2-006
+    canonical_name: End-to-End Acquisition Verification & Phase 2 Closure
     entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 6
-    predecessor: STEP-P2-005
-    activation_basis: PH-P2 / STEP-P2-005 verification
-    active_task_order: null
-    completed_task_order: TO-P2-006
-    completion_audit: AR-P2-AUDIT-007
-    purpose: Verify the complete Phase 2 acquisition boundary using real provider/runtime evidence and establish Phase 2 closure evidence.
-
-  - sid: PH-P3
-    logical_name: Validation, Normalization & Data Quality Engine
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-006 / TO-P2-007 / AR-P2-AUDIT-007
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P2-006
+    canonical_name: Build Report — End-to-End Acquisition Verification & Phase 2 Closure
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-006.md
+    traceability: TO-P2-006 / PH-P2 / STEP-P2-006 / CMP-P2-001 / CTR-P2-001 / GOV-BOUNDARY-001
+    status: PRODUCER EVIDENCE / CONTROL VERIFIED
+  - stable_id: AR-P2-AUDIT-007
+    canonical_name: CONTROL Final Verification & Phase 2 Closure
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-007.md
+    traceability: BR-P2-006 / TO-P2-007 / STEP-P2-006 / PH-P2 / GOV-BOUNDARY-001
+    status: APPROVED / VERIFIED
+  - id: DOC-P2-002
+    canonical_name: Phase 2 Execution & Continuity Report
+    entity_type: DOCUMENT
+    artifact_path: docs/operations/PH-P2-EXECUTION-REPORT.md
+    traceability: PH-P2 / STEP-P2-006 / AR-P2-AUDIT-007 / CURRENT_CHECKPOINT
+    status: CLOSED / VERIFIED
+  - stable_id: TO-P2-007
+    canonical_name: Task Order — MEXC Live WebSocket Subscription-Acknowledgement Correction & P2-006 Re-Verification
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-007.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-006 / AR-P2-AUDIT-006 / AR-P2-AUDIT-007 / DOC-V2-ARCH-001 / GOV-BOUNDARY-001
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-GOV-007
+    canonical_name: Build Report — State and Registry Correction & Reconciliation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-GOV-007.md
+    traceability: TO-GOV-007 / TO-GOV-006 / BR-GOV-006
+    status: VERIFIED / COMPLETE
+  - stable_id: DOC-P3-001
+    canonical_name: Phase 3 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE3_ROADMAP.md
+    traceability: PH-P3 / DOC-V2-ARCH-001 / G-3
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+  - stable_id: DOC-P4-001
+    canonical_name: Phase 4 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE4_ROADMAP.md
+    traceability: PH-P4 / DOC-V2-ARCH-001 / G-4
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+  - stable_id: TO-GOV-008
+    canonical_name: Governance / Documentation / Registry / Lifecycle Reconciliation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-008.md
+    traceability: TO-GOV-007 / BR-GOV-007 / ADR-GOVERNANCE-012
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-GOV-009
+    canonical_name: Governance / Documentation / Registry / Lifecycle Reconciliation — F-05/F-07 Closure
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-009.md
+    traceability: TO-GOV-008 / BR-GOV-008 / ADR-GOVERNANCE-012
+    status: VERIFIED / COMPLETE
+  - stable_id: PH-P2
+    canonical_name: Data Acquisition & Market Data Foundation
     entity_type: PH
+    artifact_path: docs/phases/PH-P2.md
+    traceability: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / DOC-V2-ARCH-001
+    status: CLOSED / VERIFIED
+  - stable_id: DOC-P2-001
+    canonical_name: Phase 2 Determination Report
+    entity_type: DOC
+    artifact_path: docs/operations/PH-P2-DETERMINATION-REPORT.md
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001
+    status: DETERMINED / ACTIVE
+  - stable_id: CMP-P2-001
+    canonical_name: Provider-Neutral Acquisition Boundary
+    entity_type: CMP
+    artifact_path: src/meylux/acquisition/provider.py
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001 / AR-P2-AUDIT-001
+    status: VERIFIED
+  - stable_id: CTR-P2-001
+    canonical_name: AcquisitionEnvelope Provider-Neutral Acquisition Contract
+    entity_type: CTR
+    artifact_path: contracts/acquisition.py
+    traceability: PH-P2 / STEP-P2-001 / TO-P2-001 / DOC-V2-ARCH-001 / AR-P2-AUDIT-001
+    status: VERIFIED
+  - stable_id: TST-P2-001
+    canonical_name: Provider-Neutral Acquisition Contract Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_acquisition_contract.py
+    traceability: TO-P2-001 / STEP-P2-001 / CTR-P2-001 / AR-P2-AUDIT-001
+    status: VERIFIED
+  - stable_id: ADR-GOVERNANCE-013
+    canonical_name: Standing Role Operating Rules & Session Anti-Drift Mechanism
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-013.md
+    traceability: Project Owner ratification / ADR-GOVERNANCE-001
+    status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+  - stable_id: PH-P3
+    canonical_name: Validation, Normalization & Data Quality Engine
+    entity_type: PH
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15 / DOC-V2-ARCH-001 / DOC-P3-001
     status: ACTIVE / AUTHORIZED
-    entry_gate: G-3
-    entry_gate_role: phase boundary
-    entry_approval: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15
-    first_step: STEP-P3-001
-    next_valid_step: STEP-P3-006
-    final_step: STEP-P3-008
-    authorization_criteria:
-      - Phase 2 is CLOSED / VERIFIED.
-      - Project Owner explicitly authorized Phase 3 establishment.
-      - Phase 3 definition and complete Step sequence are recorded in the GitHub Source of Truth.
-      - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
-    architecture_relationship:
-      architecture: DOC-V2-ARCH-001
-      phase_model: Section 13 defines PH-P3 as Validation, Normalization and Data Quality.
-      phase_specification: docs/phases/PH-P3.md
-      reference_roadmap: DOC-P3-001
-      upstream_foundation: PH-P2 CLOSED / VERIFIED
-      downstream_boundary: Phase 4 Deterministic Quantitative & Market Structure Engine
-    scope_boundary:
-      - Validation, normalization, canonicalization, data-quality classification, quarantine/DLQ, lineage, canonical persistence and normalized handoff.
-      - No deterministic quantitative or market-structure computation.
-      - No specialist intelligence or AI interpretation.
-      - No trading, capital control, custody, leverage, or autonomous execution.
-      - No V1 mutation or V1 runtime activity.
-      - Only the currently activated Step may be executed.
-
-  - sid: STEP-P3-001
-    logical_name: Canonical Contracts, Identity & Validation Foundation
+  - stable_id: STEP-P3-001
+    canonical_name: Canonical Contracts, Identity & Validation Foundation
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / TO-P3-001 / DOC-V2-ARCH-001
     status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 1
-    predecessor: STEP-P2-006
-    activation_basis: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15 / PH-P3
-    active_task_order: null
-    completed_task_order: TO-P3-001
-    completion_audit: AR-P3-001
-    purpose: Establish the canonical contract, identity, validation semantics and deterministic data-quality foundation required by Phase 3.
-
-  - sid: STEP-P3-002
-    logical_name: Structural, Schema & Identity Validation
+  - stable_id: STEP-P3-002
+    canonical_name: Structural, Schema & Identity Validation
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001 / PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15
     status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 2
-    predecessor: STEP-P3-001
-    activation_basis: PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15 / PH-P3 / AR-P3-001
-    active_task_order: null
-    completed_task_order: TO-P3-002
-    completion_audit: AR-P3-002
-    purpose: Establish structural, schema and initial identity validation for incoming acquisition data.
-
-  - sid: STEP-P3-003
-    logical_name: Temporal, Sequence & Completeness Validation
+  - stable_id: STEP-P3-003
+    canonical_name: Temporal, Sequence & Completeness Validation
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-002 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-003-PROGRESSION-2026-09-16 / AR-P3-003
     status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 3
-    predecessor: STEP-P3-002
-    activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-003-PROGRESSION-2026-09-16 / PH-P3 / TO-P3-003
-    active_task_order: null
-    completed_task_order: TO-P3-003
-    completion_audit: AR-P3-003
-    purpose: Establish timestamp, ordering, sequence, continuity and completeness validation.
-
-  - sid: STEP-P3-004
-    logical_name: Market Semantic, Price, Spread & Precision Validation
+  - stable_id: STEP-P3-004
+    canonical_name: Market Semantic, Price, Spread & Precision Validation
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-003 / DOC-V2-ARCH-001 / PROJECT OWNER DIRECTIVE — STEP-P3-004 AUTHORIZATION — 2026-09-17 / TO-P3-004
     status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 4
-    predecessor: STEP-P3-003
-    activation_basis: PROJECT OWNER DIRECTIVE — STEP-P3-004 AUTHORIZATION — 2026-09-17
-    active_task_order: null
-    completed_task_order: TO-P3-004
-    completion_audit: AR-P3-004
-    purpose: Establish market-semantic correctness including price, OHLC, quantity, spread and precision validation.
-
-  - sid: STEP-P3-005
-    logical_name: Canonical Normalization & Provider Mapping
+  - stable_id: STEP-P3-005
+    canonical_name: Canonical Normalization & Provider Mapping
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-004 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / TO-P3-005 / ADR-GOVERNANCE-013
     status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 5
-    predecessor: STEP-P3-004
-    activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / PH-P3 / AR-P3-004 / ADR-GOVERNANCE-013
-    active_task_order: null
-    completed_task_order: TO-P3-005
-    completion_audit: AR-P3-005
-    purpose: Transform validated provider representations into provider-neutral Meylux canonical semantics while preserving provider isolation and traceability.
-
-  - sid: STEP-P3-006
-    logical_name: Cross-Venue Consistency & Equivalence
+  - stable_id: STEP-P3-006
+    canonical_name: Cross-Venue Consistency & Equivalence
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-005 / DOC-V2-ARCH-001
     status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
-    order: 6
-    predecessor: STEP-P3-005
-    active_task_order: null
-
-  - sid: STEP-P3-007
-    logical_name: Data Quality, Quarantine, DLQ & Lineage
+  - stable_id: STEP-P3-007
+    canonical_name: Data Quality, Quarantine, DLQ & Lineage
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-006 / DOC-V2-ARCH-001
     status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
-    order: 7
-    predecessor: STEP-P3-006
-    active_task_order: null
-
-  - sid: STEP-P3-008
-    logical_name: Authoritative Persistence, Event Handoff & G-3 Verification
+  - stable_id: STEP-P3-008
+    canonical_name: Authoritative Persistence, Event Handoff & G-3 Verification
     entity_type: STEP
-    phase: PH-P3
+    artifact_path: docs/phases/PH-P3.md
+    traceability: PH-P3 / STEP-P3-007 / DOC-V2-ARCH-001
     status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
-    order: 8
-    predecessor: STEP-P3-007
-    active_task_order: null
+  - stable_id: TO-P3-001
+    canonical_name: Task Order — Canonical Contracts, Identity & Validation Foundation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-001.md
+    traceability: PH-P3 / STEP-P3-001 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-002
+    canonical_name: Task Order — Structural, Schema & Identity Validation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-002.md
+    traceability: PH-P3 / STEP-P3-002 / STEP-P3-001 / DOC-V2-ARCH-001 / PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-003
+    canonical_name: Task Order — Temporal, Sequence & Completeness Validation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-003.md
+    traceability: PH-P3 / STEP-P3-003 / STEP-P3-002 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-003-PROGRESSION-2026-09-16 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / AR-P3-003
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-004
+    canonical_name: Task Order — Market Semantic, Price, Spread & Precision Validation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-004.md
+    traceability: PH-P3 / STEP-P3-004 / STEP-P3-003 / DOC-V2-ARCH-001 / PROJECT OWNER DIRECTIVE — STEP-P3-004 AUTHORIZATION — 2026-09-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-005
+    canonical_name: Task Order — Canonical Normalization & Provider Mapping
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-005.md
+    traceability: PH-P3 / STEP-P3-005 / STEP-P3-004 / DOC-V2-ARCH-001 / PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P3-001
+    canonical_name: Build Report — Canonical Contracts, Identity & Validation Foundation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-001.md
+    traceability: TO-P3-001 / PH-P3 / STEP-P3-001
+    status: VERIFIED
+  - stable_id: AR-P3-001
+    canonical_name: CONTROL Independent Audit — TO-P3-001 / STEP-P3-001
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-001.md
+    traceability: BR-P3-001 / TO-P3-001 / PH-P3 / STEP-P3-001
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-001
+    canonical_name: Canonical Contracts, Identity & Validation Foundation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_001_foundation.py
+    traceability: TO-P3-001 / STEP-P3-001 / BR-P3-001 / AR-P3-001
+    status: VERIFIED
+  - stable_id: BR-P3-002
+    canonical_name: Build Report — Structural, Schema & Identity Validation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-002.md
+    traceability: TO-P3-002 / PH-P3 / STEP-P3-002 / AR-P3-002
+    status: VERIFIED
+  - stable_id: AR-P3-002
+    canonical_name: CONTROL Independent Audit — TO-P3-002 / STEP-P3-002
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-002.md
+    traceability: BR-P3-002 / TO-P3-002 / PH-P3 / STEP-P3-002
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-002
+    canonical_name: Structural, Schema & Identity Validation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_002_structural.py
+    traceability: TO-P3-002 / STEP-P3-002 / BR-P3-002 / AR-P3-002
+    status: VERIFIED
+  - stable_id: BR-P3-003
+    canonical_name: Build Report — Temporal, Sequence & Completeness Validation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-003.md
+    traceability: TO-P3-003 / PH-P3 / STEP-P3-003 / AR-P3-003
+    status: VERIFIED
+  - stable_id: AR-P3-003
+    canonical_name: CONTROL Independent Audit — TO-P3-003 / STEP-P3-003
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-003.md
+    traceability: BR-P3-003 / TO-P3-003 / PH-P3 / STEP-P3-003
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-003
+    canonical_name: Temporal, Sequence & Completeness Validation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_003_temporal.py
+    traceability: TO-P3-003 / STEP-P3-003 / BR-P3-003 / AR-P3-003
+    status: VERIFIED
+  - stable_id: BR-P3-004
+    canonical_name: Build Report — Market Semantic, Price, Spread & Precision Validation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-004.md
+    traceability: TO-P3-004 / PH-P3 / STEP-P3-004 / AR-P3-004
+    status: VERIFIED
+  - stable_id: AR-P3-004
+    canonical_name: CONTROL Independent Audit — TO-P3-004 / STEP-P3-004
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-004.md
+    traceability: BR-P3-004 / TO-P3-004 / PH-P3-004 / STEP-P3-004
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-004
+    canonical_name: Market Semantic, Price, Spread & Precision Validation Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_004_market_semantic.py
+    traceability: TO-P3-004 / STEP-P3-004 / BR-P3-004 / AR-P3-004
+    status: VERIFIED
+  - stable_id: BR-P3-005
+    canonical_name: Build Report — Canonical Normalization & Provider Mapping
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-005.md
+    traceability: TO-P3-005 / PH-P3 / STEP-P3-005 / AR-P3-005
+    status: VERIFIED
+  - stable_id: AR-P3-005
+    canonical_name: CONTROL Independent Audit — Canonical Normalization & Provider Mapping
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-005.md
+    traceability: BR-P3-005 / TO-P3-005 / PH-P3 / STEP-P3-005
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-005
+    canonical_name: Canonical Normalization & Provider Mapping Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_005_normalization.py
+    traceability: TO-P3-005 / STEP-P3-005 / BR-P3-005 / AR-P3-005
+    status: VERIFIED
