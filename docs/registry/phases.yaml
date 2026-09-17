@@ -270,7 +270,7 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15
     first_step: STEP-P3-001
-    next_valid_step: STEP-P3-004
+    next_valid_step: STEP-P3-005
     final_step: STEP-P3-008
     authorization_criteria:
       - Phase 2 is CLOSED / VERIFIED.
@@ -338,12 +338,14 @@ records:
     logical_name: Market Semantic, Price, Spread & Precision Validation
     entity_type: STEP
     phase: PH-P3
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 4
     predecessor: STEP-P3-003
     activation_basis: PROJECT OWNER DIRECTIVE — STEP-P3-004 AUTHORIZATION — 2026-09-17
-    active_task_order: TO-P3-004
+    active_task_order: null
+    completed_task_order: TO-P3-004
+    completion_audit: AR-P3-004
     purpose: Establish market-semantic correctness including price, OHLC, quantity, spread and precision validation.
 
   - sid: STEP-P3-005
