@@ -77,7 +77,7 @@ class P3006ConsistencyTests(unittest.TestCase):
         b=compare(trade('binance',price='100',qty='2',side='BUY'),trade('mexc',price='101',qty='3',side='SELL'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
         self.assertEqual(a,b); self.assertEqual([x.dimension for x in a.issues[:3]],['price','quantity','aggressor_side'])
     def test_provider_neutral_input_and_unsupported_canonical_type_rejected(self):
-        r=compare(CanonicalVenueEvidence('binance',object()),CanonicalVenueEvidence('mexc',object()))
+        r=compare(CanonicalVenueEvidence('binance',object()),trade('mexc'))
         self.assertEqual(r.status,ComparisonStatus.REJECTED); self.assertIn(ComparisonCode.TYPE_MISMATCH,[x.code for x in r.issues])
     def test_explicit_availability_is_not_promoted_to_equivalence(self):
         r=compare(CanonicalVenueEvidence('binance',trade('binance').value,available=False),trade('mexc'),policy=ComparisonPolicy(max_age=timedelta(minutes=5)),reference_time=T+timedelta(minutes=1))
