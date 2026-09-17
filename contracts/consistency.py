@@ -104,7 +104,7 @@ def compare(left: CanonicalVenueEvidence, right: CanonicalVenueEvidence, *, poli
     if not left.available or not right.available: issues.append(ComparisonIssue(ComparisonCode.AVAILABILITY_MISMATCH,"availability","one or both venue representations are explicitly unavailable"))
     if type(left.value) is not type(right.value):
         issues.append(ComparisonIssue(ComparisonCode.TYPE_MISMATCH,"canonical_type","canonical representations have different semantic types")); return _result(left,right,issues)
-    _identity(left.value,right.value,issues); _payload(left.value,right.value,issues); _temporal(left.value,right.value,policy,reference_time,issues); _provenance(left.value,right.value,issues)
+    _identity(left.value,right.value,issues); _payload(left.value,right.value,issues); _temporal(left.value,right.value,policy,reference_time,issues); _check_provenance(left.value,right.value,issues)
     return _result(left,right,issues)
 
 _HARD=frozenset({ComparisonCode.INVALID_CANONICAL,ComparisonCode.TYPE_MISMATCH,ComparisonCode.VENUE_ID_MISSING,ComparisonCode.INSTRUMENT_ID_MISSING,ComparisonCode.PROVENANCE_MISSING})
@@ -117,7 +117,7 @@ def _result(left,right,issues):
     elif any(x.code in _INSUFFICIENT for x in issues): status=ComparisonStatus.INSUFFICIENT_EVIDENCE
     else:
         status=ComparisonStatus.EQUIVALENT; issues=[ComparisonIssue(ComparisonCode.EQUIVALENT,"overall","canonical semantic evidence is equivalent")]
-    return ComparisonResult(status,tuple(issues),left.venue_id,right.venue_id,_provenance(left.value),_provenance(right.value))
+    return ComparisonResult(status,tuple(issues),left.venue_id,right.venue_id,_provenance_id(left.value),_provenance_id(right.value))
 
 def _identity(left,right,issues):
     if not isinstance(left,CanonicalInstrument): return
@@ -157,10 +157,10 @@ def _temporal(left,right,policy,reference_time,issues):
     if reference_time-l>policy.max_age: issues.append(ComparisonIssue(ComparisonCode.LEFT_STALE,"freshness","left evidence exceeds caller-supplied max_age"))
     if reference_time-r>policy.max_age: issues.append(ComparisonIssue(ComparisonCode.RIGHT_STALE,"freshness","right evidence exceeds caller-supplied max_age"))
 
-def _provenance(left,right,issues):
-    if not _provenance(left) or not _provenance(right): issues.append(ComparisonIssue(ComparisonCode.PROVENANCE_MISSING,"provenance","both canonical values must carry provenance"))
+def _check_provenance(left,right,issues):
+    if not _provenance_id(left) or not _provenance_id(right): issues.append(ComparisonIssue(ComparisonCode.PROVENANCE_MISSING,"provenance","both canonical values must carry provenance"))
 
-def _provenance(value):
+def _provenance_id(value):
     p=getattr(value,"provenance_id",None); return p if isinstance(p,str) and p else None
 
 def _timestamps(left,right):
