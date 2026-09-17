@@ -107,23 +107,26 @@ Objective: establish timestamp, ordering, sequence, continuity and completeness 
 ### `STEP-P3-004` — Market Semantic, Price, Spread & Precision Validation
 
 **Order:** 4
-**Status:** IMPLEMENTED / TESTED / UNVERIFIED
-**Authorization state:** AUTHORIZED / ACTIVE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P3-003`
-**Active Task Order:** `TO-P3-004`
-**Build Report:** `BR-P3-004`
+**Completed Task Order:** `TO-P3-004`
+**Completion Audit:** `AR-P3-004`
 
 Objective: establish market-semantic correctness including price, OHLC, quantity, spread and precision validation.
-
-The implementation audit found the authorized implementation boundary acceptable. Independent CONTROL closure verification remains pending.
 
 ### `STEP-P3-005` — Canonical Normalization & Provider Mapping
 
 **Order:** 5
-**Status:** DEFINED / INACTIVE
+**Status:** IMPLEMENTED / TESTED / UNVERIFIED
+**Authorization state:** AUTHORIZED / ACTIVE
 **Predecessor:** `STEP-P3-004`
+**Active Task Order:** `TO-P3-005`
+**Build Report:** `BR-P3-005`
 
 Objective: transform validated provider-normalized evidence into provider-neutral canonical semantics.
+
+Current Producer evidence covers Binance and MEXC mapping for supported instrument, candle, trade and order-book representations, provenance preservation, deterministic repeated mapping, explicit rejection of unsupported/ambiguous mappings, and non-promotion of malformed or non-AVAILABLE acquisition evidence. Independent CONTROL verification remains pending.
 
 ### `STEP-P3-006` — Cross-Venue Consistency & Equivalence
 
