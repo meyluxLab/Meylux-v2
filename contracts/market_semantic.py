@@ -8,13 +8,12 @@ thresholds, tick sizes, lot sizes, or normalization policies.
 from __future__ import annotations
 
 from decimal import Decimal
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping
 
 from contracts.canonical.foundation import (
     ValidationCode,
     ValidationIssue,
     ValidationOutcome,
-    require_decimal,
     validate_decimal_scale,
     validation_outcome,
 )
@@ -45,7 +44,7 @@ def validate_price(value: object, field: str = "price") -> ValidationIssue | Non
 
 
 def validate_ohlc(values: Mapping[str, Any]) -> tuple[ValidationIssue, ...]:
-    """Validate positive OHLC values and their deterministic internal ordering."""
+    """Validate positive OHLC values and deterministic internal ordering."""
 
     issues: list[ValidationIssue] = []
     required = ("open", "high", "low", "close")
@@ -57,7 +56,7 @@ def validate_ohlc(values: Mapping[str, Any]) -> tuple[ValidationIssue, ...]:
         if issue is not None:
             issues.append(issue)
 
-    if any(issue.field in required and issue.code is not ValidationCode.OK for issue in issues):
+    if issues:
         return tuple(issues)
 
     open_value = values["open"]
@@ -80,7 +79,7 @@ def validate_ohlc(values: Mapping[str, Any]) -> tuple[ValidationIssue, ...]:
 
 
 def validate_quantity(value: object, field: str = "quantity") -> ValidationIssue | None:
-    """Validate a quantity using the existing positive canonical quantity semantics."""
+    """Validate quantity using existing positive canonical quantity semantics."""
 
     issue = _decimal_issue(value, field)
     if issue is not None:
@@ -92,7 +91,7 @@ def validate_quantity(value: object, field: str = "quantity") -> ValidationIssue
 
 
 def validate_volume(value: object, field: str = "volume") -> ValidationIssue | None:
-    """Validate volume using the existing canonical candle non-negative semantics."""
+    """Validate volume using existing canonical candle non-negative semantics."""
 
     issue = _decimal_issue(value, field)
     if issue is not None:
@@ -168,13 +167,15 @@ def validate_precision(
 ) -> ValidationIssue | None:
     """Validate Decimal scale using the existing P3-001 no-rounding doctrine."""
 
+    decimal_issue = _decimal_issue(value, field)
+    if decimal_issue is not None:
+        return decimal_issue
     try:
         validate_decimal_scale(value, field, scale)
-    except TypeError as exc:
-        return ValidationIssue(ValidationCode.FLOAT_NOT_ALLOWED if isinstance(value, float) else ValidationCode.INVALID_TYPE, field, str(exc))
     except ValueError as exc:
-        code = ValidationCode.SCALE_INVALID if "scale" in str(exc) and "exceeds" not in str(exc) else ValidationCode.PRECISION_INVALID
-        return ValidationIssue(code, field, str(exc))
+        message = str(exc)
+        code = ValidationCode.SCALE_INVALID if message == "scale must be a non-negative integer" else ValidationCode.PRECISION_INVALID
+        return ValidationIssue(code, field, message)
     return None
 
 
@@ -185,9 +186,9 @@ def validate_market_semantics(
 ) -> ValidationOutcome:
     """Validate supplied market-semantic fields without inventing absent policy.
 
-    Fields are validated only when supplied. Missing market-specific fields are
-    not invented; callers must provide the applicable fields and parameters
-    required by their authoritative contract.
+    Fields are validated only when supplied. Market-specific precision/scale
+    parameters are caller-supplied and are enforced only when explicitly
+    provided by an authoritative contract/configuration.
     """
 
     if not isinstance(values, Mapping):
@@ -196,11 +197,10 @@ def validate_market_semantics(
 
     issues: list[ValidationIssue] = []
 
-    for field in ("price",):
-        if field in values:
-            issue = validate_price(values[field], field)
-            if issue is not None:
-                issues.append(issue)
+    if "price" in values:
+        issue = validate_price(values["price"], "price")
+        if issue is not None:
+            issues.append(issue)
 
     if any(field in values for field in ("open", "high", "low", "close")):
         issues.extend(validate_ohlc(values))
