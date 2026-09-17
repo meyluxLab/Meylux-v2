@@ -6,6 +6,8 @@ from contracts.market_semantic import (
     validate_ohlc,
     validate_precision,
     validate_spread,
+    validate_quantity,
+    validate_volume,
 )
 
 
@@ -33,15 +35,49 @@ def test_ohlc_valid_relationships_are_accepted() -> None:
     assert issues == ()
 
 
-def test_each_ohlc_relationship_is_checked() -> None:
-    cases = (
-        {"open": Decimal("100"), "high": Decimal("89"), "low": Decimal("80"), "close": Decimal("85")},
-        {"open": Decimal("100"), "high": Decimal("105"), "low": Decimal("80"), "close": Decimal("110")},
-        {"open": Decimal("100"), "high": Decimal("105"), "low": Decimal("80"), "close": Decimal("110")},
-        {"open": Decimal("100"), "high": Decimal("110"), "low": Decimal("101"), "close": Decimal("105")},
-        {"open": Decimal("100"), "high": Decimal("110"), "low": Decimal("99"), "close": Decimal("105")},
+def test_ohlc_high_low_violation_is_detected() -> None:
+    issues = validate_ohlc(
+        {"open": Decimal("100"), "high": Decimal("90"), "low": Decimal("95"), "close": Decimal("98")}
     )
-    assert all(validate_ohlc(case) for case in cases)
+    assert any(issue.field == "high" and "high must be >= low" in issue.message for issue in issues)
+
+
+def test_ohlc_high_open_violation_is_detected() -> None:
+    issues = validate_ohlc(
+        {"open": Decimal("100"), "high": Decimal("99"), "low": Decimal("90"), "close": Decimal("95")}
+    )
+    assert any(issue.field == "high" and "high must be >= open" in issue.message for issue in issues)
+
+
+def test_ohlc_high_close_violation_is_detected() -> None:
+    issues = validate_ohlc(
+        {"open": Decimal("100"), "high": Decimal("105"), "low": Decimal("90"), "close": Decimal("110")}
+    )
+    assert any(issue.field == "high" and "high must be >= close" in issue.message for issue in issues)
+
+
+def test_ohlc_low_open_violation_is_detected() -> None:
+    issues = validate_ohlc(
+        {"open": Decimal("100"), "high": Decimal("110"), "low": Decimal("101"), "close": Decimal("105")}
+    )
+    assert any(issue.field == "low" and "low must be <= open" in issue.message for issue in issues)
+
+
+def test_ohlc_low_close_violation_is_detected() -> None:
+    issues = validate_ohlc(
+        {"open": Decimal("100"), "high": Decimal("110"), "low": Decimal("106"), "close": Decimal("105")}
+    )
+    assert any(issue.field == "low" and "low must be <= close" in issue.message for issue in issues)
+
+
+def test_positive_quantity_and_non_negative_volume_are_valid() -> None:
+    assert validate_quantity(Decimal("2")) is None
+    assert validate_volume(Decimal("0")) is None
+
+
+def test_invalid_quantity_and_volume_are_detected() -> None:
+    assert validate_quantity(Decimal("0")) is not None
+    assert validate_volume(Decimal("-1")) is not None
 
 
 def test_bid_ask_and_exact_spread_are_valid() -> None:
