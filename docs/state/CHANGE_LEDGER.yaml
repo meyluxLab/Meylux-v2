@@ -328,36 +328,70 @@ entries:
     runtime_effect: no VPS/runtime execution; closure consisted only of repository lifecycle, evidence, registry and documentation synchronization
     v1_effect: none
 
+  - id: CHG-P3-STEP-004-ACTIVATE
+    date_utc: '2026-09-17'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-004 activation and TO-P3-004 authorization
+    basis: Project Owner Directive — STEP-P3-004 Authorization + PH-P3 + AR-P3-003 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P3-003
+      - STEP-P3-004
+      - TO-P3-003
+      - TO-P3-004
+    from_state: STEP-P3-003 COMPLETE / VERIFIED; TO-P3-003 VERIFIED / COMPLETE; STEP-P3-004 DEFINED / INACTIVE; no active Task Order
+    to_state: STEP-P3-003 remains COMPLETE / VERIFIED; TO-P3-003 remains VERIFIED / COMPLETE; STEP-P3-004 ACTIVE / AUTHORIZED; TO-P3-004 AUTHORIZED TO EXECUTE
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS/runtime execution; activation consists of governed Task Order issuance and repository lifecycle synchronization only
+    v1_effect: none
+
   - id: CHG-P3-STEP-004-CLOSE
     date_utc: '2026-09-17'
     change_type: GOVERNANCE_STATE_TRANSITION
-    subject: STEP-P3-004 independent verification and complete lifecycle closure synchronization
-    basis: AR-P3-004 + TO-P3-004 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + Project Owner Directive — STEP-P3-004 Authorization — 2026-09-17
+    subject: STEP-P3-004 independent verification and closure synchronization
+    basis: AR-P3-004 + TO-P3-004 + ADR-GOVERNANCE-012 + General Continuation and Phase Progression Authority
     affected_ids:
       - BR-P3-004
       - TO-P3-004
       - AR-P3-004
       - STEP-P3-004
       - TST-P3-004
-    from_state: STEP-P3-004 ACTIVE / AUTHORIZED; TO-P3-004 AUTHORIZED TO EXECUTE; BR-P3-004 IMPLEMENTED / TESTED / UNVERIFIED; TST-P3-004 TESTED / UNVERIFIED; AR-P3-004 pending independent audit
-    to_state: STEP-P3-004 COMPLETE / VERIFIED; TO-P3-004 VERIFIED / COMPLETE; BR-P3-004 VERIFIED; TST-P3-004 VERIFIED; AR-P3-004 APPROVED / VERIFIED; STEP-P3-005 through STEP-P3-008 remain DEFINED / INACTIVE; PH-P3 remains ACTIVE / AUTHORIZED; no active Task Order
+      - STEP-P3-005
+    from_state: STEP-P3-004 ACTIVE / AUTHORIZED; TO-P3-004 AUTHORIZED TO EXECUTE; BR-P3-004 IMPLEMENTED / TESTED / UNVERIFIED; TST-P3-004 TESTED; STEP-P3-005 DEFINED / INACTIVE
+    to_state: STEP-P3-004 COMPLETE / VERIFIED; TO-P3-004 VERIFIED / COMPLETE; AR-P3-004 APPROVED / VERIFIED; BR-P3-004 VERIFIED; TST-P3-004 VERIFIED; STEP-P3-005 ACTIVE / AUTHORIZED; TO-P3-005 AUTHORIZED TO EXECUTE
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
-    runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification and lifecycle, evidence, registry, checkpoint, and documentation synchronization only
+    runtime_effect: no VPS/runtime execution; closure consisted of repository lifecycle, evidence, registry and documentation synchronization
     v1_effect: none
 
   - id: CHG-P3-STEP-005-ACTIVATE
     date_utc: '2026-09-17'
     change_type: GOVERNANCE_STATE_TRANSITION
-    subject: STEP-P3-005 activation and TO-P3-005 issuance following STEP-P3-004 closure
-    basis: Project Owner Directive — STEP-P3-005 Commencement — 2026-09-17 + PH-P3 + STEP-P3-004 COMPLETE / VERIFIED + AR-P3-004 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    subject: STEP-P3-005 activation and TO-P3-005 authorization
+    basis: Project Owner Directive — STEP-P3-005 Commencement + PH-P3 + AR-P3-004 + ADR-GOVERNANCE-013
     affected_ids:
       - STEP-P3-004
       - STEP-P3-005
       - TO-P3-004
       - TO-P3-005
-      - AR-P3-004
     from_state: STEP-P3-004 COMPLETE / VERIFIED; TO-P3-004 VERIFIED / COMPLETE; STEP-P3-005 DEFINED / INACTIVE; no active Task Order
     to_state: STEP-P3-004 remains COMPLETE / VERIFIED; TO-P3-004 remains VERIFIED / COMPLETE; STEP-P3-005 ACTIVE / AUTHORIZED; TO-P3-005 AUTHORIZED TO EXECUTE
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
-    runtime_effect: no VPS/runtime execution; activation consists of governed Task Order issuance and repository lifecycle synchronization only
+    runtime_effect: no VPS/runtime execution; activation consisted of governed Task Order issuance and repository lifecycle synchronization only
+    v1_effect: none
+
+  - id: CHG-P3-STEP-005-CLOSE
+    date_utc: '2026-09-17'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-005 independent verification and closure synchronization
+    basis: AR-P3-005 + TO-P3-005 + BR-P3-005 + TST-P3-005 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + Project Owner explicit closure authority
+    affected_ids:
+      - BR-P3-005
+      - TST-P3-005
+      - AR-P3-005
+      - TO-P3-005
+      - STEP-P3-005
+      - STEP-P3-006
+    from_state: STEP-P3-005 ACTIVE / AUTHORIZED; TO-P3-005 AUTHORIZED TO EXECUTE; BR-P3-005 IMPLEMENTED / TESTED / UNVERIFIED; TST-P3-005 TESTED / UNVERIFIED; AR-P3-005 not issued; STEP-P3-006 DEFINED / INACTIVE
+    to_state: BR-P3-005 VERIFIED; TST-P3-005 VERIFIED; AR-P3-005 APPROVED / VERIFIED; TO-P3-005 VERIFIED / COMPLETE; STEP-P3-005 COMPLETE / VERIFIED; STEP-P3-006 remains DEFINED / INACTIVE; PH-P3 remains ACTIVE / AUTHORIZED; no active Task Order
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification, audit issuance, registry synchronization, checkpoint finalization, and documentation lifecycle synchronization
     v1_effect: none
