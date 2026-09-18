@@ -13,6 +13,8 @@ on:
       - "tests/test_docker_foundation.py"
       - "tests/test_database_foundation.py"
       - "tests/test_acquisition/**"
+      - "tests/test_quantitative_foundation.py"
+      - "tests/golden_vectors/p4_001_primitives.json"
       - "pyproject.toml"
       - ".dockerignore"
       - ".env.example"
@@ -25,9 +27,12 @@ on:
       - "migrations/**"
       - "config/database.py"
       - "src/meylux/runtime/**"
+      - "contracts/**"
       - "tests/test_docker_foundation.py"
       - "tests/test_database_foundation.py"
       - "tests/test_acquisition/**"
+      - "tests/test_quantitative_foundation.py"
+      - "tests/golden_vectors/p4_001_primitives.json"
       - "pyproject.toml"
       - ".dockerignore"
       - ".env.example"
@@ -55,6 +60,7 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
+
       - name: Verify runtime contracts packaging
         run: docker run --rm --entrypoint python meylux-v2-foundation:ci -c "import contracts.acquisition, contracts.canonical.foundation, contracts.market_semantic, contracts.normalization, contracts.quality, contracts.temporal, contracts.validation; import meylux.runtime.p3_008_vertical_slice"
 
@@ -106,6 +112,10 @@ jobs:
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0005_quantitative_foundation';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT to_regclass('meylux.calculated_indicator_vectors'), to_regclass('meylux.market_structure_events'), to_regclass('meylux.market_structure_zones'), to_regclass('meylux.volume_profile_sessions'), to_regclass('meylux.market_regime_states');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','SELECT'), has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','INSERT'), has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','UPDATE'), has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','DELETE');"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.market_structure_events','SELECT'), has_table_privilege('meylux_app','meylux.market_structure_events','INSERT'), has_table_privilege('meylux_app','meylux.market_structure_events','UPDATE'), has_table_privilege('meylux_app','meylux.market_structure_events','DELETE');"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.market_structure_zones','SELECT'), has_table_privilege('meylux_app','meylux.market_structure_zones','INSERT'), has_table_privilege('meylux_app','meylux.market_structure_zones','UPDATE'), has_table_privilege('meylux_app','meylux.market_structure_zones','DELETE');"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.volume_profile_sessions','SELECT'), has_table_privilege('meylux_app','meylux.volume_profile_sessions','INSERT'), has_table_privilege('meylux_app','meylux.volume_profile_sessions','UPDATE'), has_table_privilege('meylux_app','meylux.volume_profile_sessions','DELETE');"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.market_regime_states','SELECT'), has_table_privilege('meylux_app','meylux.market_regime_states','INSERT'), has_table_privilege('meylux_app','meylux.market_regime_states','UPDATE'), has_table_privilege('meylux_app','meylux.market_regime_states','DELETE');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT to_regclass('meylux.canonical_instruments'), to_regclass('meylux.canonical_candles'), to_regclass('meylux.canonical_trades'), to_regclass('meylux.canonical_orderbook_depth'), to_regclass('meylux.canonical_derivatives'), to_regclass('meylux.data_quality_logs'), to_regclass('meylux.canonical_event_outbox');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.canonical_trades','SELECT'), has_table_privilege('meylux_app','meylux.canonical_trades','INSERT'), has_table_privilege('meylux_app','meylux.canonical_trades','UPDATE'), has_table_privilege('meylux_app','meylux.canonical_trades','DELETE');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT to_regclass('meylux.raw_acquisition_events');"
