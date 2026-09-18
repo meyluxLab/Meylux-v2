@@ -109,6 +109,11 @@ class P3008RuntimeEnvelopeBoundaryTests(unittest.TestCase):
         self.assertIsInstance(envelope.payload, Mapping)
         self.assertEqual(dict(envelope.payload), {"price":"100.00","qty":"1.0"})
 
+    def test_jsonb_bytes_object_is_decoded_to_mapping(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        envelope=envelope_from_row(self._row(b'{"price":"100.00","qty":"1.0"}'))
+        self.assertEqual(dict(envelope.payload), {"price":"100.00","qty":"1.0"})
+
     def test_mapping_jsonb_runtime_value_is_preserved(self):
         from meylux.runtime.p3_008_vertical_slice import envelope_from_row
         payload={"price":"100.00","qty":"1.0"}
