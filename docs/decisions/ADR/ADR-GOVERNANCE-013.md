@@ -1,6 +1,7 @@
 # ADR-GOVERNANCE-013 — Standing Role Operating Rules & Session Anti-Drift Mechanism
 
 **Status:** RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+**Amended:** 2026-09-18 — Rule 5 added by explicit Project Owner Directive: `MEYLUX V2 — OWNER DIRECTIVE: AMEND ADR-GOVERNANCE-013 WITH RULE 5`
 **Stable ID:** `ADR-GOVERNANCE-013`
 **Decision Authority:** Project Owner
 **Related Decisions:** `ADR-GOVERNANCE-001`, `ADR-GOVERNANCE-011` (SentinelX privilege model), `ADR-GOVERNANCE-012` (Mandatory Peripheral Synchronization Checklist)
@@ -88,6 +89,16 @@ Any work that genuinely requires inspection or action on the VPS must be perform
 
 Availability of SentinelX does not, by itself, create new authority to change VPS or runtime state. It is the governed *method* for exercising VPS-related authority that already exists within an authorized Task Order boundary — never a route to new scope.
 
+### Rule 5 — Maximum Quality and Success-Rate Standard
+
+Every part of the system — architecture choices made within an authorized boundary, implementation design, validation depth, test coverage, edge-case handling, documentation, and closure evidence — must be built to the maximum achievable standard of correctness, robustness, and efficiency, aimed at the highest realistically attainable success rate for the finished product. Satisfying only the minimum requirement to pass is not sufficient.
+
+This rule governs quality *within* an authorized boundary; it never expands scope beyond what is authorized, and it never justifies skipping the Continuation Duty stop conditions of Rule 1.
+
+CONTROL must hold itself to this standard in every audit, Task Order, and closure decision, and must explicitly convey it to Producer in every Task Order — not as one line among many, but as the governing intent behind the engagement. Producer is expected to apply this standard to every detail of implementation, not selectively.
+
+Indefinite hedging, repeated re-verification without new evidence, or declining to reach a definitive, well-supported conclusion is itself a form of falling short of this standard — it is not caution.
+
 ## 3. Anti-Drift Mechanism (the operative part of this ADR)
 
 Rules alone do not survive long sessions. Therefore, every governed role must terminate **every substantive response** with the following compact footer, regenerated each time from its own current state — not copied forward mechanically:
@@ -98,6 +109,7 @@ R1 Continuation: <CONTINUING | STOPPED(A) | STOPPED(B) | STOPPED(C)> — <one li
 R2 Hand-off message: <NONE REQUIRED | INCLUDED ABOVE> — <recipient role + type>
 R3 Large artifacts: <N/A | fetch_blob used for: ...>
 R4 VPS/SentinelX: <N/A | used for: ...>
+R5 Quality standard: <APPLIED | N/A>
 G12 Peripheral sync: <N/A | CHECKED | PENDING AT STEP CLOSURE>
 Phase/Step: <current> | Active TO: <id or null>
 ```
