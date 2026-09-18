@@ -181,11 +181,10 @@
     "BR-P3-004 records the authorized P3-004 implementation/test evidence and has been independently verified under AR-P3-004.",
     "AR-P3-004 independently verified the P3-004 implementation, repository evidence, tests, CI evidence, and final lifecycle synchronization; P3-004 closure is complete.",
     "The Producer implementation commit 4c4b8f47fa634f7cf08e6f80cd75ae6ecaee8f1a was independently verified by CONTROL and the governed closure state is synchronized across phases.yaml, artifacts.yaml, CHANGE_LEDGER.yaml, and CURRENT_CHECKPOINT.json.",
-    "STEP-P3-005 was independently verified by CONTROL under AR-P3-005 against implementation commit 4cb4f1f0641d56230ba13e767118f7a1336e270d and CI Core Run #452; Closure Synchronization is complete and STEP-P3-006 is now active under TO-P3-006.",
     "STEP-P3-006 was independently verified by CONTROL under AR-P3-006 against final implementation commit 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283 and CI Core Run #480; Closure Synchronization is complete.",
     "TO-P3-006 is VERIFIED / COMPLETE and no active P3 Task Order remains."
   ],
   "deferred_decisions": [],
   "last_verified_commit": "9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283",
-  "updated_at_utc": "2026-09-18T00:09:32Z"
+  "updated_at_utc": "2026-09-18T00:10:05Z"
 }
