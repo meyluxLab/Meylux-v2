@@ -1,3 +1,15 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-records: []
+status: ACTIVE / EVIDENCE-TRACKING
+records:
+  - stable_id: SEC-P3-008
+    canonical_name: P3-008 Canonical Persistence Security Boundary
+    entity_type: SECURITY
+    phase: PH-P3
+    step: STEP-P3-008
+    task_order: TO-P3-008
+    evidence:
+      runtime_db_role: meylux_app
+      canonical_update_delete: DENIED
+      append_only_trigger: ENABLED
+      secrets_in_evidence: NONE
+      execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
