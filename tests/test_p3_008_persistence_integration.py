@@ -54,7 +54,8 @@ class P3008PersistenceIntegrationTests(unittest.TestCase):
         sql=(ROOT/"migrations/versions/0003_canonical_persistence_event_outbox.sql").read_text()
         for table in ("canonical_instruments","canonical_candles","canonical_trades","canonical_orderbook_depth","canonical_derivatives","data_quality_logs"):
             self.assertIn(f"me ylux.{table}".replace(" ",""),sql)
-            self.assertIn(f"trg_{table}_append_only",sql)
+        self.assertIn("CREATE TRIGGER trg_%I_append_only",sql)
+        self.assertIn("FOREACH t IN ARRAY ARRAY[",sql)
         self.assertIn("canonical_event_outbox",sql)
         self.assertIn("REVOKE UPDATE, DELETE, TRUNCATE",sql)
         self.assertIn("VALUES ('0003_canonical_persistence_event_outbox')",sql)
