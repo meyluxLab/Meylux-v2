@@ -415,10 +415,10 @@ records:
     first_step: STEP-P4-001
     next_valid_step: null
     final_step: STEP-P4-006
-    active_task_order: TO-P4-001
+    active_task_order: null
     current_step: STEP-P4-001
-    completed_task_order: null
-    completion_audit: null
+    completed_task_order: TO-P4-001
+    completion_audit: AR-P4-001
     authorization_criteria:
       - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
       - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
@@ -442,14 +442,14 @@ records:
     logical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
     entity_type: STEP
     phase: PH-P4
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
     authorization_state: AUTHORIZED TO EXECUTE
     order: 1
     predecessor: STEP-P3-008
     activation_basis: PROJECT-OWNER-DIRECTIVE-ESTABLISH-PHASE-4-AUTHORIZE-STEP-P4-001-2026-09-18 / PH-P4 / AR-P3-008 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    active_task_order: TO-P4-001
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P4-001
+    completion_audit: AR-P4-001
     purpose: Establish quantitative contracts, numeric policy, shared mathematical primitives, insufficient-history semantics, golden-vector infrastructure/freeze boundary and quantitative persistence-model foundation.
     repository_scope: contract semantics, deterministic numeric policy, mathematical foundation, golden vectors, persistence model foundation, tests and traceability within STEP-P4-001 only.
     vps_scope: no VPS action authorized by this registry entry; any genuinely required operation must be separately bounded by the Task Order and SentinelX-only governance.
