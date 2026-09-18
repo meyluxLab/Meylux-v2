@@ -87,10 +87,10 @@ def standard_deviation(values: Iterable[object], ddof: int = 0) -> CalculationRe
         raise ValueError("ddof must be 0 or 1")
     if len(xs) <= ddof:
         return _insufficient(ddof + 1, len(xs))
-    mean = sum(xs, Decimal(0)) / Decimal(len(xs))
-    variance = sum((x - mean) ** 2 for x in xs) / Decimal(len(xs) - ddof)
     with localcontext() as context:
         context.prec = max(50, max((len(x.as_tuple().digits) for x in xs), default=1) + 20)
+        mean = sum(xs, Decimal(0)) / Decimal(len(xs))
+        variance = sum((x - mean) ** 2 for x in xs) / Decimal(len(xs) - ddof)
         return _valid(variance.sqrt())
 
 
