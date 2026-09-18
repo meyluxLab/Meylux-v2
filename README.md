@@ -14,12 +14,12 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 0 — Constitution, Architecture, Specification Foundation:** `CLOSED / VERIFIED`.
 - **Phase 1 — Infrastructure Foundation:** `CLOSED / VERIFIED`.
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
-- **Phase 3 — Validation, Normalization & Data Quality Engine:** `ACTIVE / AUTHORIZED`. `STEP-P3-001` through `STEP-P3-006` are `COMPLETE / VERIFIED`; `STEP-P3-007` is `COMPLETE / VERIFIED`; `STEP-P3-008` is `ACTIVE / AUTHORIZED`.
-- **Active Task Order:** `TO-P3-008`.
+- **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
+- **Active Task Order:** none. **Completed Task Order:** `TO-P3-008`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
-- **Last verified commit:** see `docs/state/CURRENT_CHECKPOINT.json` (`last_verified_commit`) for the exact value; it is not duplicated here to avoid a second, driftable copy of the same fact.
+- **Last verified commit:** see `docs/state/CURRENT_CHECKPOINT.json` (`last_verified_commit`) for the exact runtime-verified implementation commit; it is not duplicated here to avoid a second, driftable copy of the same fact.
 
 **Open governance items currently on record** (see `docs/state/CURRENT_CHECKPOINT.json.open_questions` and `docs/state/OPEN_QUESTIONS.yaml` for full detail — not restated here to avoid drift):
 
