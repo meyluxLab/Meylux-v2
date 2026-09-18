@@ -31,7 +31,7 @@ def _payload_mapping_from_row(value:Any)->Mapping[str,Any]:
     elif isinstance(value, (str, bytes, bytearray)):
         try:
             payload=json.loads(value)
-        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+        except (TypeError, ValueError, UnicodeDecodeError) as exc:
             raise ValueError("raw payload_json contains malformed JSON") from exc
     else:
         raise TypeError(f"payload_json must be a JSON object representation, got {type(value).__name__}")
