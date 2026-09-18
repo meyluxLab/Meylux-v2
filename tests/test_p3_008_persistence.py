@@ -86,7 +86,6 @@ class P3008ContractTests(unittest.IsolatedAsyncioTestCase):
 
 class P3008RuntimeEnvelopeBoundaryTests(unittest.TestCase):
     def _row(self, payload):
-        provider=ProviderIdentity("binance","binance-acquisition","1.0.0")
         return {
             "provider_id":"binance",
             "adapter_id":"binance-acquisition",
