@@ -51,7 +51,9 @@ class CanonicalPersistence:
         if not isinstance(event_json,str) or not event_json: raise ValueError("event_json must be non-empty")
         insert=f"""INSERT INTO {table}(record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash)
                    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT(record_id) DO NOTHING RETURNING record_id"""
-        quality_log="""INSERT INTO meylux.data_quality_logs(record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint)\n                  VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10)"""\n        quality_log="""INSERT INTO meylux.data_quality_logs(record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint) VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10)"""
+        quality_log="""INSERT INTO meylux.data_quality_logs(record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint)
+                  VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10)"""
+        quality_log="""INSERT INTO meylux.data_quality_logs(record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint) VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10)"""
         outbox="""INSERT INTO meylux.canonical_event_outbox(event_id,record_id,event_type,event_time,payload_json)
                   VALUES($1,$2,$3,$4,$5::jsonb) ON CONFLICT(event_id) DO NOTHING RETURNING sequence_no"""
         async with self._connection.transaction():
@@ -61,7 +63,9 @@ class CanonicalPersistence:
                 if existing is None or str(existing["event_id"])!=record.event_id: raise ValueError("canonical record identity conflict")
                 outbox_existing=await self._connection.fetchrow("SELECT sequence_no FROM meylux.canonical_event_outbox WHERE event_id=$1",record.event_id)
                 return PersistenceResult(record.record_id,record.event_id,False,None if outbox_existing is None else int(outbox_existing["sequence_no"]))
-            if assessment is not None:\n                await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,__import__("json").dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))\n            if assessment is not None:
+            if assessment is not None:
+                await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,__import__("json").dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))
+            if assessment is not None:
                 import json
                 await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,json.dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))
             out=await self._connection.fetchrow(outbox,record.event_id,record.record_id,record.record_type,record.event_time,event_json)
