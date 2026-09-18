@@ -1,7 +1,9 @@
 """Controlled real-data P3-008 vertical-slice runner; no fabricated fallback data."""
 from __future__ import annotations
 import asyncio
+import json
 import os
+from collections.abc import Mapping
 from decimal import Decimal
 from typing import Any
 import asyncpg
@@ -22,11 +24,27 @@ def required(name:str)->str:
     if not value: raise RuntimeError(f"{name} is required")
     return value
 
+def _payload_mapping_from_row(value:Any)->Mapping[str,Any]:
+    """Decode the PostgreSQL jsonb runtime representation without weakening the envelope contract."""
+    if isinstance(value, Mapping):
+        payload=value
+    elif isinstance(value, (str, bytes, bytearray)):
+        try:
+            payload=json.loads(value)
+        except (TypeError, ValueError, json.JSONDecodeError) as exc:
+            raise ValueError("raw payload_json contains malformed JSON") from exc
+    else:
+        raise TypeError(f"payload_json must be a JSON object representation, got {type(value).__name__}")
+    if not isinstance(payload, Mapping):
+        raise TypeError("payload_json must decode to a JSON object")
+    return payload
+
 def envelope_from_row(row:Any)->AcquisitionEnvelope:
     provider=ProviderIdentity(str(row["provider_id"]),str(row["adapter_id"]),str(row["adapter_version"]))
     instrument=InstrumentIdentity(str(row["canonical_instrument_id"]),str(row["provider_instrument_id"]))
     provenance=Provenance(str(row["provenance_id"]),provider,str(row["acquisition_method"]))
-    return AcquisitionEnvelope(provider,instrument,provenance,EventType(str(row["event_type"])),row["event_time"],row["received_at"],AcquisitionState(str(row["acquisition_state"])),row["payload_json"],str(row["source_sequence"]) if row["source_sequence"] is not None else None)
+    payload=_payload_mapping_from_row(row["payload_json"])
+    return AcquisitionEnvelope(provider,instrument,provenance,EventType(str(row["event_type"])),row["event_time"],row["received_at"],AcquisitionState(str(row["acquisition_state"])),payload,str(row["source_sequence"]) if row["source_sequence"] is not None else None)
 
 def market_values(value:Any)->dict[str,Any]:
     fields={}
