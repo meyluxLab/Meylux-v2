@@ -81,6 +81,35 @@ class P3007QualityTests(unittest.TestCase):
         self.assertEqual(result.quality.quality_state, DataQualityState.INCOMPLETE)
         self.assertIn("required_evidence_missing", result.quality.reason_codes)
 
+    def test_validation_precedence_over_degraded_capability(self):
+        cases = (
+            (ValidationResult.REJECTED, DataQualityState.REJECTED),
+            (ValidationResult.INCOMPLETE, DataQualityState.INCOMPLETE),
+            (ValidationResult.CONTRADICTORY, DataQualityState.CONTRADICTORY),
+        )
+        for validation, expected in cases:
+            with self.subTest(validation=validation):
+                result = assess_quality(quality_input(validation, capability_state=CapabilityState.DEGRADED))
+                self.assertEqual(result.quality.quality_state, expected)
+                self.assertFalse(result.canonical_eligible)
+                self.assertEqual(route_assessment(result, {"id": "bad"}, BoundedQuarantine(2)), "QUARANTINED")
+
+    def test_valid_evidence_can_be_degraded_by_degraded_capability(self):
+        result = assess_quality(
+            quality_input(ValidationResult.VALID, capability_state=CapabilityState.DEGRADED)
+        )
+        self.assertEqual(result.quality.quality_state, DataQualityState.DEGRADED)
+        self.assertFalse(result.canonical_eligible)
+
+    def test_unavailable_and_unsupported_capability_remain_explicit(self):
+        for capability in (CapabilityState.UNAVAILABLE, CapabilityState.UNSUPPORTED):
+            with self.subTest(capability=capability):
+                result = assess_quality(
+                    quality_input(ValidationResult.VALID, capability_state=capability)
+                )
+                self.assertEqual(result.quality.quality_state, DataQualityState.UNAVAILABLE)
+                self.assertFalse(result.canonical_eligible)
+
     def test_capability_unavailable_and_unsupported_are_not_canonical(self):
         for capability, expected in (
             (CapabilityState.UNAVAILABLE, DataQualityState.UNAVAILABLE),
@@ -127,6 +156,43 @@ class P3007QualityTests(unittest.TestCase):
             )
         )
         self.assertIsNone(partial.explanation.score)
+
+    def test_quarantine_preserves_partial_upstream_evidence_without_fabrication(self):
+        cases = (
+            (PROVENANCE, "raw:partial:1", None),
+            (PROVENANCE, None, "stage:partial:2"),
+            (None, "raw:partial:3", "stage:partial:3"),
+        )
+        for provenance, source_id, parent_id in cases:
+            with self.subTest(provenance=provenance, source_id=source_id, parent_id=parent_id):
+                result = assess_quality(
+                    QualityInput(
+                        ValidationOutcome(ValidationResult.REJECTED),
+                        QualitySignals(**ALL_SCORES),
+                        provenance,
+                        source_id,
+                        parent_id,
+                    )
+                )
+                record = quarantine_record(result, {"case": "partial"})
+                self.assertEqual(record.provenance_id, provenance.provenance_id if provenance else None)
+                self.assertEqual(record.source_record_id, source_id)
+                self.assertEqual(record.lineage_parent_id, parent_id)
+
+    def test_incomplete_evidence_preserves_partial_upstream_identity(self):
+        result = assess_quality(
+            QualityInput(
+                ValidationOutcome(ValidationResult.INCOMPLETE),
+                QualitySignals(**ALL_SCORES),
+                PROVENANCE,
+                "raw:incomplete",
+                None,
+            )
+        )
+        record = quarantine_record(result, {"case": "incomplete"})
+        self.assertEqual(record.provenance_id, PROVENANCE.provenance_id)
+        self.assertEqual(record.source_record_id, "raw:incomplete")
+        self.assertIsNone(record.lineage_parent_id)
 
     def test_invalid_score_types_and_bounds_are_rejected(self):
         with self.assertRaises(TypeError):
