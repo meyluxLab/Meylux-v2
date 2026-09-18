@@ -1,10 +1,10 @@
 {
   "schema_version": "2.0",
   "project_version": "V2",
-  "phase": "PH-P3",
-  "step": "STEP-P3-008",
+  "phase": "PH-P4",
+  "step": "STEP-P4-001",
   "gate": "Phase progression authority",
-  "status": "CLOSED / VERIFIED",
+  "status": "ACTIVE / AUTHORIZED",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P3-008",
+  "last_approved_task_order": "TO-P4-001",
   "last_build_report": "BR-P3-008",
   "last_audit_report": "AR-P3-008",
   "last_execution_log": "EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918",
-  "active_task_order": null,
+  "active_task_order": "TO-P4-001",
   "completed_task_order": "TO-P3-008",
   "completion_audit": "AR-P3-008",
   "verified_artifacts": [
@@ -201,9 +201,12 @@
     "The Producer implementation commit 4c4b8f47fa634f7cf08e6f80cd75ae6ecaee8f1a was independently verified by CONTROL and the governed closure state is synchronized across phases.yaml, artifacts.yaml, CHANGE_LEDGER.yaml, and CURRENT_CHECKPOINT.json.",
     "STEP-P3-006 was independently verified by CONTROL under AR-P3-006 against final implementation commit 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283 and CI Core Run #480; Closure Synchronization is complete.",
     "TO-P3-006 is VERIFIED / COMPLETE and no active P3 Task Order remains.",
-    "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008."
+    "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008.",
+    "PH-P4 has been formally established ACTIVE / AUTHORIZED by the Project Owner Directive dated 2026-09-18; STEP-P4-001 is AUTHORIZED TO EXECUTE under TO-P4-001; P4-002 through P4-006 remain unauthorized."
   ],
   "deferred_decisions": [],
   "last_verified_commit": "fb17a034805abd219bad8fccc757fefc8faca27e",
-  "updated_at_utc": "2026-09-18T19:13:19.499559Z"
+  "updated_at_utc": "2026-09-18T20:00:00Z",
+  "phase_4_status": "ACTIVE / AUTHORIZED",
+  "phase_4_definition": "docs/phases/PH-P4.md"
 }
