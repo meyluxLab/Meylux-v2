@@ -8,7 +8,6 @@ from typing import Any, Mapping, Protocol
 from contracts.canonical.foundation import canonical_json
 from contracts.data_quality import DataQualityState
 from contracts.quality import QualityAssessment, fingerprint_payload
-from contracts.quality import QualityAssessment, fingerprint_payload
 
 TABLES={"instrument":"meylux.canonical_instruments","candle":"meylux.canonical_candles","trade":"meylux.canonical_trades","orderbook":"meylux.canonical_orderbook_depth","derivatives":"meylux.canonical_derivatives"}
 
