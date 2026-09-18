@@ -14,8 +14,8 @@ from meylux.quantitative.numeric import serialize_decimal
 
 def candles(closes, highs=None, lows=None, volumes=None, closed=True):
     closes = [Decimal(str(x)) for x in closes]
-    highs = [Decimal(str(x)) for x in (highs or [x + 1 for x in closes])]
-    lows = [Decimal(str(x)) for x in (lows or [x - 1 for x in closes])]
+    highs = [Decimal(str(x)) for x in (highs or [x + Decimal("0.5") for x in closes])]
+    lows = [Decimal(str(x)) for x in (lows or [x - Decimal("0.5") for x in closes])]
     volumes = [Decimal(str(x)) for x in (volumes or [100] * len(closes))]
     start = datetime(2026, 1, 1, tzinfo=timezone.utc)
     return tuple(
@@ -42,7 +42,7 @@ class MovingAverageTests(unittest.TestCase):
         self.assertEqual([r.status for r in ema(xs, 3)[:2]], [CalculationStatus.INSUFFICIENT_HISTORY] * 2)
         self.assertEqual([serialize_decimal(r.value) for r in ema(xs, 3)[2:]], ["2", "3", "4", "5"])
         self.assertEqual(serialize_decimal(sma(xs, 3)[2].value), "2")
-        self.assertEqual(serialize_decimal(wma(xs, 3)[2].value), "2.333333333333333333333333333333333333333333333333333333333333333333333333333333")
+        self.assertEqual(serialize_decimal(wma(xs, 3)[2].value), "2.3333333333333333333333333333333333333333333333333333333333333333333333333333333")
         self.assertEqual(serialize_decimal(hma(xs, 4)[4].value), "5")
 
     def test_moving_average_parameter_validation(self):
@@ -88,8 +88,8 @@ class VolatilityTests(unittest.TestCase):
         self.assertEqual(serialize_decimal(av[1].value), "2")
         self.assertEqual(serialize_decimal(av[4].value), "2.5")
         dx = adx(cs, 2)
-        self.assertEqual(dx[2].status, CalculationStatus.INSUFFICIENT_HISTORY)
-        self.assertTrue(dx[2].valid)
+        self.assertEqual(dx[2].status, CalculationStatus.VALID)
+        self.assertEqual(dx[2].value, Decimal("100"))
 
     def test_bollinger_band_and_bandwidth(self):
         cs = candles([1, 2, 3, 4])
