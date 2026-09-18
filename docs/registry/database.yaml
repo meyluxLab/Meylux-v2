@@ -17,3 +17,84 @@ records:
       append_only_trigger: VERIFIED
       application_update_delete_privilege: DENIED
       readback: VERIFIED
+
+  - stable_id: DB-P4-001
+    canonical_name: Calculated Indicator Vectors
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-001
+    task_order: TO-P4-001
+    table: meylux.calculated_indicator_vectors
+    migration: 0005_quantitative_foundation
+    evidence:
+      ci_workflow: CI Docker Foundation
+      workflow_run_id: 35397814285
+      workflow_run_number: 171
+      result: SUCCESS
+      privilege_matrix: SELECT/INSERT allowed; UPDATE/DELETE denied
+      control_audit: AR-P4-001
+      status: VERIFIED
+  - stable_id: DB-P4-002
+    canonical_name: Market Structure Events
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-001
+    task_order: TO-P4-001
+    table: meylux.market_structure_events
+    migration: 0005_quantitative_foundation
+    evidence:
+      ci_workflow: CI Docker Foundation
+      workflow_run_id: 35397814285
+      workflow_run_number: 171
+      result: SUCCESS
+      privilege_matrix: SELECT/INSERT allowed; UPDATE/DELETE denied
+      control_audit: AR-P4-001
+      status: VERIFIED
+  - stable_id: DB-P4-003
+    canonical_name: Market Structure Zones
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-001
+    task_order: TO-P4-001
+    table: meylux.market_structure_zones
+    migration: 0005_quantitative_foundation
+    evidence:
+      ci_workflow: CI Docker Foundation
+      workflow_run_id: 35397814285
+      workflow_run_number: 171
+      result: SUCCESS
+      privilege_matrix: SELECT/INSERT allowed; UPDATE/DELETE denied
+      control_audit: AR-P4-001
+      status: VERIFIED
+  - stable_id: DB-P4-004
+    canonical_name: Volume Profile Sessions
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-001
+    task_order: TO-P4-001
+    table: meylux.volume_profile_sessions
+    migration: 0005_quantitative_foundation
+    evidence:
+      ci_workflow: CI Docker Foundation
+      workflow_run_id: 35397814285
+      workflow_run_number: 171
+      result: SUCCESS
+      privilege_matrix: SELECT/INSERT allowed; UPDATE/DELETE denied
+      control_audit: AR-P4-001
+      status: VERIFIED
+  - stable_id: DB-P4-005
+    canonical_name: Market Regime States
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-001
+    task_order: TO-P4-001
+    table: meylux.market_regime_states
+    migration: 0005_quantitative_foundation
+    evidence:
+      ci_workflow: CI Docker Foundation
+      workflow_run_id: 35397814285
+      workflow_run_number: 171
+      result: SUCCESS
+      privilege_matrix: SELECT/INSERT allowed; UPDATE/DELETE denied
+      control_audit: AR-P4-001
+      status: VERIFIED
