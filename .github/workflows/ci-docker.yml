@@ -1,4 +1,5 @@
 name: CI Docker Foundation
+# AR-P4-001 corrected-boundary CI trigger; runtime checks below are evidence-bearing.
 
 on:
   push:
