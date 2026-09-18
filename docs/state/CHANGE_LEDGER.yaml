@@ -725,3 +725,24 @@ entries:
     performance_note: >5000 normalization events/sec/core target not measured and not claimed
     multi_symbol_note: second-symbol production witness unavailable from governed AVAILABLE staging; no fabricated witness used
     closure_sync: README, Checkpoint, artifact registry, specialized registries, phase registry, Phase 3 document, Task Order, Build Report, Audit Report and this Change Ledger synchronized by CONTROL
+
+  - id: CHG-P3-PHASE-3-CLOSURE-SYNC-FINAL-20260918
+    date_utc: '2026-09-18'
+    change_type: CLOSURE_SYNCHRONIZATION
+    subject: Final CONTROL closure synchronization after final audit/report/task-order wording reconciliation
+    basis: AR-P3-008 APPROVED / VERIFIED + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - AR-P3-008
+      - BR-P3-008
+      - TO-P3-008
+      - PH-P3
+      - STEP-P3-008
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+    final_state: PH-P3 CLOSED / VERIFIED; STEP-P3-008 COMPLETE / VERIFIED; TO-P3-008 VERIFIED / COMPLETE; BR-P3-008 VERIFIED; AR-P3-008 APPROVED / VERIFIED; active_task_order null
+    runtime_verified_commit: fb17a034805abd219bad8fccc757fefc8faca27e
+    execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
+    note: Closure documentation commits after the runtime-verified implementation commit are documentation/registry synchronization only; VPS runtime code remains identical to the verified commit.
