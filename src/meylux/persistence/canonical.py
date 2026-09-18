@@ -59,7 +59,8 @@ class CanonicalPersistence:
             if row is None:
                 existing=await self._connection.fetchrow(f"SELECT record_id,event_id FROM {table} WHERE record_id=$1",record.record_id)
                 if existing is None or str(existing["event_id"])!=record.event_id: raise ValueError("canonical record identity conflict")
-                outbox_existing=await self._connection.fetchrow("SELECT sequence_no FROM meylux.canonical_event_outbox WHERE event_id=$1",record.event_id)\n                return PersistenceResult(record.record_id,record.event_id,False,None if outbox_existing is None else int(outbox_existing["sequence_no"]))
+                outbox_existing=await self._connection.fetchrow("SELECT sequence_no FROM meylux.canonical_event_outbox WHERE event_id=$1",record.event_id)
+                return PersistenceResult(record.record_id,record.event_id,False,None if outbox_existing is None else int(outbox_existing["sequence_no"]))
             if assessment is not None:\n                await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,__import__("json").dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))\n            if assessment is not None:
                 import json
                 await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,json.dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))
