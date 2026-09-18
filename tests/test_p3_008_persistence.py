@@ -17,6 +17,13 @@ def assessment():
     return assess_quality(QualityInput(ValidationOutcome(ValidationResult.VALID),SCORES,PROV,"raw:1","stage:1"))
 
 class P3008ContractTests(unittest.TestCase):
+    def test_persist_with_assessment_has_single_quality_log(self):
+        import inspect
+        from meylux.persistence.canonical import CanonicalPersistence
+        source=inspect.getsource(CanonicalPersistence.persist)
+        self.assertEqual(source.count("INSERT INTO meylux.data_quality_logs"), 1)
+        self.assertEqual(source.count("if assessment is not None:"), 1)
+
     def test_canonical_record_rejects_non_promotable_state(self):
         with self.assertRaises(UnsupportedCanonicalState):
             CanonicalRecord("trade","r","e",datetime(2026,9,18,tzinfo=UTC),"BTCUSDT",{}, "p","s","l", DataQualityState.REJECTED)
