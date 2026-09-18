@@ -147,7 +147,19 @@ GRANT SELECT, INSERT, UPDATE ON meylux.canonical_event_outbox TO meylux_app;
 REVOKE UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON meylux.canonical_instruments, meylux.canonical_candles, meylux.canonical_trades, meylux.canonical_orderbook_depth, meylux.canonical_derivatives, meylux.data_quality_logs FROM meylux_app;
 
 GRANT SELECT ON meylux.canonical_instruments, meylux.canonical_candles, meylux.canonical_trades, meylux.canonical_orderbook_depth, meylux.canonical_derivatives, meylux.data_quality_logs, meylux.canonical_event_outbox TO meylux_backup;
-GRANT USAGE, SELECT ON SEQUENCE meylux.canonical_event_outbox_sequence, meylux.data_quality_logs_log_id_seq TO meylux_app;
+DO $
+DECLARE
+    seq_name text;
+BEGIN
+    seq_name := pg_get_serial_sequence('meylux.canonical_event_outbox', 'sequence_no');
+    IF seq_name IS NOT NULL THEN
+        EXECUTE format('GRANT USAGE, SELECT ON SEQUENCE %s TO meylux_app', seq_name);
+    END IF;
+    seq_name := pg_get_serial_sequence('meylux.data_quality_logs', 'log_id');
+    IF seq_name IS NOT NULL THEN
+        EXECUTE format('GRANT USAGE, SELECT ON SEQUENCE %s TO meylux_app', seq_name);
+    END IF;
+END $;
 
 INSERT INTO meylux.schema_migrations(version)
 VALUES ('0003_canonical_persistence_event_outbox')
