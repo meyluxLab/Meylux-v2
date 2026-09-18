@@ -644,7 +644,7 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
     traceability: PH-P3 / STEP-P3-007 / DOC-V2-ARCH-001 / TO-P3-008 / Project Owner Directive — Commence STEP-P3-008
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: TO-P3-001
     canonical_name: Task Order — Canonical Contracts, Identity & Validation Foundation
     entity_type: TO
@@ -794,7 +794,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-008.md
     traceability: PH-P3 / STEP-P3-008 / STEP-P3-007 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: TO-P3-007
     canonical_name: Task Order — Data Quality, Quarantine, DLQ & Lineage
     entity_type: TO
@@ -824,10 +824,17 @@ records:
     entity_type: AR
     artifact_path: docs/audits/AR-P3-008.md
     traceability: BR-P3-008 / TO-P3-008 / PH-P3
-    status: REVISE / CORRECTION REQUIRED
+    status: APPROVED / VERIFIED
   - stable_id: BR-P3-008
     canonical_name: Build Report — Authoritative Persistence, Event Handoff & G-3 Verification
     entity_type: BR
     artifact_path: docs/build-reports/BR-P3-008.md
-    traceability: TO-P3-008 / STEP-P3-008 / PH-P3
-    status: PRODUCED / TESTED / UNVERIFIED
+    traceability: TO-P3-008 / STEP-P3-008 / PH-P3 / AR-P3-008
+    status: VERIFIED
+
+  - stable_id: TST-P3-008
+    canonical_name: Authoritative Persistence, Event Handoff & G-3 Verification Tests
+    entity_type: TST
+    artifact_path: tests/test_p3_008_persistence.py
+    traceability: TO-P3-008 / STEP-P3-008 / BR-P3-008 / AR-P3-008
+    status: VERIFIED
