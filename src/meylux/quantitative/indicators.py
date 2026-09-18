@@ -463,7 +463,9 @@ def bollinger_bands(
             variance = sum((x - mean) ** 2 for x in sample) / Decimal(n)
             std = variance.sqrt()
             delta = k * std
-        out.append(BandPoint(_valid(mean, candle), _valid(mean + delta, candle), _valid(mean - delta, candle)))
+            upper = mean + delta
+            lower = mean - delta
+        out.append(BandPoint(_valid(mean, candle), _valid(upper, candle), _valid(lower, candle)))
     return tuple(out)
 
 
