@@ -89,14 +89,22 @@ class P3007QualityTests(unittest.TestCase):
         )
         for validation, expected in cases:
             with self.subTest(validation=validation):
-                result = assess_quality(quality_input(validation, capability_state=CapabilityState.DEGRADED))
+                result = assess_quality(
+                    quality_input(validation, capability_state=CapabilityState.DEGRADED)
+                )
                 self.assertEqual(result.quality.quality_state, expected)
                 self.assertFalse(result.canonical_eligible)
-                self.assertEqual(route_assessment(result, {"id": "bad"}, BoundedQuarantine(2)), "QUARANTINED")
+                self.assertEqual(
+                    route_assessment(result, {"id": "bad"}, BoundedQuarantine(2)),
+                    "QUARANTINED",
+                )
 
     def test_valid_evidence_can_be_degraded_by_degraded_capability(self):
         result = assess_quality(
-            quality_input(ValidationResult.VALID, capability_state=CapabilityState.DEGRADED)
+            quality_input(
+                ValidationResult.VALID,
+                capability_state=CapabilityState.DEGRADED,
+            )
         )
         self.assertEqual(result.quality.quality_state, DataQualityState.DEGRADED)
         self.assertFalse(result.canonical_eligible)
@@ -105,7 +113,10 @@ class P3007QualityTests(unittest.TestCase):
         for capability in (CapabilityState.UNAVAILABLE, CapabilityState.UNSUPPORTED):
             with self.subTest(capability=capability):
                 result = assess_quality(
-                    quality_input(ValidationResult.VALID, capability_state=capability)
+                    quality_input(
+                        ValidationResult.VALID,
+                        capability_state=capability,
+                    )
                 )
                 self.assertEqual(result.quality.quality_state, DataQualityState.UNAVAILABLE)
                 self.assertFalse(result.canonical_eligible)
@@ -164,7 +175,11 @@ class P3007QualityTests(unittest.TestCase):
             (None, "raw:partial:3", "stage:partial:3"),
         )
         for provenance, source_id, parent_id in cases:
-            with self.subTest(provenance=provenance, source_id=source_id, parent_id=parent_id):
+            with self.subTest(
+                provenance=provenance,
+                source_id=source_id,
+                parent_id=parent_id,
+            ):
                 result = assess_quality(
                     QualityInput(
                         ValidationOutcome(ValidationResult.REJECTED),
@@ -175,7 +190,10 @@ class P3007QualityTests(unittest.TestCase):
                     )
                 )
                 record = quarantine_record(result, {"case": "partial"})
-                self.assertEqual(record.provenance_id, provenance.provenance_id if provenance else None)
+                self.assertEqual(
+                    record.provenance_id,
+                    provenance.provenance_id if provenance else None,
+                )
                 self.assertEqual(record.source_record_id, source_id)
                 self.assertEqual(record.lineage_parent_id, parent_id)
 
