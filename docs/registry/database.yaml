@@ -1,3 +1,19 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-records: []
+status: ACTIVE / EVIDENCE-TRACKING
+records:
+  - stable_id: DB-P3-008
+    canonical_name: Authoritative Canonical Persistence Schema and Event Outbox
+    entity_type: DB
+    phase: PH-P3
+    step: STEP-P3-008
+    task_order: TO-P3-008
+    migrations:
+      - 0003_canonical_persistence_event_outbox
+      - 0004_canonical_quality_state_alignment
+    evidence:
+      runtime_commit: fb17a034805abd219bad8fccc757fefc8faca27e
+      migration_result: PASS
+      canonical_quality_state: VALID
+      append_only_trigger: VERIFIED
+      application_update_delete_privilege: DENIED
+      readback: VERIFIED
