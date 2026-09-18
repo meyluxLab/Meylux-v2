@@ -194,7 +194,7 @@
     "D-P2-006-001 was corrected and independently verified under TO-P2-007 and AR-P2-AUDIT-007.",
     "TO-GOV-008 and TO-GOV-009 are finally independently verified under AR-GOV-005; no Phase 3/4 or later implementation occurred before this Phase 3 establishment.",
     "TO-P2-007 document lifecycle status is synchronized to VERIFIED / COMPLETE following AR-P2-AUDIT-007; this is a documentation lifecycle correction only and does not alter Phase 2 scope or closure.",
-    "PH-P3 has been formally established; STEP-P3-001 through STEP-P3-005 are COMPLETE / VERIFIED; STEP-P3-006 is COMPLETE / VERIFIED under AR-P3-006; STEP-P3-007 and STEP-P3-008 remain DEFINED / INACTIVE.",
+    "PH-P3 has been formally established; STEP-P3-001 through STEP-P3-005 are COMPLETE / VERIFIED; STEP-P3-006 is COMPLETE / VERIFIED under AR-P3-006; STEP-P3-007 and STEP-P3-008 are COMPLETE / VERIFIED; TO-P3-007 and TO-P3-008 are VERIFIED / COMPLETE; PH-P3 is CLOSED / VERIFIED under AR-P3-008.",
     "ADR-GOVERNANCE-013 has been ratified and implemented as a standing role operating rule set; it does not itself authorize work outside existing boundaries.",
     "BR-P3-004 records the authorized P3-004 implementation/test evidence and has been independently verified under AR-P3-004.",
     "AR-P3-004 independently verified the P3-004 implementation, repository evidence, tests, CI evidence, and final lifecycle synchronization; P3-004 closure is complete.",
