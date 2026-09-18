@@ -404,3 +404,52 @@ records:
     active_task_order: null
     completed_task_order: TO-P3-008
     completion_audit: AR-P3-008
+
+  - sid: PH-P4
+    logical_name: Deterministic Quantitative & Market Structure Engine
+    entity_type: PH
+    status: ACTIVE / AUTHORIZED
+    entry_gate: G-4
+    entry_gate_role: phase boundary
+    entry_approval: PROJECT-OWNER-DIRECTIVE-ESTABLISH-PHASE-4-AUTHORIZE-STEP-P4-001-2026-09-18
+    first_step: STEP-P4-001
+    next_valid_step: null
+    final_step: STEP-P4-006
+    active_task_order: TO-P4-001
+    current_step: STEP-P4-001
+    completed_task_order: null
+    completion_audit: null
+    authorization_criteria:
+      - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
+      - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
+      - Phase 4 definition and complete Step sequence are recorded in the GitHub Source of Truth.
+      - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
+    architecture_relationship:
+      architecture: DOC-V2-ARCH-001
+      phase_model: Section 14 defines PH-P4 as the Deterministic Quantitative and Market Structure Engine.
+      phase_specification: docs/phases/PH-P4.md
+      reference_roadmap: DOC-P4-001
+      upstream_foundation: PH-P3 CLOSED / VERIFIED; G-3 ESTABLISHED
+      downstream_boundary: Phase 5 Specialist Analytical Layer
+    scope_boundary:
+      - Deterministic quantitative fact generation from trusted canonical Phase 3 data.
+      - Numeric policy, mathematical primitives, technical/statistical features, market structure, volume/order-flow/derivatives evidence, regime and quantitative orchestration as defined by the Phase 4 specification.
+      - Venue-aware quantitative evidence only; complete Venue Intelligence / Opportunity Engine remains an independent cross-cutting track.
+      - No AI interpretation, Opportunity Score, trading, capital, custody, leverage, V1 mutation or autonomous execution.
+      - Only the currently activated Step may be executed.
+
+  - sid: STEP-P4-001
+    logical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
+    entity_type: STEP
+    phase: PH-P4
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED TO EXECUTE
+    order: 1
+    predecessor: STEP-P3-008
+    activation_basis: PROJECT-OWNER-DIRECTIVE-ESTABLISH-PHASE-4-AUTHORIZE-STEP-P4-001-2026-09-18 / PH-P4 / AR-P3-008 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    active_task_order: TO-P4-001
+    completed_task_order: null
+    completion_audit: null
+    purpose: Establish quantitative contracts, numeric policy, shared mathematical primitives, insufficient-history semantics, golden-vector infrastructure/freeze boundary and quantitative persistence-model foundation.
+    repository_scope: contract semantics, deterministic numeric policy, mathematical foundation, golden vectors, persistence model foundation, tests and traceability within STEP-P4-001 only.
+    vps_scope: no VPS action authorized by this registry entry; any genuinely required operation must be separately bounded by the Task Order and SentinelX-only governance.
