@@ -759,3 +759,24 @@ entries:
     final_state: PH-P3 CLOSED / VERIFIED; STEP-P3-008 COMPLETE / VERIFIED; TO-P3-008 VERIFIED / COMPLETE; no active Task Order
     runtime_verified_commit: fb17a034805abd219bad8fccc757fefc8faca27e
     note: Documentation-only checkpoint consistency correction; runtime implementation unchanged.
+
+  - id: CHG-GOV-ADR-013-RULE5-20260918
+    date_utc: '2026-09-18'
+    change_type: GOVERNANCE_AMENDMENT
+    subject: ADR-GOVERNANCE-013 Rule 5 — Maximum Quality and Success-Rate Standard
+    basis: Explicit Project Owner Directive — AMEND ADR-GOVERNANCE-013 WITH RULE 5
+    affected_ids:
+      - ADR-GOVERNANCE-013
+      - ARTIFACT_PROTOCOL_V2
+      - PH-P3
+      - TO-P3-001
+    changed_paths:
+      - docs/decisions/ADR/ADR-GOVERNANCE-013.md
+      - docs/governance/ARTIFACT_PROTOCOL_V2.md
+      - docs/phases/PH-P3.md
+      - docs/task-orders/TO-P3-001.md
+      - docs/registry/artifacts.yaml
+    amendment: Rule 5 added verbatim to ADR-013; footer template extended with R5 Quality standard; mirrored governance/phase/task-order conventions updated.
+    bootstrap_reference: VERIFIED — MEYLUX_V2_BOOTSTRAP.md already references ADR-GOVERNANCE-013 among mandatory relevant ADRs; no separate Rule 5 reference added.
+    architecture_effect: none
+    authority_effect: no new authority; quality standard applies within existing authorized boundaries.
