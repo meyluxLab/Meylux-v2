@@ -53,7 +53,6 @@ class CanonicalPersistence:
                    VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT(record_id) DO NOTHING RETURNING record_id"""
         quality_log="""INSERT INTO meylux.data_quality_logs(record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint)
                   VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10)"""
-        quality_log="""INSERT INTO meylux.data_quality_logs(record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint) VALUES($1,$2,$3,$4,$5::jsonb,$6,$7,$8,$9,$10)"""
         outbox="""INSERT INTO meylux.canonical_event_outbox(event_id,record_id,event_type,event_time,payload_json)
                   VALUES($1,$2,$3,$4,$5::jsonb) ON CONFLICT(event_id) DO NOTHING RETURNING sequence_no"""
         async with self._connection.transaction():
