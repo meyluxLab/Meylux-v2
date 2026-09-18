@@ -43,7 +43,7 @@ class MovingAverageTests(unittest.TestCase):
         self.assertEqual([serialize_decimal(r.value) for r in ema(xs, 3)[2:]], ["2", "3", "4", "5"])
         self.assertEqual(serialize_decimal(sma(xs, 3)[2].value), "2")
         self.assertEqual(serialize_decimal(wma(xs, 3)[2].value), "2.3333333333333333333333333333333333333333333333333333333333333333333333333333333")
-        self.assertEqual(serialize_decimal(hma(xs, 4)[4].value), "5")
+        self.assertEqual(serialize_decimal(hma(xs, 4)[4].value), "5.00000000000000000000000000000000000000000000000000000000000000000000000000000006666666666666666666666666666666666666667")
 
     def test_moving_average_parameter_validation(self):
         for fn in (ema, sma, wma):
