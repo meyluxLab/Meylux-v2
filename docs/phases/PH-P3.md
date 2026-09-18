@@ -187,6 +187,7 @@ The following rules apply to every governed role and every session:
 2. **Same-Response Communication Duty:** whenever work requires text to be carried to another governed role, produce the complete forward-ready message in the same response. Substantive hand-offs use `FORMAL ENGLISH MESSAGE READY TO SEND` followed by `SIMPLE PERSIAN EXPLANATION`.
 3. **Large Artifact Retrieval:** use `Identify artifact → Obtain real Blob SHA → fetch_blob → Retrieve complete artifact → Read / search / verify`; never proceed from truncated content.
 4. **SentinelX-Only VPS Execution:** any work genuinely requiring VPS inspection/action must use SentinelX exclusively under `ADR-GOVERNANCE-011`; SentinelX availability does not itself authorize runtime or VPS changes.
+5. **Maximum Quality and Success-Rate Standard:** every part of the system within an authorized boundary must be built to the maximum achievable standard of correctness, robustness, and efficiency, aimed at the highest realistically attainable success rate. Minimum-to-pass quality is not sufficient. This never expands scope or overrides Rule 1 stop conditions. CONTROL must apply and explicitly convey this governing intent; Producer must apply it to every implementation detail. Indefinite hedging, repeated re-verification without new evidence, or failure to reach a definitive, well-supported conclusion is itself a quality failure.
 
 Every substantive response must end with the `--- STANDING RULES CHECK ---` footer required by `ADR-GOVERNANCE-013`.
 
