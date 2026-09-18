@@ -95,10 +95,12 @@ The Step must establish the minimum authoritative foundation without prematurely
 ### `STEP-P4-002` — Technical Indicators, Statistical & Volatility Engine
 
 **Order:** 2
-**Status:** ACTIVE / AUTHORIZED
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P4-001` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P4-002`
+**Active Task Order:** null
+**Completed Task Order:** `TO-P4-002`
+**Completion Audit:** `AR-P4-002`
 **Activation basis:** Project Owner Directive — Authorize STEP-P4-002
 **Canonical Task Order:** `docs/task-orders/TO-P4-002.md`
 
@@ -190,6 +192,10 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 `IMPLEMENTED != EXECUTED != TESTED != VERIFIED != CLOSED`
 
+## Current Step Boundary After P4-002 Closure
+
+STEP-P4-002 is COMPLETE / VERIFIED under AR-P4-002. PH-P4 remains ACTIVE / AUTHORIZED. No Phase-4 Task Order is active. STEP-P4-003 is the next sequential Step but remains NOT YET AUTHORIZED; no implementation or authorization is implied by this closure.
+
 ## Standing Role Operating Rules — ADR-GOVERNANCE-013
 
 1. **Continuation Duty:** continue to the highest genuinely authorized boundary. Difficulty, ordinary implementation problems and normal test failures are not blockers. Stop only for (A) actual Owner decision/ratification, (B) unresolved authoritative conflict, or (C) natural completion requiring independent verification.
@@ -206,4 +212,4 @@ Every substantive response must end with the `--- STANDING RULES CHECK ---` foot
 
 ## Current Phase Boundary
 
-PH-P4 is formally established and ACTIVE / AUTHORIZED. Only STEP-P4-001 is authorized at this point. Steps P4-002 through P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
+PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED. No Phase-4 Task Order is active. STEP-P4-003 through STEP-P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
