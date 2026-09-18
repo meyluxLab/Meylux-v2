@@ -1,4 +1,5 @@
 import unittest
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from decimal import Decimal
 from contracts.canonical import CanonicalTrade
