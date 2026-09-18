@@ -114,6 +114,11 @@ class P3008RuntimeEnvelopeBoundaryTests(unittest.TestCase):
         envelope=envelope_from_row(self._row(b'{"price":"100.00","qty":"1.0"}'))
         self.assertEqual(dict(envelope.payload), {"price":"100.00","qty":"1.0"})
 
+    def test_malformed_jsonb_bytes_are_rejected_explicitly(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        with self.assertRaisesRegex(ValueError, "payload_json contains malformed JSON"):
+            envelope_from_row(self._row(b"\\xff"))
+
     def test_mapping_jsonb_runtime_value_is_preserved(self):
         from meylux.runtime.p3_008_vertical_slice import envelope_from_row
         payload={"price":"100.00","qty":"1.0"}
