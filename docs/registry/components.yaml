@@ -15,3 +15,18 @@ records:
       runtime_commit: fb17a034805abd219bad8fccc757fefc8faca27e
       execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
       status: VERIFIED
+
+  - stable_id: CMP-V2-P4-001
+    canonical_name: DeterministicQuantitativeEngine
+    entity_type: CMP
+    phase: PH-P4
+    step: STEP-P4-001
+    task_order: TO-P4-001
+    implementation_paths:
+      - contracts/quantitative/
+      - src/meylux/quantitative/
+      - tests/test_quantitative_foundation.py
+    evidence:
+      implementation_commit: d9bb565023796f3969ea5a05f9a725729912bcf5
+      control_audit: AR-P4-001
+      status: VERIFIED
