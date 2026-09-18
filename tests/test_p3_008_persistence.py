@@ -85,6 +85,31 @@ class P3008ContractTests(unittest.IsolatedAsyncioTestCase):
             CanonicalEvent("e","r","trade",1,datetime(2026,9,18,tzinfo=UTC),DataQualityState.DEGRADED,"p","s","l",{}, "c")
 
 
+class P3008ValidationResultBoundaryTests(unittest.TestCase):
+    def test_quality_boundary_wraps_valid_normalization_result(self):
+        from meylux.runtime.p3_008_vertical_slice import _quality_validation_outcome
+        outcome=_quality_validation_outcome([], ValidationResult.VALID)
+        self.assertIsInstance(outcome, ValidationOutcome)
+        self.assertEqual(outcome.result, ValidationResult.VALID)
+        self.assertTrue(outcome.valid)
+
+    def test_quality_boundary_preserves_rejected_normalization_result(self):
+        from meylux.runtime.p3_008_vertical_slice import _quality_validation_outcome
+        outcome=_quality_validation_outcome([], ValidationResult.REJECTED)
+        self.assertIsInstance(outcome, ValidationOutcome)
+        self.assertEqual(outcome.result, ValidationResult.REJECTED)
+        self.assertFalse(outcome.valid)
+
+    def test_quality_boundary_uses_authoritative_issue_mapping(self):
+        from meylux.runtime.p3_008_vertical_slice import _quality_validation_outcome
+        from contracts.canonical.foundation import ValidationCode, ValidationIssue
+        issue=ValidationIssue(ValidationCode.REQUIRED_MISSING, "payload", "payload is required")
+        outcome=_quality_validation_outcome([issue], ValidationResult.VALID)
+        self.assertEqual(outcome.result, ValidationResult.INCOMPLETE)
+        self.assertEqual(outcome.issues, (issue,))
+        self.assertFalse(outcome.valid)
+
+
 class P3008RuntimeEnvelopeBoundaryTests(unittest.TestCase):
     def _row(self, payload):
         return {
