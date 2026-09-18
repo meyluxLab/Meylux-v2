@@ -686,3 +686,42 @@ entries:
       reached canonical persistence. Repository contract inspection confirms DataQualityState.VALID
       has value 'VALID'; migration 0003 requires 'valid'. This is an implementation/schema boundary
       mismatch, not stale runtime context or authoritative conflict. Producer correction required.
+  - id: CHG-P3-PHASE-3-CLOSURE-20260918
+    date_utc: '2026-09-18'
+    change_type: STEP_AND_PHASE_CLOSURE
+    subject: CONTROL end-to-end completion of STEP-P3-008, G-3 establishment and Phase 3 closure
+    basis: Project Owner explicit end-to-end authorization + TO-P3-008 + AR-P3-008 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P3-008
+      - TO-P3-008
+      - BR-P3-008
+      - AR-P3-008
+      - TST-P3-008
+      - PH-P3
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+      - docs/registry/contracts.yaml
+      - docs/registry/database.yaml
+      - docs/registry/runtime.yaml
+      - docs/registry/security.yaml
+      - docs/registry/configuration.yaml
+      - docs/registry/observability.yaml
+    runtime_verified_commit: fb17a034805abd219bad8fccc757fefc8faca27e
+    execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
+    g3_status: ESTABLISHED FOR AUTHORIZED CONTROLLED SLICE
+    step_transition: ACTIVE / AUTHORIZED -> COMPLETE / VERIFIED
+    task_order_transition: AUTHORIZED TO EXECUTE -> VERIFIED / COMPLETE
+    phase_transition: ACTIVE / AUTHORIZED -> CLOSED / VERIFIED
+    canonical_persistence: VERIFIED WITH REAL GOVERNED RAW EVIDENCE AND INDEPENDENT READ-BACK
+    event_handoff: VERIFIED WITH REDIS STREAM RECEIPT AND OUTBOX ACK
+    replay: VERIFIED; SECOND EXECUTION INSERTED FALSE AND PUBLISHED ZERO
+    restart_recovery: VERIFIED ACROSS DB/REDIS AND APPLICATION SERVICE RESTART
+    security: VERIFIED APPLICATION UPDATE/DELETE DENIED AND APPEND-ONLY TRIGGER ENABLED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    future_phase_effect: PHASE 4 REMAINS NOT AUTHORIZED
+    performance_note: >5000 normalization events/sec/core target not measured and not claimed
+    multi_symbol_note: second-symbol production witness unavailable from governed AVAILABLE staging; no fabricated witness used
+    closure_sync: README, Checkpoint, artifact registry, specialized registries, phase registry, Phase 3 document, Task Order, Build Report, Audit Report and this Change Ledger synchronized by CONTROL
