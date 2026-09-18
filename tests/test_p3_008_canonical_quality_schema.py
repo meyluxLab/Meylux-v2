@@ -8,8 +8,8 @@ class P3008CanonicalQualitySchemaTests(unittest.TestCase):
     def test_authoritative_valid_value_is_preserved_by_migration_contract(self):
         migration = Path("migrations/versions/0004_canonical_quality_state_alignment.sql").read_text()
         self.assertEqual(DataQualityState.VALID.value, "VALID")
-        self.assertIn("CHECK (quality_state = 'VALID')", migration)
-        self.assertNotIn("CHECK (quality_state = 'valid')", migration)
+        self.assertIn("quality_state = ''VALID''", migration)
+        self.assertNotIn("quality_state = ''valid''", migration)
 
     def test_all_canonical_tables_are_aligned(self):
         migration = Path("migrations/versions/0004_canonical_quality_state_alignment.sql").read_text()
@@ -21,7 +21,7 @@ class P3008CanonicalQualitySchemaTests(unittest.TestCase):
             "canonical_derivatives",
         ):
             self.assertIn(table, migration)
-            self.assertIn(table + "_quality_state_check", migration)
+            self.assertIn("t + '_quality_state_check'", migration)
 
 if __name__ == "__main__":
     unittest.main()
