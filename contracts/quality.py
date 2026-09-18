@@ -150,6 +150,9 @@ class QualityAssessment:
     canonical_eligible: bool
     explanation: QualityExplanation
     lineage: QualityLineage | None
+    provenance_id: str | None
+    source_record_id: str | None
+    lineage_parent_id: str | None
 
 
 @dataclass(frozen=True, slots=True)
@@ -241,30 +244,42 @@ def fingerprint_payload(value: Any) -> str:
 
 
 def _quality_state(inp: QualityInput) -> tuple[DataQualityState, tuple[str, ...]]:
-    reasons: list[str] = []
+    """Apply deterministic precedence from strongest safety evidence downward.
+
+    Record availability and explicit validation outcomes are authoritative for
+    safety classification. Capability degradation may downgrade only otherwise
+    valid evidence; it never weakens rejected, incomplete, contradictory or
+    unavailable validation evidence.
+    """
     if not inp.record_available:
         return DataQualityState.UNAVAILABLE, ("provider_unavailable",)
+    if inp.validation is None:
+        return DataQualityState.INCOMPLETE, ("required_evidence_missing",)
+    validation_state = {
+        ValidationResult.CONTRADICTORY: (DataQualityState.CONTRADICTORY, "contradictory_validation"),
+        ValidationResult.REJECTED: (DataQualityState.REJECTED, "validation_rejected"),
+        ValidationResult.INCOMPLETE: (DataQualityState.INCOMPLETE, "required_evidence_missing"),
+        ValidationResult.UNAVAILABLE: (DataQualityState.UNAVAILABLE, "provider_unavailable"),
+        ValidationResult.STALE: (DataQualityState.STALE, "stale_evidence"),
+        ValidationResult.DEGRADED: (DataQualityState.DEGRADED, "quality_degraded"),
+        ValidationResult.VALID: (DataQualityState.VALID, None),
+    }
+    state, reason = validation_state[inp.validation.result]
+    if state in {
+        DataQualityState.CONTRADICTORY,
+        DataQualityState.REJECTED,
+        DataQualityState.INCOMPLETE,
+        DataQualityState.UNAVAILABLE,
+    }:
+        return state, (reason,)
     if inp.capability_state is CapabilityState.UNSUPPORTED:
         return DataQualityState.UNAVAILABLE, ("provider_unsupported",)
     if inp.capability_state is CapabilityState.UNAVAILABLE:
         return DataQualityState.UNAVAILABLE, ("provider_unavailable",)
     if inp.capability_state is CapabilityState.DEGRADED:
         return DataQualityState.DEGRADED, ("quality_degraded",)
-    if inp.validation is None:
-        return DataQualityState.INCOMPLETE, ("required_evidence_missing",)
-    if inp.validation.result is ValidationResult.CONTRADICTORY:
-        return DataQualityState.CONTRADICTORY, ("contradictory_validation",)
-    if inp.validation.result is ValidationResult.REJECTED:
-        return DataQualityState.REJECTED, ("validation_rejected",)
-    if inp.validation.result is ValidationResult.INCOMPLETE:
-        return DataQualityState.INCOMPLETE, ("required_evidence_missing",)
-    if inp.validation.result is ValidationResult.UNAVAILABLE:
-        return DataQualityState.UNAVAILABLE, ("provider_unavailable",)
-    if inp.validation.result is ValidationResult.STALE:
-        return DataQualityState.STALE, ("stale_evidence",)
-    if inp.validation.result is ValidationResult.DEGRADED:
-        return DataQualityState.DEGRADED, ("quality_degraded",)
-    return DataQualityState.VALID, ()
+    return state, (reason,) if reason else ()
+
 
 
 def _explanation(signals: QualitySignals) -> QualityExplanation:
@@ -319,7 +334,16 @@ def assess_quality(inp: QualityInput) -> QualityAssessment:
             inp.validation.result.value if inp.validation else "unavailable",
             quality.quality_state,
         )
-    return QualityAssessment(quality, lifecycle, canonical_eligible, _explanation(inp.signals), lineage)
+    return QualityAssessment(
+        quality,
+        lifecycle,
+        canonical_eligible,
+        _explanation(inp.signals),
+        lineage,
+        inp.provenance.provenance_id if inp.provenance is not None else None,
+        inp.source_record_id,
+        inp.lineage_parent_id,
+    )
 
 
 def quarantine_record(
@@ -334,7 +358,7 @@ def quarantine_record(
         "quality_state": assessment.quality.quality_state.value,
         "reasons": assessment.quality.reason_codes,
         "payload": payload_fingerprint,
-        "source_record_id": assessment.lineage.source_record_id if assessment.lineage else None,
+        "source_record_id": assessment.source_record_id,
     }
     key = hashlib.sha256(
         json.dumps(key_material, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -343,9 +367,9 @@ def quarantine_record(
         key,
         assessment.quality.quality_state,
         assessment.quality.reason_codes,
-        assessment.lineage.provenance_id if assessment.lineage else None,
-        assessment.lineage.source_record_id if assessment.lineage else None,
-        assessment.lineage.lineage_parent_id if assessment.lineage else None,
+        assessment.provenance_id,
+        assessment.source_record_id,
+        assessment.lineage_parent_id,
         payload_fingerprint,
         attempt,
     )
