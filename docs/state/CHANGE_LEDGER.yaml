@@ -408,11 +408,6 @@ entries:
       - STEP-P3-006
       - STEP-P3-007
       - PH-P3
-      - docs/registry/artifacts.yaml
-      - docs/registry/phases.yaml
-      - docs/registry/tests.yaml
-      - docs/state/CURRENT_CHECKPOINT.json
-      - README.md
     from_state: STEP-P3-006 ACTIVE / AUTHORIZED; TO-P3-006 AUTHORIZED TO EXECUTE; BR-P3-006 PRODUCED / TESTED / UNVERIFIED; TST-P3-006 TESTED / UNVERIFIED; AR-P3-006 not issued; STEP-P3-007 DEFINED / INACTIVE
     to_state: BR-P3-006 VERIFIED; TST-P3-006 VERIFIED; AR-P3-006 APPROVED / VERIFIED; TO-P3-006 VERIFIED / COMPLETE; STEP-P3-006 COMPLETE / VERIFIED; STEP-P3-007 remains DEFINED / INACTIVE; PH-P3 remains ACTIVE / AUTHORIZED; no active P3 Task Order
     verified_implementation_commit: 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283
