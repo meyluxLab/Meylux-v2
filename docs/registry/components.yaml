@@ -1,3 +1,17 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-records: []
+status: ACTIVE / EVIDENCE-TRACKING
+records:
+  - stable_id: CMP-P3-008
+    canonical_name: Authoritative Canonical Persistence and Event Handoff Boundary
+    entity_type: CMP
+    phase: PH-P3
+    step: STEP-P3-008
+    task_order: TO-P3-008
+    implementation_paths:
+      - src/meylux/persistence/canonical.py
+      - src/meylux/persistence/event_handoff.py
+      - src/meylux/persistence/factory.py
+    evidence:
+      runtime_commit: fb17a034805abd219bad8fccc757fefc8faca27e
+      execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
+      status: VERIFIED
