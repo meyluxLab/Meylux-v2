@@ -887,3 +887,10 @@ records:
     artifact_path: docs/build-reports/BR-P4-001.md
     traceability: TO-P4-001 / STEP-P4-001 / PH-P4
     status: VERIFIED
+
+  - stable_id: BR-P4-002
+    canonical_name: Build Report — Technical Indicators, Statistical & Volatility Engine
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-002.md
+    traceability: TO-P4-002 / PH-P4 / STEP-P4-002
+    status: PRODUCED / TESTED / UNVERIFIED
