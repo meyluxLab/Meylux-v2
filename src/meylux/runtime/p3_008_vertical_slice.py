@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from decimal import Decimal
 from typing import Any
 from contracts.acquisition import AcquisitionEnvelope, AcquisitionState, EventType, InstrumentIdentity, ProviderIdentity, Provenance
-from contracts.canonical.foundation import ProvenanceRef, validation_outcome
+from contracts.canonical.foundation import ProvenanceRef, ValidationIssue, ValidationOutcome, ValidationResult, validation_outcome
 from contracts.market_semantic import validate_market_semantics
 from contracts.normalization import normalize
 from contracts.quality import QualityInput, QualitySignals, assess_quality
@@ -44,6 +44,12 @@ def envelope_from_row(row:Any)->AcquisitionEnvelope:
     payload=_payload_mapping_from_row(row["payload_json"])
     return AcquisitionEnvelope(provider,instrument,provenance,EventType(str(row["event_type"])),row["event_time"],row["received_at"],AcquisitionState(str(row["acquisition_state"])),payload,str(row["source_sequence"]) if row["source_sequence"] is not None else None)
 
+def _quality_validation_outcome(issues:list[ValidationIssue], normalized_result:ValidationResult)->ValidationOutcome:
+    """Adapt the existing P3 validation and normalization result contracts for quality input."""
+    if issues:
+        return validation_outcome(issues)
+    return ValidationOutcome(normalized_result)
+
 def market_values(value:Any)->dict[str,Any]:
     fields={}
     for name in ("price","quantity","open","high","low","close","volume"):
@@ -70,7 +76,7 @@ async def main()->int:
             issues=list(structural.outcome.issues)+list(temporal.outcome.issues)
             if normalized.valid:
                 issues.extend(validate_market_semantics(market_values(normalized.value)).issues)
-            outcome=validation_outcome(issues) if issues else normalized.result
+            outcome=_quality_validation_outcome(issues, normalized.result)
             provenance=ProvenanceRef(envelope.provenance.provenance_id,envelope.provider.provider_id,envelope.provenance.acquisition_method)
             signals=QualitySignals(validation_status=Decimal("1.00") if outcome.result.value=="valid" else Decimal("0.00"))
             assessment=assess_quality(QualityInput(outcome,signals,provenance,envelope.event_id,envelope.event_id))
