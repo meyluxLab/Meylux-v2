@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-002",
-  "last_build_report": "BR-P4-001",
-  "last_audit_report": "AR-P4-001",
+  "last_build_report": "BR-P4-002",
+  "last_audit_report": "AR-P4-002",
   "last_execution_log": "EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918",
-  "active_task_order": "TO-P4-002",
-  "completed_task_order": "TO-P4-001",
-  "completion_audit": "AR-P4-001",
+  "active_task_order": null,
+  "completed_task_order": "TO-P4-002",
+  "completion_audit": "AR-P4-002",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -187,7 +187,12 @@
     "DB-P4-002",
     "DB-P4-003",
     "DB-P4-004",
-    "DB-P4-005"
+    "DB-P4-005",
+    "TO-P4-002",
+    "BR-P4-002",
+    "AR-P4-002",
+    "STEP-P4-002",
+    "TST-P4-002"
   ],
   "unverified_artifacts": [],
   "open_questions": [
@@ -213,11 +218,11 @@
     "STEP-P3-006 was independently verified by CONTROL under AR-P3-006 against final implementation commit 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283 and CI Core Run #480; Closure Synchronization is complete.",
     "TO-P3-006 is VERIFIED / COMPLETE and no active P3 Task Order remains.",
     "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008.",
-    "STEP-P4-002 is ACTIVE / AUTHORIZED under TO-P4-002 by explicit Project Owner Directive; STEP-P4-001 remains COMPLETE / VERIFIED; STEP-P4-003 through STEP-P4-006 remain unauthorized."
+    "STEP-P4-002 is COMPLETE / VERIFIED under AR-P4-002; TO-P4-002 is VERIFIED / COMPLETE; PH-P4 remains ACTIVE / AUTHORIZED; no Phase-4 Task Order is active; STEP-P4-003 through STEP-P4-006 remain unauthorized."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "d9bb565023796f3969ea5a05f9a725729912bcf5",
-  "updated_at_utc": "2026-09-18T22:45:00Z",
+  "last_verified_commit": "c873d43cc4d563802e7aef7f0634deac75239f01",
+  "updated_at_utc": "2026-09-18T23:26:00Z",
   "phase_4_status": "ACTIVE / AUTHORIZED",
   "phase_4_definition": "docs/phases/PH-P4.md"
 }
