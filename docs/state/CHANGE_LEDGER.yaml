@@ -610,3 +610,30 @@ entries:
       boundary. The new failure is a Producer-owned runtime implementation defect in the
       vertical-slice quality-signal path. No synthetic/fabricated/fallback market data was used.
       Step remains ACTIVE / CORRECTION REQUIRED.
+
+  - id: CHG-P3-STEP-008-INTEGRATION-RESTORE
+    date_utc: '2026-09-18'
+    change_type: REPOSITORY_INTEGRATION_CORRECTION
+    subject: CONTROL restored the previously Producer-validated JSONB correction implementation after PR #29 merge integration omitted the two implementation/test paths
+    basis: TO-P3-008 + Producer correction evidence + CONTROL independent runtime verification
+    affected_ids:
+      - BR-P3-008
+      - AR-P3-008
+      - TO-P3-008
+      - STEP-P3-008
+    source_evidence:
+      producer_validated_state: 893e5173be03ebc7ec74460ab18ccae9f289f50f
+      corrected_build_report_head: bd8ed35b37264ef0637b21bbb687f04682e15580
+      merged_pr: '#29'
+      merge_commit: bf5e55f455f4e10454625aaf6147f9a4fc9bea9a
+    resulting_repository_commit: 9e39d1032a8dc63fe49217ad25ef0fdc430b375d
+    restored_paths:
+      - src/meylux/runtime/p3_008_vertical_slice.py
+      - tests/test_p3_008_persistence.py
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    notes: >
+      CONTROL detected the integration discrepancy before attributing runtime evidence to the
+      merged state. The restored files are exact previously Producer-validated blobs from the
+      correction state; no new implementation design was introduced. Subsequent runtime
+      execution exposed a separate quality-signal defect, recorded in the dedicated execution
+      log and AR-P3-008.
