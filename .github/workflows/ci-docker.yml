@@ -9,6 +9,7 @@ on:
       - "migrations/**"
       - "config/database.py"
       - "src/meylux/runtime/**"
+      - "contracts/**"
       - "tests/test_docker_foundation.py"
       - "tests/test_database_foundation.py"
       - "tests/test_acquisition/**"
@@ -54,6 +55,8 @@ jobs:
         env:
           PYTHONPATH: src
         run: python -m unittest discover -s tests -v
+      - name: Verify runtime contracts packaging
+        run: docker run --rm --entrypoint python meylux-v2-foundation:ci -c "import contracts.acquisition, contracts.canonical.foundation, contracts.market_semantic, contracts.normalization, contracts.quality, contracts.temporal, contracts.validation; import meylux.runtime.p3_008_vertical_slice"
 
       - name: Start database foundation
         env:
