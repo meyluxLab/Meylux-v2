@@ -114,3 +114,20 @@ records:
       dedicated_test_case_count: 23
       full_regression_test_count: 261
       execution_note: Actual CI job executed the corrected P3-007 suite and full foundation regression successfully; CONTROL independently verified the job evidence under AR-P3-007.
+
+  - stable_id: TST-P3-008
+    canonical_name: Authoritative Persistence, Event Handoff & G-3 Verification Tests
+    entity_type: TST
+    artifact_path: tests/test_p3_008_persistence.py
+    traceability: PH-P3 / STEP-P3-008 / TO-P3-008 / BR-P3-008 / AR-P3-008
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 35383756721
+      workflow_run_number: 645
+      job_id: 105725748357
+      commit: fb17a034805abd219bad8fccc757fefc8faca27e
+      result: SUCCESS
+      dedicated_test_case_count: 24
+      full_regression_test_count: 285
+      execution_note: Dedicated P3-008 test discovery and full repository regression both passed; CONTROL independently verified the CI job and production evidence under AR-P3-008.
