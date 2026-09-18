@@ -16,13 +16,48 @@ SCORES=QualitySignals(*(Decimal("1.00") for _ in range(6)))
 def assessment():
     return assess_quality(QualityInput(ValidationOutcome(ValidationResult.VALID),SCORES,PROV,"raw:1","stage:1"))
 
-class P3008ContractTests(unittest.TestCase):
-    def test_persist_with_assessment_has_single_quality_log(self):
-        import inspect
+class P3008ContractTests(unittest.IsolatedAsyncioTestCase):
+    def test_persist_with_assessment_executes_single_quality_log(self):
         from meylux.persistence.canonical import CanonicalPersistence
-        source=inspect.getsource(CanonicalPersistence.persist)
-        self.assertEqual(source.count("INSERT INTO meylux.data_quality_logs"), 1)
-        self.assertEqual(source.count("if assessment is not None:"), 1)
+
+        class _Tx:
+            async def __aenter__(self):
+                return self
+            async def __aexit__(self, exc_type, exc, tb):
+                return False
+
+        class _Connection:
+            def __init__(self):
+                self.executed=[]
+                self.transaction_entries=0
+
+            def transaction(self):
+                self.transaction_entries += 1
+                return _Tx()
+
+            async def fetchrow(self, query, *args):
+                if query.startswith("INSERT INTO meylux.canonical_trades"):
+                    return {"record_id": args[0]}
+                if query.startswith("INSERT INTO meylux.canonical_event_outbox"):
+                    return {"sequence_no": 1}
+                raise AssertionError(f"unexpected fetchrow query: {query}")
+
+            async def execute(self, query, *args):
+                self.executed.append((query,args))
+                return "INSERT 0 1"
+
+            async def fetch(self, query, *args):
+                raise AssertionError(f"unexpected fetch query: {query}")
+
+        trade=CanonicalTrade("t-quality","BTCUSDT",datetime(2026,9,18,tzinfo=UTC),Decimal("100"),Decimal("1"),provenance_id="binance:vertical")
+        record,event=build_canonical_event(trade,assessment(),1)
+        connection=_Connection()
+        result=await CanonicalPersistence(connection).persist(record,event.to_json(),assessment())
+
+        quality_writes=[query for query,args in connection.executed if query.lstrip().startswith("INSERT INTO meylux.data_quality_logs")]
+        self.assertEqual(len(quality_writes),1)
+        self.assertTrue(result.inserted)
+        self.assertEqual(connection.transaction_entries,1)
 
     def test_canonical_record_rejects_non_promotable_state(self):
         with self.assertRaises(UnsupportedCanonicalState):
