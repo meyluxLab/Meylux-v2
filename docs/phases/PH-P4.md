@@ -80,7 +80,9 @@ Venue-aware quantitative evidence may be produced in P4, but Venue Intelligence 
 ### `STEP-P4-001` — Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
 
 **Order:** 1
-**Status:** ACTIVE / AUTHORIZED
+**Status:** COMPLETE / VERIFIED
+**Completion audit:** `AR-P4-001`
+**Completed task order:** `TO-P4-001`
 **Authorization state:** AUTHORIZED TO EXECUTE
 **Predecessor:** `STEP-P3-008` — COMPLETE / VERIFIED
 **Active Task Order:** `TO-P4-001`
