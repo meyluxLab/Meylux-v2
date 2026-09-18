@@ -186,8 +186,12 @@ def _ema_series(xs: Sequence[Decimal], window: int, candles: Sequence[CanonicalC
             out.append(seed[i])
             continue
         if previous is None:
-            previous = seed[i].value
-            assert previous is not None
+            seed_values = xs[:window]
+            if all(value == seed_values[0] for value in seed_values):
+                previous = seed_values[0]
+            else:
+                previous = seed[i].value
+                assert previous is not None
             out.append(_valid(previous, candle, reason="seed_sma"))
             continue
         with localcontext() as ctx:
