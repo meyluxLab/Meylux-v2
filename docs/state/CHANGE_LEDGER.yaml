@@ -553,3 +553,34 @@ entries:
       The Build Report remains UNVERIFIED / OPEN. No closure state, G-3 state, or
       Phase 3 closure was asserted. Further progression requires governed AVAILABLE
       raw/staging evidence followed by the already-authorized CONTROL verification sequence.
+
+  - id: CHG-P3-STEP-008-OPERATIONAL-REASSESSMENT
+    date_utc: '2026-09-18'
+    change_type: OPERATIONAL_REASSESSMENT
+    subject: CONTROL diagnosis of zero-row acquisition boundary, authorized acquisition operation, and discovery of row-to-envelope runtime defect
+    basis: AR-P3-008 + TO-P3-008 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - AR-P3-008
+      - TO-P3-008
+      - STEP-P3-008
+      - PH-P3
+    from_state: STEP-P3-008 ACTIVE / CORRECTION REQUIRED; governed raw acquisition table observed empty at prior runtime boundary
+    to_state: governed AVAILABLE Binance Spot raw evidence established by CONTROL; controlled vertical slice reached raw-row reconstruction and exposed a Producer-owned payload-mapping defect; STEP-P3-008 remains ACTIVE / CORRECTION REQUIRED
+    repository_commit: 2f61be905259c7dc5ce5649b19931a83cc9591c2
+    execution_log: EXEC-LOG-TO-P3-008-ACQUISITION-DIAG-20260918
+    raw_evidence:
+      event_id: f12b8c638b3a2e742c88bad720ca2f6b6a5f19df4f38ab3983cdcb251fbc7d7a
+      provider: binance
+      instrument: BINANCE:BTCUSDT
+      event_type: TRADE
+      acquisition_state: AVAILABLE
+      source_sequence: '6692896984'
+    runtime_result: VERTICAL SLICE REACHED THEN FAILED — TypeError: payload must be a mapping during AcquisitionEnvelope reconstruction from payload_json
+    acquisition_diagnosis: existing running collector is a foundation service and had not attempted acquisition; existing governed Binance Spot acquisition path is operationally reachable; Binance Futures network is reachable but no governed Futures adapter exists in repository
+    g3_status: NOT ESTABLISHED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: SentinelX-only diagnosis, one authorized governed raw acquisition insertion, vertical-slice retry and evidence capture; no unrelated mutation
+    notes: >
+      The prior zero-row condition is not treated as a final blocker. CONTROL reached the
+      next natural correction boundary. The newly evidenced row-to-envelope defect is returned
+      to Producer for correction; no new Task Order or architecture change is required.
