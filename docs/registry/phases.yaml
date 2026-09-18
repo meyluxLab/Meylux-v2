@@ -378,11 +378,13 @@ records:
     logical_name: Data Quality, Quarantine, DLQ & Lineage
     entity_type: STEP
     phase: PH-P3
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED / ACTIVE
     order: 7
     predecessor: STEP-P3-006
-    active_task_order: null
+    activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-007-COMMENCEMENT / PH-P3 / AR-P3-006 / ADR-GOVERNANCE-013
+    active_task_order: TO-P3-007
+    purpose: Establish explicit data-quality classification, quarantine/DLQ behavior and lineage.
 
   - sid: STEP-P3-008
     logical_name: Authoritative Persistence, Event Handoff & G-3 Verification
