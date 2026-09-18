@@ -270,7 +270,7 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15
     first_step: STEP-P3-001
-    next_valid_step: STEP-P3-006
+    next_valid_step: STEP-P3-007
     final_step: STEP-P3-008
     authorization_criteria:
       - Phase 2 is CLOSED / VERIFIED.
@@ -366,11 +366,13 @@ records:
     logical_name: Cross-Venue Consistency & Equivalence
     entity_type: STEP
     phase: PH-P3
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 6
     predecessor: STEP-P3-005
     active_task_order: null
+    completed_task_order: TO-P3-006
+    completion_audit: AR-P3-006
 
   - sid: STEP-P3-007
     logical_name: Data Quality, Quarantine, DLQ & Lineage
