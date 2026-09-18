@@ -780,3 +780,33 @@ entries:
     bootstrap_reference: VERIFIED — MEYLUX_V2_BOOTSTRAP.md already references ADR-GOVERNANCE-013 among mandatory relevant ADRs; no separate Rule 5 reference added.
     architecture_effect: none
     authority_effect: no new authority; quality standard applies within existing authorized boundaries.
+  - id: CHG-P4-PHASE-4-ESTABLISHMENT-20260918
+    date_utc: '2026-09-18'
+    change_type: PHASE_AND_STEP_AUTHORIZATION
+    subject: Establish PH-P4 and authorize STEP-P4-001 / TO-P4-001
+    basis: Explicit Project Owner Directive — ESTABLISH PHASE 4 & AUTHORIZE STEP-P4-001 + DOC-V2-ARCH-001 §14 + DOC-P4-001 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - PH-P4
+      - STEP-P4-001
+      - TO-P4-001
+      - PH-P3
+      - STEP-P3-008
+      - AR-P3-008
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+    predecessor_state: PH-P3 CLOSED / VERIFIED; STEP-P3-008 COMPLETE / VERIFIED; TO-P3-008 VERIFIED / COMPLETE; active_task_order null
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-001 AUTHORIZED TO EXECUTE; TO-P4-001 AUTHORIZED TO EXECUTE; active_task_order TO-P4-001
+    phase_definition: docs/phases/PH-P4.md
+    task_order: docs/task-orders/TO-P4-001.md
+    roadmap_reference: DOC-P4-001 remains REGISTERED / REFERENCE ONLY; reconciled against DOC-V2-ARCH-001 and governance before formalization
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    g3_effect: inherited established Phase 3 G-3 boundary; no G-4 established by this action
+    specialized_registry_effect: no implementation/test/runtime evidence exists yet; no specialized evidence registry entries created
+    vps_effect: none; no VPS/SentinelX action performed
+    closure_sync: establishment-state synchronization completed across PH-P4 definition, phases registry, artifact registry, CURRENT_CHECKPOINT and README; closure-only synchronization remains CONTROL responsibility at Step/Phase closure
+    notes: >
+      The Owner authorization converts the roadmap into the formal governed Phase 4 definition and
+      authorizes only STEP-P4-001. P4-002 through P4-006 remain not yet authorized. No implementation,
+      execution, testing or verification claim is made for P4-001 by this governance transition.
