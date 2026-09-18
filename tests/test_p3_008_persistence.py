@@ -17,6 +17,29 @@ SCORES=QualitySignals(*(Decimal("1.00") for _ in range(6)))
 def assessment():
     return assess_quality(QualityInput(ValidationOutcome(ValidationResult.VALID),SCORES,PROV,"raw:1","stage:1"))
 
+class P3008QualityBoundaryTests(unittest.TestCase):
+    def test_quality_boundary_wraps_normalization_result_on_empty_issues(self):
+        from meylux.runtime.p3_008_vertical_slice import _quality_validation_outcome
+        outcome = _quality_validation_outcome([], ValidationResult.VALID)
+        self.assertIsInstance(outcome, ValidationOutcome)
+        self.assertIs(outcome.result, ValidationResult.VALID)
+        self.assertTrue(outcome.valid)
+
+    def test_quality_boundary_maps_validation_issues_to_outcome(self):
+        from contracts.canonical.foundation import ValidationCode, ValidationIssue
+        from meylux.runtime.p3_008_vertical_slice import _quality_validation_outcome
+        issue = ValidationIssue(ValidationCode.REQUIRED_MISSING, "payload", "payload is required")
+        outcome = _quality_validation_outcome([issue], ValidationResult.VALID)
+        self.assertIsInstance(outcome, ValidationOutcome)
+        self.assertIs(outcome.result, ValidationResult.INCOMPLETE)
+        self.assertEqual(outcome.issues, (issue,))
+        self.assertFalse(outcome.valid)
+
+    def test_quality_boundary_rejects_non_validation_result(self):
+        from meylux.runtime.p3_008_vertical_slice import _quality_validation_outcome
+        with self.assertRaisesRegex(TypeError, "normalized_result must be ValidationResult"):
+            _quality_validation_outcome([], "valid")
+
 class P3008ContractTests(unittest.IsolatedAsyncioTestCase):
     async def test_persist_with_assessment_executes_single_quality_log(self):
         from meylux.persistence.canonical import CanonicalPersistence
