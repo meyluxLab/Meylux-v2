@@ -1,182 +1,3 @@
-"""Deterministic Phase-3 data-quality assessment and quarantine boundary."""
-from __future__ import annotations
-
-from dataclasses import dataclass, fields, is_dataclass
-from datetime import datetime, timezone
-from decimal import Decimal
-from enum import Enum
-import hashlib
-import json
-from typing import Any, Mapping
-
-from contracts.acquisition import CapabilityState
-from contracts.canonical.foundation import ProvenanceRef, ValidationOutcome, ValidationResult
-from contracts.data_quality import DataLifecycleState, DataQuality, DataQualityState, validate_quality_lifecycle
-
-
-QUALITY_DIMENSIONS = (
-    "freshness",
-    "completeness",
-    "consistency",
-    "feed_health",
-    "validation_status",
-    "provider_capability",
-)
-
-_REASON_ORDER = {
-    "provider_unavailable": 10,
-    "provider_unsupported": 20,
-    "validation_rejected": 30,
-    "contradictory_validation": 40,
-    "required_evidence_missing": 50,
-    "lineage_missing": 60,
-    "stale_evidence": 70,
-    "quality_degraded": 80,
-}
-
-
-def _token(value: object, field: str) -> str:
-    if not isinstance(value, str) or not value.strip():
-        raise ValueError(f"{field} must be a non-empty string")
-    return value.strip()
-
-
-def _score(value: object, field: str) -> Decimal:
-    if isinstance(value, bool) or not isinstance(value, Decimal):
-        raise TypeError(f"{field} must be Decimal")
-    if not value.is_finite() or value < Decimal("0.00") or value > Decimal("1.00"):
-        raise ValueError(f"{field} must be a finite Decimal in 0.00..1.00")
-    return value.quantize(Decimal("0.01"))
-
-
-@dataclass(frozen=True, slots=True)
-class QualitySignals:
-    """Explicit evidence inputs for deterministic quality scoring/classification.
-
-    None means evidence was not supplied; it is never converted to a guessed
-    value. Scores are optional because not every authoritative input boundary
-    exposes every dimension.
-    """
-
-    freshness: Decimal | None = None
-    completeness: Decimal | None = None
-    consistency: Decimal | None = None
-    feed_health: Decimal | None = None
-    validation_status: Decimal | None = None
-    provider_capability: Decimal | None = None
-
-    def __post_init__(self) -> None:
-        for field in QUALITY_DIMENSIONS:
-            value = getattr(self, field)
-            if value is not None:
-                _score(value, field)
-
-    def present(self) -> tuple[str, ...]:
-        return tuple(field for field in QUALITY_DIMENSIONS if getattr(self, field) is not None)
-
-
-@dataclass(frozen=True, slots=True)
-class QualityInput:
-    """Provider-neutral facts consumed by the P3-007 quality boundary."""
-
-    validation: ValidationOutcome | None
-    signals: QualitySignals
-    provenance: ProvenanceRef | None
-    source_record_id: str | None = None
-    lineage_parent_id: str | None = None
-    record_available: bool = True
-    capability_state: CapabilityState | None = None
-
-    def __post_init__(self) -> None:
-        if self.validation is not None and not isinstance(self.validation, ValidationOutcome):
-            raise TypeError("validation must be ValidationOutcome or None")
-        if not isinstance(self.signals, QualitySignals):
-            raise TypeError("signals must be QualitySignals")
-        if self.provenance is not None and not isinstance(self.provenance, ProvenanceRef):
-            raise TypeError("provenance must be ProvenanceRef or None")
-        if not isinstance(self.record_available, bool):
-            raise TypeError("record_available must be bool")
-        if self.capability_state is not None and not isinstance(self.capability_state, CapabilityState):
-            raise TypeError("capability_state must be CapabilityState or None")
-        for value, field in (
-            (self.source_record_id, "source_record_id"),
-            (self.lineage_parent_id, "lineage_parent_id"),
-        ):
-            if value is not None:
-                _token(value, field)
-
-
-@dataclass(frozen=True, slots=True)
-class QualityExplanation:
-    """Immutable, reproducible component/vector representation."""
-
-    components: tuple[tuple[str, Decimal | None], ...]
-    score: Decimal | None
-
-    def __post_init__(self) -> None:
-        names = tuple(name for name, _ in self.components)
-        if names != QUALITY_DIMENSIONS:
-            raise ValueError("quality components must use the governed dimension order")
-        if self.score is not None:
-            _score(self.score, "score")
-        for name, value in self.components:
-            if value is not None:
-                _score(value, name)
-
-
-@dataclass(frozen=True, slots=True)
-class QualityLineage:
-    """Traceable quality evidence; no source identifier is fabricated."""
-
-    source_record_id: str
-    lineage_parent_id: str
-    provenance_id: str
-    validation_result: str
-    quality_state: DataQualityState
-
-    def __post_init__(self) -> None:
-        _token(self.source_record_id, "source_record_id")
-        _token(self.lineage_parent_id, "lineage_parent_id")
-        _token(self.provenance_id, "provenance_id")
-        _token(self.validation_result, "validation_result")
-        if not isinstance(self.quality_state, DataQualityState):
-            raise TypeError("quality_state must be DataQualityState")
-
-
-@dataclass(frozen=True, slots=True)
-class QualityAssessment:
-    quality: DataQuality
-    lifecycle: DataLifecycleState
-    canonical_eligible: bool
-    explanation: QualityExplanation
-    lineage: QualityLineage | None
-
-
-@dataclass(frozen=True, slots=True)
-class QuarantineRecord:
-    """Bounded-routing payload containing evidence, not authoritative persistence."""
-
-    deduplication_key: str
-    quality_state: DataQualityState
-    reason_codes: tuple[str, ...]
-    provenance_id: str | None
-    source_record_id: str | None
-    lineage_parent_id: str | None
-    payload_fingerprint: str
-    attempt: int
-
-    def __post_init__(self) -> None:
-        _token(self.deduplication_key, "deduplication_key")
-        if not self.reason_codes:
-            raise ValueError("quarantine record requires at least one reason")
-        if tuple(sorted(self.reason_codes, key=lambda x: (_REASON_ORDER.get(x, 1000), x))) != self.reason_codes:
-            raise ValueError("reason_codes must be deterministically ordered")
-        if isinstance(self.attempt, bool) or not isinstance(self.attempt, int) or self.attempt < 1:
-            raise ValueError("attempt must be a positive integer")
-        _token(self.payload_fingerprint, "payload_fingerprint")
-
-
-class BoundedQuarantine:
     """In-memory bounded isolation boundary for normalization/DLQ handoff.
 
     This is deliberately not persistence. Capacity exhaustion is explicit and
@@ -241,31 +62,41 @@ def fingerprint_payload(value: Any) -> str:
 
 
 def _quality_state(inp: QualityInput) -> tuple[DataQualityState, tuple[str, ...]]:
-    reasons: list[str] = []
+    """Apply deterministic precedence from strongest safety evidence downward.
+
+    Record availability and explicit validation outcomes are authoritative for
+    safety classification. Capability degradation may downgrade only otherwise
+    valid evidence; it never weakens rejected, incomplete, contradictory or
+    unavailable validation evidence.
+    """
     if not inp.record_available:
         return DataQualityState.UNAVAILABLE, ("provider_unavailable",)
+    if inp.validation is None:
+        return DataQualityState.INCOMPLETE, ("required_evidence_missing",)
+    validation_state = {
+        ValidationResult.CONTRADICTORY: (DataQualityState.CONTRADICTORY, "contradictory_validation"),
+        ValidationResult.REJECTED: (DataQualityState.REJECTED, "validation_rejected"),
+        ValidationResult.INCOMPLETE: (DataQualityState.INCOMPLETE, "required_evidence_missing"),
+        ValidationResult.UNAVAILABLE: (DataQualityState.UNAVAILABLE, "provider_unavailable"),
+        ValidationResult.STALE: (DataQualityState.STALE, "stale_evidence"),
+        ValidationResult.DEGRADED: (DataQualityState.DEGRADED, "quality_degraded"),
+        ValidationResult.VALID: (DataQualityState.VALID, None),
+    }
+    state, reason = validation_state[inp.validation.result]
+    if state in {
+        DataQualityState.CONTRADICTORY,
+        DataQualityState.REJECTED,
+        DataQualityState.INCOMPLETE,
+        DataQualityState.UNAVAILABLE,
+    }:
+        return state, (reason,)
     if inp.capability_state is CapabilityState.UNSUPPORTED:
         return DataQualityState.UNAVAILABLE, ("provider_unsupported",)
     if inp.capability_state is CapabilityState.UNAVAILABLE:
         return DataQualityState.UNAVAILABLE, ("provider_unavailable",)
     if inp.capability_state is CapabilityState.DEGRADED:
         return DataQualityState.DEGRADED, ("quality_degraded",)
-    if inp.validation is None:
-        return DataQualityState.INCOMPLETE, ("required_evidence_missing",)
-    if inp.validation.result is ValidationResult.CONTRADICTORY:
-        return DataQualityState.CONTRADICTORY, ("contradictory_validation",)
-    if inp.validation.result is ValidationResult.REJECTED:
-        return DataQualityState.REJECTED, ("validation_rejected",)
-    if inp.validation.result is ValidationResult.INCOMPLETE:
-        return DataQualityState.INCOMPLETE, ("required_evidence_missing",)
-    if inp.validation.result is ValidationResult.UNAVAILABLE:
-        return DataQualityState.UNAVAILABLE, ("provider_unavailable",)
-    if inp.validation.result is ValidationResult.STALE:
-        return DataQualityState.STALE, ("stale_evidence",)
-    if inp.validation.result is ValidationResult.DEGRADED:
-        return DataQualityState.DEGRADED, ("quality_degraded",)
-    return DataQualityState.VALID, ()
-
+    return state, (reason,) if reason else ()
 
 def _explanation(signals: QualitySignals) -> QualityExplanation:
     values = tuple((name, getattr(signals, name)) for name in QUALITY_DIMENSIONS)
