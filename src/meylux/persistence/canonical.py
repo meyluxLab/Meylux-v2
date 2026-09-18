@@ -65,7 +65,6 @@ class CanonicalPersistence:
                 return PersistenceResult(record.record_id,record.event_id,False,None if outbox_existing is None else int(outbox_existing["sequence_no"]))
             if assessment is not None:
                 await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,__import__("json").dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))
-            if assessment is not None:
                 import json
                 await self._connection.execute(quality_log,record.record_id,assessment.quality.quality_state.value,assessment.lifecycle.value,assessment.explanation.score,json.dumps(assessment.quality.reason_codes),assessment.quality.quality_state.value,record.provenance_id,record.source_record_id,record.lineage_parent_id,fingerprint_payload(record.payload))
             out=await self._connection.fetchrow(outbox,record.event_id,record.record_id,record.record_type,record.event_time,event_json)
