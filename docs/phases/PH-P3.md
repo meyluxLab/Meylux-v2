@@ -1,6 +1,6 @@
 # PH-P3 — Validation, Normalization & Data Quality Engine
 
-**Status:** ACTIVE / AUTHORIZED
+**Status:** CLOSED / VERIFIED
 **Phase SID:** `PH-P3`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §8.3–8.4 and §13
 **Predecessor:** `PH-P2` CLOSED / VERIFIED
@@ -158,13 +158,14 @@ Objective: establish explicit quality classification, quarantine/DLQ behavior an
 ### `STEP-P3-008` — Authoritative Persistence, Event Handoff & G-3 Verification
 
 **Order:** 8
-**Status:** ACTIVE / AUTHORIZED
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P3-007`
-**Active Task Order:** `TO-P3-008`
+**Completed Task Order:** `TO-P3-008`
+**Completion Audit:** `AR-P3-008`
 **Activation basis:** Project Owner Directive — Commence STEP-P3-008 — 2026-09-18 / AR-P3-007 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-013
 
-Objective: establish authoritative canonical persistence, normalized-event handoff and the evidence boundary required for Phase 3 closure.
+Objective: authoritative canonical persistence, normalized-event handoff and the evidence boundary required for Phase 3 closure are independently verified.
 
 ## Dependency Rule
 
