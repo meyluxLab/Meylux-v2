@@ -451,3 +451,32 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification, audit issuance, registry reconciliation, checkpoint finalization, and mandatory peripheral synchronization
     v1_effect: none
+
+   - id: CHG-P3-STEP-008-ACTIVATE
+     date: 2026-09-18
+     type: GOVERNANCE_STATE_TRANSITION
+     scope: STEP-P3-008 activation and TO-P3-008 authorization
+     affected_ids:
+       - PH-P3
+       - STEP-P3-007
+       - STEP-P3-008
+       - TO-P3-007
+       - TO-P3-008
+       - AR-P3-007
+       - DOC-P3-001
+     authority:
+       - PROJECT-OWNER-DIRECTIVE-COMMENCE-STEP-P3-008-2026-09-18
+       - ADR-GOVERNANCE-011
+       - ADR-GOVERNANCE-012
+       - ADR-GOVERNANCE-013
+     evidence:
+       predecessor: STEP-P3-007 COMPLETE / VERIFIED
+       predecessor_audit: AR-P3-007
+       task_order: TO-P3-008 AUTHORIZED TO EXECUTE
+       repository_commit_at_activation: 9b7532c0be10a7e1c72306f7f0411f9125b3bf60
+     architecture_status: unchanged
+     vps_status: inspected_pre_activation_only
+     secret_values_recorded: false
+     notes: >
+       Final Phase 3 Step activated. TO-P3-008 authorizes Producer implementation
+       and governed CONTROL SentinelX execution within scope; Phase 4 remains unauthorized.
