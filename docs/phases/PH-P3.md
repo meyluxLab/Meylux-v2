@@ -1,399 +1,203 @@
-schema_version: '0.1'
-status: ACTIVE / AUTHORIZED
-records:
-  - sid: PH-P0
-    logical_name: Phase 0
-    entity_type: PH
-    status: CLOSED / VERIFIED
-    entry_gate: G-0R
-    entry_gate_role: prerequisite
-    entry_approval: AR-P0-ENTRY-001
-    first_step: STEP-P0-001
-    next_valid_step: null
-    final_step: STEP-P0-010
+# PH-P3 — Validation, Normalization & Data Quality Engine
 
-  - sid: PH-P1
-    logical_name: Infrastructure Foundation
-    entity_type: PH
-    status: CLOSED / VERIFIED
-    entry_gate: G-1
-    entry_gate_role: phase boundary
-    entry_approval: PROJECT-OWNER-CONTINUATION-2026-09-08
-    first_step: STEP-P1-001
-    next_valid_step: null
-    final_step: STEP-P1-008
-    authorization_criteria:
-      - Phase P1 definition and complete Step sequence exist in the GitHub Source of Truth.
-      - Phase 0 is CLOSED / VERIFIED.
-      - Project Owner explicitly authorized establishment of the next Phase and automatic activation of Step 1.
-      - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
-    architecture_relationship:
-      architecture: DOC-V2-ARCH-001
-      phase_model: Section 9 defines PH-P1 as runtime foundation, persistence, messaging, and reproducibility.
-      phase_specification: docs/phases/PH-P1.md
-    scope_boundary:
-      - P1 is limited to infrastructure foundation.
-      - No V1/VPS mutation or V1 runtime activity is authorized.
-      - No market/provider runtime, trading, capital control, or autonomous execution is authorized.
-      - Only the currently activated Step may be executed.
+**Status:** ACTIVE / AUTHORIZED
+**Phase SID:** `PH-P3`
+**Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §8.3–8.4 and §13
+**Predecessor:** `PH-P2` CLOSED / VERIFIED
+**Successor:** `PH-P4` — Deterministic Quantitative & Market Structure Engine
+**Reference roadmap:** `DOC-P3-001` — `docs/blueprint/PHASE3_ROADMAP.md` — REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+**Entry authorization:** Project Owner Final Directive — Phase 3 Establishment + ADR-GOVERNANCE-013 — 2026-09-15
+**Phase owner:** `ROL-V2-001` — CONTROL / REVIEWER
 
-  - sid: STEP-P1-001
-    logical_name: Repository Foundation
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 1
-    activation_basis: PROJECT-OWNER-CONTINUATION-2026-09-08 / PH-P1
-    active_task_order: null
-    completed_task_order: TO-P1-001
-    completion_audit: AR-P1-AUDIT-001
+## Objective
 
-  - sid: STEP-P1-002
-    logical_name: Docker Foundation
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 2
-    predecessor: STEP-P1-001
-    activation_basis: PH-P1 / AR-P1-AUDIT-001
-    active_task_order: null
-    completed_task_order: TO-P1-002
-    completion_audit: AR-P1-AUDIT-002
-    purpose: Establish the reproducible container/service foundation for the V2 runtime.
+Phase 3 establishes the Validation, Normalization & Data Quality Engine that converts Phase 2 raw/staging acquisition output into validated, normalized, explicitly quality-classified and traceable canonical data.
 
-  - sid: STEP-P1-003
-    logical_name: Database Foundation
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 3
-    predecessor: STEP-P1-002
-    activation_basis: PH-P1 / AR-P1-AUDIT-002
-    active_task_order: null
-    completed_task_order: TO-P1-003
-    completion_audit: AR-P1-AUDIT-003
-    purpose: Establish the authoritative persistence foundation, migration harness, and least-privilege database boundary for V2.
+Phase 3 owns the trust boundary between provider acquisition and downstream analytical processing.
 
-  - sid: STEP-P1-004
-    logical_name: Data Contracts
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 4
-    predecessor: STEP-P1-003
-    activation_basis: AR-P1-AUDIT-003 / General Continuation and Phase Progression Authority
-    active_task_order: null
-    completed_task_order: TO-P1-004
-    completion_audit: AR-P1-AUDIT-004
-    purpose: Establish canonical V2 data contracts and their deterministic validation semantics.
+## Scope
 
-  - sid: STEP-P1-005
-    logical_name: Data Quality Foundation
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 5
-    predecessor: STEP-P1-004
-    activation_basis: AR-P1-AUDIT-004 / General Continuation and Phase Progression Authority
-    active_task_order: null
-    completed_task_order: TO-P1-005
-    completion_audit: AR-P1-AUDIT-005
-    purpose: Establish foundational explicit data-quality states, validation boundaries, and degradation handling.
+Phase 3 covers schema validation, semantic validation, timestamp and sequence validation, completeness and continuity validation, price and market-data integrity validation, spread integrity validation, tick/lot precision validation, duplicate detection, canonical normalization, provider-to-canonical mapping, cross-venue equivalence and consistency validation, explicit data-quality classification, quarantine / DLQ handling, provenance and lineage, canonical persistence, and normalized event handoff to Phase 4.
 
-  - sid: STEP-P1-006
-    logical_name: Async Worker & Queue Foundation
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 6
-    predecessor: STEP-P1-005
-    activation_basis: AR-P1-AUDIT-005 / General Continuation and Phase Progression Authority
-    active_task_order: null
-    completed_task_order: TO-P1-006
-    completion_audit: AR-P1-AUDIT-006
-    purpose: Establish bounded asynchronous worker and messaging infrastructure with failure isolation and backpressure controls.
+## Mandatory Data-Quality Principles
 
-  - sid: STEP-P1-007
-    logical_name: Observability Foundation
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 7
-    predecessor: STEP-P1-006
-    activation_basis: AR-P1-AUDIT-006 / General Continuation and Phase Progression Authority
-    active_task_order: null
-    completed_task_order: TO-P1-007
-    completion_audit: AR-P1-AUDIT-007
-    purpose: Establish structured observability sufficient to diagnose, verify, and safely operate P1 behavior.
+### No Silent Fixing
 
-  - sid: STEP-P1-008
-    logical_name: Disaster Recovery / Restore Verification & Phase 1 Closure
-    entity_type: STEP
-    phase: PH-P1
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 8
-    predecessor: STEP-P1-007
-    activation_basis: AR-P1-AUDIT-007 / General Continuation and Phase Progression Authority
-    active_task_order: null
-    completed_task_order: TO-P1-008
-    completion_audit: AR-P1-AUDIT-008
-    purpose: Verify P1 recovery/restore behavior and establish the evidence boundary required for Phase 1 closure.
+`Bad Data → Detect → Classify → Route`
 
-  - sid: PH-P2
-    logical_name: Data Acquisition & Market Data Foundation
-    entity_type: PH
-    status: CLOSED / VERIFIED
-    entry_gate: Phase progression authority
-    entry_gate_role: phase boundary
-    entry_approval: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11
-    first_step: STEP-P2-001
-    next_valid_step: null
-    final_step: STEP-P2-006
-    authorization_criteria:
-      - Phase 1 is CLOSED / VERIFIED.
-      - Project Owner explicitly authorized formal Phase 2 determination and continuation.
-      - Phase 2 definition and complete Step sequence are recorded in the GitHub Source of Truth.
-      - CONTROL / REVIEWER exercises existing General Continuation and Phase Progression Authority.
-    architecture_relationship:
-      architecture: DOC-V2-ARCH-001
-      phase_specification: docs/phases/PH-P2.md
-      upstream_foundation: PH-P1 CLOSED / VERIFIED
-      downstream_boundary: Phase 3 Validation, Normalization & Data Quality Engine
-    scope_boundary:
-      - Establish provider-isolated market-data acquisition for Binance and MEXC.
-      - Establish acquisition contracts, raw/staging handling, transport, replay/idempotency, collector integration, and operational hardening.
-      - Preserve canonical validation/normalization ownership for Phase 3.
-      - No trading, capital, custody, leverage, V1 mutation, or autonomous execution.
-      - Only the currently activated Step may be executed.
+The system must not silently guess or repair authoritative market data.
 
-  - sid: STEP-P2-001
-    logical_name: Provider Boundary & Acquisition Contracts
-    entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 1
-    predecessor: STEP-P1-008
-    activation_basis: PROJECT-OWNER-PHASE-2-AUTHORIZATION-2026-09-11 / PH-P2
-    active_task_order: null
-    completed_task_order: TO-P2-001
-    completion_audit: AR-P2-AUDIT-001
-    purpose: Establish the provider-neutral acquisition boundary and deterministic acquisition contracts required by later provider adapters.
-    repository_scope: provider abstraction, acquisition contracts/envelopes, provenance/error/degradation semantics, deterministic identity/sequence requirements, tests, and traceability artifacts.
-    vps_scope: inspection only; no provider runtime activation.
+### No Fabrication
 
-  - sid: STEP-P2-002
-    logical_name: Binance Acquisition Adapter
-    entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 2
-    predecessor: STEP-P2-001
-    activation_basis: AR-P2-AUDIT-001 / General Continuation and Phase Progression Authority
-    active_task_order: null
-    completed_task_order: TO-P2-002
-    completion_audit: AR-P2-AUDIT-002
-    purpose: Implement Binance acquisition against the approved provider boundary, including required REST/bootstrap and live-stream capabilities, bounded retry/reconnect behavior, provider isolation, and evidence-compatible telemetry.
-    repository_scope: Binance provider adapter implementation and governed tests/traceability artifacts required to demonstrate integration with the provider-neutral acquisition boundary.
-    vps_scope: governed development/validation deployment and configuration only within TO-P2-002; no unrestricted production authority.
+Missing, invalid, contradictory, stale, unavailable, or insufficient market values must not be replaced by fabricated values.
 
-  - sid: STEP-P2-003
-    logical_name: MEXC Acquisition Adapter
-    entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 3
-    predecessor: STEP-P2-002
-    activation_basis: PH-P2 / STEP-P2-002 verification
-    active_task_order: null
-    completed_task_order: TO-P2-003
-    completion_audit: AR-P2-AUDIT-003
-    purpose: Implement MEXC acquisition against the same provider boundary with independent failure behavior.
+### Explicit Degradation
 
-  - sid: STEP-P2-004
-    logical_name: Live Collector, Raw/Staging Persistence & Replay Safety
-    entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 4
-    predecessor: STEP-P2-003
-    activation_basis: PH-P2 / STEP-P2-003 verification
-    active_task_order: null
-    completed_task_order: TO-P2-004
-    completion_audit: AR-P2-AUDIT-004
-    purpose: Integrate live acquisition with the collector and establish raw/staging persistence, bounded transport, deduplication/idempotency, sequencing, reconnect, and replay-safe behavior.
+Downstream consumers must be able to distinguish explicit data-quality states including complete/fresh, incomplete, stale, degraded, contradictory, unavailable, and unsupported where applicable.
 
-  - sid: STEP-P2-005
-    logical_name: Dual-Provider Operational Hardening
-    entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 5
-    predecessor: STEP-P2-004
-    activation_basis: PH-P2 / STEP-P2-004 verification
-    active_task_order: null
-    completed_task_order: TO-P2-005
-    completion_audit: AR-P2-AUDIT-005
-    purpose: Harden provider isolation, rate-limit/reconnect behavior, bounded resource growth, observability, degradation, and operational recovery.
+### Provider Isolation
 
-  - sid: STEP-P2-006
-    logical_name: End-to-End Acquisition Verification & Phase 2 Closure
-    entity_type: STEP
-    phase: PH-P2
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 6
-    predecessor: STEP-P2-005
-    activation_basis: PH-P2 / STEP-P2-005 verification
-    active_task_order: null
-    completed_task_order: TO-P2-006
-    completion_audit: AR-P2-AUDIT-007
-    purpose: Verify the complete Phase 2 acquisition boundary using real provider/runtime evidence and establish Phase 2 closure evidence.
+Provider-specific wire semantics, aliases, event identifiers, sequence details and transport fields remain behind the provider boundary unless an explicit authoritative domain requirement establishes semantic promotion.
 
-  - sid: PH-P3
-    logical_name: Validation, Normalization & Data Quality Engine
-    entity_type: PH
-    status: ACTIVE / AUTHORIZED
-    entry_gate: G-3
-    entry_gate_role: phase boundary
-    entry_approval: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15
-    first_step: STEP-P3-001
-    next_valid_step: STEP-P3-008
-    final_step: STEP-P3-008
-    authorization_criteria:
-      - Phase 2 is CLOSED / VERIFIED.
-      - Project Owner explicitly authorized Phase 3 establishment.
-      - Phase 3 definition and complete Step sequence are recorded in the GitHub Source of Truth.
-      - CONTROL / REVIEWER exercises General Continuation and Phase Progression Authority.
-    architecture_relationship:
-      architecture: DOC-V2-ARCH-001
-      phase_model: Section 13 defines PH-P3 as Validation, Normalization and Data Quality.
-      phase_specification: docs/phases/PH-P3.md
-      reference_roadmap: DOC-P3-001
-      upstream_foundation: PH-P2 CLOSED / VERIFIED
-      downstream_boundary: Phase 4 Deterministic Quantitative & Market Structure Engine
-    scope_boundary:
-      - Validation, normalization, canonicalization, data-quality classification, quarantine/DLQ, lineage, canonical persistence and normalized handoff.
-      - No deterministic quantitative or market-structure computation.
-      - No specialist intelligence or AI interpretation.
-      - No trading, capital control, custody, leverage, or autonomous execution.
-      - No V1 mutation or V1 runtime activity.
-      - Only the currently activated Step may be executed.
+### Quarantine, Not Delete, Not Promote
 
-  - sid: STEP-P3-001
-    logical_name: Canonical Contracts, Identity & Validation Foundation
-    entity_type: STEP
-    phase: PH-P3
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 1
-    predecessor: STEP-P2-006
-    activation_basis: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15 / PH-P3
-    active_task_order: null
-    completed_task_order: TO-P3-001
-    completion_audit: AR-P3-001
-    purpose: Establish the canonical contract, identity, validation semantics and deterministic data-quality foundation required by Phase 3.
+Invalid or untrusted data must not be silently deleted and must not be promoted to canonical truth. It must be isolated according to governed quarantine / DLQ behavior.
 
-  - sid: STEP-P3-002
-    logical_name: Structural, Schema & Identity Validation
-    entity_type: STEP
-    phase: PH-P3
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 2
-    predecessor: STEP-P3-001
-    activation_basis: PROJECT-OWNER-AUTHORIZATION-STEP-P3-002-ACTIVATION-2026-09-15 / PH-P3 / AR-P3-001
-    active_task_order: null
-    completed_task_order: TO-P3-002
-    completion_audit: AR-P3-002
-    purpose: Establish structural, schema and initial identity validation for incoming acquisition data.
+### Lineage
 
-  - sid: STEP-P3-003
-    logical_name: Temporal, Sequence & Completeness Validation
-    entity_type: STEP
-    phase: PH-P3
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 3
-    predecessor: STEP-P3-002
-    activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-003-PROGRESSION-2026-09-16 / PH-P3 / TO-P3-003
-    active_task_order: null
-    completed_task_order: TO-P3-003
-    completion_audit: AR-P3-003
-    purpose: Establish timestamp, ordering, sequence, continuity and completeness validation.
+Canonical records must remain traceable to upstream evidence and validation history.
 
-  - sid: STEP-P3-004
-    logical_name: Market Semantic, Price, Spread & Precision Validation
-    entity_type: STEP
-    phase: PH-P3
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 4
-    predecessor: STEP-P3-003
-    activation_basis: PROJECT OWNER DIRECTIVE — STEP-P3-004 AUTHORIZATION — 2026-09-17
-    active_task_order: null
-    completed_task_order: TO-P3-004
-    completion_audit: AR-P3-004
-    purpose: Establish market-semantic correctness including price, OHLC, quantity, spread and precision validation.
+## Explicit Non-Scope
 
-  - sid: STEP-P3-005
-    logical_name: Canonical Normalization & Provider Mapping
-    entity_type: STEP
-    phase: PH-P3
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 5
-    predecessor: STEP-P3-004
-    activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-005-COMMENCEMENT-2026-09-17 / PH-P3 / AR-P3-004 / ADR-GOVERNANCE-013
-    active_task_order: null
-    completed_task_order: TO-P3-005
-    completion_audit: AR-P3-005
-    purpose: Transform validated provider representations into provider-neutral Meylux canonical semantics while preserving provider isolation and traceability.
+The following remain outside Phase 3:
 
-  - sid: STEP-P3-006
-    logical_name: Cross-Venue Consistency & Equivalence
-    entity_type: STEP
-    phase: PH-P3
-    status: COMPLETE / VERIFIED
-    authorization_state: VERIFIED / COMPLETE
-    order: 6
-    predecessor: STEP-P3-005
-    active_task_order: null
-    completed_task_order: TO-P3-006
-    completion_audit: AR-P3-006
+- Technical Indicators including EMA, RSI, MACD, ATR, ADX and Bollinger;
+- Market Structure including BOS, CHOCH, MSS, FVG, Order Blocks and Liquidity Pools;
+- Volume Profile;
+- Order Flow Analytics;
+- Regime Classification;
+- Specialist Intelligence;
+- AI Interpretation;
+- Opportunity Score;
+- Trade Idea Generation;
+- Natural Language Summary;
+- Arbitrage / Opportunity Analysis beyond Cross-Venue Validation;
+- trading, order execution, capital, custody, leverage, balance, transfer or withdrawal control;
+- V1 mutation or V1 runtime activity;
+- Phase 4 or later implementation;
+- redesign of `DOC-V2-ARCH-001`.
 
-  - sid: STEP-P3-007
-    logical_name: Data Quality, Quarantine, DLQ & Lineage
-    entity_type: STEP
-    phase: PH-P3
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED / ACTIVE
-    order: 7
-    predecessor: STEP-P3-006
-    activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-007-COMMENCEMENT / PH-P3 / AR-P3-006 / ADR-GOVERNANCE-013
-    active_task_order: null
-    completed_task_order: TO-P3-007
-    completion_audit: AR-P3-007
-    purpose: Establish explicit data-quality classification, quarantine/DLQ behavior and lineage.
+Cross-Venue Validation is within Phase 3. Opportunity Detection is not.
 
-  - sid: STEP-P3-008
-    logical_name: Authoritative Persistence, Event Handoff & G-3 Verification
-    entity_type: STEP
-    phase: PH-P3
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
-    order: 8
-    predecessor: STEP-P3-007
-    active_task_order: null
+## Phase 3 Step Sequence
+
+### `STEP-P3-001` — Canonical Contracts, Identity & Validation Foundation
+
+**Order:** 1
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Active Task Order:** none
+**Completed Task Order:** `TO-P3-001`
+**Completion Audit:** `AR-P3-001`
+
+Objective: establish the canonical contract, identity, validation semantics and deterministic data-quality foundation required by the remaining Phase 3 Steps.
+
+### `STEP-P3-002` — Structural, Schema & Identity Validation
+
+**Order:** 2
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Predecessor:** `STEP-P3-001`
+**Completed Task Order:** `TO-P3-002`
+**Completion Audit:** `AR-P3-002`
+
+Objective: establish structural, schema and initial identity validation for incoming acquisition data.
+
+### `STEP-P3-003` — Temporal, Sequence & Completeness Validation
+
+**Order:** 3
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Predecessor:** `STEP-P3-002`
+**Completed Task Order:** `TO-P3-003`
+**Completion Audit:** `AR-P3-003`
+
+Objective: establish timestamp, ordering, sequence, continuity and completeness validation.
+
+### `STEP-P3-004` — Market Semantic, Price, Spread & Precision Validation
+
+**Order:** 4
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Predecessor:** `STEP-P3-003`
+**Completed Task Order:** `TO-P3-004`
+**Completion Audit:** `AR-P3-004`
+
+Objective: establish market-semantic correctness including price, OHLC, quantity, spread and precision validation.
+
+### `STEP-P3-005` — Canonical Normalization & Provider Mapping
+
+**Order:** 5
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Predecessor:** `STEP-P3-004`
+**Completed Task Order:** `TO-P3-005`
+**Completion Audit:** `AR-P3-005`
+**Build Report:** `BR-P3-005`
+
+Objective: transform validated provider-normalized evidence into provider-neutral canonical semantics.
+
+P3-005 was independently verified by CONTROL under `AR-P3-005` and is the verified predecessor for P3-006.
+
+### `STEP-P3-006` — Cross-Venue Consistency & Equivalence
+
+**Order:** 6
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Predecessor:** `STEP-P3-005`
+**Completed Task Order:** `TO-P3-006`
+**Completion Audit:** `AR-P3-006`
+**Build Report:** `BR-P3-006`
+
+Objective: establish reusable provider-neutral cross-venue equivalence and consistency validation without introducing opportunity detection.
+
+P3-006 was independently verified by CONTROL under `AR-P3-006`. The corrected implementation enforces semantic instrument identity before payload equivalence for Trade, Candle, OrderBook and Derivatives representations, with successful final CI evidence and no scope expansion.
+
+### `STEP-P3-007` — Data Quality, Quarantine, DLQ & Lineage
+
+**Order:** 7
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
+**Predecessor:** `STEP-P3-006`
+**Completed Task Order:** `TO-P3-007`
+**Completion Audit:** `AR-P3-007`
+**Build Report:** `BR-P3-007`
+
+Objective: establish explicit quality classification, quarantine/DLQ behavior and lineage.
+
+### `STEP-P3-008` — Authoritative Persistence, Event Handoff & G-3 Verification
+
+**Order:** 8
+**Status:** DEFINED / INACTIVE
+**Predecessor:** `STEP-P3-007`
+
+Objective: establish authoritative canonical persistence, normalized-event handoff and the evidence boundary required for Phase 3 closure.
+
+## Dependency Rule
+
+The governed dependency is:
+
+`PH-P2 → STEP-P3-001 → STEP-P3-002 → STEP-P3-003 → STEP-P3-004 → STEP-P3-005 → STEP-P3-006 → STEP-P3-007 → STEP-P3-008 → G-3`
+
+A later Step must not rely on unverified behavior from its predecessor. Preparation, fixtures, documentation and bounded tests may proceed in parallel where they do not depend on unverified predecessor behavior.
+
+## Registry Synchronization Rule
+
+Every Phase 3 Step that produces actual evidence in requirements, tests, database, configuration, security, components, contracts, runtime, performance, observability or data-quality domains must register the corresponding record in the applicable specialized registry in the same governed Task Order cycle, with direct evidence traceability. No speculative `CMP-P3-*`, `CTR-P3-*`, `REQ-*` or `TST-P3-*` records are created merely from roadmap intent.
+
+## Standing Role Operating Rules — `ADR-GOVERNANCE-013`
+
+The following rules apply to every governed role and every session:
+
+1. **Continuation Duty:** continue to the highest genuinely authorized boundary. Difficulty, ordinary implementation problems and normal test failures are not blockers. Stop only for (A) actual Owner decision/ratification, (B) an unresolved authoritative conflict requiring a decision rather than a guess, or (C) natural completion requiring independent verification. State A/B/C explicitly when stopping.
+2. **Same-Response Communication Duty:** whenever work requires text to be carried to another governed role, produce the complete forward-ready message in the same response. Substantive hand-offs use `FORMAL ENGLISH MESSAGE READY TO SEND` followed by `SIMPLE PERSIAN EXPLANATION`.
+3. **Large Artifact Retrieval:** use `Identify artifact → Obtain real Blob SHA → fetch_blob → Retrieve complete artifact → Read / search / verify`; never proceed from truncated content.
+4. **SentinelX-Only VPS Execution:** any work genuinely requiring VPS inspection/action must use SentinelX exclusively under `ADR-GOVERNANCE-011`; SentinelX availability does not itself authorize runtime or VPS changes.
+
+Every substantive response must end with the `--- STANDING RULES CHECK ---` footer required by `ADR-GOVERNANCE-013`.
+
+## Mandatory Peripheral Synchronization
+
+`ADR-GOVERNANCE-012` applies to every Step/Phase closure. The applicable closure Build Report must individually address: (1) `README.md` synchronization; (2) `docs/registry/artifacts.yaml` lifecycle synchronization; (3) specialized-registry evidence synchronization; (4) standalone status-bearing documents; and (5) supplemental/staging registry absorption or retirement. No closure may be accepted while the checklist is omitted or only partially addressed.
+
+## VPS Boundary
+
+Any VPS inspection or action genuinely required by Phase 3 must be performed exclusively through SentinelX under the existing `ADR-GOVERNANCE-011` privilege model and the specific authorization boundary of the applicable Task Order. No manual or alternative VPS path is permitted. Availability of SentinelX does not itself authorize runtime or VPS changes.
+
+## Completion Boundary
+
+Phase 3 is complete only when all eight Steps are `COMPLETE / VERIFIED`; canonical contracts, validation and normalization behavior, data-quality states, quarantine/DLQ, lineage, authoritative persistence, normalized event handoff, required specialized-registry synchronization, mandatory peripheral synchronization, Phase 3 exit audit and G-3 evidence are all established and verified; and `CURRENT_CHECKPOINT.json` records the closure.
+
+`IMPLEMENTED != EXECUTED != VERIFIED`.
+
+Phase 4 remains `NOT AUTHORIZED` until its own formal establishment and authorization process is completed.
