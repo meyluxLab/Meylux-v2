@@ -36,6 +36,12 @@ services:
       dockerfile: infrastructure/docker/Dockerfile
     environment:
       MEYLUX_SERVICE: api
+      MEYLUX_DB_HOST: db
+      MEYLUX_DB_PORT: "5432"
+      MEYLUX_DB_NAME: ${MEYLUX_DB_NAME:?MEYLUX_DB_NAME must be set}
+      MEYLUX_DB_USER: meylux_app
+      MEYLUX_DB_PASSWORD: ${MEYLUX_APP_PASSWORD:?MEYLUX_APP_PASSWORD must be set}
+      MEYLUX_REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
         condition: service_healthy

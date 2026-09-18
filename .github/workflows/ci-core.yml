@@ -25,5 +25,7 @@ jobs:
         run: python -m unittest discover -s tests/test_acquisition -p 'test_p2_005_operational_hardening.py' -v
       - name: Run P3-007 quality tests
         run: python -m unittest discover -s tests/test_contracts -p 'test_p3_007_quality.py' -v
+      - name: Run P3-008 persistence/event tests
+        run: python -m unittest discover -s tests -p 'test_p3_008*.py' -v
       - name: Run foundation tests
         run: python -m unittest discover -s tests -v
