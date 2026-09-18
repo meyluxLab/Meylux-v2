@@ -14,8 +14,8 @@ from meylux.quantitative.numeric import serialize_decimal
 
 def make_candles(data):
     closes = [Decimal(str(x)) for x in data["closes"]]
-    highs = [Decimal(str(x)) for x in data.get("highs", [x + 1 for x in closes])]
-    lows = [Decimal(str(x)) for x in data.get("lows", [x - 1 for x in closes])]
+    highs = [Decimal(str(x)) for x in data.get("highs", [x + Decimal("0.5") for x in closes])]
+    lows = [Decimal(str(x)) for x in data.get("lows", [x - Decimal("0.5") for x in closes])]
     volumes = [Decimal(str(x)) for x in data.get("volumes", [100] * len(closes))]
     start = datetime(2026, 1, 1, tzinfo=timezone.utc)
     return tuple(
