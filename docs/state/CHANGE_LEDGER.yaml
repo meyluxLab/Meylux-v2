@@ -810,3 +810,34 @@ entries:
       The Owner authorization converts the roadmap into the formal governed Phase 4 definition and
       authorizes only STEP-P4-001. P4-002 through P4-006 remain not yet authorized. No implementation,
       execution, testing or verification claim is made for P4-001 by this governance transition.
+
+  - id: CHG-P4-STEP-001-CLOSE-20260918
+    date_utc: '2026-09-18'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL end-to-end verification and closure synchronization of STEP-P4-001
+    basis: AR-P4-001 APPROVED / VERIFIED + TO-P4-001 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-001
+      - TO-P4-001
+      - BR-P4-001
+      - AR-P4-001
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+      - docs/registry/database.yaml
+    implementation_verified_commit: d9bb565023796f3969ea5a05f9a725729912bcf5
+    integration_commit: 60abb97abd121de156e7f1020c7a3937ca5f2700
+    ci_core: Run #697 / Run ID 35397814298 / Job 105770553429 / SUCCESS / 306 tests
+    ci_docker: Run #171 / Run ID 35397814285 / SUCCESS
+    step_transition: ACTIVE / AUTHORIZED -> COMPLETE / VERIFIED
+    task_order_transition: AUTHORIZED TO EXECUTE -> VERIFIED / COMPLETE
+    phase_transition: remains ACTIVE / AUTHORIZED
+    g4_status: NOT ESTABLISHED
+    closure_sync: README, CURRENT_CHECKPOINT, canonical artifact registry, phase registry, tests registry, components registry and database registry synchronized by CONTROL; supplemental Phase-2 registry remains RETIRED / SUPERSEDED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    scope_effect: no later P4 Step authorized or implemented
