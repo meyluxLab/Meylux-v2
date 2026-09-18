@@ -528,3 +528,28 @@ entries:
       Prior contracts packaging defect is no longer observed in the rebuilt runtime.
       Closure remains blocked by absence of governed AVAILABLE raw/staging evidence required
       for the controlled real-data vertical slice and downstream persistence/event/recovery/G-3 verification.
+
+  - id: CHG-P3-STEP-008-BR-SYNC
+    date_utc: '2026-09-18'
+    change_type: EVIDENCE_SYNCHRONIZATION
+    subject: CONTROL acceptance and merge of Producer Build Report final evidence synchronization
+    basis: AR-P3-008 + TO-P3-008 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - BR-P3-008
+      - AR-P3-008
+      - TO-P3-008
+      - STEP-P3-008
+      - PH-P3
+    from_state: BR-P3-008 PRODUCED / TESTED / UNVERIFIED with older implementation-state CI references
+    to_state: BR-P3-008 synchronized to final accepted Fresh CI and CONTROL-observed Production data-availability boundary; STEP-P3-008 remains ACTIVE / CORRECTION REQUIRED
+    repository_commit: 846aa2a1a5189dda178e9706788f1c02c174a710
+    ci_evidence: CI Core Run #594 / Run ID 35365834192 / SUCCESS; CI Docker Foundation Run #124 / Run ID 35365833834 / SUCCESS; documentation commit CI Core Run #601 / Run ID 35369757908 / SUCCESS
+    production_boundary: zero governed AVAILABLE raw acquisition records; meylux.raw_acquisition_events = 0; vertical slice exit code 2; no fallback/fabricated data
+    g3_status: NOT ESTABLISHED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none in this documentation synchronization cycle
+    notes: >
+      CONTROL independently reviewed the exact one-file PR #27 change and merged it.
+      The Build Report remains UNVERIFIED / OPEN. No closure state, G-3 state, or
+      Phase 3 closure was asserted. Further progression requires governed AVAILABLE
+      raw/staging evidence followed by the already-authorized CONTROL verification sequence.
