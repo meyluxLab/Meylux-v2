@@ -480,3 +480,26 @@ entries:
      notes: >
        Final Phase 3 Step activated. TO-P3-008 authorizes Producer implementation
        and governed CONTROL SentinelX execution within scope; Phase 4 remains unauthorized.
+  - id: CHG-P3-STEP-008-RUNTIME-CORRECTION
+    date_utc: '2026-09-18'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-008 CONTROL re-audit, Production synchronization, migration execution, and runtime correction gate
+    basis: AR-P3-008 + TO-P3-008 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - BR-P3-008
+      - AR-P3-008
+      - TO-P3-008
+      - STEP-P3-008
+      - PH-P3
+    from_state: BR-P3-008 PRODUCED / TESTED / UNVERIFIED; repository correction evidence accepted; no Production execution
+    to_state: Production synchronized and migration 0003 executed by CONTROL; runtime vertical-slice execution blocked by deployed image packaging defect; STEP-P3-008 ACTIVE / CORRECTION REQUIRED
+    verified_repository_commit: 9f8c1ad0bf9f74ce03ece9dbb3d5e9d8f6483b5e
+    execution_log: EXEC-LOG-TO-P3-008-20260918T150102Z
+    runtime_result: FAILED — ModuleNotFoundError: No module named 'contracts'
+    data_result: no governed AVAILABLE raw acquisition record observed; no fallback data fabricated
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: authorized CONTROL synchronization, migration, image rebuild/recreate and bounded runtime diagnostic/cleanup only; no prohibited trading/capital/V1 activity
+    notes: >
+      Repository correction F1/F2/F3 was independently accepted before execution.
+      Production execution exposed a runtime packaging defect. G-3, independent runtime
+      verification, Step closure, Phase 3 closure and peripheral closure synchronization remain open.
