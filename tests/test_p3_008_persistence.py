@@ -94,7 +94,7 @@ class P3008RuntimeEnvelopeBoundaryTests(unittest.TestCase):
             "provider_instrument_id":"BTCUSDT",
             "provenance_id":"binance:vertical",
             "acquisition_method":"WS",
-            "event_type":"trade",
+            "event_type":"TRADE",
             "event_time":datetime(2026,9,18,tzinfo=UTC),
             "received_at":datetime(2026,9,18,0,0,1,tzinfo=UTC),
             "acquisition_state":"AVAILABLE",
