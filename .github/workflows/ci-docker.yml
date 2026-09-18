@@ -44,6 +44,7 @@ jobs:
           MEYLUX_DB_NAME: meylux_ci
           MEYLUX_DB_USER: meylux_admin
           MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
         run: docker compose -f infrastructure/compose/docker-compose.yml config --quiet
 
       - name: Build foundation image
@@ -97,6 +98,9 @@ jobs:
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT extname FROM pg_extension WHERE extname = 'timescaledb';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0001_database_foundation';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0002_raw_acquisition_staging';"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0003_canonical_persistence_event_outbox';"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT to_regclass('meylux.canonical_instruments'), to_regclass('meylux.canonical_candles'), to_regclass('meylux.canonical_trades'), to_regclass('meylux.canonical_orderbook_depth'), to_regclass('meylux.canonical_derivatives'), to_regclass('meylux.data_quality_logs'), to_regclass('meylux.canonical_event_outbox');"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.canonical_trades','SELECT'), has_table_privilege('meylux_app','meylux.canonical_trades','INSERT'), has_table_privilege('meylux_app','meylux.canonical_trades','UPDATE'), has_table_privilege('meylux_app','meylux.canonical_trades','DELETE');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT to_regclass('meylux.raw_acquisition_events');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT column_name FROM information_schema.columns WHERE table_schema = 'meylux' AND table_name = 'raw_acquisition_events' ORDER BY ordinal_position;"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT rolname, rolcanlogin FROM pg_roles WHERE rolname IN ('meylux_admin','meylux_app','meylux_backup') ORDER BY rolname;"
