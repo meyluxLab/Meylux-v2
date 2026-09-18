@@ -6,8 +6,6 @@ import os
 from collections.abc import Mapping
 from decimal import Decimal
 from typing import Any
-import asyncpg
-import redis.asyncio as redis
 from contracts.acquisition import AcquisitionEnvelope, AcquisitionState, EventType, InstrumentIdentity, ProviderIdentity, Provenance
 from contracts.canonical.foundation import ProvenanceRef, validation_outcome
 from contracts.market_semantic import validate_market_semantics
@@ -55,6 +53,8 @@ def market_values(value:Any)->dict[str,Any]:
     return fields
 
 async def main()->int:
+    import asyncpg
+    import redis.asyncio as redis
     pool=await asyncpg.create_pool(host=required("MEYLUX_DB_HOST"),port=int(os.environ.get("MEYLUX_DB_PORT","5432")),database=required("MEYLUX_DB_NAME"),user=required("MEYLUX_DB_USER"),password=required("MEYLUX_DB_PASSWORD"),min_size=1,max_size=2)
     client=redis.from_url(os.environ.get("MEYLUX_REDIS_URL","redis://redis:6379/0"),decode_responses=False)
     try:
