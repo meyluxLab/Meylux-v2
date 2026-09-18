@@ -413,12 +413,12 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-DIRECTIVE-ESTABLISH-PHASE-4-AUTHORIZE-STEP-P4-001-2026-09-18
     first_step: STEP-P4-001
-    next_valid_step: STEP-P4-002
+    next_valid_step: STEP-P4-003
     final_step: STEP-P4-006
-    active_task_order: TO-P4-002
+    active_task_order: null
     current_step: STEP-P4-002
-    completed_task_order: TO-P4-001
-    completion_audit: AR-P4-001
+    completed_task_order: TO-P4-002
+    completion_audit: AR-P4-002
     authorization_criteria:
       - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
       - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
@@ -457,14 +457,14 @@ records:
     logical_name: Technical Indicators, Statistical & Volatility Engine
     entity_type: STEP
     phase: PH-P4
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 2
     predecessor: STEP-P4-001
     activation_basis: Project Owner Directive — Authorize STEP-P4-002 / PH-P4 / AR-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    active_task_order: TO-P4-002
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P4-002
+    completion_audit: AR-P4-002
     purpose: Implement deterministic technical indicators, statistical and volatility features over trusted canonical inputs and the verified P4-001 quantitative foundation.
     repository_scope: moving averages, momentum, trend/volatility, supported statistical/realized volatility, volume/activity features, VWAP and explicitly anchored VWAP, deterministic parameters, warm-up/missing-input semantics, no-lookahead, golden vectors, tests, documentation and traceability within STEP-P4-002 only.
     exclusions: STEP-P4-003 through STEP-P4-006; AI; Venue Intelligence; trading/capital; V1; unrelated refactoring.
