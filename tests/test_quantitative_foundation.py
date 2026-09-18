@@ -54,6 +54,33 @@ class QuantitativePrimitiveTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             average(["Infinity", "1"])
 
+    def test_malformed_and_missing_numeric_inputs_raise_contract_errors(self):
+        with self.assertRaises(TypeError):
+            average(None)
+        with self.assertRaises(TypeError):
+            average([None, "1"])
+        with self.assertRaises(ValueError):
+            average(["not-a-number", "1"])
+        with self.assertRaises(TypeError):
+            weighted_average(["1", "2"], None)
+        with self.assertRaises(TypeError):
+            accumulate(["1", None])
+        with self.assertRaises(ValueError):
+            normalize_min_max(["1", "bad"])
+
+    def test_invalid_and_insufficient_results_remain_explicit(self):
+        insufficient = average([])
+        self.assertEqual(insufficient.status, CalculationStatus.INSUFFICIENT_HISTORY)
+        self.assertIsNone(insufficient.value)
+
+        invalid = weighted_average([1, 2], [1, -1])
+        self.assertEqual(invalid.status, CalculationStatus.INVALID_INPUT)
+        self.assertIsNone(invalid.value)
+
+        invalid_range = normalize_min_max([5, 5])
+        self.assertTrue(all(x.status is CalculationStatus.INVALID_INPUT for x in invalid_range))
+        self.assertTrue(all(x.value is None for x in invalid_range))
+
     def test_empty_and_warmup_are_explicit(self):
         self.assertEqual(average([]).status, CalculationStatus.INSUFFICIENT_HISTORY)
         results = rolling_mean([1, 2, 3], 3)
@@ -105,9 +132,12 @@ class GoldenVectorTests(unittest.TestCase):
     FUNCTIONS = {
         "average": average,
         "weighted_average": weighted_average,
+        "rolling_mean": rolling_mean,
         "standard_deviation": standard_deviation,
         "percentile": percentile,
         "exponential_smoothing": exponential_smoothing,
+        "accumulate": accumulate,
+        "normalize_min_max": normalize_min_max,
     }
 
     def test_all_golden_vectors_pass_exactly(self):
