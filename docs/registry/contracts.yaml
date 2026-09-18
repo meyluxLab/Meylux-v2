@@ -193,3 +193,21 @@ records:
     replay_deduplication: receive time, error detail, and capability state do not change event identity; source sequence is included when available and payload protects same-timestamp collisions
     phase_boundary: envelope is raw/staging acquisition output; validation, normalization, and data-quality ownership remains in Phase 3
     lifecycle_status: IMPLEMENTED / TESTED / UNVERIFIED
+
+
+  - sid: CTR-P3-008
+    version: 1.0.0
+    logical_name: CanonicalEvent / Authoritative Persistence Boundary
+    entity_type: CTR
+    phase: PH-P3
+    step: STEP-P3-008
+    tier: REQ-BEHAVIOR
+    purpose: Provider-neutral normalized event handoff and authoritative canonical persistence boundary
+    producer: P3-008 persistence/event boundary
+    consumers:
+      - Phase 4-ready downstream consumers
+    implementation_paths:
+      - contracts/event.py
+      - src/meylux/persistence/canonical.py
+      - src/meylux/persistence/event_handoff.py
+    lifecycle_status: VERIFIED
