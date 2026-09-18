@@ -158,8 +158,11 @@ Objective: establish explicit quality classification, quarantine/DLQ behavior an
 ### `STEP-P3-008` — Authoritative Persistence, Event Handoff & G-3 Verification
 
 **Order:** 8
-**Status:** DEFINED / INACTIVE
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** AUTHORIZED TO EXECUTE
 **Predecessor:** `STEP-P3-007`
+**Active Task Order:** `TO-P3-008`
+**Activation basis:** Project Owner Directive — Commence STEP-P3-008 — 2026-09-18 / AR-P3-007 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-013
 
 Objective: establish authoritative canonical persistence, normalized-event handoff and the evidence boundary required for Phase 3 closure.
 
