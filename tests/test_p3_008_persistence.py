@@ -1,4 +1,5 @@
 import unittest
+from collections.abc import Mapping
 from datetime import datetime, timezone
 from decimal import Decimal
 from contracts.canonical import CanonicalTrade
@@ -82,4 +83,62 @@ class P3008ContractTests(unittest.IsolatedAsyncioTestCase):
     def test_event_rejects_non_valid_quality(self):
         with self.assertRaises(ValueError):
             CanonicalEvent("e","r","trade",1,datetime(2026,9,18,tzinfo=UTC),DataQualityState.DEGRADED,"p","s","l",{}, "c")
+
+
+class P3008RuntimeEnvelopeBoundaryTests(unittest.TestCase):
+    def _row(self, payload):
+        return {
+            "provider_id":"binance",
+            "adapter_id":"binance-acquisition",
+            "adapter_version":"1.0.0",
+            "canonical_instrument_id":"BTCUSDT",
+            "provider_instrument_id":"BTCUSDT",
+            "provenance_id":"binance:vertical",
+            "acquisition_method":"WS",
+            "event_type":"TRADE",
+            "event_time":datetime(2026,9,18,tzinfo=UTC),
+            "received_at":datetime(2026,9,18,0,0,1,tzinfo=UTC),
+            "acquisition_state":"AVAILABLE",
+            "source_sequence":"1",
+            "payload_json":payload,
+        }
+
+    def test_jsonb_string_object_is_decoded_to_mapping(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        envelope=envelope_from_row(self._row('{"price":"100.00","qty":"1.0"}'))
+        self.assertIsInstance(envelope.payload, Mapping)
+        self.assertEqual(dict(envelope.payload), {"price":"100.00","qty":"1.0"})
+
+    def test_jsonb_bytes_object_is_decoded_to_mapping(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        envelope=envelope_from_row(self._row(b'{"price":"100.00","qty":"1.0"}'))
+        self.assertEqual(dict(envelope.payload), {"price":"100.00","qty":"1.0"})
+
+    def test_malformed_jsonb_bytes_are_rejected_explicitly(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        with self.assertRaisesRegex(ValueError, "payload_json contains malformed JSON"):
+            envelope_from_row(self._row(b"\\xff"))
+
+    def test_mapping_jsonb_runtime_value_is_preserved(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        payload={"price":"100.00","qty":"1.0"}
+        envelope=envelope_from_row(self._row(payload))
+        self.assertEqual(dict(envelope.payload), payload)
+
+    def test_jsonb_array_is_rejected_before_envelope_construction(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        with self.assertRaisesRegex(TypeError, "payload_json must decode to a JSON object"):
+            envelope_from_row(self._row('[{"price":"100.00"}]'))
+
+    def test_malformed_jsonb_string_is_rejected_explicitly(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        with self.assertRaisesRegex(ValueError, "payload_json contains malformed JSON"):
+            envelope_from_row(self._row('{"price":'))
+
+    def test_unsupported_jsonb_runtime_value_is_rejected(self):
+        from meylux.runtime.p3_008_vertical_slice import envelope_from_row
+        with self.assertRaisesRegex(TypeError, "payload_json must be a JSON object representation"):
+            envelope_from_row(self._row(123))
+
+
 if __name__=="__main__": unittest.main()
