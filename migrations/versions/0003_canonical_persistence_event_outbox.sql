@@ -147,7 +147,7 @@ GRANT SELECT, INSERT, UPDATE ON meylux.canonical_event_outbox TO meylux_app;
 REVOKE UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON meylux.canonical_instruments, meylux.canonical_candles, meylux.canonical_trades, meylux.canonical_orderbook_depth, meylux.canonical_derivatives, meylux.data_quality_logs FROM meylux_app;
 
 GRANT SELECT ON meylux.canonical_instruments, meylux.canonical_candles, meylux.canonical_trades, meylux.canonical_orderbook_depth, meylux.canonical_derivatives, meylux.data_quality_logs, meylux.canonical_event_outbox TO meylux_backup;
-DO $
+DO $MEYLUX$
 DECLARE
     seq_name text;
 BEGIN
@@ -159,7 +159,7 @@ BEGIN
     IF seq_name IS NOT NULL THEN
         EXECUTE format('GRANT USAGE, SELECT ON SEQUENCE %s TO meylux_app', seq_name);
     END IF;
-END $;
+END $MEYLUX$;
 
 INSERT INTO meylux.schema_migrations(version)
 VALUES ('0003_canonical_persistence_event_outbox')
