@@ -129,6 +129,7 @@ class QuantitativePrimitiveTests(unittest.TestCase):
 
 
 class GoldenVectorTests(unittest.TestCase):
+    # AR-P4-001 correction coverage: every implemented public primitive is governed by vectors.
     FUNCTIONS = {
         "average": average,
         "weighted_average": weighted_average,
