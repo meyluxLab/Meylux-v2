@@ -270,8 +270,10 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15
     first_step: STEP-P3-001
-    next_valid_step: STEP-P3-008
+    next_valid_step: null
     final_step: STEP-P3-008
+    active_task_order: TO-P3-008
+    current_step: STEP-P3-008
     authorization_criteria:
       - Phase 2 is CLOSED / VERIFIED.
       - Project Owner explicitly authorized Phase 3 establishment.
@@ -392,8 +394,9 @@ records:
     logical_name: Authoritative Persistence, Event Handoff & G-3 Verification
     entity_type: STEP
     phase: PH-P3
-    status: DEFINED / INACTIVE
-    authorization_state: DEFINED / INACTIVE
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED TO EXECUTE
     order: 8
     predecessor: STEP-P3-007
-    active_task_order: null
+    activation_basis: PROJECT-OWNER-DIRECTIVE-COMMENCE-STEP-P3-008-2026-09-18 / PH-P3 / AR-P3-007 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-013
+    active_task_order: TO-P3-008
