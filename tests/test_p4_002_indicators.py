@@ -164,6 +164,35 @@ class IntegrityTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             historical_volatility(candles([1,2,3]), 2, "0")
 
+
+    def test_indicator_invariants_hold_on_valid_sequences(self):
+        cs = candles([10, 11, 12, 11, 13, 14, 15, 14])
+        av = atr(cs, 2)
+        self.assertTrue(all((not x.valid) or x.value >= 0 for x in av))
+        rv = __import__("meylux.quantitative.indicators", fromlist=["rvol"]).rvol(
+            candles([10, 11, 12, 13], volumes=[100, 100, 100, 300]), 2
+        )
+        self.assertTrue(all((not x.valid) or x.value >= 0 for x in rv))
+        bands = bollinger_bands(cs, 3, "2")
+        for point in bands:
+            if point.middle.valid:
+                self.assertLessEqual(point.lower.value, point.middle.value)
+                self.assertLessEqual(point.middle.value, point.upper.value)
+        rs = rsi(cs, 2)
+        self.assertTrue(all((not x.valid) or Decimal("0") <= x.value <= Decimal("100") for x in rs))
+        st = supertrend(cs, 2, "3")
+        self.assertTrue(all((not x.value.valid) or x.direction.value in (Decimal("-1"), Decimal("1")) for x in st))
+
+    def test_missing_required_canonical_fields_are_rejected_at_boundary(self):
+        with self.assertRaises(TypeError):
+            CanonicalCandle(
+                instrument_id="TEST", timeframe="1h",
+                open_time=datetime(2026, 1, 1, tzinfo=timezone.utc),
+                close_time=datetime(2026, 1, 1, 1, tzinfo=timezone.utc),
+                open=Decimal("1"), high=Decimal("2"), low=Decimal("1"),
+                close=Decimal("1"), volume=None, provenance_id="missing-volume"
+            )
+
     def test_no_lookahead_for_already_emitted_values(self):
         base = candles([10, 11, 12, 13, 14])
         extended = candles([10, 11, 12, 13, 14, 1000])
