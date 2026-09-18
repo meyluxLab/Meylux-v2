@@ -866,3 +866,38 @@ entries:
     excluded_capabilities: AI, Venue Intelligence, trading/capital, V1, unrelated refactoring
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: no blanket VPS authorization; SentinelX-only if separately authorized by the Task Order
+
+  - id: CHG-P4-STEP-002-CLOSE-20260918
+    date_utc: '2026-09-18'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL independent verification and closure synchronization of STEP-P4-002
+    basis: AR-P4-002 APPROVED / VERIFIED + TO-P4-002 + BR-P4-002 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-002
+      - TO-P4-002
+      - BR-P4-002
+      - AR-P4-002
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+    implementation_verified_commit: e970752c2e332bee6311327ed6138a1b355019a4
+    producer_branch_head: 1d6d633d3355b453218cf42f1dbc78b5308d1e2b
+    integration_commit: c873d43cc4d563802e7aef7f0634deac75239f01
+    ci_core: Run #737 / Run ID 35405130030 / Job 105793191301 / SUCCESS / 325 tests
+    step_transition: ACTIVE / AUTHORIZED -> COMPLETE / VERIFIED
+    task_order_transition: AUTHORIZED TO EXECUTE -> VERIFIED / COMPLETE
+    build_report_transition: PRODUCED / TESTED / UNVERIFIED -> VERIFIED
+    audit_report: AR-P4-002 APPROVED / VERIFIED
+    phase_transition: remains ACTIVE / AUTHORIZED
+    active_task_order: null
+    next_sequential_step: STEP-P4-003
+    next_step_authorization: NOT YET AUTHORIZED
+    g4_status: NOT ESTABLISHED
+    closure_sync: README, CURRENT_CHECKPOINT, canonical artifact registry, phase registry, tests registry, components registry, Build Report and Audit Report synchronized by CONTROL; no supplemental/staging P4-002 registry required.
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    scope_effect: no later P4 Step authorized or implemented
