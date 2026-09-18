@@ -819,6 +819,12 @@ records:
     artifact_path: tests/test_contracts/test_p3_007_quality.py
     traceability: TO-P3-007 / STEP-P3-007 / BR-P3-007 / AR-P3-007
     status: VERIFIED
+  - stable_id: AR-P3-008
+    canonical_name: CONTROL Independent Audit — Authoritative Persistence, Event Handoff & G-3 Verification
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-008.md
+    traceability: BR-P3-008 / TO-P3-008 / PH-P3
+    status: REVISE / CORRECTION REQUIRED
   - stable_id: BR-P3-008
     canonical_name: Build Report — Authoritative Persistence, Event Handoff & G-3 Verification
     entity_type: BR
