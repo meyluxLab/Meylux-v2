@@ -30,3 +30,16 @@ records:
       diff_check: PASS
       deterministic_rate_stress: PASS
       final_verified_commit: 9d0b71a7cf818aa8e39102cbce6a2458cab31866
+
+
+  - stable_id: OBS-P3-008
+    canonical_name: P3-008 Persistence and Event Handoff Observability
+    entity_type: OBSERVABILITY
+    phase: PH-P3
+    step: STEP-P3-008
+    task_order: TO-P3-008
+    status: VERIFIED
+    evidence:
+      runtime_stage_outputs: validation / quality / persistence / event handoff
+      dependency_health: db and redis healthy
+      execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
