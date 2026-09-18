@@ -44,6 +44,6 @@ def build_canonical_event(value:Any,assessment:QualityAssessment,sequence:int)->
     semantic_identity={"type":record_type,"value":payload}
     record_id=deterministic_identity(semantic_identity)
     event_id=hashlib.sha256(("canonical:"+record_id).encode()).hexdigest()
-    event=CanonicalEvent(event_id,record_id,record_type,sequence,_time(value),DataQualityState.VALID,assessment.provenance_id,assessment.source_record_id,assessment.lineage_parent_id,payload)
+    event=CanonicalEvent(event_id,record_id,record_type,sequence,_time(value),DataQualityState.VALID,assessment.provenance_id,assessment.source_record_id,assessment.lineage_parent_id,payload,record_id)
     record=CanonicalRecord(record_type,record_id,event_id,_time(value),instrument_id,payload,assessment.provenance_id,assessment.source_record_id,assessment.lineage_parent_id,DataQualityState.VALID,assessment.explanation.score)
     return record,event
