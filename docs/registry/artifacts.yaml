@@ -838,3 +838,21 @@ records:
     artifact_path: tests/test_p3_008_persistence.py
     traceability: TO-P3-008 / STEP-P3-008 / BR-P3-008 / AR-P3-008
     status: VERIFIED
+  - stable_id: PH-P4
+    canonical_name: Deterministic Quantitative & Market Structure Engine
+    entity_type: PH
+    artifact_path: docs/phases/PH-P4.md
+    traceability: DOC-V2-ARCH-001 / DOC-P4-001 / PH-P3 / Project Owner Directive — Establish Phase 4 & Authorize STEP-P4-001 — 2026-09-18 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: ACTIVE / AUTHORIZED
+  - stable_id: STEP-P4-001
+    canonical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P4.md
+    traceability: PH-P4 / STEP-P3-008 / AR-P3-008 / TO-P4-001 / DOC-V2-ARCH-001 / DOC-P4-001 / Project Owner Directive — Establish Phase 4 & Authorize STEP-P4-001 — 2026-09-18
+    status: ACTIVE / AUTHORIZED
+  - stable_id: TO-P4-001
+    canonical_name: Task Order — Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-001.md
+    traceability: PH-P4 / STEP-P4-001 / STEP-P3-008 / AR-P3-008 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Establish Phase 4 & Authorize STEP-P4-001 — 2026-09-18
+    status: AUTHORIZED TO EXECUTE
