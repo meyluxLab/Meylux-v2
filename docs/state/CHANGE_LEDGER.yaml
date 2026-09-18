@@ -637,3 +637,25 @@ entries:
       correction state; no new implementation design was introduced. Subsequent runtime
       execution exposed a separate quality-signal defect, recorded in the dedicated execution
       log and AR-P3-008.
+
+  - id: CHG-P3-STEP-008-RUNTIME-CONTRACT-RECONCILIATION
+    date_utc: '2026-09-18'
+    change_type: CONTROL_RECONCILIATION
+    subject: Independent reconciliation of ValidationResult runtime exception against deployed and authoritative repository contracts
+    basis: AR-P3-008 + TO-P3-008 + ADR-GOVERNANCE-013
+    repository_head: 9e39d1032a8dc63fe49217ad25ef0fdc430b375d
+    deployed_image_id: sha256:366dfc4f6f49ba658b23e37ce6d407d162b49f3ef1da7bd6039d47511c159fef
+    runner_command: python -m meylux.runtime.p3_008_vertical_slice
+    finding: >
+      Deployed and repository runner both use `outcome=validation_outcome(issues) if issues else normalized.result`.
+      When issues are empty, `normalized.result` is ValidationResult, so `outcome.result.value`
+      deterministically raises AttributeError. The deployed contract validation_outcome remains
+      authoritative and returns ValidationOutcome; no contract conflict exists.
+    classification: IMPLEMENTATION DEFECT — CONFIRMED
+    rejected_alternatives:
+      - STALE_IMAGE_OR_CONTAINER
+      - DEPLOYMENT_VERSION_CONTEXT_DISCREPANCY
+      - AUTHORITATIVE_CONTRACT_CONFLICT
+      - OWNER_DECISION
+    g3_status: NOT ESTABLISHED
+    lifecycle: STEP-P3-008 ACTIVE / CORRECTION REQUIRED
