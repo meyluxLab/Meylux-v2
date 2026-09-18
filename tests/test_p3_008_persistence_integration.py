@@ -59,9 +59,13 @@ class P3008PersistenceIntegrationTests(unittest.TestCase):
         self.assertIn("canonical_event_outbox",sql)
         self.assertIn("REVOKE UPDATE, DELETE, TRUNCATE",sql)
         self.assertIn("VALUES ('0003_canonical_persistence_event_outbox')",sql)
+        alignment=(ROOT/"migrations/versions/0004_canonical_quality_state_alignment.sql").read_text()
+        self.assertIn("quality_state = ''VALID''",alignment)
+        self.assertNotIn("quality_state = ''valid''",alignment)
     def test_migration_harness_is_ordered_and_compose_wires_runtime(self):
         harness=(ROOT/"infrastructure/postgres/migrate.sh").read_text()
         self.assertLess(harness.index("0002_raw_acquisition_staging.sql"),harness.index("0003_canonical_persistence_event_outbox.sql"))
+        self.assertLess(harness.index("0003_canonical_persistence_event_outbox.sql"),harness.index("0004_canonical_quality_state_alignment.sql"))
         compose=(ROOT/"infrastructure/compose/docker-compose.yml").read_text()
         self.assertIn("MEYLUX_DB_USER: meylux_app",compose)
         self.assertIn("MEYLUX_DB_PASSWORD: ${MEYLUX_APP_PASSWORD",compose)
