@@ -97,3 +97,20 @@ records:
       dedicated_test_case_count: 24
       full_regression_test_count: 238
       execution_note: Final correction CI explicitly exercised all 24 P3-006 tests, including the four semantic instrument identity mismatch tests for Trade, Candle, OrderBook and Derivatives, and completed the 238-test full regression successfully.
+
+  - stable_id: TST-P3-007
+    canonical_name: Data Quality, Quarantine, DLQ & Lineage Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_007_quality.py
+    traceability: PH-P3 / STEP-P3-007 / TO-P3-007 / BR-P3-007 / AR-P3-007
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 35342255078
+      workflow_run_number: 520
+      job_id: 105590609430
+      commit: 8ee1372335ea586d2cb12e6370b11d527f41a210
+      result: SUCCESS
+      dedicated_test_case_count: 23
+      full_regression_test_count: 261
+      execution_note: Actual CI job executed the corrected P3-007 suite and full foundation regression successfully; CONTROL independently verified the job evidence under AR-P3-007.
