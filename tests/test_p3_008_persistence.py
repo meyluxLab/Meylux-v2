@@ -17,7 +17,7 @@ def assessment():
     return assess_quality(QualityInput(ValidationOutcome(ValidationResult.VALID),SCORES,PROV,"raw:1","stage:1"))
 
 class P3008ContractTests(unittest.IsolatedAsyncioTestCase):
-    def test_persist_with_assessment_executes_single_quality_log(self):
+    async def test_persist_with_assessment_executes_single_quality_log(self):
         from meylux.persistence.canonical import CanonicalPersistence
 
         class _Tx:
