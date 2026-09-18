@@ -503,3 +503,28 @@ entries:
       Repository correction F1/F2/F3 was independently accepted before execution.
       Production execution exposed a runtime packaging defect. G-3, independent runtime
       verification, Step closure, Phase 3 closure and peripheral closure synchronization remain open.
+
+  - id: CHG-P3-STEP-008-CI-AND-PRODUCTION-RETRY
+    date_utc: '2026-09-18'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-008 Fresh CI acceptance, Production synchronization/rebuild, and controlled vertical-slice retry
+    basis: AR-P3-008 + TO-P3-008 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - BR-P3-008
+      - AR-P3-008
+      - TO-P3-008
+      - STEP-P3-008
+      - PH-P3
+    from_state: STEP-P3-008 ACTIVE / CORRECTION REQUIRED; Fresh CI pending
+    to_state: Fresh CI independently accepted; Production synchronized/rebuilt; migration 0003 present; controlled vertical-slice retry blocked by zero governed AVAILABLE raw acquisition records; STEP-P3-008 remains ACTIVE / CORRECTION REQUIRED
+    repository_commit: 2f61be905259c7dc5ce5649b19931a83cc9591c2
+    ci_evidence: CI Docker Foundation Run #124 / Run ID 35365833834 / Job ID 105667972494 / SUCCESS; CI Core Run #594 / Run ID 35365834192 / Job ID 105667972898 / SUCCESS; full foundation 273 tests OK
+    execution_log: EXEC-LOG-TO-P3-008-PROD-RETRY-20260918
+    runtime_result: VERTICAL SLICE NOT REACHED — zero rows in meylux.raw_acquisition_events; runner returned exit code 2 without fallback data
+    g3_status: NOT ESTABLISHED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: authorized CONTROL repository synchronization, image rebuild/recreate, migration execution and runtime retry only
+    notes: >
+      Prior contracts packaging defect is no longer observed in the rebuilt runtime.
+      Closure remains blocked by absence of governed AVAILABLE raw/staging evidence required
+      for the controlled real-data vertical slice and downstream persistence/event/recovery/G-3 verification.
