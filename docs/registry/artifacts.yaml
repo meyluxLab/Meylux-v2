@@ -838,6 +838,13 @@ records:
     artifact_path: tests/test_p3_008_persistence.py
     traceability: TO-P3-008 / STEP-P3-008 / BR-P3-008 / AR-P3-008
     status: VERIFIED
+  - stable_id: AR-P4-001
+    canonical_name: CONTROL Independent Audit — Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-001.md
+    traceability: BR-P4-001 / TO-P4-001 / PH-P4 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: REVISE / CORRECTION REQUIRED
+
   - stable_id: PH-P4
     canonical_name: Deterministic Quantitative & Market Structure Engine
     entity_type: PH
