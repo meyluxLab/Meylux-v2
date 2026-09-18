@@ -659,3 +659,30 @@ entries:
       - OWNER_DECISION
     g3_status: NOT ESTABLISHED
     lifecycle: STEP-P3-008 ACTIVE / CORRECTION REQUIRED
+
+  - id: CHG-P3-STEP-008-CANONICAL-QUALITY-STATE-BOUNDARY
+    date_utc: '2026-09-18'
+    change_type: OPERATIONAL_REASSESSMENT
+    subject: CONTROL vertical-slice retry after PR #31 and discovery of canonical quality-state persistence/schema mismatch
+    basis: AR-P3-008 + TO-P3-008 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - BR-P3-008
+      - AR-P3-008
+      - TO-P3-008
+      - STEP-P3-008
+      - PH-P3
+    repository_commit: 737e2b557cd1db0f8ed3ab5e228d51ff0aeb3032
+    execution_log: EXEC-LOG-TO-P3-008-VERTICAL-SLICE-RETRY-20260918-VALIDATION-FOLLOWUP
+    runtime_result: FAILED — canonical_trades quality-state check rejects authoritative DataQualityState.VALID value 'VALID' because migration constraint expects lowercase 'valid'
+    classification: IMPLEMENTATION DEFECT — CONFIRMED
+    canonical_persistence_status: NOT ESTABLISHED; INSERT REJECTED BEFORE COMMIT
+    event_handoff_status: NOT ESTABLISHED
+    recovery_verification_status: NOT ESTABLISHED
+    g3_status: NOT ESTABLISHED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: authorized CONTROL synchronization, rebuild/recreate, migration execution and vertical-slice retry; no unrelated mutation
+    notes: >
+      The runner progressed through structural, temporal, normalization and quality gates and
+      reached canonical persistence. Repository contract inspection confirms DataQualityState.VALID
+      has value 'VALID'; migration 0003 requires 'valid'. This is an implementation/schema boundary
+      mismatch, not stale runtime context or authoritative conflict. Producer correction required.
