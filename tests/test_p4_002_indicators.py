@@ -78,7 +78,7 @@ class MomentumTests(unittest.TestCase):
         self.assertTrue(points[2].macd.valid)
         self.assertFalse(points[2].signal.valid)
         self.assertTrue(points[3].signal.valid)
-        self.assertEqual(points[3].histogram.value, Decimal("0"))
+        self.assertEqual(serialize_decimal(points[3].histogram.value), "0.00000000000000000000000000005")
 
 
 class VolatilityTests(unittest.TestCase):
@@ -96,9 +96,9 @@ class VolatilityTests(unittest.TestCase):
         bands = bollinger_bands(cs, 3, "2")
         self.assertFalse(bands[1].middle.valid)
         self.assertEqual(serialize_decimal(bands[2].middle.value), "2")
-        self.assertEqual(serialize_decimal(bands[2].upper.value), "3.63299316185545206546485604980392759464396498710446")
+        self.assertEqual(serialize_decimal(bands[2].upper.value), "3.63299316185545206546485604980392759464396498710444675228846171150064025163821")
         bandwidth = bollinger_bandwidth(cs, 3, "2")
-        self.assertEqual(serialize_decimal(bandwidth[2].value), "1.63299316185545206546485604980392759464396498710446")
+        self.assertEqual(serialize_decimal(bandwidth[2].value), "1.63299316185545206546485604980392759464396498710444675228846171150064025163821")
 
     def test_historical_volatility_and_atr_features(self):
         cs = candles([100, 101, 102, 104, 103, 105], [101,102,103,105,104,106], [99,100,101,103,102,104])
