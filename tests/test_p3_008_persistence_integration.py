@@ -25,8 +25,8 @@ class Tx:
     async def __aexit__(self,*args): return False
 
 class FakeConnection:
-    def __init__(self,duplicate=False):
-        self.duplicate=duplicate; self.calls=[]; self.outbox_sequence=7
+    def __init__(self,duplicate=False,expected_event_id=None):
+        self.duplicate=duplicate; self.expected_event_id=expected_event_id; self.calls=[]; self.outbox_sequence=7
     def transaction(self): return Tx()
     async def fetchrow(self,query,*args):
         self.calls.append(("fetchrow",query,args))
@@ -34,7 +34,7 @@ class FakeConnection:
             if self.duplicate: return None
             return {"record_id":args[0]}
         if "SELECT record_id,event_id" in query:
-            return {"record_id":args[0],"event_id":args[1] if len(args)>1 else "event"}
+            return {"record_id":args[0],"event_id":self.expected_event_id or "event"}
         if "canonical_event_outbox" in query:
             return {"sequence_no":self.outbox_sequence}
         return None
@@ -77,7 +77,7 @@ class P3008PersistenceIntegrationTests(unittest.TestCase):
     def test_duplicate_replay_is_not_inserted_again(self):
         trade=CanonicalTrade("t1","BTCUSDT",datetime(2026,9,18,tzinfo=UTC),Decimal("100"),Decimal("1"),provenance_id="binance:vertical")
         record,event=build_canonical_event(trade,assessment(),1)
-        conn=FakeConnection(duplicate=True)
+        conn=FakeConnection(duplicate=True,expected_event_id=event.event_id)
         result=asyncio.run(CanonicalPersistence(conn).persist(record,event.to_json(),assessment()))
         self.assertFalse(result.inserted)
     def test_event_relay_publishes_in_order_and_marks_outbox(self):
