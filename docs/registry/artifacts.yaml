@@ -590,13 +590,13 @@ records:
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-013.md
     traceability: Project Owner ratification / ADR-GOVERNANCE-001
-    status: RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+    status: RATIFIED / AMENDED — Rule 5 added 2026-09-18
   - stable_id: PH-P3
     canonical_name: Validation, Normalization & Data Quality Engine
     entity_type: PH
     artifact_path: docs/phases/PH-P3.md
     traceability: PROJECT-OWNER-PHASE-3-ESTABLISHMENT-2026-09-15 / DOC-V2-ARCH-001 / DOC-P3-001
-    status: ACTIVE / AUTHORIZED
+    status: CLOSED / VERIFIED
   - stable_id: STEP-P3-001
     canonical_name: Canonical Contracts, Identity & Validation Foundation
     entity_type: STEP
