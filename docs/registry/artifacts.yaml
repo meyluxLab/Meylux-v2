@@ -893,4 +893,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-002.md
     traceability: TO-P4-002 / PH-P4 / STEP-P4-002
-    status: ALLOCATED / NOT YET PRODUCED
+    status: PRODUCED / TESTED / UNVERIFIED
