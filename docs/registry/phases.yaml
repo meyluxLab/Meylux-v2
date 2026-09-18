@@ -378,8 +378,8 @@ records:
     logical_name: Data Quality, Quarantine, DLQ & Lineage
     entity_type: STEP
     phase: PH-P3
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED / ACTIVE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 7
     predecessor: STEP-P3-006
     activation_basis: PROJECT-OWNER-DIRECTIVE-STEP-P3-007-COMMENCEMENT / PH-P3 / AR-P3-006 / ADR-GOVERNANCE-013
