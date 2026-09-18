@@ -95,10 +95,16 @@ The Step must establish the minimum authoritative foundation without prematurely
 ### `STEP-P4-002` — Technical Indicators, Statistical & Volatility Engine
 
 **Order:** 2
-**Status:** NOT YET AUTHORIZED
-**Predecessor:** `STEP-P4-001`
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** AUTHORIZED TO EXECUTE
+**Predecessor:** `STEP-P4-001` — COMPLETE / VERIFIED
+**Active Task Order:** `TO-P4-002`
+**Activation basis:** Project Owner Directive — Authorize STEP-P4-002
+**Canonical Task Order:** `docs/task-orders/TO-P4-002.md`
 
-Objective: implement deterministic price/time/volume indicators and statistical/volatility features against the verified P4 quantitative foundation.
+Objective: implement deterministic price/time/volume technical indicators and statistical/volatility features against the verified P4 quantitative foundation and trusted canonical Phase-3 inputs.
+
+Scope boundary: moving averages, momentum, trend/volatility, statistical/realized-volatility measures supported by authoritative contracts, volume/activity features, VWAP and explicitly anchored VWAP, with deterministic parameter handling, warm-up/insufficient-history semantics, temporal correctness, no-lookahead, golden vectors, regression evidence and documentation. This Step does not authorize Market Structure, Volume Profile/Order Flow/Derivatives, Regime, orchestration/API/runtime/G-4, AI interpretation, Venue Intelligence, trading/capital authority, V1 mutation or unrelated refactoring.
 
 ### `STEP-P4-003` — Deterministic Market Structure Engine
 
