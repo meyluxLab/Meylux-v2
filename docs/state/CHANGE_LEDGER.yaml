@@ -415,3 +415,18 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification, audit issuance, registry reconciliation, checkpoint finalization, and mandatory peripheral synchronization
     v1_effect: none
+  - id: CHG-P3-STEP-007-ACTIVATE
+    date_utc: '2026-09-18'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-007 establishment and TO-P3-007 authorization
+    basis: Project Owner Directive — Commence STEP-P3-007 + PH-P3 + AR-P3-006 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P3-007
+      - TO-P3-007
+      - PH-P3
+    from_state: STEP-P3-007 DEFINED / INACTIVE; no active P3 Task Order
+    to_state: STEP-P3-007 ACTIVE / AUTHORIZED; TO-P3-007 AUTHORIZED TO EXECUTE
+    predecessor: STEP-P3-006 COMPLETE / VERIFIED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS/runtime execution
+    v1_effect: none
