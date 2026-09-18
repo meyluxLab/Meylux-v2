@@ -857,6 +857,24 @@ records:
     artifact_path: docs/phases/PH-P4.md
     traceability: DOC-V2-ARCH-001 / DOC-P4-001 / PH-P3 / Project Owner Directive — Establish Phase 4 & Authorize STEP-P4-001 — 2026-09-18 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: ACTIVE / AUTHORIZED
+  - stable_id: STEP-P4-002
+    canonical_name: Technical Indicators, Statistical & Volatility Engine
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P4.md
+    traceability: PH-P4 / STEP-P4-001 / AR-P4-001 / TO-P4-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002
+    status: ACTIVE / AUTHORIZED
+  - stable_id: TO-P4-002
+    canonical_name: Task Order — Technical Indicators, Statistical & Volatility Engine
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-002.md
+    traceability: PH-P4 / STEP-P4-002 / STEP-P4-001 / AR-P4-001 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002
+    status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-P4-002
+    canonical_name: Build Report — Technical Indicators, Statistical & Volatility Engine
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-002.md
+    traceability: TO-P4-002 / STEP-P4-002 / PH-P4
+    status: EXPECTED
   - stable_id: STEP-P4-001
     canonical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
     entity_type: STEP
