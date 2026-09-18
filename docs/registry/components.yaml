@@ -26,7 +26,11 @@ records:
       - contracts/quantitative/
       - src/meylux/quantitative/
       - tests/test_quantitative_foundation.py
+      - src/meylux/quantitative/indicators.py
     evidence:
       implementation_commit: d9bb565023796f3969ea5a05f9a725729912bcf5
       control_audit: AR-P4-001
+      p4_002_implementation_commit: e970752c2e332bee6311327ed6138a1b355019a4
+      p4_002_control_audit: AR-P4-002
+      p4_002_integration_commit: c873d43cc4d563802e7aef7f0634deac75239f01
       status: VERIFIED
