@@ -789,3 +789,9 @@ records:
     artifact_path: tests/test_contracts/test_p3_006_consistency.py
     traceability: TO-P3-006 / STEP-P3-006 / BR-P3-006 / AR-P3-006
     status: VERIFIED
+  - stable_id: TO-P3-007
+    canonical_name: Task Order — Data Quality, Quarantine, DLQ & Lineage
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-007.md
+    traceability: PH-P3 / STEP-P3-007 / STEP-P3-006 / AR-P3-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive
+    status: AUTHORIZED TO EXECUTE
