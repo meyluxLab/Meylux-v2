@@ -637,8 +637,8 @@ records:
     canonical_name: Data Quality, Quarantine, DLQ & Lineage
     entity_type: STEP
     artifact_path: docs/phases/PH-P3.md
-    traceability: PH-P3 / STEP-P3-006 / DOC-V2-ARCH-001
-    status: DEFINED / INACTIVE
+    traceability: PH-P3 / STEP-P3-006 / DOC-V2-ARCH-001 / TO-P3-007 / AR-P3-007
+    status: COMPLETE / VERIFIED
   - stable_id: STEP-P3-008
     canonical_name: Authoritative Persistence, Event Handoff & G-3 Verification
     entity_type: STEP
@@ -794,10 +794,22 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-007.md
     traceability: PH-P3 / STEP-P3-007 / STEP-P3-006 / AR-P3-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P3-007
     canonical_name: Build Report — Data Quality, Quarantine, DLQ & Lineage
     entity_type: BR
     artifact_path: docs/build-reports/BR-P3-007.md
-    traceability: TO-P3-007 / PH-P3 / STEP-P3-007
-    status: PRODUCED / UNVERIFIED
+    traceability: TO-P3-007 / PH-P3 / STEP-P3-007 / AR-P3-007
+    status: VERIFIED
+  - stable_id: AR-P3-007
+    canonical_name: CONTROL Independent Audit — Data Quality, Quarantine, DLQ & Lineage
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-007.md
+    traceability: BR-P3-007 / TO-P3-007 / PH-P3 / STEP-P3-007
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P3-007
+    canonical_name: Data Quality, Quarantine, DLQ & Lineage Tests
+    entity_type: TST
+    artifact_path: tests/test_contracts/test_p3_007_quality.py
+    traceability: TO-P3-007 / STEP-P3-007 / BR-P3-007 / AR-P3-007
+    status: VERIFIED
