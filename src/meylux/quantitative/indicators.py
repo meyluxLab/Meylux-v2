@@ -629,7 +629,10 @@ def bollinger_bandwidth(
         if point.middle.value == 0:
             out.append(_invalid("bollinger_middle_must_not_be_zero"))
         else:
-            out.append(_valid((point.upper.value - point.lower.value) / point.middle.value, reason="bandwidth"))
+            with localcontext() as ctx:
+                ctx.prec = _precision((point.upper.value, point.lower.value, point.middle.value))
+                value = (point.upper.value - point.lower.value) / point.middle.value
+            out.append(_valid(value, reason="bandwidth"))
     return tuple(out)
 
 
