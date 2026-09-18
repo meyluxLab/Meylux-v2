@@ -21,7 +21,7 @@ class P3008CanonicalQualitySchemaTests(unittest.TestCase):
             "canonical_derivatives",
         ):
             self.assertIn(table, migration)
-            self.assertIn("t + '_quality_state_check'", migration)
+            self.assertIn("t || '_quality_state_check'", migration)
 
 if __name__ == "__main__":
     unittest.main()
