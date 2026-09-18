@@ -395,3 +395,28 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification, audit issuance, registry synchronization, checkpoint finalization, and documentation lifecycle synchronization
     v1_effect: none
+  - id: CHG-P3-STEP-006-CLOSE
+    date_utc: '2026-09-18'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-006 independent verification, correction closure, and Closure Synchronization
+    basis: AR-P3-006 + TO-P3-006 + BR-P3-006 + TST-P3-006 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + General Continuation and Phase Progression Authority
+    affected_ids:
+      - BR-P3-006
+      - TST-P3-006
+      - AR-P3-006
+      - TO-P3-006
+      - STEP-P3-006
+      - STEP-P3-007
+      - PH-P3
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/state/CURRENT_CHECKPOINT.json
+      - README.md
+    from_state: STEP-P3-006 ACTIVE / AUTHORIZED; TO-P3-006 AUTHORIZED TO EXECUTE; BR-P3-006 PRODUCED / TESTED / UNVERIFIED; TST-P3-006 TESTED / UNVERIFIED; AR-P3-006 not issued; STEP-P3-007 DEFINED / INACTIVE
+    to_state: BR-P3-006 VERIFIED; TST-P3-006 VERIFIED; AR-P3-006 APPROVED / VERIFIED; TO-P3-006 VERIFIED / COMPLETE; STEP-P3-006 COMPLETE / VERIFIED; STEP-P3-007 remains DEFINED / INACTIVE; PH-P3 remains ACTIVE / AUTHORIZED; no active P3 Task Order
+    verified_implementation_commit: 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283
+    ci_evidence: CI Core Run #480 / Run ID 35288927476 / Job ID 105427313888 / 238 full-regression tests passed / 24 P3-006 tests passed
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification, audit issuance, registry reconciliation, checkpoint finalization, and mandatory peripheral synchronization
+    v1_effect: none
