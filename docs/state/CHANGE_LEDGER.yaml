@@ -841,3 +841,28 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX action performed
     scope_effect: no later P4 Step authorized or implemented
+
+  - id: CHG-P4-STEP-002-AUTH-20260918
+    date_utc: '2026-09-18'
+    change_type: STEP_AUTHORIZATION
+    subject: CONTROL establishment and authorization of STEP-P4-002
+    basis: Project Owner Directive — Authorize STEP-P4-002 + PH-P4 ACTIVE / AUTHORIZED + STEP-P4-001 COMPLETE / VERIFIED + TO-P4-001 VERIFIED / COMPLETE
+    affected_ids:
+      - STEP-P4-002
+      - TO-P4-002
+      - BR-P4-002
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+    predecessor_evidence: STEP-P4-001 COMPLETE / VERIFIED under AR-P4-001; TO-P4-001 VERIFIED / COMPLETE
+    authorization_state: ACTIVE / AUTHORIZED
+    active_task_order: TO-P4-002
+    producer_role: ROL-V2-002
+    control_role: ROL-V2-001
+    scope_boundary: deterministic technical indicators, statistical/volatility features, volume/activity features, VWAP/explicit Anchored VWAP, warm-up/input semantics, no-lookahead, golden vectors, tests, documentation and evidence only within STEP-P4-002
+    excluded_steps: STEP-P4-003, STEP-P4-004, STEP-P4-005, STEP-P4-006
+    excluded_capabilities: AI, Venue Intelligence, trading/capital, V1, unrelated refactoring
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: no blanket VPS authorization; SentinelX-only if separately authorized by the Task Order
