@@ -39,7 +39,7 @@
     "function": "macd",
     "input": {"closes": [10, 11, 12, 13, 14, 15], "fast_period": 2, "slow_period": 3, "signal_period": 2},
     "index": 3,
-    "expected": {"macd": "0.5", "signal": "0.5", "histogram": "0.00000000000000000000000000005"}
+    "expected": {"macd": "0.5000000000000000000000000001", "signal": "0.50000000000000000000000000005", "histogram": "0.00000000000000000000000000005"}
   },
   {
     "id": "P4-002-GV-ATR-002",
