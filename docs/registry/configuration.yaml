@@ -1,3 +1,14 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-records: []
+status: ACTIVE / EVIDENCE-TRACKING
+records:
+  - stable_id: CFG-P3-008
+    canonical_name: P3-008 Database and Redis Runtime Configuration
+    entity_type: CONFIGURATION
+    phase: PH-P3
+    step: STEP-P3-008
+    task_order: TO-P3-008
+    evidence:
+      repository_commit: fb17a034805abd219bad8fccc757fefc8faca27e
+      secret_values_recorded: false
+      db_and_redis_health: VERIFIED
+      execution_log: EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918
