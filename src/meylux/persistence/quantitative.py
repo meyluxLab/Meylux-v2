@@ -60,4 +60,13 @@ class QuantitativePersistence:
         if family not in self.TABLES: raise ValueError("unsupported quantitative family")
         if not symbol or not timeframe: raise ValueError("symbol and timeframe are required")
         if isinstance(limit,bool) or not isinstance(limit,int) or not 1<=limit<=1000: raise ValueError("limit must be 1..1000")
-        sql=f"SELECT * FROM {self.TABLES[family]} WHERE symbol=$1 AND timeframe=$2"; args=[symbol,timeframe]\n        if start is not None:\n            if start.tzinfo is None or start.utcoffset()!=timezone.utc.utcoffset(start): raise ValueError("start must be UTC")\n            sql+=f" AND event_time>${len(args)+1}"; args.append(start)\n        if end is not None:\n            if end.tzinfo is None or end.utcoffset()!=timezone.utc.utcoffset(end): raise ValueError("end must be UTC")\n            if start is not None and end<start: raise ValueError("end must not precede start")\n            sql+=f" AND event_time<${len(args)+1}"; args.append(end)\n        sql+=f" ORDER BY event_time,record_id LIMIT ${len(args)+1}"; args.append(limit)\n        return list(await self._connection.fetch(sql,*args))
+        sql=f"SELECT * FROM {self.TABLES[family]} WHERE symbol=$1 AND timeframe=$2"; args=[symbol,timeframe]
+        if start is not None:
+            if start.tzinfo is None or start.utcoffset()!=timezone.utc.utcoffset(start): raise ValueError("start must be UTC")
+            sql+=f" AND event_time>${len(args)+1}"; args.append(start)
+        if end is not None:
+            if end.tzinfo is None or end.utcoffset()!=timezone.utc.utcoffset(end): raise ValueError("end must be UTC")
+            if start is not None and end<start: raise ValueError("end must not precede start")
+            sql+=f" AND event_time<${len(args)+1}"; args.append(end)
+        sql+=f" ORDER BY event_time,record_id LIMIT ${len(args)+1}"; args.append(limit)
+        return list(await self._connection.fetch(sql,*args))
