@@ -861,8 +861,8 @@ records:
     canonical_name: Technical Indicators, Statistical & Volatility Engine
     entity_type: STEP
     artifact_path: docs/phases/PH-P4.md
-    traceability: PH-P4 / STEP-P4-001 / TO-P4-002 / TO-P4-003 / AR-P4-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002 / Targeted Correction and Reverification
-    status: ACTIVE / CORRECTION REQUIRED
+    traceability: PH-P4 / STEP-P4-001 / TO-P4-002 / TO-P4-003 / AR-P4-002 / AR-P4-003 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002 / Targeted Correction and Reverification
+    status: COMPLETE / VERIFIED
   - stable_id: TO-P4-002
     canonical_name: Task Order — Technical Indicators, Statistical & Volatility Engine
     entity_type: TO
@@ -873,8 +873,8 @@ records:
     canonical_name: Task Order — Targeted Historical-Volatility Boundary Correction & P4-002 Re-Verification
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-003.md
-    traceability: PH-P4 / STEP-P4-002 / TO-P4-002 / AR-P4-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Targeted Correction and Reverification of STEP-P4-002
-    status: AUTHORIZED TO EXECUTE
+    traceability: PH-P4 / STEP-P4-002 / TO-P4-002 / AR-P4-002 / BR-P4-003 / AR-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Targeted Correction and Reverification of STEP-P4-002
+    status: VERIFIED / COMPLETE
   - stable_id: STEP-P4-001
     canonical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
     entity_type: STEP
@@ -900,9 +900,21 @@ records:
     artifact_path: docs/build-reports/BR-P4-002.md
     traceability: TO-P4-002 / PH-P4 / STEP-P4-002 / AR-P4-002
     status: VERIFIED
+  - stable_id: BR-P4-003
+    canonical_name: Build Report — Targeted Historical-Volatility Boundary Correction & P4-002 Re-Verification
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-003.md
+    traceability: TO-P4-003 / PH-P4 / STEP-P4-002 / AR-P4-003
+    status: VERIFIED
   - stable_id: AR-P4-002
     canonical_name: CONTROL Independent Audit — Technical Indicators, Statistical & Volatility Engine
     entity_type: AR
     artifact_path: docs/audits/AR-P4-002.md
     traceability: BR-P4-002 / TO-P4-002 / PH-P4 / STEP-P4-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+  - stable_id: AR-P4-003
+    canonical_name: CONTROL Independent Re-Verification — Targeted Historical-Volatility Boundary Correction & P4-002
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-003.md
+    traceability: BR-P4-003 / TO-P4-003 / PH-P4 / STEP-P4-002 / AR-P4-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
