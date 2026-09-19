@@ -415,7 +415,7 @@ records:
     first_step: STEP-P4-001
     next_valid_step: STEP-P4-003
     final_step: STEP-P4-006
-    active_task_order: null
+    active_task_order: TO-P4-003
     current_step: STEP-P4-002
     completed_task_order: TO-P4-002
     completion_audit: AR-P4-002
