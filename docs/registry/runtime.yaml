@@ -23,13 +23,14 @@ records:
     task_order: TO-P4-007
     runtime_target: server-l6rf /srv/meylux-v2
     evidence:
-      runtime_commit: 48bae89931c3ab003223a867ab9f9bf75fe3117a
+      runtime_commit: fb7d9847498323bec067ba98a1e2729f869c0697
       compose_build: PASS
       db_redis_health: PASS
       api_wire_probe: PASS
       worker_failure_retry_dlq_probe: PASS
-      governed_raw_historical_acquisition: EXECUTED / OBSERVED
-      raw_records: 1498
+      governed_raw_historical_acquisition: VERIFIED
+      raw_records: 2995
+      corrected_post_TO_P4_008_raw_records: 1497
       raw_window_15m: 2026-09-14T17:30:00Z..2026-09-19T22:00:00Z (499 closed)
       raw_window_1h: 2026-08-30T03:00:00Z..2026-09-19T21:00:00Z (499 closed)
       raw_window_4h: 2026-06-28T16:00:00Z..2026-09-19T16:00:00Z (499 closed)
@@ -42,6 +43,5 @@ records:
       worker_real_data: VERIFIED — delivered/started/acked/completed
       worker_restart_recovery_real_data: VERIFIED — pending message recovered after restart
       read_only_api_real_data: VERIFIED — GET 200 / POST 405
-      restart_recovery_real_data: UNEXECUTED / UNVERIFIED
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
     status: VERIFIED
