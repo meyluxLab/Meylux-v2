@@ -1055,3 +1055,17 @@ records:
     artifact_path: docs/audits/AR-P4-010.md
     traceability: TO-P4-006 / PH-P4 / STEP-P4-005 / BR-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: REQUEST CHANGES / NOT VERIFIED
+
+
+  - stable_id: TST-P4-005
+    canonical_name: Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence Tests
+    entity_type: TST
+    artifact_path: tests/test_p4_005_regime_venue.py
+    traceability: TO-P4-006 / STEP-P4-005 / BR-P4-006 / AR-P4-011 / AR-P4-010
+    status: VERIFIED
+  - stable_id: AR-P4-011
+    canonical_name: CONTROL Final Independent Verification — STEP-P4-005 / TO-P4-006
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-011.md
+    traceability: BR-P4-006 / TO-P4-006 / PH-P4 / STEP-P4-005 / AR-P4-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
