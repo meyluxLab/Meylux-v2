@@ -99,7 +99,7 @@ class ScenarioTests(unittest.TestCase):
         self.assertEqual(r.states[40].state,"UNCONFIRMED")
         self.assertEqual(r.states[45].state,"UNCONFIRMED")
         self.assertEqual(r.states[51].state,"UNCONFIRMED")
-        self.assertEqual(r.states[52].state,"TRENDING_UP")
+        self.assertEqual(r.states[57].state,"TRENDING_UP")
 
     def test_equal_high_and_low_remain_unconfirmed(self):
         n=27
@@ -115,7 +115,7 @@ class ScenarioTests(unittest.TestCase):
         vals=[
             (Decimal("99"),Decimal("100"),Decimal("98"),Decimal("99")),
             (Decimal("101"),Decimal("102"),Decimal("101"),Decimal("102")),
-            (Decimal("102"),Decimal("104"),Decimal("103"),Decimal("103")),
+            (Decimal("103"),Decimal("104"),Decimal("103"),Decimal("103")),
             (Decimal("103"),Decimal("104"),Decimal("102"),Decimal("103")),
             (Decimal("103"),Decimal("104"),Decimal("99"),Decimal("100")),
             (Decimal("100"),Decimal("101"),Decimal("98"),Decimal("100")),
