@@ -17,8 +17,17 @@ records:
       regime_ms: 1.677
     interpretation: measured implementation evidence only; not a production-performance claim
     roadmap_target_context: '<50ms / full multi-timeframe vector is a roadmap target, not a frozen contract'
-    status: TESTED / UNVERIFIED
+    status: VERIFIED
     execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+    final_real_data_measurement:
+      workload: 116 primary 15m + 31 1h + 9 4h
+      repetitions: 5
+      average_ms: 22.690451
+      min_ms: 16.798383
+      max_ms: 31.998459
+      full_vector_target_result: PASS
+      indicator_1000_bar_target_result: NOT SATISFIED — existing EMA boundary; no engine reopening authorized
+      audit: AR-P4-015
 
     target_basis:
       indicator_target: '<5ms / indicator / 1000 bars'
