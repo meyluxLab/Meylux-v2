@@ -114,6 +114,7 @@ class MarketStructureEngine:
             else:
                 state=self._derive_state(highs,lows,high_class,low_class)
             phase_trace.append("state")
+            phase_trace.append("structural_breaks")
             if i>=boundary:
                 break_state=pre_state; choch_emitted=False
                 if break_state==_STATE_UP and pre_lows and candle.close<pre_lows[-1][1]:
@@ -154,7 +155,6 @@ class MarketStructureEngine:
                         if candle.close>protected[1] and protected[0]>pending["index"]:
                             ev=self._event("MSS",candle,candle.close_time,level=protected[1],direction="bullish",prior_state=_STATE_UNCONFIRMED,reason="post_choch_bullish_structural_transition",index=i)
                             if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bullish",protected[1],boundary)); active_break_facts[ev.identity]=ev; state=_STATE_UP; pending=None
-            phase_trace.append("structural_breaks")
             for e in list(bar_events):
                 if e.event_type not in ("BOS","CHOCH","MSS") or e.direction is None: continue
                 source=self._source_body(xs,i,e.direction,boundary)
