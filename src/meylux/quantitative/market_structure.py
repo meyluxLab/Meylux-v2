@@ -267,7 +267,12 @@ class MarketStructureEngine:
         # states handled by the main state machine.
         if not highs or not lows: return _STATE_NEUTRAL
         h=hc.get(highs[-1][0]); l=lc.get(lows[-1][0])
-        if h is None or l is None: return _STATE_NEUTRAL
+        if h is None:
+            if len(highs)>=2 and highs[-1][1]==highs[-2][1]: return _STATE_UNCONFIRMED
+            return _STATE_NEUTRAL
+        if l is None:
+            if len(lows)>=2 and lows[-1][1]==lows[-2][1]: return _STATE_UNCONFIRMED
+            return _STATE_NEUTRAL
         if h=="HH" and l=="HL": return _STATE_UP
         if h=="LH" and l=="LL": return _STATE_DOWN
         if h in ("HH","LH") and l in ("HL","LL"): return _STATE_RANGE
