@@ -179,7 +179,7 @@ class MarketStructureEngine:
                         seen.add(ev); bar_events.append(ev); active_fvgs.append(ev); fvg_lifecycle[ev.identity]="ACTIVE"
                 elif c.high<a.low:
                     ev=self._event("FVG",c,c.close_time,lower=c.high,upper=a.low,direction="bearish",lifecycle="ACTIVE",reason="bearish_three_candle_gap",index=i)
-                    if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_fvgs.append(ev)
+                    if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_fvgs.append(ev); fvg_lifecycle[ev.identity]="ACTIVE"
             if i>boundary:
                 for fvg in list(active_fvgs):
                     current=fvg_lifecycle.get(fvg.identity,"ACTIVE")
@@ -260,7 +260,7 @@ class MarketStructureEngine:
         return None
     def _event(self,event_type,c,knowledge,level=None,lower=None,upper=None,direction=None,lifecycle=None,source=None,prior_state=None,reason="",index=0,location_override=None,structural_state=None):
         loc=location_override or c.open_time
-        payload=(c.instrument_id,c.timeframe,SEMANTIC_VERSION,event_type,loc.isoformat(),knowledge.isoformat(),direction or "",self._dec(level),self._dec(lower),self._dec(upper),source or "")
+        payload=(c.instrument_id,c.timeframe,SEMANTIC_VERSION,event_type,loc.isoformat(),knowledge.isoformat(),direction or "",self._dec(level),self._dec(lower),self._dec(upper),lifecycle or "",source or "")
         ident=sha256("|".join(payload).encode()).hexdigest()
         return StructuralEvent(event_type,loc,knowledge,knowledge,ident,direction,level,lower,upper,lifecycle,structural_state,source,prior_state,reason)
     @staticmethod
