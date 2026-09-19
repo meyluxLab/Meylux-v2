@@ -1741,3 +1741,23 @@ entries:
       - AR-P4-012 / AR-P4-013: preserved as historical request-changes/open-boundary audits; final authority is AR-P4-015.
       - EXEC-LOG: contains final governed acquisition, persistence, orchestration, worker, recovery, API, security and performance evidence.
     closure_result: Final CONTROL read-back confirms no conflicting current-state record remains. STEP-P4-006 and PH-P4 closure synchronization is complete. Phase 5 remains NOT AUTHORIZED.
+
+
+  - id: CHG-P4-STEP-006-CLOSURE-SYNC-FINAL-READBACK-20260920
+    date_utc: '2026-09-20'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION_FINAL_READBACK
+    subject: CONTROL final checkpoint read-back removes stale STEP-P4-006 authorization assumption
+    basis: CHG-P4-STEP-006-CLOSURE-SYNC-FINAL-20260920 + CURRENT_CHECKPOINT final read-back + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    checkpoint_commit: 2508915dfcc5622fecf602503433ec0cde178d42
+    verified_state:
+      phase: PH-P4 CLOSED / VERIFIED
+      step: STEP-P4-006 COMPLETE / VERIFIED
+      g4: ESTABLISHED / VERIFIED
+      active_task_order: null
+      completed_task_order: TO-P4-008
+      completion_audit: AR-P4-015
+      unverified_artifacts: []
+      p4_open_questions: none
+      deferred_decision: DD-V2-P4-006-PERFORMANCE-TARGET remains DEFERRED
+      phase5: NOT AUTHORIZED
+    closure_result: Final checkpoint read-back is internally consistent and contains no stale current-state assertion that STEP-P4-006 remains active. CONTROL closure synchronization is complete.
