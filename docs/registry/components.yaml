@@ -33,4 +33,7 @@ records:
       p4_002_implementation_commit: e970752c2e332bee6311327ed6138a1b355019a4
       p4_002_control_audit: AR-P4-002
       p4_002_integration_commit: c873d43cc4d563802e7aef7f0634deac75239f01
+      p4_003_correction_implementation_commit: 2c499eccf62ce0f1cc92f1c9dce6ca0f923e1395
+      p4_003_correction_integration_commit: 4cbeecee0704c7fb2a7b678b8b2f160c8b000b68
+      p4_003_control_audit: AR-P4-003
       status: VERIFIED
