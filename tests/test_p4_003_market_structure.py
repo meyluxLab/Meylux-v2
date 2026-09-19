@@ -54,9 +54,10 @@ class ScenarioTests(unittest.TestCase):
         o[45]=c[45]=Decimal("108"); h[45]=Decimal("110"); l[45]=Decimal("107")
         for i in range(47,51): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
         o[51]=c[51]=Decimal("102"); h[51]=Decimal("103"); l[51]=Decimal("101")
-        r=MarketStructureEngine().analyze(candles(closes=c,highs=h,lows=l,opens=o))
-        self.assertEqual([(x.level,x.direction,x.event_location) for x in r.events if x.event_type=="CHOCH"],[(Decimal("107"),"bearish",c[40].open_time)])
-        self.assertEqual([(x.level,x.direction,x.event_location) for x in r.events if x.event_type=="MSS"],[(Decimal("103"),"bearish",c[51].open_time)]); self.assertEqual(r.states[40].state,"UNCONFIRMED"); self.assertEqual(r.states[50].state,"UNCONFIRMED"); self.assertEqual(r.states[51].state,"TRENDING_DOWN")
+        bars=candles(closes=c,highs=h,lows=l,opens=o)
+        r=MarketStructureEngine().analyze(bars)
+        self.assertEqual([(x.level,x.direction,x.event_location) for x in r.events if x.event_type=="CHOCH"],[(Decimal("107"),"bearish",bars[40].open_time)])
+        self.assertEqual([(x.level,x.direction,x.event_location) for x in r.events if x.event_type=="MSS"],[(Decimal("103"),"bearish",bars[51].open_time)]); self.assertEqual(r.states[40].state,"UNCONFIRMED"); self.assertEqual(r.states[50].state,"UNCONFIRMED"); self.assertEqual(r.states[51].state,"TRENDING_DOWN")
 
     def test_fvg_lifecycle(self):
         c=list(candles(6))
@@ -350,8 +351,8 @@ class ScenarioTests(unittest.TestCase):
         pool2=next(e for e in r2.events if e.event_type=="LIQUIDITY_POOL")
         sweep2=next(e for e in r2.events if e.event_type=="LIQUIDITY_POOL_SWEEP")
         self.assertEqual(sweep2.source_event_identity,pool2.identity); self.assertEqual(sweep2.level,Decimal("90"))
-        hh3=list(hh2); hh3[17]=Decimal("90.0000000000000000000000000001")
-        self.assertFalse(any(e.event_type=="LIQUIDITY_POOL" for e in MarketStructureEngine().analyze(candles(n=n,closes=cc2,highs=hh3,lows=ll2,opens=oo2)).events))
+        ll3=list(ll2); ll3[17]=Decimal("90.0000000000000000000000000001")
+        self.assertFalse(any(e.event_type=="LIQUIDITY_POOL" for e in MarketStructureEngine().analyze(candles(n=n,closes=cc2,highs=hh2,lows=ll3,opens=oo2)).events))
 
     def test_large_small_decimal_and_malformed_contradictory_inputs(self):
         huge=Decimal("9.0E+60"); tiny=Decimal("1E-60")
