@@ -40,3 +40,20 @@ records:
       p4_003_build_report: BR-P4-004
       p4_003_control_audit: AR-P4-006
       status: VERIFIED
+
+  - stable_id: CMP-V2-P4-004
+    canonical_name: Volume Profile, Order Flow & Derivatives Engine
+    entity_type: CMP
+    phase: PH-P4
+    step: STEP-P4-004
+    task_order: TO-P4-005
+    implementation_paths:
+      - src/meylux/quantitative/volume_orderflow_derivatives.py
+      - tests/test_p4_004_volume_orderflow_derivatives.py
+    evidence:
+      implementation_commit: b6dd4e0ea55319b820c5e90b7de4da4dd62e0d48
+      implementation_content_sha: 6eb4e95f15f57a4b5a8b4ff5605429dc4fab9e5a
+      build_report: BR-P4-005
+      control_audit: AR-P4-009
+      final_repository_validation: 9f42b28bc07e5bb58d2b257a841521dd0ffa940f
+      status: VERIFIED
