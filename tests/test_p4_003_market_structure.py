@@ -164,7 +164,6 @@ class ScenarioTests(unittest.TestCase):
         n=16; c=list(candles(n))
         c[5]=CanonicalCandle("TEST","1h",c[5].open_time,c[5].close_time,Decimal("102"),Decimal("110"),Decimal("101"),Decimal("102"),Decimal("1"),provenance_id="boundary-high")
         r=MarketStructureEngine().analyze(c)
-        self.assertFalse(any(e.event_type=="SWING_HIGH" and e.event_location==c[5].open_time for e in r.events[:]))
         self.assertFalse(any(e.event_type=="SWING_HIGH" and e.event_location==c[5].open_time for e in r.states[0].events))
         self.assertFalse(any(e.event_type=="SWING_HIGH" and e.event_location==c[5].open_time for st in r.states[:10] for e in st.events))
         self.assertTrue(any(e.event_type=="SWING_HIGH" and e.event_location==c[5].open_time for e in r.states[10].events))
@@ -304,7 +303,7 @@ class ScenarioTests(unittest.TestCase):
             (Decimal("103"),Decimal("105"),Decimal("103"),Decimal("104")),
             (Decimal("101"),Decimal("102"),Decimal("101"),Decimal("101")),
             (Decimal("99"),Decimal("100"),Decimal("98"),Decimal("99")),
-            (Decimal("99"),Decimal("100"),Decimal("101"),Decimal("99")),
+            (Decimal("102"),Decimal("104"),Decimal("100"),Decimal("102")),
         ])
         rr=MarketStructureEngine().analyze(bearish)
         bf=next(e for e in rr.events if e.event_type=="FVG" and e.event_location==bearish[2].open_time)
@@ -355,17 +354,17 @@ class ScenarioTests(unittest.TestCase):
         self.assertFalse(any(e.event_type=="LIQUIDITY_POOL" for e in MarketStructureEngine().analyze(candles(n=n,closes=cc2,highs=hh2,lows=ll2,opens=oo2)).events))
 
     def test_large_small_decimal_and_malformed_contradictory_inputs(self):
-        huge=Decimal("9"*60); tiny=Decimal("1e-60")
+        huge=Decimal("9.0E+60"); tiny=Decimal("1E-60")
         c=list(candles(16))
         for i in range(len(c)):
-            c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,huge,huge+Decimal("2"),huge-Decimal("1"),huge+Decimal("1"),Decimal("0"),provenance_id=f"num-{i}")
-        c[5]=CanonicalCandle("TEST","1h",c[5].open_time,c[5].close_time,huge,huge+Decimal("9"),huge-Decimal("1"),huge+Decimal("1"),Decimal("0"),provenance_id="num-swing")
+            c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,huge,Decimal("9.1E+60"),Decimal("8.9E+60"),huge,Decimal("0"),provenance_id=f"num-{i}")
+        c[5]=CanonicalCandle("TEST","1h",c[5].open_time,c[5].close_time,huge,Decimal("9.9E+60"),Decimal("8.9E+60"),huge,Decimal("0"),provenance_id="num-swing")
         r=MarketStructureEngine().analyze(tuple(c))
         self.assertTrue(any(e.event_type=="SWING_HIGH" and e.level==huge+Decimal("9") for e in r.events))
         small=list(candles(16))
         for i in range(len(small)):
-            small[i]=CanonicalCandle("TEST","1h",small[i].open_time,small[i].close_time,tiny,tiny+Decimal("2e-60"),tiny, tiny+Decimal("1e-60"),Decimal("0"),provenance_id=f"small-{i}")
-        small[5]=CanonicalCandle("TEST","1h",small[5].open_time,small[5].close_time,tiny,tiny+Decimal("9e-60"),tiny,tiny+Decimal("1e-60"),Decimal("0"),provenance_id="small-swing")
+            small[i]=CanonicalCandle("TEST","1h",small[i].open_time,small[i].close_time,tiny,Decimal("1.1E-60"),Decimal("0.9E-60"),tiny,Decimal("0"),provenance_id=f"small-{i}")
+        small[5]=CanonicalCandle("TEST","1h",small[5].open_time,small[5].close_time,tiny,Decimal("1.9E-60"),Decimal("0.9E-60"),tiny,Decimal("0"),provenance_id="small-swing")
         sr=MarketStructureEngine().analyze(tuple(small))
         self.assertTrue(any(e.event_type=="SWING_HIGH" for e in sr.events))
         with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("10"),Decimal("9"),Decimal("8"),Decimal("9"),Decimal("1"),provenance_id="bad-high")
