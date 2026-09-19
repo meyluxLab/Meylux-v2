@@ -9,7 +9,7 @@ from contracts.quantitative.base import CalculationStatus, QuantitativeContext
 from meylux.quantitative.regime_venue import (
     BEARISH, BULLISH, RANGE, INSUFFICIENT,
     COMPARABLE, INCOMPATIBLE, INSUFFICIENT_EVIDENCE,
-    MarketRegimeEngine, RegimeConfig, VenueEvidence, VenueEvidenceEngine,
+    MarketRegimeEngine, RegimeConfig, RegimeFactor, VenueEvidence, VenueEvidenceEngine,
 )
 
 
@@ -66,7 +66,6 @@ class TestMarketRegimeEngine(unittest.TestCase):
         self.assertEqual(out.factors[0].direction, BULLISH)
         self.assertEqual(out.factors[1].direction, BULLISH)
         self.assertEqual(out.result.state, BULLISH)
-        # Explicitly construct conflict by using different thresholds.
         c2 = cfg(trend_lookback=3, momentum_lookback=1, trend_entry_threshold=Decimal("0.20"))
         out2 = self.engine.classify(xs, c2)
         self.assertEqual(out2.factors[0].direction, RANGE)
@@ -81,13 +80,33 @@ class TestMarketRegimeEngine(unittest.TestCase):
         self.assertEqual(a.result.state, BULLISH)
         self.assertEqual(b.result.state, BULLISH)
 
+    def test_bearish_state_persistence(self):
+        first = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "80"]))
+        held = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "80", "74"]))
+        a = self.engine.classify(first, cfg())
+        b = self.engine.classify(held, cfg(), previous_state=a.result.state)
+        self.assertEqual(a.result.state, BEARISH)
+        self.assertEqual(b.result.state, BEARISH)
+        self.assertEqual(b.transition, "UNCHANGED")
+
+    def test_direct_opposite_transition_from_bullish_to_bearish(self):
+        xs = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "80"]))
+        out = self.engine.classify(xs, cfg(), previous_state=BULLISH)
+        self.assertEqual(out.result.state, BEARISH)
+        self.assertEqual(out.transition, "BULLISH->BEARISH")
+
+    def test_direct_opposite_transition_from_bearish_to_bullish(self):
+        xs = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "120"]))
+        out = self.engine.classify(xs, cfg(), previous_state=BEARISH)
+        self.assertEqual(out.result.state, BULLISH)
+        self.assertEqual(out.transition, "BEARISH->BULLISH")
+
     def test_exact_entry_threshold_qualifies(self):
         xs = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "110"]))
         out = self.engine.classify(xs, cfg())
         self.assertEqual(out.result.state, BULLISH)
 
     def test_exact_exit_threshold_exits(self):
-        # Baseline = 100; value = +5%, exactly the exit threshold.
         xs = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "105"]))
         out = self.engine.classify(xs, cfg(), previous_state=BULLISH)
         self.assertEqual(out.result.state, RANGE)
@@ -97,17 +116,39 @@ class TestMarketRegimeEngine(unittest.TestCase):
         xs = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "95"]))
         out = self.engine.classify(xs, cfg(), previous_state=BEARISH)
         self.assertEqual(out.result.state, RANGE)
+        self.assertEqual(out.transition, "BEARISH->RANGE")
 
-    def test_insufficient_history_is_explicit(self):
+    def test_range_previous_state_reenters_directional_state(self):
+        bullish = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "120"]))
+        bearish = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "80"]))
+        self.assertEqual(self.engine.classify(bullish, cfg(), previous_state=RANGE).result.state, BULLISH)
+        self.assertEqual(self.engine.classify(bearish, cfg(), previous_state=RANGE).result.state, BEARISH)
+
+    def test_insufficient_previous_state_matrix_is_explicit(self):
         xs = tuple(candle(i, v) for i, v in enumerate(["100", "101"]))
-        out = self.engine.classify(xs, cfg())
-        self.assertEqual(out.result.state, INSUFFICIENT)
-        self.assertEqual(out.result.result.status, CalculationStatus.INSUFFICIENT_HISTORY)
-        self.assertIsNone(out.result.result.value)
+        for previous in (None, RANGE, INSUFFICIENT, BULLISH, BEARISH):
+            with self.subTest(previous_state=previous):
+                out = self.engine.classify(xs, cfg(), previous_state=previous)
+                self.assertEqual(out.result.state, INSUFFICIENT)
+                self.assertEqual(out.result.result.status, CalculationStatus.INSUFFICIENT_HISTORY)
+                self.assertIsNone(out.result.result.value)
+                self.assertEqual([f.direction for f in out.factors], [INSUFFICIENT, INSUFFICIENT])
+
+    def test_empty_input_is_deterministically_insufficient(self):
+        a = self.engine.classify((), cfg())
+        b = self.engine.classify((), cfg())
+        self.assertEqual(a, b)
+        self.assertEqual(a.result.state, INSUFFICIENT)
+        self.assertIsNone(a.context)
+        self.assertEqual(a.transition, "INSUFFICIENT_HISTORY")
 
     def test_previous_state_validation(self):
         with self.assertRaises(ValueError):
             self.engine.classify(tuple(candle(i, "100") for i in range(4)), cfg(), previous_state="INVALID")
+
+    def test_malformed_candle_type_rejected(self):
+        with self.assertRaisesRegex(TypeError, "candles\[1\] must be CanonicalCandle"):
+            self.engine.classify((candle(0, "100"), object(), candle(2, "102"), candle(3, "103")), cfg())
 
     def test_cross_instrument_rejected(self):
         xs = (candle(0, "100"), candle(1, "101", instrument="ETHUSDT"),
@@ -127,7 +168,15 @@ class TestMarketRegimeEngine(unittest.TestCase):
                             a.close_time + timedelta(seconds=30), Decimal("101"),
                             Decimal("101"), Decimal("101"), Decimal("101"),
                             Decimal("10"), provenance_id="overlap")
-        with self.assertRaises(ValueError):
+        with self.assertRaisesRegex(ValueError, "must not overlap"):
+            self.engine.classify((a, b), cfg())
+
+    def test_non_increasing_temporal_input_rejected_separately(self):
+        a = candle(0, "100")
+        b = CanonicalCandle("BTCUSDT", "1m", a.open_time, a.close_time,
+                            Decimal("101"), Decimal("101"), Decimal("101"), Decimal("101"),
+                            Decimal("10"), provenance_id="duplicate-open")
+        with self.assertRaisesRegex(ValueError, "strictly increasing by open_time"):
             self.engine.classify((a, b), cfg())
 
     def test_no_lookahead(self):
@@ -146,6 +195,25 @@ class TestMarketRegimeEngine(unittest.TestCase):
         self.assertEqual(out.context.symbol, "BTCUSDT")
         self.assertEqual(out.context.timeframe, "1m")
         self.assertEqual(out.configuration_version, "1.0.0")
+
+    def test_configuration_and_version_change_are_explicit_and_deterministic(self):
+        xs = tuple(candle(i, v) for i, v in enumerate(["100", "100", "100", "120"]))
+        baseline = self.engine.classify(xs, cfg(version="1.0.0"))
+        replay = self.engine.classify(xs, cfg(version="1.0.0"))
+        changed = self.engine.classify(
+            xs,
+            cfg(
+                trend_entry_threshold=Decimal("0.20"),
+                momentum_entry_threshold=Decimal("0.20"),
+                version="2.0.0",
+            ),
+        )
+        self.assertEqual(baseline, replay)
+        self.assertEqual(baseline.result.state, BULLISH)
+        self.assertEqual(changed.result.state, RANGE)
+        self.assertEqual(changed.configuration_version, "2.0.0")
+        self.assertEqual(changed.context.version, "2.0.0")
+        self.assertNotEqual(baseline.configuration_version, changed.configuration_version)
 
     def test_explicit_context_is_authoritative(self):
         ctx = QuantitativeContext(source_ref="explicit", timestamp=T0, timeframe="5m",
@@ -214,6 +282,20 @@ class TestVenueEvidenceEngine(unittest.TestCase):
         out = self.engine.compare(unavailable, self.evidence("101", self.right))
         self.assertEqual(out.classification, INSUFFICIENT_EVIDENCE)
         self.assertEqual(out.result.status, CalculationStatus.INSUFFICIENT_HISTORY)
+
+    def test_venue_evidence_validity_boundaries(self):
+        with self.assertRaises(ValueError):
+            VenueEvidence("mid_price", Decimal("100"), CalculationStatus.UNAVAILABLE, self.left)
+        with self.assertRaises(ValueError):
+            VenueEvidence("mid_price", None, CalculationStatus.VALID, self.left)
+        with self.assertRaises(TypeError):
+            VenueEvidence("mid_price", 100.0, CalculationStatus.VALID, self.left)
+
+    def test_invalid_comparison_operands_rejected(self):
+        with self.assertRaises(TypeError):
+            self.engine.compare(object(), self.evidence("101", self.right))
+        with self.assertRaises(TypeError):
+            self.engine.compare(self.evidence("100", self.left), None)
 
     def test_metric_mismatch_is_incompatible(self):
         out = self.engine.compare(self.evidence("100", self.left, "funding_rate"),
