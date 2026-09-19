@@ -247,3 +247,22 @@ records:
       focused_test_content_sha: 887a7460e16e9e2136c0e68dab7425edb8faa1dd
       implementation_content_sha: 7f111802d69c1fa64c298053796a3338559f5c82
       coverage: Rule-5 regime transitions, hysteresis matrix, insufficient/empty/malformed/temporal boundaries, configuration/version changes, venue-evidence validity/comparison boundaries, Decimal extremes, deterministic replay and no-lookahead
+
+  - stable_id: TST-P4-006
+    canonical_name: Quant Orchestration, Multi-Timeframe Runtime, Persistence, API & Replay Tests
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-007
+    artifact_path: tests/test_p4_006_orchestration.py
+    traceability: TO-P4-007 / STEP-P4-006 / BR-P4-007 / AR-P4-013
+    status: TESTED / UNVERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 35468822047
+      workflow_run_number: 1016
+      job_id: 105965939193
+      commit: 48bae89931c3ab003223a867ab9f9bf75fe3117a
+      result: SUCCESS
+      full_regression_test_count: 445
+      terminal_log: "Ran 445 tests in 1.189s / OK"
+      coverage: orchestration determinism, MTF close-boundary inclusion/future exclusion, MTF key mismatch rejection, replay fingerprint equality, worker closed-candle enforcement, worker MTF propagation, API read-only semantics, invalid API parameters, HTTP wire framing, deterministic persistence identity and duplicate suppression
