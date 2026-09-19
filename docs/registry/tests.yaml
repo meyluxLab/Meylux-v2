@@ -255,7 +255,7 @@ records:
     task_order: TO-P4-007
     artifact_path: tests/test_p4_006_orchestration.py
     traceability: TO-P4-007 / STEP-P4-006 / BR-P4-007 / AR-P4-013
-    status: TESTED / UNVERIFIED
+    status: VERIFIED
     evidence:
       ci_workflow: CI Core
       workflow_run_id: 35468822047
@@ -266,3 +266,6 @@ records:
       full_regression_test_count: 445
       terminal_log: "Ran 445 tests in 1.189s / OK"
       coverage: orchestration determinism, MTF close-boundary inclusion/future exclusion, MTF key mismatch rejection, replay fingerprint equality, worker closed-candle enforcement, worker MTF propagation, API read-only semantics, invalid API parameters, HTTP wire framing, deterministic persistence identity and duplicate suppression
+      independent_control_regression: 448 tests PASS on synchronized final implementation
+      real_data_evidence: BTCUSDT 116x15m + 31x1h + 9x4h passed P2/P3/canonical persistence/orchestration/replay/worker/API boundaries
+      g4_audit: AR-P4-015
