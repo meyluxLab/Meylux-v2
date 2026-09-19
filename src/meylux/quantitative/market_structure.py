@@ -66,13 +66,13 @@ class MarketStructureEngine:
     def analyze(self, candles: Iterable[CanonicalCandle]) -> MarketStructureAnalysis:
         xs = self._validate(candles)
         events=[]; states=[]; highs=[]; lows=[]; high_class={}; low_class={}
-        boundary=0; state=_STATE_NEUTRAL; pending=None
-        active_fvgs=[]; active_obs=[]; active_breakers=[]; pools_high={}; pools_low={}; active_pools=[]
-        seen=set(); broken_levels=set()
+        boundary=0; state=_STATE_NEUTRAL; pending=None; quarantine=False
+        active_fvgs=[]; fvg_lifecycle={}; active_obs=[]; active_breakers=[]; pools_high={}; pools_low={}; active_pools=[]
+        seen=set(); broken_levels=set(); active_break_facts={}
         for i,candle in enumerate(xs):
             bar_events=[]; pre_highs=list(highs); pre_lows=list(lows); pre_state=state
             if i and self._expected_open(xs[i-1]) != candle.open_time:
-                boundary=i; state=_STATE_UNCONFIRMED; pending=None
+                boundary=i; state=_STATE_UNCONFIRMED; pending=None; quarantine=True
                 highs=[x for x in highs if x[0]>=boundary]; lows=[x for x in lows if x[0]>=boundary]
                 high_class.clear(); low_class.clear(); active_fvgs=[]; active_obs=[]; active_breakers=[]
                 pools_high={}; pools_low={}; active_pools=[]; broken_levels=set()
@@ -102,8 +102,13 @@ class MarketStructureEngine:
                                     ce=self._event(low_class[cand],candidate,candle.close_time,level=candidate.low,reason="swing_low_classification",index=cand)
                                     if ce.identity not in seen: seen.add(ce.identity); bar_events.append(ce)
                             else: low_class[cand]=None
-            if boundary==i or pending is not None: state=_STATE_UNCONFIRMED
-            else: state=self._derive_state(highs,lows,high_class,low_class)
+            if boundary==i or pending is not None or quarantine:
+                derived=self._derive_state(highs,lows,high_class,low_class)
+                if quarantine and derived in (_STATE_UP,_STATE_DOWN,_STATE_RANGE):
+                    state=derived; quarantine=False
+                else: state=_STATE_UNCONFIRMED
+            else:
+                state=self._derive_state(highs,lows,high_class,low_class)
             if i>=boundary:
                 break_state=pre_state; choch_emitted=False
                 if break_state==_STATE_UP and pre_lows and candle.close<pre_lows[-1][1]:
@@ -121,12 +126,12 @@ class MarketStructureEngine:
                         level=pre_highs[-1][1]
                         if candle.close>level and ("bullish",level,boundary) not in broken_levels:
                             ev=self._event("BOS",candle,candle.close_time,level=level,direction="bullish",prior_state=break_state,reason="close_above_confirmed_swing_high",index=i)
-                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bullish",level,boundary))
+                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bullish",level,boundary)); active_break_facts[ev.identity]=ev
                     elif break_state==_STATE_DOWN and pre_lows:
                         level=pre_lows[-1][1]
                         if candle.close<level and ("bearish",level,boundary) not in broken_levels:
                             ev=self._event("BOS",candle,candle.close_time,level=level,direction="bearish",prior_state=break_state,reason="close_below_confirmed_swing_low",index=i)
-                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bearish",level,boundary))
+                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bearish",level,boundary)); active_break_facts[ev.identity]=ev
                 if pending is not None and not choch_emitted:
                     for pe in bar_events:
                         if pe.event_type=="LL" and pending["direction"]=="bearish": pending["new_low"]=True
@@ -138,29 +143,12 @@ class MarketStructureEngine:
                         protected=pre_lows[-1]
                         if candle.close<protected[1] and protected[0]>pending["index"]:
                             ev=self._event("MSS",candle,candle.close_time,level=protected[1],direction="bearish",prior_state=_STATE_UNCONFIRMED,reason="post_choch_bearish_structural_transition",index=i)
-                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bearish",protected[1],boundary)); state=_STATE_DOWN; pending=None
+                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bearish",protected[1],boundary)); active_break_facts[ev.identity]=ev; state=_STATE_DOWN; pending=None
                     elif direction=="bullish" and pending["new_high"] and pending["new_low"] and highs and any(c>pending["index"] for c,_,_ in highs):
                         protected=pre_highs[-1]
                         if candle.close>protected[1] and protected[0]>pending["index"]:
                             ev=self._event("MSS",candle,candle.close_time,level=protected[1],direction="bullish",prior_state=_STATE_UNCONFIRMED,reason="post_choch_bullish_structural_transition",index=i)
-                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bullish",protected[1],boundary)); state=_STATE_UP; pending=None
-            if i>=2 and i>=boundary and self._window_continuous(xs,i-2,i):
-                a,b,c=xs[i-2],xs[i-1],candle
-                if c.low>a.high:
-                    ev=self._event("FVG",c,c.close_time,lower=a.high,upper=c.low,direction="bullish",lifecycle="ACTIVE",reason="bullish_three_candle_gap",index=i)
-                    if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_fvgs.append(ev)
-                elif c.high<a.low:
-                    ev=self._event("FVG",c,c.close_time,lower=c.high,upper=a.low,direction="bearish",lifecycle="ACTIVE",reason="bearish_three_candle_gap",index=i)
-                    if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_fvgs.append(ev)
-            if i>boundary:
-                for fvg in list(active_fvgs):
-                    if fvg.event_location==candle.open_time: continue
-                    if fvg.direction=="bullish" and candle.low<=fvg.upper_bound: life="FULLY_MITIGATED" if candle.low<=fvg.lower_bound else "PARTIALLY_MITIGATED"
-                    elif fvg.direction=="bearish" and candle.high>=fvg.lower_bound: life="FULLY_MITIGATED" if candle.high>=fvg.upper_bound else "PARTIALLY_MITIGATED"
-                    else: continue
-                    ev=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle=life,source=fvg.identity,reason="wick_based_mitigation",index=i)
-                    if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev)
-                    if life=="FULLY_MITIGATED": active_fvgs.remove(fvg)
+                            if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bullish",protected[1],boundary)); active_break_facts[ev.identity]=ev; state=_STATE_UP; pending=None
             for e in list(bar_events):
                 if e.event_type not in ("BOS","CHOCH","MSS") or e.direction is None: continue
                 source=self._source_body(xs,i,e.direction,boundary)
@@ -183,16 +171,43 @@ class MarketStructureEngine:
                 if (br.direction=="bearish" and candle.close>br.upper_bound) or (br.direction=="bullish" and candle.close<br.lower_bound):
                     ev=self._event("BREAKER_INVALIDATION",candle,candle.close_time,lower=br.lower_bound,upper=br.upper_bound,direction=br.direction,lifecycle="INVALIDATED",source=br.identity,reason="close_through_opposite_breaker_boundary",index=i)
                     if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_breakers.remove(br)
+            if i>=2 and i>=boundary and self._window_continuous(xs,i-2,i):
+                a,b,c=xs[i-2],xs[i-1],candle
+                if c.low>a.high:
+                    ev=self._event("FVG",c,c.close_time,lower=a.high,upper=c.low,direction="bullish",lifecycle="ACTIVE",reason="bullish_three_candle_gap",index=i)
+                    if ev.identity not in seen:
+                        seen.add(ev); bar_events.append(ev); active_fvgs.append(ev); fvg_lifecycle[ev.identity]="ACTIVE"
+                elif c.high<a.low:
+                    ev=self._event("FVG",c,c.close_time,lower=c.high,upper=a.low,direction="bearish",lifecycle="ACTIVE",reason="bearish_three_candle_gap",index=i)
+                    if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_fvgs.append(ev)
+            if i>boundary:
+                for fvg in list(active_fvgs):
+                    current=fvg_lifecycle.get(fvg.identity,"ACTIVE")
+                    if fvg.event_location==candle.open_time or current=="FULLY_MITIGATED": continue
+                    hit=None
+                    if fvg.direction=="bullish" and candle.low<=fvg.upper_bound:
+                        hit="FULLY_MITIGATED" if candle.low<=fvg.lower_bound else "PARTIALLY_MITIGATED"
+                    elif fvg.direction=="bearish" and candle.high>=fvg.lower_bound:
+                        hit="FULLY_MITIGATED" if candle.high>=fvg.upper_bound else "PARTIALLY_MITIGATED"
+                    if hit is None: continue
+                    if current=="ACTIVE":
+                        part=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle="PARTIALLY_MITIGATED",source=fvg.identity,reason="wick_based_mitigation",index=i)
+                        if part.identity not in seen: seen.add(part.identity); bar_events.append(part)
+                        fvg_lifecycle[fvg.identity]="PARTIALLY_MITIGATED"; current="PARTIALLY_MITIGATED"
+                    if current=="PARTIALLY_MITIGATED" and hit=="FULLY_MITIGATED":
+                        full=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle="FULLY_MITIGATED",source=fvg.identity,reason="wick_based_full_mitigation",index=i)
+                        if full.identity not in seen: seen.add(full.identity); bar_events.append(full)
+                        fvg_lifecycle[fvg.identity]="FULLY_MITIGATED"; active_fvgs.remove(fvg)
             for e in bar_events:
                 if e.event_type=="SWING_HIGH":
                     members=pools_high.setdefault(e.level,[]); members.append(e)
                     if len(members)==2:
-                        pool=self._event("LIQUIDITY_POOL",candle,candle.close_time,level=e.level,direction="bullish",lifecycle="ACTIVE",reason="two_exactly_equal_confirmed_swing_highs",index=i,source=e.identity)
+                        pool=self._event("LIQUIDITY_POOL",candle,candle.close_time,level=e.level,direction="bullish",lifecycle="ACTIVE",reason="two_exactly_equal_confirmed_swing_highs",index=i,source=",".join(m.identity for m in members))
                         if pool.identity not in seen: seen.add(pool.identity); bar_events.append(pool); active_pools.append(pool)
                 elif e.event_type=="SWING_LOW":
                     members=pools_low.setdefault(e.level,[]); members.append(e)
                     if len(members)==2:
-                        pool=self._event("LIQUIDITY_POOL",candle,candle.close_time,level=e.level,direction="bearish",lifecycle="ACTIVE",reason="two_exactly_equal_confirmed_swing_lows",index=i,source=e.identity)
+                        pool=self._event("LIQUIDITY_POOL",candle,candle.close_time,level=e.level,direction="bearish",lifecycle="ACTIVE",reason="two_exactly_equal_confirmed_swing_lows",index=i,source=",".join(m.identity for m in members))
                         if pool.identity not in seen: seen.add(pool.identity); bar_events.append(pool); active_pools.append(pool)
             for pool in list(active_pools):
                 if pool.direction=="bullish" and candle.close>pool.level:
@@ -201,8 +216,18 @@ class MarketStructureEngine:
                 elif pool.direction=="bearish" and candle.close<pool.level:
                     ev=self._event("LIQUIDITY_POOL_SWEEP",candle,candle.close_time,level=pool.level,direction=pool.direction,lifecycle="INVALIDATED",source=pool.identity,reason="close_beyond_bearish_side_pool_level",index=i)
                     if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_pools.remove(pool)
+            for original in list(active_break_facts.values()):
+                if original.direction=="bullish" and candle.close<original.level and original.knowledge_time<candle.close_time:
+                    inv=self._event("STRUCTURAL_INVALIDATION",candle,candle.close_time,level=original.level,direction="bearish",lifecycle="INVALIDATED",source=original.identity,reason="later_close_contradicts_bullish_structural_fact",index=i)
+                    if inv.identity not in seen: seen.add(inv.identity); bar_events.append(inv)
+                    active_break_facts.pop(original.identity,None)
+                elif original.direction=="bearish" and candle.close>original.level and original.knowledge_time<candle.close_time:
+                    inv=self._event("STRUCTURAL_INVALIDATION",candle,candle.close_time,level=original.level,direction="bullish",lifecycle="INVALIDATED",source=original.identity,reason="later_close_contradicts_bearish_structural_fact",index=i)
+                    if inv.identity not in seen: seen.add(inv.identity); bar_events.append(inv)
+                    active_break_facts.pop(original.identity,None)
+
             if boundary==i or pending is not None: state=_STATE_UNCONFIRMED
-            elif state==_STATE_UNCONFIRMED: state=self._derive_state(highs,lows,high_class,low_class)
+            elif state==_STATE_UNCONFIRMED and not quarantine: state=self._derive_state(highs,lows,high_class,low_class)
             state_event=self._event("STRUCTURE_STATE",candle,candle.close_time,structural_state=state,reason="official_post_bar_structure_state",index=i)
             if state_event.identity not in seen: seen.add(state_event.identity); bar_events.append(state_event)
             bar_events=self._dedupe(bar_events); events.extend(bar_events); states.append(BarState(i,candle.open_time,candle.close_time,state,tuple(bar_events)))
@@ -223,6 +248,7 @@ class MarketStructureEngine:
     def _derive_state(self,highs,lows,hc,lc):
         if not highs or not lows: return _STATE_NEUTRAL
         h=hc.get(highs[-1][0]); l=lc.get(lows[-1][0])
+        if h is None or l is None: return _STATE_UNCONFIRMED
         if h=="HH" and l=="HL": return _STATE_UP
         if h=="LH" and l=="LL": return _STATE_DOWN
         return _STATE_RANGE
