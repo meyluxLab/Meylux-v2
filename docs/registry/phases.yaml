@@ -473,15 +473,15 @@ records:
     logical_name: Deterministic Market Structure Engine
     entity_type: STEP
     phase: PH-P4
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 3
     predecessor: STEP-P4-002
     activation_basis: Project Owner Directive — AUTHORIZE STEP-P4-003 / PH-P4 / AR-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Full Authority Delegated to CONTROL for Market-Structure Semantics
-    active_task_order: TO-P4-004
+    active_task_order: null
     semantic_authority: DOC-P4-002 / ADR-QUANTITATIVE-001 / RATIFIED
-    completed_task_order: null
-    completion_audit: null
+    completed_task_order: TO-P4-004
+    completion_audit: AR-P4-006
     purpose: Implement deterministic swing, structure, BOS, CHOCH, MSS, FVG, order-block, breaker and liquidity facts with explicit state-machine, UNCONFIRMED, canonical-gap and zero-lookahead semantics.
     repository_scope: deterministic Market Structure Engine only; pinned 60-candle trend/BOS and reversal/CHOCH scenarios; event-by-event/state-transition evidence; deterministic replay; focused failure/boundary coverage; documentation and traceability.
     exclusions: STEP-P4-004 through STEP-P4-006; AI/LLM interpretation; Opportunity Score; Venue Intelligence; trading/capital; V1; VPS/runtime; unrelated redesign.
