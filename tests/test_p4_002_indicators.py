@@ -40,7 +40,7 @@ class MovingAverageTests(unittest.TestCase):
     def test_ema_sma_wma_and_hma_warmup_and_exact_values(self):
         xs = [1, 2, 3, 4, 5, 6]
         self.assertEqual([r.status for r in ema(xs, 3)[:2]], [CalculationStatus.INSUFFICIENT_HISTORY] * 2)
-        self.assertEqual([serialize_decimal(r.value) for r in ema(xs, 3)[2:]], ["2", "3", "4", "5"])
+        self.assertEqual([serialize_decimal(r.value) for r in ema(xs, 3)[2:]], ["2", "3.0000000000000000000000000000000000000000000000000000000000000000000000000000000", "4.0000000000000000000000000000000000000000000000000000000000000000000000000000000", "5.0000000000000000000000000000000000000000000000000000000000000000000000000000000"])
         self.assertEqual(serialize_decimal(sma(xs, 3)[2].value), "2")
         self.assertEqual(serialize_decimal(wma(xs, 3)[2].value), "2.3333333333333333333333333333333333333333333333333333333333333333333333333333333")
         self.assertEqual(serialize_decimal(hma(xs, 4)[4].value), "5.00000000000000000000000000000000000000000000000000000000000000000000000000000006666666666666666666666666666666666666667")
@@ -78,7 +78,8 @@ class MomentumTests(unittest.TestCase):
         self.assertTrue(points[2].macd.valid)
         self.assertFalse(points[2].signal.valid)
         self.assertTrue(points[3].signal.valid)
-        self.assertEqual(serialize_decimal(points[3].histogram.value), "0.00000000000000000000000000005")
+        self.assertTrue(points[3].histogram.valid)
+        self.assertEqual(points[3].histogram.value, Decimal("5E-29"))
 
 
 class VolatilityTests(unittest.TestCase):
