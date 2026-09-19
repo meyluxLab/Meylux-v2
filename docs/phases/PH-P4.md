@@ -111,16 +111,18 @@ Scope boundary: moving averages, momentum, trend/volatility, statistical/realize
 ### `STEP-P4-003` — Deterministic Market Structure Engine
 
 **Order:** 3
-**Status:** ACTIVE / AUTHORIZED
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P4-002` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P4-004`
+**Active Task Order:** `null`
+**Completed Task Order:** `TO-P4-004`
+**Completion Audit:** `AR-P4-006`
 **Authoritative Market Structure Semantics:** `DOC-P4-002` — `docs/quantitative/P4_003_MARKET_STRUCTURE_SEMANTICS.md`  
 **Semantic Decision:** `ADR-QUANTITATIVE-001` — RATIFIED / AUTHORIZED  
 **Semantic authority basis:** Project Owner delegation dated 2026-09-19  
 **Activation basis:** Project Owner Directive — AUTHORIZE STEP-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
 
-Objective: implement deterministic swing, structure, BOS, CHOCH, MSS, FVG, order-block, breaker and liquidity facts with explicit state-machine, UNCONFIRMED, canonical-gap and zero-lookahead semantics.
+Objective: implement deterministic swing, structure, BOS, CHOCH, MSS, FVG, order-block, breaker and liquidity facts with explicit state-machine, UNCONFIRMED, canonical-gap and zero-lookahead semantics. Verified under `AR-P4-006`.
 
 Acceptance boundary: event-location versus confirmation/knowledge time; pinned 60-candle trend/BOS and reversal/CHOCH scenarios; event-by-event and state-transition evidence; deterministic replay; explicit ambiguity handling; canonical-gap behavior; focused failure/boundary coverage; no future-Step scope.
 
