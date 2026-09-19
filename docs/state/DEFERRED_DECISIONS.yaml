@@ -1,3 +1,13 @@
 schema_version: '0.1'
 status: DRAFT_PRE_PHASE_0
 items: []
+
+  - id: DD-V2-P4-006-PERFORMANCE-TARGET
+    domain: Phase-4 quantitative runtime performance
+    reason_deferred: "Current measured orchestrator runtime materially exceeds the roadmap target, while the dominant cost lies in previously verified EMA and Market Structure engines that are explicitly excluded from the current Owner authorization."
+    trigger: "Reconsider when CONTROL demonstrates that orchestrator/runtime-level optimization cannot close the gap without reopening verified engine boundaries, or when new measured evidence changes the attainable-performance assessment."
+    affected_phases:
+      - PH-P4
+    owner: Project Owner
+    status: DEFERRED
+    resolution_ref: null
