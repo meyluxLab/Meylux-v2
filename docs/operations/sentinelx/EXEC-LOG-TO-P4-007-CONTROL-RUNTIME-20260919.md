@@ -98,3 +98,19 @@ CONTROL operational execution succeeded for the reachable runtime-foundation, AP
 The Step is NOT CLOSED / VERIFIED because the governed real-data vertical slice and G-4 evidence are unavailable, and measured performance exposes a material efficiency gap.
 
 No Phase-5 authorization or implementation was introduced.
+
+ 
+## 7. Post-probe addendum
+
+### I. Worker restart/recovery probe
+- CONTROL restarted worker-quant through SentinelX.
+- After restart the quantitative worker returned to running state; db and redis remained healthy and API remained running.
+- Result: service restart/liveness PASS.
+- This does not constitute real-data replay/recovery evidence.
+
+### J. Data-source diagnosis
+- The repository's collector service was inspected through its current container logs.
+- It reports only foundation-service startup/shutdown messages and does not provide a live acquisition stream in this deployed runtime.
+- The canonical_candles table is empty.
+- CONTROL therefore did not bypass the governed acquisition/normalization boundary by injecting public-provider data directly into the quantitative runtime.
+- The real-data vertical slice remains UNEXECUTED / UNVERIFIED.
