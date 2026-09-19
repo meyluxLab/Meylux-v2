@@ -1048,3 +1048,10 @@ records:
     artifact_path: docs/build-reports/BR-P4-006.md
     traceability: TO-P4-006 / PH-P4 / STEP-P4-005
     status: PRODUCED / NOT VERIFIED
+
+  - stable_id: AR-P4-010
+    canonical_name: CONTROL Independent Audit — STEP-P4-005 / TO-P4-006
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-010.md
+    traceability: TO-P4-006 / PH-P4 / STEP-P4-005 / BR-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: REQUEST CHANGES / NOT VERIFIED
