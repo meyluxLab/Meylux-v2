@@ -147,7 +147,7 @@ class TestMarketRegimeEngine(unittest.TestCase):
             self.engine.classify(tuple(candle(i, "100") for i in range(4)), cfg(), previous_state="INVALID")
 
     def test_malformed_candle_type_rejected(self):
-        with self.assertRaisesRegex(TypeError, "candles\[1\] must be CanonicalCandle"):
+        with self.assertRaisesRegex(TypeError, r"candles\[1\] must be CanonicalCandle"):
             self.engine.classify((candle(0, "100"), object(), candle(2, "102"), candle(3, "103")), cfg())
 
     def test_cross_instrument_rejected(self):
@@ -203,8 +203,8 @@ class TestMarketRegimeEngine(unittest.TestCase):
         changed = self.engine.classify(
             xs,
             cfg(
-                trend_entry_threshold=Decimal("0.20"),
-                momentum_entry_threshold=Decimal("0.20"),
+                trend_entry_threshold=Decimal("0.21"),
+                momentum_entry_threshold=Decimal("0.21"),
                 version="2.0.0",
             ),
         )
