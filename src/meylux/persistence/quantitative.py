@@ -54,7 +54,7 @@ class QuantitativePersistence:
                 else:
                     sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,event_type,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) ON CONFLICT(identity_hash) DO NOTHING"
                     args=(rid,result.symbol,result.timeframe,result.as_of,kind,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
-                if str(await self._connection.execute(sql,*args)).startswith("INSERT"): inserted+=1
+                if str(await self._connection.execute(sql,*args)).strip()=="INSERT 0 1": inserted+=1
         return inserted
     async def fetch_family(self,family:str,symbol:str,timeframe:str,*,start:datetime|None=None,end:datetime|None=None,limit:int=100)->list[Any]:
         if family not in self.TABLES: raise ValueError("unsupported quantitative family")
