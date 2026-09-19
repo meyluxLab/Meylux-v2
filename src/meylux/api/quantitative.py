@@ -22,7 +22,7 @@ class QuantitativeAPI:
         if len(parts)!=5 or parts[:2] != ("v1","quantitative"):
             return APIResponse(404,json.dumps({"error":"not_found"},separators=(",",":")))
         family,symbol,timeframe=parts[2:]
-        if family not in QuantitativePersistence.TABLES:
+        if family not in {"indicator","structure_event","regime"}:
             return APIResponse(404,json.dumps({"error":"unsupported_family"},separators=(",",":")))
         try:
             limit=int(query.get("limit","100"))
