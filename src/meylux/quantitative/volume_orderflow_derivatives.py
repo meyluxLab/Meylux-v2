@@ -294,6 +294,8 @@ class OrderFlowEngine:
         xs = tuple(trades)
         if any(not isinstance(t, CanonicalTrade) for t in xs):
             raise TypeError("trades must contain CanonicalTrade instances")
+        if xs and any(t.instrument_id != xs[0].instrument_id for t in xs[1:]):
+            raise ValueError("bar delta trades must belong to one instrument")
         context = _derived_context(
             context,
             instrument_id=xs[0].instrument_id if xs else None,
