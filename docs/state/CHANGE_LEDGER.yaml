@@ -1320,3 +1320,34 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX action performed
     historical_integrity: prior historical assumption is retained only as ledger history; current checkpoint now contains the corrected current-state assumption.
+
+  - id: CHG-P4-STEP-005-AUTHORIZATION-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_AUTHORIZATION_AND_TASK_ORDER_ESTABLISHMENT
+    subject: CONTROL establishes and activates STEP-P4-005 under Project Owner delegation
+    basis: PROJECT OWNER DIRECTIVE — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY — 2026-09-19 + AR-P4-009 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - PH-P4
+      - STEP-P4-005
+      - TO-P4-006
+      - STEP-P4-004
+      - TO-P4-005
+      - AR-P4-009
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+    authorization:
+      predecessor_state: STEP-P4-004 COMPLETE / VERIFIED; TO-P4-005 VERIFIED / COMPLETE; AR-P4-009 APPROVED / VERIFIED; active_task_order null
+      owner_authorization: STEP-P4-005 AUTHORIZED as the next sequential Phase-4 Step; STEP-P4-006 remains unauthorized
+      task_order: TO-P4-006
+      task_order_status: AUTHORIZED TO EXECUTE
+    repository_determination:
+      existing_p4_task_orders: TO-P4-001 through TO-P4-005
+      conflicting_to_p4_006_found: false
+      task_order_established_by: CONTROL
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-004 COMPLETE / VERIFIED; STEP-P4-005 ACTIVE / AUTHORIZED; TO-P4-006 AUTHORIZED TO EXECUTE; active_task_order TO-P4-006; STEP-P4-006 NOT YET AUTHORIZED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    scope_effect: no STEP-P4-006 or later functionality authorized or implemented
+    next_role: ROL-V2-002 — PRODUCER / ARCHITECT-BUILDER
