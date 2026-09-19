@@ -297,6 +297,16 @@ class TestVenueEvidenceEngine(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.engine.compare(self.evidence("100", self.left), None)
 
+    def test_unavailable_evidence_is_symmetric_for_either_operand(self):
+        unavailable_left = self.evidence(None, self.left, status=CalculationStatus.UNAVAILABLE)
+        unavailable_right = self.evidence(None, self.right, status=CalculationStatus.UNAVAILABLE)
+        left_first = self.engine.compare(unavailable_left, self.evidence("101", self.right))
+        right_first = self.engine.compare(self.evidence("100", self.left), unavailable_right)
+        self.assertEqual(left_first.classification, INSUFFICIENT_EVIDENCE)
+        self.assertEqual(right_first.classification, INSUFFICIENT_EVIDENCE)
+        self.assertEqual(left_first.result.status, CalculationStatus.INSUFFICIENT_HISTORY)
+        self.assertEqual(right_first.result.status, CalculationStatus.INSUFFICIENT_HISTORY)
+
     def test_metric_mismatch_is_incompatible(self):
         out = self.engine.compare(self.evidence("100", self.left, "funding_rate"),
                                   self.evidence("101", self.right, "mid_price"))
