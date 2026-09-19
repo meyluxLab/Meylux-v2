@@ -966,3 +966,28 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX action performed
     historical_traceability: TO-P4-002, BR-P4-002 and AR-P4-002 remain preserved as historical records
+
+  - id: CHG-P4-STEP-003-AUTH-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_ESTABLISHMENT_AND_AUTHORIZATION
+    subject: Project Owner authorization and CONTROL activation of STEP-P4-003
+    basis: Project Owner Directive — AUTHORIZE STEP-P4-003 + PH-P4 + AR-P4-003 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-003
+      - TO-P4-004
+      - CURRENT_CHECKPOINT
+      - PH-P4
+      - README
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+    previous_checkpoint_state: PH-P4 / STEP-P4-002 / ACTIVE / AUTHORIZED / active_task_order null / completed_task_order TO-P4-003 / completion_audit AR-P4-003
+    new_checkpoint_state: PH-P4 / STEP-P4-003 / ACTIVE / AUTHORIZED / active_task_order TO-P4-004 / completed_task_order null / completion_audit null
+    task_order: TO-P4-004
+    task_order_commit: 447274cb6fe24adef17e05034a755c1d22ebbc3e
+    phase_registry_commit: 3b436adb661b685bf2545ebf6709ce8a5efc5b3a
+    artifact_registry_commit: 61daa3bc1d5ddb5e2a088edc48544a0b6f88b7cf
+    checkpoint_commit: dff5784cd6e7964f87f92ba8062b593c42577650
+    phase_definition_commit: 9a32ca6d9b5222edd3dbbaeee6b6f0a9c503a8e4
+    readme_sync_commit: 6d117b2c3a64fc679845648759e920c86a37103a
+    scope: deterministic Market Structure Engine only; no future Step or Phase 5 implementation; no VPS operation
+    next_step: STEP-P4-004 NOT YET AUTHORIZED
