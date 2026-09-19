@@ -209,9 +209,9 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 `IMPLEMENTED != EXECUTED != TESTED != VERIFIED != CLOSED`
 
-## Current Step Boundary After P4-003 Closure
+## Current Step Boundary After P4-004 Closure
 
-STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is ACTIVE / AUTHORIZED under TO-P4-005 with semantic authority DOC-P4-003 / ADR-QUANTITATIVE-002. STEP-P4-005 and STEP-P4-006 remain NOT YET AUTHORIZED. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
+STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 / AR-P4-009. STEP-P4-005 is ACTIVE / AUTHORIZED under TO-P4-006. STEP-P4-006 remains NOT YET AUTHORIZED. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
 
 ## Standing Role Operating Rules — ADR-GOVERNANCE-013
 
