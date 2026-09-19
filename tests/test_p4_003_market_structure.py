@@ -55,8 +55,8 @@ class ScenarioTests(unittest.TestCase):
         for i in range(47,51): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
         o[51]=c[51]=Decimal("102"); h[51]=Decimal("103"); l[51]=Decimal("101")
         r=MarketStructureEngine().analyze(candles(closes=c,highs=h,lows=l,opens=o))
-        self.assertEqual([(x.level,x.direction) for x in r.events if x.event_type=="CHOCH"],[(Decimal("107"),"bearish")])
-        self.assertEqual([(x.level,x.direction) for x in r.events if x.event_type=="MSS"],[(Decimal("103"),"bearish")]); self.assertEqual(r.states[40].state,"UNCONFIRMED"); self.assertEqual(r.states[51].state,"TRENDING_DOWN")
+        self.assertEqual([(x.level,x.direction,x.event_location) for x in r.events if x.event_type=="CHOCH"],[(Decimal("107"),"bearish",c[40].open_time)])
+        self.assertEqual([(x.level,x.direction,x.event_location) for x in r.events if x.event_type=="MSS"],[(Decimal("103"),"bearish",c[51].open_time)]); self.assertEqual(r.states[40].state,"UNCONFIRMED"); self.assertEqual(r.states[50].state,"UNCONFIRMED"); self.assertEqual(r.states[51].state,"TRENDING_DOWN")
 
     def test_fvg_lifecycle(self):
         c=list(candles(6))
@@ -350,8 +350,8 @@ class ScenarioTests(unittest.TestCase):
         pool2=next(e for e in r2.events if e.event_type=="LIQUIDITY_POOL")
         sweep2=next(e for e in r2.events if e.event_type=="LIQUIDITY_POOL_SWEEP")
         self.assertEqual(sweep2.source_event_identity,pool2.identity); self.assertEqual(sweep2.level,Decimal("90"))
-        ll2[17]=Decimal("89.999999999999999999999999999999999999")
-        self.assertFalse(any(e.event_type=="LIQUIDITY_POOL" for e in MarketStructureEngine().analyze(candles(n=n,closes=cc2,highs=hh2,lows=ll2,opens=oo2)).events))
+        hh3=list(hh2); hh3[17]=Decimal("90.0000000000000000000000000001")
+        self.assertFalse(any(e.event_type=="LIQUIDITY_POOL" for e in MarketStructureEngine().analyze(candles(n=n,closes=cc2,highs=hh3,lows=ll2,opens=oo2)).events))
 
     def test_large_small_decimal_and_malformed_contradictory_inputs(self):
         huge=Decimal("9.0E+60"); tiny=Decimal("1E-60")
@@ -370,6 +370,8 @@ class ScenarioTests(unittest.TestCase):
         with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("10"),Decimal("9"),Decimal("8"),Decimal("9"),Decimal("1"),provenance_id="bad-high")
         with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("10"),Decimal("12"),Decimal("11"),Decimal("10"),Decimal("1"),provenance_id="bad-low")
         with self.assertRaises(ValueError): MarketStructureEngine().analyze((c[0], CanonicalCandle("OTHER","1h",c[1].open_time,c[1].close_time,huge,huge,huge,huge,Decimal("0"),provenance_id="contradictory-instrument")))
+        with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("NaN"),Decimal("10"),Decimal("9"),Decimal("9"),Decimal("1"),provenance_id="nan")
+        with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("Infinity"),Decimal("Infinity"),Decimal("Infinity"),Decimal("Infinity"),Decimal("1"),provenance_id="inf")
 
     @staticmethod
     def _golden_trace(result):
