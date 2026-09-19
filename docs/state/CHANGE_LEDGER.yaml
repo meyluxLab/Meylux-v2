@@ -930,3 +930,39 @@ entries:
     historical_traceability: TO-P4-002, BR-P4-002 and AR-P4-002 remain preserved as historical records
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     closure_sync: pending until independent correction verification succeeds
+
+  - id: CHG-P4-STEP-002-CORRECTION-CLOSE-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL independent re-verification and closure synchronization of targeted historical-volatility correction
+    basis: AR-P4-003 APPROVED / VERIFIED + TO-P4-003 + BR-P4-003 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-002
+      - TO-P4-003
+      - BR-P4-003
+      - AR-P4-003
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+    correction_verified_commit: 2c499eccf62ce0f1cc92f1c9dce6ca0f923e1395
+    integration_commit: 4cbeecee0704c7fb2a7b678b8b2f160c8b000b68
+    ci_core: Run #758 / Run ID 35427641698 / Job 105856261089 / SUCCESS / 326 tests
+    correction_regression: test_historical_volatility_window_boundary_is_explicit_and_deterministic
+    golden_vector_regression: test_controlled_vectors_are_exact
+    step_transition: ACTIVE / CORRECTION REQUIRED -> COMPLETE / VERIFIED
+    task_order_transition: AUTHORIZED TO EXECUTE -> VERIFIED / COMPLETE
+    build_report_transition: PRODUCER DELIVERY -> VERIFIED
+    audit_report: AR-P4-003 APPROVED / VERIFIED
+    phase_transition: remains ACTIVE / AUTHORIZED
+    active_task_order: null
+    next_sequential_step: STEP-P4-003
+    next_step_authorization: NOT YET AUTHORIZED
+    g4_status: NOT ESTABLISHED
+    closure_sync: README, CURRENT_CHECKPOINT, canonical artifact registry, phase registry, tests registry, component registry, Phase 4 definition, Task Order, Build Report and Audit Report synchronized by CONTROL; database, security, configuration and observability registries inspected and unchanged because the correction does not affect their governed domains.
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    historical_traceability: TO-P4-002, BR-P4-002 and AR-P4-002 remain preserved as historical records
