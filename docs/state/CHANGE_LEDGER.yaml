@@ -1128,3 +1128,28 @@ entries:
     vps_effect: none; no VPS/SentinelX action performed
     scope_effect: STEP-P4-004 through STEP-P4-006 remain unauthorized; no future-Step implementation occurred
     historical_traceability: AR-P4-004 and AR-P4-005 remain preserved as REQUEST CHANGES / NOT VERIFIED historical audits
+
+  - id: CHG-P4-STEP-004-AUTH-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_ESTABLISHMENT_AND_AUTHORIZATION
+    subject: Project Owner authorization and CONTROL activation of STEP-P4-004 / Volume Profile, Order Flow & Derivatives Engine
+    basis: Project Owner Directive — AUTHORIZE STEP-P4-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-004
+      - TO-P4-005
+      - DOC-P4-003
+      - ADR-QUANTITATIVE-002
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+    predecessor_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-003 COMPLETE / VERIFIED; TO-P4-004 VERIFIED / COMPLETE; active_task_order null
+    authorization_state: STEP-P4-004 ACTIVE / AUTHORIZED; TO-P4-005 AUTHORIZED TO EXECUTE
+    semantic_authority: DOC-P4-003 / ADR-QUANTITATIVE-002 / RATIFIED / AUTHORIZED
+    scope: deterministic Volume Profile, Order Flow and Derivatives evidence only; exact Decimal semantics; explicit unavailable/insufficient handling; deterministic replay; Rule-5 evidence
+    excluded_steps: STEP-P4-005 and STEP-P4-006
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    contract_effect: existing quantitative and canonical contracts remain the input/output foundation; no new canonical Stable ID allocated
+    vps_effect: none; no VPS/SentinelX action performed
+    closure_sync: not applicable at activation; CONTROL retains full closure ownership
