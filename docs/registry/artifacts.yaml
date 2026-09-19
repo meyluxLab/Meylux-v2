@@ -1030,3 +1030,15 @@ records:
     artifact_path: docs/build-reports/BR-P4-005.md
     traceability: TO-P4-005 / PH-P4 / STEP-P4-004 / AR-P4-009
     status: VERIFIED
+  - stable_id: TO-P4-006
+    canonical_name: Task Order — Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-006.md
+    traceability: PH-P4 / STEP-P4-005 / STEP-P4-004 / TO-P4-005 / AR-P4-009 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY
+    status: AUTHORIZED TO EXECUTE
+  - stable_id: STEP-P4-005
+    canonical_name: Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P4.md
+    traceability: PH-P4 / STEP-P4-004 / TO-P4-005 / AR-P4-009 / TO-P4-006 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY
+    status: AUTHORIZED TO EXECUTE
