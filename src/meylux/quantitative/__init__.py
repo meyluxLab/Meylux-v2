@@ -14,6 +14,7 @@ from .indicators import (
     volume_spike, vwap, wma, wma_candles, volatility_expansion_ratio,
     BandPoint, MACDPoint, SupertrendPoint, VolumeActivityPoint,
 )
+from .market_structure import MarketStructureEngine, MarketStructureAnalysis, StructuralEvent, BarState, SEMANTIC_VERSION
 
 __all__ = [
     "quantize", "serialize_decimal",
@@ -28,4 +29,5 @@ __all__ = [
     "sma_candles", "supertrend", "volume_activity", "volume_climax", "volume_sma",
     "volume_spike", "vwap", "wma", "wma_candles", "volatility_expansion_ratio",
     "BandPoint", "MACDPoint", "SupertrendPoint", "VolumeActivityPoint",
+    "MarketStructureEngine", "MarketStructureAnalysis", "StructuralEvent", "BarState", "SEMANTIC_VERSION",
 ]
