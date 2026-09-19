@@ -511,14 +511,14 @@ records:
     logical_name: Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
     entity_type: STEP
     phase: PH-P4
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 5
     predecessor: STEP-P4-004
     activation_basis: PROJECT OWNER DIRECTIVE — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY — 2026-09-19 / PH-P4 / AR-P4-009 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    active_task_order: TO-P4-006
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P4-006
+    completion_audit: AR-P4-011
     purpose: Implement deterministic market-regime classification with explicit hysteresis and multi-factor state, plus venue-aware quantitative evidence comparison while preserving the independent Venue Intelligence Track boundary.
     repository_scope: deterministic regime state, hysteresis/transition semantics, quantitative factor aggregation, unavailable/insufficient/invalid/contradictory handling, venue-aware evidence comparability/rejection, zero-lookahead, deterministic replay, tests, documentation and traceability within STEP-P4-005 only.
     exclusions: STEP-P4-006; Phase 5+; AI/LLM interpretation; Opportunity Score; Analytical Confidence; complete Venue Intelligence / Opportunity Engine; trading/capital; V1; unrelated refactoring.
