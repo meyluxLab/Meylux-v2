@@ -66,10 +66,7 @@ def _derived_context(
         return explicit
     if instrument_id is None and not timestamps and not provenance_ids:
         return None
-    ordered_provenance: list[str] = []
-    for provenance_id in provenance_ids:
-        if provenance_id and provenance_id not in ordered_provenance:
-            ordered_provenance.append(provenance_id)
+    ordered_provenance = [provenance_id for provenance_id in provenance_ids if provenance_id]
     source_ref = None
     if ordered_provenance:
         source_ref = "canonical-provenance:" + "|".join(ordered_provenance)
@@ -336,7 +333,7 @@ class OrderFlowEngine:
                     raise ValueError("CVD bars must use one instrument across the complete sequence")
             previous_end = bar.end_time
             for trade in bar.trades:
-                if trade.provenance_id not in lineage_provenance:
+                if trade.provenance_id:
                     lineage_provenance.append(trade.provenance_id)
                 lineage_timestamps.append(trade.timestamp)
             bar_context = _derived_context(
