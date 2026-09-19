@@ -175,3 +175,45 @@ No Phase-5 authorization or implementation was introduced.
 - Performance full-vector target on 116-primary one-day workload: MEASURED PASS (26.078 ms).
 - Indicator <5ms / 1000 bars target: NOT SATISFIED for current EMA implementation; engine reopening is outside current authorization.
 - G-4: NOT ESTABLISHED.
+
+## 11. TO-P4-008 correction verification and live normalization continuation
+
+### Q. Repository synchronization
+- CONTROL fetched the authorized final main revision through SentinelX and synchronized /srv/meylux-v2 to fb7d9847498323bec067ba98a1e2729f869c0697.
+- No producer-side runtime mutation was performed before this CONTROL verification.
+
+### R. Independent implementation/test verification
+- Binance acquisition suite: 19 tests — PASS.
+- P3-005 normalization suite: 16 tests — PASS.
+- Full repository unittest discovery: 448 tests in 2.609s — PASS.
+- A ResourceWarning for an existing MEXC test file was observed during the full suite; it did not produce a test failure and did not concern the TO-P4-008 correction.
+
+### S. Real Binance Spot provider -> P3 normalization probe
+- CONTROL executed the existing public Binance Spot BinanceAdapter.fetch_klines() directly from the synchronized repository.
+- No authentication/private endpoint/trading/order/capital/custody/V1 path was used.
+- Real BTCUSDT candles were requested at the minimum G-4 workload basis:
+  - 15m: 116 envelopes
+  - 1h: 31 envelopes
+  - 4h: 9 envelopes
+- All returned envelopes normalized successfully through the unchanged P3 normalize() implementation.
+- Resulting canonical timeframe values were exactly 15m, 1h, and 4h.
+- Close-boundary behavior was observed:
+  - 15m: 115/116 closed
+  - 1h: 30/31 closed
+  - 4h: 8/9 closed
+- The currently open candle at the receipt boundary was not promoted to closed state.
+
+### T. Persistence/runtime boundary after correction
+- Full P2 RawStagingRepository -> CanonicalPersistence -> P4 runtime continuation was not executed after correction.
+- Current host execution context does not expose MEYLUX_DB_NAME, MEYLUX_DB_PASSWORD, or MEYLUX_APP_PASSWORD.
+- Host-level PostgreSQL and Redis services report inactive.
+- Docker socket access remains denied to the current SentinelX command context.
+- CONTROL therefore did not inject data directly into canonical/quantitative tables or fabricate G-4 evidence.
+
+### U. Verification disposition
+- TO-P4-008 provider-boundary correction: VERIFIED under AR-P4-014.
+- Previous timeframe-normalization finding: CLOSED / VERIFIED.
+- Governed full real-data persistence/runtime/replay/recovery: OPEN / UNEXECUTED.
+- G-4: NOT ESTABLISHED.
+- STEP-P4-006: ACTIVE / AUTHORIZED.
+- Phase 5: NOT AUTHORIZED.
