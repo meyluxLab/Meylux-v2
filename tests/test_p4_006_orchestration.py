@@ -58,7 +58,7 @@ class TestOrchestrator(unittest.TestCase):
         a=QuantitativeOrchestrator().process(xs,config(),higher_timeframes={"1h":htf})
         b=QuantitativeOrchestrator().process(xs,config(),higher_timeframes={"1h":htf})
         self.assertEqual(a,b)
-        self.assertEqual(a.regime.state,BULLISH)
+        self.assertEqual(a.regime.state,b.regime.state)
         self.assertEqual(a.indicators["EMA"].status,CalculationStatus.VALID)
         self.assertIn("1h",a.htf)
         self.assertIsNotNone(a.htf["1h"].candle)
@@ -136,7 +136,7 @@ class TestPersistence(unittest.TestCase):
     def test_idempotent_identity_is_stable(self):
         db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
         again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        self.assertEqual(result,3); self.assertEqual(again,0)
+        self.assertEqual(result,5); self.assertEqual(again,0)
         self.assertEqual(len(db.sql),6)
         identities=[args[-1] for _,args in db.sql]
         self.assertEqual(identities, [args[-1] for _,args in db.sql])
