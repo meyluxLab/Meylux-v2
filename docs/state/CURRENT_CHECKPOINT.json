@@ -254,7 +254,6 @@
     "STEP-P4-003 was independently verified under AR-P4-006 against DOC-P4-002 / ADR-QUANTITATIVE-001, final implementation/evidence baseline c00c36a31414f9e887a4b656ff87287afb5839cb, Core Run #836 and Docker Foundation Run #211; CONTROL-owned closure synchronization is complete.",
     "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009.",
     "DOC-P4-003 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-002 as the deterministic semantic authority for STEP-P4-004; no higher-order architecture or canonical contract authority was amended.",
-    "STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009; TO-P4-005 is VERIFIED / COMPLETE; STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 and AR-P4-011; TO-P4-006 is VERIFIED / COMPLETE; STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007.",
     "STEP-P4-006 is COMPLETE / VERIFIED under AR-P4-015; TO-P4-007 and TO-P4-008 are VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED.",
     "CONTROL verified the governed BTCUSDT real-data G-4 workload: 116 closed 15m primary candles, 31 closed 1h candles and 9 closed 4h candles, with P2 raw persistence, P3 validation/normalization/quality, canonical persistence, deterministic orchestration/replay, worker processing/restart recovery, read-only API and security evidence.",
     "Real-data replay-sized orchestration averaged 22.690451 ms across five executions, below the roadmap <50ms full-vector target; the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied for the existing EMA implementation and remains governed by DD-V2-P4-006-PERFORMANCE-TARGET without engine reopening.",
@@ -264,7 +263,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-19T23:45:00Z",
+  "updated_at_utc": "2026-09-19T23:50:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED"
