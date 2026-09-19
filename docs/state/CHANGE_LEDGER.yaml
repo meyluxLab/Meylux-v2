@@ -1019,7 +1019,7 @@ entries:
     repository_commits:
       semantic_specification: 4157538770feb972a49e034fe59baed07c4b3887
       decision_record: 73d4b5ea4617330999c20834144d48b316813122
-      task_order_amendment: 9b7b3165b7da79674959dc87ce6e57f2f6a9c634
+      task_order_amendment: e8fee76a8936e21db2782cff63149351c9eccbb0
       artifact_registry: 2f4684cec38b0ccc9803cd9710b248237621edfb
       adr_index: 2a1066250187f03488b437d2c4af98ba268f069b
       open_questions: 62c8720d5c0efec1b740d0e37053a58132f6f808
