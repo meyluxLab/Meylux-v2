@@ -4,7 +4,7 @@
   "phase": "PH-P4",
   "step": "STEP-P4-003",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED",
+  "status": "COMPLETE / VERIFIED",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-004",
-  "last_build_report": null,
-  "last_audit_report": null,
+  "last_build_report": "BR-P4-004",
+  "last_audit_report": "AR-P4-006",
   "last_execution_log": "EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918",
-  "active_task_order": "TO-P4-004",
-  "completed_task_order": null,
-  "completion_audit": null,
+  "active_task_order": null,
+  "completed_task_order": "TO-P4-004",
+  "completion_audit": "AR-P4-006",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -195,11 +195,14 @@
     "TST-P4-002",
     "TO-P4-003",
     "BR-P4-003",
-    "AR-P4-003"
+    "AR-P4-003",
+    "TO-P4-004",
+    "BR-P4-004",
+    "AR-P4-006",
+    "STEP-P4-003",
+    "TST-P4-003"
   ],
-  "unverified_artifacts": [
-    "TO-P4-004"
-  ],
+  "unverified_artifacts": [],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID."
   ],
@@ -223,12 +226,13 @@
     "STEP-P3-006 was independently verified by CONTROL under AR-P3-006 against final implementation commit 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283 and CI Core Run #480; Closure Synchronization is complete.",
     "TO-P3-006 is VERIFIED / COMPLETE and no active P3 Task Order remains.",
     "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008.",
-    "STEP-P4-003 is ACTIVE / AUTHORIZED under Project Owner Directive — AUTHORIZE STEP-P4-003 and TO-P4-004; STEP-P4-004 through STEP-P4-006 remain NOT YET AUTHORIZED.",
-    "DOC-P4-002 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-001 following the Project Owner delegation dated 2026-09-19; TO-P4-004 implementation may proceed against the ratified semantic boundary, while STEP-P4-004 through STEP-P4-006 remain unauthorized."
+    "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 through STEP-P4-006 remain NOT YET AUTHORIZED.",
+    "DOC-P4-002 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-001 following the Project Owner delegation dated 2026-09-19; TO-P4-004 implementation may proceed against the ratified semantic boundary, while STEP-P4-004 through STEP-P4-006 remain unauthorized.",
+    "STEP-P4-003 was independently verified under AR-P4-006 against DOC-P4-002 / ADR-QUANTITATIVE-001, final implementation/evidence baseline c00c36a31414f9e887a4b656ff87287afb5839cb, Core Run #836 and Docker Foundation Run #211; CONTROL-owned closure synchronization is complete."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "4cbeecee0704c7fb2a7b678b8b2f160c8b000b68",
-  "updated_at_utc": "2026-09-19T11:19:00Z",
+  "last_verified_commit": "c00c36a31414f9e887a4b656ff87287afb5839cb",
+  "updated_at_utc": "2026-09-19T13:21:59Z",
   "phase_4_status": "ACTIVE / AUTHORIZED",
   "phase_4_definition": "docs/phases/PH-P4.md"
 }
