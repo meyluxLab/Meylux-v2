@@ -417,8 +417,8 @@ records:
     final_step: STEP-P4-006
     active_task_order: null
     current_step: STEP-P4-004
-    completed_task_order: TO-P4-004
-    completion_audit: AR-P4-006
+    completed_task_order: TO-P4-005
+    completion_audit: AR-P4-009
     authorization_criteria:
       - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
       - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
@@ -493,14 +493,14 @@ records:
     logical_name: Volume Profile, Order Flow & Derivatives Engine
     entity_type: STEP
     phase: PH-P4
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
     authorization_state: AUTHORIZED TO EXECUTE
     order: 4
     predecessor: STEP-P4-003
     activation_basis: Project Owner Directive — AUTHORIZE STEP-P4-004 / Volume Profile, Order Flow & Derivatives Engine — 2026-09-19 / PH-P4 / AR-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    active_task_order: TO-P4-005
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P4-005
+    completion_audit: AR-P4-009
     semantic_authority: DOC-P4-003 / ADR-QUANTITATIVE-002 / RATIFIED
     purpose: Implement deterministic Volume Profile, Order Flow and Derivatives evidence with explicit Decimal semantics, unavailable/insufficient handling, deterministic replay and Rule-5 boundary/failure coverage.
     repository_scope: Volume Profile POC/VAH/VAL/HVN/LVN; Bar Delta/CVD; Imbalance; evidence-bounded Absorption; Funding/OI/Basis analytics; tests, golden/reference vectors, replay and traceability within STEP-P4-004 only.
