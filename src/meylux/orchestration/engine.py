@@ -89,5 +89,11 @@ class QuantitativeOrchestrator:
         structure=self._structure.analyze(xs)
         indicators={"EMA":ema_candles(xs,config.ema_period)[-1],"RSI":rsi(xs,config.rsi_period)[-1],"ATR":atr(xs,config.atr_period)[-1]}
         htf={}
-        for tf,series in (higher_timeframes or {}).items(): htf[tf]=align_higher_timeframe(xs[-1],tuple(series))
+        for tf,series in (higher_timeframes or {}).items():
+            if not isinstance(tf,str) or not tf: raise ValueError("higher timeframe key must be non-empty")
+            normalized=tuple(series)
+            for i,c in enumerate(normalized):
+                if not isinstance(c,CanonicalCandle): raise TypeError(f"higher_timeframes[{tf}][{i}] must be CanonicalCandle")
+                if c.timeframe!=tf: raise ValueError(f"higher_timeframes[{tf}] contains candle with timeframe {c.timeframe!r}")
+            htf[tf]=align_higher_timeframe(xs[-1],normalized)
         return QuantOrchestrationResult(xs[-1].instrument_id,xs[-1].timeframe,xs[-1].close_time,config.version,regime.result,regime.transition,indicators,len(structure.events),structure.states[-1].state if structure.states else "NEUTRAL",htf,tuple(c.provenance_id for c in xs))
