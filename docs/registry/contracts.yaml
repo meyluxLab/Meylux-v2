@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
+status: ACTIVE / EVIDENCE-TRACKING
 records:
   - sid: CTR-V2-CANONICAL-CANDLE
     version: 1.0.0
@@ -211,3 +211,30 @@ records:
       - src/meylux/persistence/canonical.py
       - src/meylux/persistence/event_handoff.py
     lifecycle_status: VERIFIED
+
+
+  - sid: CTR-P4-QUANT-CANDLE-CLOSE-1.0
+    version: 1.0.0
+    logical_name: Quantitative Candle-Close Worker Envelope
+    entity_type: CTR
+    phase: PH-P4
+    step: STEP-P4-006
+    tier: REQ-BEHAVIOR
+    purpose: Governed worker payload identity for closed canonical candle quantitative orchestration
+    producer: Phase-4 quantitative runtime boundary
+    consumers:
+      - QuantWorkerHandler
+      - Redis Streams quantitative worker boundary
+    fields:
+      - candles
+      - higher_timeframes
+      - previous_regime
+    type_semantics: candles is a sequence of canonical candle mappings; higher_timeframes is an optional mapping of timeframe to canonical candle mappings; previous_regime is optional deterministic regime state input
+    timestamp_semantics: all supplied candle timestamps must be timezone-aware UTC and preserve CanonicalCandle close-time semantics
+    validation: Worker rejects unsupported payload contract identity, incomplete primary candle input, malformed canonical candle data, and MTF timeframe-key mismatches
+    deterministic_identity: Envelope identity is supplied by the existing QueueEnvelope boundary; quantitative result identity remains governed by persistence SHA-256 identity material
+    phase_boundary: Payload is a runtime handoff contract only; mathematical truth remains owned by verified Phase-4 engines and persistence remains authoritative in the existing Phase-4 tables
+    implementation_paths:
+      - src/meylux/runtime/quant_worker.py
+      - src/meylux/orchestration/engine.py
+    lifecycle_status: TESTED / UNVERIFIED
