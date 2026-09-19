@@ -1240,3 +1240,48 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX action performed
     scope_effect: STEP-P4-005 and STEP-P4-006 remain unauthorized; no future-Step implementation occurred
+
+  - id: CHG-P4-STEP-004-CLOSURE-SYNC-FINAL-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL final closure synchronization re-check for STEP-P4-004 after repository drift inspection
+    basis: Project Owner Directive — COMPLETE STEP-P4-004 CLOSURE SYNCHRONIZATION + AR-P4-009 + TO-P4-005 + BR-P4-005 + DOC-P4-003 + ADR-QUANTITATIVE-002 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-004
+      - TO-P4-005
+      - BR-P4-005
+      - AR-P4-009
+      - TST-P4-004
+      - CMP-V2-P4-004
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+      - docs/state/CHANGE_LEDGER.yaml
+    pre_sync_state: STEP-P4-004 COMPLETE / VERIFIED; TO-P4-005 VERIFIED / COMPLETE; active_task_order null; CURRENT_CHECKPOINT already represented completed closure state; README already matched the current checkpoint; Phase registry retained STEP-P4-004 authorization_state as AUTHORIZED TO EXECUTE; canonical artifact traceability retained pre-final-audit references and TST-P4-004 was absent from the canonical artifact registry.
+    corrections:
+      - docs/registry/phases.yaml STEP-P4-004 authorization_state synchronized to VERIFIED / COMPLETE.
+      - docs/registry/artifacts.yaml STEP-P4-004, TO-P4-005 and BR-P4-005 traceability synchronized to include AR-P4-009.
+      - docs/registry/artifacts.yaml TST-P4-004 canonical record added using the existing TST registry convention and verified evidence.
+      - docs/registry/artifacts.yaml duplicate AR-P4-008 status line removed without changing its historical REQUEST CHANGES / NOT VERIFIED state.
+    unchanged_but_verified:
+      - docs/state/CURRENT_CHECKPOINT.json already matched STEP-P4-004 COMPLETE / VERIFIED, TO-P4-005 VERIFIED / COMPLETE, active_task_order null, completion_audit AR-P4-009, verified_artifacts including STEP-P4-004 / TO-P4-005 / TST-P4-004 / CMP-V2-P4-004, and unverified_artifacts empty; no checkpoint rewrite was required.
+      - README.md already matched the synchronized checkpoint and PH-P4 lifecycle.
+      - docs/registry/tests.yaml TST-P4-004 is VERIFIED with CI Core Run #897 and repository validation Run #899, both SUCCESS with 393 tests.
+      - docs/registry/components.yaml CMP-V2-P4-004 is VERIFIED with implementation commit b6dd4e0ea55319b820c5e90b7de4da4dd62e0d48 and final repository validation 9f42b28bc07e5bb58d2b257a841521dd0ffa940f.
+      - docs/registry/contracts.yaml, requirements.yaml, runtime.yaml, database.yaml, security.yaml, configuration.yaml, performance.yaml and observability.yaml were inspected; no direct P4-004 lifecycle/domain evidence requiring a new record was found, so they remain unchanged.
+      - docs/registry/phase2-artifacts.yaml was inspected as the only supplemental/staging registry; no P4-004 stranded content was found and no retirement was justified.
+      - PH-P4.md remains ACTIVE / AUTHORIZED; STEP-P4-005 and STEP-P4-006 remain NOT YET AUTHORIZED.
+      - BR-P4-005 and AR-P4-009 remain preserved as historical evidence; no historical report was rewritten.
+    implementation_verified_commit: b6dd4e0ea55319b820c5e90b7de4da4dd62e0d48
+    final_repository_validation_commit: 9f42b28bc07e5bb58d2b257a841521dd0ffa940f
+    repository_head_at_sync_start: d6408c65a3995f0e16c352e4cf4406b30eb0c332
+    audit_report: AR-P4-009 APPROVED / VERIFIED
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-004 COMPLETE / VERIFIED; TO-P4-005 VERIFIED / COMPLETE; BR-P4-005 VERIFIED; AR-P4-009 APPROVED / VERIFIED; active_task_order null; STEP-P4-005 and STEP-P4-006 NOT YET AUTHORIZED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    scope_effect: no future-Step implementation or authorization occurred
+    closure_result: CONTROL-owned STEP-P4-004 closure synchronization completed through correction, dependent-record inspection, specialized-registry sweep, historical-integrity check, and final read-back.
