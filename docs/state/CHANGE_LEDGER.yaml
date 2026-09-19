@@ -1442,3 +1442,33 @@ entries:
     scope_effect: STEP-P4-006 remains NOT YET AUTHORIZED; no future-Step implementation occurred.
     historical_integrity: AR-P4-010 and failed Run #945 remain preserved as historical correction evidence; no historical audit or CI result was rewritten.
     closure_result: CONTROL-owned Closure Synchronization completed across the mandatory ADR-GOVERNANCE-012 surfaces and final read-back boundary.
+
+  - id: CHG-P4-STEP-005-CLOSURE-SYNC-FINAL-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION_FINAL_READBACK
+    subject: CONTROL final read-back confirms STEP-P4-005 closure consistency
+    basis: CHG-P4-STEP-005-CLOSE-20260919 + AR-P4-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-005
+      - TO-P4-006
+      - BR-P4-006
+      - AR-P4-010
+      - AR-P4-011
+      - TST-P4-005
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/state/CHANGE_LEDGER.yaml
+    repository_head_at_final_readback: bda773d563625d6a9469a178f3a061e5a0e21081
+    verified_consistency:
+      - CURRENT_CHECKPOINT: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-005 remains the current completed step; active_task_order null; TO-P4-006 VERIFIED / COMPLETE; completion_audit AR-P4-011; unverified_artifacts empty.
+      - phases.yaml: PH-P4 active_task_order null; STEP-P4-005 COMPLETE / VERIFIED; TO-P4-006 completed; AR-P4-011 completion audit.
+      - artifacts.yaml: TO-P4-006 VERIFIED / COMPLETE; STEP-P4-005 COMPLETE / VERIFIED; BR-P4-006 VERIFIED; AR-P4-011 APPROVED / VERIFIED; TST-P4-005 VERIFIED; historical AR-P4-010 preserved as REQUEST CHANGES / NOT VERIFIED.
+      - tests.yaml: TST-P4-005 VERIFIED with Run #947 SUCCESS evidence.
+      - README.md: repository status matches the synchronized checkpoint and Phase-4 lifecycle.
+      - specialized registries and supplemental phase2-artifacts registry: inspected; no unrecorded P4-005 domain evidence or stale P4-005 status requiring additional synchronization.
+      - PH-P4 and applicable quantitative/ADR documents: inspected; no stale closure status requiring correction.
+    closure_result: final CONTROL read-back confirms the mandatory peripheral synchronization is complete; no future Step authorization or implementation was introduced.
