@@ -1,0 +1,1 @@
+P4-004 semantic specification content is being committed from the fully constructed governed artifact in this turn.
