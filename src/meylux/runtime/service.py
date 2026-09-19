@@ -37,6 +37,10 @@ def _config()->QuantOrchestrationConfig:
 
 async def main():
     service=os.environ.get("MEYLUX_SERVICE","")
+    if service in {"collector","worker-ai"}:
+        print(f"meylux-v2 foundation service started: {service}", flush=True)
+        while True:
+            await asyncio.sleep(3600)
     if service not in {"api","worker-quant"}:
         raise SystemExit(f"unsupported Phase-4 service: {service!r}")
     pool=await asyncpg.create_pool(
