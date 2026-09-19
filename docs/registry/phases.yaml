@@ -413,7 +413,7 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-DIRECTIVE-ESTABLISH-PHASE-4-AUTHORIZE-STEP-P4-001-2026-09-18
     first_step: STEP-P4-001
-    next_valid_step: STEP-P4-004
+    next_valid_step: STEP-P4-005
     final_step: STEP-P4-006
     active_task_order: null
     current_step: STEP-P4-004
