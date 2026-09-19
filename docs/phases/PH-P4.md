@@ -159,10 +159,13 @@ Acceptance boundary: deterministic multi-factor regime classification, explicit 
 ### `STEP-P4-006` — Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
 
 **Order:** 6
-**Status:** NOT YET AUTHORIZED
-**Predecessor:** `STEP-P4-005`
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** AUTHORIZED TO EXECUTE
+**Active Task Order:** `TO-P4-007`
+**Activation basis:** Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-006 AND DELEGATE FULL OPERATIONAL WORKFLOW AUTHORITY — 2026-09-19
+**Predecessor:** `STEP-P4-005` — COMPLETE / VERIFIED
 
-Objective: operationalize the verified quantitative engines through controlled orchestration, candle-close and multi-timeframe execution, authoritative persistence, read-only API, deterministic replay/recovery and the evidence boundary for G-4 and Phase 4 closure.
+Objective: operationalize the verified quantitative engines through controlled orchestration, candle-close and multi-timeframe execution, authoritative persistence, worker/event processing, read-only API, deterministic replay/recovery, controlled real-data vertical-slice validation and the evidence boundary for G-4 and Phase 4 closure.
 
 ## Dependency Rule
 
@@ -218,7 +221,7 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 ## Current Step Boundary After P4-004 Closure
 
-STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 / AR-P4-009. STEP-P4-005 is ACTIVE / AUTHORIZED under TO-P4-006. STEP-P4-006 remains NOT YET AUTHORIZED. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
+STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 / AR-P4-009. STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 / AR-P4-011. STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
 
 ## Standing Role Operating Rules — ADR-GOVERNANCE-013
 
@@ -236,4 +239,4 @@ Every substantive response must end with the `--- STANDING RULES CHECK ---` foot
 
 ## Current Phase Boundary
 
-PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED, with STEP-P4-002 re-verified under AR-P4-003. STEP-P4-003 is COMPLETE / VERIFIED under TO-P4-004 / AR-P4-006. STEP-P4-004 is ACTIVE / AUTHORIZED under TO-P4-005. STEP-P4-005 and STEP-P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
+PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED, with STEP-P4-002 re-verified under AR-P4-003. STEP-P4-003 is COMPLETE / VERIFIED under TO-P4-004 / AR-P4-006. STEP-P4-004 is ACTIVE / AUTHORIZED under TO-P4-005. STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 / AR-P4-011; STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007.
