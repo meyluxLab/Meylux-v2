@@ -186,7 +186,7 @@ class OrderFlowTests(unittest.TestCase):
         self.assertEqual(result[0].result.context.source_ref, "canonical-provenance:prov-1")
         self.assertEqual(result[1].result.context.source_ref, "canonical-provenance:prov-1|prov-2")
         self.assertEqual(result[1].result.context.symbol, "BTCUSDT")
-        self.assertEqual(result[1].result.context.timestamp, T0 + timedelta(minutes=1))
+        self.assertEqual(result[1].result.context.timestamp, T0 + timedelta(hours=1))
 
     def test_closed_bar_end_boundary_belongs_only_to_next_bar(self):
         boundary_trade = trade(1, "100", "5", "BUY", minute=1)
