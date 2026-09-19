@@ -102,10 +102,12 @@ class TestWorkerAPI(unittest.TestCase):
     def test_api_rejects_negative_limit(self):
         response=asyncio.run(QuantitativeAPI(_FakePersistence()).handle("GET","/v1/quantitative/regime/BTCUSDT/15m",{"limit":"-1"}))
         self.assertEqual(response.status,400)
-\n    def test_api_rejects_unknown_family(self):
+
+    def test_api_rejects_unknown_family(self):
         response=asyncio.run(QuantitativeAPI(_FakePersistence()).handle("GET","/v1/quantitative/unknown/BTCUSDT/15m",{}))
-        self.assertEqual(response.status,400)
-\n    def test_api_is_read_only_and_deterministic(self):
+        self.assertEqual(response.status,404)
+
+    def test_api_is_read_only_and_deterministic(self):
         api=QuantitativeAPI(_FakePersistence())
         post=asyncio.run(api.handle("POST","/v1/quantitative/regime/BTCUSDT/15m",{}))
         self.assertEqual(post.status,405)
