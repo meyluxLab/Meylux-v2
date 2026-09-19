@@ -24,6 +24,7 @@ records:
       application_update_delete_privileges: DENIED
       direct_update_probe: REJECTED
       api_http_methods: GET_ONLY
+      final_real_data_api_probe: GET 200 / POST 405 read_only
       secrets_in_evidence: NONE
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
-    status: TESTED / UNVERIFIED
+    status: VERIFIED
