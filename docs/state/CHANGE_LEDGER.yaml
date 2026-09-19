@@ -1302,3 +1302,21 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX action performed
     historical_integrity: prior closure and correction entries remain preserved; this entry records the final checkpoint assumption correction discovered by post-edit read-back.
+
+  - id: CHG-P4-STEP-004-CLOSURE-CHECKPOINT-ASSUMPTION-FINAL-20260919
+    date_utc: '2026-09-19'
+    change_type: CHECKPOINT_CLOSURE_ASSUMPTION_CORRECTION
+    subject: CONTROL final checkpoint read-back removes remaining stale P4-004 authorization assumption
+    basis: CHG-P4-STEP-004-CLOSURE-CHECKPOINT-ASSUMPTION-FIX-20260919 + AR-P4-009 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-004
+      - STEP-P4-005
+      - STEP-P4-006
+      - CURRENT_CHECKPOINT
+    correction:
+      previous_assumption: DOC-P4-002 ratification entry stated STEP-P4-004 through STEP-P4-006 remained unauthorized.
+      corrected_assumption: STEP-P4-004 is COMPLETE / VERIFIED under AR-P4-009; STEP-P4-005 and STEP-P4-006 remain NOT YET AUTHORIZED.
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-004 COMPLETE / VERIFIED; TO-P4-005 VERIFIED / COMPLETE; active_task_order null; STEP-P4-005 and STEP-P4-006 NOT YET AUTHORIZED.
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    historical_integrity: prior historical assumption is retained only as ledger history; current checkpoint now contains the corrected current-state assumption.
