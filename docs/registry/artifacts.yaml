@@ -1107,3 +1107,10 @@ records:
     artifact_path: tests/test_p4_006_orchestration.py
     traceability: TO-P4-007 / STEP-P4-006 / BR-P4-007 / AR-P4-013
     status: TESTED / UNVERIFIED
+
+  - stable_id: TO-P4-008
+    canonical_name: Task Order — Governed Historical Candle Path & P4-006 Performance Profiling
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-008.md
+    traceability: PH-P4 / STEP-P4-006 / TO-P4-007 / AR-P4-013 / OQ-P4-006-REAL-DATA-PATH / OQ-P4-006-PERFORMANCE / DD-V2-P4-006-PERFORMANCE-TARGET / DOC-V2-ARCH-001 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20
+    status: AUTHORIZED TO EXECUTE
