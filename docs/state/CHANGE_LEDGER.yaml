@@ -1061,3 +1061,29 @@ entries:
     future_step_effect: STEP-P4-004 through STEP-P4-006 remain unauthorized
     vps_effect: none
     closure_sync: not applicable because Step closure was rejected; CONTROL retains closure ownership for the eventual successful correction cycle
+  - id: CHG-P4-STEP-003-REAUDIT-20260919
+    date_utc: '2026-09-19'
+    change_type: INDEPENDENT_REAUDIT_REQUEST_CHANGES
+    subject: CONTROL independent re-audit of TO-P4-004 correction cycle identifies remaining state-semantics and CHOCH invalidation blockers
+    basis: AR-P4-005 + DOC-P4-002 + TO-P4-004 Revision 1.1 + ADR-QUANTITATIVE-001 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-003
+      - TO-P4-004
+      - BR-P4-004
+      - AR-P4-004
+      - AR-P4-005
+      - docs/registry/artifacts.yaml
+    producer_branch: producer/p4-004-market-structure
+    final_evidence_head: f80ca14e332e371bd7623fa0543136abddb2a5de
+    final_implementation_fix: b53c94fb78e23eee20251624a09d7fecde5b3bf5
+    ci_core: Run #821 / Run ID 35444628242 / Job 105901322752 / SUCCESS / 350 tests
+    ci_docker: Run #199 / Run ID 35444628243 / Job 105901322781 / SUCCESS
+    audit_result: REQUEST CHANGES / NOT VERIFIED
+    blocking_findings:
+      - normal insufficient/warm-up structure is incorrectly emitted as UNCONFIRMED instead of NEUTRAL under DOC-P4-002
+      - CHOCH append-only invalidation is not implemented/proven despite TO-P4-004 authorization
+    lifecycle_effect: STEP-P4-003 remains ACTIVE / AUTHORIZED; TO-P4-004 remains AUTHORIZED TO EXECUTE; no closure state advanced
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    future_step_effect: STEP-P4-004 through STEP-P4-006 remain unauthorized
+    vps_effect: none
+    closure_sync: not applicable because Step verification was rejected; CONTROL retains closure ownership for eventual successful correction cycle
