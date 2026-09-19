@@ -115,6 +115,9 @@ Scope boundary: moving averages, momentum, trend/volatility, statistical/realize
 **Authorization state:** AUTHORIZED TO EXECUTE
 **Predecessor:** `STEP-P4-002` — COMPLETE / VERIFIED
 **Active Task Order:** `TO-P4-004`
+**Authoritative Market Structure Semantics:** `DOC-P4-002` — `docs/quantitative/P4_003_MARKET_STRUCTURE_SEMANTICS.md`  
+**Semantic Decision:** `ADR-QUANTITATIVE-001` — RATIFIED / AUTHORIZED  
+**Semantic authority basis:** Project Owner delegation dated 2026-09-19  
 **Activation basis:** Project Owner Directive — AUTHORIZE STEP-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
 
 Objective: implement deterministic swing, structure, BOS, CHOCH, MSS, FVG, order-block, breaker and liquidity facts with explicit state-machine, UNCONFIRMED, canonical-gap and zero-lookahead semantics.
