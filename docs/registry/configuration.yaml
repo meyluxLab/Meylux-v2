@@ -21,7 +21,8 @@ records:
     evidence:
       repository_commit: 48bae89931c3ab003223a867ab9f9bf75fe3117a
       compose_validation: PASS
+      final_deployed_commit: fb7d9847498323bec067ba98a1e2729f869c0697
       api_and_worker_dependencies: CONFIGURED
       secret_values_recorded: false
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
-    status: TESTED / UNVERIFIED
+    status: VERIFIED
