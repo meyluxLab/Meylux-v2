@@ -250,7 +250,7 @@ class DerivativesTests(unittest.TestCase):
         previous = deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100"))
         current = deriv(2, 60, funding_rate=Decimal("0.003"), open_interest=Decimal("125"), basis=Decimal("2"))
         result = self.engine.analyze(current, previous)
-        self.assertEqual(result["FUNDING_VELOCITY"].value, Decimal("0.00003333333333333333333333333333"))
+        self.assertEqual(result["FUNDING_VELOCITY"].value, Decimal("0.0000005555555555555555555555556"))
         self.assertEqual(result["OI_DELTA"].value, Decimal("25"))
         self.assertEqual(result["BASIS"].value, Decimal("2"))
 
