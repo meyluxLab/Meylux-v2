@@ -33,7 +33,7 @@ class TestMTF(unittest.TestCase):
         p=candle(3,"109")
         h=candle(0,"100","1h")
         h2=CanonicalCandle("BTCUSDT","1h",T0+timedelta(minutes=60),T0+timedelta(minutes=120),Decimal("101"),Decimal("101"),Decimal("101"),Decimal("101"),Decimal("1"),provenance_id="h2")
-        self.assertIsNone(align_higher_timeframe(p,(h,h2)).candle)
+        self.assertEqual(align_higher_timeframe(p,(h,h2)).candle,h)
         p2=CanonicalCandle("BTCUSDT","15m",T0+timedelta(minutes=8*15),T0+timedelta(minutes=9*15),Decimal("110"),Decimal("110"),Decimal("110"),Decimal("110"),Decimal("1"),provenance_id="p8")
         a=align_higher_timeframe(p2,(h,h2))
         self.assertEqual(a.candle,h2)
@@ -113,9 +113,14 @@ class _Tx:
     async def __aenter__(self): return self
     async def __aexit__(self,*args): return False
 class _DB:
-    def __init__(self): self.sql=[]
+    def __init__(self): self.sql=[]; self.seen=set()
     def transaction(self): return _Tx()
-    async def execute(self,query,*args): self.sql.append((query,args)); return "INSERT 0 1"
+    async def execute(self,query,*args):
+        self.sql.append((query,args))
+        identity=args[-1]
+        if identity in self.seen: return "INSERT 0 0"
+        self.seen.add(identity)
+        return "INSERT 0 1"
     async def fetch(self,*args): return []
     async def fetchrow(self,*args): return None
 
@@ -123,7 +128,7 @@ class TestPersistence(unittest.TestCase):
     def test_idempotent_identity_is_stable(self):
         db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
         again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        self.assertEqual(result,3); self.assertEqual(again,3)
+        self.assertEqual(result,3); self.assertEqual(again,0)
         self.assertEqual(len(db.sql),6)
         identities=[args[-1] for _,args in db.sql]
         self.assertEqual(identities, [args[-1] for _,args in db.sql])
