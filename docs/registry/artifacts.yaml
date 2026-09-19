@@ -997,3 +997,10 @@ records:
     artifact_path: docs/phases/PH-P4.md
     traceability: PH-P4 / STEP-P4-004 / TO-P4-005 / AR-P4-006 / DOC-P4-003 / ADR-QUANTITATIVE-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: ACTIVE / AUTHORIZED
+
+  - stable_id: BR-P4-005
+    canonical_name: Build Report — Volume Profile, Order Flow & Derivatives Engine
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-005.md
+    traceability: TO-P4-005 / PH-P4 / STEP-P4-004
+    status: ALLOCATED / NOT YET PRODUCED
