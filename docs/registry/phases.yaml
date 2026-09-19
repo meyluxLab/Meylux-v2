@@ -408,17 +408,18 @@ records:
   - sid: PH-P4
     logical_name: Deterministic Quantitative & Market Structure Engine
     entity_type: PH
-    status: ACTIVE / AUTHORIZED
+    status: CLOSED / VERIFIED
     entry_gate: G-4
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-DIRECTIVE-ESTABLISH-PHASE-4-AUTHORIZE-STEP-P4-001-2026-09-18
     first_step: STEP-P4-001
-    next_valid_step: STEP-P4-006
+    next_valid_step: null
     final_step: STEP-P4-006
-    active_task_order: TO-P4-008
-    current_step: STEP-P4-006
-    completed_task_order: TO-P4-006
-    completion_audit: AR-P4-011
+    g4_status: ESTABLISHED / VERIFIED
+    active_task_order: null
+    current_step: null
+    completed_task_order: TO-P4-008
+    completion_audit: AR-P4-015
     authorization_criteria:
       - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
       - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
@@ -528,8 +529,8 @@ records:
     logical_name: Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
     entity_type: STEP
     phase: PH-P4
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: VERIFIED / COMPLETE
     order: 6
     predecessor: STEP-P4-005
     activation_basis: Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-006 AND DELEGATE FULL OPERATIONAL WORKFLOW AUTHORITY — 2026-09-19 / PH-P4 / AR-P4-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
