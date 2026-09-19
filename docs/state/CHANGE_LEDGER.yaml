@@ -1625,3 +1625,98 @@ entries:
     vps_effect: CONTROL retains SentinelX-only operational execution authority; Producer remains read-only on VPS
     scope_effect: no Phase-5 authorization and no engine-level optimization authorization
 
+
+
+  - id: CHG-P4-STEP-006-CLOSE-20260920
+    date_utc: '2026-09-20'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL final independent verification, G-4 establishment and closure synchronization for STEP-P4-006
+    basis: AR-P4-015 + TO-P4-007 + TO-P4-008 + BR-P4-007 + BR-P4-008 + AR-P4-013 + AR-P4-014 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + Project Owner Directive 2026-09-20
+    affected_ids:
+      - PH-P4
+      - STEP-P4-006
+      - TO-P4-007
+      - TO-P4-008
+      - BR-P4-007
+      - BR-P4-008
+      - AR-P4-012
+      - AR-P4-013
+      - AR-P4-014
+      - AR-P4-015
+      - TST-P4-006
+      - CMP-V2-P4-006
+      - RUN-P4-006
+      - SEC-P4-006
+      - CFG-P4-006
+      - PERF-P4-006
+      - OBS-P4-006
+      - OQ-P4-006-REAL-DATA-PATH
+      - OQ-P4-006-PERFORMANCE
+      - DD-V2-P4-006-PERFORMANCE-TARGET
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/phases/PH-P4.md
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+      - docs/registry/runtime.yaml
+      - docs/registry/security.yaml
+      - docs/registry/configuration.yaml
+      - docs/registry/performance.yaml
+      - docs/registry/observability.yaml
+      - docs/task-orders/TO-P4-007.md
+      - docs/task-orders/TO-P4-008.md
+      - docs/audits/AR-P4-015.md
+      - docs/operations/sentinelx/EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919.md
+    from_state:
+      phase: PH-P4 ACTIVE / AUTHORIZED
+      step: STEP-P4-006 ACTIVE / AUTHORIZED
+      active_task_order: TO-P4-008
+      g4: NOT ESTABLISHED
+    final_evidence:
+      governed_real_data: BTCUSDT 15M + 1H + 4H
+      new_raw_p2_records: 1497
+      canonical_g4_workload: 116x15m + 31x1h + 9x4h = 156
+      p2_raw_persistence: PASS
+      p3_validation_normalization_quality: PASS for all 156
+      canonical_persistence: PASS
+      mtf_execution: PASS
+      zero_lookahead: PASS; HTF close boundaries did not exceed primary knowledge time
+      deterministic_replay: PASS; repeated orchestration equality true
+      quantitative_persistence_idempotency: PASS; second identical persistence inserted 0
+      worker_real_data: PASS; DELIVERED / STARTED / ACKED / COMPLETED
+      worker_restart_recovery: PASS; message published while worker stopped was processed after restart
+      read_only_api: PASS; GET 200 with persisted data / POST 405 read_only
+      security_boundary: PASS; existing append-only / denied UPDATE-DELETE boundary preserved
+      real_data_performance_ms:
+        average: 22.690451
+        min: 16.798383
+        max: 31.998459
+        target: '<50ms full multi-timeframe vector'
+        result: PASS
+    deferred_performance_boundary:
+      DD-V2-P4-006-PERFORMANCE-TARGET: DEFERRED
+      reason: existing EMA remains above the separate <5ms/1000-bars roadmap diagnostic; no engine-level reopening was authorized or required for the verified one-day full-vector target.
+    closure_sync:
+      README: synchronized to PH-P4 CLOSED / VERIFIED, G-4 ESTABLISHED / VERIFIED, active_task_order null.
+      artifacts_registry: TO-P4-007, TO-P4-008, STEP-P4-006, BR-P4-007, BR-P4-008, TST-P4-006, CMP-V2-P4-006 and AR-P4-015 synchronized; historical request-changes audits preserved.
+      phases_registry: PH-P4 CLOSED / VERIFIED; STEP-P4-006 COMPLETE / VERIFIED; completion audit AR-P4-015; G-4 ESTABLISHED / VERIFIED.
+      specialized_registries: tests, components, runtime, security, configuration, performance and observability updated with evidence-backed final lifecycle; database/contract/requirements registries inspected and no lifecycle mutation was required.
+      standalone_status_docs: PH-P4 and Task Orders synchronized; producer Build Reports remain historical evidence artifacts and were not rewritten to impersonate CONTROL verification.
+      supplemental_registry: docs/registry/phase2-artifacts.yaml checked; no stranded P4-006/P4-008 content identified.
+      open_questions: OQ-P4-006-REAL-DATA-PATH and OQ-P4-006-PERFORMANCE resolved.
+      deferred_decisions: DD-V2-P4-006-PERFORMANCE-TARGET remains DEFERRED.
+      checkpoint: synchronized to STEP-P4-006 COMPLETE / VERIFIED, G-4 ESTABLISHED / VERIFIED, active_task_order null, completion_audit AR-P4-015, unverified_artifacts empty.
+      final_readback: required repository closure surfaces re-read after synchronization; no conflicting current-state record remains.
+    to_state:
+      phase: PH-P4 CLOSED / VERIFIED
+      step: STEP-P4-006 COMPLETE / VERIFIED
+      task_order: TO-P4-008 VERIFIED / COMPLETE
+      g4: ESTABLISHED / VERIFIED
+      phase5: NOT AUTHORIZED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged.
+    contract_effect: AcquisitionEnvelope, CanonicalCandle, P3 contracts, quantitative contracts and persistence truth layer remain unchanged.
+    vps_effect: all VPS/runtime mutation, deployment, restart and data operations were executed through SentinelX only under explicit Owner authorization.
+    historical_integrity: AR-P4-012 and AR-P4-013 remain preserved as historical request-changes/open-boundary evidence; no failed audit or prior CI result was rewritten.
+    closure_result: CONTROL-owned Closure Synchronization completed and final read-back confirms consistent Phase-4 closed state. Phase 5 remains NOT AUTHORIZED.
