@@ -41,11 +41,11 @@ items:
       - "Producer must implement the ratified semantics exactly and may not substitute alternative definitions."
 
   - question: "OQ-P4-006-REAL-DATA-PATH — How shall the required governed BTCUSDT 15M + 1H + 4H historical candle path be completed when the existing Binance Spot adapter does not currently preserve explicit timeframe context required by P3 normalization?"
-    status: OPEN
+    status: RESOLVED
     affected_phase: PH-P4
     affected_step: STEP-P4-006
     task_order: TO-P4-008
-    resolution: null
+    resolution: "Resolved by the authorized provider-boundary correction in TO-P4-008 and independently verified under AR-P4-014. BinanceAdapter now preserves explicit 15m/1h/4h interval context, the existing P3 normalization accepts real Binance Spot candles, and the resulting CanonicalCandle timeframe remains exact. The broader real-data persistence/runtime/G-4 boundary remains open under STEP-P4-006 and is not closed by this resolution."
     authority: "Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20"
     required_record: "TO-P4-008 implementation evidence, Build Report, CONTROL EXEC-LOG, AR-P4-013 follow-up verification, and closure synchronization"
     constraints:
