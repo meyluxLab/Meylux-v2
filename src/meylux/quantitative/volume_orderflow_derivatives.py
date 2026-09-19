@@ -397,14 +397,14 @@ class DerivativesEngine:
                 out["FUNDING_VELOCITY"] = _result((current.funding_rate - prior.funding_rate) / elapsed, CalculationStatus.VALID, "derived_from_ordered_canonical_observations", context)
 
         velocity = out["FUNDING_VELOCITY"].value
-        if velocity is None or velocity is not None and out["FUNDING_VELOCITY"].status is not CalculationStatus.VALID:
-            out["FUNDING_ACCELERATION"] = _result(None, CalculationStatus.INSUFFICIENT_HISTORY, "missing_prior_velocity_observation", context)
-        elif prior_velocity is None:
+        if prior is None or prior_velocity is None or velocity is None:
             out["FUNDING_ACCELERATION"] = _result(None, CalculationStatus.INSUFFICIENT_HISTORY, "missing_prior_velocity_observation", context)
         else:
-            elapsed = Decimal(str((current.timestamp - prior.timestamp).total_seconds())) if prior is not None else Decimal("0")
+            elapsed = Decimal(str((current.timestamp - prior.timestamp).total_seconds()))
             if elapsed <= 0:
                 out["FUNDING_ACCELERATION"] = _result(None, CalculationStatus.INVALID_INPUT, "non_positive_derivative_elapsed_time", context)
+            elif out["FUNDING_VELOCITY"].status is not CalculationStatus.VALID:
+                out["FUNDING_ACCELERATION"] = _result(None, out["FUNDING_VELOCITY"].status, "current_velocity_unavailable", context)
             else:
                 out["FUNDING_ACCELERATION"] = _result((velocity - prior_velocity) / elapsed, CalculationStatus.VALID, "derived_from_ordered_velocity_observations", context)
 
