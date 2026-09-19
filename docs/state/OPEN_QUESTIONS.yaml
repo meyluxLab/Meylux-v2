@@ -55,11 +55,11 @@ items:
       - "No private/authenticated market-data access, trading, capital, custody or V1 activity."
 
   - question: "OQ-P4-006-PERFORMANCE — Can the STEP-P4-006 orchestrator/runtime meet the roadmap target of <50ms per full multi-timeframe vector without changing the exact outputs/semantics of previously verified P4 engines?"
-    status: OPEN
+    status: RESOLVED
     affected_phase: PH-P4
     affected_step: STEP-P4-006
     task_order: TO-P4-008
-    resolution: null
+    resolution: "Resolved by CONTROL real-data measurement under AR-P4-015: the required 116 primary 15m + 31 1h + 9 4h replay-sized workload averaged 22.690451 ms across five executions, below the roadmap <50ms full-vector target, with deterministic replay equality preserved. The separate <5ms/indicator/1000-bars roadmap diagnostic remains unsatisfied for the existing EMA implementation and is governed by DD-V2-P4-006-PERFORMANCE-TARGET; no engine or numeric-policy reopening occurred."
     authority: "Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20"
     required_record: "CONTROL workload definition, profiler evidence, Decimal-policy analysis, output-preservation analysis, performance conclusion, and any subsequent Owner decision"
     constraints:
