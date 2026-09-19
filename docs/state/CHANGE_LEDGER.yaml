@@ -1720,3 +1720,24 @@ entries:
     vps_effect: all VPS/runtime mutation, deployment, restart and data operations were executed through SentinelX only under explicit Owner authorization.
     historical_integrity: AR-P4-012 and AR-P4-013 remain preserved as historical request-changes/open-boundary evidence; no failed audit or prior CI result was rewritten.
     closure_result: CONTROL-owned Closure Synchronization completed and final read-back confirms consistent Phase-4 closed state. Phase 5 remains NOT AUTHORIZED.
+
+
+  - id: CHG-P4-STEP-006-CLOSURE-SYNC-FINAL-20260920
+    date_utc: '2026-09-20'
+    change_type: STEP_CLOSURE_SYNCHRONIZATION_FINAL_READBACK
+    subject: CONTROL final read-back confirms STEP-P4-006 / G-4 / Phase-4 closure consistency
+    basis: CHG-P4-STEP-006-CLOSE-20260920 + AR-P4-015 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    repository_checkpoint_commit: d950b499b9aedafef9f132948bf73ce56dc35356
+    verified_consistency:
+      - CURRENT_CHECKPOINT: PH-P4 CLOSED / VERIFIED; STEP-P4-006 COMPLETE / VERIFIED; G-4 ESTABLISHED / VERIFIED; active_task_order null; TO-P4-008 VERIFIED / COMPLETE; completion_audit AR-P4-015; unverified_artifacts empty.
+      - README.md: Phase 4 CLOSED / VERIFIED, STEP-P4-001 through STEP-P4-006 COMPLETE / VERIFIED, G-4 ESTABLISHED / VERIFIED, active task order null.
+      - phases.yaml: PH-P4 CLOSED / VERIFIED; STEP-P4-006 COMPLETE / VERIFIED; next_valid_step null; completion_audit AR-P4-015.
+      - artifacts.yaml: TO-P4-007 / TO-P4-008 VERIFIED / COMPLETE; STEP-P4-006 COMPLETE / VERIFIED; BR-P4-007 / BR-P4-008 VERIFIED; TST-P4-006 VERIFIED; CMP-V2-P4-006 evidence-backed; AR-P4-015 APPROVED / VERIFIED.
+      - runtime/security/configuration/performance/observability/tests/components registries: final evidence-backed statuses synchronized.
+      - OPEN_QUESTIONS: P4-006 real-data and performance questions RESOLVED; only unrelated historical Constitution Stable-ID governance question remains.
+      - DEFERRED_DECISIONS: DD-V2-P4-006-PERFORMANCE-TARGET remains explicitly DEFERRED for the separate <5ms/indicator/1000-bars EMA diagnostic; it does not contradict G-4.
+      - supplemental registry docs/registry/phase2-artifacts.yaml: checked; no P4-006/P4-008 stranded content.
+      - producer Build Reports: preserved as historical Producer evidence and not rewritten to impersonate CONTROL verification.
+      - AR-P4-012 / AR-P4-013: preserved as historical request-changes/open-boundary audits; final authority is AR-P4-015.
+      - EXEC-LOG: contains final governed acquisition, persistence, orchestration, worker, recovery, API, security and performance evidence.
+    closure_result: Final CONTROL read-back confirms no conflicting current-state record remains. STEP-P4-006 and PH-P4 closure synchronization is complete. Phase 5 remains NOT AUTHORIZED.
