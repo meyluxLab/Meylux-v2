@@ -991,3 +991,41 @@ entries:
     readme_sync_commit: 6d117b2c3a64fc679845648759e920c86a37103a
     scope: deterministic Market Structure Engine only; no future Step or Phase 5 implementation; no VPS operation
     next_step: STEP-P4-004 NOT YET AUTHORIZED
+
+  - id: CHG-P4-STEP-003-SEMANTIC-AUTH-20260919
+    date_utc: '2026-09-19'
+    change_type: SEMANTIC_AUTHORITY_ESTABLISHMENT
+    subject: Project Owner delegation to CONTROL and ratification of authoritative Market Structure semantics for STEP-P4-003
+    basis: Project Owner Directive — STEP-P4-003 / TO-P4-004 — Full Authority Delegated to CONTROL for Market-Structure Semantics + ADR-QUANTITATIVE-001 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-003
+      - TO-P4-004
+      - DOC-P4-002
+      - ADR-QUANTITATIVE-001
+      - OQ-P4-003-STRUCTURE-SEMANTICS
+      - CURRENT_CHECKPOINT
+      - PH-P4
+      - docs/registry/artifacts.yaml
+      - docs/decisions/ADR_INDEX.md
+      - docs/state/OPEN_QUESTIONS.yaml
+    prior_boundary: TO-P4-004 AUTHORIZED TO EXECUTE but affected semantic implementation boundary STOPPED(A) pending authoritative semantic disposition
+    delegated_authority: Project Owner delegated full and final implementation-level semantic authority within STEP-P4-003 to CONTROL, subject to higher-order authority and explicit delegation limits
+    semantic_specification: DOC-P4-002 / docs/quantitative/P4_003_MARKET_STRUCTURE_SEMANTICS.md / RATIFIED / AUTHORIZED
+    decision_record: ADR-QUANTITATIVE-001 / RATIFIED / AUTHORIZED
+    open_question_resolution: OQ-P4-003-STRUCTURE-SEMANTICS RESOLVED
+    task_order_revision: TO-P4-004 Revision 1.1
+    scope: exact deterministic Market Structure semantics only; minimal additive MarketStructureResult contract extension authorized where required
+    exclusions: no Constitution amendment, no frozen architecture change, no future P4 Step, no future Phase, no AI/LLM, no Opportunity Score, no Venue Intelligence, no trading/capital, no V1, no VPS/SentinelX, no unrelated redesign
+    repository_commits:
+      semantic_specification: 4157538770feb972a49e034fe59baed07c4b3887
+      decision_record: 73d4b5ea4617330999c20834144d48b316813122
+      task_order_amendment: 9b7b3165b7da79674959dc87ce6e57f2f6a9c634
+      artifact_registry: 2f4684cec38b0ccc9803cd9710b248237621edfb
+      adr_index: 2a1066250187f03488b437d2c4af98ba268f069b
+      open_questions: 62c8720d5c0efec1b740d0e37053a58132f6f808
+      phase_definition: 9a2a7f343121759b2906abf19e5c358aef07dcf7
+      checkpoint: 1a5beb7ecd7ed739427962e42d2851824533b67c
+    implementation_state: Producer may resume TO-P4-004 against DOC-P4-002; no implementation evidence is claimed by this entry
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX operation performed
+    closure_sync: pending until STEP-P4-003 implementation, Build Report, independent audit, and CONTROL-owned closure synchronization
