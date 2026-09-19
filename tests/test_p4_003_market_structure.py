@@ -393,7 +393,7 @@ class ScenarioTests(unittest.TestCase):
     def test_choch_append_only_invalidation_is_identity_specific(self):
         n=60
         c=[Decimal("102")]*n; h=[Decimal("103")]*n; l=[Decimal("101")]*n; o=[Decimal("102")]*n
-        piv={7:(96,97,95),12:(104,105,103),17:(101,102,100),22:(111,112,110),27:(108,109,107)}
+        piv={7:(96,97,95),12:(104,105,103),17:(101,102,100),22:(111,112,110),27:(108,109,107),32:(110,118,109)}
         for i,(op,hi,lo) in piv.items(): o[i]=c[i]=Decimal(op); h[i]=Decimal(hi); l[i]=Decimal(lo)
         for i in list(range(23,27))+list(range(28,32)): o[i]=c[i]=Decimal("109"); h[i]=Decimal("110"); l[i]=Decimal("108")
         for i in range(33,40): o[i]=c[i]=Decimal("110"); h[i]=Decimal("111"); l[i]=Decimal("109")
