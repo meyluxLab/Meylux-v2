@@ -206,8 +206,7 @@ class BinanceAdapter(ProviderAdapter):
 
     def fetch_klines(self, symbol: str, interval: str, *, limit: int = 500) -> tuple[AcquisitionEnvelope, ...]:
         symbol = self._normalize_symbol(symbol)
-        if not interval or any(ch.isspace() for ch in interval):
-            raise ValueError("interval must be a non-empty Binance interval")
+        interval = self._normalize_kline_interval(interval)
         if not 1 <= limit <= 1000:
             raise ValueError("limit must be between 1 and 1000")
         try:
@@ -237,12 +236,28 @@ class BinanceAdapter(ProviderAdapter):
                     ProviderError("BINANCE_INVALID_KLINE_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
                 )
                 return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
+            payload = {
+                "row": row,
+                "k": {
+                    "t": row[0],
+                    "o": row[1],
+                    "h": row[2],
+                    "l": row[3],
+                    "c": row[4],
+                    "v": row[5],
+                    "T": row[6],
+                    "q": row[7] if len(row) > 7 else None,
+                    "n": row[8] if len(row) > 8 else None,
+                    "x": True,
+                    "i": interval,
+                },
+            }
             envelopes.append(self._envelope(
                 instrument=self._instrument(symbol),
                 event_type=EventType.CANDLE,
                 event_time=event_time,
                 received_at=received,
-                payload=row,
+                payload=payload,
                 source_sequence=str(row[0]),
                 state=AcquisitionState.AVAILABLE,
             ))
@@ -500,6 +515,20 @@ class BinanceAdapter(ProviderAdapter):
             return
         from meylux.observability import Severity, emit
         emit(self._logger, Severity.INFO, event, provider=PROVIDER_ID, adapter=ADAPTER_ID, **fields)
+
+    @staticmethod
+    def _normalize_kline_interval(interval: str) -> str:
+        if not isinstance(interval, str) or not interval.strip():
+            raise ValueError("interval must be a non-empty Binance interval")
+        value = interval.strip()
+        supported = {
+            "1s", "1m", "3m", "5m", "15m", "30m",
+            "1h", "2h", "4h", "6h", "8h", "12h",
+            "1d", "3d", "1w", "1M",
+        }
+        if value not in supported:
+            raise ValueError(f"unsupported Binance kline interval: {value}")
+        return value
 
     @staticmethod
     def _normalize_symbol(symbol: str) -> str:
