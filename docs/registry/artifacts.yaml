@@ -875,6 +875,18 @@ records:
     artifact_path: docs/task-orders/TO-P4-003.md
     traceability: PH-P4 / STEP-P4-002 / TO-P4-002 / AR-P4-002 / BR-P4-003 / AR-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Targeted Correction and Reverification of STEP-P4-002
     status: VERIFIED / COMPLETE
+  - stable_id: STEP-P4-003
+    canonical_name: Deterministic Market Structure Engine
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P4.md
+    traceability: PH-P4 / STEP-P4-002 / TO-P4-004 / DOC-V2-ARCH-001 / DOC-P4-001 / AR-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE STEP-P4-003
+    status: ACTIVE / AUTHORIZED
+  - stable_id: TO-P4-004
+    canonical_name: Task Order — Deterministic Market Structure Engine
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-004.md
+    traceability: PH-P4 / STEP-P4-003 / STEP-P4-002 / AR-P4-003 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE STEP-P4-003
+    status: AUTHORIZED TO EXECUTE
   - stable_id: STEP-P4-001
     canonical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
     entity_type: STEP
