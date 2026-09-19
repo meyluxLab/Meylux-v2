@@ -488,3 +488,20 @@ records:
     vps_scope: no VPS authorization; SentinelX-only if separately authorized.
 
 
+
+  - sid: STEP-P4-004
+    logical_name: Volume Profile, Order Flow & Derivatives Engine
+    entity_type: STEP
+    phase: PH-P4
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED TO EXECUTE
+    order: 4
+    predecessor: STEP-P4-003
+    activation_basis: Project Owner Directive — AUTHORIZE STEP-P4-004 / Volume Profile, Order Flow & Derivatives Engine — 2026-09-19 / PH-P4 / AR-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    active_task_order: TO-P4-005
+    completed_task_order: null
+    completion_audit: null
+    semantic_authority: DOC-P4-003 / ADR-QUANTITATIVE-002 / RATIFIED
+    purpose: Implement deterministic Volume Profile, Order Flow and Derivatives evidence with explicit Decimal semantics, unavailable/insufficient handling, deterministic replay and Rule-5 boundary/failure coverage.
+    repository_scope: Volume Profile POC/VAH/VAL/HVN/LVN; Bar Delta/CVD; Imbalance; evidence-bounded Absorption; Funding/OI/Basis analytics; tests, golden/reference vectors, replay and traceability within STEP-P4-004 only.
+    vps_scope: no VPS authorization; SentinelX-only if separately authorized.
