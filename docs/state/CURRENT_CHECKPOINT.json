@@ -2,7 +2,7 @@
   "schema_version": "2.0",
   "project_version": "V2",
   "phase": "PH-P4",
-  "step": "STEP-P4-005",
+  "step": "STEP-P4-006",
   "gate": "Phase progression authority",
   "status": "ACTIVE / AUTHORIZED",
   "formation_stage": "PP-12",
@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P4-006",
+  "last_approved_task_order": "TO-P4-007",
   "last_build_report": "BR-P4-006",
   "last_audit_report": "AR-P4-011",
   "last_execution_log": "EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918",
-  "active_task_order": null,
+  "active_task_order": "TO-P4-007",
   "completed_task_order": "TO-P4-006",
   "completion_audit": "AR-P4-011",
   "verified_artifacts": [
@@ -240,11 +240,11 @@
     "STEP-P4-003 was independently verified under AR-P4-006 against DOC-P4-002 / ADR-QUANTITATIVE-001, final implementation/evidence baseline c00c36a31414f9e887a4b656ff87287afb5839cb, Core Run #836 and Docker Foundation Run #211; CONTROL-owned closure synchronization is complete.",
     "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009.",
     "DOC-P4-003 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-002 as the deterministic semantic authority for STEP-P4-004; no higher-order architecture or canonical contract authority was amended.",
-    "STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009; TO-P4-005 is VERIFIED / COMPLETE; STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 and AR-P4-011; TO-P4-006 is VERIFIED / COMPLETE; STEP-P4-006 remains NOT YET AUTHORIZED."
+    "STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009; TO-P4-005 is VERIFIED / COMPLETE; STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 and AR-P4-011; TO-P4-006 is VERIFIED / COMPLETE; STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007."
   ],
   "deferred_decisions": [],
   "last_verified_commit": "3ea6589f93e5abc3b71cd8fc68b4bf4107f38ffe",
-  "updated_at_utc": "2026-09-19T19:30:23.401Z",
+  "updated_at_utc": "2026-09-19T20:14:49.185Z",
   "phase_4_status": "ACTIVE / AUTHORIZED",
   "phase_4_definition": "docs/phases/PH-P4.md"
 }
