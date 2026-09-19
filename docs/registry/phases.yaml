@@ -415,7 +415,7 @@ records:
     first_step: STEP-P4-001
     next_valid_step: STEP-P4-006
     final_step: STEP-P4-006
-    active_task_order: TO-P4-007
+    active_task_order: TO-P4-008
     current_step: STEP-P4-006
     completed_task_order: TO-P4-006
     completion_audit: AR-P4-011
@@ -539,4 +539,4 @@ records:
     purpose: Operationalize the verified quantitative engines through controlled orchestration, candle-close and multi-timeframe execution, authoritative persistence, read-only API, deterministic replay/recovery and the evidence boundary for G-4 and Phase 4 closure.
     repository_scope: quantitative orchestration, candle-close execution, multi-timeframe alignment, authoritative persistence, worker/event-driven processing, governed Redis/queue/stream integration, read-only quantitative API, deterministic replay, zero-lookahead, failure/recovery/idempotency, measured performance, security/observability evidence, controlled BTCUSDT 15M primary + 1H/4H vertical slice, regression and G-4 evidence.
     exclusions: Phase 5+; AI/LLM interpretation; Opportunity Score; Analytical Confidence; complete Venue Intelligence / Opportunity Engine; trading/capital/custody/leverage; V1 runtime; unrelated architecture redesign/refactoring; speculative future-phase contracts.
-    vps_scope: Project Owner explicitly authorizes required VPS/runtime operations under TO-P4-007; SentinelX-only. Producer has read-only SentinelX inspection authority only; CONTROL retains mutation/deployment/recovery execution authority.
+    vps_scope: Project Owner explicitly authorizes required VPS/runtime operations under TO-P4-007 and the bounded correction/integration work under TO-P4-008; SentinelX-only. Producer has read-only SentinelX inspection authority only; CONTROL retains mutation/deployment/recovery execution authority.
