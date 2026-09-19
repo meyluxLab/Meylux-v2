@@ -100,6 +100,17 @@ class VolatilityTests(unittest.TestCase):
         bandwidth = bollinger_bandwidth(cs, 3, "2")
         self.assertEqual(serialize_decimal(bandwidth[2].value), "1.63299316185545206546485604980392759464396498710444675228846171150064025163821")
 
+    def test_historical_volatility_window_boundary_is_explicit_and_deterministic(self):
+        cs = candles([100, 101, 102, 104])
+        for _ in range(3):
+            with self.assertRaisesRegex(ValueError, "window must be at least 2 for historical volatility"):
+                historical_volatility(cs, window=1, periods_per_year=4)
+        valid = historical_volatility(cs, window=2, periods_per_year=4)
+        self.assertEqual(valid[2].status, CalculationStatus.VALID)
+        self.assertIsNotNone(valid[2].value)
+        self.assertTrue(valid[2].value.is_finite())
+        self.assertGreaterEqual(valid[2].value, Decimal("0"))
+
     def test_historical_volatility_and_atr_features(self):
         cs = candles([100, 101, 102, 104, 103, 105], [101,102,103,105,104,106], [99,100,101,103,102,104])
         hv = historical_volatility(cs, window=2, periods_per_year=4)
