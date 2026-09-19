@@ -1498,3 +1498,74 @@ entries:
     exclusions: Phase 5+, AI/LLM, Opportunity Score/Analytical Confidence, complete Venue Intelligence, trading/capital/custody/leverage, V1, unrelated architecture redesign.
     phase_exit: Phase 5 is not authorized; G-4 is an evidence/closure boundary only.
     closure_sync: establishment-state synchronization completed across PH-P4 definition, phases.yaml, artifacts.yaml, CURRENT_CHECKPOINT and README; Step closure synchronization remains CONTROL responsibility at completion.
+
+
+  - id: CHG-P4-STEP-006-AUDIT-REQUEST-CHANGES-20260919
+    date_utc: '2026-09-19'
+    change_type: CONTROL_INDEPENDENT_AUDIT_REQUEST_CHANGES
+    subject: CONTROL independent audit of TO-P4-007 identifies bounded implementation defects and incomplete operational evidence
+    basis: BR-P4-007 + TO-P4-007 + AR-P4-012 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-006
+      - TO-P4-007
+      - BR-P4-007
+      - AR-P4-012
+      - CURRENT_CHECKPOINT
+    findings:
+      - HTTP wire adapter emitted non-conformant literal newline framing.
+      - quantitative worker did not propagate higher-timeframe observations.
+      - MTF mapping keys were not validated against candle timeframe values.
+      - CTR-P4-QUANT-CANDLE-CLOSE-1.0 lacked canonical registry traceability.
+      - controlled real-data vertical slice, runtime replay/recovery, official execution evidence and production performance remained unexecuted.
+    disposition: REQUEST CHANGES / NOT VERIFIED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: no VPS operation by Producer; correction authority remained with CONTROL under Owner delegation
+    scope_effect: corrections remained inside TO-P4-007; no Phase-5 functionality introduced
+
+  - id: CHG-P4-STEP-006-CONTROL-CORRECTION-AND-RUNTIME-20260919
+    date_utc: '2026-09-19'
+    change_type: CONTROL_BOUNDED_CORRECTION_AND_RUNTIME_EXECUTION
+    subject: CONTROL corrects AR-P4-012 findings, executes authorized SentinelX runtime boundary, and records open G-4 evidence
+    basis: Project Owner directive delegating full STEP-P4-006 operational workflow authority + AR-P4-012 + TO-P4-007 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-006
+      - TO-P4-007
+      - AR-P4-012
+      - AR-P4-013
+      - BR-P4-007
+      - TST-P4-006
+      - CMP-V2-P4-006
+      - RUN-P4-006
+      - SEC-P4-006
+      - CFG-P4-006
+      - PERF-P4-006
+      - OBS-P4-006
+      - EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+      - CURRENT_CHECKPOINT
+    correction_evidence:
+      http_wire_framing: corrected and live probe PASS
+      worker_mtf_propagation: corrected; CI Run #1016 SUCCESS
+      mtf_key_validation: corrected and directly tested
+      worker_contract_registry: CTR-P4-QUANT-CANDLE-CLOSE-1.0 registered as TESTED / UNVERIFIED
+    runtime_evidence:
+      deployed_runtime_commit: 48bae89931c3ab003223a867ab9f9bf75fe3117a
+      compose_build: PASS
+      database_migrations_0001_to_0005: PASS
+      api_wire_probe: PASS
+      worker_retry_dlq_probe: PASS
+      app_role_update_delete: DENIED
+      canonical_candle_inventory: EMPTY
+    performance_evidence:
+      orchestrator_1000_candle_average_ms: 1036.023
+      roadmap_context: '<50ms / full multi-timeframe vector is a roadmap target, not a frozen contract'
+      interpretation: material Rule-5 efficiency gap; no silent optimization of previously verified engines
+    unexecuted_evidence:
+      - BTCUSDT 15M + 1H + 4H governed real-data vertical slice
+      - real-data persistence/replay/recovery
+      - G-4 establishment
+    execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+    audit_result: AR-P4-013 NOT VERIFIED — OPEN EVIDENCE BOUNDARY
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-006 ACTIVE / AUTHORIZED; TO-P4-007 remains active; G-4 not established
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: CONTROL executed authorized deployment/build/start/migration and bounded runtime probes through SentinelX only
+    scope_effect: no Phase-5 authorization or implementation
