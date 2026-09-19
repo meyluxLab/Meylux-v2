@@ -99,7 +99,10 @@ class TestWorkerAPI(unittest.TestCase):
         payload["candles"][-1]["is_closed"]=False
         with self.assertRaises(ValueError): asyncio.run(handler(QueueEnvelope("m2","i2","CTR-P4-QUANT-CANDLE-CLOSE-1.0",payload)))
 
-    def test_api_is_read_only_and_deterministic(self):
+    def test_api_rejects_unknown_family(self):
+        response=asyncio.run(QuantitativeAPI(_FakePersistence()).handle("GET","/v1/quantitative/unknown/BTCUSDT/15m",{}))
+        self.assertEqual(response.status,400)
+\n    def test_api_is_read_only_and_deterministic(self):
         api=QuantitativeAPI(_FakePersistence())
         post=asyncio.run(api.handle("POST","/v1/quantitative/regime/BTCUSDT/15m",{}))
         self.assertEqual(post.status,405)
