@@ -1198,3 +1198,45 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     contract_effect: no contract redesign or Stable-ID mutation authorized
     vps_effect: none; no VPS/SentinelX action performed
+
+  - id: CHG-P4-STEP-004-CLOSE-20260919
+    date_utc: '2026-09-19'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P4-004 independent verification and CONTROL-owned closure synchronization
+    basis: AR-P4-009 + TO-P4-005 + DOC-P4-003 + ADR-QUANTITATIVE-002 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - BR-P4-005
+      - AR-P4-009
+      - STEP-P4-004
+      - TO-P4-005
+      - TST-P4-004
+      - CMP-V2-P4-004
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+      - docs/registry/tests.yaml
+      - docs/registry/components.yaml
+      - docs/state/CHANGE_LEDGER.yaml
+    from_state: STEP-P4-004 ACTIVE / AUTHORIZED; TO-P4-005 AUTHORIZED TO EXECUTE; BR-P4-005 PRODUCED / NOT VERIFIED
+    to_state: STEP-P4-004 COMPLETE / VERIFIED; TO-P4-005 VERIFIED / COMPLETE; BR-P4-005 VERIFIED; AR-P4-009 APPROVED / VERIFIED; active_task_order null
+    implementation_verified_commit: b6dd4e0ea55319b820c5e90b7de4da4dd62e0d48
+    final_repository_validation_commit: 9f42b28bc07e5bb58d2b257a841521dd0ffa940f
+    ci_core_final_implementation: Run #897 / Run ID 35452347288 / Job 105921572784 / SUCCESS / 393 tests / OK
+    ci_core_repository_validation: Run #899 / Run ID 35452412415 / Job 105921749365 / SUCCESS / 393 tests / OK
+    audit_report: AR-P4-009 APPROVED / VERIFIED
+    step_transition: ACTIVE / AUTHORIZED -> COMPLETE / VERIFIED
+    task_order_transition: AUTHORIZED TO EXECUTE -> VERIFIED / COMPLETE
+    build_report_transition: PRODUCED / NOT VERIFIED -> VERIFIED
+    active_task_order: null
+    completed_task_order: TO-P4-005
+    completion_audit: AR-P4-009
+    next_sequential_step: STEP-P4-005
+    next_step_authorization: NOT YET AUTHORIZED
+    phase_transition: PH-P4 remains ACTIVE / AUTHORIZED
+    g4_status: NOT ESTABLISHED
+    closure_sync: CONTROL synchronized README, CURRENT_CHECKPOINT, canonical artifact registry, phase registry, tests registry, components registry and Change Ledger; specialized contract/requirements/runtime/database/security/configuration/performance/observability registries were inspected and no direct P4-004 lifecycle evidence requiring a new record was identified; no supplemental/staging registry required retirement
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: none; no VPS/SentinelX action performed
+    scope_effect: STEP-P4-005 and STEP-P4-006 remain unauthorized; no future-Step implementation occurred
