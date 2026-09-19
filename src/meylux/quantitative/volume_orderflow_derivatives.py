@@ -230,6 +230,11 @@ class ClosedBar:
             raise ValueError("ClosedBar requires is_closed=True")
         if any(not isinstance(t, CanonicalTrade) for t in self.trades):
             raise TypeError("trades must contain CanonicalTrade instances")
+        for trade in self.trades:
+            if trade.timestamp < self.start_time or trade.timestamp > self.end_time:
+                raise ValueError("bar trade timestamp must fall within the closed bar interval")
+        if self.trades and any(t.instrument_id != self.trades[0].instrument_id for t in self.trades[1:]):
+            raise ValueError("bar trades must belong to one instrument")
 
 
 @dataclass(frozen=True, slots=True)
@@ -332,6 +337,12 @@ class OrderFlowEngine:
             raise TypeError("trades must contain CanonicalTrade instances")
         if any(not isinstance(b, CanonicalOrderBook) for b in books):
             raise TypeError("order_books must contain CanonicalOrderBook instances")
+        if xs and any(t.instrument_id != xs[0].instrument_id for t in xs):
+            raise ValueError("absorption trades must belong to one instrument")
+        if books and any(b.instrument_id != books[0].instrument_id for b in books):
+            raise ValueError("absorption order books must belong to one instrument")
+        if xs and books and xs[0].instrument_id != books[0].instrument_id:
+            raise ValueError("trade and order-book instruments must match")
         aggressive = tuple(t for t in xs if start <= t.timestamp <= end and t.aggressor_side == aggressor_side and t.price == price)
         if not aggressive or not books:
             return _of("ABSORPTION", _result(None, CalculationStatus.UNAVAILABLE, "missing_trade_or_order_book_evidence", context))
