@@ -39,3 +39,30 @@ items:
       - "No future Phase/Step is authorized."
       - "No unrelated contract redesign is authorized."
       - "Producer must implement the ratified semantics exactly and may not substitute alternative definitions."
+
+  - question: "OQ-P4-006-REAL-DATA-PATH — How shall the required governed BTCUSDT 15M + 1H + 4H historical candle path be completed when the existing Binance Spot adapter does not currently preserve explicit timeframe context required by P3 normalization?"
+    status: OPEN
+    affected_phase: PH-P4
+    affected_step: STEP-P4-006
+    task_order: TO-P4-008
+    resolution: null
+    authority: "Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20"
+    required_record: "TO-P4-008 implementation evidence, Build Report, CONTROL EXEC-LOG, AR-P4-013 follow-up verification, and closure synchronization"
+    constraints:
+      - "Reuse the existing P2 provider-adapter boundary, P3 validation/normalization boundary and CanonicalPersistence."
+      - "Do not weaken P3 validation or introduce a competing canonical contract."
+      - "No synthetic/fabricated market data."
+      - "No private/authenticated market-data access, trading, capital, custody or V1 activity."
+
+  - question: "OQ-P4-006-PERFORMANCE — Can the STEP-P4-006 orchestrator/runtime meet the roadmap target of <50ms per full multi-timeframe vector without changing the exact outputs/semantics of previously verified P4 engines?"
+    status: OPEN
+    affected_phase: PH-P4
+    affected_step: STEP-P4-006
+    task_order: TO-P4-008
+    resolution: null
+    authority: "Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20"
+    required_record: "CONTROL workload definition, profiler evidence, Decimal-policy analysis, output-preservation analysis, performance conclusion, and any subsequent Owner decision"
+    constraints:
+      - "Do not modify or reopen EMA or Market Structure engines under this authorization."
+      - "Do not silently revise the roadmap target."
+      - "If target attainment requires engine-level changes, escalate to Project Owner."
