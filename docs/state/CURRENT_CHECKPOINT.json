@@ -234,9 +234,9 @@
     "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008.",
     "DOC-P4-002 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-001 following the Project Owner delegation dated 2026-09-19; TO-P4-004 implementation may proceed against the ratified semantic boundary, while STEP-P4-004 through STEP-P4-006 remain unauthorized.",
     "STEP-P4-003 was independently verified under AR-P4-006 against DOC-P4-002 / ADR-QUANTITATIVE-001, final implementation/evidence baseline c00c36a31414f9e887a4b656ff87287afb5839cb, Core Run #836 and Docker Foundation Run #211; CONTROL-owned closure synchronization is complete.",
-    "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 is ACTIVE / AUTHORIZED under TO-P4-005.",
+    "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009.",
     "DOC-P4-003 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-002 as the deterministic semantic authority for STEP-P4-004; no higher-order architecture or canonical contract authority was amended.",
-    "TO-P4-005 is AUTHORIZED TO EXECUTE; STEP-P4-005 and STEP-P4-006 remain NOT YET AUTHORIZED."
+    "TO-P4-005 is VERIFIED / COMPLETE under AR-P4-009; active_task_order is null; STEP-P4-005 and STEP-P4-006 remain NOT YET AUTHORIZED."
   ],
   "deferred_decisions": [],
   "last_verified_commit": "b6dd4e0ea55319b820c5e90b7de4da4dd62e0d48",
