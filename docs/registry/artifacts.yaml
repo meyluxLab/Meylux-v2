@@ -1108,6 +1108,12 @@ records:
     traceability: TO-P4-007 / STEP-P4-006 / BR-P4-007 / AR-P4-013
     status: TESTED / UNVERIFIED
 
+  - stable_id: BR-P4-008
+    canonical_name: Build Report — Governed Historical Candle Path & P4-006 Performance Profiling
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-008.md
+    traceability: TO-P4-008 / PH-P4 / STEP-P4-006
+
   - stable_id: TO-P4-008
     canonical_name: Task Order — Governed Historical Candle Path & P4-006 Performance Profiling
     entity_type: TO
