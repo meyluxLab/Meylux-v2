@@ -20,7 +20,7 @@
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-005",
   "last_build_report": "BR-P4-004",
-  "last_audit_report": "AR-P4-006",
+  "last_audit_report": "AR-P4-007",
   "last_execution_log": "EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918",
   "active_task_order": "TO-P4-005",
   "completed_task_order": null,
@@ -202,7 +202,10 @@
     "STEP-P4-003",
     "TST-P4-003"
   ],
-  "unverified_artifacts": [],
+  "unverified_artifacts": [
+    "BR-P4-005",
+    "AR-P4-007"
+  ],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID."
   ],
@@ -234,7 +237,7 @@
   ],
   "deferred_decisions": [],
   "last_verified_commit": "c00c36a31414f9e887a4b656ff87287afb5839cb",
-  "updated_at_utc": "2026-09-19T13:46:12Z",
+  "updated_at_utc": "2026-09-19T14:08:30Z",
   "phase_4_status": "ACTIVE / AUTHORIZED",
   "phase_4_definition": "docs/phases/PH-P4.md"
 }
