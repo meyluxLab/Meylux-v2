@@ -152,7 +152,7 @@ class OrderFlowTests(unittest.TestCase):
     def test_cvd_replay_and_missing_delta_does_not_become_zero(self):
         bars = (
             ClosedBar(T0, T0 + timedelta(minutes=1), (trade(1, "100", "5", "BUY"),)),
-            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(2, "101", "1", None),)),
+            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(2, "101", "1", None, minute=1),)),
             ClosedBar(T0 + timedelta(minutes=2), T0 + timedelta(minutes=3), (trade(3, "102", "2", "SELL"),)),
         )
         a = self.engine.cvd(bars)
@@ -250,7 +250,7 @@ class DerivativesTests(unittest.TestCase):
         previous = deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100"))
         current = deriv(2, 60, funding_rate=Decimal("0.003"), open_interest=Decimal("125"), basis=Decimal("2"))
         result = self.engine.analyze(current, previous)
-        self.assertEqual(result["FUNDING_VELOCITY"].value, Decimal("0.0000005555555555555555555555556"))
+        self.assertEqual(result["FUNDING_VELOCITY"].value, Decimal("0.0000005555555555555555555555555556"))
         self.assertEqual(result["OI_DELTA"].value, Decimal("25"))
         self.assertEqual(result["BASIS"].value, Decimal("2"))
 
