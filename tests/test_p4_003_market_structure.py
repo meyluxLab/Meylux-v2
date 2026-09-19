@@ -255,6 +255,30 @@ class ScenarioTests(unittest.TestCase):
         self.assertTrue(dobs); dob=dobs[-1]
         self.assertFalse(any(e.event_type=="ORDER_BLOCK_INVALIDATION" and e.source_event_identity==dob.identity and e.event_location==down[40].open_time for e in dr.events))
 
+
+    def test_breaker_wick_only_invalidation_does_not_transition(self):
+        up=list(trend())
+        up[38]=CanonicalCandle("TEST","1h",up[38].open_time,up[38].close_time,Decimal("118"),Decimal("118"),Decimal("116"),Decimal("117"),Decimal("1"),provenance_id="br-up-ob")
+        up[40]=CanonicalCandle("TEST","1h",up[40].open_time,up[40].close_time,Decimal("115"),Decimal("117"),Decimal("114"),Decimal("115"),Decimal("1"),provenance_id="br-up-inv")
+        up[41]=CanonicalCandle("TEST","1h",up[41].open_time,up[41].close_time,Decimal("117"),Decimal("120"),Decimal("116"),Decimal("117"),Decimal("1"),provenance_id="br-up-wick")
+        up[42]=CanonicalCandle("TEST","1h",up[42].open_time,up[42].close_time,Decimal("119"),Decimal("120"),Decimal("118"),Decimal("119"),Decimal("1"),provenance_id="br-up-close")
+        ur=MarketStructureEngine().analyze(tuple(up))
+        uob=next(e for e in ur.events if e.event_type=="ORDER_BLOCK" and e.direction=="bullish")
+        ubr=next(e for e in ur.events if e.event_type=="BREAKER" and e.source_event_identity==uob.identity)
+        self.assertFalse(any(e.event_type=="BREAKER_INVALIDATION" and e.source_event_identity==ubr.identity and e.event_location==up[41].open_time for e in ur.events))
+        self.assertTrue(any(e.event_type=="BREAKER_INVALIDATION" and e.source_event_identity==ubr.identity and e.event_location==up[42].open_time for e in ur.events))
+
+        down=list(self._bearish_trend_bars())
+        down[38]=CanonicalCandle("TEST","1h",down[38].open_time,down[38].close_time,Decimal("82"),Decimal("84"),Decimal("81"),Decimal("83"),Decimal("1"),provenance_id="br-down-ob")
+        down[40]=CanonicalCandle("TEST","1h",down[40].open_time,down[40].close_time,Decimal("85"),Decimal("86"),Decimal("83"),Decimal("85"),Decimal("1"),provenance_id="br-down-inv")
+        down[41]=CanonicalCandle("TEST","1h",down[41].open_time,down[41].close_time,Decimal("82"),Decimal("83"),Decimal("79"),Decimal("82"),Decimal("1"),provenance_id="br-down-wick")
+        down[42]=CanonicalCandle("TEST","1h",down[42].open_time,down[42].close_time,Decimal("80"),Decimal("81"),Decimal("78"),Decimal("80"),Decimal("1"),provenance_id="br-down-close")
+        dr=MarketStructureEngine().analyze(tuple(down))
+        dob=next(e for e in dr.events if e.event_type=="ORDER_BLOCK" and e.direction=="bearish")
+        dbr=next(e for e in dr.events if e.event_type=="BREAKER" and e.source_event_identity==dob.identity)
+        self.assertFalse(any(e.event_type=="BREAKER_INVALIDATION" and e.source_event_identity==dbr.identity and e.event_location==down[41].open_time for e in dr.events))
+        self.assertTrue(any(e.event_type=="BREAKER_INVALIDATION" and e.source_event_identity==dbr.identity and e.event_location==down[42].open_time for e in dr.events))
+
     def test_fvg_bullish_bearish_equality_and_direct_full_traversal(self):
         def make(vals):
             base=candles(len(vals))
