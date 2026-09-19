@@ -25,3 +25,17 @@ items:
       - "Do not alter DOC-V2-ARCH-001 through this allocation."
       - "Producer must implement only the corresponding contract objects within TO-P1-004."
       - "No competing Stable IDs may be created for these logical contract identities."
+
+  - question: "OQ-P4-003-STRUCTURE-SEMANTICS — What authoritative structural semantics shall govern STEP-P4-003 / TO-P4-004?"
+    status: RESOLVED
+    affected_phase: PH-P4
+    affected_step: STEP-P4-003
+    task_order: TO-P4-004
+    resolution: "Project Owner delegated full and final implementation-level semantic authority within STEP-P4-003 to CONTROL on 2026-09-19. CONTROL ratified DOC-P4-002 and recorded ADR-QUANTITATIVE-001, defining deterministic 5/5 swings, HH/HL/LH/LL, structure states, close-confirmed BOS, CHOCH, MSS, FVG lifecycle, Order Block/Breaker behavior, exact-equality liquidity pools, event identity/invalidation, canonical-gap handling, and event-location/confirmation/knowledge-time semantics."
+    authority: "Project Owner delegation dated 2026-09-19; CONTROL / REVIEWER (ROL-V2-001) acting strictly within that delegation."
+    required_record: "ADR-QUANTITATIVE-001, DOC-P4-002, amended TO-P4-004, artifact registry, Phase 4 definition, Change Ledger, and current checkpoint traceability."
+    constraints:
+      - "Higher-order architecture, constitutional invariants, ratified ADRs, canonical contracts, and P4-001 numeric policy remain superior."
+      - "No future Phase/Step is authorized."
+      - "No unrelated contract redesign is authorized."
+      - "Producer must implement the ratified semantics exactly and may not substitute alternative definitions."
