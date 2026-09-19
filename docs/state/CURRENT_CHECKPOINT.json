@@ -4,7 +4,7 @@
   "phase": "PH-P4",
   "step": "STEP-P4-006",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED",
+  "status": "CLOSED / VERIFIED",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -20,11 +20,11 @@
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-008",
   "last_build_report": "BR-P4-008",
-  "last_audit_report": "AR-P4-014",
+  "last_audit_report": "AR-P4-015",
   "last_execution_log": "EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919",
-  "active_task_order": "TO-P4-008",
-  "completed_task_order": "TO-P4-006",
-  "completion_audit": "AR-P4-011",
+  "active_task_order": null,
+  "completed_task_order": "TO-P4-008",
+  "completion_audit": "AR-P4-015",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -213,24 +213,26 @@
     "TO-P4-006",
     "TST-P4-005",
     "BR-P4-008",
-    "AR-P4-014"
-  ],
-  "unverified_artifacts": [
+    "AR-P4-014",
+    "TO-P4-007",
     "BR-P4-007",
-    "AR-P4-012",
-    "AR-P4-013",
+    "STEP-P4-006",
     "TST-P4-006",
     "CMP-V2-P4-006",
     "RUN-P4-006",
     "SEC-P4-006",
     "CFG-P4-006",
     "PERF-P4-006",
-    "OBS-P4-006"
+    "OBS-P4-006",
+    "TO-P4-008",
+    "AR-P4-015"
+  ],
+  "unverified_artifacts": [
+    "AR-P4-012",
+    "AR-P4-013"
   ],
   "open_questions": [
-    "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
-    "OQ-P4-006-REAL-DATA-PATH — governed BTCUSDT 15M + 1H + 4H historical candle path requires explicit timeframe context at the existing P2/P3 boundary; TO-P4-008 is authorized.",
-    "OQ-P4-006-PERFORMANCE — determine whether <50ms/full multi-timeframe vector is attainable without reopening previously verified P4 engines."
+    "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID."
   ],
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
@@ -256,15 +258,17 @@
     "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009.",
     "DOC-P4-003 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-002 as the deterministic semantic authority for STEP-P4-004; no higher-order architecture or canonical contract authority was amended.",
     "STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009; TO-P4-005 is VERIFIED / COMPLETE; STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 and AR-P4-011; TO-P4-006 is VERIFIED / COMPLETE; STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007.",
-    "TO-P4-007 implementation corrections and CONTROL runtime evidence are recorded under AR-P4-013; STEP-P4-006 remains ACTIVE / AUTHORIZED because governed real-data vertical-slice and G-4 evidence remain unverified.",
-    "Measured P4-006 orchestrator performance is 1036.023 ms per 1000 closed 15M candles in the deployed worker image; this is implementation evidence, not a production claim, and the roadmap <50ms target remains an open performance finding.",
-    "Project Owner Directive dated 2026-09-20 authorizes bounded governed real-data continuation and CONTROL-owned performance profiling; no engine-level optimization or roadmap target revision is authorized."
+    "STEP-P4-006 is COMPLETE / VERIFIED under AR-P4-015; TO-P4-007 and TO-P4-008 are VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED.",
+    "CONTROL verified the governed BTCUSDT real-data G-4 workload: 116 closed 15m primary candles, 31 closed 1h candles and 9 closed 4h candles, with P2 raw persistence, P3 validation/normalization/quality, canonical persistence, deterministic orchestration/replay, worker processing/restart recovery, read-only API and security evidence.",
+    "Real-data replay-sized orchestration averaged 22.690451 ms across five executions, below the roadmap <50ms full-vector target; the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied for the existing EMA implementation and remains governed by DD-V2-P4-006-PERFORMANCE-TARGET without engine reopening.",
+    "Phase 4 closure synchronization is CONTROL-owned and complete under ADR-GOVERNANCE-012; Phase 5 remains NOT AUTHORIZED."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-20T00:45:00Z",
-  "phase_4_status": "ACTIVE / AUTHORIZED",
-  "phase_4_definition": "docs/phases/PH-P4.md"
+  "updated_at_utc": "2026-09-19T23:40:00Z",
+  "phase_4_status": "CLOSED / VERIFIED",
+  "phase_4_definition": "docs/phases/PH-P4.md",
+  "g4_status": "ESTABLISHED / VERIFIED"
 }
