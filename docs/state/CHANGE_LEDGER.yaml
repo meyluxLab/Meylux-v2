@@ -1029,3 +1029,35 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX operation performed
     closure_sync: pending until STEP-P4-003 implementation, Build Report, independent audit, and CONTROL-owned closure synchronization
+
+  - id: CHG-P4-STEP-003-AUDIT-20260919
+    date_utc: '2026-09-19'
+    change_type: INDEPENDENT_AUDIT_REQUEST_CHANGES
+    subject: CONTROL independent audit of TO-P4-004 / BR-P4-004 identifies blocking semantic and Rule 5 evidence deficiencies
+    basis: AR-P4-004 + DOC-P4-002 + TO-P4-004 Revision 1.1 + ADR-QUANTITATIVE-001 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-003
+      - TO-P4-004
+      - BR-P4-004
+      - AR-P4-004
+      - docs/registry/artifacts.yaml
+    producer_head: f1186b10d3f884fa565aa866f2f120bf6a657a81
+    audit_result: REQUEST CHANGES / NOT VERIFIED
+    blocking_findings:
+      - continuity-gap UNCONFIRMED state is not maintained until fresh post-gap evidence
+      - equal-swing classification does not force UNCONFIRMED
+      - append-only invalidation/state-transition coverage is incomplete for structural-break facts
+      - liquidity-pool identity omits the ordered member-swing identity requirement
+      - FVG lifecycle is not enforced as a monotonic state machine
+      - implementation order diverges from the ratified per-bar processing order
+    quality_finding: focused test evidence does not yet meet the required Rule 5 depth for boundary, symmetry, lifecycle, identity, invalidation and event-by-event pinned-state coverage
+    evidence:
+      ci_core: Run #798 / Run ID 35441158900 / Job 105892058156 / SUCCESS / 332 tests
+      ci_docker: Run #179 / Run ID 35441158949 / Job 105892058211 / SUCCESS
+      audit_report: docs/audits/AR-P4-004.md
+      artifact_registry_commit: 24faac2b2a240fb0ac0906dd953e74bc01c00c3c
+    lifecycle_effect: STEP-P4-003 remains ACTIVE / AUTHORIZED; TO-P4-004 remains AUTHORIZED TO EXECUTE; no closure state advanced
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    future_step_effect: STEP-P4-004 through STEP-P4-006 remain unauthorized
+    vps_effect: none
+    closure_sync: not applicable because Step closure was rejected; CONTROL retains closure ownership for the eventual successful correction cycle
