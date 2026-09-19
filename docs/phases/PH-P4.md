@@ -111,10 +111,15 @@ Scope boundary: moving averages, momentum, trend/volatility, statistical/realize
 ### `STEP-P4-003` — Deterministic Market Structure Engine
 
 **Order:** 3
-**Status:** NOT YET AUTHORIZED
-**Predecessor:** `STEP-P4-002`
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** AUTHORIZED TO EXECUTE
+**Predecessor:** `STEP-P4-002` — COMPLETE / VERIFIED
+**Active Task Order:** `TO-P4-004`
+**Activation basis:** Project Owner Directive — AUTHORIZE STEP-P4-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
 
-Objective: implement deterministic swing, structure, BOS, CHOCH, MSS, FVG, order-block, breaker and liquidity facts with explicit state-machine and zero-lookahead semantics.
+Objective: implement deterministic swing, structure, BOS, CHOCH, MSS, FVG, order-block, breaker and liquidity facts with explicit state-machine, UNCONFIRMED, canonical-gap and zero-lookahead semantics.
+
+Acceptance boundary: event-location versus confirmation/knowledge time; pinned 60-candle trend/BOS and reversal/CHOCH scenarios; event-by-event and state-transition evidence; deterministic replay; explicit ambiguity handling; canonical-gap behavior; focused failure/boundary coverage; no future-Step scope.
 
 ### `STEP-P4-004` — Volume Profile, Order Flow & Derivatives Engine
 
@@ -194,7 +199,7 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 ## Current Step Boundary After P4-002 Closure
 
-STEP-P4-002 is COMPLETE / VERIFIED under AR-P4-003. PH-P4 remains ACTIVE / AUTHORIZED. No Phase-4 Task Order is active. STEP-P4-003 is the next sequential Step but remains NOT YET AUTHORIZED; no implementation or authorization is implied by this closure. Historical AR-P4-002 remains preserved for traceability; the TO-P4-003 correction did not authorize or implement STEP-P4-003.
+STEP-P4-002 is COMPLETE / VERIFIED under AR-P4-003. STEP-P4-003 is now ACTIVE / AUTHORIZED under TO-P4-004. STEP-P4-004 through STEP-P4-006 remain NOT YET AUTHORIZED. Historical AR-P4-002 remains preserved for traceability.
 
 ## Standing Role Operating Rules — ADR-GOVERNANCE-013
 
@@ -212,4 +217,4 @@ Every substantive response must end with the `--- STANDING RULES CHECK ---` foot
 
 ## Current Phase Boundary
 
-PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED, with STEP-P4-002 re-verified under AR-P4-003. No Phase-4 Task Order is active. STEP-P4-003 through STEP-P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
+PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED, with STEP-P4-002 re-verified under AR-P4-003. STEP-P4-003 is ACTIVE / AUTHORIZED under TO-P4-004. STEP-P4-004 through STEP-P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
