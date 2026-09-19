@@ -34,7 +34,9 @@ records:
       raw_window_1h: 2026-08-30T03:00:00Z..2026-09-19T21:00:00Z (499 closed)
       raw_window_4h: 2026-06-28T16:00:00Z..2026-09-19T16:00:00Z (499 closed)
       p3_structural_temporal_validation: PASS
-      p3_normalization: BLOCKED — explicit timeframe context required
+      p3_normalization: VERIFIED after TO-P4-008 provider-boundary correction
+      live_post_correction_normalization_probe: PASS — 116x15m + 31x1h + 9x4h real BTCUSDT candles normalized through unchanged P3
+      real_data_persistence_after_correction: UNEXECUTED / UNVERIFIED
       real_data_vertical_slice: UNEXECUTED / UNVERIFIED
       restart_recovery_real_data: UNEXECUTED / UNVERIFIED
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
