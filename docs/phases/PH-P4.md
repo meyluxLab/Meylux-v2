@@ -161,7 +161,7 @@ Acceptance boundary: deterministic multi-factor regime classification, explicit 
 **Order:** 6
 **Status:** ACTIVE / AUTHORIZED
 **Authorization state:** AUTHORIZED TO EXECUTE
-**Active Task Order:** `TO-P4-007`
+**Active Task Order:** `TO-P4-008`
 **Activation basis:** Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-006 AND DELEGATE FULL OPERATIONAL WORKFLOW AUTHORITY — 2026-09-19
 **Predecessor:** `STEP-P4-005` — COMPLETE / VERIFIED
 
@@ -221,7 +221,7 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 ## Current Step Boundary After P4-004 Closure
 
-STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 / AR-P4-009. STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 / AR-P4-011. STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
+STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 / AR-P4-009. STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 / AR-P4-011. STEP-P4-006 is ACTIVE / AUTHORIZED under TO-P4-007, with bounded correction/integration continuation under TO-P4-008. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
 
 ## Standing Role Operating Rules — ADR-GOVERNANCE-013
 
