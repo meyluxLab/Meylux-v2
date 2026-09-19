@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-003",
-  "last_build_report": "BR-P4-002",
-  "last_audit_report": "AR-P4-002",
+  "last_build_report": "BR-P4-003",
+  "last_audit_report": "AR-P4-003",
   "last_execution_log": "EXEC-LOG-TO-P3-008-CONTROL-CLOSURE-20260918",
-  "active_task_order": "TO-P4-003",
-  "completed_task_order": "TO-P4-002",
-  "completion_audit": "AR-P4-002",
+  "active_task_order": null,
+  "completed_task_order": "TO-P4-003",
+  "completion_audit": "AR-P4-003",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -192,9 +192,12 @@
     "BR-P4-002",
     "AR-P4-002",
     "STEP-P4-002",
-    "TST-P4-002"
+    "TST-P4-002",
+    "TO-P4-003",
+    "BR-P4-003",
+    "AR-P4-003"
   ],
-  "unverified_artifacts": ["TO-P4-003"],
+  "unverified_artifacts": [],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID."
   ],
@@ -218,11 +221,11 @@
     "STEP-P3-006 was independently verified by CONTROL under AR-P3-006 against final implementation commit 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283 and CI Core Run #480; Closure Synchronization is complete.",
     "TO-P3-006 is VERIFIED / COMPLETE and no active P3 Task Order remains.",
     "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008.",
-    "STEP-P4-002 historical closure under AR-P4-002 is retained for traceability, but current verification is not sustained pending targeted correction under TO-P4-003; TO-P4-003 is AUTHORIZED TO EXECUTE; STEP-P4-003 through STEP-P4-006 remain unauthorized."
+    "STEP-P4-002 was corrected and independently re-verified under TO-P4-003 / AR-P4-003; TO-P4-003 is VERIFIED / COMPLETE; STEP-P4-003 through STEP-P4-006 remain unauthorized."
   ],
   "deferred_decisions": [],
-  "last_verified_commit": "c873d43cc4d563802e7aef7f0634deac75239f01",
-  "updated_at_utc": "2026-09-19T00:00:00Z",
+  "last_verified_commit": "4cbeecee0704c7fb2a7b678b8b2f160c8b000b68",
+  "updated_at_utc": "2026-09-19T06:53:05Z",
   "phase_4_status": "ACTIVE / AUTHORIZED",
   "phase_4_definition": "docs/phases/PH-P4.md"
 }
