@@ -248,7 +248,7 @@ class BinanceAdapter(ProviderAdapter):
                     "T": row[6],
                     "q": row[7] if len(row) > 7 else None,
                     "n": row[8] if len(row) > 8 else None,
-                    "x": True,
+                    "x": self._epoch_ms(row[6]) <= received,
                     "i": interval,
                 },
             }
