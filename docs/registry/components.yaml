@@ -73,6 +73,8 @@ records:
       - infrastructure/compose/docker-compose.yml
     evidence:
       implementation_commit: 48bae89931c3ab003223a867ab9f9bf75fe3117a
+      final_real_data_verification_audit: AR-P4-015
+      real_data_runtime: VERIFIED — 116 primary 15m + 31 1h + 9 4h
       ci_run: 35468822047
       runtime_execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
-      status: IMPLEMENTED / TESTED / UNVERIFIED
+      status: VERIFIED
