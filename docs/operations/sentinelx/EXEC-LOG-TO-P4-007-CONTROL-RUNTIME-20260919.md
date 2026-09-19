@@ -217,3 +217,79 @@ No Phase-5 authorization or implementation was introduced.
 - G-4: NOT ESTABLISHED.
 - STEP-P4-006: ACTIVE / AUTHORIZED.
 - Phase 5: NOT AUTHORIZED.
+
+
+## 12. Final TO-P4-008 governed real-data execution and G-4 evidence
+
+### V. Corrected provider acquisition and P2 persistence
+- CONTROL synchronized and rebuilt the API/quant-worker images from the verified repository revision fb7d9847498323bec067ba98a1e2729f869c0697.
+- Using the corrected BinanceAdapter through the API runtime, CONTROL fetched 500 candidates for each required interval and excluded the current open candle.
+- New post-correction P2 RawStagingRepository inserts:
+  - 15m: 499
+  - 1h: 499
+  - 4h: 499
+  - total: 1497
+- The prior 1498 pre-correction raw records were preserved unchanged as historical evidence.
+
+### W. P2 -> P3 -> CanonicalPersistence
+- CONTROL processed the corrected real-data records through the existing structural validation, temporal validation, Binance normalization, market-semantic validation and quality boundary.
+- G-4 minimum workload:
+  - 116 closed 15m primary candles
+  - 31 closed 1h candles
+  - 9 closed 4h candles
+- All 156 records were canonical-eligible and persisted through the existing CanonicalPersistence.
+- Final canonical G-4 inventory: 156 records, exactly 116/31/9 by timeframe.
+- Canonical event handoff published the inserted canonical events.
+- No direct canonical/quantitative table injection and no synthetic/fabricated data were used.
+
+### X. Quantitative orchestration / MTF / replay
+- CONTROL executed QuantitativeOrchestrator with 116 primary 15m candles and 31/9 HTF candles.
+- Final primary knowledge time: 2026-09-19T23:29:59.999Z.
+- 1h selected HTF close: 2026-09-19T22:59:59.999Z.
+- 4h selected HTF close: 2026-09-19T19:59:59.999Z.
+- Both satisfy HTF.close_time <= primary.close_time.
+- Observed regime: RANGE.
+- Observed structure event count: 193.
+- Observed structure state: UNCONFIRMED.
+- Repeated orchestration on identical governed inputs produced replay_equal=true.
+- First quantitative persistence inserted 5 records; second identical persistence inserted 0.
+
+### Y. Worker / queue / restart recovery
+- CONTROL published real-data MTF payload under CTR-P4-QUANT-CANDLE-CLOSE-1.0.
+- Message CONTROL-P4-008-REAL-MTF-001: DELIVERED -> STARTED -> ACKED -> COMPLETED.
+- Worker was restarted through SentinelX.
+- Message CONTROL-P4-008-REAL-MTF-002 after restart: DELIVERED -> STARTED -> ACKED -> COMPLETED.
+- For direct recovery evidence, CONTROL stopped worker-quant, published CONTROL-P4-008-REAL-MTF-003 while the worker was stopped, then started the worker.
+- The pending real-data message was delivered, processed and ACKed after restart.
+- Quantitative record counts remained idempotently stable: indicator vectors 3, structure events 1, regime states 1.
+
+### Z. Read-only API / security
+- Real persisted quantitative API GET returned HTTP 200 with real data.
+- POST to the same endpoint returned HTTP 405 with read_only.
+- Existing application append-only / denied UPDATE-DELETE security boundary remained intact.
+- No account, private market-data, trading, capital, custody or leverage operation occurred.
+
+### AA. Final real-data performance
+- Workload: 116 primary 15m + 31 1h + 9 4h.
+- Five direct orchestration executions in the synchronized API runtime:
+  - average: 22.690451 ms
+  - minimum: 16.798383 ms
+  - maximum: 31.998459 ms
+- Result: below roadmap <50ms full-vector target for the required replay-sized workload.
+- Existing separate <5ms/indicator/1000-bars EMA diagnostic remains unsatisfied; no engine or Decimal-policy reopening was performed.
+
+### AB. Final evidence disposition
+- P2 raw persistence: VERIFIED.
+- P3 structural/temporal validation: VERIFIED.
+- P3 normalization: VERIFIED after TO-P4-008.
+- Canonical persistence: VERIFIED.
+- MTF execution and zero-lookahead boundary: VERIFIED.
+- Quantitative persistence/idempotency: VERIFIED.
+- Deterministic replay: VERIFIED.
+- Worker/event-driven execution: VERIFIED.
+- Real-data restart/recovery: VERIFIED.
+- Read-only API/security: VERIFIED.
+- Real-data replay-sized performance target: PASS.
+- G-4: ESTABLISHED / VERIFIED.
+- STEP-P4-006: ready for closure synchronization under AR-P4-015.
+- Phase 5: NOT AUTHORIZED.
