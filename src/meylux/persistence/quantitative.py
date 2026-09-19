@@ -25,7 +25,7 @@ def _calc(v:CalculationResult)->dict[str,Any]:
     return {"value":None if v.value is None else format(v.value,"f"),"status":v.status.value,"reason":v.reason,"context":_json(v.context)}
 
 class QuantitativePersistence:
-    TABLES={"indicator":"meylux.calculated_indicator_vectors","structure_event":"meylux.market_structure_events","structure_zone":"meylux.market_structure_zones","regime":"meylux.market_regime_states"}
+    TABLES={"indicator":"meylux.calculated_indicator_vectors","structure_event":"meylux.market_structure_events","structure_zone":"meylux.market_structure_zones","volume_profile":"meylux.volume_profile_sessions","regime":"meylux.market_regime_states"}
     def __init__(self,connection:Any): self._connection=connection
     @staticmethod
     def _id(material:Mapping[str,Any])->str: return hashlib.sha256(json.dumps(_json(material),sort_keys=True,separators=(",",":")).encode()).hexdigest()
