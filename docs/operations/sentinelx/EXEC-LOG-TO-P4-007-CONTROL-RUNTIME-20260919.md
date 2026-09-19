@@ -114,3 +114,64 @@ No Phase-5 authorization or implementation was introduced.
 - The canonical_candles table is empty.
 - CONTROL therefore did not bypass the governed acquisition/normalization boundary by injecting public-provider data directly into the quantitative runtime.
 - The real-data vertical slice remains UNEXECUTED / UNVERIFIED.
+
+## 8. Owner-authorized governed historical acquisition and normalization boundary probe
+
+### K. Public Binance Spot historical acquisition
+- CONTROL used the existing repository BinanceAdapter.fetch_klines() through the API container.
+- No authentication, account credential, private endpoint, trading/order/capital/custody endpoint, V1 path or direct quantitative-table insertion was used.
+- Acquired 500 requested closed-candle candidates per interval; the currently open last candle was excluded.
+- Persisted through the existing P2 RawStagingRepository into meylux.raw_acquisition_events.
+- Result:
+  - 15M: 499 closed envelopes inserted; open-time window 2026-09-14T17:30:00Z through 2026-09-19T22:00:00Z.
+  - 1H: 499 closed envelopes inserted; open-time window 2026-08-30T03:00:00Z through 2026-09-19T21:00:00Z.
+  - 4H: 499 closed envelopes inserted; open-time window 2026-06-28T16:00:00Z through 2026-09-19T16:00:00Z.
+- Total raw acquisition records after the operation: 1498.
+
+### L. P2 -> P3 normalization boundary result
+- CONTROL executed the existing validate_acquisition_envelope, validate_temporal_evidence, and normalize functions against an actual acquired Binance Spot candle.
+- Structural validation: PASS.
+- Temporal validation: PASS.
+- Normalization: REJECTED because the provider candle payload does not carry explicit timeframe context required by the existing P3 normalization contract.
+- This is a genuine implementation-boundary finding.
+- CONTROL did NOT inject timeframe into the envelope, bypass normalization, or write directly to canonical/quantitative tables.
+- TO-P4-008 authorizes Producer to make the minimal provider-boundary context-preservation correction.
+
+## 9. Performance profiling under Owner Decision B
+
+### M. Roadmap target basis
+- Authoritative roadmap records: <5ms / indicator / 1000 bars; <50ms / full multi-timeframe vector; TARGET != GUARANTEE.
+- The roadmap does not define the full-vector target as a 1000-bar end-to-end calculation. CONTROL therefore tested both the required one-day replay-sized workload and the prior 1000-primary-bar diagnostic workload.
+
+### N. Orchestrator workload measurements
+- 21 primary 15M + 25 1H + 7 4H: average 3.766 ms.
+- 116 primary 15M + 31 1H + 9 4H: average 26.078 ms.
+- 1000 primary 15M + 252 1H + 64 4H: average 704.670 ms.
+- The 116-primary workload represents 20 EMA warm-up bars plus the roadmap-required one-day 96-bar 15M replay; 25 1H and 7 4H cover the same evaluation span plus one preceding closed HTF boundary.
+- Therefore the current orchestration implementation is below the <50ms full-vector target on the one-day replay-sized workload, while the 1000-primary-bar diagnostic workload is not.
+
+### O. Profiler evidence
+- cProfile on the 1000-primary workload identified the dominant cumulative costs as EMA/Decimal processing and Market Structure, not the orchestration wrapper itself.
+- EMA cumulative: approximately 0.633s.
+- Market Structure cumulative: approximately 0.180s.
+- The orchestration wrapper direct function frame contributed approximately 0.004s before callees.
+- Decimal as_tuple/precision/context operations were prominent in the EMA path.
+
+### P. Decimal policy diagnostic
+- Authoritative Decimal EMA over 1000 values: average 464.081 ms.
+- Separate diagnostic float-only recurrence: average 0.757 ms.
+- Diagnostic ratio: approximately 613x.
+- This float comparison is NOT an alternative quantitative truth, not a candidate implementation, and not output-equivalence evidence. It is diagnostic evidence that the authoritative Decimal policy is a material performance factor.
+- No Decimal policy or verified engine implementation was changed.
+
+## 10. Current evidence disposition
+
+- Governed raw historical acquisition: EXECUTED / OBSERVED.
+- P2 raw persistence: PASS.
+- P3 structural/temporal validation: PASS.
+- P3 normalization for historical candles: BLOCKED by missing timeframe context; TO-P4-008 correction required.
+- Canonical persistence of this historical candle set: NOT YET EXECUTED.
+- 1-day real-data P4 replay: NOT YET EXECUTED.
+- Performance full-vector target on 116-primary one-day workload: MEASURED PASS (26.078 ms).
+- Indicator <5ms / 1000 bars target: NOT SATISFIED for current EMA implementation; engine reopening is outside current authorization.
+- G-4: NOT ESTABLISHED.
