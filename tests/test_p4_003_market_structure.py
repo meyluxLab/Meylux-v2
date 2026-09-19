@@ -374,6 +374,48 @@ class ScenarioTests(unittest.TestCase):
         with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("NaN"),Decimal("10"),Decimal("9"),Decimal("9"),Decimal("1"),provenance_id="nan")
         with self.assertRaises(ValueError): CanonicalCandle("TEST","1h",c[0].open_time,c[0].close_time,Decimal("Infinity"),Decimal("Infinity"),Decimal("Infinity"),Decimal("Infinity"),Decimal("1"),provenance_id="inf")
 
+    def test_warmup_first_unclassified_swing_is_neutral(self):
+        bars=list(candles(22))
+        # Two confirmed lows exist before the second high is confirmed, so the
+        # latest high is intentionally unclassified while paired structure is present.
+        for i in range(len(bars)):
+            bars[i]=CanonicalCandle("TEST","1h",bars[i].open_time,bars[i].close_time,
+                                    Decimal("100"),Decimal("101"),Decimal("99"),Decimal("100"),Decimal("1"),
+                                    provenance_id=f"warm-{i}")
+        for i,hi,lo in ((5,105,95),(10,103,96),(15,108,94)):
+            b=bars[i]
+            bars[i]=CanonicalCandle("TEST","1h",b.open_time,b.close_time,Decimal("100"),Decimal(hi),Decimal(lo),Decimal("100"),Decimal("1"),provenance_id=f"warm-pivot-{i}")
+        r=MarketStructureEngine().analyze(tuple(bars))
+        first_unclassified=[st for st in r.states if any(e.event_type=="SWING_HIGH" and not any(x.event_type in ("HH","LH") and x.level==e.level for x in st.events) for e in st.events)]
+        self.assertTrue(first_unclassified)
+        self.assertTrue(all(st.state=="NEUTRAL" for st in first_unclassified))
+
+    def test_choch_append_only_invalidation_is_identity_specific(self):
+        n=60
+        c=[Decimal("102")]*n; h=[Decimal("103")]*n; l=[Decimal("101")]*n; o=[Decimal("102")]*n
+        piv={7:(96,97,95),12:(104,105,103),17:(101,102,100),22:(111,112,110),27:(108,109,107)}
+        for i,(op,hi,lo) in piv.items(): o[i]=c[i]=Decimal(op); h[i]=Decimal(hi); l[i]=Decimal(lo)
+        for i in list(range(23,27))+list(range(28,32)): o[i]=c[i]=Decimal("109"); h[i]=Decimal("110"); l[i]=Decimal("108")
+        for i in range(33,40): o[i]=c[i]=Decimal("110"); h[i]=Decimal("111"); l[i]=Decimal("109")
+        o[40]=c[40]=Decimal("106"); h[40]=Decimal("107"); l[40]=Decimal("105")
+        o[41]=c[41]=Decimal("108"); h[41]=Decimal("109"); l[41]=Decimal("107")
+        o[42]=c[42]=Decimal("104"); h[42]=Decimal("105"); l[42]=Decimal("103")
+        for i in (43,44,46): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
+        o[45]=c[45]=Decimal("108"); h[45]=c[45]=Decimal("110"); l[45]=Decimal("107")
+        for i in range(47,51): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
+        o[51]=c[51]=Decimal("102"); h[51]=Decimal("103"); l[51]=Decimal("101")
+        # Contradict the bearish CHOCH level after its knowledge time without
+        # mutating/removing the original fact.
+        bars=candles(closes=c,highs=h,lows=l,opens=o)
+        r=MarketStructureEngine().analyze(bars)
+        chochs=[e for e in r.events if e.event_type=="CHOCH" and e.direction=="bearish"]
+        self.assertTrue(chochs)
+        ch=chochs[0]
+        invalid=[e for e in r.events if e.event_type=="STRUCTURAL_INVALIDATION" and e.source_event_identity==ch.identity]
+        self.assertTrue(invalid)
+        self.assertIn(ch,r.events)
+        self.assertEqual(invalid[0].source_event_identity,ch.identity)
+
     @staticmethod
     def _golden_trace(result):
         base=result.bars[0].open_time
