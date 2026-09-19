@@ -901,3 +901,32 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: none; no VPS/SentinelX action performed
     scope_effect: no later P4 Step authorized or implemented
+
+
+  - id: CHG-P4-STEP-002-CORRECTION-AUTH-20260919
+    date_utc: '2026-09-19'
+    change_type: STEP_CORRECTION_AUTHORIZATION
+    subject: CONTROL authorization of targeted historical-volatility boundary correction and P4-002 re-verification
+    basis: Project Owner Directive — Targeted Correction and Reverification of STEP-P4-002 + independent CONTROL finding + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-002
+      - TO-P4-002
+      - TO-P4-003
+      - BR-P4-002
+      - AR-P4-002
+      - PH-P4
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/registry/artifacts.yaml
+      - docs/registry/phases.yaml
+    predecessor_state: STEP-P4-002 historical COMPLETE / VERIFIED under AR-P4-002; no active Task Order
+    correction_finding: historical_volatility(window=1) can reach sample-variance denominator n-1=0 after positive-period validation accepts window=1
+    authorization_state: TO-P4-003 AUTHORIZED TO EXECUTE
+    current_step_state: STEP-P4-002 ACTIVE / CORRECTION REQUIRED
+    producer_role: ROL-V2-002
+    control_role: ROL-V2-001
+    scope_boundary: targeted correction of the confirmed historical-volatility window=1 boundary plus directly necessary regression and evidence only
+    exclusions: no redesign, unrelated refactoring, future P4 Steps, AI, Venue Intelligence, trading/capital, V1, VPS/SentinelX, or lifecycle/closure edits by Producer
+    historical_traceability: TO-P4-002, BR-P4-002 and AR-P4-002 remain preserved as historical records
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    closure_sync: pending until independent correction verification succeeds
