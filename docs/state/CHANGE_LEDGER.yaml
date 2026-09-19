@@ -1591,3 +1591,37 @@ entries:
     resulting_state: STEP-P4-006 remains ACTIVE / AUTHORIZED; real-data vertical slice remains UNEXECUTED / UNVERIFIED
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     scope_effect: CONTROL did not bypass P2/P3 acquisition/normalization boundaries and did not inject direct provider data
+
+  - id: CHG-P4-STEP-006-OWNER-DIRECTIVE-20260920
+    date_utc: '2026-09-20'
+    change_type: OWNER_DIRECTIVE_AND_BOUNDED_CONTINUATION
+    subject: Project Owner authorizes governed historical real-data path and CONTROL performance profiling for AR-P4-013 open boundary
+    basis: Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20 + AR-P4-013 + TO-P4-007 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-006
+      - TO-P4-007
+      - TO-P4-008
+      - AR-P4-013
+      - OQ-P4-006-REAL-DATA-PATH
+      - OQ-P4-006-PERFORMANCE
+      - DD-V2-P4-006-PERFORMANCE-TARGET
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/phases/PH-P4.md
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+      - docs/state/OPEN_QUESTIONS.yaml
+      - docs/state/DEFERRED_DECISIONS.yaml
+    decision_a:
+      scope: governed BTCUSDT 15M + 1H + 4H historical path
+      boundary: existing P2 provider adapter -> P3 validation/normalization -> CanonicalPersistence
+      prohibitions: no bypass, no synthetic/fabricated data, no private/authenticated market-data access, no trading/capital/custody/V1
+    decision_b:
+      scope: CONTROL-owned runtime performance profiling and output-preserving orchestration optimization evaluation
+      prohibitions: no EMA/Market Structure engine reopening, no silent target revision
+    resulting_state: STEP-P4-006 remains ACTIVE / AUTHORIZED; TO-P4-008 ACTIVE / AUTHORIZED; G-4 remains NOT ESTABLISHED; Phase 5 remains NOT AUTHORIZED
+    minimum_g4_window_basis: 96 closed 15M evaluation bars + 20 closed 15M warm-up bars; at least 25 closed 1H and 7 closed 4H bars for the same one-day evaluation span plus one preceding closed HTF boundary
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    vps_effect: CONTROL retains SentinelX-only operational execution authority; Producer remains read-only on VPS
+    scope_effect: no Phase-5 authorization and no engine-level optimization authorization
+
