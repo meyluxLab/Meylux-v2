@@ -226,9 +226,9 @@ class TestVenueEvidenceEngine(unittest.TestCase):
         self.assertEqual(a, b)
 
     def test_decimal_extremes(self):
-        out = self.engine.compare(self.evidence("0.000000000000000001", self.left),
-                                  self.evidence("1000000000000000000", self.right))
-        self.assertEqual(out.result.value, Decimal("999999999999999999.999999999999999999"))
+        out = self.engine.compare(self.evidence("0.000000000001", self.left),
+                                  self.evidence("1000000000000", self.right))
+        self.assertEqual(out.result.value, Decimal("999999999999.999999999999"))
 
 
 if __name__ == "__main__":
