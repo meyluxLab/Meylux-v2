@@ -153,7 +153,7 @@ class OrderFlowTests(unittest.TestCase):
         bars = (
             ClosedBar(T0, T0 + timedelta(minutes=1), (trade(1, "100", "5", "BUY"),)),
             ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(2, "101", "1", None, minute=1),)),
-            ClosedBar(T0 + timedelta(minutes=2), T0 + timedelta(minutes=3), (trade(3, "102", "2", "SELL"),)),
+            ClosedBar(T0 + timedelta(minutes=2), T0 + timedelta(minutes=3), (trade(3, "102", "2", "SELL", minute=2),)),
         )
         a = self.engine.cvd(bars)
         b = self.engine.cvd(bars)
@@ -164,8 +164,8 @@ class OrderFlowTests(unittest.TestCase):
 
     def test_cvd_rejects_out_of_order_bars(self):
         bars = (
-            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(1, "100", "1"),)),
-            ClosedBar(T0, T0 + timedelta(minutes=1), (trade(2, "100", "1"),)),
+            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(1, "100", "1", minute=1),)),
+            ClosedBar(T0, T0 + timedelta(minutes=1), (trade(2, "100", "1", minute=0),)),
         )
         with self.assertRaises(ValueError):
             self.engine.cvd(bars)
