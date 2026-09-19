@@ -224,3 +224,26 @@ records:
       repository_validation_full_regression_test_count: 393
       focused_test_content_sha: 1502f598b261089b0941d74a6bd14ce55d38d31d
       coverage: Volume Profile POC/VAH/VAL/HVN/LVN, Bar Delta/CVD, imbalance, evidence-bounded absorption, derivatives, malformed/non-finite input, contradictory temporal/instrument input, provenance lineage, half-open CVD boundaries, cross-instrument rejection, deterministic replay and no-lookahead
+
+
+  - stable_id: TST-P4-005
+    canonical_name: Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence Tests
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-005
+    task_order: TO-P4-006
+    artifact_path: tests/test_p4_005_regime_venue.py
+    traceability: TO-P4-006 / STEP-P4-005 / BR-P4-006 / AR-P4-011 / AR-P4-010
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      final_run_id: 35464169186
+      final_run_number: 947
+      final_job_id: 105953215112
+      final_ci_head: 93903454155fd50eb5d1489ad1a373b705a201e6
+      final_result: SUCCESS
+      full_regression_test_count: 431
+      terminal_log: "Ran 431 tests in 0.612s / OK"
+      focused_test_content_sha: 887a7460e16e9e2136c0e68dab7425edb8faa1dd
+      implementation_content_sha: 7f111802d69c1fa64c298053796a3338559f5c82
+      coverage: Rule-5 regime transitions, hysteresis matrix, insufficient/empty/malformed/temporal boundaries, configuration/version changes, venue-evidence validity/comparison boundaries, Decimal extremes, deterministic replay and no-lookahead
