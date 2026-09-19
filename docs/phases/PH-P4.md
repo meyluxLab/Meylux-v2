@@ -129,10 +129,12 @@ Acceptance boundary: event-location versus confirmation/knowledge time; pinned 6
 ### `STEP-P4-004` — Volume Profile, Order Flow & Derivatives Engine
 
 **Order:** 4
-**Status:** ACTIVE / AUTHORIZED
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P4-003` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P4-005`
+**Active Task Order:** `null`
+**Completed Task Order:** `TO-P4-005`
+**Completion Audit:** `AR-P4-009`
 **Semantic Authority:** `DOC-P4-003` — RATIFIED / AUTHORIZED
 **Semantic Decision:** `ADR-QUANTITATIVE-002` — RATIFIED / AUTHORIZED
 **Activation basis:** Project Owner Directive — AUTHORIZE STEP-P4-004 / Volume Profile, Order Flow & Derivatives Engine — 2026-09-19
@@ -144,10 +146,15 @@ Acceptance boundary: deterministic POC/VAH/VAL, HVN/LVN, Bar Delta/CVD, Imbalanc
 ### `STEP-P4-005` — Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
 
 **Order:** 5
-**Status:** NOT YET AUTHORIZED
-**Predecessor:** `STEP-P4-004`
+**Status:** ACTIVE / AUTHORIZED
+**Authorization state:** AUTHORIZED TO EXECUTE
+**Predecessor:** `STEP-P4-004` — COMPLETE / VERIFIED
+**Active Task Order:** `TO-P4-006`
+**Activation basis:** PROJECT OWNER DIRECTIVE — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY — 2026-09-19
 
 Objective: implement deterministic regime state with hysteresis and venue-aware quantitative evidence while preserving the independent Venue Intelligence Track boundary.
+
+Acceptance boundary: deterministic multi-factor regime classification, explicit hysteresis and transition semantics, unavailable/insufficient/invalid/contradictory handling, zero-lookahead, deterministic replay, provenance/version preservation, venue-aware quantitative evidence comparison with explicit comparability/rejection semantics, focused boundary/failure coverage and traceability under the existing PH-P4 quantitative contracts and numeric policy.
 
 ### `STEP-P4-006` — Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
 
