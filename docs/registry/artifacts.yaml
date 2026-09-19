@@ -942,3 +942,9 @@ records:
     artifact_path: docs/audits/AR-P4-003.md
     traceability: BR-P4-003 / TO-P4-003 / PH-P4 / STEP-P4-002 / AR-P4-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+  - stable_id: AR-P4-004
+    canonical_name: CONTROL Independent Audit — TO-P4-004 / STEP-P4-003
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-004.md
+    traceability: BR-P4-004 / TO-P4-004 / PH-P4 / STEP-P4-003 / DOC-P4-002 / ADR-QUANTITATIVE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: REQUEST CHANGES / NOT VERIFIED
