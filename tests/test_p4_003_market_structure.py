@@ -88,4 +88,73 @@ class ScenarioTests(unittest.TestCase):
         with self.assertRaises(ValueError): MarketStructureEngine().analyze(bad)
         p=MarketStructureEngine().analyze(trend()[:40]); f=MarketStructureEngine().analyze(trend()); self.assertEqual(tuple(x.identity for x in p.events),tuple(x.identity for x in f.events if x.knowledge_time<=trend()[39].close_time))
 
+
+    def test_gap_unconfirmed_persists_until_fresh_post_gap_structure(self):
+        c=list(candles(gap_index=30))
+        for i,(hi,lo) in {37:(Decimal("103"),Decimal("95")),42:(Decimal("105"),Decimal("100")),47:(Decimal("103"),Decimal("99")),52:(Decimal("112"),Decimal("100"))}.items():
+            c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,Decimal("102"),hi,lo,Decimal("102"),Decimal("1"),provenance_id=f"gap-{i}")
+        r=MarketStructureEngine().analyze(c)
+        self.assertEqual(r.states[30].state,"UNCONFIRMED")
+        self.assertEqual(r.states[31].state,"UNCONFIRMED")
+        self.assertEqual(r.states[40].state,"UNCONFIRMED")
+        self.assertEqual(r.states[45].state,"UNCONFIRMED")
+        self.assertEqual(r.states[51].state,"UNCONFIRMED")
+        self.assertEqual(r.states[52].state,"TRENDING_UP")
+
+    def test_equal_high_and_low_remain_unconfirmed(self):
+        n=27
+        c=list(candles(n))
+        for i,hi,lo in ((7,Decimal("110"),Decimal("100")),(12,Decimal("105"),Decimal("95")),(17,Decimal("110"),Decimal("100")),(22,Decimal("105"),Decimal("95"))):
+            c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,Decimal("102"),hi,lo,Decimal("102"),Decimal("1"),provenance_id=f"eq-{i}")
+        r=MarketStructureEngine().analyze(c)
+        self.assertFalse(any(e.event_type in ("HH","LH","HL","LL") and e.level in (Decimal("110"),Decimal("95")) for e in r.events))
+        self.assertEqual(r.states[26].state,"UNCONFIRMED")
+
+    def test_fvg_lifecycle_is_monotonic_and_terminal(self):
+        c=list(candles(7))
+        vals=[
+            (Decimal("99"),Decimal("100"),Decimal("98"),Decimal("99")),
+            (Decimal("101"),Decimal("102"),Decimal("101"),Decimal("102")),
+            (Decimal("102"),Decimal("104"),Decimal("103"),Decimal("103")),
+            (Decimal("103"),Decimal("104"),Decimal("102"),Decimal("103")),
+            (Decimal("103"),Decimal("104"),Decimal("99"),Decimal("100")),
+            (Decimal("100"),Decimal("101"),Decimal("98"),Decimal("100")),
+            (Decimal("100"),Decimal("101"),Decimal("98"),Decimal("100")),
+        ]
+        for i,(op,hi,lo,cl) in enumerate(vals):
+            c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,op,hi,lo,cl,Decimal("1"),provenance_id=f"life-{i}")
+        r=MarketStructureEngine().analyze(c)
+        life=[e.lifecycle for e in r.events if e.event_type=="FVG_LIFECYCLE"]
+        self.assertEqual(life,["PARTIALLY_MITIGATED","FULLY_MITIGATED"])
+        self.assertEqual(len([e for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.lifecycle=="PARTIALLY_MITIGATED"]),1)
+        self.assertEqual(len([e for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.lifecycle=="FULLY_MITIGATED"]),1)
+
+    def test_liquidity_identity_contains_ordered_member_identities(self):
+        n=30; cc=[Decimal("100")]*n; hh=[Decimal("101")]*n; ll=[Decimal("99")]*n; oo=[Decimal("100")]*n
+        for i in (7,17):
+            oo[i]=cc[i]=Decimal("109"); hh[i]=Decimal("110"); ll[i]=Decimal("108")
+        r=MarketStructureEngine().analyze(candles(n=n,closes=cc,highs=hh,lows=ll,opens=oo))
+        swings=[e for e in r.events if e.event_type=="SWING_HIGH" and e.level==Decimal("110")]
+        pool=[e for e in r.events if e.event_type=="LIQUIDITY_POOL" and e.level==Decimal("110")]
+        self.assertEqual(len(swings),2); self.assertEqual(len(pool),1)
+        self.assertEqual(pool[0].source_event_identity,swings[0].identity+","+swings[1].identity)
+        replay=MarketStructureEngine().analyze(candles(n=n,closes=cc,highs=hh,lows=ll,opens=oo))
+        self.assertEqual(pool[0].identity,[e for e in replay.events if e.event_type=="LIQUIDITY_POOL"][0].identity)
+
+    def test_structural_invalidation_is_append_only(self):
+        r=MarketStructureEngine().analyze(trend())
+        bos=[e for e in r.events if e.event_type=="BOS"]
+        inv=[e for e in r.events if e.event_type=="STRUCTURAL_INVALIDATION" and e.source_event_identity in {x.identity for x in bos}]
+        self.assertEqual(len(bos),1)
+        self.assertTrue(inv)
+        self.assertIn(bos[0].identity,{e.source_event_identity for e in inv})
+        self.assertIn(bos[0],r.events)
+
+    def test_per_bar_processing_order_is_explicit_and_deterministic(self):
+        r=MarketStructureEngine().analyze(trend())
+        expected=("continuity","swing","classification","state","structural_breaks","ob_breaker","fvg","liquidity","official_post_bar_state")
+        self.assertTrue(all(st.processing_order==expected for st in r.states))
+        self.assertEqual(r.states[39].processing_order,expected)
+        self.assertEqual(r.states[39].state,"TRENDING_UP")
+
 if __name__=="__main__": unittest.main()
