@@ -157,6 +157,24 @@ class OrderFlowTests(unittest.TestCase):
         )
         self.assertEqual(result.result.value, Decimal("4"))
 
+    def test_bar_delta_same_instrument_input_is_valid(self):
+        result = self.engine.bar_delta(
+            (trade(1, "100", "7", "BUY"), trade(2, "101", "3", "SELL"))
+        )
+        self.assertEqual(result.result.status, CalculationStatus.VALID)
+        self.assertEqual(result.result.value, Decimal("4"))
+        self.assertEqual(result.result.context.symbol, "BTCUSDT")
+
+    def test_bar_delta_rejects_cross_instrument_input(self):
+        eth_trade = CanonicalTrade(
+            "eth-1", "ETHUSDT", T0,
+            Decimal("2000"), Decimal("3"), "SELL", None, "eth-prov-1"
+        )
+        with self.assertRaises(ValueError):
+            self.engine.bar_delta(
+                (trade(1, "100", "7", "BUY"), eth_trade)
+            )
+
     def test_cvd_replay_and_missing_delta_does_not_become_zero(self):
         bars = (
             ClosedBar(T0, T0 + timedelta(minutes=1), (trade(1, "100", "5", "BUY"),)),
