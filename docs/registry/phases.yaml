@@ -415,10 +415,10 @@ records:
     first_step: STEP-P4-001
     next_valid_step: STEP-P4-003
     final_step: STEP-P4-006
-    active_task_order: TO-P4-003
+    active_task_order: null
     current_step: STEP-P4-002
-    completed_task_order: TO-P4-002
-    completion_audit: AR-P4-002
+    completed_task_order: TO-P4-003
+    completion_audit: AR-P4-003
     authorization_criteria:
       - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
       - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
@@ -461,10 +461,10 @@ records:
     authorization_state: VERIFIED / COMPLETE
     order: 2
     predecessor: STEP-P4-001
-    activation_basis: Project Owner Directive — Authorize STEP-P4-002 / PH-P4 / AR-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    activation_basis: Project Owner Directive — Authorize STEP-P4-002 / Targeted Correction and Reverification / PH-P4 / AR-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     active_task_order: null
-    completed_task_order: TO-P4-002
-    completion_audit: AR-P4-002
+    completed_task_order: TO-P4-003
+    completion_audit: AR-P4-003
     purpose: Implement deterministic technical indicators, statistical and volatility features over trusted canonical inputs and the verified P4-001 quantitative foundation.
     repository_scope: moving averages, momentum, trend/volatility, supported statistical/realized volatility, volume/activity features, VWAP and explicitly anchored VWAP, deterministic parameters, warm-up/missing-input semantics, no-lookahead, golden vectors, tests, documentation and traceability within STEP-P4-002 only.
     exclusions: STEP-P4-003 through STEP-P4-006; AI; Venue Intelligence; trading/capital; V1; unrelated refactoring.
