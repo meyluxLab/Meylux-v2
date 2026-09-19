@@ -1153,3 +1153,23 @@ entries:
     contract_effect: existing quantitative and canonical contracts remain the input/output foundation; no new canonical Stable ID allocated
     vps_effect: none; no VPS/SentinelX action performed
     closure_sync: not applicable at activation; CONTROL retains full closure ownership
+
+  - id: CHG-P4-STEP-004-AUDIT-20260919
+    date_utc: '2026-09-19'
+    change_type: INDEPENDENT_AUDIT_REQUEST_CHANGES
+    subject: CONTROL independent audit of TO-P4-005 / STEP-P4-004
+    audit_id: AR-P4-007
+    basis: BR-P4-005 / DOC-P4-003 / ADR-QUANTITATIVE-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    audited_implementation_commit: 03e4bfcc8619667304ff09dcf09a7fb9a64ce2e7
+    final_repository_regression_commit: dd5b2de21c5eb05842d7794a64a34dfa7824b4b6
+    ci_evidence: CI Core Run #875 / 35447364660 / Job 105908511585 SUCCESS; CI Core Run #878 / 35447484865 / Job 105908821338 SUCCESS / 384 tests / OK
+    disposition: REQUEST CHANGES / NOT VERIFIED
+    findings:
+      - F-01 provenance/context is not automatically preserved from canonical input evidence into quantitative result context
+      - F-02 ClosedBar/CVD boundary permits exact-boundary duplicate trade counting; cross-bar instrument consistency is not enforced
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-004 ACTIVE / AUTHORIZED; TO-P4-005 AUTHORIZED TO EXECUTE; BR-P4-005 PRODUCED / NOT VERIFIED
+    correction_required: true
+    closure_sync: not performed; CONTROL retains closure ownership
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    contract_effect: no contract redesign or Stable-ID mutation authorized
+    vps_effect: none; no VPS/SentinelX action performed
