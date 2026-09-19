@@ -861,14 +861,20 @@ records:
     canonical_name: Technical Indicators, Statistical & Volatility Engine
     entity_type: STEP
     artifact_path: docs/phases/PH-P4.md
-    traceability: PH-P4 / STEP-P4-001 / AR-P4-001 / TO-P4-002 / AR-P4-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002
-    status: COMPLETE / VERIFIED
+    traceability: PH-P4 / STEP-P4-001 / TO-P4-002 / TO-P4-003 / AR-P4-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002 / Targeted Correction and Reverification
+    status: ACTIVE / CORRECTION REQUIRED
   - stable_id: TO-P4-002
     canonical_name: Task Order — Technical Indicators, Statistical & Volatility Engine
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-002.md
     traceability: PH-P4 / STEP-P4-002 / STEP-P4-001 / AR-P4-001 / AR-P4-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Authorize STEP-P4-002
     status: VERIFIED / COMPLETE
+  - stable_id: TO-P4-003
+    canonical_name: Task Order — Targeted Historical-Volatility Boundary Correction & P4-002 Re-Verification
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-003.md
+    traceability: PH-P4 / STEP-P4-002 / TO-P4-002 / AR-P4-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Targeted Correction and Reverification of STEP-P4-002
+    status: AUTHORIZED TO EXECUTE
   - stable_id: STEP-P4-001
     canonical_name: Quantitative Foundation, Contracts, Numeric Policy & Golden Vector Freeze
     entity_type: STEP
