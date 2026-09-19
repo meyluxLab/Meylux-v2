@@ -53,6 +53,34 @@ def _ctx(context: QuantitativeContext | None) -> QuantitativeContext | None:
     return context
 
 
+def _derived_context(
+    context: QuantitativeContext | None,
+    *,
+    instrument_id: str | None = None,
+    timestamps: Sequence[datetime] = (),
+    provenance_ids: Sequence[str] = (),
+) -> QuantitativeContext | None:
+    """Derive deterministic lineage from canonical evidence when context is omitted."""
+    explicit = _ctx(context)
+    if explicit is not None:
+        return explicit
+    if instrument_id is None and not timestamps and not provenance_ids:
+        return None
+    ordered_provenance: list[str] = []
+    for provenance_id in provenance_ids:
+        if provenance_id and provenance_id not in ordered_provenance:
+            ordered_provenance.append(provenance_id)
+    source_ref = None
+    if ordered_provenance:
+        source_ref = "canonical-provenance:" + "|".join(ordered_provenance)
+    timestamp = max(timestamps) if timestamps else None
+    return QuantitativeContext(
+        source_ref=source_ref,
+        timestamp=timestamp,
+        symbol=instrument_id,
+    )
+
+
 def _result(
     value: Decimal | None,
     status: CalculationStatus,
@@ -125,6 +153,12 @@ class VolumeProfileEngine:
         if any(t.instrument_id != xs[0].instrument_id for t in xs[1:]) if xs else False:
             raise ValueError("profile trades must belong to one instrument")
         selected = tuple(t for t in xs if start <= t.timestamp < end)
+        context = _derived_context(
+            context,
+            instrument_id=selected[0].instrument_id if selected else (xs[0].instrument_id if xs else None),
+            timestamps=tuple(t.timestamp for t in selected),
+            provenance_ids=tuple(t.provenance_id for t in selected),
+        )
         if not selected:
             unavailable = _result(None, CalculationStatus.INSUFFICIENT_HISTORY, "empty_profile_interval", context)
             return VolumeProfileAnalysis(
@@ -231,8 +265,8 @@ class ClosedBar:
         if any(not isinstance(t, CanonicalTrade) for t in self.trades):
             raise TypeError("trades must contain CanonicalTrade instances")
         for trade in self.trades:
-            if trade.timestamp < self.start_time or trade.timestamp > self.end_time:
-                raise ValueError("bar trade timestamp must fall within the closed bar interval")
+            if trade.timestamp < self.start_time or trade.timestamp >= self.end_time:
+                raise ValueError("bar trade timestamp must fall within the half-open closed bar interval [start_time, end_time)")
         if self.trades and any(t.instrument_id != self.trades[0].instrument_id for t in self.trades[1:]):
             raise ValueError("bar trades must belong to one instrument")
 
@@ -263,6 +297,12 @@ class OrderFlowEngine:
         xs = tuple(trades)
         if any(not isinstance(t, CanonicalTrade) for t in xs):
             raise TypeError("trades must contain CanonicalTrade instances")
+        context = _derived_context(
+            context,
+            instrument_id=xs[0].instrument_id if xs else None,
+            timestamps=tuple(t.timestamp for t in xs),
+            provenance_ids=tuple(t.provenance_id for t in xs),
+        )
         if not xs:
             return _of("BAR_DELTA", _result(None, CalculationStatus.INSUFFICIENT_HISTORY, "empty_trade_set", context))
         if any(t.aggressor_side is None for t in xs):
@@ -280,17 +320,37 @@ class OrderFlowEngine:
         xs = tuple(bars)
         previous_end: datetime | None = None
         running: Decimal | None = None
+        sequence_instrument: str | None = None
+        lineage_provenance: list[str] = []
+        lineage_timestamps: list[datetime] = []
         out: list[OrderFlowResult] = []
         for bar in xs:
             if previous_end is not None and bar.start_time < previous_end:
                 raise ValueError("closed bars must be explicitly ordered without temporal overlap")
+            bar_instruments = {trade.instrument_id for trade in bar.trades}
+            if bar_instruments:
+                bar_instrument = next(iter(bar_instruments))
+                if sequence_instrument is None:
+                    sequence_instrument = bar_instrument
+                elif bar_instrument != sequence_instrument:
+                    raise ValueError("CVD bars must use one instrument across the complete sequence")
             previous_end = bar.end_time
-            delta = self.bar_delta(bar.trades, context).result
+            for trade in bar.trades:
+                if trade.provenance_id not in lineage_provenance:
+                    lineage_provenance.append(trade.provenance_id)
+                lineage_timestamps.append(trade.timestamp)
+            bar_context = _derived_context(
+                context,
+                instrument_id=sequence_instrument,
+                timestamps=tuple(lineage_timestamps),
+                provenance_ids=tuple(lineage_provenance),
+            )
+            delta = self.bar_delta(bar.trades, bar_context).result
             if delta.status is not CalculationStatus.VALID:
-                out.append(_of("CVD", _result(None, delta.status, "bar_delta_unavailable; cumulative_state_not_advanced", context)))
+                out.append(_of("CVD", _result(None, delta.status, "bar_delta_unavailable; cumulative_state_not_advanced", bar_context)))
                 continue
             running = delta.value if running is None else running + delta.value
-            out.append(_of("CVD", _result(running, CalculationStatus.VALID, "cumulative_valid_closed_bar_delta", context)))
+            out.append(_of("CVD", _result(running, CalculationStatus.VALID, "cumulative_valid_closed_bar_delta", bar_context)))
         return tuple(out)
 
     def imbalance(
@@ -383,6 +443,12 @@ class DerivativesEngine:
             raise TypeError("prior must be CanonicalDerivatives or None")
         if prior is not None and prior.instrument_id != current.instrument_id:
             raise ValueError("current and prior derivatives must use the same instrument")
+        context = _derived_context(
+            context,
+            instrument_id=current.instrument_id,
+            timestamps=(prior.timestamp, current.timestamp) if prior is not None else (current.timestamp,),
+            provenance_ids=(prior.provenance_id, current.provenance_id) if prior is not None else (current.provenance_id,),
+        )
         if prior_velocity is not None:
             _finite_decimal(prior_velocity, "prior_velocity")
         out: dict[str, CalculationResult] = {}
