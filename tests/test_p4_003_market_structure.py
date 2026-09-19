@@ -124,10 +124,11 @@ class ScenarioTests(unittest.TestCase):
         for i,(op,hi,lo,cl) in enumerate(vals):
             c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,op,hi,lo,cl,Decimal("1"),provenance_id=f"life-{i}")
         r=MarketStructureEngine().analyze(c)
-        life=[e.lifecycle for e in r.events if e.event_type=="FVG_LIFECYCLE"]
+        fvg=next(e for e in r.events if e.event_type=="FVG" and e.event_location==c[2].open_time)
+        life=[e.lifecycle for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.source_event_identity==fvg.identity]
         self.assertEqual(life,["PARTIALLY_MITIGATED","FULLY_MITIGATED"])
-        self.assertEqual(len([e for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.lifecycle=="PARTIALLY_MITIGATED"]),1)
-        self.assertEqual(len([e for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.lifecycle=="FULLY_MITIGATED"]),1)
+        self.assertEqual(len([e for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.source_event_identity==fvg.identity and e.lifecycle=="PARTIALLY_MITIGATED"]),1)
+        self.assertEqual(len([e for e in r.events if e.event_type=="FVG_LIFECYCLE" and e.source_event_identity==fvg.identity and e.lifecycle=="FULLY_MITIGATED"]),1)
 
     def test_liquidity_identity_contains_ordered_member_identities(self):
         n=30; cc=[Decimal("100")]*n; hh=[Decimal("101")]*n; ll=[Decimal("99")]*n; oo=[Decimal("100")]*n
