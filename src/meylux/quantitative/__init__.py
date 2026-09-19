@@ -30,4 +30,11 @@ __all__ = [
     "volume_spike", "vwap", "wma", "wma_candles", "volatility_expansion_ratio",
     "BandPoint", "MACDPoint", "SupertrendPoint", "VolumeActivityPoint",
     "MarketStructureEngine", "MarketStructureAnalysis", "StructuralEvent", "BarState", "SEMANTIC_VERSION",
+    "VOLUME_ORDERFLOW_DERIVATIVES_SEMANTIC_VERSION", "VolumeProfileConfig", "VolumeProfileAnalysis",
+    "VolumeProfileEngine", "ClosedBar", "OrderFlowConfig", "OrderFlowEngine", "DerivativesEngine",
 ]
+from .volume_orderflow_derivatives import (
+    SEMANTIC_VERSION as VOLUME_ORDERFLOW_DERIVATIVES_SEMANTIC_VERSION,
+    VolumeProfileConfig, VolumeProfileAnalysis, VolumeProfileEngine,
+    ClosedBar, OrderFlowConfig, OrderFlowEngine, DerivativesEngine,
+)
