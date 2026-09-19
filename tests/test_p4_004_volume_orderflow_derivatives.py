@@ -127,6 +127,14 @@ class VolumeProfileTests(unittest.TestCase):
         with self.assertRaises(TypeError):
             self.engine.analyze((object(),), T0, T0 + timedelta(minutes=1), self.config)
 
+    def test_volume_profile_derives_provenance_context(self):
+        result = self.analyze((trade(1, "100", "2"), trade(2, "101", "3")))
+        self.assertIsNotNone(result.context)
+        self.assertEqual(result.context.symbol, "BTCUSDT")
+        self.assertEqual(result.context.timestamp, T0)
+        self.assertEqual(result.context.source_ref, "canonical-provenance:prov-1|prov-2")
+        self.assertEqual(result.poc.result.context, result.context)
+
     def test_repeated_profile_replay_is_equal(self):
         trades = (trade(1, "100", "2"), trade(2, "101", "3"))
         a = self.analyze(trades)
@@ -161,6 +169,57 @@ class OrderFlowTests(unittest.TestCase):
         self.assertEqual(a[0].result.value, Decimal("5"))
         self.assertEqual(a[1].result.status, CalculationStatus.UNAVAILABLE)
         self.assertEqual(a[2].result.value, Decimal("3"))
+
+    def test_bar_delta_derives_provenance_context(self):
+        result = self.engine.bar_delta((trade(1, "100", "7", "BUY"), trade(2, "100", "3", "SELL")))
+        self.assertIsNotNone(result.result.context)
+        self.assertEqual(result.result.context.symbol, "BTCUSDT")
+        self.assertEqual(result.result.context.timestamp, T0)
+        self.assertEqual(result.result.context.source_ref, "canonical-provenance:prov-1|prov-2")
+
+    def test_cvd_derives_cumulative_provenance_context(self):
+        bars = (
+            ClosedBar(T0, T0 + timedelta(minutes=1), (trade(1, "100", "5", "BUY"),)),
+            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(2, "101", "2", "SELL", minute=1),)),
+        )
+        result = self.engine.cvd(bars)
+        self.assertEqual(result[0].result.context.source_ref, "canonical-provenance:prov-1")
+        self.assertEqual(result[1].result.context.source_ref, "canonical-provenance:prov-1|prov-2")
+        self.assertEqual(result[1].result.context.symbol, "BTCUSDT")
+        self.assertEqual(result[1].result.context.timestamp, T0 + timedelta(minutes=1))
+
+    def test_closed_bar_end_boundary_belongs_only_to_next_bar(self):
+        boundary_trade = trade(1, "100", "5", "BUY", minute=1)
+        with self.assertRaises(ValueError):
+            ClosedBar(T0, T0 + timedelta(minutes=1), (boundary_trade,))
+        next_bar = ClosedBar(
+            T0 + timedelta(minutes=1),
+            T0 + timedelta(minutes=2),
+            (boundary_trade,),
+        )
+        result = self.engine.cvd((next_bar,))
+        self.assertEqual(result[0].result.value, Decimal("5"))
+
+    def test_adjacent_same_instrument_bars_remain_valid_and_count_once(self):
+        bars = (
+            ClosedBar(T0, T0 + timedelta(minutes=1), (trade(1, "100", "5", "BUY"),)),
+            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (trade(2, "101", "2", "SELL", minute=1),)),
+        )
+        result = self.engine.cvd(bars)
+        self.assertEqual(result[0].result.value, Decimal("5"))
+        self.assertEqual(result[1].result.value, Decimal("3"))
+
+    def test_cvd_rejects_cross_instrument_sequence(self):
+        eth_trade = CanonicalTrade(
+            "eth-1", "ETHUSDT", T0 + timedelta(minutes=1),
+            Decimal("2000"), Decimal("1"), "BUY", None, "eth-prov-1"
+        )
+        bars = (
+            ClosedBar(T0, T0 + timedelta(minutes=1), (trade(1, "100", "5", "BUY"),)),
+            ClosedBar(T0 + timedelta(minutes=1), T0 + timedelta(minutes=2), (eth_trade,)),
+        )
+        with self.assertRaises(ValueError):
+            self.engine.cvd(bars)
 
     def test_cvd_rejects_out_of_order_bars(self):
         bars = (
@@ -287,6 +346,17 @@ class DerivativesTests(unittest.TestCase):
             CanonicalDerivatives(
                 "BTCUSDT", T0, funding_rate=float("nan"), provenance_id="bad"
             )
+
+    def test_derivatives_derives_provenance_context(self):
+        result = self.engine.analyze(
+            deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100")),
+            deriv(2, 60, funding_rate=Decimal("0.003"), open_interest=Decimal("125")),
+        )
+        context = result["FUNDING_RATE"].context
+        self.assertIsNotNone(context)
+        self.assertEqual(context.symbol, "BTCUSDT")
+        self.assertEqual(context.timestamp, T0 + timedelta(minutes=1))
+        self.assertEqual(context.source_ref, "canonical-provenance:d-2|d-1")
 
     def test_deterministic_derivatives_replay(self):
         previous = deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100"))
