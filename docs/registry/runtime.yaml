@@ -28,6 +28,13 @@ records:
       db_redis_health: PASS
       api_wire_probe: PASS
       worker_failure_retry_dlq_probe: PASS
+      governed_raw_historical_acquisition: EXECUTED / OBSERVED
+      raw_records: 1498
+      raw_window_15m: 2026-09-14T17:30:00Z..2026-09-19T22:00:00Z (499 closed)
+      raw_window_1h: 2026-08-30T03:00:00Z..2026-09-19T21:00:00Z (499 closed)
+      raw_window_4h: 2026-06-28T16:00:00Z..2026-09-19T16:00:00Z (499 closed)
+      p3_structural_temporal_validation: PASS
+      p3_normalization: BLOCKED — explicit timeframe context required
       real_data_vertical_slice: UNEXECUTED / UNVERIFIED
       restart_recovery_real_data: UNEXECUTED / UNVERIFIED
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
