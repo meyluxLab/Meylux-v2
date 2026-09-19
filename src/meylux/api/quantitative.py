@@ -16,7 +16,8 @@ class QuantitativeAPI:
         parts=tuple(x for x in path.split("/") if x)
         if len(parts)!=5 or parts[:2] != ("v1","quantitative"): return APIResponse(404,json.dumps({"error":"not_found"},separators=(",",":")))
         family,symbol,timeframe=parts[2:]
-        try: limit=int(query.get("limit","100"))
+        if family not in QuantitativePersistence.TABLES:\n            return APIResponse(404,json.dumps({"error":"unsupported_family"},separators=(",",":")))
+        try: limit=int(query.get("limit","100"))\n        except ValueError: return APIResponse(400,json.dumps({"error":"invalid_limit"},separators=(",",":")))\n        if limit < 1 or limit > 1000: return APIResponse(400,json.dumps({"error":"invalid_limit"},separators=(",",":")))\n        try: start=None if "start" not in query else datetime.fromisoformat(query["start"].replace("Z","+00:00"))
         except ValueError: return APIResponse(400,json.dumps({"error":"invalid_limit"},separators=(",",":")))
         try:
             start=None if "start" not in query else datetime.fromisoformat(query["start"].replace("Z","+00:00"))
