@@ -538,6 +538,8 @@ def historical_volatility(
     xs = _validate_candles(candles)
     _require_closed(xs, allow_incomplete)
     n = _positive_period(window, "window")
+    if n < 2:
+        raise ValueError("window must be at least 2 for historical volatility")
     annual_periods = _nonnegative_decimal(periods_per_year, "periods_per_year")
     if annual_periods <= 0:
         raise ValueError("periods_per_year must be positive")
