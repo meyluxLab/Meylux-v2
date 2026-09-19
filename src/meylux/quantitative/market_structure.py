@@ -121,11 +121,13 @@ class MarketStructureEngine:
                     protected=pre_lows[-1]
                     ev=self._event("CHOCH",candle,candle.close_time,level=protected[1],direction="bearish",prior_state=_STATE_UP,reason="close_below_protected_swing_low",index=i)
                     if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev)
+                    active_break_facts[ev.identity]=ev
                     pending={"direction":"bearish","event":ev,"boundary":boundary,"index":i,"new_low":False,"new_high":False}; state=_STATE_UNCONFIRMED; choch_emitted=True
                 elif break_state==_STATE_DOWN and pre_highs and candle.close>pre_highs[-1][1]:
                     protected=pre_highs[-1]
                     ev=self._event("CHOCH",candle,candle.close_time,level=protected[1],direction="bullish",prior_state=_STATE_DOWN,reason="close_above_protected_swing_high",index=i)
                     if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev)
+                    active_break_facts[ev.identity]=ev
                     pending={"direction":"bullish","event":ev,"boundary":boundary,"index":i,"new_low":False,"new_high":False}; state=_STATE_UNCONFIRMED; choch_emitted=True
                 if pending is None and not choch_emitted:
                     if break_state==_STATE_UP and pre_highs:
@@ -260,12 +262,16 @@ class MarketStructureEngine:
     def _window_continuous(self,xs,a,b):
         return all(xs[j].timeframe in _INTERVALS and xs[j].open_time==self._expected_open(xs[j-1]) for j in range(a+1,b+1))
     def _derive_state(self,highs,lows,hc,lc):
+        # Ordinary warm-up / insufficient paired structure is NEUTRAL.
+        # UNCONFIRMED is reserved for explicit quarantine/ambiguity/transition
+        # states handled by the main state machine.
         if not highs or not lows: return _STATE_NEUTRAL
         h=hc.get(highs[-1][0]); l=lc.get(lows[-1][0])
-        if h is None or l is None: return _STATE_UNCONFIRMED
+        if h is None or l is None: return _STATE_NEUTRAL
         if h=="HH" and l=="HL": return _STATE_UP
         if h=="LH" and l=="LL": return _STATE_DOWN
-        return _STATE_RANGE
+        if h in ("HH","LH") and l in ("HL","LL"): return _STATE_RANGE
+        return _STATE_NEUTRAL
     def _source_body(self,xs,i,direction,boundary):
         for j in range(i-1,boundary-1,-1):
             c=xs[j]
