@@ -30,7 +30,7 @@ By default, indicators require is_closed=True. Passing allow_incomplete=True exp
 - ADX: Wilder-smoothed TR and directional movement produce +DI/-DI, DX, then a Wilder-smoothed ADX. The first ADX requires 2*period-1 observations.
 - Bollinger Bands: SMA middle band plus/minus deviations * population standard deviation.
 - Supertrend: uses Wilder ATR, midpoint (high+low)/2, explicit multiplier, deterministic initial UP direction at the first valid ATR, and deterministic final-band recurrence.
-- Historical Volatility: sample standard deviation (ddof=1) of rolling natural-log close returns, annualized by sqrt(periods_per_year). It requires window+1 closes.
+- Historical Volatility: sample standard deviation (ddof=1) of rolling natural-log close returns, annualized by sqrt(periods_per_year). The window must be at least 2 because sample variance uses a n-1 denominator; valid calculations require window+1 closes.
 - ATR percentile: current ATR's percentile rank among the current and preceding lookback-1 valid ATR observations, with rank normalized to 0–100.
 - Volatility expansion ratio: current ATR divided by the rolling mean of the last baseline_window valid ATR values.
 - Bollinger bandwidth: (upper-lower)/middle; zero middle is explicit INVALID_INPUT.
