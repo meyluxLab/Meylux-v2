@@ -415,10 +415,10 @@ records:
     first_step: STEP-P4-001
     next_valid_step: STEP-P4-006
     final_step: STEP-P4-006
-    active_task_order: TO-P4-006
+    active_task_order: null
     current_step: STEP-P4-005
-    completed_task_order: TO-P4-005
-    completion_audit: AR-P4-009
+    completed_task_order: TO-P4-006
+    completion_audit: AR-P4-011
     authorization_criteria:
       - Phase 3 is CLOSED / VERIFIED with G-3 established under AR-P3-008.
       - Project Owner explicitly authorized formal Phase 4 establishment and STEP-P4-001 execution.
