@@ -379,7 +379,9 @@ class ScenarioTests(unittest.TestCase):
                 evs=[]
                 for e in st.events:
                     loc=int((e.event_location-base).total_seconds()/3600)
-                    evs.append(f"{e.event_type}@{loc}:{e.level}:{e.direction}:{e.lifecycle}:{e.structural_state}:{e.source_event_identity}")
+                    conf=int((e.confirmation_time-base).total_seconds()/3600)
+                    know=int((e.knowledge_time-base).total_seconds()/3600)
+                    evs.append(f"{e.event_type}@{loc}/{conf}/{know}|{e.identity}|{e.level}|{e.direction}|{e.lifecycle}|{e.structural_state}|{e.source_event_identity}")
                 out.append((st.index,st.state,tuple(evs)))
             return tuple(out)
 
