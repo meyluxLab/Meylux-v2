@@ -3,12 +3,14 @@ import io
 import json
 import unittest
 from datetime import datetime, timezone
+from decimal import Decimal
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urlparse
 
 from contracts.acquisition import AcquisitionState, EventType
 from meylux.acquisition.binance import BinanceAdapter, BinanceTransportError, RetryPolicy
 from meylux.observability import ObservabilityLimits, configure_logging
+from contracts.normalization import normalize
 
 
 FIXED_NOW = datetime(2026, 9, 11, 12, 0, tzinfo=timezone.utc)
@@ -177,6 +179,34 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(trade.event_id, trade.deduplication_key)
         self.assertEqual(candle.source_sequence, "1778155200000")
         self.assertEqual(candle.canonical_bytes(), candle.canonical_bytes())
+
+    def test_historical_kline_timeframe_context_normalizes_for_required_intervals(self):
+        row = [1778155200000, "100", "101", "99", "100.5", "10", 1778155259999, "1000", 2, "5", "500", "0"]
+        for interval in ("15m", "1h", "4h"):
+            adapter = self.make_adapter(http_get=FakeHTTP([[row]]))
+            envelope = adapter.fetch_klines("BTCUSDT", interval)[0]
+            self.assertEqual(envelope.payload["k"]["i"], interval)
+            outcome = normalize(envelope)
+            self.assertTrue(outcome.valid, outcome.issues)
+            self.assertEqual(outcome.value.timeframe, interval)
+            self.assertEqual(outcome.value.open, Decimal("100"))
+            self.assertEqual(envelope.source_sequence, "1778155200000")
+
+    def test_historical_kline_interval_rejects_malformed_and_unsupported_values(self):
+        adapter = self.make_adapter(http_get=FakeHTTP([]))
+        for interval in ("", " ", "15", "15x", "15 m", "1H", "1h30m"):
+            with self.subTest(interval=interval):
+                with self.assertRaises(ValueError):
+                    adapter.fetch_klines("BTCUSDT", interval)
+
+    def test_historical_kline_payload_preserves_wire_row_and_explicit_context(self):
+        row = [1778155200000, "100", "101", "99", "100.5", "10", 1778155259999, "1000", 2, "5", "500", "0"]
+        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "15m")[0]
+        self.assertEqual(tuple(envelope.payload["row"]), tuple(row))
+        self.assertEqual(envelope.payload["k"]["t"], row[0])
+        self.assertEqual(envelope.payload["k"]["T"], row[6])
+        self.assertTrue(envelope.payload["k"]["x"])
+        self.assertEqual(envelope.payload["k"]["i"], "15m")
 
     def test_stream_trade_mapping_and_provenance(self):
         connector = FakeConnector([
