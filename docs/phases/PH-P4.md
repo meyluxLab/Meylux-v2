@@ -95,14 +95,14 @@ The Step must establish the minimum authoritative foundation without prematurely
 ### `STEP-P4-002` — Technical Indicators, Statistical & Volatility Engine
 
 **Order:** 2
-**Status:** COMPLETE / VERIFIED
-**Authorization state:** VERIFIED / COMPLETE
+**Status:** ACTIVE / CORRECTION REQUIRED
+**Authorization state:** AUTHORIZED TO EXECUTE
 **Predecessor:** `STEP-P4-001` — COMPLETE / VERIFIED
-**Active Task Order:** null
-**Completed Task Order:** `TO-P4-002`
-**Completion Audit:** `AR-P4-002`
-**Activation basis:** Project Owner Directive — Authorize STEP-P4-002
-**Canonical Task Order:** `docs/task-orders/TO-P4-002.md`
+**Active Task Order:** `TO-P4-003`
+**Completed Task Order:** `TO-P4-002` (historical closure record)
+**Completion Audit:** `AR-P4-002` (historical audit; current verification under correction)
+**Activation basis:** Project Owner Directive — Authorize STEP-P4-002 / Targeted Correction and Reverification
+**Canonical Task Order:** `docs/task-orders/TO-P4-003.md`
 
 Objective: implement deterministic price/time/volume technical indicators and statistical/volatility features against the verified P4 quantitative foundation and trusted canonical Phase-3 inputs.
 
