@@ -1112,7 +1112,14 @@ records:
     canonical_name: Build Report — Governed Historical Candle Path & P4-006 Performance Profiling
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-008.md
-    traceability: TO-P4-008 / PH-P4 / STEP-P4-006
+    traceability: TO-P4-008 / PH-P4 / STEP-P4-006 / AR-P4-014
+    status: VERIFIED
+  - stable_id: AR-P4-014
+    canonical_name: CONTROL Independent Verification — TO-P4-008 Provider-Boundary Correction
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-014.md
+    traceability: BR-P4-008 / TO-P4-008 / PH-P4 / STEP-P4-006 / AR-P4-013
+    status: APPROVED / VERIFIED
 
   - stable_id: TO-P4-008
     canonical_name: Task Order — Governed Historical Candle Path & P4-006 Performance Profiling
