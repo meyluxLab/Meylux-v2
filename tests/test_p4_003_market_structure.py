@@ -360,7 +360,7 @@ class ScenarioTests(unittest.TestCase):
             c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,huge,Decimal("9.1E+60"),Decimal("8.9E+60"),huge,Decimal("0"),provenance_id=f"num-{i}")
         c[5]=CanonicalCandle("TEST","1h",c[5].open_time,c[5].close_time,huge,Decimal("9.9E+60"),Decimal("8.9E+60"),huge,Decimal("0"),provenance_id="num-swing")
         r=MarketStructureEngine().analyze(tuple(c))
-        self.assertTrue(any(e.event_type=="SWING_HIGH" and e.level==huge+Decimal("9") for e in r.events))
+        self.assertTrue(any(e.event_type=="SWING_HIGH" and e.level==Decimal("9.9E+60") for e in r.events))
         small=list(candles(16))
         for i in range(len(small)):
             small[i]=CanonicalCandle("TEST","1h",small[i].open_time,small[i].close_time,tiny,Decimal("1.1E-60"),Decimal("0.9E-60"),tiny,Decimal("0"),provenance_id=f"small-{i}")
@@ -397,7 +397,7 @@ class ScenarioTests(unittest.TestCase):
         for i in (43,44,46): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
         o[45]=c[45]=Decimal("108"); h[45]=Decimal("110"); l[45]=Decimal("107")
         for i in range(47,51): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
-        o[51]=c[51]=Decimal("102"); h[51]=c[51]=Decimal("102"); l[51]=Decimal("101")
+        o[51]=c[51]=Decimal("102"); h[51]=Decimal("103"); l[51]=Decimal("101")
         reversal_bars=candles(closes=c,highs=h,lows=l,opens=o)
         reversal_result=MarketStructureEngine().analyze(reversal_bars)
         raise AssertionError("TREND_TRACE="+repr(trace(trend_result,trend_bars))+"\\nREVERSAL_TRACE="+repr(trace(reversal_result,reversal_bars)))
