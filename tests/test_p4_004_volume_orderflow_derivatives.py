@@ -349,8 +349,8 @@ class DerivativesTests(unittest.TestCase):
 
     def test_derivatives_derives_provenance_context(self):
         result = self.engine.analyze(
-            deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100")),
             deriv(2, 60, funding_rate=Decimal("0.003"), open_interest=Decimal("125")),
+            deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100")),
         )
         context = result["FUNDING_RATE"].context
         self.assertIsNotNone(context)
