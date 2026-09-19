@@ -356,7 +356,7 @@ class DerivativesTests(unittest.TestCase):
         self.assertIsNotNone(context)
         self.assertEqual(context.symbol, "BTCUSDT")
         self.assertEqual(context.timestamp, T0 + timedelta(minutes=1))
-        self.assertEqual(context.source_ref, "canonical-provenance:d-2|d-1")
+        self.assertEqual(context.source_ref, "canonical-provenance:d-1|d-2")
 
     def test_deterministic_derivatives_replay(self):
         previous = deriv(1, 0, funding_rate=Decimal("0.001"), open_interest=Decimal("100"))
