@@ -49,6 +49,7 @@ class BarState:
     knowledge_time: datetime
     state: str
     events: tuple[StructuralEvent, ...]
+    processing_order: tuple[str, ...] = ()
 
 @dataclass(frozen=True, slots=True)
 class MarketStructureAnalysis:
@@ -70,12 +71,14 @@ class MarketStructureEngine:
         active_fvgs=[]; fvg_lifecycle={}; active_obs=[]; active_breakers=[]; pools_high={}; pools_low={}; active_pools=[]
         seen=set(); broken_levels=set(); active_break_facts={}
         for i,candle in enumerate(xs):
-            bar_events=[]; pre_highs=list(highs); pre_lows=list(lows); pre_state=state
+            bar_events=[]; phase_trace=[]; pre_highs=list(highs); pre_lows=list(lows); pre_state=state
+            phase_trace.append("continuity")
             if i and self._expected_open(xs[i-1]) != candle.open_time:
                 boundary=i; state=_STATE_UNCONFIRMED; pending=None; quarantine=True
                 highs=[x for x in highs if x[0]>=boundary]; lows=[x for x in lows if x[0]>=boundary]
                 high_class.clear(); low_class.clear(); active_fvgs=[]; active_obs=[]; active_breakers=[]
                 pools_high={}; pools_low={}; active_pools=[]; broken_levels=set()
+            phase_trace.append("swing")
             cand=i-5
             if cand>=boundary and cand>=5 and self._window_continuous(xs,cand,i):
                 candidate=xs[cand]; window=xs[cand-5:cand+6]
@@ -102,6 +105,7 @@ class MarketStructureEngine:
                                     ce=self._event(low_class[cand],candidate,candle.close_time,level=candidate.low,reason="swing_low_classification",index=cand)
                                     if ce.identity not in seen: seen.add(ce.identity); bar_events.append(ce)
                             else: low_class[cand]=None
+            phase_trace.append("classification")
             if boundary==i or pending is not None or quarantine:
                 derived=self._derive_state(highs,lows,high_class,low_class)
                 if quarantine and derived in (_STATE_UP,_STATE_DOWN,_STATE_RANGE):
@@ -109,6 +113,7 @@ class MarketStructureEngine:
                 else: state=_STATE_UNCONFIRMED
             else:
                 state=self._derive_state(highs,lows,high_class,low_class)
+            phase_trace.append("state")
             if i>=boundary:
                 break_state=pre_state; choch_emitted=False
                 if break_state==_STATE_UP and pre_lows and candle.close<pre_lows[-1][1]:
@@ -149,6 +154,7 @@ class MarketStructureEngine:
                         if candle.close>protected[1] and protected[0]>pending["index"]:
                             ev=self._event("MSS",candle,candle.close_time,level=protected[1],direction="bullish",prior_state=_STATE_UNCONFIRMED,reason="post_choch_bullish_structural_transition",index=i)
                             if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); broken_levels.add(("bullish",protected[1],boundary)); active_break_facts[ev.identity]=ev; state=_STATE_UP; pending=None
+            phase_trace.append("structural_breaks")
             for e in list(bar_events):
                 if e.event_type not in ("BOS","CHOCH","MSS") or e.direction is None: continue
                 source=self._source_body(xs,i,e.direction,boundary)
@@ -156,6 +162,7 @@ class MarketStructureEngine:
                 sidx,sc=source
                 ob=self._event("ORDER_BLOCK",sc,e.knowledge_time,lower=sc.low,upper=sc.high,direction=e.direction,lifecycle="ACTIVE",source=e.identity,reason="nearest_preceding_opposite_body",index=sidx,location_override=sc.open_time)
                 if ob.identity not in seen: seen.add(ob.identity); bar_events.append(ob); active_obs.append(ob)
+            phase_trace.append("ob_breaker")
             for ob in list(active_obs):
                 if ob.direction=="bullish" and candle.close<ob.lower_bound:
                     inv=self._event("ORDER_BLOCK_INVALIDATION",candle,candle.close_time,lower=ob.lower_bound,upper=ob.upper_bound,direction="bearish",lifecycle="INVALIDATED",source=ob.identity,reason="close_below_bullish_order_block",index=i)
@@ -171,6 +178,7 @@ class MarketStructureEngine:
                 if (br.direction=="bearish" and candle.close>br.upper_bound) or (br.direction=="bullish" and candle.close<br.lower_bound):
                     ev=self._event("BREAKER_INVALIDATION",candle,candle.close_time,lower=br.lower_bound,upper=br.upper_bound,direction=br.direction,lifecycle="INVALIDATED",source=br.identity,reason="close_through_opposite_breaker_boundary",index=i)
                     if ev.identity not in seen: seen.add(ev.identity); bar_events.append(ev); active_breakers.remove(br)
+            phase_trace.append("fvg")
             if i>=2 and i>=boundary and self._window_continuous(xs,i-2,i):
                 a,b,c=xs[i-2],xs[i-1],candle
                 if c.low>a.high:
@@ -198,6 +206,7 @@ class MarketStructureEngine:
                         full=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle="FULLY_MITIGATED",source=fvg.identity,reason="wick_based_full_mitigation",index=i)
                         if full.identity not in seen: seen.add(full.identity); bar_events.append(full)
                         fvg_lifecycle[fvg.identity]="FULLY_MITIGATED"; active_fvgs.remove(fvg)
+            phase_trace.append("liquidity")
             for e in bar_events:
                 if e.event_type=="SWING_HIGH":
                     members=pools_high.setdefault(e.level,[]); members.append(e)
@@ -228,9 +237,10 @@ class MarketStructureEngine:
 
             if boundary==i or pending is not None: state=_STATE_UNCONFIRMED
             elif state==_STATE_UNCONFIRMED and not quarantine: state=self._derive_state(highs,lows,high_class,low_class)
+            phase_trace.append("official_post_bar_state")
             state_event=self._event("STRUCTURE_STATE",candle,candle.close_time,structural_state=state,reason="official_post_bar_structure_state",index=i)
             if state_event.identity not in seen: seen.add(state_event.identity); bar_events.append(state_event)
-            bar_events=self._dedupe(bar_events); events.extend(bar_events); states.append(BarState(i,candle.open_time,candle.close_time,state,tuple(bar_events)))
+            bar_events=self._dedupe(bar_events); events.extend(bar_events); states.append(BarState(i,candle.open_time,candle.close_time,state,tuple(bar_events),tuple(phase_trace)))
         return MarketStructureAnalysis(tuple(xs),tuple(events),tuple(states))
 
     def _validate(self,candles):
