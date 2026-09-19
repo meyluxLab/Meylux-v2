@@ -12,6 +12,7 @@ from meylux.persistence.quantitative import QuantitativePersistence
 from meylux.quantitative.regime_venue import RegimeConfig,BULLISH,RANGE
 from meylux.replay import QuantitativeReplay
 from meylux.runtime.quant_worker import QuantWorkerHandler
+from meylux.runtime.http import _wire_response
 from meylux.queue import QueueEnvelope
 
 UTC=timezone.utc
@@ -45,10 +46,12 @@ class TestMTF(unittest.TestCase):
         future=CanonicalCandle("BTCUSDT","1h",T0+timedelta(minutes=60),T0+timedelta(minutes=120),Decimal("1"),Decimal("1"),Decimal("1"),Decimal("1"),Decimal("1"),provenance_id="future")
         self.assertIsNone(align_higher_timeframe(p,(future,)).candle)
 
-    def test_incomplete_and_wrong_order_rejected(self):
+    def test_incomplete_wrong_order_and_key_mismatch_rejected(self):
         with self.assertRaises(ValueError): align_higher_timeframe(candle(1,"101"),(candle(0,"100","1h",closed=False),))
         h0=candle(0,"100","1h"); h1=candle(0,"101","1h")
         with self.assertRaises(ValueError): align_higher_timeframe(candle(3,"109"),(h0,h1))
+        with self.assertRaises(ValueError):
+            QuantitativeOrchestrator().process(bars(),config(),higher_timeframes={"4h":(candle(0,"100","1h"),)})
 
 class TestOrchestrator(unittest.TestCase):
     def test_deterministic_composition_and_replay(self):
@@ -87,17 +90,28 @@ class _FakePersistence:
     async def fetch_family(self,*args,**kwargs): return [{"record_id":"r1","value_numeric":Decimal("1.25")}]
 
 class TestWorkerAPI(unittest.TestCase):
-    def test_worker_rejects_incomplete_and_accepts_closed(self):
-        p=_FakePersistence(); handler=QuantWorkerHandler(p,config())
-        payload={"candles":[
+    def _payload(self):
+        return {"candles":[
             {"instrument_id":"BTCUSDT","timeframe":"15m","open_time":candle(0,"100").open_time.isoformat().replace("+00:00","Z"),"close_time":candle(0,"100").close_time.isoformat().replace("+00:00","Z"),"open":"100","high":"100","low":"100","close":"100","volume":"10","is_closed":True,"provenance_id":"p0"},
             {"instrument_id":"BTCUSDT","timeframe":"15m","open_time":candle(1,"103").open_time.isoformat().replace("+00:00","Z"),"close_time":candle(1,"103").close_time.isoformat().replace("+00:00","Z"),"open":"103","high":"103","low":"103","close":"103","volume":"10","is_closed":True,"provenance_id":"p1"},
             {"instrument_id":"BTCUSDT","timeframe":"15m","open_time":candle(2,"106").open_time.isoformat().replace("+00:00","Z"),"close_time":candle(2,"106").close_time.isoformat().replace("+00:00","Z"),"open":"106","high":"106","low":"106","close":"106","volume":"10","is_closed":True,"provenance_id":"p2"},
         ]}
+
+    def test_worker_rejects_incomplete_and_accepts_closed(self):
+        p=_FakePersistence(); handler=QuantWorkerHandler(p,config()); payload=self._payload()
         asyncio.run(handler(QueueEnvelope("m1","i1","CTR-P4-QUANT-CANDLE-CLOSE-1.0",payload)))
         self.assertEqual(len(p.results),1)
         payload["candles"][-1]["is_closed"]=False
         with self.assertRaises(ValueError): asyncio.run(handler(QueueEnvelope("m2","i2","CTR-P4-QUANT-CANDLE-CLOSE-1.0",payload)))
+
+    def test_worker_carries_mtf_into_runtime_orchestration(self):
+        p=_FakePersistence(); handler=QuantWorkerHandler(p,config()); payload=self._payload()
+        h={"instrument_id":"BTCUSDT","timeframe":"1h","open_time":T0.isoformat().replace("+00:00","Z"),"close_time":(T0+timedelta(hours=1)).isoformat().replace("+00:00","Z"),"open":"100","high":"100","low":"100","close":"100","volume":"1","is_closed":True,"provenance_id":"h0"}
+        payload["higher_timeframes"]={"1h":[h]}
+        asyncio.run(handler(QueueEnvelope("m3","i3","CTR-P4-QUANT-CANDLE-CLOSE-1.0",payload)))
+        self.assertEqual(len(p.results),1)
+        self.assertIn("1h",p.results[0].htf)
+        self.assertIsNotNone(p.results[0].htf["1h"].candle)
 
     def test_api_rejects_negative_limit(self):
         response=asyncio.run(QuantitativeAPI(_FakePersistence()).handle("GET","/v1/quantitative/regime/BTCUSDT/15m",{"limit":"-1"}))
@@ -116,6 +130,12 @@ class TestWorkerAPI(unittest.TestCase):
         self.assertEqual(get.body,'[{"record_id":"r1","value_numeric":"1.25"}]')
         bad=asyncio.run(api.handle("GET","/v1/quantitative/regime/BTCUSDT/15m",{"limit":"x"}))
         self.assertEqual(bad.status,400)
+
+    def test_http_wire_response_uses_real_crlf(self):
+        body=b"{}"
+        wire=_wire_response(200,"application/json",body)
+        self.assertIn(b"HTTP/1.1 200 OK\r\n",wire)
+        self.assertIn(b"\r\n\r\n{}",wire)
 
 class _Tx:
     async def __aenter__(self): return self
