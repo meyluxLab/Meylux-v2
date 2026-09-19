@@ -1173,3 +1173,28 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     contract_effect: no contract redesign or Stable-ID mutation authorized
     vps_effect: none; no VPS/SentinelX action performed
+
+  - id: CHG-P4-STEP-004-AUDIT-RECHECK-20260919
+    date_utc: '2026-09-19'
+    change_type: INDEPENDENT_AUDIT_REQUEST_CHANGES
+    subject: CONTROL re-audit of TO-P4-005 / STEP-P4-004 after AR-P4-007 correction cycle
+    audit_id: AR-P4-008
+    basis: BR-P4-005 / AR-P4-007 / DOC-P4-003 / ADR-QUANTITATIVE-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    audited_repository_head: c611e31d5a266abc76956b2c29ce8636bd72de32
+    verified_correction_findings:
+      - F-01 canonical provenance/context derivation materially corrected
+      - F-02 ClosedBar half-open ownership and CVD sequence instrument integrity materially corrected
+    new_blocking_findings:
+      - F-03 Bar Delta permits cross-instrument aggregation while deriving a single-symbol context
+      - F-04 BR-P4-005 contains contradictory CI evidence, including an incorrect 391-test attribution to Run #875
+    ci_evidence:
+      - Run #875 / Run ID 35447364660 / head 03e4bfcc8619667304ff09dcf09a7fb9a64ce2e7 / SUCCESS / repository audit record: 384 tests
+      - Run #889 / Run ID 35448380558 / Job 105911175610 / head d09ab0e9edab023c7370aeaa27b15adba457d096 / SUCCESS / 391 tests
+      - Run #890 / Run ID 35448421861 / Job 105911280553 / head c611e31d5a266abc76956b2c29ce8636bd72de32 / SUCCESS
+    disposition: REQUEST CHANGES / NOT VERIFIED
+    resulting_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-004 ACTIVE / AUTHORIZED; TO-P4-005 AUTHORIZED TO EXECUTE; BR-P4-005 PRODUCED / NOT VERIFIED
+    correction_required: true
+    closure_sync: not performed; CONTROL retains closure ownership
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    contract_effect: no contract redesign or Stable-ID mutation authorized
+    vps_effect: none; no VPS/SentinelX action performed
