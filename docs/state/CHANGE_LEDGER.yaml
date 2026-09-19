@@ -1569,3 +1569,25 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     vps_effect: CONTROL executed authorized deployment/build/start/migration and bounded runtime probes through SentinelX only
     scope_effect: no Phase-5 authorization or implementation
+
+
+  - id: CHG-P4-STEP-006-RUNTIME-ADDENDUM-20260919
+    date_utc: '2026-09-19'
+    change_type: CONTROL_RUNTIME_EVIDENCE_ADDENDUM
+    subject: CONTROL verifies worker restart/liveness and confirms governed acquisition boundary remains unavailable for G-4 vertical slice
+    basis: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919 + AR-P4-013 + TO-P4-007
+    affected_ids:
+      - STEP-P4-006
+      - RUN-P4-006
+      - OBS-P4-006
+      - EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+    evidence:
+      worker_restart: PASS
+      api_after_restart: RUNNING
+      db_after_restart: HEALTHY
+      redis_after_restart: HEALTHY
+      collector_runtime: foundation-service-only; no live acquisition stream observed
+      canonical_candles: EMPTY
+    resulting_state: STEP-P4-006 remains ACTIVE / AUTHORIZED; real-data vertical slice remains UNEXECUTED / UNVERIFIED
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
+    scope_effect: CONTROL did not bypass P2/P3 acquisition/normalization boundaries and did not inject direct provider data
