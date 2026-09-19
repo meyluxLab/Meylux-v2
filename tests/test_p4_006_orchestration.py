@@ -106,7 +106,7 @@ class TestWorkerAPI(unittest.TestCase):
 
     def test_worker_carries_mtf_into_runtime_orchestration(self):
         p=_FakePersistence(); handler=QuantWorkerHandler(p,config()); payload=self._payload()
-        h={"instrument_id":"BTCUSDT","timeframe":"1h","open_time":T0.isoformat().replace("+00:00","Z"),"close_time":(T0+timedelta(hours=1)).isoformat().replace("+00:00","Z"),"open":"100","high":"100","low":"100","close":"100","volume":"1","is_closed":True,"provenance_id":"h0"}
+        h={"instrument_id":"BTCUSDT","timeframe":"1h","open_time":(T0-timedelta(minutes=15)).isoformat().replace("+00:00","Z"),"close_time":(T0+timedelta(minutes=45)).isoformat().replace("+00:00","Z"),"open":"100","high":"100","low":"100","close":"100","volume":"1","is_closed":True,"provenance_id":"h0"}
         payload["higher_timeframes"]={"1h":[h]}
         asyncio.run(handler(QueueEnvelope("m3","i3","CTR-P4-QUANT-CANDLE-CLOSE-1.0",payload)))
         self.assertEqual(len(p.results),1)
