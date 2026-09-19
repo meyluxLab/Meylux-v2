@@ -104,7 +104,7 @@ class ScenarioTests(unittest.TestCase):
     def test_equal_high_and_low_remain_unconfirmed(self):
         n=27
         c=list(candles(n))
-        for i,hi,lo in ((7,Decimal("110"),Decimal("100")),(12,Decimal("105"),Decimal("95")),(17,Decimal("110"),Decimal("100")),(22,Decimal("105"),Decimal("95"))):
+        for i,hi,lo in ((7,Decimal("110"),Decimal("101")),(12,Decimal("103"),Decimal("95")),(17,Decimal("110"),Decimal("101")),(22,Decimal("103"),Decimal("95"))):
             c[i]=CanonicalCandle("TEST","1h",c[i].open_time,c[i].close_time,Decimal("102"),hi,lo,Decimal("102"),Decimal("1"),provenance_id=f"eq-{i}")
         r=MarketStructureEngine().analyze(c)
         self.assertFalse(any(e.event_type in ("HH","LH","HL","LL") and e.level in (Decimal("110"),Decimal("95")) for e in r.events))
