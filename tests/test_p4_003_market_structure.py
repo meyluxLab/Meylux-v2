@@ -158,4 +158,36 @@ class ScenarioTests(unittest.TestCase):
         self.assertEqual(r.states[39].processing_order,expected)
         self.assertEqual(r.states[39].state,"TRENDING_UP")
 
+
+    def test_DIAGNOSTIC_dump_golden_traces(self):
+        def trace(result, bars):
+            base=bars[0].open_time
+            out=[]
+            for st in result.states:
+                evs=[]
+                for e in st.events:
+                    loc=int((e.event_location-base).total_seconds()/3600)
+                    evs.append(f"{e.event_type}@{loc}:{e.level}:{e.direction}:{e.lifecycle}:{e.structural_state}:{e.source_event_identity}")
+                out.append((st.index,st.state,tuple(evs)))
+            return tuple(out)
+
+        trend_bars=trend()
+        trend_result=MarketStructureEngine().analyze(trend_bars)
+
+        n=60; c=[Decimal("102")]*n; h=[Decimal("103")]*n; l=[Decimal("101")]*n; o=[Decimal("102")]*n
+        piv={7:(96,97,95),12:(104,105,103),17:(101,102,100),22:(111,112,110),27:(108,109,107),32:(110,118,109)}
+        for i,(op,hi,lo) in piv.items(): o[i]=c[i]=Decimal(op); h[i]=Decimal(hi); l[i]=Decimal(lo)
+        for i in list(range(23,27))+list(range(28,32)): o[i]=c[i]=Decimal("109"); h[i]=Decimal("110"); l[i]=Decimal("108")
+        for i in range(33,40): o[i]=c[i]=Decimal("110"); h[i]=Decimal("111"); l[i]=Decimal("109")
+        o[40]=c[40]=Decimal("106"); h[40]=Decimal("107"); l[40]=Decimal("105")
+        o[41]=c[41]=Decimal("108"); h[41]=Decimal("109"); l[41]=Decimal("107")
+        o[42]=c[42]=Decimal("104"); h[42]=Decimal("105"); l[42]=Decimal("103")
+        for i in (43,44,46): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
+        o[45]=c[45]=Decimal("108"); h[45]=Decimal("110"); l[45]=Decimal("107")
+        for i in range(47,51): o[i]=c[i]=Decimal("106"); h[i]=Decimal("107"); l[i]=Decimal("105")
+        o[51]=c[51]=Decimal("102"); h[51]=c[51]=Decimal("102"); l[51]=Decimal("101")
+        reversal_bars=candles(closes=c,highs=h,lows=l,opens=o)
+        reversal_result=MarketStructureEngine().analyze(reversal_bars)
+        raise AssertionError("TREND_TRACE="+repr(trace(trend_result,trend_bars))+"\\nREVERSAL_TRACE="+repr(trace(reversal_result,reversal_bars)))
+
 if __name__=="__main__": unittest.main()
