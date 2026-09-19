@@ -15,8 +15,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 1 — Infrastructure Foundation:** `CLOSED / VERIFIED`.
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
-- **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `ACTIVE / AUTHORIZED`. `STEP-P4-001` and `STEP-P4-002` are `COMPLETE / VERIFIED`; `STEP-P4-002` closed under `AR-P4-002`; later Phase 4 Steps remain unauthorized.
-- **Active Task Order:** `null`. **Completed Task Order:** `TO-P4-002` (completion audit `AR-P4-002`).
+- **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `ACTIVE / AUTHORIZED`. `STEP-P4-001` remains `COMPLETE / VERIFIED`; `STEP-P4-002` is under targeted correction/reverification via `TO-P4-003` following an independent CONTROL finding; later Phase 4 Steps remain unauthorized.
+- **Active Task Order:** `TO-P4-003`. **Completed Task Order:** `TO-P4-002` (historical completion audit `AR-P4-002`; current P4-002 verification is under correction).
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
