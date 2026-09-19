@@ -1351,3 +1351,32 @@ entries:
     vps_effect: none; no VPS/SentinelX action performed
     scope_effect: no STEP-P4-006 or later functionality authorized or implemented
     next_role: ROL-V2-002 — PRODUCER / ARCHITECT-BUILDER
+
+  - id: CHG-P4-STEP-005-AUTHORIZATION-SYNC-FINAL-20260919
+    date_utc: '2026-09-19'
+    change_type: AUTHORIZATION_STATE_PERIPHERAL_SYNCHRONIZATION
+    subject: CONTROL final read-back confirms STEP-P4-005 activation and predecessor closure consistency
+    basis: CHG-P4-STEP-005-AUTHORIZATION-20260919 + Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY — 2026-09-19 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - PH-P4
+      - STEP-P4-004
+      - STEP-P4-005
+      - STEP-P4-006
+      - TO-P4-005
+      - TO-P4-006
+      - AR-P4-009
+      - CURRENT_CHECKPOINT
+      - README
+      - docs/phases/PH-P4.md
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+    verified_state:
+      predecessor: STEP-P4-004 COMPLETE / VERIFIED; TO-P4-005 VERIFIED / COMPLETE; AR-P4-009 APPROVED / VERIFIED
+      current_step: STEP-P4-005 ACTIVE / AUTHORIZED
+      active_task_order: TO-P4-006
+      next_step: STEP-P4-006 NOT YET AUTHORIZED
+      architecture: DOC-V2-ARCH-001 RATIFIED / FROZEN
+    repository_commit_before_this_entry: d989a67a30c44fb3f7b83a1ffd810dbd9641763f
+    vps_effect: none; no VPS/SentinelX action performed
+    scope_effect: no STEP-P4-006 or later functionality authorized or implemented
+    synchronization_result: CURRENT_CHECKPOINT, PH-P4, phases.yaml, artifacts.yaml, README.md and Change Ledger agree on the active authorization boundary.
