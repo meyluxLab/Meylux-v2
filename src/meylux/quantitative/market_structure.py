@@ -198,14 +198,18 @@ class MarketStructureEngine:
                     elif fvg.direction=="bearish" and candle.high>=fvg.lower_bound:
                         hit="FULLY_MITIGATED" if candle.high>=fvg.upper_bound else "PARTIALLY_MITIGATED"
                     if hit is None: continue
-                    if current=="ACTIVE":
-                        part=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle="PARTIALLY_MITIGATED",source=fvg.identity,reason="wick_based_mitigation",index=i)
-                        if part.identity not in seen: seen.add(part.identity); bar_events.append(part)
-                        fvg_lifecycle[fvg.identity]="PARTIALLY_MITIGATED"; current="PARTIALLY_MITIGATED"
-                    if current=="PARTIALLY_MITIGATED" and hit=="FULLY_MITIGATED":
+                    if hit=="FULLY_MITIGATED":
+                        # A first-touch candle that traverses the entire zone is a
+                        # single terminal transition: ACTIVE -> FULLY_MITIGATED.
+                        # It must not manufacture an intermediate PARTIALLY_MITIGATED
+                        # fact for the same observed candle.
                         full=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle="FULLY_MITIGATED",source=fvg.identity,reason="wick_based_full_mitigation",index=i)
                         if full.identity not in seen: seen.add(full.identity); bar_events.append(full)
                         fvg_lifecycle[fvg.identity]="FULLY_MITIGATED"; active_fvgs.remove(fvg)
+                    elif hit=="PARTIALLY_MITIGATED" and current=="ACTIVE":
+                        part=self._event("FVG_LIFECYCLE",candle,candle.close_time,lower=fvg.lower_bound,upper=fvg.upper_bound,direction=fvg.direction,lifecycle="PARTIALLY_MITIGATED",source=fvg.identity,reason="wick_based_mitigation",index=i)
+                        if part.identity not in seen: seen.add(part.identity); bar_events.append(part)
+                        fvg_lifecycle[fvg.identity]="PARTIALLY_MITIGATED"
             phase_trace.append("liquidity")
             for e in bar_events:
                 if e.event_type=="SWING_HIGH":
