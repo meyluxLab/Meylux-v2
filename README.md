@@ -15,8 +15,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 1 — Infrastructure Foundation:** `CLOSED / VERIFIED`.
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
-- **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `ACTIVE / AUTHORIZED`. `STEP-P4-001` and `STEP-P4-002` are `COMPLETE / VERIFIED`; P4-002 was independently re-verified under `AR-P4-003` after the targeted `TO-P4-003` correction; `STEP-P4-003` is `COMPLETE / VERIFIED` under `TO-P4-004` / `AR-P4-006`; `STEP-P4-004` is `COMPLETE / VERIFIED` under `TO-P4-005` / `AR-P4-009`; `STEP-P4-005` is `COMPLETE / VERIFIED` under `TO-P4-006` / `AR-P4-011`; `STEP-P4-006` is `ACTIVE / AUTHORIZED` under `TO-P4-007`.
-- **Active Task Order:** `TO-P4-008`. **Completed Task Order:** `TO-P4-006` (verified under `AR-P4-011`; historical `TO-P4-005` / `TO-P4-004` / `TO-P4-003` / `TO-P4-002` retained for traceability).
+- **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
+- **Active Task Order:** `null`. **Completed Task Order:** `TO-P4-008` (verified under `AR-P4-015`; historical `TO-P4-007` / `TO-P4-006` / `TO-P4-005` / `TO-P4-004` / `TO-P4-003` / `TO-P4-002` retained for traceability).
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
