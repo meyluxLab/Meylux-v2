@@ -198,3 +198,29 @@ records:
       docker_job_id: 105903707001
       docker_result: SUCCESS
       coverage: strict 5/5 swings, HH/HL/LH/LL, state machine, BOS/CHOCH/MSS, FVG, Order Block, Breaker, liquidity, canonical-gap quarantine, zero-lookahead timing, append-only invalidation, malformed/non-finite input, pinned 60-candle golden traces and exact replay
+
+  - stable_id: TST-P4-004
+    canonical_name: Volume Profile, Order Flow & Derivatives Engine Tests
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-004
+    task_order: TO-P4-005
+    artifact_path: tests/test_p4_004_volume_orderflow_derivatives.py
+    traceability: TO-P4-005 / STEP-P4-004 / BR-P4-005 / AR-P4-009 / DOC-P4-003 / ADR-QUANTITATIVE-002
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      final_implementation_run_id: 35452347288
+      final_implementation_run_number: 897
+      final_implementation_job_id: 105921572784
+      final_implementation_commit: b6dd4e0ea55319b820c5e90b7de4da4dd62e0d48
+      final_implementation_result: SUCCESS
+      final_implementation_full_regression_test_count: 393
+      repository_validation_run_id: 35452412415
+      repository_validation_run_number: 899
+      repository_validation_job_id: 105921749365
+      repository_validation_commit: 9f42b28bc07e5bb58d2b257a841521dd0ffa940f
+      repository_validation_result: SUCCESS
+      repository_validation_full_regression_test_count: 393
+      focused_test_content_sha: 1502f598b261089b0941d74a6bd14ce55d38d31d
+      coverage: Volume Profile POC/VAH/VAL/HVN/LVN, Bar Delta/CVD, imbalance, evidence-bounded absorption, derivatives, malformed/non-finite input, contradictory temporal/instrument input, provenance lineage, half-open CVD boundaries, cross-instrument rejection, deterministic replay and no-lookahead
