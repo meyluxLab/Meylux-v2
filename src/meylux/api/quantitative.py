@@ -1,6 +1,7 @@
 from __future__ import annotations
 from dataclasses import dataclass
-from datetime import datetime, timezone\nfrom typing import Mapping
+from datetime import datetime, timezone
+from typing import Mapping
 import json
 from meylux.persistence.quantitative import QuantitativePersistence,_json
 @dataclass(frozen=True,slots=True)
@@ -18,7 +19,9 @@ class QuantitativeAPI:
         try: limit=int(query.get("limit","100"))
         except ValueError: return APIResponse(400,json.dumps({"error":"invalid_limit"},separators=(",",":")))
         try:
-            start=None if "start" not in query else datetime.fromisoformat(query["start"].replace("Z","+00:00"))\n            end=None if "end" not in query else datetime.fromisoformat(query["end"].replace("Z","+00:00"))\n            rows=await self._persistence.fetch_family(family,symbol,timeframe,start=start,end=end,limit=limit)
+            start=None if "start" not in query else datetime.fromisoformat(query["start"].replace("Z","+00:00"))
+            end=None if "end" not in query else datetime.fromisoformat(query["end"].replace("Z","+00:00"))
+            rows=await self._persistence.fetch_family(family,symbol,timeframe,start=start,end=end,limit=limit)
             return APIResponse(200,json.dumps([_json(dict(r)) for r in rows],sort_keys=True,separators=(",",":")))
         except ValueError as exc: return APIResponse(400,json.dumps({"error":"invalid_request","detail":str(exc)},separators=(",",":")))
         except Exception: return APIResponse(503,json.dumps({"error":"quantitative_data_unavailable"},separators=(",",":")))
