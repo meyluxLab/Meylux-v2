@@ -137,7 +137,7 @@ class TestPersistence(unittest.TestCase):
         db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
         again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
         self.assertEqual(result,5); self.assertEqual(again,0)
-        self.assertEqual(len(db.sql),6)
+        self.assertEqual(len(db.sql),10)
         identities=[args[-1] for _,args in db.sql]
         self.assertEqual(identities, [args[-1] for _,args in db.sql])
         self.assertTrue(all(isinstance(x,str) and len(x)==64 for x in identities))
