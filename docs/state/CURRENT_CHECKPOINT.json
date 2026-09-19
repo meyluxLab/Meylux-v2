@@ -223,11 +223,12 @@
     "STEP-P3-006 was independently verified by CONTROL under AR-P3-006 against final implementation commit 9f9a519e001c8a3a09e23fccf8f1c40f5f2d4283 and CI Core Run #480; Closure Synchronization is complete.",
     "TO-P3-006 is VERIFIED / COMPLETE and no active P3 Task Order remains.",
     "STEP-P3-007 is COMPLETE / VERIFIED under AR-P3-007; TO-P3-007 is VERIFIED / COMPLETE; Project Owner has authorized establishment and execution of STEP-P3-008 under TO-P3-008.",
-    "STEP-P4-003 is ACTIVE / AUTHORIZED under Project Owner Directive — AUTHORIZE STEP-P4-003 and TO-P4-004; STEP-P4-004 through STEP-P4-006 remain NOT YET AUTHORIZED."
+    "STEP-P4-003 is ACTIVE / AUTHORIZED under Project Owner Directive — AUTHORIZE STEP-P4-003 and TO-P4-004; STEP-P4-004 through STEP-P4-006 remain NOT YET AUTHORIZED.",
+    "DOC-P4-002 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-001 following the Project Owner delegation dated 2026-09-19; TO-P4-004 implementation may proceed against the ratified semantic boundary, while STEP-P4-004 through STEP-P4-006 remain unauthorized."
   ],
   "deferred_decisions": [],
   "last_verified_commit": "4cbeecee0704c7fb2a7b678b8b2f160c8b000b68",
-  "updated_at_utc": "2026-09-19T09:25:00Z",
+  "updated_at_utc": "2026-09-19T11:19:00Z",
   "phase_4_status": "ACTIVE / AUTHORIZED",
   "phase_4_definition": "docs/phases/PH-P4.md"
 }
