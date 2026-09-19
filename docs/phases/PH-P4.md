@@ -95,12 +95,12 @@ The Step must establish the minimum authoritative foundation without prematurely
 ### `STEP-P4-002` — Technical Indicators, Statistical & Volatility Engine
 
 **Order:** 2
-**Status:** ACTIVE / CORRECTION REQUIRED
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P4-001` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P4-003`
-**Completed Task Order:** `TO-P4-002` (historical closure record)
-**Completion Audit:** `AR-P4-002` (historical audit; current verification under correction)
+**Active Task Order:** `null`
+**Completed Task Order:** `TO-P4-003` (targeted correction; `TO-P4-002` retained as historical closure record)
+**Completion Audit:** `AR-P4-003` (independent correction re-verification; `AR-P4-002` retained as historical audit)
 **Activation basis:** Project Owner Directive — Authorize STEP-P4-002 / Targeted Correction and Reverification
 **Canonical Task Order:** `docs/task-orders/TO-P4-003.md`
 
@@ -194,7 +194,7 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 ## Current Step Boundary After P4-002 Closure
 
-STEP-P4-002 is COMPLETE / VERIFIED under AR-P4-002. PH-P4 remains ACTIVE / AUTHORIZED. No Phase-4 Task Order is active. STEP-P4-003 is the next sequential Step but remains NOT YET AUTHORIZED; no implementation or authorization is implied by this closure.
+STEP-P4-002 is COMPLETE / VERIFIED under AR-P4-003. PH-P4 remains ACTIVE / AUTHORIZED. No Phase-4 Task Order is active. STEP-P4-003 is the next sequential Step but remains NOT YET AUTHORIZED; no implementation or authorization is implied by this closure. Historical AR-P4-002 remains preserved for traceability; the TO-P4-003 correction did not authorize or implement STEP-P4-003.
 
 ## Standing Role Operating Rules — ADR-GOVERNANCE-013
 
@@ -212,4 +212,4 @@ Every substantive response must end with the `--- STANDING RULES CHECK ---` foot
 
 ## Current Phase Boundary
 
-PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED. No Phase-4 Task Order is active. STEP-P4-003 through STEP-P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
+PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED, with STEP-P4-002 re-verified under AR-P4-003. No Phase-4 Task Order is active. STEP-P4-003 through STEP-P4-006 remain NOT YET AUTHORIZED until their governed predecessor and activation conditions are satisfied.
