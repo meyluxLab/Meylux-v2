@@ -1069,3 +1069,16 @@ records:
     artifact_path: docs/audits/AR-P4-011.md
     traceability: BR-P4-006 / TO-P4-006 / PH-P4 / STEP-P4-005 / AR-P4-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+
+  - stable_id: TO-P4-007
+    canonical_name: Task Order — Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-007.md
+    traceability: PH-P4 / STEP-P4-006 / STEP-P4-005 / TO-P4-006 / AR-P4-011 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-006 AND DELEGATE FULL OPERATIONAL WORKFLOW AUTHORITY
+    status: AUTHORIZED TO EXECUTE
+  - stable_id: STEP-P4-006
+    canonical_name: Quant Orchestration, Multi-Timeframe Runtime, Persistence, API, Replay & G-4 Closure
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P4.md
+    traceability: PH-P4 / STEP-P4-005 / TO-P4-006 / AR-P4-011 / TO-P4-007 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE PH-P4 / STEP-P4-006 AND DELEGATE FULL OPERATIONAL WORKFLOW AUTHORITY
+    status: ACTIVE / AUTHORIZED
