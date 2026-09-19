@@ -1380,3 +1380,24 @@ entries:
     vps_effect: none; no VPS/SentinelX action performed
     scope_effect: no STEP-P4-006 or later functionality authorized or implemented
     synchronization_result: CURRENT_CHECKPOINT, PH-P4, phases.yaml, artifacts.yaml, README.md and Change Ledger agree on the active authorization boundary.
+
+  - id: CHG-P4-STEP-005-AUDIT-REQUEST-CHANGES-20260919
+    date_utc: '2026-09-19'
+    change_type: CONTROL_INDEPENDENT_AUDIT_REQUEST_CHANGES
+    subject: CONTROL audit of TO-P4-006 identifies incomplete Rule-5 evidence coverage
+    basis: BR-P4-006 + TO-P4-006 + AR-P4-010 + ADR-GOVERNANCE-013
+    affected_ids:
+      - STEP-P4-005
+      - TO-P4-006
+      - BR-P4-006
+      - AR-P4-010
+      - CURRENT_CHECKPOINT
+      - docs/registry/artifacts.yaml
+    findings:
+      - F-01: required direct edge/failure and previous-state transition coverage is incomplete
+      - F-02: Run #936 execution is independently corroborated by workflow/job metadata; exact terminal test-log line is not independently restated
+    disposition: REQUEST CHANGES / NOT VERIFIED
+    current_state: PH-P4 ACTIVE / AUTHORIZED; STEP-P4-005 ACTIVE / AUTHORIZED; TO-P4-006 AUTHORIZED TO EXECUTE; BR-P4-006 PRODUCED / NOT VERIFIED; AR-P4-010 REQUEST CHANGES / NOT VERIFIED
+    producer_boundary: correction remains inside TO-P4-006; Producer must not modify CURRENT_CHECKPOINT or perform closure synchronization
+    scope_effect: no STEP-P4-006 activation or future-scope implementation authorized
+    vps_effect: none; no VPS/SentinelX action performed
