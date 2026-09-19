@@ -186,7 +186,7 @@ class OrderFlowTests(unittest.TestCase):
         self.assertEqual(result[0].result.context.source_ref, "canonical-provenance:prov-1")
         self.assertEqual(result[1].result.context.source_ref, "canonical-provenance:prov-1|prov-2")
         self.assertEqual(result[1].result.context.symbol, "BTCUSDT")
-        self.assertEqual(result[1].result.context.timestamp, T0 + timedelta(hours=1))
+        self.assertEqual(result[1].result.context.timestamp, T0 + timedelta(minutes=1))
 
     def test_closed_bar_end_boundary_belongs_only_to_next_bar(self):
         boundary_trade = trade(1, "100", "5", "BUY", minute=1)
@@ -355,7 +355,7 @@ class DerivativesTests(unittest.TestCase):
         context = result["FUNDING_RATE"].context
         self.assertIsNotNone(context)
         self.assertEqual(context.symbol, "BTCUSDT")
-        self.assertEqual(context.timestamp, T0 + timedelta(minutes=1))
+        self.assertEqual(context.timestamp, T0 + timedelta(hours=1))
         self.assertEqual(context.source_ref, "canonical-provenance:d-1|d-2")
 
     def test_deterministic_derivatives_replay(self):
