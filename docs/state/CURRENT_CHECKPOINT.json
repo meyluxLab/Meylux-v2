@@ -227,10 +227,7 @@
     "TO-P4-008",
     "AR-P4-015"
   ],
-  "unverified_artifacts": [
-    "AR-P4-012",
-    "AR-P4-013"
-  ],
+  "unverified_artifacts": [],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID."
   ],
@@ -267,7 +264,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-19T23:40:00Z",
+  "updated_at_utc": "2026-09-19T23:45:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED"
