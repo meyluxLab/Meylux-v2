@@ -966,6 +966,13 @@ records:
     artifact_path: tests/test_p4_003_market_structure.py
     traceability: TO-P4-004 / STEP-P4-003 / BR-P4-004 / AR-P4-006
     status: VERIFIED
+  - stable_id: TST-P4-004
+    canonical_name: Volume Profile, Order Flow & Derivatives Engine Tests
+    entity_type: TST
+    artifact_path: tests/test_p4_004_volume_orderflow_derivatives.py
+    traceability: TO-P4-005 / STEP-P4-004 / BR-P4-005 / AR-P4-009 / DOC-P4-003 / ADR-QUANTITATIVE-002
+    status: VERIFIED
+
   - stable_id: AR-P4-005
     canonical_name: CONTROL Independent Re-Audit — TO-P4-004 / STEP-P4-003
     entity_type: AR
@@ -989,13 +996,13 @@ records:
     canonical_name: Task Order — Volume Profile, Order Flow & Derivatives Engine
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-005.md
-    traceability: PH-P4 / STEP-P4-004 / STEP-P4-003 / AR-P4-006 / DOC-P4-003 / ADR-QUANTITATIVE-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE STEP-P4-004
+    traceability: PH-P4 / STEP-P4-004 / STEP-P4-003 / AR-P4-006 / AR-P4-009 / DOC-P4-003 / ADR-QUANTITATIVE-002 / DOC-V2-ARCH-001 / DOC-P4-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — AUTHORIZE STEP-P4-004
     status: VERIFIED / COMPLETE
   - stable_id: STEP-P4-004
     canonical_name: Volume Profile, Order Flow & Derivatives Engine
     entity_type: STEP
     artifact_path: docs/phases/PH-P4.md
-    traceability: PH-P4 / STEP-P4-004 / TO-P4-005 / AR-P4-006 / DOC-P4-003 / ADR-QUANTITATIVE-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    traceability: PH-P4 / STEP-P4-004 / TO-P4-005 / AR-P4-006 / AR-P4-009 / DOC-P4-003 / ADR-QUANTITATIVE-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: COMPLETE / VERIFIED
   - stable_id: AR-P4-007
     canonical_name: CONTROL Independent Audit — TO-P4-005 / STEP-P4-004
@@ -1010,7 +1017,6 @@ records:
     artifact_path: docs/audits/AR-P4-008.md
     traceability: BR-P4-005 / AR-P4-007 / TO-P4-005 / PH-P4 / STEP-P4-004 / DOC-P4-003 / ADR-QUANTITATIVE-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: REQUEST CHANGES / NOT VERIFIED
-    status: REQUEST CHANGES / NOT VERIFIED
   - stable_id: AR-P4-009
     canonical_name: CONTROL Final Independent Verification — TO-P4-005 / STEP-P4-004
     entity_type: AR
@@ -1022,5 +1028,5 @@ records:
     canonical_name: Build Report — Volume Profile, Order Flow & Derivatives Engine
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-005.md
-    traceability: TO-P4-005 / PH-P4 / STEP-P4-004
+    traceability: TO-P4-005 / PH-P4 / STEP-P4-004 / AR-P4-009
     status: VERIFIED
