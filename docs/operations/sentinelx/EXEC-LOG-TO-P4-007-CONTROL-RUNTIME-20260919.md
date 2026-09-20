@@ -293,3 +293,78 @@ No Phase-5 authorization or implementation was introduced.
 - G-4: ESTABLISHED / VERIFIED.
 - STEP-P4-006: ready for closure synchronization under AR-P4-015.
 - Phase 5: NOT AUTHORIZED.
+
+
+## 13. Final VPS State — Owner Post-Closure Read-Back
+
+### 13.1 Repository / deployment relation
+- SentinelX host: server-l6rf / host_3774c70bc3624713
+- VPS checkout HEAD/deployed revision: fb7d9847498323bec067ba98a1e2729f869c0697
+- Remote main at this read-back: 217a8a10d467a75023fbb7ddbe7ac1c4a915469e
+- Divergence: deployed checkout is 52 commits behind remote main; git diff is documentation-only. No runtime source/configuration file differs in the inspected compare.
+- VPS worktree: clean; no tracked or untracked runtime artifacts observed.
+- Decision: do not synchronize/rebuild solely for documentation-only governance changes. Runtime source hashes inside API and worker-quant images matched the deployed git revision for BinanceAdapter, QuantitativeOrchestrator, QuantWorker, HTTP adapter and quantitative persistence.
+
+### 13.2 Compose / service state
+- Services running: api, worker-quant, collector, worker-ai, db, redis.
+- DB and Redis report healthy.
+- Inspected service restart counts: zero; OOMKilled=false; no crash-loop evidence.
+- Last 6-hour error-pattern scan for api, worker-quant, collector and worker-ai: zero matches for error/traceback/fatal/panic/exception/critical.
+- Collector remains a foundation service only. The 156 canonical candles are therefore a governed point-in-time slice, not evidence of continuous collector completeness.
+- Four historical compose-api-run one-off containers remain running from prior probes. They were not removed because this post-closure read-back was explicitly non-mutating and no cleanup mutation was separately authorized.
+
+### 13.3 Database
+- Migrations present/applied: 0001_database_foundation, 0002_raw_acquisition_staging, 0003_canonical_persistence_event_outbox, 0004_canonical_quality_state_alignment, 0005_quantitative_foundation.
+- Raw acquisition inventory: 2995 total = 1498 historical pre-correction records + 1497 corrected post-TO-P4-008 records.
+- Historical pre-correction records are distinguishable by the original payload shape (k/row markers absent) and are retained unchanged as inert historical evidence; corrected records contain the provider-boundary k/row interval context.
+- Canonical inventory: 156 = 116 15m + 31 1h + 9 4h; all quality state VALID.
+- Quantitative inventory: 3 indicator vectors + 1 market-structure event + 1 regime state.
+- No synthetic rows were observed in the governed inventory.
+- Quantitative/canonical truth tables: meylux_app has SELECT/INSERT and no UPDATE/DELETE/TRUNCATE.
+- Two application-role grant exceptions were observed and not mutated: raw_acquisition_events has UPDATE inherited from the existing meylux_admin default privilege; canonical_event_outbox has explicit UPDATE required by migration 0003. This is a security-boundary drift relative to the Owner-requested blanket SELECT/INSERT-only statement and requires separate authority before mutation.
+- No direct database mutation was performed during this read-back.
+
+### 13.4 Redis / queue / DLQ
+- quantitative-candle-close consumer group pending: 0.
+- queue lag: 0.
+- Idempotency markers for CONTROL-P4-008-REAL-MTF-001, -002, -003 and CONTROL-P4-FAILURE-PROBE-20260919 remain retained.
+- Quantitative DLQ retains the historical failure/retry evidence from the controlled failure probe; it was not purged or rewritten.
+- Retry keys for the controlled failure probe remain retained.
+- No queue/DLQ cleanup mutation was performed.
+
+### 13.5 Host security / hygiene
+- Public host listener inspection exposed SSH port 22 only; DB/Redis/application ports were not host-published.
+- /srv/meylux-v2/.env permissions: 0600 root:root.
+- Secret-pattern scan found no secret assignments in the inspected EXEC-LOG or available history locations.
+- Host clock: UTC; system clock synchronized; NTP active.
+- Disk: 76G total, approximately 5.0G used (7%); approximately 67G available.
+- Memory: approximately 14GiB available.
+- Docker log driver: json-file for inspected services.
+- Docker system state: 6 images active, no reclaimable images; 2 active volumes; 150.9MB reclaimable build cache.
+- No stray benchmark/probe source scripts outside normal repository source/test/migration/documentation locations were identified. Historical one-off runtime containers are recorded above and intentionally retained pending explicit cleanup authority.
+- SentinelX state at final inspection: host operational; UTC 2026-09-20T06:08:12Z; load average 0.11/0.14/0.09.
+
+### 13.6 Evidence corrections required by Owner read-back
+- The 22.690451 ms result covers only the required replay-sized 116 primary 15m + 31 1h + 9 4h workload. It does not represent the 1000-primary diagnostic.
+- The separate 1000-primary diagnostic measured 704.670 ms.
+- Component measurements on that diagnostic were EMA 537.506 ms, RSI 34.002 ms, ATR 32.012 ms and Market Structure 440.568 ms; these remain diagnostic evidence only and no engine was reopened.
+- The orchestrator currently computes EMA/RSI/ATR and Market Structure on the primary series. Higher-timeframe inputs are used for temporal alignment, not separate HTF indicator-vector calculation.
+- Therefore no 1H or 4H HTF indicator vector was claimed as computed. For the configured periods, 31 1H candles are sufficient for EMA-20/RSI-14/ATR-14 input length, while 9 4H candles are insufficient for those configured lookbacks. The implementation intentionally does not compute separate HTF indicator vectors in this orchestration boundary.
+- The final 156-candle canonical dataset is a controlled point-in-time real-data slice supplied to the runtime; it is not a claim of continuous collector completeness.
+
+### 13.7 Final VPS disposition
+- Runtime health: VERIFIED.
+- Runtime source/image correspondence: VERIFIED against deployed revision.
+- DB migration state: VERIFIED.
+- Canonical and quantitative counts: VERIFIED.
+- Redis pending/lag: VERIFIED zero.
+- Secret/hygiene scan: VERIFIED within the read-only inspection boundary.
+- Deployment synchronization to current main: NOT REQUIRED for runtime correctness because the divergence is documentation-only.
+- Security grant blanket SELECT/INSERT-only condition: NOT FULLY SATISFIED; pre-existing raw-staging UPDATE/default-privilege and canonical-event-outbox UPDATE exceptions were observed and deliberately left unchanged pending separate authorization.
+- Cleanup of four historical one-off containers: NOT PERFORMED under the non-mutating read-back boundary.
+- No VPS mutation occurred during this final read-back.
+
+## 14. Final read-back conclusion
+The repository lifecycle/traceability corrections requested by the Project Owner are being synchronized independently of runtime code. The deployed runtime itself remains evidence-consistent with the verified implementation baseline. Two VPS hygiene/security items remain explicitly recorded rather than silently changed: application-role UPDATE exceptions and historical one-off probe containers.
+
+Phase 5 remains NOT AUTHORIZED. No engine, Decimal policy, frozen architecture or Producer implementation was changed.
