@@ -1146,12 +1146,25 @@ records:
     canonical_name: Task Order — Post-Closure Security Boundary Hardening
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-009.md
-    traceability: PH-P4 / STEP-P4-006 / OQ-P4-006-APP-GRANTS / TO-P4-008 / AR-P4-015 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Disposition of post-closure items (legacy probe containers; OQ-P4-006-APP-GRANTS)
-    status: AUTHORIZED / ACTIVE
+    traceability: PH-P4 / STEP-P4-006 / OQ-P4-006-APP-GRANTS / TO-P4-008 / AR-P4-015 / AR-P4-016 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Disposition of post-closure items (legacy probe containers; OQ-P4-006-APP-GRANTS)
+    status: VERIFIED / COMPLETE
 
   - stable_id: BR-P4-009
     canonical_name: Build Report — Post-Closure Security Boundary Hardening
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-009.md
-    traceability: TO-P4-009 / PH-P4 / STEP-P4-006 / AR-P4-015
-    status: IMPLEMENTED / TESTED — CONTROL AUDIT PENDING
+    traceability: TO-P4-009 / PH-P4 / STEP-P4-006 / AR-P4-015 / AR-P4-016
+    status: VERIFIED
+
+  - stable_id: AR-P4-016
+    canonical_name: CONTROL Independent Audit & Runtime Verification — TO-P4-009
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-016.md
+    traceability: BR-P4-009 / TO-P4-009 / PH-P4 / STEP-P4-006 / OQ-P4-006-APP-GRANTS / EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+  - stable_id: TST-P4-009
+    canonical_name: Post-Closure Application-Role Grant Hardening Tests
+    entity_type: TST
+    artifact_path: tests/test_p4_009_security_grants.py
+    traceability: TO-P4-009 / BR-P4-009 / AR-P4-016
+    status: VERIFIED
