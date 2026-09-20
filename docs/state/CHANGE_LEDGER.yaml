@@ -1871,3 +1871,37 @@ entries:
     implementation_status: ACTIVE
     producer: ROL-V2-002
     control_runtime_boundary: SentinelX only
+
+  - ledger_id: CL-POSTCLOSURE-TO-P4-009-CLOSURE
+    recorded_at: "2026-09-20"
+    authority: CONTROL / REVIEWER
+    action: "INDEPENDENT AUDIT, SENTINELX APPLICATION, RUNTIME VERIFICATION AND CLOSURE"
+    task_order: TO-P4-009
+    build_report: BR-P4-009
+    audit_report: AR-P4-016
+    phase: PH-P4
+    step: STEP-P4-006
+    closure_preserved: true
+    owner_open_question: OQ-P4-006-APP-GRANTS
+    disposition: RESOLVED
+    evidence:
+      migration: 0006_application_role_grant_hardening
+      raw_acquisition_events_update: DENIED
+      raw_acquisition_events_select_insert: ALLOWED
+      future_table_update_inheritance: DENIED
+      outbox_table_update: DENIED
+      outbox_publication_columns_update: ALLOWED — published_at, published_stream_id
+      outbox_unrelated_update: DENIED
+      relay_probe: UPDATE 1
+      migration_record_count: 1
+      canonical_count: 156
+      quantitative_inventory: 3/1/1
+      db_connections: 4
+      service_inventory: six governed services present; db/redis healthy
+      error_scan: CLEAN
+    runtime_application: SentinelX only
+    runtime_source_observation: "Deployed /srv/meylux-v2 migration mount predates repository TO-P4-009; authorized SQL was applied directly through SentinelX. No unapproved source/deployment synchronization performed."
+    phase_status_unchanged: PH-P4 CLOSED / VERIFIED
+    step_status_unchanged: STEP-P4-006 COMPLETE / VERIFIED
+    g4_status_unchanged: G-4 ESTABLISHED / VERIFIED
+    phase5_authorized: false
