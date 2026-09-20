@@ -22,3 +22,5 @@ GRANT UPDATE (published_at, published_stream_id)
 INSERT INTO meylux.schema_migrations(version)
 VALUES ('0006_application_role_grant_hardening')
 ON CONFLICT(version) DO NOTHING;
+
+-- CI Docker Foundation executes its own database lifecycle after repository self-checks.
