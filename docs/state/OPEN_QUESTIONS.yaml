@@ -76,3 +76,19 @@ items:
     constraints:
       - "Do not infer, invent, or retroactively assign a Constitution Stable ID."
       - "This is a deferred governance identity matter and does not authorize runtime or Phase-5 work."
+
+  - question: "OQ-P4-006-APP-GRANTS — Should the pre-existing meylux_app UPDATE privileges on raw_acquisition_events and the explicit canonical_event_outbox UPDATE privilege be narrowed/retained after the Owner requested a SELECT/INSERT-only application-role boundary?"
+    status: OPEN
+    affected_phase: PH-P4
+    affected_step: STEP-P4-006
+    authority: Project Owner / security-boundary authority
+    evidence: "Final SentinelX read-back observed raw_acquisition_events UPDATE via meylux_admin default privileges and canonical_event_outbox UPDATE via migration 0003; DELETE/TRUNCATE were not granted. No mutation was performed."
+    resolution: null
+
+  - question: "OQ-P4-006-MEXC-RESOURCEWARNING — How should the existing MEXC test ResourceWarning observed during the final 448-test repository regression be eliminated or formally accepted?"
+    status: OPEN
+    affected_phase: PH-P4
+    affected_step: STEP-P4-006
+    authority: CONTROL / Project Owner if scope expansion is required
+    evidence: "Final 448-test regression passed; a ResourceWarning from an existing MEXC test file was observed without test failure. No P4 implementation defect was attributed to it."
+    resolution: null

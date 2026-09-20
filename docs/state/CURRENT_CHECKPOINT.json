@@ -232,7 +232,10 @@
   ],
   "unverified_artifacts": [],
   "open_questions": [
-    "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID."
+    "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
+    "OQ-P4-006-APP-GRANTS",
+    "OQ-P4-006-MEXC-RESOURCEWARNING",
+    "OQ-GOV-CONSTITUTION-STABLE-ID"
   ],
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
@@ -257,19 +260,51 @@
     "STEP-P4-003 was independently verified under AR-P4-006 against DOC-P4-002 / ADR-QUANTITATIVE-001, final implementation/evidence baseline c00c36a31414f9e887a4b656ff87287afb5839cb, Core Run #836 and Docker Foundation Run #211; CONTROL-owned closure synchronization is complete.",
     "STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006; TO-P4-004 is VERIFIED / COMPLETE; STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 and AR-P4-009.",
     "DOC-P4-003 is RATIFIED / AUTHORIZED under ADR-QUANTITATIVE-002 as the deterministic semantic authority for STEP-P4-004; no higher-order architecture or canonical contract authority was amended.",
-    "STEP-P4-006 is COMPLETE / VERIFIED under AR-P4-015; TO-P4-007 and TO-P4-008 are VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED.",
     "CONTROL verified the governed BTCUSDT real-data G-4 workload: 116 closed 15m primary candles, 31 closed 1h candles and 9 closed 4h candles, with P2 raw persistence, P3 validation/normalization/quality, canonical persistence, deterministic orchestration/replay, worker processing/restart recovery, read-only API and security evidence.",
     "Real-data replay-sized orchestration averaged 22.690451 ms across five executions, below the roadmap <50ms full-vector target; the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied for the existing EMA implementation and remains governed by DD-V2-P4-006-PERFORMANCE-TARGET without engine reopening.",
-    "Phase 4 closure synchronization is CONTROL-owned and complete under ADR-GOVERNANCE-012; Phase 5 remains NOT AUTHORIZED.",
     "PH-P4 is CLOSED / VERIFIED; STEP-P4-001 through STEP-P4-006 are COMPLETE / VERIFIED; TO-P4-008 is VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED; active_task_order is null.",
-    "The Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative Stable ID has been created."
+    "The Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative Stable ID has been created.",
+    "PH-P4 is CLOSED / VERIFIED; STEP-P4-001 through STEP-P4-006 are COMPLETE / VERIFIED; TO-P4-008 is VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED; active_task_order is null.",
+    "The Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative Stable ID has been created.",
+    "Final SentinelX read-back found deployed runtime revision fb7d9847498323bec067ba98a1e2729f869c0697 clean and runtime-source-matched; remote main divergence is documentation-only, so no runtime synchronization/rebuild was required.",
+    "Post-closure application-role grant exception remains explicitly tracked under OQ-P4-006-APP-GRANTS; no VPS security mutation was performed without separate authority.",
+    "Four historical compose-api-run probe containers remain explicitly recorded as non-mutated hygiene carry-over.",
+    "Phase 5 remains NOT AUTHORIZED."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-20T06:05:40.806Z",
+  "updated_at_utc": "2026-09-20T06:10:04.219Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
-  "g4_status": "ESTABLISHED / VERIFIED"
+  "g4_status": "ESTABLISHED / VERIFIED",
+  "post_closure_readback": {
+    "owner_readback_date": "2026-09-20",
+    "repository_base_readback_commit": "6e9f314c4dd479494039ade4a9f0c8dd16bb56f5",
+    "vps_deployed_revision": "fb7d9847498323bec067ba98a1e2729f869c0697",
+    "vps_remote_main_at_readback": "217a8a10d467a75023fbb7ddbe7ac1c4a915469e",
+    "vps_divergence": "documentation-only",
+    "runtime_sync_required": false,
+    "db_counts": {
+      "raw_total": 2995,
+      "historical_pre_correction": 1498,
+      "corrected_post_to_p4_008": 1497,
+      "canonical_total": 156,
+      "canonical_15m": 116,
+      "canonical_1h": 31,
+      "canonical_4h": 9,
+      "indicator_vectors": 3,
+      "structure_events": 1,
+      "regime_states": 1
+    },
+    "redis": {
+      "quant_pending": 0,
+      "quant_lag": 0
+    },
+    "security_drift_tracked": "OQ-P4-006-APP-GRANTS",
+    "hygiene_drift_tracked": "four historical compose-api-run containers retained without mutation",
+    "mexc_warning_tracked": "OQ-P4-006-MEXC-RESOURCEWARNING"
+  },
+  "last_governance_sync_base_commit": "6e9f314c4dd479494039ade4a9f0c8dd16bb56f5"
 }

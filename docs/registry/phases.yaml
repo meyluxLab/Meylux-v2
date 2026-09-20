@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: ACTIVE / AUTHORIZED
+status: CLOSED / VERIFIED
 records:
   - sid: PH-P0
     logical_name: Phase 0
