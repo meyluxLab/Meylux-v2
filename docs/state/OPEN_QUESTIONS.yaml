@@ -78,12 +78,14 @@ items:
       - "This is a deferred governance identity matter and does not authorize runtime or Phase-5 work."
 
   - question: "OQ-P4-006-APP-GRANTS — Should the pre-existing meylux_app UPDATE privileges on raw_acquisition_events and the explicit canonical_event_outbox UPDATE privilege be narrowed/retained after the Owner requested a SELECT/INSERT-only application-role boundary?"
-    status: OPEN
+    status: RESOLVED
     affected_phase: PH-P4
     affected_step: STEP-P4-006
     authority: Project Owner / security-boundary authority
-    evidence: "Final SentinelX read-back observed raw_acquisition_events UPDATE via meylux_admin default privileges and canonical_event_outbox UPDATE via migration 0003; DELETE/TRUNCATE were not granted. No mutation was performed."
-    resolution: null
+    evidence: "Owner Decision 2 authorized bounded hardening under TO-P4-009. CONTROL independently audited BR-P4-009, applied the exact 0006 privilege hardening through SentinelX, and verified the resulting runtime grants and relay behavior."
+    resolution: "Resolved under TO-P4-009 and AR-P4-016: raw_acquisition_events UPDATE is denied to meylux_app while SELECT/INSERT remain allowed; meylux_admin future-table UPDATE inheritance is removed; canonical_event_outbox table UPDATE is denied and UPDATE is retained only on published_at and published_stream_id. Actual relay SQL succeeded under meylux_app. The hardening did not invalidate PH-P4, STEP-P4-006, or G-4 closure."
+    resolution_artifact: AR-P4-016
+    task_order: TO-P4-009
 
   - question: "OQ-P4-006-MEXC-RESOURCEWARNING — How should the existing MEXC test ResourceWarning observed during the final 448-test repository regression be eliminated or formally accepted?"
     status: OPEN
