@@ -61,7 +61,13 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
 
     @classmethod
     def _run(cls, args: list[str], *, check: bool = True, env: dict[str, str] | None = None) -> subprocess.CompletedProcess[str]:
-        return subprocess.run(args, text=True, capture_output=True, check=check, env=env)
+        result = subprocess.run(args, text=True, capture_output=True, check=False, env=env)
+        if check and result.returncode != 0:
+            raise AssertionError(
+                f"command failed ({result.returncode}): {' '.join(args)}\\n"
+                f"stdout:\\n{result.stdout}\\nstderr:\\n{result.stderr}"
+            )
+        return result
 
     @classmethod
     def _start_database(cls) -> None:
