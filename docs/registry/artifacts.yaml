@@ -863,6 +863,13 @@ records:
     traceability: BR-P4-001 / TO-P4-001 / PH-P4 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
 
+  - stable_id: DOC-P4-006-OWNER-DIRECTIVE-20260920
+    canonical_name: Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary
+    entity_type: DOC
+    artifact_path: docs/decisions/PROJECT-OWNER-DIRECTIVE-P4-006-20260920.md
+    traceability: AR-P4-013 / TO-P4-007 / TO-P4-008 / PH-P4 / STEP-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+
   - stable_id: PH-P4
     canonical_name: Deterministic Quantitative & Market Structure Engine
     entity_type: PH
