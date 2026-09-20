@@ -26,8 +26,9 @@ records:
       min_ms: 16.798383
       max_ms: 31.998459
       full_vector_target_result: PASS
-      indicator_1000_bar_target_result: NOT SATISFIED — existing EMA boundary; no engine reopening authorized
+      indicator_1000_bar_target_result: NOT SATISFIED — EMA 537.506 ms, RSI 34.002 ms, ATR 32.012 ms on the 1000-primary diagnostic; Market Structure 440.568 ms was also measured above 5ms; no engine reopening authorized
       audit: AR-P4-015
+      scope_note: 22.690451 ms covers only the required 116/31/9 replay-sized workload; the separate 1000-primary diagnostic was 704.670 ms
 
     target_basis:
       indicator_target: '<5ms / indicator / 1000 bars'
