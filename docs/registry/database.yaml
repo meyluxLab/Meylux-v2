@@ -98,3 +98,25 @@ records:
       privilege_matrix: SELECT/INSERT allowed; UPDATE/DELETE denied
       control_audit: AR-P4-001
       status: VERIFIED
+
+  - stable_id: DB-P4-006-GRANT-HARDENING
+    canonical_name: P4-006 Application-Role Grant Hardening
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-009
+    migrations:
+      - 0006_application_role_grant_hardening
+    evidence:
+      raw_acquisition_events_update: DENIED
+      raw_acquisition_events_select_insert: ALLOWED
+      meylux_admin_future_table_update: DENIED
+      canonical_event_outbox_table_update: DENIED
+      canonical_event_outbox_publication_columns_update: ALLOWED — published_at, published_stream_id
+      canonical_event_outbox_unrelated_update: DENIED
+      relay_runtime_probe: UPDATE 1
+      migration_record_count: 1
+      migration_order: 0001..0006
+      control_audit: AR-P4-016
+      execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+      status: VERIFIED
