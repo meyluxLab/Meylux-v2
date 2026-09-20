@@ -21,10 +21,13 @@ records:
     step: STEP-P4-006
     task_order: TO-P4-007
     evidence:
-      application_update_delete_privileges: DENIED
+      application_update_delete_privileges: DENIED on canonical and quantitative truth tables
+      application_grant_boundary_exception: raw_acquisition_events has UPDATE inherited from the pre-existing meylux_admin default privilege; canonical_event_outbox has explicit UPDATE required by migration 0003
+      delete_truncate_privileges: DENIED on the inspected application role
       direct_update_probe: REJECTED
       api_http_methods: GET_ONLY
       final_real_data_api_probe: GET 200 / POST 405 read_only
       secrets_in_evidence: NONE
+      owner_requested_select_insert_only: NOT FULLY OBSERVED — raw staging UPDATE exception remains; no mutation was performed pending separate authority
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
     status: VERIFIED
