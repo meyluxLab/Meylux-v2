@@ -452,10 +452,10 @@ entries:
     runtime_effect: no VPS/runtime execution; closure consisted of independent repository verification, audit issuance, registry reconciliation, checkpoint finalization, and mandatory peripheral synchronization
     v1_effect: none
 
-   - id: CHG-P3-STEP-008-ACTIVATE
-     date: 2026-09-18
-     type: GOVERNANCE_STATE_TRANSITION
-     scope: STEP-P3-008 activation and TO-P3-008 authorization
+  - id: CHG-P3-STEP-008-ACTIVATE
+    date_utc: 2026-09-18
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: STEP-P3-008 activation and TO-P3-008 authorization
      affected_ids:
        - PH-P3
        - STEP-P3-007
@@ -1613,11 +1613,11 @@ entries:
       - docs/state/OPEN_QUESTIONS.yaml
       - docs/state/DEFERRED_DECISIONS.yaml
     decision_a:
-      scope: governed BTCUSDT 15M + 1H + 4H historical path
+     subject: governed BTCUSDT 15M + 1H + 4H historical path
       boundary: existing P2 provider adapter -> P3 validation/normalization -> CanonicalPersistence
       prohibitions: no bypass, no synthetic/fabricated data, no private/authenticated market-data access, no trading/capital/custody/V1
     decision_b:
-      scope: CONTROL-owned runtime performance profiling and output-preserving orchestration optimization evaluation
+     subject: CONTROL-owned runtime performance profiling and output-preserving orchestration optimization evaluation
       prohibitions: no EMA/Market Structure engine reopening, no silent target revision
     resulting_state: STEP-P4-006 remains ACTIVE / AUTHORIZED; TO-P4-008 ACTIVE / AUTHORIZED; G-4 remains NOT ESTABLISHED; Phase 5 remains NOT AUTHORIZED
     minimum_g4_window_basis: 96 closed 15M evaluation bars + 20 closed 15M warm-up bars; at least 25 closed 1H and 7 closed 4H bars for the same one-day evaluation span plus one preceding closed HTF boundary
@@ -1761,3 +1761,48 @@ entries:
       deferred_decision: DD-V2-P4-006-PERFORMANCE-TARGET remains DEFERRED
       phase5: NOT AUTHORIZED
     closure_result: Final checkpoint read-back is internally consistent and contains no stale current-state assertion that STEP-P4-006 remains active. CONTROL closure synchronization is complete.
+
+
+  - id: CHG-P4-CLOSURE-READBACK-CORRECTION-20260920
+    date_utc: '2026-09-20'
+    change_type: GOVERNANCE_STATE_CORRECTION
+    subject: Correct prior final closure read-back overstatement and reconcile remaining lifecycle/traceability findings
+    basis: Project Owner post-closure independent read-back dated 2026-09-20 + AR-P4-015 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    affected_ids:
+      - PH-P4
+      - STEP-P4-006
+      - TO-P4-008
+      - CTR-P4-QUANT-CANDLE-CLOSE-1.0
+      - TST-P3-004
+      - TST-P3-005
+      - CTR-P2-001
+      - OQ-P4-006-REAL-DATA-PATH
+      - OQ-GOV-CONSTITUTION-STABLE-ID
+      - DD-V2-P4-006-PERFORMANCE-TARGET
+      - CURRENT_CHECKPOINT
+      - docs/phases/PH-P4.md
+      - docs/registry/phases.yaml
+      - docs/registry/artifacts.yaml
+      - docs/registry/contracts.yaml
+      - docs/registry/tests.yaml
+      - docs/state/DEFERRED_DECISIONS.yaml
+      - docs/state/OPEN_QUESTIONS.yaml
+      - docs/task-orders/TO-P4-008.md
+    correction:
+      prior_readback_entries: CHG-P4-STEP-006-CLOSURE-SYNC-FINAL-20260920; CHG-P4-STEP-006-CLOSURE-SYNC-FINAL-READBACK-20260920
+      prior_statement: "Those entries stated that no conflicting current-state record remained."
+      corrected_statement: "That assertion was overstated. At the time of those entries, lifecycle and traceability defects remained in phases.yaml, artifacts.yaml, contracts.yaml, PH-P4.md, TO-P4-008.md, DEFERRED_DECISIONS.yaml and CHANGE_LEDGER.yaml, and stale specialized-registry records were still present."
+      preservation: Historical closure entries remain unchanged; this entry is the authoritative correction and does not erase prior history.
+    final_repository_corrections:
+      - PH-P4 artifact lifecycle synchronized to CLOSED / VERIFIED.
+      - STEP-P4-006 active/completed/audit fields synchronized to null / TO-P4-008 / AR-P4-015.
+      - CTR-P4-QUANT-CANDLE-CLOSE-1.0 synchronized to VERIFIED.
+      - TO-P4-008 synchronized to VERIFIED / COMPLETE.
+      - P3/P2 lifecycle records TST-P3-004, TST-P3-005 and CTR-P2-001 synchronized to VERIFIED.
+      - PH-P4.md reconciled to closed Phase-4 state.
+      - DEFERRED_DECISIONS.yaml repaired to valid YAML and performance evidence scope expanded to EMA, RSI and ATR.
+      - Constitution Stable-ID question registered as an explicit open governance question without assigning an identity.
+      - CURRENT_CHECKPOINT timestamp and verified-artifact set synchronized.
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged.
+    runtime_effect: No VPS mutation was performed during this correction cycle before drift reporting; runtime state is recorded separately in the official EXEC-LOG.
+    phase5_effect: Phase 5 remains NOT AUTHORIZED.
