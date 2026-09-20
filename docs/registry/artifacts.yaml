@@ -1141,3 +1141,10 @@ records:
     artifact_path: docs/task-orders/TO-P4-008.md
     traceability: PH-P4 / STEP-P4-006 / TO-P4-007 / AR-P4-013 / OQ-P4-006-REAL-DATA-PATH / OQ-P4-006-PERFORMANCE / DD-V2-P4-006-PERFORMANCE-TARGET / DOC-V2-ARCH-001 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20
     status: VERIFIED / COMPLETE
+
+  - stable_id: TO-P4-009
+    canonical_name: Task Order — Post-Closure Security Boundary Hardening
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-009.md
+    traceability: PH-P4 / STEP-P4-006 / OQ-P4-006-APP-GRANTS / TO-P4-008 / AR-P4-015 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Disposition of post-closure items (legacy probe containers; OQ-P4-006-APP-GRANTS)
+    status: AUTHORIZED / ACTIVE
