@@ -868,7 +868,7 @@ records:
     entity_type: PH
     artifact_path: docs/phases/PH-P4.md
     traceability: DOC-V2-ARCH-001 / DOC-P4-001 / PH-P3 / Project Owner Directive — Establish Phase 4 & Authorize STEP-P4-001 — 2026-09-18 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: ACTIVE / AUTHORIZED
+    status: CLOSED / VERIFIED
   - stable_id: STEP-P4-002
     canonical_name: Technical Indicators, Statistical & Volatility Engine
     entity_type: STEP
