@@ -1,6 +1,6 @@
 # PH-P4 — Deterministic Quantitative & Market Structure Engine
 
-**Status:** ACTIVE / AUTHORIZED
+**Status:** CLOSED / VERIFIED
 **Phase SID:** `PH-P4`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §14
 **Predecessor:** `PH-P3` CLOSED / VERIFIED
@@ -83,9 +83,9 @@ Venue-aware quantitative evidence may be produced in P4, but Venue Intelligence 
 **Status:** COMPLETE / VERIFIED
 **Completion audit:** `AR-P4-001`
 **Completed task order:** `TO-P4-001`
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P3-008` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P4-001`
+**Active Task Order:** `null`
 **Activation basis:** Project Owner Directive — Establish Phase 4 & Authorize STEP-P4-001 — 2026-09-18
 
 Objective: establish the governed quantitative contracts, numeric policy, shared mathematical primitives, explicit insufficient-history behavior, golden-vector infrastructure/freeze boundary and persistence-model foundation required by later Phase 4 Steps.
@@ -146,10 +146,10 @@ Acceptance boundary: deterministic POC/VAH/VAL, HVN/LVN, Bar Delta/CVD, Imbalanc
 ### `STEP-P4-005` — Deterministic Market Regime Engine & Venue-Aware Quantitative Evidence
 
 **Order:** 5
-**Status:** ACTIVE / AUTHORIZED
-**Authorization state:** AUTHORIZED TO EXECUTE
+**Status:** COMPLETE / VERIFIED
+**Authorization state:** VERIFIED / COMPLETE
 **Predecessor:** `STEP-P4-004` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P4-006`
+**Active Task Order:** `null`
 **Activation basis:** PROJECT OWNER DIRECTIVE — AUTHORIZE PH-P4 / STEP-P4-005 AND DELEGATE WORKFLOW AUTHORITY — 2026-09-19
 
 Objective: implement deterministic regime state with hysteresis and venue-aware quantitative evidence while preserving the independent Venue Intelligence Track boundary.
@@ -223,7 +223,7 @@ Phase 4 may be declared CLOSED / VERIFIED only after all six Steps are independe
 
 `IMPLEMENTED != EXECUTED != TESTED != VERIFIED != CLOSED`
 
-## Current Step Boundary After P4-004 Closure
+## Historical Step Boundary After P4-004 Closure
 
 STEP-P4-003 is COMPLETE / VERIFIED under AR-P4-006. STEP-P4-004 is COMPLETE / VERIFIED under TO-P4-005 / AR-P4-009. STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 / AR-P4-011. STEP-P4-006 is COMPLETE / VERIFIED under AR-P4-015; TO-P4-008 is VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED. Historical AR-P4-004 and AR-P4-005 remain preserved for traceability.
 
@@ -243,4 +243,4 @@ Every substantive response must end with the `--- STANDING RULES CHECK ---` foot
 
 ## Current Phase Boundary
 
-PH-P4 is formally established and ACTIVE / AUTHORIZED. STEP-P4-001 and STEP-P4-002 are COMPLETE / VERIFIED, with STEP-P4-002 re-verified under AR-P4-003. STEP-P4-003 is COMPLETE / VERIFIED under TO-P4-004 / AR-P4-006. STEP-P4-004 is ACTIVE / AUTHORIZED under TO-P4-005. STEP-P4-005 is COMPLETE / VERIFIED under TO-P4-006 / AR-P4-011; STEP-P4-006 is COMPLETE / VERIFIED under AR-P4-015; G-4 is ESTABLISHED / VERIFIED.
+PH-P4 is CLOSED / VERIFIED. STEP-P4-001 through STEP-P4-006 are COMPLETE / VERIFIED. STEP-P4-006 is complete under AR-P4-015; TO-P4-008 is VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED. No active P4 Task Order remains.
