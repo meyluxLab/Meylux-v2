@@ -453,3 +453,83 @@ Error-pattern scan over the last six hours for `api`, `worker-quant`, `collector
 The first combined verification probe used an incorrect table name (`indicator_vectors`); it failed without mutation. The authoritative table discovery identified `calculated_indicator_vectors`, after which the truth-count query succeeded with `156|3|1|1`.
 
 **Disposition:** Legacy probe-container hygiene item resolved by exact authorized removal. PH-P4 / STEP-P4-006 / G-4 closure status was not changed.
+
+## 15. TO-P4-009 CONTROL Independent Audit, SentinelX Application & Runtime Re-Verification
+
+**Authority:** Project Owner Decision 2; `TO-P4-009`; CONTROL / REVIEWER `ROL-V2-001`.
+
+### 15.1 Independent audit disposition
+
+CONTROL independently reviewed `TO-P4-009`, `BR-P4-009`, `0006_application_role_grant_hardening.sql`, `tests/test_p4_009_security_grants.py`, and the migration harness.
+
+The Producer implementation matches the authorized boundary:
+- exactly one new forward migration `0006_application_role_grant_hardening`;
+- migrations `0001`–`0005` unchanged per recorded repository integrity evidence;
+- `raw_acquisition_events` UPDATE revoked while SELECT/INSERT remain;
+- `meylux_admin` default UPDATE inheritance revoked;
+- `canonical_event_outbox` table UPDATE revoked and column UPDATE retained only for `published_at` and `published_stream_id`;
+- actual relay SQL compatibility demonstrated by PostgreSQL-backed Producer evidence;
+- no legitimate production raw-table UPDATE path identified;
+- Producer did not perform VPS mutation or closure synchronization.
+
+**CONTROL audit disposition:** PASS.
+
+### 15.2 Authorized SentinelX application
+
+The deployed VPS database did not yet contain migration `0006` in `meylux.schema_migrations`, and the deployed `/workspace` migration mount did not contain the new repository migration file. Therefore CONTROL did not run the stale deployed migration harness. Instead, CONTROL applied the exact authorized `0006` SQL through SentinelX directly to the governed database, preserving the Task Order's bounded runtime-application authority.
+
+First application result:
+- transaction committed;
+- `schema_migrations` inserted `0006_application_role_grant_hardening`.
+
+The exact SQL was then re-applied as an idempotence check:
+- transaction committed;
+- second `schema_migrations` insertion returned `INSERT 0 0`;
+- no duplicate migration record was created.
+
+No service restart, image, volume, network, or schema/data mutation outside the authorized privilege hardening was performed.
+
+### 15.3 Runtime grant verification
+
+Post-application authoritative read-back:
+- `raw_acquisition_events`: UPDATE=`false`, SELECT=`true`, INSERT=`true`.
+- `canonical_event_outbox`: table UPDATE=`false`.
+- `canonical_event_outbox.published_at`: UPDATE=`true`.
+- `canonical_event_outbox.published_stream_id`: UPDATE=`true`.
+- unrelated tested outbox columns `event_id` and `event_type`: UPDATE=`false`.
+- `0006_application_role_grant_hardening` migration count=`1`.
+- migration order is exactly `0001` through `0006`.
+
+### 15.4 Application-role behavior verification
+
+Under `SET ROLE meylux_app`:
+- UPDATE on `raw_acquisition_events` was rejected with PostgreSQL permission denial.
+- DELETE on `canonical_event_outbox` was rejected.
+- UPDATE of an unrelated outbox column was rejected.
+- A transaction-local temporary outbox probe row was inserted by the admin role, then the exact relay publication UPDATE was executed as `meylux_app` and returned `UPDATE 1`; the transaction was rolled back, leaving governed data unchanged.
+- A temporary future-table probe created by `meylux_admin` showed SELECT=`true`, INSERT=`true`, UPDATE=`false`, DELETE=`false`; the probe transaction was rolled back.
+
+### 15.5 Post-application G-4/runtime preservation
+
+Current runtime verification:
+- exactly six governed Docker services present: `api`, `worker-quant`, `collector`, `worker-ai`, `db`, `redis`;
+- `db` and `redis` healthy;
+- database connections for `meylux`: `4`;
+- canonical candles: `156`;
+- calculated indicator vectors: `3`;
+- market structure events: `1`;
+- market regime states: `1`;
+- quantitative inventory: `3/1/1`;
+- 30-minute error-pattern scan across `api`, `worker-quant`, `collector`, and `worker-ai`: clean.
+
+No observed evidence invalidates `G-4`. `PH-P4` and `STEP-P4-006` remain `CLOSED / VERIFIED`.
+
+### 15.6 Runtime-source observation
+
+The deployed `/srv/meylux-v2` migration mount predates the repository TO-P4-009 implementation: its mounted `migrate.sh` invokes only `0001`–`0005`, and `0006_application_role_grant_hardening.sql` was absent from that mount at application time.
+
+CONTROL therefore applied the authorized SQL directly rather than executing a stale migration harness.
+
+This is recorded as a deployment-source synchronization observation, not as a TO-P4-009 implementation defect: the governed runtime database is hardened and verified, while the repository remains the Source of Truth. No unapproved VPS source/deployment synchronization was performed under this Task Order.
+
+**CONTROL disposition:** Runtime application and verification PASS; deployment-source observation recorded for governance traceability.
