@@ -45,7 +45,7 @@ items:
     affected_phase: PH-P4
     affected_step: STEP-P4-006
     task_order: TO-P4-008
-    resolution: "Resolved by the authorized provider-boundary correction in TO-P4-008 and independently verified under AR-P4-014. BinanceAdapter now preserves explicit 15m/1h/4h interval context, the existing P3 normalization accepts real Binance Spot candles, and the resulting CanonicalCandle timeframe remains exact. The broader real-data persistence/runtime/G-4 boundary remains open under STEP-P4-006 and is not closed by this resolution."
+    resolution: "Resolved by the authorized provider-boundary correction in TO-P4-008 and independently verified under AR-P4-014. BinanceAdapter now preserves explicit 15m/1h/4h interval context, the existing P3 normalization accepts real Binance Spot candles, and the resulting CanonicalCandle timeframe remains exact. The provider-boundary question itself is resolved by TO-P4-008; the subsequent persistence/runtime/G-4 evidence was independently completed under AR-P4-015."
     authority: "Project Owner Directive — Resolution of AR-P4-013 Open Evidence Boundary — 2026-09-20"
     required_record: "TO-P4-008 implementation evidence, Build Report, CONTROL EXEC-LOG, AR-P4-013 follow-up verification, and closure synchronization"
     constraints:
@@ -66,3 +66,13 @@ items:
       - "Do not modify or reopen EMA or Market Structure engines under this authorization."
       - "Do not silently revise the roadmap target."
       - "If target attainment requires engine-level changes, escalate to Project Owner."
+
+  - question: "OQ-GOV-CONSTITUTION-STABLE-ID — What authoritative governance record, if any, assigns a Stable ID to the ratified Constitution? The current authoritative value remains IDENTITY UNCONFIRMED."
+    status: OPEN
+    affected_phase: PH-P0
+    affected_step: STEP-P0-004
+    authority: Project Owner / governance identity authority
+    resolution: null
+    constraints:
+      - "Do not infer, invent, or retroactively assign a Constitution Stable ID."
+      - "This is a deferred governance identity matter and does not authorize runtime or Phase-5 work."
