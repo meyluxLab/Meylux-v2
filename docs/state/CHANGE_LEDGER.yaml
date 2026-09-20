@@ -722,7 +722,7 @@ entries:
     security: VERIFIED APPLICATION UPDATE/DELETE DENIED AND APPEND-ONLY TRIGGER ENABLED
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
     future_phase_effect: PHASE 4 REMAINS NOT AUTHORIZED
-    performance_note: >5000 normalization events/sec/core target not measured and not claimed
+    performance_note: ">5000 normalization events/sec/core target not measured and not claimed"
     multi_symbol_note: second-symbol production witness unavailable from governed AVAILABLE staging; no fabricated witness used
     closure_sync: README, Checkpoint, artifact registry, specialized registries, phase registry, Phase 3 document, Task Order, Build Report, Audit Report and this Change Ledger synchronized by CONTROL
 
