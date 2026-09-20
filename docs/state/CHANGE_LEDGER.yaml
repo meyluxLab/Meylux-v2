@@ -575,7 +575,7 @@ entries:
       event_type: TRADE
       acquisition_state: AVAILABLE
       source_sequence: '6692896984'
-    runtime_result: VERTICAL SLICE REACHED THEN FAILED — TypeError: payload must be a mapping during AcquisitionEnvelope reconstruction from payload_json
+    runtime_result: "VERTICAL SLICE REACHED THEN FAILED — TypeError: payload must be a mapping during AcquisitionEnvelope reconstruction from payload_json"
     acquisition_diagnosis: existing running collector is a foundation service and had not attempted acquisition; existing governed Binance Spot acquisition path is operationally reachable; Binance Futures network is reachable but no governed Futures adapter exists in repository
     g3_status: NOT ESTABLISHED
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged
