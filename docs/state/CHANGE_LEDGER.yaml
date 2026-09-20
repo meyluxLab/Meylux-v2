@@ -1806,3 +1806,44 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged.
     runtime_effect: No VPS mutation was performed during this correction cycle before drift reporting; runtime state is recorded separately in the official EXEC-LOG.
     phase5_effect: Phase 5 remains NOT AUTHORIZED.
+
+
+  - id: CHG-P4-POSTCLOSURE-VPS-READBACK-20260920
+    date_utc: '2026-09-20'
+    change_type: POST_CLOSURE_INDEPENDENT_READBACK
+    subject: Owner-requested final VPS verification and remaining explicitly bounded drift disposition
+    basis: Project Owner post-closure independent read-back 2026-09-20 + AR-P4-015 + EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013
+    repository_effect:
+      - lifecycle/traceability corrections synchronized across phase, artifact, contract, test, Task Order, Phase definition, Deferred Decision, Open Question and Checkpoint records.
+      - CHANGE_LEDGER schema normalized from CHG-P3-STEP-008-ACTIVATE onward without deleting historical content.
+      - prior closure-readback overstatement corrected by CHG-P4-CLOSURE-READBACK-CORRECTION-20260920.
+      - Project Owner Directive registered as DOC-P4-006-OWNER-DIRECTIVE-20260920.
+    vps_readback:
+      deployed_revision: fb7d9847498323bec067ba98a1e2729f869c0697
+      remote_main_at_readback: 217a8a10d467a75023fbb7ddbe7ac1c4a915469e
+      divergence: 52 commits, documentation-only
+      worktree: clean
+      runtime_source_image_match: PASS
+      services: api/worker-quant/collector/worker-ai running; db/redis healthy
+      crash_loops: none observed
+      database_migrations: 0001 through 0005 applied
+      raw_records: 1498 historical + 1497 corrected = 2995
+      canonical_records: 156 = 116x15m + 31x1h + 9x4h
+      quantitative_records: 3 indicator + 1 structure event + 1 regime
+      redis_pending: 0
+      redis_lag: 0
+      public_host_ports: SSH 22 only
+      env_permissions: .env 0600 root:root
+      ntp: synchronized
+      secret_scan: no secret assignment patterns found
+    non_mutating_disposition:
+      app_grant_exception: raw_acquisition_events UPDATE inherited from existing default privilege; canonical_event_outbox UPDATE explicitly required by migration 0003. No mutation performed.
+      one_off_containers: four historical compose-api-run containers remain; no cleanup mutation performed.
+      deployment_sync: no sync/rebuild performed because deployed/runtime divergence is documentation-only.
+    tracked_followups:
+      - OQ-P4-006-APP-GRANTS
+      - OQ-P4-006-MEXC-RESOURCEWARNING
+      - OQ-GOV-CONSTITUTION-STABLE-ID
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged.
+    phase5_effect: Phase 5 remains NOT AUTHORIZED.
+    closure_result: Phase-4 lifecycle closure remains valid; post-closure security/hygiene drift is explicitly recorded rather than silently mutated outside the requested read-only verification boundary.
