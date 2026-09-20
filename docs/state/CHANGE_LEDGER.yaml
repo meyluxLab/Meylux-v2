@@ -597,7 +597,7 @@ entries:
       - PH-P3
     repository_commit: 9e39d1032a8dc63fe49217ad25ef0fdc430b375d
     execution_log: EXEC-LOG-TO-P3-008-VERTICAL-SLICE-RETRY-20260918
-    runtime_result: FAILED — AttributeError: 'ValidationResult' object has no attribute 'result' during quality-signal construction
+    runtime_result: "FAILED — AttributeError: 'ValidationResult' object has no attribute 'result' during quality-signal construction"
     deployment_result: Compose rebuild/recreate successful; migrations 0001/0002/0003 re-executed successfully
     g3_status: NOT ESTABLISHED
     canonical_persistence_status: NOT ESTABLISHED
