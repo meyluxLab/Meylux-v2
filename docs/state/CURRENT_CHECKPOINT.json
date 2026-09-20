@@ -275,7 +275,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-20T06:10:04.219Z",
+  "updated_at_utc": "2026-09-20T06:30:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -303,8 +303,22 @@
       "quant_lag": 0
     },
     "security_drift_tracked": "OQ-P4-006-APP-GRANTS",
-    "hygiene_drift_tracked": "four historical compose-api-run containers retained without mutation",
-    "mexc_warning_tracked": "OQ-P4-006-MEXC-RESOURCEWARNING"
+    "hygiene_drift_tracked": "resolved: four historical compose-api-run containers removed under Owner Decision 1",
+    "mexc_warning_tracked": "OQ-P4-006-MEXC-RESOURCEWARNING",
+    "legacy_probe_cleanup": {
+      "status": "VERIFIED",
+      "removed_container_count": 4,
+      "removed_container_names": [
+        "compose-api-run-9d92a105c094",
+        "compose-api-run-dc97688262e8",
+        "compose-api-run-f0ecf208a940",
+        "compose-api-run-e88ffee4974a"
+      ],
+      "db_connections": 4,
+      "canonical_total": 156,
+      "quantitative_inventory": "3/1/1",
+      "six_hour_error_scan": "CLEAN"
+    }
   },
   "last_governance_sync_base_commit": "6e9f314c4dd479494039ade4a9f0c8dd16bb56f5"
 }
