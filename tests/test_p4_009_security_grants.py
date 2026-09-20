@@ -79,6 +79,8 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 f"POSTGRES_USER={ADMIN}",
                 "--env",
                 f"POSTGRES_PASSWORD={ADMIN_PASSWORD}",
+                "--volume",
+                f"{ROOT}:/workspace:ro",
                 IMAGE,
             ]
         )
