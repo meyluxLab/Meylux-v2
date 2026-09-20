@@ -30,7 +30,10 @@ records:
       worker_failure_retry_dlq_probe: PASS
       governed_raw_historical_acquisition: VERIFIED
       raw_records: 2995
+      historical_pre_correction_raw_records: 1498
       corrected_post_TO_P4_008_raw_records: 1497
+      historical_records_shape: payload k/row absent — inert historical evidence retained unchanged
+      corrected_records_shape: payload k/row present with explicit interval context
       raw_window_15m: 2026-09-14T17:30:00Z..2026-09-19T22:00:00Z (499 closed)
       raw_window_1h: 2026-08-30T03:00:00Z..2026-09-19T21:00:00Z (499 closed)
       raw_window_4h: 2026-06-28T16:00:00Z..2026-09-19T16:00:00Z (499 closed)
@@ -43,5 +46,26 @@ records:
       worker_real_data: VERIFIED — delivered/started/acked/completed
       worker_restart_recovery_real_data: VERIFIED — pending message recovered after restart
       read_only_api_real_data: VERIFIED — GET 200 / POST 405
+      collector_role: FOUNDATION_SERVICE_ONLY — canonical inventory is a point-in-time governed slice, not continuous collector completeness
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+      final_vps_state:
+        deployed_revision: fb7d9847498323bec067ba98a1e2729f869c0697
+        remote_main_at_inspection: 693030a43655723ac97efb2a1e2729f869c0697
+        relation: deployed_revision is 31 commits behind remote main; compare is documentation-only
+        worktree: clean
+        runtime_source_hashes: matched deployed git revision for BinanceAdapter, QuantitativeOrchestrator, QuantWorker, HTTP adapter and quantitative persistence
+        compose_services: api/worker-quant/collector/worker-ai running; db/redis healthy
+        crash_loops: none observed; restart_count zero on inspected services
+        public_host_ports: only SSH 22 observed; application/db/redis ports not host-published
+        env_permissions: .env 0600 root:root
+        ntp: synchronized / active
+        disk_memory: 7% disk used; 14GiB available memory
+        one_off_containers: four compose-api-run containers remain from historical probes; not removed because this read-back was explicitly non-mutating
+        docker_cleanup: no unused images/volumes; build cache 150.9MB reclaimable
+        log_rotation: json-file; no errors/tracebacks/fatal patterns in last 6h service logs
+        secret_leak_scan: no secret assignment patterns found in EXEC-LOG or inspected history locations
+        redis_quant_queue_pending: 0
+        redis_quant_queue_lag: 0
+        redis_dlq: retained historical failure/retry evidence; no consumer group pending state
+        runtime_sync_decision: no VPS sync/rebuild required because deployed/runtime source differs from main only in documentation surfaces
     status: VERIFIED
