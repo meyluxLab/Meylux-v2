@@ -60,12 +60,13 @@ records:
         env_permissions: .env 0600 root:root
         ntp: synchronized / active
         disk_memory: 7% disk used; 14GiB available memory
-        one_off_containers: four compose-api-run containers remain from historical probes; not removed because this read-back was explicitly non-mutating
+        one_off_containers: four historical compose-api-run containers removed under Owner Decision 1; exact IDs recorded in EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919; no prune/volume/image/network/service change
         docker_cleanup: no unused images/volumes; build cache 150.9MB reclaimable
         log_rotation: json-file; no errors/tracebacks/fatal patterns in last 6h service logs
         secret_leak_scan: no secret assignment patterns found in EXEC-LOG or inspected history locations
         redis_quant_queue_pending: 0
         redis_quant_queue_lag: 0
         redis_dlq: retained historical failure/retry evidence; no consumer group pending state
+        legacy_probe_cleanup: VERIFIED — exactly four historical compose-api-run containers removed; six governed services re-verified healthy/up; DB connections=4; canonical/quantitative inventory=156 and 3/1/1; six-hour error-pattern scan clean
         runtime_sync_decision: no VPS sync/rebuild required because deployed/runtime source differs from main only in documentation surfaces
     status: VERIFIED
