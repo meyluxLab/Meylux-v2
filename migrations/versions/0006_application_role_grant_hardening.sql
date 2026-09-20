@@ -1,4 +1,5 @@
 -- Meylux V2 TO-P4-009 — post-closure application-role grant hardening.
+-- PostgreSQL-backed integration evidence is exercised by tests/test_p4_009_security_grants.py.
 -- Forward-only, idempotent correction of the pre-existing meylux_app UPDATE boundary.
 
 SET TIME ZONE 'UTC';
