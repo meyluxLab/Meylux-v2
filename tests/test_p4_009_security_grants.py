@@ -187,7 +187,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
         harness = (ROOT / "infrastructure/postgres/migrate.sh").read_text()
         self.assertLess(harness.index("0005_quantitative_foundation.sql"), harness.index("0006_application_role_grant_hardening.sql"))
         self.assertEqual(
-            sorted(p.name for p in MIGRATIONS if p.name.startswith("000")),
+            sorted(p.name for p in MIGRATIONS.glob("000*.sql")),
             [
                 "0001_database_foundation.sql",
                 "0002_raw_acquisition_staging.sql",
