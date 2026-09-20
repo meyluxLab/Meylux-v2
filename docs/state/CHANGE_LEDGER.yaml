@@ -1868,8 +1868,9 @@ entries:
       5. This is post-closure hardening: it must not change the closed state of PH-P4 or G-4. If any G-4 evidence is affected, stop and report. No change to frozen architecture, engines, Decimal policy or Phase 5.
       6. On completion, resolve OQ-P4-006-APP-GRANTS. Record this directive verbatim in the repository and Change Ledger.
     legacy_probe_cleanup_authorized: true
-    implementation_status: ACTIVE
+    implementation_status: VERIFIED / COMPLETE
     producer: ROL-V2-002
+    control_audit: AR-P4-016
     control_runtime_boundary: SentinelX only
 
   - ledger_id: CL-POSTCLOSURE-TO-P4-009-CLOSURE
