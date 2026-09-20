@@ -1,10 +1,10 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
-items: []
+status: ACTIVE / EVIDENCE-TRACKING
+items:
 
   - id: DD-V2-P4-006-PERFORMANCE-TARGET
     domain: Phase-4 quantitative runtime performance
-    reason_deferred: "The required one-day full-vector workload is below the roadmap <50ms target, but the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied by the existing EMA implementation; resolving that diagnostic would require reopening a previously verified engine boundary, which is outside the current authorization."
+    reason_deferred: "The required one-day full-vector workload is below the roadmap <50ms target, but the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied by the existing EMA, RSI and ATR implementations; resolving that diagnostic would require reopening a previously verified engine boundary, which is outside the current authorization."
     trigger: "Reconsider when CONTROL demonstrates that orchestrator/runtime-level optimization cannot close the gap without reopening verified engine boundaries, or when new measured evidence changes the attainable-performance assessment."
     affected_phases:
       - PH-P4
