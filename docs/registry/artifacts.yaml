@@ -1148,3 +1148,10 @@ records:
     artifact_path: docs/task-orders/TO-P4-009.md
     traceability: PH-P4 / STEP-P4-006 / OQ-P4-006-APP-GRANTS / TO-P4-008 / AR-P4-015 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive — Disposition of post-closure items (legacy probe containers; OQ-P4-006-APP-GRANTS)
     status: AUTHORIZED / ACTIVE
+
+  - stable_id: BR-P4-009
+    canonical_name: Build Report — Post-Closure Security Boundary Hardening
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-009.md
+    traceability: TO-P4-009 / PH-P4 / STEP-P4-006 / AR-P4-015
+    status: IMPLEMENTED / TESTED — CONTROL AUDIT PENDING
