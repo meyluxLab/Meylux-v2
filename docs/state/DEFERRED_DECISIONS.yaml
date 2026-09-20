@@ -6,6 +6,12 @@ items:
     domain: Phase-4 quantitative runtime performance
     reason_deferred: "The required one-day full-vector workload is below the roadmap <50ms target, but the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied by the existing EMA, RSI and ATR implementations; resolving that diagnostic would require reopening a previously verified engine boundary, which is outside the current authorization."
     trigger: "Reconsider when CONTROL demonstrates that orchestrator/runtime-level optimization cannot close the gap without reopening verified engine boundaries, or when new measured evidence changes the attainable-performance assessment."
+    evidence_scope:
+      required_replay_sized_workload: 116 primary 15m + 31 1h + 9 4h; average 22.690451 ms across five executions; full-vector <50ms target PASS
+      diagnostic_1000_primary: 704.670 ms
+      indicator_diagnostics: EMA 537.506 ms; RSI 34.002 ms; ATR 32.012 ms
+      market_structure_diagnostic: 440.568 ms
+      disposition: the deferred decision covers the separate <5ms/indicator/1000-bars diagnostic and any engine-level work required to address it; no reopening was authorized.
     affected_phases:
       - PH-P4
     owner: Project Owner
