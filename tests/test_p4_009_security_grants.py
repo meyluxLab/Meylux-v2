@@ -92,10 +92,25 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
         )
         for _ in range(60):
             ready = cls._run(
-                [cls.docker, "exec", CONTAINER, "pg_isready", "-U", ADMIN, "-d", DB],
+                [
+                    cls.docker,
+                    "exec",
+                    "--env",
+                    f"PGPASSWORD={ADMIN_PASSWORD}",
+                    CONTAINER,
+                    "psql",
+                    "-X",
+                    "-At",
+                    "-U",
+                    ADMIN,
+                    "-d",
+                    DB,
+                    "-c",
+                    "SELECT 1;",
+                ],
                 check=False,
             )
-            if ready.returncode == 0:
+            if ready.returncode == 0 and ready.stdout.strip() == "1":
                 return
             time.sleep(1)
         raise RuntimeError("ephemeral PostgreSQL did not become ready")
