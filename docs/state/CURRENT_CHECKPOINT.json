@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P4-008",
+  "last_approved_task_order": "TO-P4-009",
   "last_build_report": "BR-P4-008",
   "last_audit_report": "AR-P4-015",
   "last_execution_log": "EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919",
-  "active_task_order": null,
+  "active_task_order": "TO-P4-009",
   "completed_task_order": "TO-P4-008",
   "completion_audit": "AR-P4-015",
   "verified_artifacts": [
