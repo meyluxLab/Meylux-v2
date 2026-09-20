@@ -368,3 +368,88 @@ No Phase-5 authorization or implementation was introduced.
 The repository lifecycle/traceability corrections requested by the Project Owner are being synchronized independently of runtime code. The deployed runtime itself remains evidence-consistent with the verified implementation baseline. Two VPS hygiene/security items remain explicitly recorded rather than silently changed: application-role UPDATE exceptions and historical one-off probe containers.
 
 Phase 5 remains NOT AUTHORIZED. No engine, Decimal policy, frozen architecture or Producer implementation was changed.
+
+
+## 14. Post-Closure Legacy Probe Container Cleanup — Owner-Authorized
+
+**Authority:** Project Owner Decision 1 — legacy probe containers cleanup.
+
+Before removal, the four historical one-off containers were independently inspected through SentinelX. Exact evidence:
+
+1. Container ID: `41acd970c5c7ef714a96e057557b6aef011945797c9b288de1f7e073080c4ae1`
+   - Name: `compose-api-run-9d92a105c094`
+   - Image ID: `sha256:366dfc4f6f49ba658b23e37ce6d407d162b49f3ef1da7bd6039d47511c159fef`
+   - Created: `2026-09-18T17:53:57.541072027Z`
+   - Command: `python -m meylux.runtime.p3_008_vertical_slice`
+   - Status before removal: `running`
+   - `com.docker.compose.oneoff=True`
+   - `com.docker.compose.service=api`
+   - Last logs: `meylux-v2 foundation service started: api`
+
+2. Container ID: `53bf3301f16f2e5fcd04ba06e63fd9f15c9846b1f42a4dc19831c48e38154878`
+   - Name: `compose-api-run-dc97688262e8`
+   - Image ID: `sha256:366dfc4f6f49ba658b23e37ce6d407d162b49f3ef1da7bd6039d47511c159fef`
+   - Created: `2026-09-18T17:52:57.121746795Z`
+   - Command: `python -m meylux.runtime.p3_008_vertical_slice`
+   - Status before removal: `running`
+   - `com.docker.compose.oneoff=True`
+   - `com.docker.compose.service=api`
+   - Last logs: `meylux-v2 foundation service started: api`
+
+3. Container ID: `ae3b8a119b51612ba9682989a0fc67cbd94376ad34a1aabd9ad6dac7e2f57a48`
+   - Name: `compose-api-run-f0ecf208a940`
+   - Image ID: `sha256:366dfc4f6f49ba658b23e37ce6d407d162b49f3ef1da7bd6039d47511c159fef`
+   - Created: `2026-09-18T17:52:22.557584373Z`
+   - Command: `python -m meylux.runtime.p3_008_vertical_slice`
+   - Status before removal: `running`
+   - `com.docker.compose.oneoff=True`
+   - `com.docker.compose.service=api`
+   - Last logs: `meylux-v2 foundation service started: api`
+
+4. Container ID: `fe55bef4dccaf56080a7899906ed40790ec46843af6b3d3312c0e25b378cd14e`
+   - Name: `compose-api-run-e88ffee4974a`
+   - Image ID: `sha256:366dfc4f6f49ba658b23e37ce6d407d162b49f3ef1da7bd6039d47511c159fef`
+   - Created: `2026-09-18T17:51:21.844530055Z`
+   - Command: `python -m meylux.runtime.p3_008_vertical_slice`
+   - Status before removal: `running`
+   - `com.docker.compose.oneoff=True`
+   - `com.docker.compose.service=api`
+   - Last logs: `meylux-v2 foundation service started: api`
+
+All four matched the historical one-off `compose-api-run-*` pattern and were distinguished from the six live services `api`, `worker-quant`, `collector`, `worker-ai`, `db`, and `redis`. No target container belonged to `worker-quant`, `collector`, `worker-ai`, `db`, or `redis`.
+
+The first removal attempt without force was rejected because the four historical containers were still running. Under the Owner-authorized exact-container removal boundary, the four specified container IDs were then removed with `sudo docker rm -f`. No prune operation was used. No volume, image, network, or service change was requested or performed.
+
+Removed container IDs:
+- `41acd970c5c7`
+- `53bf3301f16f`
+- `ae3b8a119b51`
+- `fe55bef4dccaf`
+
+### 14.1 Post-cleanup verification
+
+Current Docker service inventory contains exactly the six expected services:
+- `compose-api-1` — Up
+- `compose-worker-quant-1` — Up
+- `compose-collector-1` — Up
+- `compose-worker-ai-1` — Up
+- `compose-db-1` — Up / healthy
+- `compose-redis-1` — Up / healthy
+
+No `compose-api-run-*` container remains.
+
+Database connection read-back:
+- `pg_stat_activity` count for database `meylux`: `4`.
+
+Canonical/quantitative truth inventory read-back:
+- canonical candles: `156`
+- calculated indicator vectors: `3`
+- market structure events: `1`
+- market regime states: `1`
+- combined quantitative count: `3/1/1`
+
+Error-pattern scan over the last six hours for `api`, `worker-quant`, `collector`, and `worker-ai` returned zero matches for `error|traceback|fatal|panic|exception|critical`.
+
+The first combined verification probe used an incorrect table name (`indicator_vectors`); it failed without mutation. The authoritative table discovery identified `calculated_indicator_vectors`, after which the truth-count query succeeded with `156|3|1|1`.
+
+**Disposition:** Legacy probe-container hygiene item resolved by exact authorized removal. PH-P4 / STEP-P4-006 / G-4 closure status was not changed.
