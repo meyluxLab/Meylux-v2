@@ -228,6 +228,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 WHERE r.rolname='meylux_app'
                 ORDER BY privilege_type;"""
         ).stdout.splitlines()
+        print(f"TO-P4-009 PRE default privileges for meylux_app: {pre_default_acl}")
         self.assertEqual(pre_default_acl, ["INSERT", "SELECT", "UPDATE"])
 
         pre_table_privs = self._psql(
@@ -239,16 +240,16 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 has_table_privilege('meylux_app','meylux.raw_acquisition_events','TRUNCATE'),
                 has_table_privilege('meylux_app','meylux.canonical_event_outbox','UPDATE');"""
         ).stdout.strip()
+        print(f"TO-P4-009 PRE table privileges raw/outbox: {pre_table_privs}")
         self.assertEqual(pre_table_privs, "t|t|t|f|f|t")
 
         # Prove the pre-0006 default privilege inheritance on a future table.
         self._psql("CREATE TABLE meylux.to_p4_009_pre_future(id integer);")
-        self.assertEqual(
-            self._psql(
-                "SELECT has_table_privilege('meylux_app','meylux.to_p4_009_pre_future','UPDATE');"
-            ).stdout.strip(),
-            "t",
-        )
+        pre_future_update = self._psql(
+            "SELECT has_table_privilege('meylux_app','meylux.to_p4_009_pre_future','UPDATE');"
+        ).stdout.strip()
+        print(f"TO-P4-009 PRE future-table UPDATE inherited: {pre_future_update}")
+        self.assertEqual(pre_future_update, "t")
         self._psql("DROP TABLE meylux.to_p4_009_pre_future;")
 
         pre_outbox_columns = self._psql(
@@ -257,11 +258,12 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 has_column_privilege('meylux_app','meylux.canonical_event_outbox','published_stream_id','UPDATE'),
                 has_column_privilege('meylux_app','meylux.canonical_event_outbox','event_id','UPDATE');"""
         ).stdout.strip()
+        print(f"TO-P4-009 PRE outbox column UPDATE privileges: {pre_outbox_columns}")
         self.assertEqual(pre_outbox_columns, "t|t|t")
 
         # The repository migration harness is the authorized forward path; running it
         # from a 0001-0005 database applies 0006 after the established five migrations.
-        self._run(
+        harness_result = self._run(
             [
                 self.docker,
                 "exec",
@@ -274,6 +276,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 "/workspace/infrastructure/postgres/migrate.sh",
             ]
         )
+        print(f"TO-P4-009 migration harness output: {harness_result.stdout.strip()}")
 
         post_default_acl = self._psql(
             """SELECT privilege_type
@@ -288,6 +291,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 WHERE r.rolname='meylux_app'
                 ORDER BY privilege_type;"""
         ).stdout.splitlines()
+        print(f"TO-P4-009 POST default privileges for meylux_app: {post_default_acl}")
         self.assertEqual(post_default_acl, ["INSERT", "SELECT"])
 
         post_table_privs = self._psql(
@@ -303,6 +307,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 has_table_privilege('meylux_app','meylux.canonical_event_outbox','DELETE'),
                 has_table_privilege('meylux_app','meylux.canonical_event_outbox','TRUNCATE');"""
         ).stdout.strip()
+        print(f"TO-P4-009 POST table privileges raw/outbox: {post_table_privs}")
         self.assertEqual(post_table_privs, "t|t|f|f|f|t|t|f|f|f")
 
         post_outbox_columns = self._psql(
@@ -312,21 +317,21 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
                 has_column_privilege('meylux_app','meylux.canonical_event_outbox','event_id','UPDATE'),
                 has_column_privilege('meylux_app','meylux.canonical_event_outbox','event_type','UPDATE');"""
         ).stdout.strip()
+        print(f"TO-P4-009 POST outbox column UPDATE privileges: {post_outbox_columns}")
         self.assertEqual(post_outbox_columns, "t|t|f|f")
 
         # Future tables must no longer inherit UPDATE.
         self._psql("CREATE TABLE meylux.to_p4_009_post_future(id integer);")
-        self.assertEqual(
-            self._psql(
-                """SELECT
-                    has_table_privilege('meylux_app','meylux.to_p4_009_post_future','SELECT'),
-                    has_table_privilege('meylux_app','meylux.to_p4_009_post_future','INSERT'),
-                    has_table_privilege('meylux_app','meylux.to_p4_009_post_future','UPDATE'),
-                    has_table_privilege('meylux_app','meylux.to_p4_009_post_future','DELETE'),
-                    has_table_privilege('meylux_app','meylux.to_p4_009_post_future','TRUNCATE');"""
-            ).stdout.strip(),
-            "t|t|f|f|f",
-        )
+        post_future_privs = self._psql(
+            """SELECT
+                has_table_privilege('meylux_app','meylux.to_p4_009_post_future','SELECT'),
+                has_table_privilege('meylux_app','meylux.to_p4_009_post_future','INSERT'),
+                has_table_privilege('meylux_app','meylux.to_p4_009_post_future','UPDATE'),
+                has_table_privilege('meylux_app','meylux.to_p4_009_post_future','DELETE'),
+                has_table_privilege('meylux_app','meylux.to_p4_009_post_future','TRUNCATE');"""
+        ).stdout.strip()
+        print(f"TO-P4-009 POST future-table privileges: {post_future_privs}")
+        self.assertEqual(post_future_privs, "t|t|f|f|f")
 
         # Required raw SELECT/INSERT still work under the resulting privilege model.
         self._psql(
@@ -344,14 +349,13 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             user=APP,
             password=APP_PASSWORD,
         )
-        self.assertEqual(
-            self._psql(
-                "SELECT count(*) FROM meylux.raw_acquisition_events WHERE event_id='to-p4-009-raw';",
-                user=APP,
-                password=APP_PASSWORD,
-            ).stdout.strip(),
-            "1",
-        )
+        raw_select_count = self._psql(
+            "SELECT count(*) FROM meylux.raw_acquisition_events WHERE event_id='to-p4-009-raw';",
+            user=APP,
+            password=APP_PASSWORD,
+        ).stdout.strip()
+        print(f"TO-P4-009 APP raw SELECT after INSERT: {raw_select_count}")
+        self.assertEqual(raw_select_count, "1")
 
         denied_raw_update = self._psql(
             "UPDATE meylux.raw_acquisition_events SET acquisition_state='AVAILABLE' WHERE event_id='to-p4-009-raw';",
@@ -359,6 +363,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             password=APP_PASSWORD,
             check=False,
         )
+        print(f"TO-P4-009 APP raw UPDATE denied rc={denied_raw_update.returncode}: {denied_raw_update.stderr.strip()}")
         self.assertNotEqual(denied_raw_update.returncode, 0)
         self.assertIn("permission denied", denied_raw_update.stderr.lower())
 
@@ -396,6 +401,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             user=APP,
             password=APP_PASSWORD,
         )
+        print(f"TO-P4-009 APP relay UPDATE rc={relay_update.returncode}: {relay_update.stdout.strip()}")
         self.assertEqual(relay_update.returncode, 0)
         self.assertEqual(
             self._psql(
@@ -407,6 +413,12 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             ).stdout.strip(),
             "t",
         )
+        relay_state = self._psql(
+            "SELECT published_at IS NOT NULL, published_stream_id FROM meylux.canonical_event_outbox WHERE event_id='to-p4-009-event';",
+            user=APP,
+            password=APP_PASSWORD,
+        ).stdout.strip()
+        print(f"TO-P4-009 relay persisted publication state: {relay_state}")
 
         denied_outbox_unrelated = self._psql(
             "UPDATE meylux.canonical_event_outbox SET event_type='not-allowed' WHERE event_id='to-p4-009-event';",
@@ -414,6 +426,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             password=APP_PASSWORD,
             check=False,
         )
+        print(f"TO-P4-009 APP unrelated outbox UPDATE denied rc={denied_outbox_unrelated.returncode}: {denied_outbox_unrelated.stderr.strip()}")
         self.assertNotEqual(denied_outbox_unrelated.returncode, 0)
 
         denied_outbox_delete = self._psql(
@@ -434,12 +447,11 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
 
         # Re-applying only the new migration is explicitly idempotent.
         self._psql_file("migrations/versions/0006_application_role_grant_hardening.sql")
-        self.assertEqual(
-            self._psql(
-                "SELECT count(*) FROM meylux.schema_migrations WHERE version='0006_application_role_grant_hardening';"
-            ).stdout.strip(),
-            "1",
-        )
+        migration_count = self._psql(
+            "SELECT count(*) FROM meylux.schema_migrations WHERE version='0006_application_role_grant_hardening';"
+        ).stdout.strip()
+        print(f"TO-P4-009 idempotent 0006 schema_migrations count: {migration_count}")
+        self.assertEqual(migration_count, "1")
         self.assertEqual(
             self._psql(
                 "SELECT has_table_privilege('meylux_app','meylux.raw_acquisition_events','UPDATE');"
