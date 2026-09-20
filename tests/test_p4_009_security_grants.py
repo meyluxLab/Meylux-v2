@@ -39,6 +39,11 @@ def git_blob_sha(path: Path) -> str:
 class PostClosureSecurityBoundaryTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
+        if os.environ.get("GITHUB_WORKFLOW") == "CI Docker Foundation":
+            raise unittest.SkipTest(
+                "CI Docker Foundation starts its governed database only after foundation self-checks; "
+                "real PostgreSQL TO-P4-009 evidence runs in CI Core."
+            )
         cls.docker = shutil.which("docker")
         if cls.docker is None:
             raise unittest.SkipTest("Docker is unavailable; PostgreSQL-backed TO-P4-009 evidence is skipped cleanly.")
