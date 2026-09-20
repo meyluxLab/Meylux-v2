@@ -32,7 +32,7 @@ APP_PASSWORD = "p4-009-app"
 
 def git_blob_sha(path: Path) -> str:
     data = path.read_bytes()
-    material = b"blob " + str(len(data)).encode("ascii") + b"\\0" + data
+    material = b"blob " + str(len(data)).encode("ascii") + b"\0" + data
     return hashlib.sha1(material).hexdigest()
 
 
@@ -129,6 +129,8 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             [
                 cls.docker,
                 "exec",
+                "--env",
+                f"PGPASSWORD={ADMIN_PASSWORD}",
                 CONTAINER,
                 "psql",
                 "-X",
@@ -178,7 +180,7 @@ class PostClosureSecurityBoundaryTests(unittest.TestCase):
             self.assertEqual(git_blob_sha(MIGRATIONS / name), expected_sha, name)
 
         # Complete implementation/test search: no legitimate production UPDATE path exists.
-        update_pattern = re.compile(r"UPDATE\\s+(?:meylux\\.)?raw_acquisition_events\\b", re.IGNORECASE)
+        update_pattern = re.compile(r"UPDATE\s+(?:meylux\.)?raw_acquisition_events\b", re.IGNORECASE)
         source_hits = [
             str(path.relative_to(ROOT))
             for path in (ROOT / "src").rglob("*.py")
