@@ -225,7 +225,10 @@
     "PERF-P4-006",
     "OBS-P4-006",
     "TO-P4-008",
-    "AR-P4-015"
+    "AR-P4-015",
+    "PH-P4",
+    "CTR-P4-QUANT-CANDLE-CLOSE-1.0",
+    "DOC-P4-006-OWNER-DIRECTIVE-20260920"
   ],
   "unverified_artifacts": [],
   "open_questions": [
@@ -257,13 +260,15 @@
     "STEP-P4-006 is COMPLETE / VERIFIED under AR-P4-015; TO-P4-007 and TO-P4-008 are VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED.",
     "CONTROL verified the governed BTCUSDT real-data G-4 workload: 116 closed 15m primary candles, 31 closed 1h candles and 9 closed 4h candles, with P2 raw persistence, P3 validation/normalization/quality, canonical persistence, deterministic orchestration/replay, worker processing/restart recovery, read-only API and security evidence.",
     "Real-data replay-sized orchestration averaged 22.690451 ms across five executions, below the roadmap <50ms full-vector target; the separate <5ms/indicator/1000-bars diagnostic remains unsatisfied for the existing EMA implementation and remains governed by DD-V2-P4-006-PERFORMANCE-TARGET without engine reopening.",
-    "Phase 4 closure synchronization is CONTROL-owned and complete under ADR-GOVERNANCE-012; Phase 5 remains NOT AUTHORIZED."
+    "Phase 4 closure synchronization is CONTROL-owned and complete under ADR-GOVERNANCE-012; Phase 5 remains NOT AUTHORIZED.",
+    "PH-P4 is CLOSED / VERIFIED; STEP-P4-001 through STEP-P4-006 are COMPLETE / VERIFIED; TO-P4-008 is VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED; active_task_order is null.",
+    "The Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative Stable ID has been created."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-19T23:50:00Z",
+  "updated_at_utc": "2026-09-20T06:05:40.806Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED"
