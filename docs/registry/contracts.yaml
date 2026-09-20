@@ -192,7 +192,7 @@ records:
     deterministic_identity: canonical JSON uses sorted keys and compact separators; event_id is SHA-256 of provider/instrument/event/time/sequence/payload identity material
     replay_deduplication: receive time, error detail, and capability state do not change event identity; source sequence is included when available and payload protects same-timestamp collisions
     phase_boundary: envelope is raw/staging acquisition output; validation, normalization, and data-quality ownership remains in Phase 3
-    lifecycle_status: IMPLEMENTED / TESTED / UNVERIFIED
+    lifecycle_status: VERIFIED
 
 
   - sid: CTR-P3-008
@@ -237,4 +237,4 @@ records:
     implementation_paths:
       - src/meylux/runtime/quant_worker.py
       - src/meylux/orchestration/engine.py
-    lifecycle_status: TESTED / UNVERIFIED
+    lifecycle_status: VERIFIED
