@@ -270,16 +270,16 @@
     "The Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative Stable ID has been created.",
     "PH-P4 is CLOSED / VERIFIED; STEP-P4-001 through STEP-P4-006 are COMPLETE / VERIFIED; TO-P4-008 is VERIFIED / COMPLETE; G-4 is ESTABLISHED / VERIFIED; active_task_order is null.",
     "The Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative Stable ID has been created.",
-    "Final SentinelX read-back found deployed runtime revision fb7d9847498323bec067ba98a1e2729f869c0697 clean and runtime-source-matched; remote main divergence is documentation-only, so no runtime synchronization/rebuild was required.",
-    "Post-closure application-role grant exception remains explicitly tracked under OQ-P4-006-APP-GRANTS; no VPS security mutation was performed without separate authority.",
-    "Four historical compose-api-run probe containers remain explicitly recorded as non-mutated hygiene carry-over.",
+    "Final SentinelX runtime evidence remains valid; TO-P4-009 database hardening was applied directly through SentinelX because the deployed migration mount predates the repository implementation; no unapproved source/deployment synchronization was performed.",
+    "OQ-P4-006-APP-GRANTS is RESOLVED under TO-P4-009 / AR-P4-016; application-role grant hardening is independently verified and applied through SentinelX.",
+    "Four historical compose-api-run probe containers were removed under Owner Decision 1; cleanup evidence is recorded in EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919.",
     "Phase 5 remains NOT AUTHORIZED."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-20T10:35:00Z",
+  "updated_at_utc": "2026-09-20T10:45:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
