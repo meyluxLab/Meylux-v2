@@ -1613,11 +1613,11 @@ entries:
       - docs/state/OPEN_QUESTIONS.yaml
       - docs/state/DEFERRED_DECISIONS.yaml
     decision_a:
-     subject: governed BTCUSDT 15M + 1H + 4H historical path
+      subject: governed BTCUSDT 15M + 1H + 4H historical path
       boundary: existing P2 provider adapter -> P3 validation/normalization -> CanonicalPersistence
       prohibitions: no bypass, no synthetic/fabricated data, no private/authenticated market-data access, no trading/capital/custody/V1
     decision_b:
-     subject: CONTROL-owned runtime performance profiling and output-preserving orchestration optimization evaluation
+      subject: CONTROL-owned runtime performance profiling and output-preserving orchestration optimization evaluation
       prohibitions: no EMA/Market Structure engine reopening, no silent target revision
     resulting_state: STEP-P4-006 remains ACTIVE / AUTHORIZED; TO-P4-008 ACTIVE / AUTHORIZED; G-4 remains NOT ESTABLISHED; Phase 5 remains NOT AUTHORIZED
     minimum_g4_window_basis: 96 closed 15M evaluation bars + 20 closed 15M warm-up bars; at least 25 closed 1H and 7 closed 4H bars for the same one-day evaluation span plus one preceding closed HTF boundary
