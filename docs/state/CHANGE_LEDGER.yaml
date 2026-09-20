@@ -1847,3 +1847,27 @@ entries:
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged.
     phase5_effect: Phase 5 remains NOT AUTHORIZED.
     closure_result: Phase-4 lifecycle closure remains valid; post-closure security/hygiene drift is explicitly recorded rather than silently mutated outside the requested read-only verification boundary.
+
+  - ledger_id: CL-POSTCLOSURE-TO-P4-009
+    recorded_at: "2026-09-20"
+    authority: Project Owner
+    action: "AUTHORIZED POST-CLOSURE HARDENING — TO-P4-009"
+    task_order: TO-P4-009
+    phase: PH-P4
+    step: STEP-P4-006
+    closure_preserved: true
+    owner_directive_verbatim: |
+      **Decision 2 — Application-role grants (OQ-P4-006-APP-GRANTS): bounded hardening authorized.**
+
+      Note for the record: the blanket "SELECT/INSERT-only" wording exceeded what the ratified repository claims (canonical and quantitative truth tables, which are verified). I am now making it an explicit decision for raw_acquisition_events, and for canonical_event_outbox in the narrowed form below.
+
+      1. Issue a bounded Task Order and delegate implementation to ROL-V2-002. Use a **new forward migration only**; do not edit migrations 0001–0005.
+      2. Scope: revoke UPDATE on raw_acquisition_events from meylux_app; correct the meylux_admin default privileges so that future tables do not silently inherit UPDATE for meylux_app; narrow the outbox UPDATE to the columns the relay needs (published_at, published_stream_id), if PostgreSQL column-level privileges are compatible with the relay.
+      3. Before implementation, confirm by search and test that no legitimate code path updates raw_acquisition_events, and demonstrate that the canonical event relay still works.
+      4. Independent CONTROL audit, then application through SentinelX, then re-verification of grants, canonical/quantitative counts (156 and 3/1/1) and worker/relay behavior.
+      5. This is post-closure hardening: it must not change the closed state of PH-P4 or G-4. If any G-4 evidence is affected, stop and report. No change to frozen architecture, engines, Decimal policy or Phase 5.
+      6. On completion, resolve OQ-P4-006-APP-GRANTS. Record this directive verbatim in the repository and Change Ledger.
+    legacy_probe_cleanup_authorized: true
+    implementation_status: ACTIVE
+    producer: ROL-V2-002
+    control_runtime_boundary: SentinelX only
