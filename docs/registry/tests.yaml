@@ -269,3 +269,24 @@ records:
       independent_control_regression: 448 tests PASS on synchronized final implementation
       real_data_evidence: BTCUSDT 116x15m + 31x1h + 9x4h passed P2/P3/canonical persistence/orchestration/replay/worker/API boundaries
       g4_audit: AR-P4-015
+
+  - stable_id: TST-P4-009
+    canonical_name: Post-Closure Application-Role Grant Hardening Tests
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-009
+    artifact_path: tests/test_p4_009_security_grants.py
+    evidence:
+      ci_core_run: 35504212725
+      ci_core_result: SUCCESS
+      foundation_tests: 449
+      postgres_image: timescale/timescaledb:2.29.2-pg16
+      migration_order: 0001..0006
+      idempotence: VERIFIED
+      raw_update_denied: VERIFIED
+      relay_update: VERIFIED
+      unrelated_outbox_update_denied: VERIFIED
+      future_table_update_denied: VERIFIED
+      control_audit: AR-P4-016
+    status: VERIFIED
