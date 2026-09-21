@@ -549,6 +549,13 @@ records:
     artifact_path: docs/blueprint/PHASE4_ROADMAP.md
     traceability: PH-P4 / DOC-V2-ARCH-001 / G-4
     status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
+  - stable_id: DOC-P5-001
+    canonical_name: Phase 5 Master Roadmap
+    entity_type: DOCUMENT
+    artifact_type: ROADMAP
+    artifact_path: docs/blueprint/PHASE5_ROADMAP.md
+    traceability: DOC-V2-ARCH-001 / G-4 / Project Owner Phase 5 Formalization-Preparation Directive — 2026-09-21
+    status: REGISTERED / REFERENCE ONLY — NOT AUTHORIZED FOR IMPLEMENTATION
   - stable_id: TO-GOV-008
     canonical_name: Governance / Documentation / Registry / Lifecycle Reconciliation
     entity_type: TO
