@@ -16,6 +16,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-001` — `ACTIVE / AUTHORIZED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
 - **Active Task Order:** `null`. **Completed Task Order:** `TO-P4-009` (post-closure hardening verified under `AR-P4-016`; `TO-P4-008` / `AR-P4-015` and historical `TO-P4-007` / `TO-P4-006` / `TO-P4-005` / `TO-P4-004` / `TO-P4-003` / `TO-P4-002` retained for traceability).
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
@@ -69,3 +70,8 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 ## Phase 5 Current State
 
 Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current scope is Spot + Futures for `BTCUSDT` and `SOLUSDT` on Binance and MEXC. Forex remains future intent only.
+
+
+## Phase 5 Current State
+
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-001`; Active Task Order: `TO-P5-001`.
