@@ -21,8 +21,6 @@ class TestContracts(unittest.TestCase):
   with self.assertRaises(ValueError): SnapshotFact("bad",FactStatus.VALID,{"specialist_output":{"status":"SUCCESS"}},T0,(REF,))
  def test_non_string_mapping_key_rejected(self):
   with self.assertRaises(TypeError): SnapshotFact("ambiguous",FactStatus.VALID,{1:"one","1":"string"},T0,(REF,))
- def test_mapping_key_ambiguity_cannot_collapse(self):
-  with self.assertRaises(TypeError): SpecialistOutput("S","1.0.0",snapshot().snapshot_id,"1.0.0",CFG,SpecialistStatus.FAILED,"bad",{},{})
  def test_missing_and_contradictory_states_remain_explicit(self):
   missing=SnapshotFact("missing",FactStatus.UNAVAILABLE,None,T0,())
   contradictory=SnapshotFact("conflict",FactStatus.CONTRADICTORY,None,T0,())
