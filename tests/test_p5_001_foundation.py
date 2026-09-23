@@ -19,6 +19,11 @@ class TestContracts(unittest.TestCase):
   with self.assertRaises(ValueError): InputSnapshot.build(as_of=T0,version="1.0.0",facts=(SnapshotFact("future",FactStatus.VALID,Decimal("1"),datetime(2026,1,1,0,0,1,tzinfo=UTC),(REF,)),))
  def test_specialist_dependency_rejected(self):
   with self.assertRaises(ValueError): SnapshotFact("bad",FactStatus.VALID,{"specialist_output":{"status":"SUCCESS"}},T0,(REF,))
+ def test_missing_and_contradictory_states_remain_explicit(self):
+  missing=SnapshotFact("missing",FactStatus.UNAVAILABLE,None,T0,())
+  contradictory=SnapshotFact("conflict",FactStatus.CONTRADICTORY,None,T0,())
+  self.assertEqual(missing.status,FactStatus.UNAVAILABLE); self.assertIsNone(missing.value)
+  self.assertEqual(contradictory.status,FactStatus.CONTRADICTORY); self.assertIsNone(contradictory.value)
  def test_nonfinite_float_rejected(self):
   with self.assertRaises((ValueError,TypeError)): SnapshotFact("nan",FactStatus.VALID,Decimal("NaN"),T0,(REF,))
   with self.assertRaises(TypeError): SnapshotFact("float",FactStatus.VALID,1.5,T0,(REF,))
