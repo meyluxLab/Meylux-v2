@@ -238,3 +238,27 @@ records:
       - src/meylux/runtime/quant_worker.py
       - src/meylux/orchestration/engine.py
     lifecycle_status: VERIFIED
+
+  - sid: CTR-P5-001
+    version: 1.0.0
+    logical_name: Specialist Contract and Evidence Model
+    entity_type: CTR
+    phase: PH-P5
+    step: STEP-P5-001
+    tier: REQ-BEHAVIOR
+    purpose: Deterministic provider-neutral Stage-1 specialist request, snapshot, evidence and output contract boundary
+    producer: P5 specialist foundation
+    consumers:
+      - later governed P5 specialist execution
+    fields:
+      - specialist_id
+      - input_snapshot
+      - config_reference
+      - evidence_reference
+      - specialist_status
+      - findings
+      - evidence_refs
+    validation: deterministic identity; no-lookahead; Stage-1 independence; finite Decimal/no float; SHA-256 identity; explicit evidence/status semantics
+    immutability: dataclass contract boundary
+    provenance: BR-P5-001 / AR-P5-001
+    status: VERIFIED
