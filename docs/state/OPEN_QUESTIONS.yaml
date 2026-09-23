@@ -94,3 +94,50 @@ items:
     authority: CONTROL / Project Owner if scope expansion is required
     evidence: "Final 448-test regression passed; a ResourceWarning from an existing MEXC test file was observed without test failure. No P4 implementation defect was attributed to it."
     resolution: null
+  - question: "OQ-P5-002-PRQ1-FACT-AVAILABILITY — Which P4 quantitative/structural persisted facts required by the Phase-5 specialist surface are not yet sufficiently evidenced on the authoritative runtime, and what upstream delivery trigger resolves them?"
+    status: OPEN
+    affected_phase: PH-P5
+    affected_step: STEP-P5-002
+    authority: CONTROL / REVIEWER
+    current_disposition: "UNAVAILABLE_DISPOSITIONED for any required fact not independently evidenced as available; owning boundary remains P4 and no P5 fabrication is permitted."
+    trigger: "Reconsider when CONTROL independently verifies the required persisted fact on the authoritative VPS/runtime or a governed P4 delivery is independently verified."
+    constraints:
+      - "Do not infer AVAILABLE_PERSISTED from source-code capability or table existence alone."
+      - "Do not implement PRQ-1 inside P5-002."
+      - "Any later availability claim requires actual persisted evidence and provenance."
+
+  - question: "OQ-P5-002-PRQ2-VENUE-ORDERFLOW — What governed upstream delivery is required for MEXC/second-venue and trade/depth-derived specialist facts that are not currently evidenced?"
+    status: OPEN
+    affected_phase: PH-P5
+    affected_step: STEP-P5-002
+    authority: CONTROL / REVIEWER
+    current_disposition: "UNAVAILABLE_DISPOSITIONED where the required venue/order-flow fact is not independently evidenced; owning boundary remains P2/P4 according to the fact."
+    trigger: "Reconsider when governed P2/P4 delivery is independently verified and the corresponding persisted facts are available with complete provenance."
+    constraints:
+      - "No silent venue substitution."
+      - "No provider-runtime activation inside P5-002."
+      - "No order-flow derivation inside the Snapshot Builder."
+
+  - question: "OQ-P5-002-PRQ3-DERIVATIVES — What governed acquisition/persistence delivery is required before derivatives facts can be treated as available to P5 specialists?"
+    status: OPEN
+    affected_phase: PH-P5
+    affected_step: STEP-P5-002
+    authority: CONTROL / REVIEWER
+    current_disposition: "UNAVAILABLE_DISPOSITIONED for derivatives requirements not independently evidenced as delivered; owning boundary remains P2/P4."
+    trigger: "Reconsider when governed derivatives acquisition/persistence is implemented and independently verified."
+    constraints:
+      - "No Futures/derivatives runtime implementation inside P5-002."
+      - "Do not treat the existence of a derivatives table or engine as delivered runtime fact evidence."
+      - "No synthetic derivatives values."
+
+  - question: "OQ-P5-002-PRQ4-QUALITY-EVIDENCE — What governed upstream quality/acquisition evidence is required before P5 can classify the corresponding quality facts as available?"
+    status: OPEN
+    affected_phase: PH-P5
+    affected_step: STEP-P5-002
+    authority: CONTROL / REVIEWER
+    current_disposition: "UNAVAILABLE_DISPOSITIONED where required P3 quality evidence is not independently evidenced; owning boundary remains P3."
+    trigger: "Reconsider when the required persisted quality evidence is independently verified and provenance-complete."
+    constraints:
+      - "Do not infer quality availability from absence of an error."
+      - "Do not modify P3 quality ownership inside P5-002."
+      - "Do not fabricate quality EvidenceRefs."
