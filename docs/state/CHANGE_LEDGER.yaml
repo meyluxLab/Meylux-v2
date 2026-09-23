@@ -1980,3 +1980,28 @@ entries:
       - P2/P3/P4 redesign
       - VPS mutation
     g12: "ACTIVATION STATE SYNCHRONIZED"
+
+  - ledger_id: CL-P5-STEP-002-ACTIVATION-CORRECTION-20260923
+    recorded_at: "2026-09-23"
+    authority: CONTROL / REVIEWER
+    action: "CORRECTIVE READ-BACK OF STEP-P5-002 ACTIVATION ARTIFACTS"
+    basis: "Owner continuation authorization 2026-09-23 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + repository read-back at e7a415e25b3187481810d8f3fcc9e605b4c120eb"
+    affected_ids:
+      - STEP-P5-002
+      - TO-P5-002
+      - PH-P5
+      - README
+      - CHANGE_LEDGER
+    findings:
+      - "PH-P5.md top-level current-step header remained stale at STEP-P5-001 although the Step Sequence and registry recorded STEP-P5-002 active."
+      - "README.md contained a stale Phase-5 current-step line and duplicated Phase-5 current-state blocks."
+      - "TO-P5-002 did not explicitly enforce the authoritative USR-03 three-state disposition model and therefore required clarification before Producer reliance."
+      - "TO-P5-002 did not explicitly carry the roadmap §37 Snapshot/FRM growth-and-retention policy requirement."
+    corrections:
+      - "PH-P5.md top-level current-step header corrected to STEP-P5-002 ACTIVE / AUTHORIZED."
+      - "README.md current-state text reconciled to STEP-P5-002 / TO-P5-002 and duplicate Phase-5 block removed."
+      - "TO-P5-002 revised from 1.0 to 1.1 with explicit USR-03 three-state disposition semantics and subordinate reason taxonomy."
+      - "TO-P5-002 revised to require documentation/verification of the roadmap §37 growth-and-retention policy within Step scope, without scope expansion."
+    runtime_effect: "NONE — no VPS/SentinelX operation performed."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
+    lifecycle_effect: "STEP-P5-002 and TO-P5-002 remain ACTIVE / AUTHORIZED; no lifecycle advancement occurred."
