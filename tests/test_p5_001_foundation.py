@@ -19,6 +19,10 @@ class TestContracts(unittest.TestCase):
   with self.assertRaises(ValueError): InputSnapshot.build(as_of=T0,version="1.0.0",facts=(SnapshotFact("future",FactStatus.VALID,Decimal("1"),datetime(2026,1,1,0,0,1,tzinfo=UTC),(REF,)),))
  def test_specialist_dependency_rejected(self):
   with self.assertRaises(ValueError): SnapshotFact("bad",FactStatus.VALID,{"specialist_output":{"status":"SUCCESS"}},T0,(REF,))
+ def test_non_string_mapping_key_rejected(self):
+  with self.assertRaises(TypeError): SnapshotFact("ambiguous",FactStatus.VALID,{1:"one","1":"string"},T0,(REF,))
+ def test_mapping_key_ambiguity_cannot_collapse(self):
+  with self.assertRaises(TypeError): SpecialistOutput("S","1.0.0",snapshot().snapshot_id,"1.0.0",CFG,SpecialistStatus.FAILED,"bad",{},{})
  def test_missing_and_contradictory_states_remain_explicit(self):
   missing=SnapshotFact("missing",FactStatus.UNAVAILABLE,None,T0,())
   contradictory=SnapshotFact("conflict",FactStatus.CONTRADICTORY,None,T0,())
@@ -29,6 +33,10 @@ class TestContracts(unittest.TestCase):
   with self.assertRaises(TypeError): SnapshotFact("float",FactStatus.VALID,1.5,T0,(REF,))
  def test_success_requires_evidence(self):
   with self.assertRaises(ValueError): SpecialistOutput("S","1.0.0",snapshot().snapshot_id,"1.0.0",CFG,SpecialistStatus.SUCCESS,"missing")
+ def test_config_ref_hash_validation(self):
+  for value in ("abc","g"*64,"a"*63,"a"*65,"a"*63+"g"):
+   with self.assertRaises(ValueError): SpecialistConfigRef("p5","1.0",value,"development")
+  self.assertEqual(SpecialistConfigRef("p5","1.0.0","A"*64,"development").identity_hash,"A"*64)
  def test_confidence_bounded(self):
   with self.assertRaises(ValueError): SpecialistFinding("F",SpecialistStatus.SUCCESS,Decimal("1"),"bad",Decimal("1.1"),(REF,))
  def test_status_taxonomy(self):
