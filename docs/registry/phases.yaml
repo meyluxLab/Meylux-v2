@@ -450,10 +450,10 @@ records:
     next_valid_step: null
     final_step: STEP-P5-012
     g4_status: ESTABLISHED / VERIFIED
-    active_task_order: TO-P5-001
+    active_task_order: null
     current_step: STEP-P5-001
-    completed_task_order: null
-    completion_audit: null
+    completed_task_order: TO-P5-001
+    completion_audit: AR-P5-001
     authorization_criteria:
       - PH-P4 is CLOSED / VERIFIED with G-4 ESTABLISHED / VERIFIED.
       - Project Owner explicitly authorized PH-P5 establishment and STEP-P5-001.
@@ -476,14 +476,14 @@ records:
     logical_name: Contract, Evidence Model, Config & Persistence Foundation
     entity_type: STEP
     phase: PH-P5
-    status: ACTIVE / AUTHORIZED
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: COMPLETE / VERIFIED
     order: 1
     predecessor: STEP-P4-006
     activation_basis: PROJECT-OWNER-PHASE-5-REDIRECTION-AND-SIMPLIFIED-ESTABLISHMENT-2026-09-23
-    active_task_order: TO-P5-001
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P5-001
+    completion_audit: AR-P5-001
     purpose: Establish the specialist contract, evidence model, versioned configuration and append-only persistence foundation required by later PH-P5 Steps.
     repository_scope: P5 contracts, evidence semantics, configuration, persistence foundation, tests and traceability within STEP-P5-001 only.
     vps_scope: only operations explicitly authorized by TO-P5-001; SentinelX-only.
