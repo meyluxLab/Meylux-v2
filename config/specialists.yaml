@@ -1,0 +1,13 @@
+{
+  "name":"p5-specialists",
+  "schema_version":"1.0.0",
+  "configuration_version":"1.0.0",
+  "environment":"development",
+  "provenance":"repo:config/specialists.yaml",
+  "safety":{"read_only":true,"allow_private_provider_access":false,"allow_trading":false,"allow_capital_movement":false,"allow_custody":false},
+  "parameters":{
+    "execution_timeout_ms":{"type":"integer","unit":"ms","value":5000,"minimum":1,"maximum":600000},
+    "max_findings":{"type":"integer","unit":"count","value":100,"minimum":1,"maximum":10000},
+    "max_evidence_refs":{"type":"integer","unit":"count","value":100,"minimum":1,"maximum":1000}
+  }
+}
