@@ -51,7 +51,7 @@ Phase 5 interprets authoritative upstream facts through independent specialist d
 **Order:** 1
 **Status:** COMPLETE / VERIFIED
 **Completion Audit:** `AR-P5-001`
-**Authorization state:** ACTIVE / AUTHORIZED
+**Authorization state:** COMPLETE / VERIFIED
 **Predecessor:** `STEP-P4-006` — COMPLETE / VERIFIED
 **Active Task Order:** `null`
 **Activation basis:** Project Owner — PHASE 5 RE-DIRECTION AND SIMPLIFIED ESTABLISHMENT DIRECTIVE — 2026-09-23
