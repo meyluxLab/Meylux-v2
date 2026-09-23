@@ -290,3 +290,21 @@ records:
       future_table_update_denied: VERIFIED
       control_audit: AR-P4-016
     status: VERIFIED
+
+  - stable_id: TST-P5-001
+    canonical_name: P5-001 Contract, Config and PostgreSQL Integration Tests
+    entity_type: TST
+    phase: PH-P5
+    step: STEP-P5-001
+    task_order: TO-P5-001
+    artifact_path: tests/test_p5_001_foundation.py
+    traceability: BR-P5-001 / AR-P5-001
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 35879485901
+      workflow_job_id: 107243933390
+      result: SUCCESS
+      foundation_test_count: 467
+      postgres_integration: test_real_postgresql_persistence_and_privileges ... ok
+      docker_foundation_run_id: 35879486031
