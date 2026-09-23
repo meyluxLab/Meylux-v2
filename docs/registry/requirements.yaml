@@ -1,5 +1,5 @@
 schema_version: '0.1'
-status: DRAFT_PRE_PHASE_0
+status: ACTIVE / EVIDENCE-TRACKING
 records:
   - stable_id: REQ-P5-001
     canonical_name: P5-001 Contract, Evidence, Config & Persistence Foundation Requirements
