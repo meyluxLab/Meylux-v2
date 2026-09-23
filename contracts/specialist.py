@@ -1,6 +1,6 @@
 """Phase-5 specialist contracts: deterministic, provider-neutral, Stage-1 independent."""
 from __future__ import annotations
-import hashlib, json
+import hashlib, json, re
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from decimal import Decimal
@@ -30,7 +30,10 @@ def _normalise(v: Any) -> Any:
         return {"__decimal__":format(v,"f")}
     if isinstance(v,datetime): return _utc(v,"datetime").isoformat().replace("+00:00","Z")
     if isinstance(v,float): raise TypeError("float values are forbidden in authoritative specialist contracts")
-    if isinstance(v,Mapping): return {str(k):_normalise(v[k]) for k in sorted(v,key=lambda x:str(x))}
+    if isinstance(v,Mapping):
+        if any(not isinstance(k,str) for k in v):
+            raise TypeError("mapping keys must be strings in authoritative specialist contracts")
+        return {k:_normalise(v[k]) for k in sorted(v)}
     if isinstance(v,(tuple,list)): return [_normalise(x) for x in v]
     if isinstance(v,(str,int,bool)) or v is None: return v
     if isinstance(v,Enum): return v.value
@@ -95,7 +98,7 @@ class SpecialistConfigRef:
     name:str; version:str; identity_hash:str; environment:str
     def __post_init__(self):
         for v,f in ((self.name,"name"),(self.version,"version"),(self.identity_hash,"identity_hash"),(self.environment,"environment")): _token(v,f)
-        if len(self.identity_hash)!=64: raise ValueError("config identity_hash must be SHA-256")
+        if not re.fullmatch(r"[0-9a-fA-F]{64}", self.identity_hash): raise ValueError("config identity_hash must be a 64-character hexadecimal SHA-256 value")
 
 @dataclass(frozen=True,slots=True)
 class SpecialistRequest:
