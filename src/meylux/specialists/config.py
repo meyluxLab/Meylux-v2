@@ -13,13 +13,13 @@ class SpecialistConfig:
     @classmethod
     def from_mapping(cls,raw):
         if not isinstance(raw,Mapping): raise SpecialistConfigError("configuration root must be a mapping")
-        req=("schema_version","configuration_version","environment","provenance","parameters","safety")
+        req=("name","schema_version","configuration_version","environment","provenance","parameters","safety")
         missing=[x for x in req if x not in raw]
         if missing: raise SpecialistConfigError("missing configuration fields: "+",".join(missing))
         safety=raw["safety"]
         expected={"read_only":True,"allow_private_provider_access":False,"allow_trading":False,"allow_capital_movement":False,"allow_custody":False}
         if safety!=expected: raise SpecialistConfigError("configuration cannot weaken frozen read-only/security invariants")
-        for k in ("schema_version","configuration_version","environment","provenance"):
+        for k in ("name","schema_version","configuration_version","environment","provenance"):
             if not isinstance(raw[k],str) or not raw[k]: raise SpecialistConfigError(f"{k} must be a non-empty string")
         if not isinstance(raw["parameters"],Mapping): raise SpecialistConfigError("parameters must be a mapping")
         params={}
@@ -38,9 +38,9 @@ class SpecialistConfig:
                 allowed=spec["allowed"]
                 if not isinstance(allowed,list) or value not in [_convert(ptype,x,name+".allowed") for x in allowed]: raise SpecialistConfigError(f"parameter {name} is outside allowed values")
             params[name]={**dict(spec),"value":value}
-        material={"schema_version":raw["schema_version"],"configuration_version":raw["configuration_version"],"environment":raw["environment"],"provenance":raw["provenance"],"parameters":params,"safety":safety}
+        material={"name":raw["name"],"schema_version":raw["schema_version"],"configuration_version":raw["configuration_version"],"environment":raw["environment"],"provenance":raw["provenance"],"parameters":params,"safety":safety}
         digest=hashlib.sha256(canonical_json(material).encode()).hexdigest()
-        return cls(raw["provenance"],raw["schema_version"],raw["configuration_version"],raw["environment"],raw["provenance"],params,digest)
+        return cls(raw["name"],raw["schema_version"],raw["configuration_version"],raw["environment"],raw["provenance"],params,digest)
     def ref(self):
         from contracts.specialist import SpecialistConfigRef
         return SpecialistConfigRef(self.name,self.version,self.identity_hash,self.environment)
