@@ -1955,3 +1955,28 @@ entries:
       supplemental_registry: NO P5-001 STRANDED RECORD IDENTIFIED
     runtime_effect: NO VPS/RUNTIME MUTATION
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN
+
+  - ledger_id: CL-P5-STEP-002-ACTIVATION-20260923
+    recorded_at: "2026-09-23"
+    authority: PROJECT OWNER / CONTROL
+    action: "PHASE 5 CONTINUATION AUTHORIZATION AND NEXT STEP ACTIVATION"
+    phase: PH-P5
+    predecessor_step: STEP-P5-001
+    predecessor_task_order: TO-P5-001
+    predecessor_audit: AR-P5-001
+    step: STEP-P5-002
+    task_order: TO-P5-002
+    disposition: ACTIVE / AUTHORIZED
+    basis: "PROJECT OWNER — PHASE 5 CONTINUATION AUTHORIZATION — 2026-09-23"
+    scope: "Input Snapshot Builder and Fact Requirements Matrix using existing authoritative persisted facts; CONTROL-owned read-only SentinelX availability verification."
+    exclusions:
+      - PRQ-1/2/3/4 implementation
+      - provider runtime activation
+      - specialist execution
+      - Futures acquisition
+      - Forex
+      - cross-specialist synthesis
+      - trading/capital/custody
+      - P2/P3/P4 redesign
+      - VPS mutation
+    g12: "ACTIVATION STATE SYNCHRONIZED"
