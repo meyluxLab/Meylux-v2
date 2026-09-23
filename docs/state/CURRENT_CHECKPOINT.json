@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P5-001",
-  "last_build_report": null,
-  "last_audit_report": null,
+  "last_build_report": "BR-P5-001",
+  "last_audit_report": "AR-P5-001",
   "last_execution_log": "EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919",
-  "active_task_order": "TO-P5-001",
-  "completed_task_order": null,
-  "completion_audit": null,
+  "active_task_order": null,
+  "completed_task_order": "TO-P5-001",
+  "completion_audit": "AR-P5-001",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -233,9 +233,20 @@
     "BR-P4-009",
     "AR-P4-016",
     "TST-P4-009",
-    "DB-P4-006-GRANT-HARDENING"
+    "DB-P4-006-GRANT-HARDENING",
+    "BR-P5-001",
+    "AR-P5-001",
+    "CMP-P5-001",
+    "CTR-P5-001",
+    "TST-P5-001",
+    "DB-P5-001",
+    "SEC-P5-001",
+    "CFG-P5-001",
+    "REQ-P5-001"
   ],
-  "unverified_artifacts": [],
+  "unverified_artifacts": [
+    "DOC-P5-002"
+  ],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
     "OQ-P4-006-MEXC-RESOURCEWARNING",
@@ -274,13 +285,14 @@
     "Final SentinelX runtime evidence remains valid; TO-P4-009 database hardening was applied directly through SentinelX because the deployed migration mount predates the repository implementation; no unapproved source/deployment synchronization was performed.",
     "OQ-P4-006-APP-GRANTS is RESOLVED under TO-P4-009 / AR-P4-016; application-role grant hardening is independently verified and applied through SentinelX.",
     "Four historical compose-api-run probe containers were removed under Owner Decision 1; cleanup evidence is recorded in EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919.",
-    "Phase 5 remains NOT AUTHORIZED."
+    "Phase 5 remains NOT AUTHORIZED.",
+    "STEP-P5-001 is COMPLETE / VERIFIED under AR-P5-001; TO-P5-001 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later Phase-5 Step is activated."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-23T10:02:10Z",
+  "updated_at_utc": "2026-09-23T15:27:04Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -333,12 +345,13 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "6e9f314c4dd479494039ade4a9f0c8dd16bb56f5",
+  "last_governance_sync_base_commit": "b40eec0038572c5646007100c12d6dcfcc34812b",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
   "notes": [
-    "Project Owner Phase 5 Redirection Directive 2026-09-23 supersedes the previous Phase 5 Formalization-Preparation / Readiness Cycle; no blanket pre-Phase readiness cycle is required."
+    "Project Owner Phase 5 Redirection Directive 2026-09-23 supersedes the previous Phase 5 Formalization-Preparation / Readiness Cycle; no blanket pre-Phase readiness cycle is required.",
+    "CONTROL closure synchronization for STEP-P5-001 completed under AR-P5-001; repository evidence baseline 6b1c563b6aedbe04d62c8c99737f88921e5d562d and Build Report revision f8937bc55dfefc99889d130f7c44ad947df0665b were independently verified; no VPS/runtime execution was performed for P5-001."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md"
 }
