@@ -2005,3 +2005,24 @@ entries:
     runtime_effect: "NONE — no VPS/SentinelX operation performed."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
     lifecycle_effect: "STEP-P5-002 and TO-P5-002 remain ACTIVE / AUTHORIZED; no lifecycle advancement occurred."
+  - ledger_id: CL-P5-001-SOURCE-PUBLICATION-CORRECTION-20260923
+    recorded_at: "2026-09-23"
+    authority: CONTROL / REVIEWER
+    action: "CORRECTIVE READ-BACK AND PUBLICATION OF VERIFIED P5-001 IMPLEMENTATION"
+    basis: "AR-P5-001 + repository read-back identified that P5-001 lifecycle/registry closure had been synchronized while the verified Producer implementation remained only on open PR #42 and was absent from main."
+    affected_ids:
+      - BR-P5-001
+      - TO-P5-001
+      - STEP-P5-001
+      - AR-P5-001
+      - PH-P5
+    findings:
+      - "P5-001 registry/checkpoint lifecycle was VERIFIED/COMPLETE, but the verified implementation and Build Report were not present on main."
+      - "PR #42 remained open/draft and contained the verified P5-001 implementation baseline."
+    corrections:
+      - "PR #42 was marked ready and merged after read-back of the existing independent audit and verified implementation/evidence baseline."
+      - "Main now contains the P5-001 implementation and docs/build-reports/BR-P5-001.md."
+      - "P5-001 lifecycle remains COMPLETE / VERIFIED; no reclassification was performed."
+    runtime_effect: "NONE — no VPS mutation or runtime deployment performed."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
+    lifecycle_effect: "P5-001 remains COMPLETE / VERIFIED; P5-002 remains ACTIVE / AUTHORIZED."
