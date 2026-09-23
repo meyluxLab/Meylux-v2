@@ -1,10 +1,10 @@
 {
   "schema_version": "2.0",
   "project_version": "V2",
-  "phase": "PH-P4",
-  "step": "STEP-P4-006",
+  "phase": "PH-P5",
+  "step": "STEP-P5-001",
   "gate": "Phase progression authority",
-  "status": "CLOSED / VERIFIED",
+  "status": "ACTIVE / AUTHORIZED",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -18,13 +18,13 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P4-009",
-  "last_build_report": "BR-P4-009",
-  "last_audit_report": "AR-P4-016",
+  "last_approved_task_order": "TO-P5-001",
+  "last_build_report": null,
+  "last_audit_report": null,
   "last_execution_log": "EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919",
-  "active_task_order": null,
-  "completed_task_order": "TO-P4-009",
-  "completion_audit": "AR-P4-016",
+  "active_task_order": "TO-P5-001",
+  "completed_task_order": null,
+  "completion_audit": null,
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -239,7 +239,8 @@
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
     "OQ-P4-006-MEXC-RESOURCEWARNING",
-    "OQ-GOV-CONSTITUTION-STABLE-ID"
+    "OQ-GOV-CONSTITUTION-STABLE-ID",
+    "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control."
   ],
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
@@ -332,5 +333,11 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "6e9f314c4dd479494039ade4a9f0c8dd16bb56f5"
+  "last_governance_sync_base_commit": "6e9f314c4dd479494039ade4a9f0c8dd16bb56f5",
+  "phase_5_status": "ACTIVE / AUTHORIZED",
+  "current_phase_definition": "docs/phases/PH-P5.md",
+  "current_step_definition": "docs/phases/PH-P5.md",
+  "notes": [
+    "Project Owner Phase 5 Redirection Directive 2026-09-23 supersedes the previous Phase 5 Formalization-Preparation / Readiness Cycle; no blanket pre-Phase readiness cycle is required."
+  ]
 }
