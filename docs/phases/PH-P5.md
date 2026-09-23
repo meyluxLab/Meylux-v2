@@ -62,6 +62,23 @@ This Step does not implement later specialist groups, cross-specialist synthesis
 
 Required evidence includes deterministic contract semantics, explicit status/reason handling, no NaN/Inf, versioned configuration, append-only persistence semantics, tests, and the applicable VPS evidence required by the Task Order.
 
+### `STEP-P5-002` — Input Snapshot Builder & Fact Availability Verification
+
+**Order:** 2  
+**Status:** ACTIVE / AUTHORIZED  
+**Authorization state:** ACTIVE / AUTHORIZED  
+**Predecessor:** `STEP-P5-001` — COMPLETE / VERIFIED  
+**Active Task Order:** `TO-P5-002`  
+**Activation basis:** Project Owner — PHASE 5 CONTINUATION AUTHORIZATION — 2026-09-23
+
+Purpose: establish the authoritative Stage-1 Input Snapshot boundary and the Fact Requirements Matrix (FRM), using only existing authoritative persisted facts and preserving no-lookahead, provenance, deterministic identity and specialist independence.
+
+This Step does not implement PRQ-1/2/3/4, provider runtime activation, specialist execution, later specialist groups, Futures acquisition, Forex, or cross-specialist synthesis.
+
+VPS boundary: CONTROL-only, SentinelX-only, read-only verification required for Step acceptance; no mutation, restart, migration, deployment or provider-runtime activation.
+
+Required evidence includes the final FRM, deterministic Snapshot identity/replay, no-lookahead boundary tests, explicit missing/unsupported/unavailable/insufficient/invalid/stale semantics, specialist-independence tests, and applicable read-only VPS fact-availability evidence.
+
 ## Continuation and Dependency Rule
 
 Phase 5 follows just-in-time dependency completion. A dependency is not treated as a blanket Phase prerequisite merely because the Roadmap mentions it. When an authorized Step demonstrates an actual dependency, CONTROL routes that dependency through the correct ownership and change-control mechanism and continues the Step after the dependency is legitimately resolved or explicitly dispositioned unavailable.
