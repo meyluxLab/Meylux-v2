@@ -64,3 +64,8 @@ Full role definitions are in `docs/governance/`. AI sessions resuming work on th
 ## V1 Boundary
 
 V1 is frozen historical/reference material and remains outside V2. Nothing in this repository grants permission to modify, resume, or integrate V1 runtime infrastructure. V1 lessons are incorporated into V2 only as documented source material (see `docs/architecture/MEYLUX_V2_ARCHITECTURE_HARDENING_LESSONS_LEARNED.md`), never as a codebase fork.
+
+
+## Phase 5 Current State
+
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current scope is Spot + Futures for `BTCUSDT` and `SOLUSDT` on Binance and MEXC. Forex remains future intent only.
