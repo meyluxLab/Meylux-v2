@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-001` — `ACTIVE / AUTHORIZED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Active Task Order:** `null`. **Completed Task Order:** `TO-P4-009` (post-closure hardening verified under `AR-P4-016`; `TO-P4-008` / `AR-P4-015` and historical `TO-P4-007` / `TO-P4-006` / `TO-P4-005` / `TO-P4-004` / `TO-P4-003` / `TO-P4-002` retained for traceability).
+- **Active Task Order:** `null`. **Completed Task Order:** `TO-P5-001` (`VERIFIED / COMPLETE` under `AR-P5-001`). `STEP-P5-001` is `COMPLETE / VERIFIED`; no later Phase-5 Step is activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -26,6 +26,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 **Open governance items currently on record** (see `docs/state/CURRENT_CHECKPOINT.json.open_questions` and `docs/state/OPEN_QUESTIONS.yaml` for full detail — not restated here to avoid drift):
 
 - Constitution Stable ID: `IDENTITY UNCONFIRMED`.
+- `OQ-P4-006-MEXC-RESOURCEWARNING` remains on record.
+- Futures acquisition capability is not present in the current Binance/MEXC adapters; the bounded dependency route remains through the owning P2 boundary when a concrete P5 need arises.
 
 The existence of any file in this repository does not, by itself, constitute implementation, execution, verification, ratification, or authorization of anything beyond what `CURRENT_CHECKPOINT.json` and the Registry explicitly record. When this README and `CURRENT_CHECKPOINT.json` ever appear to disagree, `CURRENT_CHECKPOINT.json` is authoritative and this file is stale and due for correction.
 
@@ -74,4 +76,4 @@ Phase 5 is established and authorized under the Project Owner Phase 5 Re-Directi
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-001`; Active Task Order: `TO-P5-001`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-001` — `COMPLETE / VERIFIED`; Active Task Order: `null`; Completed Task Order: `TO-P5-001`; completion audit: `AR-P5-001`. No later Step is activated.
