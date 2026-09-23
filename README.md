@@ -71,9 +71,4 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current scope is Spot + Futures for `BTCUSDT` and `SOLUSDT` on Binance and MEXC. Forex remains future intent only.
-
-
-## Phase 5 Current State
-
 Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-002` — `ACTIVE / AUTHORIZED`; Active Task Order: `TO-P5-002`; Completed Task Order: `TO-P5-001`; completion audit: `AR-P5-001`.
