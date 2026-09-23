@@ -1,6 +1,9 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
+**Current Step Lifecycle:** `STEP-P5-001` — COMPLETE / VERIFIED
+**Last Completed Task Order:** `TO-P5-001`
+**Completion Audit:** `AR-P5-001`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
 **Predecessor:** `PH-P4` CLOSED / VERIFIED; `G-4` ESTABLISHED / VERIFIED
@@ -46,10 +49,11 @@ Phase 5 interprets authoritative upstream facts through independent specialist d
 ### `STEP-P5-001` — Contract, Evidence Model, Config & Persistence Foundation
 
 **Order:** 1
-**Status:** ACTIVE / AUTHORIZED
+**Status:** COMPLETE / VERIFIED
+**Completion Audit:** `AR-P5-001`
 **Authorization state:** ACTIVE / AUTHORIZED
 **Predecessor:** `STEP-P4-006` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P5-001`
+**Active Task Order:** `null`
 **Activation basis:** Project Owner — PHASE 5 RE-DIRECTION AND SIMPLIFIED ESTABLISHMENT DIRECTIVE — 2026-09-23
 
 Purpose: establish the specialist contract/evidence model, configuration and append-only persistence foundation required by later Phase 5 execution, while preserving Stage-1 independence and the frozen architecture.
