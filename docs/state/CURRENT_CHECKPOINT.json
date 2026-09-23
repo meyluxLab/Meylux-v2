@@ -280,7 +280,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-20T10:45:00Z",
+  "updated_at_utc": "2026-09-23T10:02:10Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -339,5 +339,6 @@
   "current_step_definition": "docs/phases/PH-P5.md",
   "notes": [
     "Project Owner Phase 5 Redirection Directive 2026-09-23 supersedes the previous Phase 5 Formalization-Preparation / Readiness Cycle; no blanket pre-Phase readiness cycle is required."
-  ]
+  ],
+  "phase_5_definition": "docs/phases/PH-P5.md"
 }
