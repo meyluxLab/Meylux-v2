@@ -1,3 +1,13 @@
 schema_version: '0.1'
 status: DRAFT_PRE_PHASE_0
-records: []
+records:
+  - stable_id: REQ-P5-001
+    canonical_name: P5-001 Contract, Evidence, Config & Persistence Foundation Requirements
+    entity_type: REQUIREMENT
+    phase: PH-P5
+    step: STEP-P5-001
+    task_order: TO-P5-001
+    traceability: TO-P5-001 / BR-P5-001 / AR-P5-001
+    disposition: VERIFIED
+    status: VERIFIED
+
