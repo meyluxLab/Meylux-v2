@@ -1906,3 +1906,52 @@ entries:
     step_status_unchanged: STEP-P4-006 COMPLETE / VERIFIED
     g4_status_unchanged: G-4 ESTABLISHED / VERIFIED
     phase5_authorized: false
+
+  - ledger_id: CL-P5-STEP-001-CLOSURE-20260923
+    recorded_at: "2026-09-23"
+    authority: CONTROL / REVIEWER
+    action: "INDEPENDENT AUDIT AND CONTROL-OWNED CLOSURE SYNCHRONIZATION"
+    task_order: TO-P5-001
+    build_report: BR-P5-001
+    audit_report: AR-P5-001
+    phase: PH-P5
+    step: STEP-P5-001
+    disposition: VERIFIED / COMPLETE
+    evidence:
+      implementation_commit: 6b1c563b6aedbe04d62c8c99737f88921e5d562d
+      build_report_revision: f8937bc55dfefc99889d130f7c44ad947df0665b
+      ci_core_run: 35879485901
+      ci_core_job: 107243933390
+      ci_core_result: SUCCESS
+      ci_foundation_test_count: 467
+      postgres_integration: PASS
+      ci_docker_foundation_run: 35879486031
+      ci_docker_foundation_job: 107243933754
+      ci_docker_result: SUCCESS
+      migration_0007: PASS
+      post_report_ci_core_run: 35879698964
+      post_report_ci_docker_run: 35879698961
+    scope_result:
+      futures_adapter: NOT_IMPLEMENTED
+      forex: NOT_IMPLEMENTED
+      later_specialists: NOT_IMPLEMENTED
+      synthesis: NOT_IMPLEMENTED
+      trading_capital_custody: NOT_IMPLEMENTED
+      private_provider_access: NOT_IMPLEMENTED
+      producer_vps_operations: NONE
+    lifecycle_sync:
+      phase5: ACTIVE / AUTHORIZED
+      step: COMPLETE / VERIFIED
+      active_task_order: null
+      completed_task_order: TO-P5-001
+      completion_audit: AR-P5-001
+      next_step: NOT ACTIVATED
+    g12:
+      checkpoint: SYNCHRONIZED
+      phase_registry: SYNCHRONIZED
+      artifact_registry: SYNCHRONIZED
+      specialized_registries: SYNCHRONIZED FOR P5-001 EVIDENCE
+      readme: SYNCHRONIZED
+      supplemental_registry: NO P5-001 STRANDED RECORD IDENTIFIED
+    runtime_effect: NO VPS/RUNTIME MUTATION
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN
