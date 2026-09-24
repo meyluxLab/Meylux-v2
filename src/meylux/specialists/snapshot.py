@@ -64,6 +64,70 @@ class SnapshotRecord:
     reason: str | None
     metadata: Mapping[str, Any]
 
+    def __post_init__(self):
+        try:
+            status = self.status if isinstance(self.status, FactStatus) else FactStatus(self.status)
+        except (TypeError, ValueError) as exc:
+            raise SnapshotBuildError(f"unsupported fact status: {self.status!r}") from exc
+        if not isinstance(self.fact_id, str) or not self.fact_id.strip():
+            raise SnapshotBuildError("fact_id must be a non-empty string")
+        if self.fact_id != self.fact_id.strip():
+            raise SnapshotBuildError("fact_id must not contain leading/trailing whitespace")
+        for value, field in ((self.event_time, "event_time"), (self.knowledge_time, "knowledge_time")):
+            if not isinstance(value, datetime) or value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value):
+                raise SnapshotBuildError(f"{field} must be an explicit timezone-aware UTC datetime")
+        if self.knowledge_time is None:
+            raise SnapshotBuildError("knowledge_time is mandatory for SnapshotRecord")
+        if not isinstance(self.metadata, Mapping):
+            raise SnapshotBuildError("metadata must be a mapping")
+        missing_metadata = tuple(name for name in InputSnapshotBuilder.REQUIRED_METADATA_FIELDS if name not in self.metadata)
+        if missing_metadata:
+            raise SnapshotBuildError(f"authoritative record metadata missing {missing_metadata}")
+        if self.metadata["record_id"] != self.fact_id:
+            raise SnapshotBuildError("metadata.record_id must match fact_id")
+        if self.metadata["event_time"] != self.event_time:
+            raise SnapshotBuildError("metadata.event_time must equal the explicit record event_time")
+        if self.metadata["knowledge_time"] != self.knowledge_time:
+            raise SnapshotBuildError("metadata.knowledge_time must equal the explicit record knowledge_time")
+        identity_hash = self.metadata["identity_hash"]
+        if not isinstance(identity_hash, str) or len(identity_hash) != 64 or any(ch not in "0123456789abcdefABCDEF" for ch in identity_hash):
+            raise SnapshotBuildError("metadata.identity_hash must be a 64-character hexadecimal SHA-256 value")
+        if not isinstance(self.evidence_refs, tuple) or not self.evidence_refs:
+            raise SnapshotBuildError("authoritative Snapshot fact requires at least one structured EvidenceRef")
+        refs = tuple(self.evidence_refs)
+        if any(not isinstance(ref, EvidenceRef) for ref in refs):
+            raise SnapshotBuildError("evidence_refs must contain EvidenceRef values")
+        for ref in refs:
+            required = (ref.source_family, ref.record_id, ref.identity_hash, ref.event_time, ref.knowledge_time, ref.timeframe, ref.venue)
+            if any(value is None for value in required):
+                raise SnapshotBuildError(
+                    "P5-002 EvidenceRef is incomplete: source_family, record_id, identity_hash, "
+                    "event_time, knowledge_time, timeframe and venue are required"
+                )
+            if ref.identity_hash != identity_hash:
+                raise SnapshotBuildError("EvidenceRef identity_hash must match the authoritative record identity_hash")
+            if ref.record_id != self.metadata["record_id"]:
+                raise SnapshotBuildError("EvidenceRef record_id must match metadata.record_id")
+            if ref.event_time != self.event_time:
+                raise SnapshotBuildError("EvidenceRef event_time must match record event_time")
+            if ref.knowledge_time != self.knowledge_time:
+                raise SnapshotBuildError("EvidenceRef knowledge_time must match record knowledge_time")
+            if ref.timeframe != self.metadata["timeframe"]:
+                raise SnapshotBuildError("EvidenceRef timeframe must match metadata.timeframe")
+            if ref.venue != self.metadata["venue"]:
+                raise SnapshotBuildError("EvidenceRef venue must match metadata.venue")
+        _no_specialist_dependency(self.value)
+        _normalise(self.value)
+        _no_specialist_dependency(self.metadata)
+        _normalise(self.metadata)
+        object.__setattr__(self, "status", status)
+        object.__setattr__(self, "value", SnapshotFact.__dataclass_fields__["value"].default if False else self.value)
+        object.__setattr__(self, "evidence_refs", tuple(sorted(refs, key=lambda r: r.evidence_id)))
+        object.__setattr__(self, "reason", self.reason.strip() if isinstance(self.reason, str) else self.reason)
+        object.__setattr__(self, "metadata", dict(self.metadata))
+        if status is not FactStatus.VALID and (not isinstance(self.reason, str) or not self.reason.strip()):
+            raise SnapshotBuildError("non-VALID authoritative records require an explicit reason")
+
     @classmethod
     def from_mapping(cls, record: Mapping[str, Any]) -> "SnapshotRecord":
         if not isinstance(record, Mapping):
