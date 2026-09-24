@@ -73,15 +73,19 @@ class EvidenceRef:
 
 @dataclass(frozen=True,slots=True)
 class SnapshotFact:
-    fact_id:str; status:FactStatus; value:Any=None; knowledge_time:datetime|None=None; evidence_refs:tuple[EvidenceRef,...]=()
+    fact_id:str; status:FactStatus; value:Any=None; knowledge_time:datetime|None=None
+    evidence_refs:tuple[EvidenceRef,...]=(); reason:str|None=None; metadata:Mapping[str,Any]|None=None
     def __post_init__(self):
         _token(self.fact_id,"fact_id")
         if not isinstance(self.status,FactStatus): raise TypeError("status must be FactStatus")
         if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
         _no_specialist_dependency(self.value); _normalise(self.value)
+        _no_specialist_dependency(self.metadata); _normalise(self.metadata or {})
         if self.status is FactStatus.VALID and self.value is None: raise ValueError("VALID fact requires a value")
+        if self.status is not FactStatus.VALID and (not isinstance(self.reason,str) or not self.reason.strip()):
+            raise ValueError("non-VALID SnapshotFact requires an explicit reason")
         if len({r.evidence_id for r in self.evidence_refs})!=len(self.evidence_refs): raise ValueError("duplicate evidence_id in fact")
-    def as_dict(self): return {"fact_id":self.fact_id,"status":self.status.value,"value":self.value,"knowledge_time":self.knowledge_time,"evidence_refs":[r.as_dict() for r in self.evidence_refs]}
+    def as_dict(self): return {"fact_id":self.fact_id,"status":self.status.value,"value":self.value,"knowledge_time":self.knowledge_time,"evidence_refs":[r.as_dict() for r in self.evidence_refs],"reason":self.reason,"metadata":self.metadata}
 
 @dataclass(frozen=True,slots=True)
 class InputSnapshot:
