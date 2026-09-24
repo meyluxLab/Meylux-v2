@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import ast
 import unittest
+from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from decimal import Decimal
 
@@ -111,6 +113,76 @@ class TestSnapshotBuilder(unittest.TestCase):
         a = self.builder.build(as_of=T0, records=[record(knowledge=T0)])
         b = self.builder.build(as_of=T0, records=[record(knowledge=T0 - timedelta(minutes=1))])
         self.assertNotEqual(a.snapshot_id, b.snapshot_id)
+
+    def test_empty_evidence_refs_are_rejected(self):
+        with self.assertRaisesRegex(SnapshotBuildError, "requires at least one structured EvidenceRef"):
+            self.builder.build(as_of=T0, records=[record(refs=())])
+
+    def test_nested_snapshot_content_is_immutable_and_detached_from_source(self):
+        source = record(
+            value={"outer": {"inner": [{"leaf": {"close": Decimal("100.25")}}]}},
+            metadata={"nested": {"levels": [{"x": "original"}]}},
+        )
+        snap = self.builder.build(as_of=T0, records=[source])
+        baseline_id = snap.snapshot_id
+        baseline_serialized = snap.serialize()
+
+        with self.assertRaises(TypeError):
+            snap.facts[0].value["outer"]["inner"][0]["leaf"]["close"] = Decimal("999")
+        with self.assertRaises(TypeError):
+            snap.facts[0].metadata["nested"]["levels"][0]["x"] = "changed"
+        with self.assertRaises(TypeError):
+            snap.facts[0].value["outer"]["inner"] += ({"extra": True},)
+
+        source["value"]["outer"]["inner"][0]["leaf"]["close"] = Decimal("777")
+        source["metadata"]["nested"]["levels"][0]["x"] = "source-mutated"
+
+        equivalent = self.builder.build(
+            as_of=T0,
+            records=[record(
+                value={"outer": {"inner": [{"leaf": {"close": Decimal("100.25")}}]}},
+                metadata={"nested": {"levels": [{"x": "original"}]}},
+            )],
+        )
+        self.assertEqual(snap.snapshot_id, baseline_id)
+        self.assertEqual(snap.serialize(), baseline_serialized)
+        self.assertEqual(snap.snapshot_id, equivalent.snapshot_id)
+        self.assertEqual(snap.serialize(), equivalent.serialize())
+
+    def test_specialist_output_add_remove_cannot_change_authoritative_snapshot(self):
+        authoritative = [record()]
+        baseline = self.builder.build(as_of=T0, records=authoritative)
+        hypothetical_output = {
+            "specialist_id": "S-01",
+            "status": "SUCCESS",
+            "finding": {"code": "EXAMPLE"},
+        }
+        with self.assertRaises(ValueError):
+            self.builder.build(as_of=T0, records=authoritative + [hypothetical_output])
+        restored = self.builder.build(as_of=T0, records=list(authoritative))
+        self.assertEqual(baseline.snapshot_id, restored.snapshot_id)
+        self.assertEqual(baseline.serialize(), restored.serialize())
+
+    def test_snapshot_dependency_import_path_is_static_and_independent(self):
+        snapshot_path = Path(__file__).parents[1] / "src" / "meylux" / "specialists" / "snapshot.py"
+        source = snapshot_path.read_text(encoding="utf-8")
+        tree = ast.parse(source, filename=str(snapshot_path))
+        imported = []
+        for node in ast.walk(tree):
+            if isinstance(node, ast.Import):
+                imported.extend(alias.name for alias in node.names)
+            elif isinstance(node, ast.ImportFrom) and node.module:
+                imported.append(node.module)
+        self.assertIn("contracts.specialist", imported)
+        self.assertNotIn("meylux.specialists", imported)
+        self.assertNotIn("meylux.specialists.engine", imported)
+        self.assertNotIn("meylux.specialists.execution", imported)
+        self.assertNotIn("meylux.specialists.output", imported)
+        self.assertNotIn("SpecialistOutput", source)
+        self.assertNotRegex(source, r"\bexecute(?:_specialist|_specialists)?\s*\(")
+        builder_source = ast.get_source_segment(source, next(node for node in tree.body if isinstance(node, ast.ClassDef) and node.name == "InputSnapshotBuilder"))
+        self.assertIsNotNone(builder_source)
+        self.assertNotRegex(builder_source or "", r"\bSpecialist(?:Output|Finding|Request)\b")
 
     def test_snapshot_content_is_immutable_after_build(self):
         source = record()
