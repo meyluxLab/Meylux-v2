@@ -15,6 +15,7 @@ from meylux.specialists.snapshot import (
     InputSnapshotBuilder,
     LookaheadFactError,
     SnapshotBuildError,
+    SnapshotRecord,
 )
 
 UTC = timezone.utc
@@ -277,6 +278,121 @@ class TestSnapshotBuilder(unittest.TestCase):
         del bad["metadata"]["identity_hash"]
         with self.assertRaises(SnapshotBuildError):
             self.builder.build(as_of=T0, records=[bad])
+
+    def test_direct_snapshot_record_empty_evidence_refs_is_rejected(self):
+        data = record()
+        with self.assertRaises(SnapshotBuildError):
+            SnapshotRecord(
+                fact_id=data["fact_id"], status=data["status"], value=data["value"],
+                event_time=data["event_time"], knowledge_time=data["knowledge_time"],
+                evidence_refs=(), reason=data["reason"], metadata=data["metadata"],
+            )
+
+    def test_direct_snapshot_record_missing_knowledge_time_is_rejected(self):
+        data = record()
+        with self.assertRaises(SnapshotBuildError):
+            SnapshotRecord(
+                fact_id=data["fact_id"], status=data["status"], value=data["value"],
+                event_time=data["event_time"], knowledge_time=None,
+                evidence_refs=data["evidence_refs"], reason=data["reason"], metadata=data["metadata"],
+            )
+
+    def test_direct_snapshot_record_non_utc_knowledge_time_is_rejected(self):
+        data = record()
+        naive = T0.replace(tzinfo=None)
+        data["knowledge_time"] = naive
+        data["metadata"]["knowledge_time"] = naive
+        with self.assertRaises(SnapshotBuildError):
+            SnapshotRecord(
+                fact_id=data["fact_id"], status=data["status"], value=data["value"],
+                event_time=data["event_time"], knowledge_time=data["knowledge_time"],
+                evidence_refs=data["evidence_refs"], reason=data["reason"], metadata=data["metadata"],
+            )
+
+    def test_direct_snapshot_record_event_knowledge_metadata_mismatch_is_rejected(self):
+        data = record()
+        metadata = dict(data["metadata"])
+        metadata["knowledge_time"] = T0 - timedelta(minutes=1)
+        with self.assertRaises(SnapshotBuildError):
+            SnapshotRecord(
+                fact_id=data["fact_id"], status=data["status"], value=data["value"],
+                event_time=data["event_time"], knowledge_time=data["knowledge_time"],
+                evidence_refs=data["evidence_refs"], reason=data["reason"], metadata=metadata,
+            )
+
+    def test_direct_snapshot_record_incomplete_evidence_ref_is_rejected(self):
+        data = record()
+        ref = EvidenceRef("legacy", "postgresql", "x", data["metadata"]["identity_hash"])
+        with self.assertRaises(SnapshotBuildError):
+            SnapshotRecord(
+                fact_id=data["fact_id"], status=data["status"], value=data["value"],
+                event_time=data["event_time"], knowledge_time=data["knowledge_time"],
+                evidence_refs=(ref,), reason=data["reason"], metadata=data["metadata"],
+            )
+
+    def test_direct_snapshot_record_identity_and_record_cross_checks_are_rejected(self):
+        data = record()
+        metadata = dict(data["metadata"])
+        metadata["record_id"] = "different-record"
+        with self.assertRaises(SnapshotBuildError):
+            SnapshotRecord(
+                fact_id=data["fact_id"], status=data["status"], value=data["value"],
+                event_time=data["event_time"], knowledge_time=data["knowledge_time"],
+                evidence_refs=data["evidence_refs"], reason=data["reason"], metadata=metadata,
+            )
+
+    def test_direct_snapshot_fact_empty_evidence_refs_is_rejected(self):
+        with self.assertRaises(ValueError):
+            SnapshotFact(
+                "direct", FactStatus.VALID, {"close": Decimal("1")}, T0, (),
+            )
+
+    def test_direct_snapshot_fact_without_knowledge_time_is_rejected(self):
+        ref = evidence()
+        with self.assertRaises(ValueError):
+            SnapshotFact(
+                "direct", FactStatus.VALID, {"close": Decimal("1")}, None, (ref,),
+            )
+
+    def test_direct_snapshot_fact_non_utc_knowledge_time_is_rejected(self):
+        ref = evidence()
+        with self.assertRaises(ValueError):
+            SnapshotFact(
+                "direct", FactStatus.VALID, {"close": Decimal("1")}, T0.replace(tzinfo=None), (ref,),
+            )
+
+    def test_direct_snapshot_fact_event_knowledge_metadata_mismatch_is_rejected(self):
+        ref = evidence()
+        with self.assertRaises(ValueError):
+            SnapshotFact(
+                "direct", FactStatus.VALID, {"close": Decimal("1")}, T0, (ref,),
+                metadata={"event_time": EVENT, "knowledge_time": T0 - timedelta(minutes=1)},
+            )
+
+    def test_direct_typed_and_mapping_construction_have_identical_snapshot_identity(self):
+        data = record()
+        typed = SnapshotRecord(
+            fact_id=data["fact_id"], status=data["status"], value=data["value"],
+            event_time=data["event_time"], knowledge_time=data["knowledge_time"],
+            evidence_refs=data["evidence_refs"], reason=data["reason"], metadata=data["metadata"],
+        )
+        mapped = SnapshotRecord.from_mapping(data)
+        typed_snapshot = self.builder.build(as_of=T0, records=[typed])
+        mapped_snapshot = self.builder.build(as_of=T0, records=[mapped])
+        self.assertEqual(typed_snapshot.snapshot_id, mapped_snapshot.snapshot_id)
+        self.assertEqual(typed_snapshot.serialize(), mapped_snapshot.serialize())
+
+    def test_direct_snapshot_fact_nested_immutability_and_source_detachment(self):
+        source = {"outer": {"items": [{"value": Decimal("1.0")}]}}
+        ref = evidence()
+        fact = SnapshotFact(
+            "direct", FactStatus.VALID, source, T0, (ref,),
+            metadata={"event_time": EVENT, "knowledge_time": T0},
+        )
+        source["outer"]["items"][0]["value"] = Decimal("9.0")
+        with self.assertRaises(TypeError):
+            fact.value["outer"]["items"][0]["value"] = Decimal("2.0")
+        self.assertEqual(fact.value["outer"]["items"][0]["value"], Decimal("1.0"))
 
     def test_knowledge_time_is_mandatory(self):
         bad = record()
