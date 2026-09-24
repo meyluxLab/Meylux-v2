@@ -107,7 +107,9 @@ records:
       mode: SentinelX corrective execution
       pre_correction_revision: fb7d9847498323bec067ba98a1e2729f869c0697
       final_deployed_revision: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2
-      remote_main_revision: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2
+      final_governed_checkout_revision: 9cd7ac8d35889f45573ff0e11162112e507bc9a4
+      remote_main_revision_at_runtime_bringup: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2
+      relation_after_governance_sync: final checkout 9cd7ac8 is governance/evidence-only beyond runtime implementation baseline
       migration_head: 0007_specialist_foundation
       compose_state: ALL_RUNNING; DB_HEALTHY; REDIS_HEALTHY
       redis_probe: PONG
