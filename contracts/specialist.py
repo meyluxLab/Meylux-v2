@@ -58,12 +58,18 @@ def _no_specialist_dependency(v: Any) -> None:
 class EvidenceRef:
     evidence_id:str; source_type:str; source_reference:str; identity_hash:str
     observed_at_utc:datetime|None=None; content_version:str|None=None
+    source_family:str|None=None; record_id:str|None=None; event_time:datetime|None=None
+    knowledge_time:datetime|None=None; timeframe:str|None=None; venue:str|None=None
     def __post_init__(self):
         for v,f in ((self.evidence_id,"evidence_id"),(self.source_type,"source_type"),(self.source_reference,"source_reference"),(self.identity_hash,"identity_hash")): _token(v,f)
         if len(self.identity_hash)!=64 or any(c not in "0123456789abcdef" for c in self.identity_hash.lower()): raise ValueError("identity_hash must be a 64-character hexadecimal SHA-256 value")
         if self.observed_at_utc is not None: _utc(self.observed_at_utc,"observed_at_utc")
         if self.content_version is not None: _token(self.content_version,"content_version")
-    def as_dict(self): return {"evidence_id":self.evidence_id,"source_type":self.source_type,"source_reference":self.source_reference,"identity_hash":self.identity_hash,"observed_at_utc":self.observed_at_utc,"content_version":self.content_version}
+        for v,f in ((self.source_family,"source_family"),(self.record_id,"record_id"),(self.timeframe,"timeframe"),(self.venue,"venue")):
+            if v is not None: _token(v,f)
+        if self.event_time is not None: _utc(self.event_time,"event_time")
+        if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
+    def as_dict(self): return {"evidence_id":self.evidence_id,"source_type":self.source_type,"source_reference":self.source_reference,"identity_hash":self.identity_hash,"observed_at_utc":self.observed_at_utc,"content_version":self.content_version,"source_family":self.source_family,"record_id":self.record_id,"event_time":self.event_time,"knowledge_time":self.knowledge_time,"timeframe":self.timeframe,"venue":self.venue}
 
 @dataclass(frozen=True,slots=True)
 class SnapshotFact:
