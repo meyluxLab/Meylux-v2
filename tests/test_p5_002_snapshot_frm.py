@@ -107,6 +107,26 @@ class TestSnapshotBuilder(unittest.TestCase):
         self.assertEqual(a.snapshot_id, b.snapshot_id)
         self.assertEqual(a.serialize(), b.serialize())
 
+    def test_knowledge_time_change_changes_identity(self):
+        a = self.builder.build(as_of=T0, records=[record(knowledge=T0)])
+        b = self.builder.build(as_of=T0, records=[record(knowledge=T0 - timedelta(minutes=1))])
+        self.assertNotEqual(a.snapshot_id, b.snapshot_id)
+
+    def test_snapshot_content_is_immutable_after_build(self):
+        source = record()
+        snap = self.builder.build(as_of=T0, records=[source])
+        with self.assertRaises(TypeError):
+            snap.facts[0].metadata["late_specialist_output"] = "x"
+        with self.assertRaises(TypeError):
+            snap.facts[0].value["close"] = Decimal("999")
+        self.assertEqual(snap.snapshot_id, InputSnapshotBuilder().build(as_of=T0, records=[record()]).snapshot_id)
+        self.assertEqual(snap.serialize(), InputSnapshotBuilder().build(as_of=T0, records=[record()]).serialize())
+
+    def test_future_content_cannot_enter_authoritative_snapshot(self):
+        future = record(knowledge=T0 + timedelta(minutes=1), value={"close": Decimal("999")})
+        with self.assertRaises(LookaheadFactError):
+            self.builder.build(as_of=T0, records=[future])
+
     def test_content_change_changes_identity(self):
         a = self.builder.build(as_of=T0, records=[record(value={"close": Decimal("100.25")})])
         b = self.builder.build(as_of=T0, records=[record(value={"close": Decimal("100.26")})])
@@ -200,6 +220,10 @@ class TestFRM(unittest.TestCase):
             {"AVAILABLE_PERSISTED", "PRQ_DELIVERED", "UNAVAILABLE_DISPOSITIONED"},
         )
 
+    def test_every_row_has_source_audit(self):
+        self.assertTrue(all(row.source_audit for row in FRM_ROWS))
+        self.assertTrue(all(any("knowledge_time=" in item for item in row.source_audit) for row in FRM_ROWS))
+
     def test_no_runtime_unverified_available_claims(self):
         self.assertTrue(all(row.disposition is USR03Disposition.UNAVAILABLE_DISPOSITIONED for row in FRM_ROWS))
 
@@ -227,6 +251,12 @@ class TestFRM(unittest.TestCase):
         self.assertNotIn("UNAVAILABLE", {x.value for x in USR03Disposition})
         self.assertIn(FRMReason.UNSUPPORTED.value, {x.reason.value for x in FRM_ROWS})
 
+
+    def test_roadmap_growth_retention_policy_is_documented(self):
+        from pathlib import Path
+        text = Path("docs/requirements/P5_002_FACT_REQUIREMENTS_MATRIX.md").read_text(encoding="utf-8")
+        for required in ("Logical event identity", "Deduplication key", "Unique constraint", "Expected rate", "Peak rate", "Daily growth", "Retention", "Compression/archive", "Maximum acceptable cardinality", "Alert threshold", "Recovery path", "Backfill semantics", "Replay semantics"):
+            self.assertIn(required, text)
 
 if __name__ == "__main__":
     unittest.main()
