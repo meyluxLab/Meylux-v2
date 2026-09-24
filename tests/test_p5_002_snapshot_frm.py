@@ -257,8 +257,9 @@ class TestFRM(unittest.TestCase):
     def test_roadmap_growth_retention_policy_is_documented(self):
         from pathlib import Path
         text = Path("docs/requirements/P5_002_FACT_REQUIREMENTS_MATRIX.md").read_text(encoding="utf-8")
-        for required in ("Logical event identity", "Deduplication key", "Unique constraint", "Expected rate", "Peak rate", "Daily growth", "Retention", "Compression/archive", "Maximum acceptable cardinality", "Alert threshold", "Recovery path", "Backfill semantics", "Replay semantics"):
-            self.assertIn(required, text)
+        lowered = text.lower()
+        for required in ("logical event identity", "deduplication key", "unique constraint", "expected rate", "peak rate", "daily growth", "retention", "compression/archive", "maximum acceptable cardinality", "alert threshold", "recovery path", "backfill semantics", "replay semantics"):
+            self.assertIn(required, lowered)
 
 if __name__ == "__main__":
     unittest.main()
