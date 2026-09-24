@@ -89,7 +89,26 @@ class SnapshotFact:
     def __post_init__(self):
         _token(self.fact_id,"fact_id")
         if not isinstance(self.status,FactStatus): raise TypeError("status must be FactStatus")
-        if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
+        if self.knowledge_time is None: raise ValueError("knowledge_time is mandatory for SnapshotFact")
+        _utc(self.knowledge_time,"knowledge_time")
+        if not isinstance(self.evidence_refs, tuple) or not self.evidence_refs:
+            raise ValueError("SnapshotFact requires at least one EvidenceRef")
+        if any(not isinstance(ref, EvidenceRef) for ref in self.evidence_refs):
+            raise TypeError("SnapshotFact evidence_refs must contain EvidenceRef values")
+        if self.status is not FactStatus.VALID and (not isinstance(self.reason,str) or not self.reason.strip()):
+            raise ValueError("non-VALID SnapshotFact requires an explicit reason")
+        if self.metadata is not None and not isinstance(self.metadata, Mapping):
+            raise TypeError("SnapshotFact metadata must be a mapping")
+        if isinstance(self.metadata, Mapping):
+            if "event_time" in self.metadata:
+                _utc(self.metadata["event_time"],"metadata.event_time")
+            if "knowledge_time" in self.metadata:
+                _utc(self.metadata["knowledge_time"],"metadata.knowledge_time")
+                if self.metadata["knowledge_time"] != self.knowledge_time:
+                    raise ValueError("metadata.knowledge_time must match SnapshotFact.knowledge_time")
+            if "event_time" in self.metadata and "knowledge_time" in self.metadata:
+                # Equality is permitted only when explicitly supplied by the authoritative source.
+                pass
         _no_specialist_dependency(self.value); _normalise(self.value)
         _no_specialist_dependency(self.metadata); _normalise(self.metadata or {})
         object.__setattr__(self, "value", _freeze(self.value))
