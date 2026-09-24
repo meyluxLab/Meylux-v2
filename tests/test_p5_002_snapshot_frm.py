@@ -221,6 +221,7 @@ class TestFRM(unittest.TestCase):
         )
 
     def test_every_row_has_source_audit(self):
+        self.assertEqual({row.specialist for row in FRM_ROWS}, {f"S-{i:02d}" for i in range(1, 19)})
         self.assertTrue(all(row.source_audit for row in FRM_ROWS))
         self.assertTrue(all(any("knowledge_time=" in item for item in row.source_audit) for row in FRM_ROWS))
 
@@ -231,6 +232,7 @@ class TestFRM(unittest.TestCase):
         self.assertEqual({row.specialist for row in FRM_ROWS}, {f"S-{i:02d}" for i in range(1, 19)})
 
     def test_every_unavailable_row_has_governed_disposition(self):
+
         unavailable = [row for row in FRM_ROWS if row.disposition is USR03Disposition.UNAVAILABLE_DISPOSITIONED]
         self.assertEqual(len(unavailable), 18)
         self.assertTrue(all(row.governed_disposition for row in unavailable))
