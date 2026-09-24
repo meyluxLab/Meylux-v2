@@ -900,19 +900,37 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-001 / TO-P5-002 / AR-P5-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: TO-P5-002
     canonical_name: Input Snapshot Builder & Fact Availability Verification
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-002.md
     traceability: PH-P5 / STEP-P5-002 / AR-P5-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: ACTIVE / AUTHORIZED
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P5-002
     canonical_name: Build Report — Input Snapshot Builder & Fact Availability Verification
     entity_type: BR
     artifact_path: docs/build-reports/BR-P5-002.md
     traceability: TO-P5-002 / PH-P5 / STEP-P5-002
-    status: ACTIVE / AUTHORIZED
+    status: VERIFIED
+  - stable_id: AR-P5-002
+    canonical_name: CONTROL Independent Audit — TO-P5-002
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-002.md
+    traceability: TO-P5-002 / BR-P5-002 / PH-P5 / STEP-P5-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+  - stable_id: CMP-P5-002
+    canonical_name: Input Snapshot Builder & Fact Requirements Matrix
+    entity_type: CMP
+    artifact_path: src/meylux/specialists/snapshot.py
+    traceability: PH-P5 / STEP-P5-002 / TO-P5-002 / BR-P5-002 / AR-P5-002
+    status: VERIFIED
+  - stable_id: TST-P5-002
+    canonical_name: P5-002 Snapshot and Fact Requirements Matrix Tests
+    entity_type: TST
+    artifact_path: tests/test_p5_002_snapshot_frm.py
+    traceability: PH-P5 / STEP-P5-002 / TO-P5-002 / BR-P5-002 / AR-P5-002
+    status: VERIFIED
   - stable_id: BR-P5-001
     canonical_name: Build Report — Contract, Evidence Model, Config & Persistence Foundation
     entity_type: BR
