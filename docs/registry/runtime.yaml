@@ -92,3 +92,30 @@ records:
       reason: authoritative runtime database was stopped during the read-only verification boundary
       control_audit: AR-P5-002
     status: VERIFIED
+
+  - stable_id: RUN-P5-CORRECTIVE-001
+    canonical_name: P5 Corrective VPS Reconciliation and Bring-Up
+    entity_type: RUN
+    phase: PH-P5
+    step: STEP-P5-002
+    runtime_target: server-l6rf /srv/meylux-v2
+    evidence:
+      owner_directive: OWNER-DIRECTIVE-P5-CORRECTIVE-VPS-20260924
+      execution_log: EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924
+      control_audit: AR-P5-CORRECTIVE-001
+      executor_role: ROL-V2-001
+      mode: SentinelX corrective execution
+      pre_correction_revision: fb7d9847498323bec067ba98a1e2729f869c0697
+      final_deployed_revision: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2
+      remote_main_revision: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2
+      migration_head: 0007_specialist_foundation
+      compose_state: ALL_RUNNING; DB_HEALTHY; REDIS_HEALTHY
+      redis_probe: PONG
+      database_runtime_access: VERIFIED
+      persisted_fact_runtime_access: VERIFIED
+      p5_authoritative_available_persisted_claim: NONE
+      usr03_disposition: UNAVAILABLE_DISPOSITIONED
+      availability_reason: P4 persisted fact families lack dedicated authoritative knowledge_time required by P5-002 FRM; event_time/persisted_at/logged_at are not substituted
+      data_preservation: VERIFIED
+      recovery_point: /var/backups/meylux-v2-p5-corrective-20260924T140710Z
+    status: VERIFIED
