@@ -1284,3 +1284,10 @@ records:
     artifact_path: tests/test_p4_009_security_grants.py
     traceability: TO-P4-009 / BR-P4-009 / AR-P4-016
     status: VERIFIED
+
+  - stable_id: AR-P5-CORRECTIVE-001
+    canonical_name: CONTROL Independent Audit — Corrective VPS Reconciliation
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-CORRECTIVE-001.md
+    traceability: OWNER-DIRECTIVE-P5-CORRECTIVE-VPS-20260924 / EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
