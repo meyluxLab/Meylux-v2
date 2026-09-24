@@ -381,10 +381,8 @@
     "usr03_disposition": "UNAVAILABLE_DISPOSITIONED",
     "semantic_reason": "P5-002 authoritative knowledge_time is not present in the inspected P4 persistence families; event_time/persisted_at/logged_at are not substituted",
     "phase_step_lifecycle_unchanged": "PH-P5 ACTIVE / AUTHORIZED; STEP-P5-002 COMPLETE / VERIFIED; active_task_order null; STEP-P5-003 NOT AUTHORIZED",
-    "final_governed_checkout_revision": "9cd7ac8d35889f45573ff0e11162112e507bc9a4",
-    "post_bringup_commits": "GOVERNANCE/EVIDENCE ONLY"
+    "post_bringup_commits": "GOVERNANCE/EVIDENCE ONLY THROUGH LAST READ-BACK; current repository HEAD is authoritative for later read-backs",
+    "last_governed_checkout_readback_revision": "9cd7ac8d35889f45573ff0e11162112e507bc9a4"
   },
-  "current_vps_checkout_revision": "9cd7ac8d35889f45573ff0e11162112e507bc9a4",
-  "current_vps_runtime_implementation_revision": "2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2",
-  "current_vps_relation_to_main": "EXACT CHECKOUT MATCH; runtime implementation baseline 2ed8aad was unchanged by subsequent governance/evidence-only commits"
+  "current_vps_runtime_implementation_revision": "2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2"
 }
