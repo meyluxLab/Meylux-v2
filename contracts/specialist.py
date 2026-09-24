@@ -91,8 +91,10 @@ class SnapshotFact:
         if not isinstance(self.status,FactStatus): raise TypeError("status must be FactStatus")
         if self.knowledge_time is None: raise ValueError("knowledge_time is mandatory for SnapshotFact")
         _utc(self.knowledge_time,"knowledge_time")
-        if not isinstance(self.evidence_refs, tuple) or not self.evidence_refs:
-            raise ValueError("SnapshotFact requires at least one EvidenceRef")
+        if not isinstance(self.evidence_refs, tuple):
+            raise TypeError("SnapshotFact evidence_refs must be a tuple")
+        if self.status is FactStatus.VALID and not self.evidence_refs:
+            raise ValueError("authoritative SnapshotFact requires at least one EvidenceRef")
         if any(not isinstance(ref, EvidenceRef) for ref in self.evidence_refs):
             raise TypeError("SnapshotFact evidence_refs must contain EvidenceRef values")
         if self.status is not FactStatus.VALID and (not isinstance(self.reason,str) or not self.reason.strip()):
