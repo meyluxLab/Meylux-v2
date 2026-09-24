@@ -96,7 +96,7 @@ records:
       control_audit: AR-P5-001
       status: VERIFIED
 
-- stable_id: CMP-P5-002
+  - stable_id: CMP-P5-002
     canonical_name: Input Snapshot Builder & Fact Requirements Matrix
     entity_type: CMP
     phase: PH-P5
