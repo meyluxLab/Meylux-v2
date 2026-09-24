@@ -72,3 +72,23 @@ records:
         deployed_migration_source_observation: VPS /srv/meylux-v2 migration mount predates repository TO-P4-009 at application time; 0006 was applied directly via authorized SentinelX SQL; no unapproved source/deployment synchronization performed
         runtime_sync_decision: no service rebuild/restart required for TO-P4-009; runtime database state independently verified after authorized SQL application
     status: VERIFIED
+
+- stable_id: RUN-P5-002
+    canonical_name: P5-002 CONTROL Read-Only Fact Availability Verification
+    entity_type: RUN
+    phase: PH-P5
+    step: STEP-P5-002
+    task_order: TO-P5-002
+    runtime_target: server-l6rf /srv/meylux-v2
+    evidence:
+      execution_log: EXEC-LOG-TO-P5-002-CONTROL-VPS-RECON-20260924
+      executor_role: ROL-V2-001
+      mode: SentinelX read-only
+      deployed_revision: fb7d9847498323bec067ba98a1e2729f869c0697
+      compose_state: EXITED
+      persisted_fact_availability: NOT ESTABLISHED
+      available_persisted_claim: NONE
+      disposition: UNAVAILABLE_DISPOSITIONED
+      reason: authoritative runtime database was stopped during the read-only verification boundary
+      control_audit: AR-P5-002
+    status: VERIFIED
