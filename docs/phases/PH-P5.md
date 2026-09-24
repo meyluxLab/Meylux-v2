@@ -1,9 +1,9 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-002` — ACTIVE / AUTHORIZED
-**Last Completed Task Order:** `TO-P5-001`
-**Completion Audit:** `AR-P5-001`
+**Current Step Lifecycle:** `STEP-P5-002` — COMPLETE / VERIFIED
+**Last Completed Task Order:** `TO-P5-002`
+**Completion Audit:** `AR-P5-002`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
 **Predecessor:** `PH-P4` CLOSED / VERIFIED; `G-4` ESTABLISHED / VERIFIED
@@ -50,7 +50,7 @@ Phase 5 interprets authoritative upstream facts through independent specialist d
 
 **Order:** 1
 **Status:** COMPLETE / VERIFIED
-**Completion Audit:** `AR-P5-001`
+**Completion Audit:** `AR-P5-002`
 **Authorization state:** COMPLETE / VERIFIED
 **Predecessor:** `STEP-P4-006` — COMPLETE / VERIFIED
 **Active Task Order:** `null`
@@ -68,7 +68,7 @@ Required evidence includes deterministic contract semantics, explicit status/rea
 **Status:** ACTIVE / AUTHORIZED  
 **Authorization state:** ACTIVE / AUTHORIZED  
 **Predecessor:** `STEP-P5-001` — COMPLETE / VERIFIED  
-**Active Task Order:** `TO-P5-002`  
+**Active Task Order:** `null`  
 **Activation basis:** Project Owner — PHASE 5 CONTINUATION AUTHORIZATION — 2026-09-23
 
 Purpose: establish the authoritative Stage-1 Input Snapshot boundary and the Fact Requirements Matrix (FRM), using only existing authoritative persisted facts and preserving no-lookahead, provenance, deterministic identity and specialist independence.
