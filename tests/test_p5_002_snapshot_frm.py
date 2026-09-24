@@ -6,7 +6,7 @@ from pathlib import Path
 from datetime import datetime, timezone, timedelta
 from decimal import Decimal
 
-from contracts.specialist import EvidenceRef, FactStatus
+from contracts.specialist import EvidenceRef, FactStatus, SnapshotFact
 from meylux.specialists.frm import FRM_ROWS, FRMReason, USR03Disposition, validate_frm
 from meylux.specialists.snapshot import (
     AmbiguousFactError,
