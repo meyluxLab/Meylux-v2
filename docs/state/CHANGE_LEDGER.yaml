@@ -2026,3 +2026,30 @@ entries:
     runtime_effect: "NONE — no VPS mutation or runtime deployment performed."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
     lifecycle_effect: "P5-001 remains COMPLETE / VERIFIED; P5-002 remains ACTIVE / AUTHORIZED."
+  - ledger_id: CL-P5-VPS-SAME-STEP-RECON-20260924
+    recorded_at: "2026-09-24"
+    authority: PROJECT OWNER / CONTROL
+    action: "PHASE 5 VPS SAME-STEP RECONCILIATION AND NO-DEFERRAL EVIDENCE CAPTURE"
+    basis: "Project Owner Directive — Phase 5 VPS Same-Step Reconciliation, Completion & No-Deferral Enforcement — 2026-09-24 + ADR-GOVERNANCE-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + DOC-P5-001"
+    affected_ids:
+      - STEP-P5-001
+      - TO-P5-001
+      - BR-P5-001
+      - AR-P5-001
+      - STEP-P5-002
+      - TO-P5-002
+      - EXEC-LOG-TO-P5-002-CONTROL-VPS-RECON-20260924
+    findings:
+      - "PHASE5_ROADMAP.md assigns VPS-1/VPS-2/VPS-11/VPS-12 to STEP-P5-001."
+      - "TO-P5-001 did not explicitly authorize those VPS operations; BR-P5-001 and AR-P5-001 explicitly record no VPS execution."
+      - "Current VPS /srv/meylux-v2 is detached at fb7d9847498323bec067ba98a1e2729f869c0697 and predates the P5-001 specialist migration 0007."
+      - "Current compose stack is exited and no live database runtime is available for P5-002 fact-availability queries."
+      - "No AVAILABLE_PERSISTED disposition is claimed without authoritative runtime evidence."
+      - "No historical VPS execution evidence has been invented or retroactively attributed to P5-001."
+    control_determination:
+      p5_001: "VPS obligations remain unexecuted/unevidenced; precise correction authorization is required before mutation can be performed."
+      p5_002: "Authorized read-only SentinelX reconciliation has been performed to the currently reachable boundary; runtime fact availability cannot be established while the governed stack is stopped."
+      same_step_rule: "No P5-002 VPS obligation is intentionally deferred to P5-003 or a final Phase-5 Step."
+    runtime_effect: "READ-ONLY OBSERVATION ONLY — no VPS mutation, restart, deploy, migration, provider activation, database write, cleanup, or configuration mutation."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
+    lifecycle_effect: "STEP-P5-001 remains historically recorded COMPLETE / VERIFIED pending governed correction decision; STEP-P5-002 and TO-P5-002 remain ACTIVE / AUTHORIZED; no closure transition performed."
