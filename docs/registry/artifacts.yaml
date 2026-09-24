@@ -899,19 +899,19 @@ records:
     canonical_name: Input Snapshot Builder & Fact Availability Verification
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
-    traceability: PH-P5 / STEP-P5-001 / TO-P5-002 / AR-P5-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    traceability: PH-P5 / STEP-P5-001 / TO-P5-002 / AR-P5-001 / AR-P5-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: COMPLETE / VERIFIED
   - stable_id: TO-P5-002
     canonical_name: Input Snapshot Builder & Fact Availability Verification
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-002.md
-    traceability: PH-P5 / STEP-P5-002 / AR-P5-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    traceability: PH-P5 / STEP-P5-002 / AR-P5-001 / AR-P5-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: VERIFIED / COMPLETE
   - stable_id: BR-P5-002
     canonical_name: Build Report — Input Snapshot Builder & Fact Availability Verification
     entity_type: BR
     artifact_path: docs/build-reports/BR-P5-002.md
-    traceability: TO-P5-002 / PH-P5 / STEP-P5-002
+    traceability: TO-P5-002 / PH-P5 / STEP-P5-002 / AR-P5-002
     status: VERIFIED
   - stable_id: AR-P5-002
     canonical_name: CONTROL Independent Audit — TO-P5-002
