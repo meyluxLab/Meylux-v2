@@ -242,7 +242,13 @@
     "DB-P5-001",
     "SEC-P5-001",
     "CFG-P5-001",
-    "REQ-P5-001"
+    "REQ-P5-001",
+    "BR-P5-002",
+    "AR-P5-002",
+    "CMP-P5-002",
+    "TST-P5-002",
+    "REQ-P5-002",
+    "RUN-P5-002"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -293,7 +299,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "fb7d9847498323bec067ba98a1e2729f869c0697",
-  "updated_at_utc": "2026-09-24T08:45:00Z",
+  "updated_at_utc": "2026-09-24T08:02:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -346,7 +352,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "2631c1dd9aee1243288f63f65eaed5b19c517625",
+  "last_governance_sync_base_commit": "4066ffcc30e395f60c9cc21863d0329290b6b9f9",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
