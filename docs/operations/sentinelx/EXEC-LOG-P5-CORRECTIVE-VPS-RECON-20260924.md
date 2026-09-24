@@ -221,9 +221,20 @@ No:
 - unrelated cleanup;
 - historical retroactive attribution.
 
+
+## 11.1 Post-closure repository read-back
+
+After the corrective runtime was established, CONTROL completed the governance/peripheral synchronization commits. The VPS checkout was then independently synchronized once more to the new current `origin/main`:
+
+- runtime implementation/deployment baseline used for bring-up: `2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2`
+- post-closure governed repository HEAD: `9cd7ac8d35889f45573ff0e11162112e507bc9a4`
+- relation: the post-closure commits are governance/evidence synchronization only; no runtime source, migration, compose or application implementation change occurred after the bring-up.
+- all six governed containers remained running; DB and Redis remained healthy during this final checkout synchronization.
+
 ## 11. Final execution state
 
-VPS repository revision: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2  
+VPS runtime implementation revision: 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2
+VPS final governed checkout revision: 9cd7ac8d35889f45573ff0e11162112e507bc9a4  
 DB migration head: 0007_specialist_foundation  
 Compose stack: running; DB and Redis healthy  
 Protected DB volume: preserved  
