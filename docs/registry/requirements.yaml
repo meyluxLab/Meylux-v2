@@ -11,3 +11,12 @@ records:
     disposition: VERIFIED
     status: VERIFIED
 
+- stable_id: REQ-P5-002
+    canonical_name: P5-002 Input Snapshot and Fact Availability Requirements
+    entity_type: REQUIREMENT
+    phase: PH-P5
+    step: STEP-P5-002
+    task_order: TO-P5-002
+    traceability: TO-P5-002 / BR-P5-002 / AR-P5-002
+    disposition: VERIFIED
+    status: VERIFIED
