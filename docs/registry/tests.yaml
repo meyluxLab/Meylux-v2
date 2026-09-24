@@ -309,7 +309,7 @@ records:
       postgres_integration: test_real_postgresql_persistence_and_privileges ... ok
       docker_foundation_run_id: 35879486031
 
-- stable_id: TST-P5-002
+  - stable_id: TST-P5-002
     canonical_name: P5-002 Snapshot and Fact Requirements Matrix Tests
     entity_type: TST
     phase: PH-P5
