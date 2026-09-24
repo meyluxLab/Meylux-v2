@@ -73,7 +73,7 @@ records:
         runtime_sync_decision: no service rebuild/restart required for TO-P4-009; runtime database state independently verified after authorized SQL application
     status: VERIFIED
 
-- stable_id: RUN-P5-002
+  - stable_id: RUN-P5-002
     canonical_name: P5-002 CONTROL Read-Only Fact Availability Verification
     entity_type: RUN
     phase: PH-P5
