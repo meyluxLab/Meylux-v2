@@ -2098,3 +2098,38 @@ entries:
     runtime_effect: NO VPS/RUNTIME MUTATION
     architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN
     p5_001_separate_finding: PRESERVED — NOT ABSORBED INTO P5-002
+
+  - ledger_id: CL-P5-CORRECTIVE-VPS-RECON-20260924
+    recorded_at: "2026-09-24"
+    authority: PROJECT OWNER / CONTROL
+    action: "CORRECTIVE VPS RECONCILIATION, SYNCHRONIZATION, MIGRATION AND BRING-UP"
+    basis: "Project Owner — Corrective VPS Reconciliation, Synchronization and Bring-Up — 2026-09-24 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - OWNER-DIRECTIVE-P5-CORRECTIVE-VPS-20260924
+      - EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924
+      - AR-P5-CORRECTIVE-001
+      - RUN-P5-CORRECTIVE-001
+      - DB-P5-CORRECTIVE-001
+      - SEC-P5-CORRECTIVE-001
+      - STEP-P5-002
+      - TO-P5-002
+    findings:
+      - "Pre-correction VPS was detached at fb7d9847498323bec067ba98a1e2729f869c0697 while origin/main was 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2."
+      - "Actual DB migration state was 0001 through 0006; 0007_specialist_foundation was absent."
+      - "Governed compose stack was stopped before correction."
+      - "A real recoverable PostgreSQL volume archive was created before mutation."
+      - "Existing persisted data was preserved; normalized pre/post logical data dumps were identical."
+      - "After runtime bring-up, persisted P4 source tables were queryable with real data."
+      - "P5 AVAILABLE_PERSISTED remains NONE because authoritative knowledge_time is absent from the inspected P4 persistence families; event_time/persisted_at/logged_at were not substituted."
+    corrective_actions:
+      - "Synchronized /srv/meylux-v2 to origin/main 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2."
+      - "Applied repository migration 0007_specialist_foundation.sql after actual migration-state reconciliation."
+      - "Safely re-executed 0007 and observed INSERT 0 0 with unchanged data counts."
+      - "Rebuilt existing governed compose service images from synchronized source and brought the existing stack up."
+      - "Verified DB/Redis health, application-role DB connectivity, schema and privilege boundaries."
+    runtime_effect: "VPS corrective mutation performed under explicit Owner authorization; current stack is running with DB and Redis healthy."
+    data_effect: "Existing persisted data preserved; no volume replacement/reset/truncate/destructive cleanup."
+    lifecycle_effect: "PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; TO-P5-002 remains VERIFIED / COMPLETE; no P5-003 activation."
+    historical_integrity: "Corrective execution is new evidence and is not retroactively attributed to TO-P5-001 or TO-P5-002."
+    g12: "CONTROL closure synchronization completed; checkpoint, runtime/database/security registries, artifact registry, Open Questions and Change Ledger synchronized; machine read-back pending final verification in this cycle."
+
