@@ -170,7 +170,8 @@ class SnapshotRecord:
 
 
 class InputSnapshotBuilder:
-    VERSION = "1.2.0"
+    CONTRACT_VERSION = "1.2.0"
+    VERSION = CONTRACT_VERSION
     REQUIRED_METADATA_FIELDS = (
         "symbol", "venue", "product", "timeframe",
         "source_table", "record_id", "identity_hash", "version",
