@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from decimal import Decimal
 from enum import Enum
+from types import MappingProxyType
 from typing import Any, Mapping
 
 class SpecialistStatus(str, Enum):
@@ -54,28 +55,69 @@ def _no_specialist_dependency(v: Any) -> None:
     elif isinstance(v,(tuple,list)):
         for x in v: _no_specialist_dependency(x)
 
+def _freeze(value: Any) -> Any:
+    """Recursively copy supported Snapshot content into intrinsically read-only containers."""
+    if isinstance(value, Mapping):
+        return MappingProxyType({k: _freeze(v) for k, v in value.items()})
+    if isinstance(value, (list, tuple)):
+        return tuple(_freeze(v) for v in value)
+    if isinstance(value, set):
+        return frozenset(_freeze(v) for v in value)
+    return value
+
 @dataclass(frozen=True,slots=True)
 class EvidenceRef:
     evidence_id:str; source_type:str; source_reference:str; identity_hash:str
     observed_at_utc:datetime|None=None; content_version:str|None=None
+    source_family:str|None=None; record_id:str|None=None; event_time:datetime|None=None
+    knowledge_time:datetime|None=None; timeframe:str|None=None; venue:str|None=None
     def __post_init__(self):
         for v,f in ((self.evidence_id,"evidence_id"),(self.source_type,"source_type"),(self.source_reference,"source_reference"),(self.identity_hash,"identity_hash")): _token(v,f)
         if len(self.identity_hash)!=64 or any(c not in "0123456789abcdef" for c in self.identity_hash.lower()): raise ValueError("identity_hash must be a 64-character hexadecimal SHA-256 value")
         if self.observed_at_utc is not None: _utc(self.observed_at_utc,"observed_at_utc")
         if self.content_version is not None: _token(self.content_version,"content_version")
-    def as_dict(self): return {"evidence_id":self.evidence_id,"source_type":self.source_type,"source_reference":self.source_reference,"identity_hash":self.identity_hash,"observed_at_utc":self.observed_at_utc,"content_version":self.content_version}
+        for v,f in ((self.source_family,"source_family"),(self.record_id,"record_id"),(self.timeframe,"timeframe"),(self.venue,"venue")):
+            if v is not None: _token(v,f)
+        if self.event_time is not None: _utc(self.event_time,"event_time")
+        if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
+    def as_dict(self): return {"evidence_id":self.evidence_id,"source_type":self.source_type,"source_reference":self.source_reference,"identity_hash":self.identity_hash,"observed_at_utc":self.observed_at_utc,"content_version":self.content_version,"source_family":self.source_family,"record_id":self.record_id,"event_time":self.event_time,"knowledge_time":self.knowledge_time,"timeframe":self.timeframe,"venue":self.venue}
 
 @dataclass(frozen=True,slots=True)
 class SnapshotFact:
-    fact_id:str; status:FactStatus; value:Any=None; knowledge_time:datetime|None=None; evidence_refs:tuple[EvidenceRef,...]=()
+    fact_id:str; status:FactStatus; value:Any=None; knowledge_time:datetime|None=None
+    evidence_refs:tuple[EvidenceRef,...]=(); reason:str|None=None; metadata:Mapping[str,Any]|None=None
     def __post_init__(self):
         _token(self.fact_id,"fact_id")
         if not isinstance(self.status,FactStatus): raise TypeError("status must be FactStatus")
-        if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
+        if self.knowledge_time is None: raise ValueError("knowledge_time is mandatory for SnapshotFact")
+        _utc(self.knowledge_time,"knowledge_time")
+        if not isinstance(self.evidence_refs, tuple):
+            raise TypeError("SnapshotFact evidence_refs must be a tuple")
+        if self.status is FactStatus.VALID and not self.evidence_refs:
+            raise ValueError("authoritative SnapshotFact requires at least one EvidenceRef")
+        if any(not isinstance(ref, EvidenceRef) for ref in self.evidence_refs):
+            raise TypeError("SnapshotFact evidence_refs must contain EvidenceRef values")
+        if self.status is not FactStatus.VALID and self.evidence_refs and (not isinstance(self.reason,str) or not self.reason.strip()):
+            raise ValueError("non-VALID authoritative SnapshotFact requires an explicit reason")
+        if self.metadata is not None and not isinstance(self.metadata, Mapping):
+            raise TypeError("SnapshotFact metadata must be a mapping")
+        if isinstance(self.metadata, Mapping):
+            if "event_time" in self.metadata:
+                _utc(self.metadata["event_time"],"metadata.event_time")
+            if "knowledge_time" in self.metadata:
+                _utc(self.metadata["knowledge_time"],"metadata.knowledge_time")
+                if self.metadata["knowledge_time"] != self.knowledge_time:
+                    raise ValueError("metadata.knowledge_time must match SnapshotFact.knowledge_time")
+            if "event_time" in self.metadata and "knowledge_time" in self.metadata:
+                # Equality is permitted only when explicitly supplied by the authoritative source.
+                pass
         _no_specialist_dependency(self.value); _normalise(self.value)
+        _no_specialist_dependency(self.metadata); _normalise(self.metadata or {})
+        object.__setattr__(self, "value", _freeze(self.value))
+        object.__setattr__(self, "metadata", _freeze(self.metadata or {}))
         if self.status is FactStatus.VALID and self.value is None: raise ValueError("VALID fact requires a value")
         if len({r.evidence_id for r in self.evidence_refs})!=len(self.evidence_refs): raise ValueError("duplicate evidence_id in fact")
-    def as_dict(self): return {"fact_id":self.fact_id,"status":self.status.value,"value":self.value,"knowledge_time":self.knowledge_time,"evidence_refs":[r.as_dict() for r in self.evidence_refs]}
+    def as_dict(self): return {"fact_id":self.fact_id,"status":self.status.value,"value":self.value,"knowledge_time":self.knowledge_time,"evidence_refs":[r.as_dict() for r in self.evidence_refs],"reason":self.reason,"metadata":self.metadata}
 
 @dataclass(frozen=True,slots=True)
 class InputSnapshot:
@@ -92,6 +134,7 @@ class InputSnapshot:
         material={"version":version,"as_of":as_of,"facts":sorted((f.as_dict() for f in facts),key=lambda x:x["fact_id"]),"provenance_refs":sorted((r.as_dict() for r in provenance_refs),key=lambda x:x["evidence_id"])}
         return cls(identity_hash(material),as_of,version,facts,provenance_refs)
     def as_dict(self): return {"snapshot_id":self.snapshot_id,"as_of":self.as_of,"version":self.version,"facts":sorted((f.as_dict() for f in self.facts),key=lambda x:x["fact_id"]),"provenance_refs":sorted((r.as_dict() for r in self.provenance_refs),key=lambda x:x["evidence_id"])}
+    def serialize(self): return canonical_json(self.as_dict())
 
 @dataclass(frozen=True,slots=True)
 class SpecialistConfigRef:
