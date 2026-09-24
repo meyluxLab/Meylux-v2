@@ -115,6 +115,8 @@ class SnapshotRecord:
             raise SnapshotBuildError("metadata.identity_hash must be a 64-character hexadecimal SHA-256 value")
 
         raw_refs = record["evidence_refs"]
+        if not isinstance(raw_refs, (tuple, list)) or not raw_refs:
+            raise SnapshotBuildError("authoritative Snapshot fact requires at least one structured EvidenceRef")
         refs: list[EvidenceRef] = []
         for raw_ref in raw_refs:
             if isinstance(raw_ref, EvidenceRef):
