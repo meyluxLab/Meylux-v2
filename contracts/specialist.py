@@ -97,8 +97,8 @@ class SnapshotFact:
             raise ValueError("authoritative SnapshotFact requires at least one EvidenceRef")
         if any(not isinstance(ref, EvidenceRef) for ref in self.evidence_refs):
             raise TypeError("SnapshotFact evidence_refs must contain EvidenceRef values")
-        if self.status is not FactStatus.VALID and (not isinstance(self.reason,str) or not self.reason.strip()):
-            raise ValueError("non-VALID SnapshotFact requires an explicit reason")
+        if self.status is not FactStatus.VALID and self.evidence_refs and (not isinstance(self.reason,str) or not self.reason.strip()):
+            raise ValueError("non-VALID authoritative SnapshotFact requires an explicit reason")
         if self.metadata is not None and not isinstance(self.metadata, Mapping):
             raise TypeError("SnapshotFact metadata must be a mapping")
         if isinstance(self.metadata, Mapping):
