@@ -115,3 +115,14 @@ No evidence of:
 **STEP-P5-003: NOT AUTHORIZED.**
 
 The remaining blocker is semantic upstream fact admissibility (knowledge_time), not VPS availability. Any future resolution must follow the owning P4/P3/P2 governance route and must not be implemented opportunistically inside this corrective action.
+
+
+## 6. Final repository read-back
+
+After the evidence/registry synchronization commits, CONTROL synchronized the VPS checkout to the then-current `origin/main` revision `9cd7ac8d35889f45573ff0e11162112e507bc9a4`.
+
+The runtime implementation baseline remains `2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2`. The intervening and final commits contain governance/evidence synchronization only; no runtime implementation, migration, compose or application-source change occurred after bring-up.
+
+All six governed containers remained running; DB and Redis remained healthy after the final checkout read-back.
+
+This does not alter any Step lifecycle state and does not activate STEP-P5-003.
