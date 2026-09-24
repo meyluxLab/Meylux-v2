@@ -81,6 +81,8 @@ class SnapshotFact:
         if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
         _no_specialist_dependency(self.value); _normalise(self.value)
         _no_specialist_dependency(self.metadata); _normalise(self.metadata or {})
+        object.__setattr__(self, "value", _freeze(self.value))
+        object.__setattr__(self, "metadata", _freeze(self.metadata or {}))
         if self.status is FactStatus.VALID and self.value is None: raise ValueError("VALID fact requires a value")
         if len({r.evidence_id for r in self.evidence_refs})!=len(self.evidence_refs): raise ValueError("duplicate evidence_id in fact")
     def as_dict(self): return {"fact_id":self.fact_id,"status":self.status.value,"value":self.value,"knowledge_time":self.knowledge_time,"evidence_refs":[r.as_dict() for r in self.evidence_refs],"reason":self.reason,"metadata":self.metadata}
