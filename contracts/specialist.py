@@ -54,6 +54,24 @@ def _no_specialist_dependency(v: Any) -> None:
     elif isinstance(v,(tuple,list)):
         for x in v: _no_specialist_dependency(x)
 
+class FrozenDict(dict):
+    """JSON-compatible immutable mapping used to freeze Snapshot content."""
+    __slots__ = ()
+    def _blocked(self, *args, **kwargs):
+        raise TypeError("Snapshot content is immutable")
+    __setitem__ = __delitem__ = clear = pop = popitem = setdefault = update = _blocked
+
+def _freeze(value: Any) -> Any:
+    if isinstance(value, FrozenDict):
+        return value
+    if isinstance(value, Mapping):
+        return FrozenDict({str(k): _freeze(v) for k, v in value.items()})
+    if isinstance(value, (list, tuple)):
+        return tuple(_freeze(v) for v in value)
+    if isinstance(value, set):
+        return frozenset(_freeze(v) for v in value)
+    return value
+
 @dataclass(frozen=True,slots=True)
 class EvidenceRef:
     evidence_id:str; source_type:str; source_reference:str; identity_hash:str
@@ -81,6 +99,8 @@ class SnapshotFact:
         if self.knowledge_time is not None: _utc(self.knowledge_time,"knowledge_time")
         _no_specialist_dependency(self.value); _normalise(self.value)
         _no_specialist_dependency(self.metadata); _normalise(self.metadata or {})
+        object.__setattr__(self, "value", _freeze(self.value))
+        object.__setattr__(self, "metadata", _freeze(self.metadata or {}))
         object.__setattr__(self, "value", _freeze(self.value))
         object.__setattr__(self, "metadata", _freeze(self.metadata or {}))
         if self.status is FactStatus.VALID and self.value is None: raise ValueError("VALID fact requires a value")
