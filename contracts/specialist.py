@@ -82,8 +82,6 @@ class SnapshotFact:
         _no_specialist_dependency(self.value); _normalise(self.value)
         _no_specialist_dependency(self.metadata); _normalise(self.metadata or {})
         if self.status is FactStatus.VALID and self.value is None: raise ValueError("VALID fact requires a value")
-        if self.status is not FactStatus.VALID and (not isinstance(self.reason,str) or not self.reason.strip()):
-            raise ValueError("non-VALID SnapshotFact requires an explicit reason")
         if len({r.evidence_id for r in self.evidence_refs})!=len(self.evidence_refs): raise ValueError("duplicate evidence_id in fact")
     def as_dict(self): return {"fact_id":self.fact_id,"status":self.status.value,"value":self.value,"knowledge_time":self.knowledge_time,"evidence_refs":[r.as_dict() for r in self.evidence_refs],"reason":self.reason,"metadata":self.metadata}
 
@@ -102,6 +100,7 @@ class InputSnapshot:
         material={"version":version,"as_of":as_of,"facts":sorted((f.as_dict() for f in facts),key=lambda x:x["fact_id"]),"provenance_refs":sorted((r.as_dict() for r in provenance_refs),key=lambda x:x["evidence_id"])}
         return cls(identity_hash(material),as_of,version,facts,provenance_refs)
     def as_dict(self): return {"snapshot_id":self.snapshot_id,"as_of":self.as_of,"version":self.version,"facts":sorted((f.as_dict() for f in self.facts),key=lambda x:x["fact_id"]),"provenance_refs":sorted((r.as_dict() for r in self.provenance_refs),key=lambda x:x["evidence_id"])}
+    def serialize(self): return canonical_json(self.as_dict())
 
 @dataclass(frozen=True,slots=True)
 class SpecialistConfigRef:
