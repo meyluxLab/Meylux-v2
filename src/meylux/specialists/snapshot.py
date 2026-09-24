@@ -21,6 +21,18 @@ from contracts.specialist import (
 )
 
 
+def _freeze(value: Any) -> Any:
+    """Recursively detach supported SnapshotRecord content into read-only containers."""
+    if isinstance(value, Mapping):
+        from types import MappingProxyType
+        return MappingProxyType({k: _freeze(v) for k, v in value.items()})
+    if isinstance(value, (list, tuple)):
+        return tuple(_freeze(v) for v in value)
+    if isinstance(value, set):
+        return frozenset(_freeze(v) for v in value)
+    return value
+
+
 class SnapshotBuildError(ValueError):
     """Authoritative persisted input cannot be safely represented in a Snapshot."""
 
