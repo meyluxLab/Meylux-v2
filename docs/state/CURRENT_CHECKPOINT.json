@@ -352,7 +352,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "4066ffcc30e395f60c9cc21863d0329290b6b9f9",
+  "last_governance_sync_base_commit": "06b9ed6dc361b6292bffc1b085209e9698454eb2",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
