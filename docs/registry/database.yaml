@@ -142,3 +142,23 @@ records:
       backup_select_only: VERIFIED
       control_audit: AR-P5-001
     status: VERIFIED
+
+  - stable_id: DB-P5-CORRECTIVE-001
+    canonical_name: Corrective VPS Migration and Data Preservation Verification
+    entity_type: DB
+    phase: PH-P5
+    step: STEP-P5-002
+    migration: 0007_specialist_foundation
+    runtime_target: server-l6rf
+    evidence:
+      execution_log: EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924
+      control_audit: AR-P5-CORRECTIVE-001
+      pre_migration_head: 0006_application_role_grant_hardening
+      post_migration_head: 0007_specialist_foundation
+      migration_sha256: 3a97f9539fc12d007f6501eb71668a65af1e72ef69f6f1238bec3b67cb143eff
+      data_preservation_dump_compare: IDENTICAL
+      normalized_data_sha256: b3d650edb7c6d4aedc39948ec57072294a0e9cd30ec5e11038baed95b71d6
+      specialist_outputs_rows: 0
+      existing_data_counts_preserved: true
+      reexecution: VERIFIED
+    status: VERIFIED
