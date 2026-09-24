@@ -99,8 +99,8 @@ items:
     affected_phase: PH-P5
     affected_step: STEP-P5-002
     authority: CONTROL / REVIEWER
-    current_disposition: "UNAVAILABLE_DISPOSITIONED for any required fact not independently evidenced as available; owning boundary remains P4 and no P5 fabrication is permitted."
-    trigger: "Reconsider when CONTROL independently verifies the required persisted fact on the authoritative VPS/runtime or a governed P4 delivery is independently verified."
+    current_disposition: "Runtime persistence is now independently reachable and the required source records are physically present, but AVAILABLE_PERSISTED remains unestablished because the authoritative P4 persistence families do not expose dedicated knowledge_time required by P5-002; owning boundary remains P4 and no P5 timestamp substitution/fabrication is permitted."
+    trigger: "Reconsider when CONTROL independently verifies a persistence representation that carries the required authoritative knowledge_time, or a governed P4 delivery adds that semantic evidence and is independently verified."
     constraints:
       - "Do not infer AVAILABLE_PERSISTED from source-code capability or table existence alone."
       - "Do not implement PRQ-1 inside P5-002."
