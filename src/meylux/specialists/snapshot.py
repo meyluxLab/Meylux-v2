@@ -121,10 +121,10 @@ class SnapshotRecord:
         _no_specialist_dependency(self.metadata)
         _normalise(self.metadata)
         object.__setattr__(self, "status", status)
-        object.__setattr__(self, "value", SnapshotFact.__dataclass_fields__["value"].default if False else self.value)
+        object.__setattr__(self, "value", _freeze(self.value))
         object.__setattr__(self, "evidence_refs", tuple(sorted(refs, key=lambda r: r.evidence_id)))
         object.__setattr__(self, "reason", self.reason.strip() if isinstance(self.reason, str) else self.reason)
-        object.__setattr__(self, "metadata", dict(self.metadata))
+        object.__setattr__(self, "metadata", _freeze(self.metadata))
         if status is not FactStatus.VALID and (not isinstance(self.reason, str) or not self.reason.strip()):
             raise SnapshotBuildError("non-VALID authoritative records require an explicit reason")
 
