@@ -47,6 +47,7 @@ class FactRequirement:
     dependency_owner: str = ""
     dependency_route: str = ""
     governed_disposition: str = ""
+    source_audit: tuple[str, ...] = ()
 
     def __post_init__(self) -> None:
         for value, field in (
@@ -70,6 +71,8 @@ class FactRequirement:
                 raise FRMValidationError("available/delivered rows must use NOT_REQUIRED reason")
             if self.governed_disposition:
                 raise FRMValidationError("available/delivered rows cannot carry an unavailable disposition record")
+        if not self.source_audit:
+            raise FRMValidationError("every FRM row requires row-level source audit evidence")
         if self.disposition is USR03Disposition.UNAVAILABLE_DISPOSITIONED:
             if self.reason is FRMReason.NOT_REQUIRED:
                 raise FRMValidationError("unavailable rows require a subordinate reason")
@@ -105,7 +108,7 @@ def _row(
 ) -> FactRequirement:
     return FactRequirement(
         specialist, fact, source, granularity, timeframe, history, mandatory,
-        disposition, reason, provenance, lookahead, evidence, owner, route, governed
+        disposition, reason, provenance, lookahead, evidence, owner, route, governed, SOURCE_AUDIT[specialist]
     )
 
 
@@ -114,6 +117,27 @@ OQ2 = "OQ-P5-002-PRQ2-VENUE-ORDERFLOW"
 OQ3 = "OQ-P5-002-PRQ3-DERIVATIVES"
 OQ4 = "OQ-P5-002-PRQ4-QUALITY-EVIDENCE"
 ROADMAP_S15 = "docs/blueprint/PHASE5_ROADMAP.md §16.2 S-15 — SKIPPED / NO_NEWS_PROVIDER_CONFIGURED"
+SOURCE_AUDIT = {
+"S-01": ("schema=meylux","table=calculated_indicator_vectors","columns=record_id,symbol,timeframe,event_time,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash,persisted_at","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED_BY_PRODUCER; knowledge_time=ABSENT"),
+"S-02": ("schema=meylux","table=market_structure_events + market_structure_zones","columns=record_id,symbol,timeframe,event_time,event_type/zone_type,source_ref,venue_context,version,calculation_version,status,reason,payload_json,identity_hash,persisted_at","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED_BY_PRODUCER; knowledge_time=ABSENT"),
+"S-03": ("schema=meylux","table=calculated_indicator_vectors + canonical_candles","columns=vector payload_json; candle payload_json,event_time,identity_hash","identity=vector record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED_BY_PRODUCER; knowledge_time=ABSENT"),
+"S-04": ("schema=meylux","table=canonical_derivatives","columns=record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash,persisted_at","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; knowledge_time=ABSENT"),
+"S-05": ("schema=meylux","table=canonical_trades + canonical_orderbook_depth + P4 order-flow facts","columns=record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,quality_state,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; knowledge_time=ABSENT"),
+"S-06": ("schema=meylux","table=calculated_indicator_vectors + market_structure_*","columns=record_id,symbol,timeframe,event_time,status,reason,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; complete timeframe coverage not evidenced; knowledge_time=ABSENT"),
+"S-07": ("schema=meylux","table=canonical market tables","columns=instrument_id,event_time,provenance_id,source_record_id,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; venue is payload/provenance context; knowledge_time=ABSENT"),
+"S-08": ("schema=meylux","table=calculated_indicator_vectors","columns=record_id,symbol,timeframe,event_time,source_ref,venue_context,version,calculation_version,status,reason,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; required sub-facts/timeframes not evidenced; knowledge_time=ABSENT"),
+"S-09": ("source=all contributing P2/P3/P4 rows","identity=each source record_id + identity_hash","runtime=UNVERIFIED; Snapshot receipt is not availability evidence","knowledge_time=each source must expose it; current P4 schemas do not"),
+"S-10": ("schema=meylux","table=data_quality_logs + acquisition contracts","columns=log_id,record_id,quality_state,lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,source_record_id,lineage_parent_id,payload_fingerprint,logged_at","identity=log_id; record_id indexed","runtime=UNVERIFIED; knowledge_time=ABSENT"),
+"S-11": ("schema=meylux","table=canonical_candles + market_structure_zones","columns=record_id,instrument_id,event_time,payload_json,identity_hash + zone fields","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; knowledge_time=ABSENT"),
+"S-12": ("schema=meylux","table=market_structure_zones + canonical_orderbook_depth","columns=zone/depth record_id,event_time,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; knowledge_time=ABSENT"),
+"S-13": ("source=authoritative Snapshot source facts","identity=source record_id + identity_hash","runtime=UNVERIFIED; source completeness not evidenced","knowledge_time=must come from each source; current schemas do not provide it"),
+"S-14": ("schema=meylux","table=market_regime_states + market_structure_events/zones","columns=record_id,symbol,timeframe,event_time,status,reason,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; minimum history not evidenced; knowledge_time=ABSENT"),
+"S-15": ("source=N/A; no news provider configured","identity=N/A","runtime=ROADMAP-CONTRACT-SKIPPED","knowledge_time=N/A"),
+"S-16": ("source=authoritative P4 Snapshot source facts","identity=source record_id + identity_hash","runtime=UNVERIFIED; checklist inputs not evidenced","knowledge_time=each source must expose it"),
+"S-17": ("schema=meylux","table=volume_profile_sessions","columns=record_id,symbol,timeframe,session_start,session_end,source_ref,venue_context,version,calculation_version,status,reason,payload_json,identity_hash,persisted_at","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; two sessions not evidenced; knowledge_time=ABSENT"),
+"S-18": ("schema=meylux","table=market_regime_states + market_structure_events/zones","columns=record_id,symbol,timeframe,event_time,regime_state/status,reason,payload_json,identity_hash","identity=record_id PK; identity_hash UNIQUE","runtime=UNVERIFIED; theoretically executable but live evidence absent; knowledge_time=ABSENT")
+}
+
 
 
 FRM_ROWS = (
