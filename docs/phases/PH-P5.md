@@ -65,8 +65,9 @@ Required evidence includes deterministic contract semantics, explicit status/rea
 ### `STEP-P5-002` — Input Snapshot Builder & Fact Availability Verification
 
 **Order:** 2  
-**Status:** ACTIVE / AUTHORIZED  
-**Authorization state:** ACTIVE / AUTHORIZED  
+**Status:** COMPLETE / VERIFIED  
+**Authorization state:** COMPLETE / VERIFIED  
+**Completion Audit:** `AR-P5-002`  
 **Predecessor:** `STEP-P5-001` — COMPLETE / VERIFIED  
 **Active Task Order:** `null`  
 **Activation basis:** Project Owner — PHASE 5 CONTINUATION AUTHORIZATION — 2026-09-23
