@@ -2053,3 +2053,48 @@ entries:
     runtime_effect: "READ-ONLY OBSERVATION ONLY — no VPS mutation, restart, deploy, migration, provider activation, database write, cleanup, or configuration mutation."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
     lifecycle_effect: "STEP-P5-001 remains historically recorded COMPLETE / VERIFIED pending governed correction decision; STEP-P5-002 and TO-P5-002 remain ACTIVE / AUTHORIZED; no closure transition performed."
+- ledger_id: CL-P5-STEP-002-CLOSURE-20260924
+    recorded_at: "2026-09-24"
+    authority: CONTROL / REVIEWER
+    action: "INDEPENDENT AUDIT AND CONTROL-OWNED CLOSURE SYNCHRONIZATION"
+    task_order: TO-P5-002
+    build_report: BR-P5-002
+    audit_report: AR-P5-002
+    phase: PH-P5
+    step: STEP-P5-002
+    disposition: VERIFIED / COMPLETE
+    evidence:
+      implementation_head: a62349620744004308c01dd38f7374b5e4e3e32d
+      merge_commit: 6b07e405ea2a80502bd0b8442a4736790f5071e2
+      ci_core_run: 35966246213
+      ci_core_job: 107525809803
+      ci_core_result: SUCCESS
+      ci_test_count: 514
+      ci_docker_foundation_run: 35966246211
+      ci_docker_result: SUCCESS
+      vps_execution_log: EXEC-LOG-TO-P5-002-CONTROL-VPS-RECON-20260924
+      vps_runtime_availability: NOT ESTABLISHED
+      available_persisted_claim: NONE
+      usr03_disposition: UNAVAILABLE_DISPOSITIONED
+    lifecycle_sync:
+      phase5: ACTIVE / AUTHORIZED
+      step: COMPLETE / VERIFIED
+      active_task_order: null
+      completed_task_order: TO-P5-002
+      completion_audit: AR-P5-002
+      next_step: NOT ACTIVATED
+      p5_003_authorization: NOT AUTHORIZED
+    g12:
+      checkpoint: SYNCHRONIZED
+      phase_registry: SYNCHRONIZED
+      artifact_registry: SYNCHRONIZED
+      specialized_registries: SYNCHRONIZED FOR P5-002 EVIDENCE
+      readme: SYNCHRONIZED
+      standalone_status_documents: SYNCHRONIZED
+      change_ledger: SYNCHRONIZED
+      open_questions: PRESERVED / REFERENCED
+      supplemental_staging_registry: CHECKED — NO P5-002 STRANDED RECORD IDENTIFIED; EXISTING PHASE-2 SUPPLEMENTAL REGISTRY REMAINS RETIRED / SUPERSEDED
+      machine_readback: COMPLETED
+    runtime_effect: NO VPS/RUNTIME MUTATION
+    architecture_effect: DOC-V2-ARCH-001 remains RATIFIED / FROZEN
+    p5_001_separate_finding: PRESERVED — NOT ABSORBED INTO P5-002
