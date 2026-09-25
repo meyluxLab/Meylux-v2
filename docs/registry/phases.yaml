@@ -257,7 +257,7 @@ records:
     order: 6
     predecessor: STEP-P2-005
     activation_basis: PH-P2 / STEP-P2-005 verification
-    active_task_order: null
+    active_task_order: TO-P2-008
     completed_task_order: TO-P2-006
     completion_audit: AR-P2-AUDIT-007
     purpose: Verify the complete Phase 2 acquisition boundary using real provider/runtime evidence and establish Phase 2 closure evidence.
