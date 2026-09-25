@@ -1291,3 +1291,10 @@ records:
     artifact_path: docs/audits/AR-P5-CORRECTIVE-001.md
     traceability: OWNER-DIRECTIVE-P5-CORRECTIVE-VPS-20260924 / EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+
+  - stable_id: TO-P2-008
+    canonical_name: Task Order — Binance Provider Finality / Closed-Candle Knowledge-Time Hardening
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-008.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-007 / AR-P2-AUDIT-007 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
