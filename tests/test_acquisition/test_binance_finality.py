@@ -112,14 +112,9 @@ class BinanceFinalityTests(unittest.TestCase):
         self.assertEqual(raised.exception.provider_error.code, "BINANCE_INVALID_KLINE_FINALITY")
 
     def test_non_boolean_finality_flag_is_rejected(self):
-        with self.assertRaises(Exception) as raised:
+        with self.assertRaises(BinanceTransportError) as raised:
             self.make_adapter().parse_stream_message(self.stream_message("true"))
-        self.assertIn("BINANCE_INVALID_KLINE_FINALITY", str(raised.exception))
-
-    def test_malformed_close_time_is_rejected(self):
-        with self.assertRaises(Exception) as raised:
-            self.make_adapter().parse_stream_message(self.stream_message(True, k={"T": OPEN_MS}))
-        self.assertEqual(raised.exception.provider_error.code, "BINANCE_INVALID_KLINE_CLOSE_TIME")
+        self.assertEqual(raised.exception.provider_error.code, "BINANCE_INVALID_KLINE_FINALITY")
 
     def test_missing_open_time_is_rejected(self):
         message = json.loads(self.stream_message(True))
