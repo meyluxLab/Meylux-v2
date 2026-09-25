@@ -1310,6 +1310,13 @@ records:
     artifact_path: tests/test_acquisition/test_binance_finality.py
     traceability: TO-P2-008 / PH-P2 / STEP-P2-006 / BR-P2-008 / AR-P2-AUDIT-008
     status: VERIFIED
+  - stable_id: AR-P2-AUDIT-009
+    canonical_name: CONTROL Independent Audit — MEXC Provider Finality Investigation
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-009.md
+    traceability: BR-P2-009 / TO-P2-009 / PH-P2 / STEP-P2-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+
   - stable_id: AR-P2-AUDIT-008
     canonical_name: CONTROL Independent Verification — TO-P2-008
     entity_type: AR
@@ -1322,10 +1329,10 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-009.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-008 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
+    status: VERIFIED / COMPLETE
   - stable_id: BR-P2-009
     canonical_name: Build Report — MEXC Provider Finality Investigation
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-009.md
     traceability: TO-P2-009 / PH-P2 / STEP-P2-006 / A-P2-MEXC
-    status: PRODUCED / UNVERIFIED
+    status: VERIFIED
