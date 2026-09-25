@@ -229,13 +229,32 @@ class BinanceAdapter(ProviderAdapter):
                 )
                 return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
             try:
-                event_time = self._epoch_ms(row[0])
+                open_time = self._epoch_ms(row[0])
             except BinanceTransportError as exc:
                 failure = _BinanceProviderFailure(
                     AcquisitionState.INVALID,
                     ProviderError("BINANCE_INVALID_KLINE_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
                 )
                 return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
+            try:
+                close_time = self._epoch_ms(row[6])
+            except BinanceTransportError as exc:
+                failure = _BinanceProviderFailure(
+                    AcquisitionState.INVALID,
+                    ProviderError("BINANCE_INVALID_KLINE_CLOSE_TIME", "INVALID_PAYLOAD", str(exc)),
+                )
+                return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
+            if close_time <= open_time:
+                failure = _BinanceProviderFailure(
+                    AcquisitionState.INVALID,
+                    ProviderError(
+                        "BINANCE_INVALID_KLINE_CLOSE_TIME",
+                        "INVALID_PAYLOAD",
+                        "Binance kline close time must be later than open time",
+                    ),
+                )
+                return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
+            event_time = open_time
             payload = {
                 "row": row,
                 "k": {
@@ -415,15 +434,42 @@ class BinanceAdapter(ProviderAdapter):
                     "Binance kline closure flag k.x must be an explicit boolean",
                 ),
             )
-        open_ms = kline.get("t")
-        close_ms = kline.get("T")
-        if isinstance(open_ms, bool) or not isinstance(open_ms, int) or isinstance(close_ms, bool) or not isinstance(close_ms, int):
+        if "t" not in kline:
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_OPEN_TIME",
+                    "INVALID_PAYLOAD",
+                    "Binance kline open time k.t is required",
+                ),
+            )
+        open_ms = kline["t"]
+        if isinstance(open_ms, bool) or not isinstance(open_ms, int):
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_OPEN_TIME",
+                    "INVALID_PAYLOAD",
+                    "Binance kline open time k.t must be an integer epoch milliseconds value",
+                ),
+            )
+        if "T" not in kline:
             raise _BinanceProviderFailure(
                 AcquisitionState.INVALID,
                 ProviderError(
                     "BINANCE_INVALID_KLINE_CLOSE_TIME",
                     "INVALID_PAYLOAD",
-                    "Binance kline open/close times must be integer epoch milliseconds",
+                    "Binance kline close time k.T is required",
+                ),
+            )
+        close_ms = kline["T"]
+        if isinstance(close_ms, bool) or not isinstance(close_ms, int):
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_CLOSE_TIME",
+                    "INVALID_PAYLOAD",
+                    "Binance kline close time k.T must be an integer epoch milliseconds value",
                 ),
             )
         if close_ms <= open_ms:
