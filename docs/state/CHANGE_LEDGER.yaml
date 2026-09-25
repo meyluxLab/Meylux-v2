@@ -2257,4 +2257,4 @@ entries:
       specialized_registries: CHECKED — no new execution evidence produced
       supplemental_staging_registry: CHECKED — no stranded TO-P2-009 record
       change_ledger: RECORDED
-      machine_readback: REQUIRED NEXT
+      machine_readback: COMPLETED — final repository read-back verified
