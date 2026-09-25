@@ -326,3 +326,27 @@ records:
       docker_foundation_run: 35966246211
       docker_foundation_result: SUCCESS
       direct_typed_contract_regressions: VERIFIED
+
+  - stable_id: TST-P2-008
+    canonical_name: Binance Provider Finality / Closed-Candle Knowledge-Time Hardening Tests
+    phase: PH-P2
+    step: STEP-P2-006
+    task_order: TO-P2-008
+    artifact_path: tests/test_acquisition/test_binance_finality.py
+    traceability: TO-P2-008 / STEP-P2-006 / BR-P2-008 / AR-P2-AUDIT-008
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 36132680775
+      workflow_job_id: 108063348102
+      workflow_run_number: 1325
+      commit: 14f00e25893fcf73c6c5d881fb86852a8091f909
+      result: SUCCESS
+      dedicated_test_case_count: 27
+      related_binance_adapter_test_count: 20
+      full_regression_test_count: 542
+      ci_exit_status: 0
+      docker_foundation_run_id: 36132680788
+      docker_foundation_job_id: 108063348410
+      docker_foundation_result: SUCCESS
+      coverage: explicit true/false finality; missing/non-boolean finality; missing/malformed t/T; temporal contradiction; provider metadata mismatch; unsupported provider; REST no-finality; receipt/local-clock independence; replay; non-final→final; final→conflicting non-final; deterministic serialization; no-lookahead; malformed REST row/close time; Binance isolation
