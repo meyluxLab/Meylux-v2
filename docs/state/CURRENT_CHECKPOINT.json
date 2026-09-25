@@ -310,7 +310,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-25T14:30:00Z",
+  "updated_at_utc": "2026-09-25T14:35:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -363,7 +363,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
+  "last_governance_sync_base_commit": "9386dd537c4c58b9f206a0324031fdc7f14b5aa0",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -375,7 +375,8 @@
     "Owner authorized the upstream correction cycle on 2026-09-25. CONTROL allocated and committed TO-P2-008 for A-P2-BINANCE as a post-closure hardening action under PH-P2/STEP-P2-006; PH-P2 remains CLOSED / VERIFIED and no closure state is reopened.",
     "CONTROL independently verified TO-P2-008 on 2026-09-25 against Producer correction head b5491d9dee7a5e1e1dc6cab4bd670ca18710999c, CI Core Run #1325, Docker Foundation Run #327, and merge commit 14f00e25893fcf73c6c5d881fb86852a8091f909; TO-P2-008 is VERIFIED / COMPLETE as post-closure Binance hardening; PH-P2 and STEP-P2-006 historical closure remain unchanged; active_task_order is null.",
     "CONTROL activated TO-P2-009 on 2026-09-25 as the Owner-authorized A-P2-MEXC investigation-only continuation after TO-P2-008 verification. No MEXC implementation is authorized by this Task Order; P5-003 remains NOT AUTHORIZED.",
-    "CONTROL independently audited TO-P2-009 under AR-P2-AUDIT-009; MEXC_FINALITY remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; TO-P2-009 is VERIFIED / COMPLETE; PH-P2 and STEP-P2-006 historical closure remain unchanged; no MEXC implementation is authorized; active_task_order is null."
+    "CONTROL independently audited TO-P2-009 under AR-P2-AUDIT-009; MEXC_FINALITY remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; TO-P2-009 is VERIFIED / COMPLETE; PH-P2 and STEP-P2-006 historical closure remain unchanged; no MEXC implementation is authorized; active_task_order is null.",
+    "Final machine read-back after TO-P2-009 closure synchronization completed; artifact/phase/checkpoint/README/Change Ledger state is internally consistent, historical PH-P2 closure preserved, and no active Task Order remains."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
