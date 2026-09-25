@@ -2258,3 +2258,32 @@ entries:
       supplemental_staging_registry: CHECKED — no stranded TO-P2-009 record
       change_ledger: RECORDED
       machine_readback: COMPLETED — final repository read-back verified
+
+  - ledger_id: CL-P2-010-AUTHORIZATION-20260925
+    recorded_at: "2026-09-25"
+    authority: PROJECT OWNER / CONTROL
+    action: "OWNER-DIRECTED MEXC SEMANTIC CORRECTION — POST-CLOSURE IMPLEMENTATION TASK-ORDER ACTIVATION"
+    basis: "Project Owner directive 2026-09-25 requiring full technical resolution of the MEXC finality semantic inconsistency exposed by TO-P2-009 + TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-010
+      - TO-P2-009
+      - STEP-P2-006
+      - PH-P2
+      - PH-P5
+      - STEP-P5-002
+    findings:
+      - "TO-P2-009 established MEXC provider finality as UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED."
+      - "Current contracts/normalization.py synthesized closed=True for MEXC candles despite that absence of provider-finality evidence."
+      - "CanonicalCandle.is_closed is a boolean contract field; downstream P4 semantics require closed candles for authoritative quantitative/structural processing."
+    control_disposition:
+      task_order: TO-P2-010
+      objective: "Remove the unsupported MEXC closed=True synthesis and enforce an evidence-preserving fail-closed normalization boundary."
+      canonical_behavior: "MEXC raw/acquisition observations remain preservable, but candles without authoritative provider finality are rejected before CanonicalCandle construction."
+      contract_change: "NONE AUTHORIZED — existing CanonicalCandle bool contract is preserved."
+      architecture_change: "NONE AUTHORIZED."
+      knowledge_time: "NOT CREATED OR INFERRED."
+      historical_investigation: "TO-P2-009 remains immutable historical investigation evidence and is not rewritten."
+    scope_effect: "TO-P2-010 is AUTHORIZED / ACTIVE as bounded post-closure corrective implementation under PH-P2 / STEP-P2-006; PH-P2 remains CLOSED / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; no P5-003 activation."
+    runtime_effect: "NONE — no VPS/SentinelX operation authorized or performed."
+    g12: "Activation synchronization only; final closure synchronization remains CONTROL-owned and pending independent verification after Producer Build Report."
+
