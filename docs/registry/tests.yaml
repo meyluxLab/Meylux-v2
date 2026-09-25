@@ -358,4 +358,4 @@ records:
     task_order: TO-P2-010
     artifact_path: tests/test_acquisition/test_mexc_finality.py
     traceability: TO-P2-010 / PH-P2 / STEP-P2-006 / BR-P2-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: IMPLEMENTED / UNVERIFIED
+    status: IMPLEMENTED / TESTED
