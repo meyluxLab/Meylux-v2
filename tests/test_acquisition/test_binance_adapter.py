@@ -187,9 +187,9 @@ class BinanceAdapterTests(unittest.TestCase):
             envelope = adapter.fetch_klines("BTCUSDT", interval)[0]
             self.assertEqual(envelope.payload["k"]["i"], interval)
             outcome = normalize(envelope)
-            self.assertTrue(outcome.valid, outcome.issues)
-            self.assertEqual(outcome.value.timeframe, interval)
-            self.assertEqual(outcome.value.open, Decimal("100"))
+            self.assertFalse(outcome.valid)
+            self.assertTrue(any(issue.field == "is_closed" for issue in outcome.issues))
+            self.assertEqual(envelope.payload["k"]["x"], None)
             self.assertEqual(envelope.source_sequence, "1778155200000")
 
     def test_historical_kline_interval_rejects_malformed_and_unsupported_values(self):
@@ -205,7 +205,7 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(tuple(envelope.payload["row"]), tuple(row))
         self.assertEqual(envelope.payload["k"]["t"], row[0])
         self.assertEqual(envelope.payload["k"]["T"], row[6])
-        self.assertTrue(envelope.payload["k"]["x"])
+        self.assertIsNone(envelope.payload["k"]["x"])
         self.assertEqual(envelope.payload["k"]["i"], "15m")
 
     def test_stream_trade_mapping_and_provenance(self):
