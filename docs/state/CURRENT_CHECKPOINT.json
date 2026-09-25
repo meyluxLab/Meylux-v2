@@ -19,10 +19,10 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P2-009",
-  "last_build_report": "BR-P2-008",
-  "last_audit_report": "AR-P2-AUDIT-008",
+  "last_build_report": "BR-P2-009",
+  "last_audit_report": "AR-P2-AUDIT-009",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P2-009",
+  "active_task_order": null,
   "completed_task_order": "TO-P5-002",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
@@ -256,7 +256,10 @@
     "TO-P2-008",
     "BR-P2-008",
     "TST-P2-008",
-    "AR-P2-AUDIT-008"
+    "AR-P2-AUDIT-008",
+    "TO-P2-009",
+    "BR-P2-009",
+    "AR-P2-AUDIT-009"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -307,7 +310,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-25T13:10:00Z",
+  "updated_at_utc": "2026-09-25T14:30:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -371,7 +374,8 @@
     "Owner-authorized corrective VPS reconciliation completed 2026-09-24: VPS synchronized to main 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2, migration 0007 applied and safely re-executed, governed compose stack brought up, protected data preservation independently verified, and runtime persistence became reachable. AVAILABLE_PERSISTED remains NONE because P5-002 knowledge_time semantics are absent from the authoritative P4 persistence families; this is an upstream semantic disposition, not a runtime outage.",
     "Owner authorized the upstream correction cycle on 2026-09-25. CONTROL allocated and committed TO-P2-008 for A-P2-BINANCE as a post-closure hardening action under PH-P2/STEP-P2-006; PH-P2 remains CLOSED / VERIFIED and no closure state is reopened.",
     "CONTROL independently verified TO-P2-008 on 2026-09-25 against Producer correction head b5491d9dee7a5e1e1dc6cab4bd670ca18710999c, CI Core Run #1325, Docker Foundation Run #327, and merge commit 14f00e25893fcf73c6c5d881fb86852a8091f909; TO-P2-008 is VERIFIED / COMPLETE as post-closure Binance hardening; PH-P2 and STEP-P2-006 historical closure remain unchanged; active_task_order is null.",
-    "CONTROL activated TO-P2-009 on 2026-09-25 as the Owner-authorized A-P2-MEXC investigation-only continuation after TO-P2-008 verification. No MEXC implementation is authorized by this Task Order; P5-003 remains NOT AUTHORIZED."
+    "CONTROL activated TO-P2-009 on 2026-09-25 as the Owner-authorized A-P2-MEXC investigation-only continuation after TO-P2-008 verification. No MEXC implementation is authorized by this Task Order; P5-003 remains NOT AUTHORIZED.",
+    "CONTROL independently audited TO-P2-009 under AR-P2-AUDIT-009; MEXC_FINALITY remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; TO-P2-009 is VERIFIED / COMPLETE; PH-P2 and STEP-P2-006 historical closure remain unchanged; no MEXC implementation is authorized; active_task_order is null."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
