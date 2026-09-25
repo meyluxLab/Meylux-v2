@@ -1316,3 +1316,10 @@ records:
     artifact_path: docs/audits/AR-P2-AUDIT-008.md
     traceability: BR-P2-008 / TO-P2-008 / PH-P2 / STEP-P2-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+
+  - stable_id: TO-P2-009
+    canonical_name: Task Order — MEXC Provider Finality Investigation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-009.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-008 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
