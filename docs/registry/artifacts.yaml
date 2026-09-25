@@ -1296,5 +1296,23 @@ records:
     canonical_name: Task Order — Binance Provider Finality / Closed-Candle Knowledge-Time Hardening
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-008.md
-    traceability: PH-P2 / STEP-P2-006 / TO-P2-007 / AR-P2-AUDIT-007 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-007 / AR-P2-AUDIT-007 / BR-P2-008 / AR-P2-AUDIT-008 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P2-008
+    canonical_name: Build Report — Binance Provider Finality / Closed-Candle Knowledge-Time Hardening
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-008.md
+    traceability: TO-P2-008 / PH-P2 / STEP-P2-006 / AR-P2-AUDIT-008
+    status: VERIFIED
+  - stable_id: TST-P2-008
+    canonical_name: Binance Provider Finality / Closed-Candle Knowledge-Time Hardening Tests
+    entity_type: TST
+    artifact_path: tests/test_acquisition/test_binance_finality.py
+    traceability: TO-P2-008 / PH-P2 / STEP-P2-006 / BR-P2-008 / AR-P2-AUDIT-008
+    status: VERIFIED
+  - stable_id: AR-P2-AUDIT-008
+    canonical_name: CONTROL Independent Verification — TO-P2-008
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-008.md
+    traceability: BR-P2-008 / TO-P2-008 / PH-P2 / STEP-P2-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
