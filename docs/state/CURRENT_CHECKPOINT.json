@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P2-009",
+  "last_approved_task_order": "TO-P2-010",
   "last_build_report": "BR-P2-009",
   "last_audit_report": "AR-P2-AUDIT-009",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": null,
+  "active_task_order": "TO-P2-010",
   "completed_task_order": "TO-P5-002",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
@@ -304,13 +304,14 @@
     "Four historical compose-api-run probe containers were removed under Owner Decision 1; cleanup evidence is recorded in EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919.",
     "Phase 5 remains NOT AUTHORIZED.",
     "STEP-P5-001 is COMPLETE / VERIFIED under AR-P5-001; TO-P5-001 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later Phase-5 Step is activated.",
-    "Owner authorized Phase 5 continuation on 2026-09-23; CONTROL established STEP-P5-002 and TO-P5-002 from the repository roadmap. STEP-P5-002 has no PRQ delivery gate and is limited to existing authoritative persisted facts plus CONTROL-owned read-only SentinelX verification."
+    "Owner authorized Phase 5 continuation on 2026-09-23; CONTROL established STEP-P5-002 and TO-P5-002 from the repository roadmap. STEP-P5-002 has no PRQ delivery gate and is limited to existing authoritative persisted facts plus CONTROL-owned read-only SentinelX verification.",
+    "Project Owner directed full technical resolution of the MEXC finality semantic inconsistency exposed by TO-P2-009; CONTROL established TO-P2-010 as a bounded post-closure corrective implementation. PH-P2 remains CLOSED / VERIFIED and STEP-P2-006 remains COMPLETE / VERIFIED."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-25T14:35:00Z",
+  "updated_at_utc": "2026-09-25T14:40:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -363,7 +364,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "9386dd537c4c58b9f206a0324031fdc7f14b5aa0",
+  "last_governance_sync_base_commit": "1c51666a074c00585d529907e6638d5ab478c03c",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -376,7 +377,9 @@
     "CONTROL independently verified TO-P2-008 on 2026-09-25 against Producer correction head b5491d9dee7a5e1e1dc6cab4bd670ca18710999c, CI Core Run #1325, Docker Foundation Run #327, and merge commit 14f00e25893fcf73c6c5d881fb86852a8091f909; TO-P2-008 is VERIFIED / COMPLETE as post-closure Binance hardening; PH-P2 and STEP-P2-006 historical closure remain unchanged; active_task_order is null.",
     "CONTROL activated TO-P2-009 on 2026-09-25 as the Owner-authorized A-P2-MEXC investigation-only continuation after TO-P2-008 verification. No MEXC implementation is authorized by this Task Order; P5-003 remains NOT AUTHORIZED.",
     "CONTROL independently audited TO-P2-009 under AR-P2-AUDIT-009; MEXC_FINALITY remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; TO-P2-009 is VERIFIED / COMPLETE; PH-P2 and STEP-P2-006 historical closure remain unchanged; no MEXC implementation is authorized; active_task_order is null.",
-    "Final machine read-back after TO-P2-009 closure synchronization completed; artifact/phase/checkpoint/README/Change Ledger state is internally consistent, historical PH-P2 closure preserved, and no active Task Order remains."
+    "Final machine read-back after TO-P2-009 closure synchronization completed; artifact/phase/checkpoint/README/Change Ledger state is internally consistent, historical PH-P2 closure preserved, and no active Task Order remains.",
+    "TO-P2-010 — MEXC Finality Semantic Correction & Canonical-State Hardening is AUTHORIZED / ACTIVE. The repository contract analysis establishes fail-closed normalization as the bounded correction: preserve MEXC raw/acquisition evidence, reject unavailable provider finality before CanonicalCandle construction, and do not modify the frozen CanonicalCandle contract or infer finality.",
+    "TO-P2-010 activation is governance-only; no implementation, test execution, CI execution, VPS mutation, or provider activation has occurred yet. Producer is the next authorized implementation boundary."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
