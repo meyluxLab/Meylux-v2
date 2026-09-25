@@ -38,6 +38,8 @@ def _trade(e):
     return CanonicalTrade(tid,e.instrument.canonical_instrument_id,ts,price,qty,side,quote,e.provenance.provenance_id)
 def _candle(e):
     p=_record(e.payload,"candle")
+    if e.provider.provider_id not in {"binance","mexc"}:
+        raise _MappingFailure(ValidationCode.INVALID_VALUE,"provider","unsupported provider mapping")
     if e.provider.provider_id=="binance" and isinstance(p.get("k"),Mapping):
         k=p["k"];tf=_text(k,("i",),"timeframe");ot=_timestamp(_pick(k,"t"),e.event_time,"open_time");ct=_timestamp(_pick(k,"T"),e.event_time,"close_time");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("o","h","l","c","v"));quote=_decimal_optional(k,("q","quoteVolume"));count=_int(k,("n","tradeCount"));closed=k.get("x")
     elif e.provider.provider_id=="mexc" and isinstance(p.get("data"),Mapping) and "openingPrice" in p["data"]:
