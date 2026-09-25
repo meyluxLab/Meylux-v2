@@ -199,6 +199,13 @@ class BinanceAdapterTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     adapter.fetch_klines("BTCUSDT", interval)
 
+    def test_historical_kline_malformed_close_time_is_invalid_without_finality_fallback(self):
+        row = [1778155200000, "100", "101", "99", "100.5", "10", "bad"]
+        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "1m")[0]
+        self.assertEqual(envelope.state, AcquisitionState.INVALID)
+        self.assertEqual(envelope.provider_error.code, "BINANCE_INVALID_KLINE_CLOSE_TIME")
+        self.assertIsNotNone(envelope.provider_error)
+
     def test_historical_kline_payload_preserves_wire_row_and_explicit_context(self):
         row = [1778155200000, "100", "101", "99", "100.5", "10", 1778155259999, "1000", 2, "5", "500", "0"]
         envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "15m")[0]
