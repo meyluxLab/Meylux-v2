@@ -85,7 +85,7 @@ class MEXCFinalityCorrectionTests(unittest.TestCase):
         received = NOW
         acquired = adapter(http_get=FakeHTTP([row])).fetch_klines("BTCUSDT", "1m")[0]
         self.assertEqual(acquired.state, AcquisitionState.AVAILABLE)
-        self.assertEqual(acquired.payload["row"], row)
+        self.assertEqual(tuple(acquired.payload["row"]), tuple(row))
         self.assertEqual(acquired.provenance.acquisition_method, "REST_KLINES")
         self.assertEqual(acquired.received_at, received)
         self.assert_unavailable_finality(normalize(acquired))
@@ -186,9 +186,11 @@ class MEXCFinalityCorrectionTests(unittest.TestCase):
 
     def test_unsupported_provider_still_rejected(self):
         source = envelope(kline_payload())
+        unsupported_provider = ProviderIdentity("unsupported", "unsupported-adapter", "1.0.0")
         unsupported = replace(
             source,
-            provider=ProviderIdentity("unsupported", "unsupported-adapter", "1.0.0"),
+            provider=unsupported_provider,
+            provenance=Provenance("unsupported:test", unsupported_provider, "TEST"),
         )
         outcome = normalize(unsupported)
         self.assertFalse(outcome.valid)
