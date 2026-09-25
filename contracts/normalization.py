@@ -39,7 +39,7 @@ def _trade(e):
 def _candle(e):
     p=_record(e.payload,"candle")
     if e.provider.provider_id=="binance" and isinstance(p.get("k"),Mapping):
-        k=p["k"];tf=_text(k,("i",),"timeframe");ot=_timestamp(_pick(k,"t"),e.event_time,"open_time");ct=_timestamp(_pick(k,"T"),e.event_time,"close_time");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("o","h","l","c","v"));quote=_decimal_optional(k,("q","quoteVolume"));count=_int(k,("n","tradeCount"));closed=k.get("x",True)
+        k=p["k"];tf=_text(k,("i",),"timeframe");ot=_timestamp(_pick(k,"t"),e.event_time,"open_time");ct=_timestamp(_pick(k,"T"),e.event_time,"close_time");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("o","h","l","c","v"));quote=_decimal_optional(k,("q","quoteVolume"));count=_int(k,("n","tradeCount"));closed=k.get("x")
     elif e.provider.provider_id=="mexc" and isinstance(p.get("data"),Mapping) and "openingPrice" in p["data"]:
         k=p["data"];tf=_text(k,("interval",),"timeframe");ot=_timestamp(_pick(k,"windowStart"),e.event_time,"open_time","seconds");ct=_timestamp(_pick(k,"windowEnd"),e.event_time,"close_time","seconds");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("openingPrice","highestPrice","lowestPrice","closingPrice","volume"));quote=_decimal_optional(k,("amount","quoteVolume"));count=None;closed=True
     else:raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"timeframe","provider candle payload does not carry explicit timeframe context")

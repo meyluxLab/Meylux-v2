@@ -248,7 +248,7 @@ class BinanceAdapter(ProviderAdapter):
                     "T": row[6],
                     "q": row[7] if len(row) > 7 else None,
                     "n": row[8] if len(row) > 8 else None,
-                    "x": self._epoch_ms(row[6]) <= received,
+                    "x": None,  # REST klines expose close_time but no authoritative WebSocket closed flag.
                     "i": interval,
                 },
             }
@@ -367,6 +367,8 @@ class BinanceAdapter(ProviderAdapter):
                 AcquisitionState.INVALID,
                 ProviderError("BINANCE_INVALID_STREAM_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
             ) from exc
+        if event == "kline":
+            self._validate_kline_stream_finality(data, symbol)
         sequence = self._sequence_for_stream_event(event, data)
         event_type = {
             "trade": EventType.TRADE,
@@ -384,6 +386,75 @@ class BinanceAdapter(ProviderAdapter):
             source_sequence=sequence,
             state=AcquisitionState.AVAILABLE,
         )
+
+    @staticmethod
+    def _validate_kline_stream_finality(data: Mapping[str, Any], symbol: str) -> None:
+        """Validate Binance's authoritative WebSocket kline closure signal.
+
+        The provider's `k.x` flag is the only source accepted as finality evidence
+        at this boundary. Close-time arithmetic and receipt time are deliberately
+        not used to synthesize finality.
+        """
+        kline = data.get("k")
+        if not isinstance(kline, Mapping):
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_FINALITY",
+                    "INVALID_PAYLOAD",
+                    "Binance kline event must contain a kline mapping with authoritative finality evidence",
+                ),
+            )
+        closed = kline.get("x")
+        if not isinstance(closed, bool):
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_FINALITY",
+                    "INVALID_PAYLOAD",
+                    "Binance kline closure flag k.x must be an explicit boolean",
+                ),
+            )
+        open_ms = kline.get("t")
+        close_ms = kline.get("T")
+        if isinstance(open_ms, bool) or not isinstance(open_ms, int) or isinstance(close_ms, bool) or not isinstance(close_ms, int):
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_CLOSE_TIME",
+                    "INVALID_PAYLOAD",
+                    "Binance kline open/close times must be integer epoch milliseconds",
+                ),
+            )
+        if close_ms <= open_ms:
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_CLOSE_TIME",
+                    "INVALID_PAYLOAD",
+                    "Binance kline close time must be later than open time",
+                ),
+            )
+        provider_symbol = kline.get("s")
+        if not isinstance(provider_symbol, str) or provider_symbol.upper() != symbol.upper():
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_KLINE_SYMBOL_MISMATCH",
+                    "INVALID_PAYLOAD",
+                    "Binance kline symbol does not match the event symbol",
+                ),
+            )
+        timeframe = kline.get("i")
+        if not isinstance(timeframe, str) or not timeframe.strip():
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_KLINE_INTERVAL",
+                    "INVALID_PAYLOAD",
+                    "Binance kline interval must be explicit",
+                ),
+            )
 
     def _request_json(self, path: str, params: Mapping[str, Any]) -> Any:
         query = urlencode({k: v for k, v in params.items() if v is not None})
