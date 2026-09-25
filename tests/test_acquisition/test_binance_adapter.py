@@ -201,7 +201,7 @@ class BinanceAdapterTests(unittest.TestCase):
 
     def test_historical_kline_malformed_close_time_is_invalid_without_finality_fallback(self):
         row = [1778155200000, "100", "101", "99", "100.5", "10", "bad"]
-        envelope = self.make_adapter(http_get=FakeHTTP([row])).fetch_klines("BTCUSDT", "1m")[0]
+        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "1m")[0]
         self.assertEqual(envelope.state, AcquisitionState.INVALID)
         self.assertEqual(envelope.provider_error.code, "BINANCE_INVALID_KLINE_CLOSE_TIME")
         self.assertIsNotNone(envelope.provider_error)
