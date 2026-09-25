@@ -2150,3 +2150,21 @@ entries:
       services_after_checkout: "ALL_RUNNING; DB_HEALTHY; REDIS_HEALTHY"
     lifecycle_effect: "No Phase/Step lifecycle change; STEP-P5-002 remains COMPLETE / VERIFIED; STEP-P5-003 remains NOT AUTHORIZED."
     g12: "Final repository read-back synchronized with current main."
+
+
+  - ledger_id: CL-P2-008-AUTHORIZATION-20260925
+    recorded_at: "2026-09-25"
+    authority: PROJECT OWNER / CONTROL
+    action: "OWNER-AUTHORIZED UPSTREAM CORRECTION CYCLE — A-P2-BINANCE TASK-ORDER ACTIVATION"
+    basis: "Project Owner Authorization — Corrected Upstream Routing Package with Split Binance/MEXC A-P2 Boundary — 2026-09-25 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-008
+      - STEP-P2-006
+      - PH-P2
+      - PH-P5
+      - STEP-P5-002
+    lifecycle_effect: "PH-P2 remains CLOSED / VERIFIED; STEP-P2-006 remains COMPLETE / VERIFIED; TO-P2-008 is AUTHORIZED TO EXECUTE as post-closure hardening; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; STEP-P5-003 remains NOT AUTHORIZED."
+    scope_effect: "A-P2-BINANCE only. A-P2-MEXC remains investigation-only and is not activated by this Task Order. Routes A-P3, B, C and D remain authorized but not active."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; G-4 remains ESTABLISHED / VERIFIED; no identity or canonical-byte change is authorized."
+    runtime_effect: "No VPS/runtime mutation authorized or performed by TO-P2-008."
+    g12: "Activation record only; Step/Task closure synchronization remains CONTROL-owned and is pending the later independent verification boundary."
