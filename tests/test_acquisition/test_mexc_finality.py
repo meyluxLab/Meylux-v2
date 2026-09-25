@@ -132,6 +132,15 @@ class MEXCFinalityCorrectionTests(unittest.TestCase):
         self.assert_unavailable_finality(early)
         self.assert_unavailable_finality(late)
 
+    def test_event_time_and_window_end_cannot_promote_mexc_finality(self):
+        earlier_event = envelope(kline_payload(windowEnd=OPEN_MS // 1000), received_at=NOW)
+        later_event = replace(
+            earlier_event,
+            event_time=datetime(2030, 1, 1, tzinfo=UTC),
+        )
+        self.assert_unavailable_finality(normalize(earlier_event))
+        self.assert_unavailable_finality(normalize(later_event))
+
     def test_repeated_observations_remain_non_canonical(self):
         first = envelope(kline_payload())
         replay = envelope(kline_payload())
