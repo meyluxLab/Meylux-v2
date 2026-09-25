@@ -22,7 +22,7 @@
   "last_build_report": "BR-P5-002",
   "last_audit_report": "AR-P5-002",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": null,
+  "active_task_order": "TO-P2-008",
   "completed_task_order": "TO-P5-002",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
@@ -303,7 +303,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2",
-  "updated_at_utc": "2026-09-24T14:15:00Z",
+  "updated_at_utc": "2026-09-25T09:15:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -364,7 +364,8 @@
     "Project Owner Phase 5 Redirection Directive 2026-09-23 supersedes the previous Phase 5 Formalization-Preparation / Readiness Cycle; no blanket pre-Phase readiness cycle is required.",
     "CONTROL closure synchronization for STEP-P5-001 completed under AR-P5-001; repository evidence baseline 6b1c563b6aedbe04d62c8c99737f88921e5d562d and Build Report revision f8937bc55dfefc99889d130f7c44ad947df0665b were independently verified; no VPS/runtime execution was performed for P5-001.",
     "STEP-P5-002 — Input Snapshot Builder & Fact Availability Verification is COMPLETE / VERIFIED under AR-P5-002; TO-P5-002 is VERIFIED / COMPLETE; active_task_order is null; no P5-003 activation is authorized.",
-    "Owner-authorized corrective VPS reconciliation completed 2026-09-24: VPS synchronized to main 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2, migration 0007 applied and safely re-executed, governed compose stack brought up, protected data preservation independently verified, and runtime persistence became reachable. AVAILABLE_PERSISTED remains NONE because P5-002 knowledge_time semantics are absent from the authoritative P4 persistence families; this is an upstream semantic disposition, not a runtime outage."
+    "Owner-authorized corrective VPS reconciliation completed 2026-09-24: VPS synchronized to main 2ed8aad3c1353801ab1ea68b2a8e953ecaf258e2, migration 0007 applied and safely re-executed, governed compose stack brought up, protected data preservation independently verified, and runtime persistence became reachable. AVAILABLE_PERSISTED remains NONE because P5-002 knowledge_time semantics are absent from the authoritative P4 persistence families; this is an upstream semantic disposition, not a runtime outage.",
+    "Owner authorized the upstream correction cycle on 2026-09-25. CONTROL allocated and committed TO-P2-008 for A-P2-BINANCE as a post-closure hardening action under PH-P2/STEP-P2-006; PH-P2 remains CLOSED / VERIFIED and no closure state is reopened."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
