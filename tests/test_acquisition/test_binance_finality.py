@@ -61,7 +61,7 @@ class BinanceFinalityTests(unittest.TestCase):
 
     def test_rest_historical_kline_never_synthesizes_finality(self):
         row = [OPEN_MS, "100", "102", "99", "101", "10", CLOSE_MS, "1005", 100, "5", "502.5", "0"]
-        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "1m")[0]
+        envelope = self.make_adapter(http_get=FakeHTTP([row])).fetch_klines("BTCUSDT", "1m")[0]
 
         self.assertIsNone(envelope.payload["k"]["x"])
         self.assertEqual(envelope.event_time, datetime.fromtimestamp(OPEN_MS / 1000, tz=UTC))
@@ -76,7 +76,7 @@ class BinanceFinalityTests(unittest.TestCase):
         late = NOW + timedelta(hours=24)
         adapter = BinanceAdapter(
             clock=lambda: late,
-            http_get=FakeHTTP([[row]]),
+            http_get=FakeHTTP([row]),
             sleeper=lambda _: None,
             retry_policy=RetryPolicy(max_attempts=1),
         )
@@ -253,19 +253,19 @@ class BinanceFinalityTests(unittest.TestCase):
 
     def test_historical_row_with_seven_fields_remains_supported_by_existing_adapter_policy(self):
         row = [OPEN_MS, "100", "102", "99", "101", "10", CLOSE_MS]
-        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "1m")[0]
+        envelope = self.make_adapter(http_get=FakeHTTP([row])).fetch_klines("BTCUSDT", "1m")[0]
         self.assertIsNone(envelope.payload["k"]["x"])
         self.assertEqual(tuple(envelope.payload["row"]), tuple(row))
 
     def test_historical_row_shorter_than_minimum_is_rejected(self):
         row = [OPEN_MS, "100", "102", "99", "101", "10"]
-        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "1m")[0]
+        envelope = self.make_adapter(http_get=FakeHTTP([row])).fetch_klines("BTCUSDT", "1m")[0]
         self.assertEqual(envelope.state, AcquisitionState.INVALID)
         self.assertEqual(envelope.provider_error.code, "BINANCE_INVALID_KLINE_ROW")
 
     def test_historical_row_with_malformed_close_time_is_rejected(self):
         row = [OPEN_MS, "100", "102", "99", "101", "10", "bad"]
-        envelope = self.make_adapter(http_get=FakeHTTP([[row]])).fetch_klines("BTCUSDT", "1m")[0]
+        envelope = self.make_adapter(http_get=FakeHTTP([row])).fetch_klines("BTCUSDT", "1m")[0]
         self.assertEqual(envelope.state, AcquisitionState.INVALID)
         self.assertEqual(envelope.provider_error.code, "BINANCE_INVALID_KLINE_CLOSE_TIME")
 
