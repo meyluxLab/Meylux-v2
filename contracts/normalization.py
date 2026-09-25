@@ -42,8 +42,12 @@ def _candle(e):
         raise _MappingFailure(ValidationCode.INVALID_VALUE,"provider","unsupported provider mapping")
     if e.provider.provider_id=="binance" and isinstance(p.get("k"),Mapping):
         k=p["k"];tf=_text(k,("i",),"timeframe");ot=_timestamp(_pick(k,"t"),e.event_time,"open_time");ct=_timestamp(_pick(k,"T"),e.event_time,"close_time");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("o","h","l","c","v"));quote=_decimal_optional(k,("q","quoteVolume"));count=_int(k,("n","tradeCount"));closed=k.get("x")
-    elif e.provider.provider_id=="mexc" and isinstance(p.get("data"),Mapping) and "openingPrice" in p["data"]:
-        k=p["data"];tf=_text(k,("interval",),"timeframe");ot=_timestamp(_pick(k,"windowStart"),e.event_time,"open_time","seconds");ct=_timestamp(_pick(k,"windowEnd"),e.event_time,"close_time","seconds");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("openingPrice","highestPrice","lowestPrice","closingPrice","volume"));quote=_decimal_optional(k,("amount","quoteVolume"));count=None;closed=True
+    elif e.provider.provider_id=="mexc":
+        if isinstance(p.get("data"),Mapping) and "openingPrice" in p["data"]:
+            raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"is_closed","MEXC provider finality is unavailable; candle cannot become canonical")
+        if "row" in p:
+            raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"is_closed","MEXC REST candle has no authoritative provider finality; candle cannot become canonical")
+        raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"timeframe","provider candle payload does not carry explicit timeframe context")
     else:raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"timeframe","provider candle payload does not carry explicit timeframe context")
     if not isinstance(closed,bool):raise _MappingFailure(ValidationCode.INVALID_TYPE,"is_closed","is_closed must be bool")
     return CanonicalCandle(e.instrument.canonical_instrument_id,tf,ot,ct,op,hi,lo,cl,vol,quote,count,closed,e.provenance.provenance_id)

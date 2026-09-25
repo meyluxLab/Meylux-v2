@@ -350,3 +350,12 @@ records:
       docker_foundation_job_id: 108063348410
       docker_foundation_result: SUCCESS
       coverage: explicit true/false finality; missing/non-boolean finality; missing/malformed t/T; temporal contradiction; provider metadata mismatch; unsupported provider; REST no-finality; receipt/local-clock independence; replay; non-final→final; final→conflicting non-final; deterministic serialization; no-lookahead; malformed REST row/close time; Binance isolation
+  - stable_id: TST-P2-010
+    canonical_name: MEXC Finality Semantic Correction Boundary Tests
+    entity_type: TST
+    phase: PH-P2
+    step: STEP-P2-006
+    task_order: TO-P2-010
+    artifact_path: tests/test_acquisition/test_mexc_finality.py
+    traceability: TO-P2-010 / PH-P2 / STEP-P2-006 / BR-P2-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: IMPLEMENTED / TESTED
