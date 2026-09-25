@@ -1342,3 +1342,9 @@ records:
     artifact_path: docs/task-orders/TO-P2-010.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: AUTHORIZED / ACTIVE
+  - stable_id: BR-P2-010
+    canonical_name: Build Report — MEXC Finality Semantic Correction & Canonical-State Hardening
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-010.md
+    traceability: TO-P2-010 / PH-P2 / STEP-P2-006 / TST-P2-010
+    status: PRODUCED / UNVERIFIED
