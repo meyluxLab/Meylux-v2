@@ -350,3 +350,25 @@ records:
       docker_foundation_job_id: 108063348410
       docker_foundation_result: SUCCESS
       coverage: explicit true/false finality; missing/non-boolean finality; missing/malformed t/T; temporal contradiction; provider metadata mismatch; unsupported provider; REST no-finality; receipt/local-clock independence; replay; non-final→final; final→conflicting non-final; deterministic serialization; no-lookahead; malformed REST row/close time; Binance isolation
+
+  - stable_id: TST-P2-010
+    canonical_name: MEXC Provider Finality / Fail-Closed Canonicalization Tests
+    entity_type: TST
+    phase: PH-P2
+    step: STEP-P2-006
+    task_order: TO-P2-010
+    artifact_path: tests/test_acquisition/test_mexc_adapter.py
+    traceability: TO-P2-010 / STEP-P2-006 / BR-P2-010 / AR-P2-AUDIT-010
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 36342830440
+      workflow_job_id: 108686134426
+      workflow_run_number: 1397
+      commit: 935a7368ceea971a1d9a7b5bfde47f9d30a7b733
+      result: SUCCESS
+      dedicated_mexc_adapter_test_count: 26
+      full_regression_test_count: 547
+      ci_exit_status: 0
+      docker_foundation_result: NOT CLAIMED — no final-revision Docker run observed
+      coverage: MEXC REST unavailable-finality rejection; MEXC WebSocket unavailable-finality rejection; deterministic structural-vs-finality precedence; replay/idempotency; temporal anti-inference; raw-row/context preservation; Binance finality regression included in full suite
