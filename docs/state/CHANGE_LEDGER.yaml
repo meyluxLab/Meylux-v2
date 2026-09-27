@@ -2388,3 +2388,42 @@ entries:
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; assessment may identify governance/change-control needs but may not implement them."
     runtime_effect: "NONE — no VPS/SentinelX mutation authorized."
     g12: "Activation synchronization completed; final closure synchronization belongs to CONTROL after AR-P2-AUDIT-012."
+
+  - ledger_id: CL-P2-012-CLOSURE-20260927
+    recorded_at: "2026-09-27"
+    authority: CONTROL / REVIEWER
+    action: "INDEPENDENT AUDIT AND CONTROL-OWNED CLOSURE SYNCHRONIZATION — TO-P2-012"
+    basis: "BR-P2-012 + AR-P2-AUDIT-012 + TO-P2-012 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-012
+      - BR-P2-012
+      - AR-P2-AUDIT-012
+      - TO-P2-011
+      - AR-P2-AUDIT-011
+      - TO-P2-010
+      - STEP-P2-006
+      - PH-P2
+      - PH-P5
+      - STEP-P5-002
+    disposition: "TO-P2-012 VERIFIED / COMPLETE"
+    architectural_disposition: "A defensible MEXC capability-preservation architecture exists conceptually under the current frozen architecture; MEXC candle finality and public trade-stream completeness remain unavailable / not authoritatively established."
+    implementation_effect: "NONE — investigation/advisory only; no implementation authorized."
+    lifecycle_effect: "PH-P2 remains CLOSED / VERIFIED; STEP-P2-006 remains COMPLETE / VERIFIED; TO-P2-010 remains AUTHORIZED / SUSPENDED pending Owner decision after TO-P2-012 outcome; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no contract, schema, or canonical-state change."
+    runtime_effect: "NONE — no VPS/SentinelX mutation or deployment."
+    evidence:
+      build_report_blob_sha: 685ed2d7080b0dd6c61567c7caaf7f75dbd584b0
+      producer_delivery_commit: 3a45758f69bc19008279d1a63d915f1c2be0686d
+      audit_report: AR-P2-AUDIT-012
+      audit_commit: bcbbc356d974740b6b5899c28b0c73a40fb14def
+      tests: NOT EXECUTED — investigation-only
+      ci: NOT EXECUTED — investigation-only
+    g12:
+      artifact_registry: UPDATED
+      checkpoint: UPDATED
+      phase_registry: CHECKED — PH-P2 / STEP-P2-006 lifecycle unchanged
+      readme: UPDATED
+      specialized_registries: CHECKED — no implementation/test evidence produced
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+      machine_readback: PENDING FINAL READ-BACK IN THIS CYCLE
