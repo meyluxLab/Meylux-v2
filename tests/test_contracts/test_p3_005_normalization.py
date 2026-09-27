@@ -15,8 +15,8 @@ class P3005NormalizationTests(unittest.TestCase):
   r=normalize(env("mexc",EventType.TRADE,{"price":"100","qty":"2","time":1757592000000,"tradeId":"7","tradeType":1})); self.assertTrue(r.valid); self.assertIsNone(r.value.aggressor_side)
  def test_binance_candle(self):
   r=normalize(env("binance",EventType.CANDLE,{"k":{"i":"1m","t":1757592000000,"T":1757592059999,"o":"100","h":"110","l":"90","c":"105","v":"12","q":"1250","n":10,"x":True,"wire":"x"}})); self.assertTrue(r.valid); self.assertIsInstance(r.value,CanonicalCandle); self.assertEqual((r.value.timeframe,r.value.close),("1m",Decimal("105")))
- def test_mexc_candle(self):
-  r=normalize(env("mexc",EventType.CANDLE,{"data":{"interval":"Min1","windowStart":1757592000,"windowEnd":1757592059,"openingPrice":"100","closingPrice":"105","highestPrice":"110","lowestPrice":"90","volume":"12","amount":"1250"}})); self.assertTrue(r.valid); self.assertEqual(r.value.timeframe,"Min1")
+ def test_mexc_candle_finality_unavailable_is_rejected(self):
+  r=normalize(env("mexc",EventType.CANDLE,{"data":{"interval":"Min1","windowStart":1757592000,"windowEnd":1757592059,"openingPrice":"100","closingPrice":"105","highestPrice":"110","lowestPrice":"90","volume":"12","amount":"1250"}})); self.assertFalse(r.valid); self.assertIsNone(r.value); self.assertEqual(r.issues[0].field,"is_closed"); self.assertEqual(r.issues[0].code.value,"provider_field")
  def test_order_books(self):
   for provider in ("binance","mexc"):
    with self.subTest(provider=provider):
