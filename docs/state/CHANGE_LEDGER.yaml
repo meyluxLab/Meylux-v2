@@ -2355,7 +2355,7 @@ entries:
       standalone_status_documents: CHECKED
       specialized_registries: CHECKED — no execution evidence produced
       supplemental_staging_registry: CHECKED
-      machine_readback: PENDING FINAL READ-BACK IN THIS CYCLE
+      machine_readback: COMPLETED — final repository read-back verified
 
   - ledger_id: CL-P2-012-AUTHORIZATION-20260927
     recorded_at: "2026-09-27"
