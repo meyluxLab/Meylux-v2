@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P2-012",
+  "last_approved_task_order": "TO-P2-010",
   "last_build_report": "BR-P2-012",
   "last_audit_report": "AR-P2-AUDIT-012",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": null,
+  "active_task_order": "TO-P2-010",
   "completed_task_order": "TO-P5-002",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
@@ -317,7 +317,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-27T18:16:37.903Z",
+  "updated_at_utc": "2026-09-27T18:16:39Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -390,7 +390,10 @@
     "CONTROL independently audited TO-P2-011 under AR-P2-AUDIT-011; MEXC_TRADE_SEQUENCE_INTEGRITY remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; TO-P2-011 is VERIFIED / COMPLETE; PH-P2 and STEP-P2-006 historical closure remain unchanged; TO-P2-010 remains AUTHORIZED / SUSPENDED; no implementation route was authorized from the disposition.",
     "Project Owner authorized TO-P2-012 on 2026-09-27 as a bounded architectural investigation/advisory assessment to determine maximum valid MEXC capability without unsupported canonical facts; TO-P2-012 is the sole active Task Order; TO-P2-010 remains suspended and must not be auto-resumed, cancelled, replaced, or redirected.",
     "CONTROL independently verified TO-P2-012 under AR-P2-AUDIT-012; the architectural result is a conceptually defensible capability-preservation route under the frozen architecture, while MEXC candle finality and public trade-stream completeness remain unavailable; PH-P2 and STEP-P2-006 historical closure remain unchanged.",
-    "TO-P2-012 is VERIFIED / COMPLETE and no active Task Order remains. TO-P2-010 remains AUTHORIZED / SUSPENDED pending explicit Project Owner decision after the TO-P2-012 outcome; CONTROL must not auto-resume, cancel, replace, or redirect it."
+    "TO-P2-012 is VERIFIED / COMPLETE and no active Task Order remains. TO-P2-010 remains AUTHORIZED / SUSPENDED pending explicit Project Owner decision after the TO-P2-012 outcome; CONTROL must not auto-resume, cancel, replace, or redirect it.",
+    "Project Owner resumed TO-P2-010 on 2026-09-27 as the existing bounded post-closure MEXC finality corrective implementation; PH-P2 and STEP-P2-006 historical closure remain unchanged. TO-P2-010 is active for Producer implementation and BR-P2-010 delivery; no VPS mutation is authorized.",
+    "CONTROL prepared TO-P2-013 on 2026-09-27 as a separate MEXC Spot order-book snapshot and versioned aggregated-depth implementation boundary. TO-P2-013 is PREPARED / NOT ACTIVATED; Producer execution requires a separate CONTROL activation record.",
+    "TO-P2-010 and TO-P2-013 are independent tracks; neither is a prerequisite for the other unless a later authoritative dependency is established."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
