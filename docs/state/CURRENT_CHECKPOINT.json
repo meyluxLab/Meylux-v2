@@ -19,10 +19,10 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P2-010",
-  "last_build_report": "BR-P2-012",
-  "last_audit_report": "AR-P2-AUDIT-012",
+  "last_build_report": "BR-P2-010",
+  "last_audit_report": "AR-P2-AUDIT-010",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P2-010",
+  "active_task_order": null,
   "completed_task_order": "TO-P5-002",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
@@ -265,7 +265,11 @@
     "TO-P2-011",
     "BR-P2-012",
     "AR-P2-AUDIT-012",
-    "TO-P2-012"
+    "TO-P2-012",
+    "TO-P2-010",
+    "BR-P2-010",
+    "TST-P2-010",
+    "AR-P2-AUDIT-010"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -316,8 +320,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-27T18:52:38Z",
+  "last_verified_commit": "935a7368ceea971a1d9a7b5bfde47f9d30a7b733",
+  "updated_at_utc": "2026-09-27T19:00:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -370,7 +374,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "de709d38ba6412d1c4bf51a4ca847c4e6c1f3233",
+  "last_governance_sync_base_commit": "489afb5ca0ad6885f7f8bfe87bfc1089401bbdfb",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -393,7 +397,11 @@
     "TO-P2-012 is VERIFIED / COMPLETE and no active Task Order remains. TO-P2-010 remains AUTHORIZED / SUSPENDED pending explicit Project Owner decision after the TO-P2-012 outcome; CONTROL must not auto-resume, cancel, replace, or redirect it.",
     "Project Owner resumed TO-P2-010 on 2026-09-27 as the existing bounded post-closure MEXC finality corrective implementation; PH-P2 and STEP-P2-006 historical closure remain unchanged. TO-P2-010 is active for Producer implementation and BR-P2-010 delivery; no VPS mutation is authorized.",
     "CONTROL prepared TO-P2-013 on 2026-09-27 as a separate MEXC Spot order-book snapshot and versioned aggregated-depth implementation boundary. TO-P2-013 is PREPARED / NOT ACTIVATED; Producer execution requires a separate CONTROL activation record.",
-    "TO-P2-010 and TO-P2-013 are independent tracks; neither is a prerequisite for the other unless a later authoritative dependency is established."
+    "TO-P2-010 and TO-P2-013 are independent tracks; neither is a prerequisite for the other unless a later authoritative dependency is established.",
+    "CONTROL independently verified TO-P2-010 under AR-P2-AUDIT-010 against final implementation revision 935a7368ceea971a1d9a7b5bfde47f9d30a7b733 and CI Core Run #1397 / Run ID 36342830440; BR-P2-010 is VERIFIED and TO-P2-010 is VERIFIED / COMPLETE.",
+    "TO-P2-010 closure is a post-closure corrective action only; PH-P2 remains CLOSED / VERIFIED and STEP-P2-006 remains COMPLETE / VERIFIED. No Phase/Step reopening occurred.",
+    "CONTROL-owned closure synchronization completed for TO-P2-010: artifacts.yaml, tests.yaml, README.md, CHANGE_LEDGER.yaml and checkpoint were reconciled; phases.yaml was checked and historical PH-P2 / STEP-P2-006 closure remained unchanged; TO-P2-013 remains PREPARED / NOT ACTIVATED.",
+    "No final-revision Docker Foundation success is claimed; no VPS/SentinelX operation, deployment, migration, restart or runtime mutation occurred."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
