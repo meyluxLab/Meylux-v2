@@ -42,8 +42,14 @@ def _candle(e):
         raise _MappingFailure(ValidationCode.INVALID_VALUE,"provider","unsupported provider mapping")
     if e.provider.provider_id=="binance" and isinstance(p.get("k"),Mapping):
         k=p["k"];tf=_text(k,("i",),"timeframe");ot=_timestamp(_pick(k,"t"),e.event_time,"open_time");ct=_timestamp(_pick(k,"T"),e.event_time,"close_time");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("o","h","l","c","v"));quote=_decimal_optional(k,("q","quoteVolume"));count=_int(k,("n","tradeCount"));closed=k.get("x")
-    elif e.provider.provider_id=="mexc" and isinstance(p.get("data"),Mapping) and "openingPrice" in p["data"]:
-        k=p["data"];tf=_text(k,("interval",),"timeframe");ot=_timestamp(_pick(k,"windowStart"),e.event_time,"open_time","seconds");ct=_timestamp(_pick(k,"windowEnd"),e.event_time,"close_time","seconds");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("openingPrice","highestPrice","lowestPrice","closingPrice","volume"));quote=_decimal_optional(k,("amount","quoteVolume"));count=None;closed=True
+    elif e.provider.provider_id=="mexc":
+        if isinstance(p.get("data"),Mapping) and "openingPrice" in p["data"]:
+            k=p["data"];tf=_text(k,("interval",),"timeframe");ot=_timestamp(_pick(k,"windowStart"),e.event_time,"open_time","seconds");ct=_timestamp(_pick(k,"windowEnd"),e.event_time,"close_time","seconds");op,hi,lo,cl,vol=(_decimal(_pick(k,x),x) for x in ("openingPrice","highestPrice","lowestPrice","closingPrice","volume"));quote=_decimal_optional(k,("amount","quoteVolume"));count=None
+        elif isinstance(p.get("row"),Sequence) and not isinstance(p.get("row"),(str,bytes)) and len(p["row"])>=7:
+            row=p["row"];tf=_text(p,("interval",),"timeframe");ot=_timestamp(row[0],e.event_time,"open_time");ct=_timestamp(row[6],e.event_time,"close_time");op=_decimal(row[1],"open");hi=_decimal(row[2],"high");lo=_decimal(row[3],"low");cl=_decimal(row[4],"close");vol=_decimal(row[5],"volume");quote=_decimal_optional(p,("quoteVolume","amount"));count=None
+        else:
+            raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"timeframe","provider candle payload does not carry explicit timeframe context")
+        raise _MappingFailure(ValidationCode.PROVIDER_FIELD,"is_closed","MEXC provider finality is unavailable; candle is not canonically eligible")
     else:raise _MappingFailure(ValidationCode.REQUIRED_MISSING,"timeframe","provider candle payload does not carry explicit timeframe context")
     if not isinstance(closed,bool):raise _MappingFailure(ValidationCode.INVALID_TYPE,"is_closed","is_closed must be bool")
     return CanonicalCandle(e.instrument.canonical_instrument_id,tf,ot,ct,op,hi,lo,cl,vol,quote,count,closed,e.provenance.provenance_id)
