@@ -9,6 +9,7 @@ from urllib.error import HTTPError, URLError
 from contracts.acquisition import AcquisitionState, EventType
 from meylux.acquisition.binance import BinanceAdapter
 from meylux.acquisition.mexc import MEXCAdapter, RetryPolicy
+from contracts.normalization import normalize
 
 FIXED_NOW = datetime(2026, 9, 11, 12, 0, tzinfo=timezone.utc)
 
@@ -245,6 +246,71 @@ class MEXCAdapterTests(unittest.TestCase):
         self.assertEqual(failure.state, AcquisitionState.UNAVAILABLE)
         self.assertEqual(binance.identity.provider_id, "binance")
         self.assertNotEqual(failure.provider.provider_id, binance.identity.provider_id)
+
+
+    def test_mexc_rest_kline_preserves_row_and_rejects_unavailable_finality(self):
+        row = [1757592000000, "100", "110", "90", "105", "12", 1757592059999, "1250"]
+        envelope = adapter(http_get=lambda _url, _timeout: json.dumps([row]).encode()).fetch_klines("BTCUSDT", "1m")[0]
+        self.assertEqual(envelope.state, AcquisitionState.AVAILABLE)
+        self.assertEqual(envelope.payload["row"], row)
+        self.assertEqual(envelope.payload["interval"], "1m")
+        outcome = normalize(envelope)
+        self.assertFalse(outcome.valid)
+        self.assertEqual(len(outcome.issues), 1)
+        self.assertEqual(outcome.issues[0].code.value, "provider_field")
+        self.assertEqual(outcome.issues[0].field, "is_closed")
+        self.assertIn("finality is unavailable", outcome.issues[0].message)
+
+    def test_mexc_websocket_kline_rejects_before_canonical_construction(self):
+        envelope = adapter().parse_stream_message(kline_proto())
+        outcome = normalize(envelope)
+        self.assertFalse(outcome.valid)
+        self.assertIsNone(outcome.value)
+        self.assertEqual(outcome.issues[0].field, "is_closed")
+        self.assertEqual(outcome.issues[0].code.value, "provider_field")
+
+    def test_mexc_finality_precedence_is_deterministic_after_structural_validation(self):
+        valid = adapter().parse_stream_message(kline_proto())
+        malformed_close = json.loads(json.dumps(valid.payload))
+        malformed_close["data"]["windowEnd"] = "not-an-integer"
+        malformed = valid.__class__(
+            provider=valid.provider, instrument=valid.instrument, provenance=valid.provenance,
+            event_type=valid.event_type, event_time=valid.event_time, received_at=valid.received_at,
+            state=valid.state, payload=malformed_close, source_sequence=valid.source_sequence,
+        )
+        structural = normalize(malformed)
+        self.assertFalse(structural.valid)
+        self.assertEqual(structural.issues[0].field, "close_time")
+        self.assertNotEqual(structural.issues[0].code.value, "provider_field")
+        self.assertEqual(normalize(valid).issues[0].field, "is_closed")
+
+    def test_mexc_replay_cannot_promote_unavailable_finality(self):
+        first = adapter().parse_stream_message(kline_proto())
+        second = adapter().parse_stream_message(kline_proto())
+        first_outcome = normalize(first)
+        second_outcome = normalize(second)
+        self.assertEqual(first.event_id, second.event_id)
+        self.assertEqual(first.canonical_bytes(), second.canonical_bytes())
+        self.assertFalse(first_outcome.valid)
+        self.assertFalse(second_outcome.valid)
+        self.assertIsNone(first_outcome.value)
+        self.assertIsNone(second_outcome.value)
+        self.assertEqual(first_outcome.issues, second_outcome.issues)
+
+    def test_mexc_temporal_fields_do_not_synthesize_finality(self):
+        original = adapter().parse_stream_message(kline_proto())
+        for end in (1757592059, 1757595599, 1757599200):
+            payload = json.loads(json.dumps(original.payload))
+            payload["data"]["windowEnd"] = end
+            replay = original.__class__(
+                provider=original.provider, instrument=original.instrument, provenance=original.provenance,
+                event_type=original.event_type, event_time=original.event_time, received_at=original.received_at,
+                state=original.state, payload=payload, source_sequence=original.source_sequence,
+            )
+            outcome = normalize(replay)
+            self.assertFalse(outcome.valid)
+            self.assertEqual(outcome.issues[0].field, "is_closed")
+            self.assertEqual(outcome.issues[0].code.value, "provider_field")
 
     def test_credentials_are_not_part_of_public_adapter_configuration(self):
         source = open("src/meylux/acquisition/mexc.py", encoding="utf-8").read()
