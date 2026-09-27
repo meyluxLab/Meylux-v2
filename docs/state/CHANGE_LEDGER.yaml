@@ -2427,3 +2427,31 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED
       machine_readback: COMPLETED — final repository read-back verified
+
+  - ledger_id: CL-P2-010-RESUMPTION-20260927
+    recorded_at: "2026-09-27"
+    authority: PROJECT OWNER / CONTROL
+    action: "OWNER-DIRECTED RESUMPTION OF TO-P2-010 AND SEPARATE PREPARATION OF MEXC ORDER-BOOK CAPABILITY TASK ORDER"
+    basis: "Project Owner Decision — Resume TO-P2-010 and Prepare a Separate MEXC Order-Book Task Order — 2026-09-27 + TO-P2-012 / BR-P2-012 / AR-P2-AUDIT-012 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-010
+      - TO-P2-013
+      - TO-P2-012
+      - BR-P2-012
+      - AR-P2-AUDIT-012
+      - STEP-P2-006
+      - PH-P2
+      - PH-P5
+      - STEP-P5-002
+    control_disposition:
+      resumed_task_order: TO-P2-010
+      resumed_status: "AUTHORIZED TO EXECUTE"
+      active_task_order: TO-P2-010
+      parallel_prepared_task_order: TO-P2-013
+      parallel_prepared_status: "PREPARED / NOT ACTIVATED"
+      dependency_rule: "TO-P2-010 and TO-P2-013 are independent tracks; neither is a prerequisite for the other unless a later authoritative dependency is established."
+    lifecycle_effect: "PH-P2 remains CLOSED / VERIFIED; STEP-P2-006 remains COMPLETE / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED."
+    scope_effect: "TO-P2-010 scope and acceptance criteria are unchanged. TO-P2-013 is separately bounded to MEXC Spot REST order-book snapshots, aggregated WebSocket depth, documented version continuity, gap detection/recovery, stale-update handling, provenance/replayability and contract-sufficiency assessment."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no canonical contract or architecture change is authorized by this resumption/preparation record."
+    runtime_effect: "NONE — no VPS/SentinelX mutation authorized or performed."
+    g12: "Activation/preparation synchronization only; final closure synchronization remains CONTROL-owned after the applicable independent verification boundary."
