@@ -1347,7 +1347,8 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-011.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-010 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED / ACTIVE  - stable_id: BR-P2-011
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P2-011
     canonical_name: Build Report — MEXC Trade-Stream Sequence Integrity Investigation
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-011.md
@@ -1364,5 +1365,5 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-012.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-011 / BR-P2-011 / AR-P2-AUDIT-011 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: VERIFIED / COMPLETE
+    status: AUTHORIZED / ACTIVE
 
