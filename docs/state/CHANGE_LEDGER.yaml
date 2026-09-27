@@ -2320,3 +2320,71 @@ entries:
     runtime_effect: "NONE — no VPS/SentinelX operation authorized or performed."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no Trade-to-Candle architecture or canonical contract change is authorized."
     g12: "Activation/suspension synchronization only; final closure synchronization remains CONTROL-owned and pending the independent audit of TO-P2-011."
+
+  - ledger_id: CL-P2-011-CLOSURE-20260927
+    recorded_at: "2026-09-27"
+    authority: CONTROL / REVIEWER
+    action: "INDEPENDENT AUDIT AND CONTROL-OWNED CLOSURE SYNCHRONIZATION — TO-P2-011"
+    basis: "BR-P2-011 + AR-P2-AUDIT-011 + TO-P2-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-011
+      - BR-P2-011
+      - AR-P2-AUDIT-011
+      - TO-P2-010
+      - STEP-P2-006
+      - PH-P2
+      - PH-P5
+      - STEP-P5-002
+    disposition: "TO-P2-011 VERIFIED / COMPLETE"
+    provider_trade_sequence_disposition: "MEXC_TRADE_SEQUENCE_INTEGRITY: UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED"
+    implementation_effect: "NONE — investigation only; no implementation route authorized by TO-P2-011."
+    lifecycle_effect: "PH-P2 remains CLOSED / VERIFIED; STEP-P2-006 remains COMPLETE / VERIFIED; TO-P2-010 remains AUTHORIZED / SUSPENDED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no canonical contract or architecture change."
+    runtime_effect: "NONE — no VPS/SentinelX mutation."
+    evidence:
+      build_report_blob_sha: 70c62f33e310a9bc78dfdf22b0b5a44ca9ce69b5
+      producer_delivery_commit: dc018712354e9f5f1da80de1c48e1b9d3e1c1c61
+      audit_report: AR-P2-AUDIT-011
+      tests: NOT EXECUTED — investigation-only
+      ci: NOT EXECUTED — investigation-only
+    g12:
+      checkpoint: UPDATED
+      phase_registry: CHECKED — no lifecycle change to PH-P2/STEP-P2-006
+      artifact_registry: UPDATED
+      readme: UPDATED
+      standalone_status_documents: CHECKED
+      specialized_registries: CHECKED — no execution evidence produced
+      supplemental_staging_registry: CHECKED
+      machine_readback: PENDING FINAL READ-BACK IN THIS CYCLE
+
+  - ledger_id: CL-P2-012-AUTHORIZATION-20260927
+    recorded_at: "2026-09-27"
+    authority: PROJECT OWNER / CONTROL
+    action: "OWNER-DIRECTED POST-TO-P2-011 ARCHITECTURAL CAPABILITY-PRESERVATION ASSESSMENT — TO-P2-012 ACTIVATION"
+    basis: "Project Owner decision 2026-09-27 requesting bounded architectural investigation before any decision concerning TO-P2-010 + AR-P2-AUDIT-011 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-012
+      - TO-P2-011
+      - BR-P2-011
+      - AR-P2-AUDIT-011
+      - TO-P2-010
+      - STEP-P2-006
+      - PH-P2
+      - PH-P5
+      - STEP-P5-002
+    scope_effect: "TO-P2-012 is investigation/advisory only. No implementation, contract change, schema change, migration, adapter change, persistence change, historical rewrite, Trade-to-Candle implementation, VPS mutation, or automatic TO-P2-010 resume/cancel/redirect is authorized."
+    fixed_inputs:
+      - "MEXC_FINALITY: UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED"
+      - "MEXC_TRADE_SEQUENCE_INTEGRITY: UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED"
+      - "TO-P2-010: AUTHORIZED / SUSPENDED"
+      - "TO-P2-011: VERIFIED / COMPLETE"
+    control_disposition:
+      active_task_order: TO-P2-012
+      active_status: "AUTHORIZED / ACTIVE"
+      suspended_task_order: TO-P2-010
+      suspended_status: "AUTHORIZED / SUSPENDED — pending TO-P2-012 outcome"
+      resume_authority: "PROJECT OWNER DECISION REQUIRED AFTER TO-P2-012 DISPOSITION; CONTROL MUST NOT AUTO-RESUME, CANCEL, REPLACE, OR REDIRECT TO-P2-010."
+    lifecycle_effect: "PH-P2 remains CLOSED / VERIFIED; STEP-P2-006 remains COMPLETE / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; assessment may identify governance/change-control needs but may not implement them."
+    runtime_effect: "NONE — no VPS/SentinelX mutation authorized."
+    g12: "Activation synchronization completed; final closure synchronization belongs to CONTROL after AR-P2-AUDIT-012."
