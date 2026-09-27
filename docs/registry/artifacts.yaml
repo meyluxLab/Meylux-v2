@@ -1341,10 +1341,28 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-010.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-25 / Owner Suspension 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED / SUSPENDED — pending TO-P2-011 outcome
+    status: AUTHORIZED / SUSPENDED — pending TO-P2-012 outcome
   - stable_id: TO-P2-011
     canonical_name: Task Order — MEXC Trade-Stream Sequence Integrity Investigation
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-011.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-010 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED / ACTIVE
+    status: AUTHORIZED / ACTIVE  - stable_id: BR-P2-011
+    canonical_name: Build Report — MEXC Trade-Stream Sequence Integrity Investigation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-011.md
+    traceability: TO-P2-011 / PH-P2 / STEP-P2-006 / A-P2-MEXC-TRADE-SEQUENCE
+    status: VERIFIED
+  - stable_id: AR-P2-AUDIT-011
+    canonical_name: CONTROL Independent Audit — MEXC Trade-Stream Sequence Integrity Investigation
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-011.md
+    traceability: BR-P2-011 / TO-P2-011 / PH-P2 / STEP-P2-006
+    status: APPROVED / VERIFIED
+  - stable_id: TO-P2-012
+    canonical_name: Task Order — MEXC Capability-Preservation Architectural Assessment
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-012.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-011 / BR-P2-011 / AR-P2-AUDIT-011 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+
