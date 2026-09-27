@@ -314,7 +314,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-27T13:51:13.988Z",
+  "updated_at_utc": "2026-09-27T13:51:47.199Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -367,7 +367,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "3812601668d81b47d9ef2c5ec52d33765006c462",
+  "last_governance_sync_base_commit": "475c9459930b637cf66f929e71c71d91c9470e7e",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
