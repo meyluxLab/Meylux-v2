@@ -1340,8 +1340,8 @@ records:
     canonical_name: Task Order — MEXC Finality Semantic Correction & Canonical-State Hardening
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-010.md
-    traceability: PH-P2 / STEP-P2-006 / TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-25 / Owner Suspension 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED / SUSPENDED — pending Owner decision after TO-P2-012 outcome
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-25 / Owner Suspension 2026-09-27 / Owner Resumption 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
   - stable_id: TO-P2-011
     canonical_name: Task Order — MEXC Trade-Stream Sequence Integrity Investigation
     entity_type: TO
@@ -1366,6 +1366,12 @@ records:
     artifact_path: docs/task-orders/TO-P2-012.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-011 / BR-P2-011 / AR-P2-AUDIT-011 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: VERIFIED / COMPLETE
+  - stable_id: TO-P2-013
+    canonical_name: Task Order — MEXC Spot Order-Book Snapshot & Versioned Depth Capability
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-013.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-012 / BR-P2-012 / AR-P2-AUDIT-012 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: PREPARED / NOT ACTIVATED
   - stable_id: BR-P2-012
     canonical_name: Build Report — MEXC Capability-Preservation Architectural Assessment
     entity_type: BR
