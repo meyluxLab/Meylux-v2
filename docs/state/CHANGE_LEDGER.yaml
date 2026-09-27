@@ -2502,4 +2502,4 @@ entries:
       specialized_registries: UPDATED — tests.yaml; no runtime/database/security/config/performance/observability evidence changed
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED
-      machine_readback: PENDING FINAL CHECKPOINT UPDATE
+      machine_readback: COMPLETED — final checkpoint update and repository read-back verified
