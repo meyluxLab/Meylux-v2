@@ -252,7 +252,7 @@ class MEXCAdapterTests(unittest.TestCase):
         row = [1757592000000, "100", "110", "90", "105", "12", 1757592059999, "1250"]
         envelope = adapter(http_get=lambda _url, _timeout: json.dumps([row]).encode()).fetch_klines("BTCUSDT", "1m")[0]
         self.assertEqual(envelope.state, AcquisitionState.AVAILABLE)
-        self.assertEqual(envelope.payload["row"], row)
+        self.assertEqual(tuple(envelope.payload["row"]), tuple(row))
         self.assertEqual(envelope.payload["interval"], "1m")
         outcome = normalize(envelope)
         self.assertFalse(outcome.valid)
@@ -271,7 +271,7 @@ class MEXCAdapterTests(unittest.TestCase):
 
     def test_mexc_finality_precedence_is_deterministic_after_structural_validation(self):
         valid = adapter().parse_stream_message(kline_proto())
-        malformed_close = json.loads(json.dumps(valid.payload))
+        malformed_close = {"channel": valid.payload["channel"], "symbol": valid.payload["symbol"], "sendtime": valid.payload["sendtime"], "data": dict(valid.payload["data"])}
         malformed_close["data"]["windowEnd"] = "not-an-integer"
         malformed = valid.__class__(
             provider=valid.provider, instrument=valid.instrument, provenance=valid.provenance,
@@ -300,7 +300,7 @@ class MEXCAdapterTests(unittest.TestCase):
     def test_mexc_temporal_fields_do_not_synthesize_finality(self):
         original = adapter().parse_stream_message(kline_proto())
         for end in (1757592059, 1757595599, 1757599200):
-            payload = json.loads(json.dumps(original.payload))
+            payload = {"channel": original.payload["channel"], "symbol": original.payload["symbol"], "sendtime": original.payload["sendtime"], "data": dict(original.payload["data"])}
             payload["data"]["windowEnd"] = end
             replay = original.__class__(
                 provider=original.provider, instrument=original.instrument, provenance=original.provenance,
