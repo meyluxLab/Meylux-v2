@@ -19,10 +19,10 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P2-012",
-  "last_build_report": "BR-P2-011",
-  "last_audit_report": "AR-P2-AUDIT-011",
+  "last_build_report": "BR-P2-012",
+  "last_audit_report": "AR-P2-AUDIT-012",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P2-012",
+  "active_task_order": null,
   "completed_task_order": "TO-P5-002",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
@@ -262,7 +262,10 @@
     "AR-P2-AUDIT-009",
     "BR-P2-011",
     "AR-P2-AUDIT-011",
-    "TO-P2-011"
+    "TO-P2-011",
+    "BR-P2-012",
+    "AR-P2-AUDIT-012",
+    "TO-P2-012"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -314,7 +317,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "14f00e25893fcf73c6c5d881fb86852a8091f909",
-  "updated_at_utc": "2026-09-27T13:51:47.199Z",
+  "updated_at_utc": "2026-09-27T18:16:27.124Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -367,7 +370,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "475c9459930b637cf66f929e71c71d91c9470e7e",
+  "last_governance_sync_base_commit": "8afbe603d5fefa2fd1d18749a4a40fdf0c7e8c5c",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -385,7 +388,9 @@
     "CONTROL activated TO-P2-011 on 2026-09-27 as the sole active Task Order for the post-closure MEXC trade-stream sequence-integrity investigation under PH-P2 / STEP-P2-006. No Trade-to-Candle implementation is authorized; CONTROL must return the disposition to the Project Owner before resuming or redirecting TO-P2-010.",
     "TO-P2-011 investigation dispositions are restricted to MEXC_TRADE_SEQUENCE_INTEGRITY: ESTABLISHED or MEXC_TRADE_SEQUENCE_INTEGRITY: UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED.",
     "CONTROL independently audited TO-P2-011 under AR-P2-AUDIT-011; MEXC_TRADE_SEQUENCE_INTEGRITY remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; TO-P2-011 is VERIFIED / COMPLETE; PH-P2 and STEP-P2-006 historical closure remain unchanged; TO-P2-010 remains AUTHORIZED / SUSPENDED; no implementation route was authorized from the disposition.",
-    "Project Owner authorized TO-P2-012 on 2026-09-27 as a bounded architectural investigation/advisory assessment to determine maximum valid MEXC capability without unsupported canonical facts; TO-P2-012 is the sole active Task Order; TO-P2-010 remains suspended and must not be auto-resumed, cancelled, replaced, or redirected."
+    "Project Owner authorized TO-P2-012 on 2026-09-27 as a bounded architectural investigation/advisory assessment to determine maximum valid MEXC capability without unsupported canonical facts; TO-P2-012 is the sole active Task Order; TO-P2-010 remains suspended and must not be auto-resumed, cancelled, replaced, or redirected.",
+    "CONTROL independently verified TO-P2-012 under AR-P2-AUDIT-012; the architectural result is a conceptually defensible capability-preservation route under the frozen architecture, while MEXC candle finality and public trade-stream completeness remain unavailable; PH-P2 and STEP-P2-006 historical closure remain unchanged.",
+    "TO-P2-012 is VERIFIED / COMPLETE and no active Task Order remains. TO-P2-010 remains AUTHORIZED / SUSPENDED pending explicit Project Owner decision after the TO-P2-012 outcome; CONTROL must not auto-resume, cancel, replace, or redirect it."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
