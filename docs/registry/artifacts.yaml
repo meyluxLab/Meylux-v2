@@ -1340,5 +1340,11 @@ records:
     canonical_name: Task Order — MEXC Finality Semantic Correction & Canonical-State Hardening
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-010.md
-    traceability: PH-P2 / STEP-P2-006 / TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-25 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-009 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-25 / Owner Suspension 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED / SUSPENDED — pending TO-P2-011 outcome
+  - stable_id: TO-P2-011
+    canonical_name: Task Order — MEXC Trade-Stream Sequence Integrity Investigation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-011.md
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-010 / BR-P2-009 / AR-P2-AUDIT-009 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: AUTHORIZED / ACTIVE
