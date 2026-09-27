@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Active Task Order:** `TO-P2-012` (post-closure MEXC capability-preservation architectural assessment). **Suspended Task Order:** `TO-P2-010` (`AUTHORIZED / SUSPENDED — pending TO-P2-012 outcome`; not cancelled). **Completed Investigation:** `TO-P2-011` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-011`). **Completed Task Order:** `TO-P5-002` (`VERIFIED / COMPLETE` under `AR-P5-002`). Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`.
+- **Active Task Order:** none. **Suspended Task Order:** `TO-P2-010` (`AUTHORIZED / SUSPENDED — pending Owner decision after TO-P2-012 outcome`; not cancelled). **Completed Investigations:** `TO-P2-011` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-011`) and `TO-P2-012` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-012`). **Completed Task Order:** `TO-P5-002` (`VERIFIED / COMPLETE` under `AR-P5-002`). Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -71,7 +71,7 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`; Active Task Order: `TO-P2-012` (post-closure MEXC capability-preservation architectural assessment); Suspended Task Order: `TO-P2-010` (reversible suspension pending the `TO-P2-012` disposition); Completed Investigation: `TO-P2-011` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-011`); Completed Task Order: `TO-P5-002`; completion audit: `AR-P5-002`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`; Active Task Order: none; Suspended Task Order: `TO-P2-010` (reversible suspension pending explicit Owner decision after the `TO-P2-012` disposition); Completed Investigations: `TO-P2-011` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-011`) and `TO-P2-012` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-012`); Completed Task Order: `TO-P5-002`; completion audit: `AR-P5-002`.
 
 
 ## Post-Closure Investigation State
