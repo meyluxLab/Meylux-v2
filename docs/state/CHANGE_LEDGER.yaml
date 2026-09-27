@@ -2455,3 +2455,51 @@ entries:
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no canonical contract or architecture change is authorized by this resumption/preparation record."
     runtime_effect: "NONE — no VPS/SentinelX mutation authorized or performed."
     g12: "Activation/preparation synchronization only; final closure synchronization remains CONTROL-owned after the applicable independent verification boundary."
+
+  - ledger_id: CL-P2-010-CLOSURE-20260927
+    recorded_at: "2026-09-27"
+    authority: CONTROL / REVIEWER
+    action: "INDEPENDENT VERIFICATION AND CONTROL-OWNED CLOSURE OF TO-P2-010"
+    basis: "TO-P2-010 / BR-P2-010 / AR-P2-AUDIT-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P2-010
+      - BR-P2-010
+      - TST-P2-010
+      - AR-P2-AUDIT-010
+      - STEP-P2-006
+      - PH-P2
+      - TO-P2-013
+      - PH-P5
+      - STEP-P5-002
+    control_disposition:
+      task_order: TO-P2-010
+      status: "VERIFIED / COMPLETE"
+      audit_report: AR-P2-AUDIT-010
+      audit_status: "APPROVED / VERIFIED"
+      implementation_commit: 935a7368ceea971a1d9a7b5bfde47f9d30a7b733
+      build_report: BR-P2-010
+      test_artifact: TST-P2-010
+      active_task_order_after_closure: null
+    lifecycle_effect: "PH-P2 remains CLOSED / VERIFIED; STEP-P2-006 remains COMPLETE / VERIFIED; this post-closure corrective action does not reopen the historical Phase/Step closure. PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED."
+    semantic_effect: "MEXC provider finality remains UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED; MEXC candles without authoritative finality are rejected before CanonicalCandle construction; no synthetic closed state is produced."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; CanonicalCandle.is_closed remains boolean; no contract, schema, migration, identity or G-4 change."
+    evidence:
+      audit_commit: df28c1a9071877dea21af692a0ce18bd812532b4
+      ci_workflow: "CI Core"
+      ci_run_id: 36342830440
+      ci_run_number: 1397
+      ci_job_id: 108686134426
+      ci_result: "SUCCESS"
+      full_regression_tests: 547
+      implementation_revision: 935a7368ceea971a1d9a7b5bfde47f9d30a7b733
+      docker_final_revision_result: "NOT CLAIMED"
+      vps_runtime_mutation: "NONE"
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      phase_registry: CHECKED — PH-P2 / STEP-P2-006 historical lifecycle unchanged
+      readme: UPDATED
+      specialized_registries: UPDATED — tests.yaml; no runtime/database/security/config/performance/observability evidence changed
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+      machine_readback: PENDING FINAL CHECKPOINT UPDATE
