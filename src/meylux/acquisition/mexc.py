@@ -278,7 +278,7 @@ class MEXCAdapter(ProviderAdapter):
                 event_time = self._epoch_ms(row[0])
             except MEXCTransportError as exc:
                 return (self._invalid(self._instrument(symbol), EventType.CANDLE, "MEXC_INVALID_KLINE_TIMESTAMP", str(exc)),)
-            result.append(self._envelope(self._instrument(symbol), EventType.CANDLE, event_time, received, {"row": row}, "REST_KLINES", self._string_or_none(row[0])))
+            result.append(self._envelope(self._instrument(symbol), EventType.CANDLE, event_time, received, {"row": row, "interval": interval}, "REST_KLINES", self._string_or_none(row[0])))
         return tuple(result)
 
     def bootstrap(self, symbol: str, *, depth_limit: int = 100) -> tuple[AcquisitionEnvelope, AcquisitionEnvelope]:
