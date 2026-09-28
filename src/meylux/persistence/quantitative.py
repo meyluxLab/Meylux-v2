@@ -47,6 +47,9 @@ class QuantitativePersistence:
         payload={"state":result.regime.state,"transition":result.regime_transition,"result":_calc(result.regime.result),"source_provenance":result.source_provenance,"htf":_json(result.htf)}
         material={"family":"regime","symbol":result.symbol,"timeframe":result.timeframe,"event_time":result.as_of,"version":result.configuration_version,"payload":payload}
         rows.append(("regime",self._id(material),result.regime.state,result.regime.result.status.value,result.regime.result.reason,result.regime.result.value,result.regime.result.context,payload,result.regime.calculation_version))
+        # The ORCHESTRATION structure row is a snapshot summary, not a
+        # DOC-P4-002 structural fact. Its event_time is preserved as the
+        # orchestration reference boundary, but no knowledge_time is claimed.
         payload={"event_count":result.structure_event_count,"state":result.structure_state,"source_provenance":result.source_provenance}
         material={"family":"structure_event","symbol":result.symbol,"timeframe":result.timeframe,"event_time":result.as_of,"version":result.configuration_version,"payload":payload}
         rows.append(("structure_event",self._id(material),"ORCHESTRATION","valid","orchestration_snapshot",None,None,payload,"1.0.0"))
