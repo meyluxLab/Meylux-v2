@@ -2531,7 +2531,7 @@ entries:
       artifact_registry: UPDATED
       checkpoint: UPDATED
       phase_registry: CHECKED — no PH-P4/STEP-P4-006 lifecycle mutation
-      readme: PENDING — synchronized in same activation cycle
+      readme: CHECKED — synchronized in same activation cycle
       specialized_registries: CHECKED — no execution/test/runtime evidence produced
       supplemental_staging_registry: CHECKED
-      machine_readback: PENDING — final activation read-back after all synchronization writes
+      machine_readback: COMPLETED — final activation read-back performed after all synchronization writes
