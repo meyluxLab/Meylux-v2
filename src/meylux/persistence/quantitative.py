@@ -23,9 +23,11 @@ def _json(v:Any)->Any:
 
 def _knowledge_time(result: QuantOrchestrationResult) -> datetime:
     """Authoritative orchestration knowledge boundary: last closed input candle close."""
-    value = result.as_of
+    value = result.knowledge_time
     if value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value):
         raise ValueError("orchestration knowledge_time must be UTC")
+    if value != result.as_of:
+        raise ValueError("orchestration knowledge_time must equal as_of")
     return value
 
 def _calc(v:CalculationResult)->dict[str,Any]:
