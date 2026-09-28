@@ -123,7 +123,7 @@ jobs:
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.market_structure_zones WHERE record_id=$legacy-zone$;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.volume_profile_sessions WHERE record_id=$legacy-profile$;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT count(*) FROM meylux.calculated_indicator_vectors; SELECT count(*) FROM meylux.market_structure_events; SELECT count(*) FROM meylux.market_structure_zones; SELECT count(*) FROM meylux.volume_profile_sessions; SELECT count(*) FROM meylux.market_regime_states;" | tr -d "\r" | tr "\n" " ")" = "1 1 1 1 1 "
-            psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS meylux_legacy_ci;"
+            psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d postgres -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS meylux_legacy_ci;"
           '
 
       - name: Verify database foundation boundary
