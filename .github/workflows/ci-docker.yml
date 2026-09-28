@@ -108,7 +108,7 @@ jobs:
           MEYLUX_APP_PASSWORD: ci-app-password
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: |
-          docker compose -f infrastructure/compose/docker-compose.yml exec -T db bash -lc '
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T -e MEYLUX_DB_USER="$MEYLUX_DB_USER" -e MEYLUX_DB_PASSWORD="$MEYLUX_DB_PASSWORD" db bash -lc '
             set -euo pipefail
             export PGPASSWORD="$MEYLUX_DB_PASSWORD"
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d postgres -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS meylux_legacy_ci;"
