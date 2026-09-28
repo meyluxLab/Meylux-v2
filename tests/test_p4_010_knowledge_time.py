@@ -245,18 +245,17 @@ class TestP4010KnowledgeTime(unittest.TestCase):
             timeframe="15m",
             venue=None,
         )
-        incomplete = SnapshotRecord(
-            fact_id=record.fact_id,
-            status=FactStatus.VALID,
-            value=record.value,
-            event_time=T0,
-            knowledge_time=T0,
-            evidence_refs=(ref,),
-            reason=None,
-            metadata=dict(record.metadata),
-        )
         with self.assertRaises(SnapshotBuildError):
-            InputSnapshotBuilder().build(as_of=T0, records=[incomplete])
+            SnapshotRecord(
+                fact_id=record.fact_id,
+                status=FactStatus.VALID,
+                value=record.value,
+                event_time=T0,
+                knowledge_time=T0,
+                evidence_refs=(ref,),
+                reason=None,
+                metadata=dict(record.metadata),
+            )
 
     def test_event_time_and_knowledge_time_remain_distinct_in_p5_contract(self):
         event_time = T0 - timedelta(minutes=15)
