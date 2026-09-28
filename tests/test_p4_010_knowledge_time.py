@@ -142,17 +142,39 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         self.assertEqual(first.knowledge_time, first.as_of)
         self.assertEqual(first, second)
 
-    def test_persistence_writes_explicit_knowledge_time_for_every_written_family(self):
+    def test_family_semantics_independently_preserve_authoritative_closed_boundary(self):
+        result = QuantitativeOrchestrator().process(bars(), config())
+        boundary = bars()[-1].close_time
+        self.assertEqual(result.as_of, boundary)
+        self.assertEqual(result.knowledge_time, boundary)
+        for name, calculation in result.indicators.items():
+            self.assertIsNotNone(calculation.context, name)
+            self.assertEqual(calculation.context.timestamp, boundary, name)
+        self.assertIsNotNone(result.regime.result.context)
+        self.assertEqual(result.regime.result.context.timestamp, boundary)
+
+    def test_persistence_writes_authoritative_knowledge_time_only_for_proven_families(self):
         db = _DB()
         result = QuantitativeOrchestrator().process(bars(), config())
         inserted = asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
         self.assertEqual(inserted, 5)
         self.assertEqual(len(db.sql), 5)
-        for query, args in db.sql:
+        indicator_and_regime = [
+            (query, args) for query, args in db.sql
+            if "calculated_indicator_vectors" in query or "market_regime_states" in query
+        ]
+        structure = [
+            (query, args) for query, args in db.sql
+            if "market_structure_events" in query
+        ]
+        self.assertEqual(len(indicator_and_regime), 4)
+        self.assertEqual(len(structure), 1)
+        for query, args in indicator_and_regime:
             self.assertNotIn("persisted_at", query.lower())
-            self.assertNotIn("knowledge_time", query.lower())
             self.assertEqual(args[3], result.knowledge_time)
             self.assertIsInstance(args[3], datetime)
+        self.assertEqual(structure[0][1][3], result.as_of)
+        self.assertNotIn("knowledge_time", structure[0][0].lower())
 
     def test_persistence_rejects_non_utc_or_mismatched_knowledge_time(self):
         result = QuantitativeOrchestrator().process(bars(), config())
@@ -267,8 +289,9 @@ class TestP4010KnowledgeTime(unittest.TestCase):
 
     def test_migration_keeps_legacy_unknown_rows_representable(self):
         text = Path("migrations/versions/0008_p4_knowledge_time_persistence.sql").read_text(encoding="utf-8")
-        self.assertIn("GENERATED ALWAYS AS (event_time) STORED", text)
-        self.assertIn("CASE WHEN event_type = 'ORCHESTRATION' THEN event_time ELSE NULL END", text)
+        self.assertEqual(text.count("GENERATED ALWAYS AS (event_time) STORED"), 2)
+        self.assertNotIn("CASE WHEN event_type = 'ORCHESTRATION'", text)
+        self.assertIn("market_structure_events", text)
         self.assertIn("ADD COLUMN IF NOT EXISTS knowledge_time timestamptz;", text)
         self.assertNotIn("ALTER COLUMN knowledge_time SET NOT NULL", text)
         self.assertNotIn("UPDATE meylux.", text)
@@ -281,7 +304,7 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         self.assertNotIn("DROP TABLE", text.upper())
         self.assertNotIn("DELETE FROM", text.upper())
         self.assertIn("ADD COLUMN IF NOT EXISTS", text)
-        self.assertIn("GENERATED ALWAYS AS", text)
+        self.assertEqual(text.count("GENERATED ALWAYS AS"), 2)
         self.assertIn("ON CONFLICT(version) DO NOTHING", text)
         self.assertNotIn("UPDATE meylux.", text)
 
@@ -291,6 +314,22 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         with self.assertRaises(ValueError):
             QuantitativeOrchestrator().process(ordered, config())
 
+
+    def test_semantic_evidence_artifact_preserves_family_specific_authority(self):
+        text = Path("docs/quantitative/P4_010_KNOWLEDGE_TIME_SEMANTIC_EVIDENCE.md").read_text(encoding="utf-8")
+        for marker in (
+            "calculated_indicator_vectors",
+            "market_regime_states",
+            "market_structure_events",
+            "DOC-P4-002",
+            "P4_002_INDICATOR_SEMANTICS.md",
+            "P5_002_FACT_REQUIREMENTS_MATRIX.md",
+            "CLASS-B",
+            "UNAVAILABLE",
+        ):
+            self.assertIn(marker, text)
+        self.assertIn("ORCHESTRATION", text)
+        self.assertIn("not governed as a structural fact", text)
 
 if __name__ == "__main__":
     unittest.main()
