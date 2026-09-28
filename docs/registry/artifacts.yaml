@@ -1404,3 +1404,9 @@ records:
     traceability: BR-P2-012 / TO-P2-012 / PH-P2 / STEP-P2-006 / AR-P2-AUDIT-011
     status: APPROVED / VERIFIED
 
+  - stable_id: TO-P4-010
+    canonical_name: Task Order — P4 Authoritative Knowledge-Time Semantic & Persistence Correction
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-010.md
+    traceability: PH-P4 / STEP-P4-006 / P5-002 knowledge-time evidence gap / Owner Direction — Complete Resolution of the P4 knowledge_time Problem / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
