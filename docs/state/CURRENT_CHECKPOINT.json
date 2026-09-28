@@ -19,11 +19,11 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-010",
-  "last_build_report": "BR-P2-010",
-  "last_audit_report": "AR-P2-AUDIT-010",
+  "last_build_report": "BR-P4-010",
+  "last_audit_report": "AR-P4-017",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P4-010",
-  "completed_task_order": "TO-P5-002",
+  "active_task_order": null,
+  "completed_task_order": "TO-P4-010",
   "completion_audit": "AR-P5-002",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
@@ -269,7 +269,11 @@
     "TO-P2-010",
     "BR-P2-010",
     "TST-P2-010",
-    "AR-P2-AUDIT-010"
+    "AR-P2-AUDIT-010",
+    "TO-P4-010",
+    "BR-P4-010",
+    "TST-P4-010",
+    "AR-P4-017"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -320,8 +324,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "935a7368ceea971a1d9a7b5bfde47f9d30a7b733",
-  "updated_at_utc": "2026-09-28T09:22:00Z",
+  "last_verified_commit": "f0f6a48e61b0a187a969a7aa2be303f17aacfe40",
+  "updated_at_utc": "2026-09-28T15:00:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -402,7 +406,8 @@
     "TO-P2-010 closure is a post-closure corrective action only; PH-P2 remains CLOSED / VERIFIED and STEP-P2-006 remains COMPLETE / VERIFIED. No Phase/Step reopening occurred.",
     "CONTROL-owned closure synchronization completed for TO-P2-010: artifacts.yaml, tests.yaml, README.md, CHANGE_LEDGER.yaml and checkpoint were reconciled; phases.yaml was checked and historical PH-P2 / STEP-P2-006 closure remained unchanged; TO-P2-013 remains PREPARED / NOT ACTIVATED.",
     "No final-revision Docker Foundation success is claimed; no VPS/SentinelX operation, deployment, migration, restart or runtime mutation occurred.",
-    "CONTROL formalized and activated TO-P4-010 on 2026-09-28 under the Owner-authorized P4 knowledge_time correction direction. PH-P4 remains CLOSED / VERIFIED; STEP-P4-006 remains COMPLETE / VERIFIED; G-4 remains ESTABLISHED / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; no P5-003 or unrelated PRQ route is activated."
+    "CONTROL formalized and activated TO-P4-010 on 2026-09-28 under the Owner-authorized P4 knowledge_time correction direction. PH-P4 remains CLOSED / VERIFIED; STEP-P4-006 remains COMPLETE / VERIFIED; G-4 remains ESTABLISHED / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; no P5-003 or unrelated PRQ route is activated.",
+    "CONTROL independently verified TO-P4-010 under AR-P4-017 against implementation baseline 0f819b9b5c2193165ba8491850b5e0c6b0d9acdf, merged revision f0f6a48e61b0a187a969a7aa2be303f17aacfe40, historical 3/1/1 evidence, and final CI evidence. TO-P4-010 is VERIFIED / COMPLETE as post-closure hardening; PH-P4 / STEP-P4-006 / G-4 historical closure remains unchanged; PH-P5 / STEP-P5-002 remains COMPLETE / VERIFIED; no active Task Order remains."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
