@@ -3,9 +3,43 @@ import asyncio
 import unittest
 from datetime import datetime, timezone
 
-from meylux.orchestration import QuantitativeOrchestrator
+from decimal import Decimal
+from datetime import timedelta
+from contracts.canonical.candle import CanonicalCandle
+from contracts.quantitative.base import CalculationStatus
+from meylux.orchestration import QuantitativeOrchestrator, QuantOrchestrationConfig
 from meylux.persistence.quantitative import QuantitativePersistence, _knowledge_time
-from tests.test_p4_006_orchestration import _DB, bars, config
+from meylux.quantitative.regime_venue import RegimeConfig
+
+UTC = timezone.utc
+T0 = datetime(2026, 1, 1, tzinfo=UTC)
+
+def candle(i: int) -> CanonicalCandle:
+    t = T0 + timedelta(minutes=15 * i)
+    value = Decimal(100 + i)
+    return CanonicalCandle("BTCUSDT", "15m", t, t + timedelta(minutes=15), value, value, value, value, Decimal("10"), is_closed=True, provenance_id=f"p-{i}")
+
+def bars() -> tuple[CanonicalCandle, ...]:
+    return tuple(candle(i) for i in range(30))
+
+def config() -> QuantOrchestrationConfig:
+    return QuantOrchestrationConfig(RegimeConfig(2, 2, Decimal("0.10"), Decimal("0.05"), Decimal("0.10"), Decimal("0.05")))
+
+class _Tx:
+    async def __aenter__(self): return self
+    async def __aexit__(self, *args): return False
+
+class _DB:
+    def __init__(self): self.sql = []; self.seen = set()
+    def transaction(self): return _Tx()
+    async def execute(self, query, *args):
+        self.sql.append((query, args))
+        identity = args[-1]
+        if identity in self.seen: return "INSERT 0 0"
+        self.seen.add(identity)
+        return "INSERT 0 1"
+    async def fetch(self, *args): return []
+    async def fetchrow(self, *args): return None
 
 
 class TestP4010KnowledgeTime(unittest.TestCase):
