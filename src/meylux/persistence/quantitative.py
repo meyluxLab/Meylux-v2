@@ -21,6 +21,13 @@ def _json(v:Any)->Any:
     if isinstance(v,(str,int,bool)) or v is None: return v
     raise TypeError(f"unsupported value: {type(v).__name__}")
 
+def _knowledge_time(result: QuantOrchestrationResult) -> datetime:
+    """Authoritative orchestration knowledge boundary: last closed input candle close."""
+    value = result.as_of
+    if value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value):
+        raise ValueError("orchestration knowledge_time must be UTC")
+    return value
+
 def _calc(v:CalculationResult)->dict[str,Any]:
     return {"value":None if v.value is None else format(v.value,"f"),"status":v.status.value,"reason":v.reason,"context":_json(v.context)}
 
@@ -30,6 +37,7 @@ class QuantitativePersistence:
     @staticmethod
     def _id(material:Mapping[str,Any])->str: return hashlib.sha256(json.dumps(_json(material),sort_keys=True,separators=(",",":")).encode()).hexdigest()
     async def persist_orchestration(self,result:QuantOrchestrationResult)->int:
+        knowledge_time = _knowledge_time(result)
         rows=[]
         for name,calc in result.indicators.items():
             payload=_calc(calc); material={"family":"indicator","name":name,"symbol":result.symbol,"timeframe":result.timeframe,"event_time":result.as_of,"version":result.configuration_version,"payload":payload}
@@ -46,11 +54,11 @@ class QuantitativePersistence:
                 source=ctx.source_ref if ctx else f"canonical-provenance:{'|'.join(result.source_provenance)}"; venue=ctx.venue_context if ctx else None
                 pj=json.dumps(_json(payload),sort_keys=True,separators=(",",":"))
                 if family=="indicator":
-                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb,$13) ON CONFLICT(identity_hash) DO NOTHING"
-                    args=(rid,result.symbol,result.timeframe,result.as_of,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
+                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,knowledge_time,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) ON CONFLICT(identity_hash) DO NOTHING"
+                    args=(rid,result.symbol,result.timeframe,result.as_of,knowledge_time,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
                 elif family=="regime":
-                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,regime_state,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) ON CONFLICT(identity_hash) DO NOTHING"
-                    args=(rid,result.symbol,result.timeframe,result.as_of,kind,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
+                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,knowledge_time,regime_state,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14::jsonb,$15) ON CONFLICT(identity_hash) DO NOTHING"
+                    args=(rid,result.symbol,result.timeframe,result.as_of,knowledge_time,kind,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
                 else:
                     sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,event_type,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) ON CONFLICT(identity_hash) DO NOTHING"
                     args=(rid,result.symbol,result.timeframe,result.as_of,kind,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
