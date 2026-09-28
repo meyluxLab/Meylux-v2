@@ -372,3 +372,21 @@ records:
       ci_exit_status: 0
       docker_foundation_result: NOT CLAIMED — no final-revision Docker run observed
       coverage: MEXC REST unavailable-finality rejection; MEXC WebSocket unavailable-finality rejection; deterministic structural-vs-finality precedence; replay/idempotency; temporal anti-inference; raw-row/context preservation; Binance finality regression included in full suite
+  - stable_id: TST-P4-010
+    canonical_name: P4 Knowledge-Time Semantic & Persistence Correction Tests
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-010
+    artifact_path: tests/test_p4_010_knowledge_time.py
+    traceability: TO-P4-010 / BR-P4-010 / AR-P4-017
+    status: VERIFIED
+    evidence:
+      ci_core_run_id: 36421343199
+      ci_core_run_number: 1443
+      ci_core_result: FAILURE
+      docker_foundation_run_id: 36421343177
+      docker_foundation_run_number: 396
+      docker_foundation_result: SUCCESS
+      final_implementation_baseline: 0f819b9b5c2193165ba8491850b5e0c6b0d9acdf
+      independent_control_disposition: VERIFIED
