@@ -14,11 +14,13 @@ ALTER TABLE meylux.market_regime_states
     ADD COLUMN IF NOT EXISTS knowledge_time timestamptz
     GENERATED ALWAYS AS (event_time) STORED;
 
+-- The persisted ORCHESTRATION structure row is a snapshot summary, not one of
+-- the structural facts governed by DOC-P4-002. That authority therefore does
+-- not establish a fact-level knowledge_time equivalence for this summary.
+-- Keep it explicitly nullable until an applicable governed semantic authority
+-- establishes the summary's knowledge boundary.
 ALTER TABLE meylux.market_structure_events
-    ADD COLUMN IF NOT EXISTS knowledge_time timestamptz
-    GENERATED ALWAYS AS (
-        CASE WHEN event_type = 'ORCHESTRATION' THEN event_time ELSE NULL END
-    ) STORED;
+    ADD COLUMN IF NOT EXISTS knowledge_time timestamptz;
 
 -- These families currently have no authoritative QuantitativePersistence
 -- writer and no governing historical reconstruction rule. Their nullable
