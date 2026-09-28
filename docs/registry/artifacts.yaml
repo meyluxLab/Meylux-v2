@@ -1409,7 +1409,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-010.md
     traceability: PH-P4 / STEP-P4-006 / P5-002 knowledge-time evidence gap / Owner Direction — Complete Resolution of the P4 knowledge_time Problem / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
     lifecycle_context: POST-CLOSURE HARDENING — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
     completion_audit: AR-P4-017
 
