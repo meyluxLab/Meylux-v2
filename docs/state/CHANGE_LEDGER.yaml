@@ -2535,3 +2535,45 @@ entries:
       specialized_registries: CHECKED — no execution/test/runtime evidence produced
       supplemental_staging_registry: CHECKED
       machine_readback: COMPLETED — final activation read-back performed after all synchronization writes
+
+  - ledger_id: CL-P4-010-CLOSURE-20260928
+    recorded_at: "2026-09-28"
+    authority: CONTROL / REVIEWER
+    action: "FINAL INDEPENDENT VERIFICATION AND CONTROL-OWNED CLOSURE SYNCHRONIZATION — TO-P4-010"
+    basis: "AR-P4-017 + BR-P4-010 + TO-P4-010 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P4-010
+      - BR-P4-010
+      - TST-P4-010
+      - AR-P4-017
+      - STEP-P4-006
+      - PH-P4
+      - G-4
+      - PH-P5
+      - STEP-P5-002
+    disposition: "TO-P4-010 VERIFIED / COMPLETE"
+    implementation_baseline: "0f819b9b5c2193165ba8491850b5e0c6b0d9acdf"
+    merge_commit: "f0f6a48e61b0a187a969a7aa2be303f17aacfe40"
+    semantic_disposition:
+      indicator_vectors: "CLASS-B — deterministically reconstructible"
+      regime_states: "CLASS-B — deterministically reconstructible"
+      structure_orchestration: "CLASS-C — UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED"
+      structure_zones: "UNAVAILABLE"
+      volume_profiles: "UNAVAILABLE"
+    ci:
+      final_core_run_id: 36421343199
+      final_core_result: "FAILURE — independently classified as external PostgreSQL foundation/bootstrap failure"
+      final_docker_run_id: 36421343177
+      final_docker_result: "SUCCESS"
+    runtime_effect: "NONE — no VPS mutation or migration application by CONTROL during closure."
+    lifecycle_effect: "PH-P4 remains CLOSED / VERIFIED; STEP-P4-006 remains COMPLETE / VERIFIED; G-4 remains ESTABLISHED / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; no P5-003 activation."
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      checkpoint: UPDATED
+      phase_registry: CHECKED — historical PH-P4 / STEP-P4-006 lifecycle unchanged
+      readme: UPDATED
+      standalone_status_documents: CHECKED
+      specialized_registries: CHECKED — no additional applicable registry mutation required
+      supplemental_staging_registry: CHECKED
+      machine_readback: COMPLETED
