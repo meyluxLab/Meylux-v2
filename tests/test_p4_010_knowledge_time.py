@@ -329,7 +329,7 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         ):
             self.assertIn(marker, text)
         self.assertIn("ORCHESTRATION", text)
-        self.assertIn("not governed as a structural fact", text)
+        self.assertIn("not itself one of those governed structural event objects", text)
 
 if __name__ == "__main__":
     unittest.main()
