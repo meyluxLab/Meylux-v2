@@ -21,6 +21,15 @@ def _json(v:Any)->Any:
     if isinstance(v,(str,int,bool)) or v is None: return v
     raise TypeError(f"unsupported value: {type(v).__name__}")
 
+def _knowledge_time(result: QuantOrchestrationResult) -> datetime:
+    """Authoritative orchestration knowledge boundary: last closed input candle close."""
+    value = result.knowledge_time
+    if value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value):
+        raise ValueError("orchestration knowledge_time must be UTC")
+    if value != result.as_of:
+        raise ValueError("orchestration knowledge_time must equal as_of")
+    return value
+
 def _calc(v:CalculationResult)->dict[str,Any]:
     return {"value":None if v.value is None else format(v.value,"f"),"status":v.status.value,"reason":v.reason,"context":_json(v.context)}
 
@@ -30,6 +39,7 @@ class QuantitativePersistence:
     @staticmethod
     def _id(material:Mapping[str,Any])->str: return hashlib.sha256(json.dumps(_json(material),sort_keys=True,separators=(",",":")).encode()).hexdigest()
     async def persist_orchestration(self,result:QuantOrchestrationResult)->int:
+        knowledge_time = _knowledge_time(result)
         rows=[]
         for name,calc in result.indicators.items():
             payload=_calc(calc); material={"family":"indicator","name":name,"symbol":result.symbol,"timeframe":result.timeframe,"event_time":result.as_of,"version":result.configuration_version,"payload":payload}
@@ -37,6 +47,9 @@ class QuantitativePersistence:
         payload={"state":result.regime.state,"transition":result.regime_transition,"result":_calc(result.regime.result),"source_provenance":result.source_provenance,"htf":_json(result.htf)}
         material={"family":"regime","symbol":result.symbol,"timeframe":result.timeframe,"event_time":result.as_of,"version":result.configuration_version,"payload":payload}
         rows.append(("regime",self._id(material),result.regime.state,result.regime.result.status.value,result.regime.result.reason,result.regime.result.value,result.regime.result.context,payload,result.regime.calculation_version))
+        # The ORCHESTRATION structure row is a snapshot summary, not a
+        # DOC-P4-002 structural fact. Its event_time is preserved as the
+        # orchestration reference boundary, but no knowledge_time is claimed.
         payload={"event_count":result.structure_event_count,"state":result.structure_state,"source_provenance":result.source_provenance}
         material={"family":"structure_event","symbol":result.symbol,"timeframe":result.timeframe,"event_time":result.as_of,"version":result.configuration_version,"payload":payload}
         rows.append(("structure_event",self._id(material),"ORCHESTRATION","valid","orchestration_snapshot",None,None,payload,"1.0.0"))
@@ -49,10 +62,10 @@ class QuantitativePersistence:
                     sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb,$13) ON CONFLICT(identity_hash) DO NOTHING"
                     args=(rid,result.symbol,result.timeframe,result.as_of,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
                 elif family=="regime":
-                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,regime_state,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) ON CONFLICT(identity_hash) DO NOTHING"
+                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,regime_state,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb,$13) ON CONFLICT(identity_hash) DO NOTHING"
                     args=(rid,result.symbol,result.timeframe,result.as_of,kind,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
                 else:
-                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,event_type,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) ON CONFLICT(identity_hash) DO NOTHING"
+                    sql=f"INSERT INTO {self.TABLES[family]} (record_id,symbol,timeframe,event_time,event_type,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb,$13) ON CONFLICT(identity_hash) DO NOTHING"
                     args=(rid,result.symbol,result.timeframe,result.as_of,kind,source,venue,result.configuration_version,calc_version,status,reason,value,pj,rid)
                 if str(await self._connection.execute(sql,*args)).strip()=="INSERT 0 1": inserted+=1
         return inserted
