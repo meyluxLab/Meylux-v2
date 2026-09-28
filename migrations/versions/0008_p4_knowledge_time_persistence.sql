@@ -15,8 +15,21 @@ ALTER TABLE meylux.market_regime_states ADD COLUMN IF NOT EXISTS knowledge_time 
 
 UPDATE meylux.calculated_indicator_vectors SET knowledge_time=event_time WHERE knowledge_time IS NULL;
 UPDATE meylux.market_structure_events SET knowledge_time=event_time WHERE knowledge_time IS NULL;
-UPDATE meylux.market_structure_zones SET knowledge_time=event_time WHERE knowledge_time IS NULL;
-UPDATE meylux.volume_profile_sessions SET knowledge_time=session_end WHERE knowledge_time IS NULL;
+-- These two tables have no current QuantitativePersistence writer. Their legacy
+-- rows therefore lack a repository-proven reconstruction rule for knowledge_time.
+-- Preserve them as explicitly unevidenced and fail rather than laundering event/session
+-- boundaries into knowledge_time.
+DO $
+DECLARE unsupported_legacy bigint;
+BEGIN
+    SELECT
+      (SELECT count(*) FROM meylux.market_structure_zones WHERE knowledge_time IS NULL) +
+      (SELECT count(*) FROM meylux.volume_profile_sessions WHERE knowledge_time IS NULL)
+    INTO unsupported_legacy;
+    IF unsupported_legacy <> 0 THEN
+        RAISE EXCEPTION 'TO-P4-010 insufficient historical knowledge_time evidence for % zone/profile rows', unsupported_legacy;
+    END IF;
+END $;
 UPDATE meylux.market_regime_states SET knowledge_time=event_time WHERE knowledge_time IS NULL;
 
 DO $$
