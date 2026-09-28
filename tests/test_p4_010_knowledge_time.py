@@ -149,9 +149,10 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         self.assertEqual(inserted, 5)
         self.assertEqual(len(db.sql), 5)
         for query, args in db.sql:
-            self.assertIn("knowledge_time", query)
-            self.assertEqual(args[4], result.knowledge_time)
-            self.assertIsInstance(args[4], datetime)
+            self.assertNotIn("persisted_at", query.lower())
+            self.assertNotIn("knowledge_time", query.lower())
+            self.assertEqual(args[3], result.knowledge_time)
+            self.assertIsInstance(args[3], datetime)
 
     def test_persistence_rejects_non_utc_or_mismatched_knowledge_time(self):
         result = QuantitativeOrchestrator().process(bars(), config())
@@ -266,12 +267,13 @@ class TestP4010KnowledgeTime(unittest.TestCase):
 
     def test_migration_keeps_legacy_unknown_rows_representable(self):
         text = Path("migrations/versions/0008_p4_knowledge_time_persistence.sql").read_text(encoding="utf-8")
-        self.assertIn("ADD COLUMN IF NOT EXISTS knowledge_time timestamptz", text)
+        self.assertIn("GENERATED ALWAYS AS (event_time) STORED", text)
+        self.assertIn("CASE WHEN event_type = 'ORCHESTRATION' THEN event_time ELSE NULL END", text)
+        self.assertIn("ADD COLUMN IF NOT EXISTS knowledge_time timestamptz;", text)
         self.assertNotIn("ALTER COLUMN knowledge_time SET NOT NULL", text)
+        self.assertNotIn("UPDATE meylux.", text)
         self.assertIn("market_structure_zones", text)
         self.assertIn("volume_profile_sessions", text)
-        self.assertIn("knowledge_time IS NULL", text)
-        self.assertIn("event_type = 'ORCHESTRATION'", text)
         self.assertNotIn("session_end", text)
 
     def test_migration_is_non_destructive_and_idempotent(self):
@@ -279,8 +281,9 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         self.assertNotIn("DROP TABLE", text.upper())
         self.assertNotIn("DELETE FROM", text.upper())
         self.assertIn("ADD COLUMN IF NOT EXISTS", text)
+        self.assertIn("GENERATED ALWAYS AS", text)
         self.assertIn("ON CONFLICT(version) DO NOTHING", text)
-        self.assertIn("SET knowledge_time = event_time", text)
+        self.assertNotIn("UPDATE meylux.", text)
 
     def test_out_of_order_primary_candles_are_rejected_before_knowledge_time_is_derived(self):
         ordered = list(bars())
