@@ -105,6 +105,8 @@ class TestP4010Migration(unittest.TestCase):
         self.assertIn("SET knowledge_time=session_end", text)
         self.assertIn("ON CONFLICT(version) DO NOTHING", text)
         self.assertIn("'0008_p4_knowledge_time_persistence'", text)
+        harness = Path("infrastructure/postgres/migrate.sh").read_text(encoding="utf-8")
+        self.assertIn("0008_p4_knowledge_time_persistence.sql", harness)
 
     def test_migration_is_non_destructive_and_has_explicit_backfill_failure_gate(self):
         from pathlib import Path
