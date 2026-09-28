@@ -1410,3 +1410,36 @@ records:
     artifact_path: docs/task-orders/TO-P4-010.md
     traceability: PH-P4 / STEP-P4-006 / P5-002 knowledge-time evidence gap / Owner Direction — Complete Resolution of the P4 knowledge_time Problem / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: AUTHORIZED TO EXECUTE
+    lifecycle_context: POST-CLOSURE HARDENING — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
+    completion_audit: AR-P4-017
+
+
+  - stable_id: BR-P4-010
+    canonical_name: Build Report — P4 Authoritative Knowledge-Time Semantic & Persistence Correction
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-010.md
+    traceability: TO-P4-010 / PH-P4 / STEP-P4-006 / AR-P4-017
+    status: VERIFIED
+
+  - stable_id: TST-P4-010
+    canonical_name: P4 Knowledge-Time Semantic & Persistence Correction Tests
+    entity_type: TST
+    artifact_path: tests/test_p4_010_knowledge_time.py
+    traceability: TO-P4-010 / BR-P4-010 / AR-P4-017
+    status: VERIFIED
+    evidence:
+      ci_core_run_id: 36421343199
+      ci_core_run_number: 1443
+      ci_core_result: FAILURE
+      docker_foundation_run_id: 36421343177
+      docker_foundation_run_number: 396
+      docker_foundation_result: SUCCESS
+      final_implementation_baseline: 0f819b9b5c2193165ba8491850b5e0c6b0d9acdf
+      evidence_note: "Core workflow failure independently classified as external real-PostgreSQL bootstrap/foundation failure; TO-P4-010-specific tests observed OK; Docker Foundation migration and legacy semantics passed."
+
+  - stable_id: AR-P4-017
+    canonical_name: CONTROL Final Independent Audit — TO-P4-010
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-017.md
+    traceability: TO-P4-010 / BR-P4-010 / TST-P4-010 / PH-P4 / STEP-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
