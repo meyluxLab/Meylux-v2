@@ -105,6 +105,8 @@ jobs:
           MEYLUX_DB_NAME: meylux_ci
           MEYLUX_DB_USER: meylux_admin
           MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: |
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db bash -lc '
             set -euo pipefail
@@ -117,11 +119,11 @@ jobs:
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -c "INSERT INTO meylux.calculated_indicator_vectors(record_id,symbol,timeframe,event_time,version,calculation_version,status,reason,payload_json,identity_hash) VALUES ('legacy-indicator','BINANCE:BTCUSDT','15m','2026-01-01T00:15:00Z','1.0.0','1.0.0','valid','legacy','{}','aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'); INSERT INTO meylux.market_structure_events(record_id,symbol,timeframe,event_time,event_type,version,calculation_version,status,reason,payload_json,identity_hash) VALUES ('legacy-structure','BINANCE:BTCUSDT','15m','2026-01-01T00:15:00Z','ORCHESTRATION','1.0.0','1.0.0','valid','legacy','{}','bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'); INSERT INTO meylux.market_regime_states(record_id,symbol,timeframe,event_time,regime_state,version,calculation_version,status,reason,payload_json,identity_hash) VALUES ('legacy-regime','BINANCE:BTCUSDT','15m','2026-01-01T00:15:00Z','RANGE','1.0.0','1.0.0','valid','legacy','{}','cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc'); INSERT INTO meylux.market_structure_zones(record_id,symbol,timeframe,event_time,zone_type,version,calculation_version,status,reason,payload_json,identity_hash) VALUES ('legacy-zone','BINANCE:BTCUSDT','15m','2026-01-01T00:15:00Z','ZONE','1.0.0','1.0.0','valid','legacy','{}','dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'); INSERT INTO meylux.volume_profile_sessions(record_id,symbol,timeframe,session_start,session_end,version,calculation_version,status,reason,payload_json,identity_hash) VALUES ('legacy-profile','BINANCE:BTCUSDT','15m','2026-01-01T00:00:00Z','2026-01-01T00:15:00Z','1.0.0','1.0.0','valid','legacy','{}','eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee');"
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -f /workspace/migrations/versions/0008_p4_knowledge_time_persistence.sql
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -f /workspace/migrations/versions/0008_p4_knowledge_time_persistence.sql
-            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.calculated_indicator_vectors WHERE record_id=$legacy-indicator$;")" = "2026-01-01 00:15:00+00"
-            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.market_structure_events WHERE record_id=$legacy-structure$;")" = "2026-01-01 00:15:00+00"
-            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.market_regime_states WHERE record_id=$legacy-regime$;")" = "2026-01-01 00:15:00+00"
-            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.market_structure_zones WHERE record_id=$legacy-zone$;")" = "t"
-            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.volume_profile_sessions WHERE record_id=$legacy-profile$;")" = "t"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.calculated_indicator_vectors;")" = "2026-01-01 00:15:00+00"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.market_structure_events;")" = "2026-01-01 00:15:00+00"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.market_regime_states;")" = "2026-01-01 00:15:00+00"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.market_structure_zones;")" = "t"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.volume_profile_sessions;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT count(*) FROM meylux.calculated_indicator_vectors; SELECT count(*) FROM meylux.market_structure_events; SELECT count(*) FROM meylux.market_structure_zones; SELECT count(*) FROM meylux.volume_profile_sessions; SELECT count(*) FROM meylux.market_regime_states;" | tr -d "\r" | tr "\n" " ")" = "1 1 1 1 1 "
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d postgres -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS meylux_legacy_ci;"
           '
