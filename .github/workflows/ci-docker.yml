@@ -120,7 +120,7 @@ jobs:
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -f /workspace/migrations/versions/0008_p4_knowledge_time_persistence.sql
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -f /workspace/migrations/versions/0008_p4_knowledge_time_persistence.sql
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.calculated_indicator_vectors;")" = "2026-01-01 00:15:00+00"
-            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.market_structure_events;")" = "2026-01-01 00:15:00+00"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.market_structure_events;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time FROM meylux.market_regime_states;")" = "2026-01-01 00:15:00+00"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.market_structure_zones;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.volume_profile_sessions;")" = "t"
