@@ -1,7 +1,8 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-002` — COMPLETE / VERIFIED
+**Current Step Lifecycle:** `STEP-P5-003` — ACTIVE / AUTHORIZED
+**Active Task Order:** `TO-P5-003` — AUTHORIZED TO EXECUTE
 **Last Completed Task Order:** `TO-P5-002`
 **Completion Audit:** `AR-P5-002`
 **Phase SID:** `PH-P5`
@@ -79,6 +80,29 @@ This Step does not implement PRQ-1/2/3/4, provider runtime activation, specialis
 VPS boundary: CONTROL-only, SentinelX-only, read-only verification required for Step acceptance; no mutation, restart, migration, deployment or provider-runtime activation.
 
 Required evidence includes the final FRM, deterministic Snapshot identity/replay, no-lookahead boundary tests, explicit missing/unsupported/unavailable/insufficient/invalid/stale semantics, specialist-independence tests, and applicable read-only VPS fact-availability evidence.
+
+### `STEP-P5-003` — Runtime Harness & Reference Specialist (S-10)
+
+**Order:** 3  
+**Status:** ACTIVE / AUTHORIZED  
+**Authorization state:** ACTIVE / AUTHORIZED  
+**Predecessor:** `STEP-P5-002` — COMPLETE / VERIFIED  
+**Activation basis:** Project Owner authorization — `STEP-P5-003 = AUTHORIZED FOR GOVERNED PROGRESSION` — 2026-09-29  
+**Active Task Order:** `TO-P5-003`
+
+Purpose: establish the real bounded end-to-end Stage-1 runtime harness and the reference specialist `S-10`, using the authoritative Input Snapshot / FRM boundary and the independently verified P3 quality/acquisition evidence established by `TO-P3-009`.
+
+This Step is the first runtime walking skeleton for Phase 5. It includes bounded execution, deterministic ordering, timeout/isolation/retry semantics, DLQ, overload handling, idempotent persistence/read-back, replay determinism, and a reproducible runtime/resource baseline.
+
+The Step consumes existing authoritative upstream facts only. It does not implement `PRQ-1`, `PRQ-2`, or `PRQ-3`, does not activate new provider acquisition, does not reopen P2/P3/P4 closure, and does not absorb unavailable upstream fact families.
+
+`PRQ-4` is a resolved prerequisite for this Step: `TO-P3-009 = VERIFIED / COMPLETE`, `AR-P3-009 = APPROVED / VERIFIED`.
+
+The reference specialist `S-10` must emit deterministic, evidence-backed quality/acquisition interpretation, including explicit handling of non-`VALID`, stale, incomplete, contradictory and unavailable inputs. No evidence or timestamp may be fabricated.
+
+VPS/runtime work required by this Step is CONTROL-owned and SentinelX-only under `ADR-GOVERNANCE-011`; Producer implementation remains within the governed development workspace unless CONTROL performs the authorized runtime deployment/verification.
+
+Required evidence includes actual end-to-end runtime execution, failure isolation, bounded retry, DLQ, overload, duplicate/replay behavior, append-only persistence/read-back, security, CI coverage and the Step performance/resource baseline. Passing tests alone does not constitute Step verification.
 
 ## Continuation and Dependency Rule
 
