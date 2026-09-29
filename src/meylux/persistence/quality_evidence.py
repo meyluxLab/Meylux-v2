@@ -74,16 +74,11 @@ class QualityEvidencePersistence:
         if not isinstance(record, QualityEvidenceRecord):
             raise TypeError("record must be QualityEvidenceRecord")
         async with self._connection.transaction():
-            existing = await self._connection.fetchrow(
-                "SELECT evidence_id FROM meylux.quality_evidence WHERE evidence_id=$1",
-                record.evidence_id,
-            )
-            if existing is not None:
-                rows = await self._connection.fetch(self.FETCH_LOGICAL_SQL, record.logical_fact_key)
-                contradictory = len({str(row["evidence_id"]) for row in rows}) > 1
-                return QualityEvidencePersistenceResult(record.evidence_id, False, contradictory)
-            await self._connection.execute(
-                self.INSERT_SQL,
+            inserted_row = await self._connection.fetchrow(
+                self.INSERT_SQL.replace(
+                    "ON CONFLICT (evidence_id) DO NOTHING",
+                    "ON CONFLICT (evidence_id) DO NOTHING RETURNING evidence_id",
+                ),
                 record.evidence_id, record.logical_fact_key, record.source_record_id,
                 record.source_identity_hash, record.provider_id, record.adapter_id,
                 record.adapter_version, record.canonical_instrument_id,
@@ -96,7 +91,11 @@ class QualityEvidencePersistence:
             )
             rows = await self._connection.fetch(self.FETCH_LOGICAL_SQL, record.logical_fact_key)
             contradictory = len({str(row["evidence_id"]) for row in rows}) > 1
-        return QualityEvidencePersistenceResult(record.evidence_id, True, contradictory)
+        return QualityEvidencePersistenceResult(
+            record.evidence_id,
+            inserted_row is not None,
+            contradictory,
+        )
 
     async def fetch(self, evidence_id: str) -> Any:
         return await self._connection.fetchrow(self.FETCH_BY_ID_SQL, evidence_id)
