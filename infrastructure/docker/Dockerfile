@@ -9,6 +9,7 @@ WORKDIR /app
 COPY pyproject.toml .python-version ./
 COPY src ./src
 COPY contracts ./contracts
+COPY config ./config
 
 RUN pip install --no-cache-dir --no-compile --disable-pip-version-check .
 
