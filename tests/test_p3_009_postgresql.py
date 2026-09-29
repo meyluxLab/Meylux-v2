@@ -92,7 +92,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
     @classmethod
     def _connect(cls):
         import asyncpg
-        return asyncpg.connect(host=self.db_host,port=5432,database=DB,user=APP,password=APP_PASSWORD)
+        return asyncpg.connect(host=TestP3009PostgreSQLBehavior.db_host,port=5432,database=DB,user=APP,password=APP_PASSWORD)
 
     @staticmethod
     def _record(*,timeframe="15m",venue="BINANCE",knowledge=T0):
