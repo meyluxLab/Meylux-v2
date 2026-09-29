@@ -37,8 +37,8 @@ T0=datetime(2026,9,29,12,0,tzinfo=UTC)
 class TestP3009PostgreSQLBehavior(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        if os.environ.get("GITHUB_WORKFLOW") == "CI Docker Foundation":
-            raise unittest.SkipTest("P3-009 PostgreSQL evidence runs in CI Core; Docker Foundation has no database yet.")
+        if os.environ.get("MEYLUX_RUN_P3009_POSTGRESQL") != "1":
+            raise unittest.SkipTest("P3-009 PostgreSQL evidence runs only in its dedicated CI Core evidence step.")
         cls.docker=shutil.which("docker")
         if cls.docker is None:
             raise unittest.SkipTest("Docker unavailable; PostgreSQL-backed P3-009 evidence skipped.")
