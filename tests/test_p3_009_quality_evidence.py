@@ -139,15 +139,16 @@ class P3009QualityEvidenceTests(unittest.TestCase):
         with self.assertRaises(ContradictoryQualityEvidence):
             asyncio.run(QualityEvidencePersistence(conn).resolve(record.logical_fact_key))
 
-    def test_p5_resolution_refuses_silent_missing_context(self):
+    def test_p5_resolution_requires_context_when_consumer_requires_it(self):
         conn=Conn()
         record=build_quality_evidence(envelope(payload={"close":"100"}),assessment())
         asyncio.run(QualityEvidencePersistence(conn).persist(record))
-        ref=asyncio.run(QualityEvidencePersistence(conn).resolve_evidence_ref(record.logical_fact_key))
-        self.assertIsNotNone(ref)
-        self.assertIsNone(ref["timeframe"])
-        self.assertIsNone(ref["venue"])
-        self.assertEqual(ref["knowledge_time"],record.knowledge_time)
+        ref=asyncio.run(QualityEvidencePersistence(conn).resolve_evidence_ref(record.logical_fact_key,require_timeframe=True,require_venue=True))
+        self.assertIsNone(ref)
+        partial=build_quality_evidence(envelope(payload={"timeframe":"15m"}),assessment())
+        conn2=Conn()
+        asyncio.run(QualityEvidencePersistence(conn2).persist(partial))
+        self.assertIsNone(asyncio.run(QualityEvidencePersistence(conn2).resolve_evidence_ref(partial.logical_fact_key,require_venue=True)))
 
     def test_migration_is_additive_idempotent_and_append_only(self):
         sql=(ROOT/"migrations/versions/0009_quality_evidence_persistence.sql").read_text()
