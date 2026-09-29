@@ -57,17 +57,16 @@ class TestS10(unittest.TestCase):
         future = datetime(2026, 1, 1, 0, 0, 1, tzinfo=UTC)
         ref = _ref("future", future)
         source = InputSnapshot.build(as_of=future, version="1.0.0", facts=(SnapshotFact("future", FactStatus.VALID, Decimal("1"), future, (ref,)),), provenance_refs=(ref,))
-        raw = source.as_dict()
-        raw["as_of"] = T0
+        raw = json.loads(source.serialize())
+        raw["as_of"] = T0.isoformat().replace("+00:00", "Z")
         with self.assertRaises(S10SemanticError):
-            snapshot_from_json(json.dumps(raw, default=lambda x: x.isoformat().replace("+00:00", "Z")))
+            snapshot_from_json(json.dumps(raw))
 
     def test_unresolvable_evidence_is_rejected(self):
         ref = _ref("fact")
         snap = _snapshot(SnapshotFact("fact", FactStatus.VALID, Decimal("1"), T0, (ref,)))
-        raw = snap.as_dict()
+        raw = json.loads(snap.serialize())
         raw["provenance_refs"] = []
-        raw["snapshot_id"] = snap.snapshot_id
         with self.assertRaises(S10SemanticError):
             snapshot_from_json(json.dumps(raw, default=lambda x: x.isoformat().replace("+00:00", "Z")))
 
