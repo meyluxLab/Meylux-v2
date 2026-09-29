@@ -2,7 +2,7 @@ import asyncio
 import time
 import unittest
 
-from meylux.queue.model import DuplicateMessage, ProcessingOutcome, QueueEnvelope, QueueOverloaded, QueuePolicy, WorkerSpec
+from meylux.queue.model import DuplicateMessage, NonRetryableProcessingError, ProcessingOutcome, QueueEnvelope, QueueOverloaded, QueuePolicy, WorkerSpec
 from meylux.queue.redis import RedisQueue, AsyncWorker
 
 
@@ -359,6 +359,22 @@ class QueueFoundationTests(unittest.TestCase):
             workers = [AsyncWorker(q, handler, consumer=f'c{i}') for i in range(2)]
             await asyncio.gather(*(w.run_once() for w in workers))
             self.assertLessEqual(peak, 2)
+        asyncio.run(run())
+
+    def test_non_retryable_failure_goes_directly_to_dlq(self):
+        async def handler(_):
+            raise NonRetryableProcessingError("malformed specialist input")
+        async def run():
+            redis = FakeRedis()
+            p = QueuePolicy(name="semantic", owner="o", producer="p", consumer="c", purpose="t", payload_contract="CTR", dlq_name="semantic-dlq", max_backlog=10, max_concurrency=1, max_attempts=3, timeout_seconds=.1, backoff_seconds=0, retention_seconds=60)
+            q = RedisQueue(redis, p, "g")
+            eid = await q.publish(QueueEnvelope("m","i","CTR",{}))
+            result = await AsyncWorker(q, handler, consumer="c").run_once()
+            self.assertEqual(result.status, "DLQ")
+            self.assertEqual(result.attempt, 1)
+            self.assertEqual(len(redis.entries), 1)
+            self.assertEqual(len(redis.dlq_entries), 1)
+            self.assertNotIn(eid, redis.pending)
         asyncio.run(run())
 
 
