@@ -104,7 +104,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
             provider,instrument,provenance,EventType.CANDLE,T0-timedelta(minutes=15),knowledge,
             AcquisitionState.AVAILABLE,
             {"timeframe":timeframe,"venue":venue,"close":"100"},
-            "p3009-sequence",
+            "p3009-sequence-"+str(timeframe)+"-"+str(venue),
         )
         assessment=assess_quality(QualityInput(
             ValidationOutcome(ValidationResult.VALID),
@@ -129,7 +129,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 raw=await RawStagingRepository(conn).persist(envelope)
                 self.assertTrue(raw.inserted)
                 row=await conn.fetchrow(
-                    "SELECT event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json FROM meylux.raw_acquisition_events WHERE event_id=$1",
+                    "SELECT event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json,canonical_bytes FROM meylux.raw_acquisition_events WHERE event_id=$1",
                     envelope.event_id,
                 )
                 evidence_result,_=await process_raw_row(conn,row)
@@ -150,7 +150,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         async def run():
             conn=await self._connect()
             try:
-                envelope,assessment=self._record()
+                envelope,assessment=self._record(venue="BINANCE")
                 from contracts.quality_evidence import build_quality_evidence
                 evidence=build_quality_evidence(envelope,assessment)
                 repo=QualityEvidencePersistence(conn)
@@ -232,7 +232,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         async def run():
             conn=await self._connect()
             try:
-                envelope,assessment=self._record()
+                envelope,assessment=self._record(venue="BINANCE")
                 from contracts.quality_evidence import build_quality_evidence
                 evidence=build_quality_evidence(envelope,assessment)
                 repo=QualityEvidencePersistence(conn)
