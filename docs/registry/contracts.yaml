@@ -262,3 +262,17 @@ records:
     immutability: dataclass contract boundary
     provenance: BR-P5-001 / AR-P5-001
     status: VERIFIED
+
+  - sid: CTR-P3-009
+    version: 1.0.0
+    logical_name: Authoritative P3 Quality / Acquisition Evidence Contract
+    entity_type: CTR
+    phase: PH-P5
+    step: STEP-P5-002
+    tier: REQ-BEHAVIOR
+    purpose: Deterministic provider-neutral persisted quality/acquisition evidence boundary required by PRQ-4
+    implementation_paths:
+      - contracts/quality_evidence.py
+      - src/meylux/persistence/quality_evidence.py
+    provenance: BR-P3-009 / AR-P3-009
+    lifecycle_status: VERIFIED
