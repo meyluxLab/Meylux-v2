@@ -4,7 +4,6 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-import asyncpg
 from typing import Any
 
 from meylux.observability import HealthState, Severity, configure_logging, emit
@@ -113,8 +112,11 @@ class SpecialistWorkerHandler:
                 persistence = SpecialistPersistence(connection)
                 inserted = await persistence.persist(output)
                 persisted = await persistence.fetch_by_identity(output.identity_hash)
-        except (asyncpg.PostgresError, ConnectionError, TimeoutError) as exc:
-            raise RetryableProcessingError("transient specialist persistence failure") from exc
+        except Exception as exc:
+            module = type(exc).__module__
+            if module.startswith("asyncpg") or isinstance(exc, (ConnectionError, TimeoutError)):
+                raise RetryableProcessingError("transient specialist persistence failure") from exc
+            raise S10SemanticError("unexpected specialist persistence contract failure") from exc
         if persisted is None:
             raise RuntimeError("specialist output was not readable after persistence")
         emit(
