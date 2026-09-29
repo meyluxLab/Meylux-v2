@@ -159,6 +159,15 @@ class P3009QualityEvidenceTests(unittest.TestCase):
         self.assertNotIn("DROP TABLE",sql.upper())
         self.assertIn("ON CONFLICT(version) DO NOTHING",sql)
 
+    def test_migration_harness_and_runtime_use_authoritative_path(self):
+        harness=(ROOT/"infrastructure/postgres/migrate.sh").read_text()
+        self.assertIn("0008_p4_knowledge_time_persistence.sql",harness)
+        self.assertIn("0009_quality_evidence_persistence.sql",harness)
+        runtime=(ROOT/"src/meylux/runtime/p3_008_vertical_slice.py").read_text()
+        self.assertIn("QualityEvidencePersistence",runtime)
+        self.assertIn("build_quality_evidence",runtime)
+        self.assertLess(runtime.index("build_quality_evidence"),runtime.index("if not normalized.valid or not assessment.canonical_eligible"))
+
 
 if __name__=="__main__":
     unittest.main()
