@@ -65,7 +65,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
             "0009_quality_evidence_persistence.sql",
         ):
             cls._psql_file(f"migrations/versions/{name}")
-        cls._psql(f"ALTER ROLE {APP} LOGIN PASSWORD '{APP_PASSWORD};")
+        cls._psql(f"ALTER ROLE {APP} LOGIN PASSWORD '{APP_PASSWORD}';")
         cls.db_host=cls._run([cls.docker,"inspect","-f","{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}",CONTAINER]).stdout.strip()
         if not cls.db_host:
             raise RuntimeError("unable to resolve ephemeral PostgreSQL container address")
