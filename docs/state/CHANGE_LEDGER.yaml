@@ -2653,3 +2653,28 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED
       machine_readback: PENDING — to be completed after the activation writes and before any closure claim
+
+  - ledger_id: CL-P3-009-AUDIT-20260929
+    recorded_at: "2026-09-29"
+    authority: CONTROL / ROL-V2-001
+    action: "INDEPENDENT AUDIT OF TO-P3-009 — CORRECTION REQUIRED"
+    basis: "AR-P3-009 against PR #51 head e3f021e427ff87e10819377438e94b715456da74"
+    disposition:
+      task_order: TO-P3-009
+      audit: AR-P3-009
+      status: "REQUIRES CORRECTION"
+      prq4: "NOT YET RESOLVED"
+      step_p5_003: "NOT ACTIVATED"
+    findings:
+      - C1_REAL_UNAVAILABLE_RUNTIME_PATH
+      - C2_END_TO_END_P5_EVIDENCE_REF
+      - C3_HISTORICAL_EVIDENCE_BOUNDARY
+      - C4_POSTGRES_BEHAVIORAL_VERIFICATION
+      - C5_BUILD_REPORT_AND_CURRENT_CI_EVIDENCE
+    ci_current_head:
+      core_run: 36571493161
+      core_conclusion: SUCCESS
+      docker_run: 36571493151
+      docker_conclusion: SUCCESS
+    runtime_vps: "NONE — no VPS/SentinelX mutation performed"
+    next_boundary: "Producer correction cycle under existing TO-P3-009, followed by independent CONTROL re-audit"
