@@ -180,8 +180,8 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 with self.assertRaises(LookaheadFactError):
                     builder.build(as_of=evidence.knowledge_time-timedelta(microseconds=1),records=[record])
 
-                incomplete_env,_=self._record(timeframe=None,venue=None)
-                incomplete=build_quality_evidence(incomplete_env,assessment)
+                incomplete_env,incomplete_assessment=self._record(timeframe=None,venue=None)
+                incomplete=build_quality_evidence(incomplete_env,incomplete_assessment)
                 await repo.persist(incomplete)
                 self.assertIsNone(await repo.resolve_evidence_ref(incomplete.logical_fact_key,require_timeframe=True,require_venue=True))
             finally:
