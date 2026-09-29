@@ -56,11 +56,9 @@ class TestS10(unittest.TestCase):
     def test_zero_lookahead_and_evidence_resolution_are_rechecked_at_worker_boundary(self):
         future = datetime(2026, 1, 1, 0, 0, 1, tzinfo=UTC)
         ref = _ref("future", future)
-        raw = _snapshot(SnapshotFact("future", FactStatus.VALID, Decimal("1"), future, (ref,))).as_dict()
-        raw["facts"][0]["knowledge_time"] = future
-        raw["provenance_refs"][0]["knowledge_time"] = future
+        source = InputSnapshot.build(as_of=future, version="1.0.0", facts=(SnapshotFact("future", FactStatus.VALID, Decimal("1"), future, (ref,)),), provenance_refs=(ref,))
+        raw = source.as_dict()
         raw["as_of"] = T0
-        raw["snapshot_id"] = "b" * 64
         with self.assertRaises(S10SemanticError):
             snapshot_from_json(json.dumps(raw, default=lambda x: x.isoformat().replace("+00:00", "Z")))
 
