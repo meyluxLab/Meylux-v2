@@ -95,7 +95,7 @@ class SpecialistWorkerHandler:
         if snapshot.snapshot_id != payload["snapshot_id"]:
             raise S10SemanticError("queue payload snapshot identity mismatch")
 
-        analyst = S10DataQualityAnalyst(self.config.ref())
+        analyst = S10DataQualityAnalyst(\n            self.config.ref(),\n            max_findings=int(self.config.parameter("max_findings")),\n            max_evidence_refs=int(self.config.parameter("max_evidence_refs")),\n        )
         output = analyst.analyze(snapshot)
         async with self.pool.acquire() as connection:
             persistence = SpecialistPersistence(connection)
