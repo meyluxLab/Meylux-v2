@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Active Task Order:** `none`. `TO-P4-010` is `VERIFIED / COMPLETE` under `AR-P4-017` as post-closure corrective hardening; it does not reopen `PH-P4` / `STEP-P4-006` / `G-4`. `TO-P2-010` is `VERIFIED / COMPLETE`; `TO-P2-013` remains `PREPARED / NOT ACTIVATED`; `TO-P2-011` and `TO-P2-012` remain `VERIFIED / COMPLETE`; `TO-P5-002` remains `VERIFIED / COMPLETE`. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`. No `P5-003` activation is implied.
+- **Active Task Order:** `TO-P3-009` — `AUTHORIZED TO EXECUTE`. This is a post-closure corrective action for the upstream PRQ-4 persisted quality/acquisition-evidence gap; it does not reopen `PH-P3` / `STEP-P3-007` / `STEP-P3-008`. `TO-P4-010` is `VERIFIED / COMPLETE` under `AR-P4-017`; `TO-P2-010` is `VERIFIED / COMPLETE`; `TO-P2-013` remains `PREPARED / NOT ACTIVATED`; `TO-P2-011` and `TO-P2-012` remain `VERIFIED / COMPLETE`; `TO-P5-002` remains `VERIFIED / COMPLETE`. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`. `STEP-P5-003` is not activated and remains gated on genuine PRQ-4 resolution and its subsequent governed authorization path.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -71,7 +71,7 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`; Active Task Order: none; Suspended Task Order: `TO-P2-010` (reversible suspension pending explicit Owner decision after the `TO-P2-012` disposition); Completed Investigations: `TO-P2-011` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-011`) and `TO-P2-012` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-012`); Completed Task Order: `TO-P5-002`; completion audit: `AR-P5-002`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-002` — `COMPLETE / VERIFIED`; Active Task Order: `TO-P3-009` — post-closure PRQ-4 corrective resolution; Suspended Task Order: `TO-P2-010` (reversible suspension pending explicit Owner decision after the `TO-P2-012` disposition); Completed Investigations: `TO-P2-011` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-011`) and `TO-P2-012` (`VERIFIED / COMPLETE` under `AR-P2-AUDIT-012`); Completed Task Order: `TO-P5-002`; completion audit: `AR-P5-002`.
 
 
 ## Post-Closure Investigation State
