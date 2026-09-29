@@ -56,11 +56,12 @@ class _Tx:
 class _DB:
  def __init__(self): self.sql=[]; self.seen=set()
  def transaction(self): return _Tx()
- async def execute(self,q,*args):
+ async def fetchrow(self,q,*args):
   self.sql.append((q,args)); identity=args[-1]
-  if identity in self.seen: return "INSERT 0 0"
-  self.seen.add(identity); return "INSERT 0 1"
- async def fetchrow(self,q,*args): return None
+  if "INSERT INTO meylux.specialist_outputs" in q:
+   if identity in self.seen: return None
+   self.seen.add(identity); return {"record_id": args[0]}
+  return None
 class TestPersistence(unittest.TestCase):
  def test_duplicate_replay_idempotent(self):
   db=_DB(); p=SpecialistPersistence(db); self.assertTrue(asyncio.run(p.persist(output()))); self.assertFalse(asyncio.run(p.persist(output()))); self.assertIn("ON CONFLICT (identity_hash) DO NOTHING",db.sql[0][0])
