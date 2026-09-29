@@ -49,11 +49,13 @@ Legacy data_quality_logs rows are preserved unchanged. They are not promoted aut
 
 Historical raw acquisition observations can be reconstructed into the new evidence family only when the preserved raw envelope is complete and the deterministic P3 validation/quality path can be rerun without external or wall-clock inputs. Such rows are Class-B / deterministically reconstructible evidence. Rows lacking those inputs remain Class-C / semantically incomplete. No migration performs a blind timestamp backfill.
 
-## 6. Contradiction semantics
+## 6. Contradiction and concurrent retry semantics
 
 Multiple distinct evidence identities for one logical_fact_key are retained. Read-back resolution refuses silent selection and raises ContradictoryQualityEvidence.
 
-This preserves both evidence and ambiguity instead of overwriting history.
+Identical concurrent persistence attempts use the database INSERT conflict boundary as the authoritative insertion decision. The INSERT uses ON CONFLICT (evidence_id) DO NOTHING RETURNING evidence_id. Exactly one invocation receives the returned identity and reports inserted=True; an identical losing invocation receives no returned row and reports inserted=False. The losing invocation then reads the logical fact after the conflict boundary, so the result is based on committed database state rather than a race-prone pre-insert existence check.
+
+This preserves both evidence and ambiguity instead of overwriting history, while making duplicate delivery and concurrent retry result semantics deterministic.
 
 ## 7. P5 resolution boundary
 
