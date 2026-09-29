@@ -1448,4 +1448,10 @@ records:
     entity_type: AR
     artifact_path: docs/audits/AR-P4-017.md
     traceability: TO-P4-010 / BR-P4-010 / TST-P4-010 / PH-P4 / STEP-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: APPROVED / VERIFIED
+    status: APPROVED / VERIFIED  - stable_id: AR-P3-009
+    canonical_name: CONTROL Independent Audit — Persisted Quality / Acquisition Evidence Corrective Resolution
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-009.md
+    traceability: BR-P3-009 / TO-P3-009 / PR #51 / PRQ-4 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: REQUIRES CORRECTION
+
