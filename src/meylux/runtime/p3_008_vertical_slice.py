@@ -15,7 +15,7 @@ from contracts.temporal import validate_temporal_evidence
 from contracts.validation import validate_acquisition_envelope
 from meylux.persistence.canonical import CanonicalPersistence
 from meylux.persistence.event_handoff import CanonicalEventRelay
-from meylux.persistence.quality_evidence import QualityEvidencePersistence
+from meylux.persistence.quality_evidence import QualityEvidencePersistence, QualityEvidencePersistenceResult
 from contracts.quality_evidence import build_quality_evidence
 from meylux.persistence.factory import build_canonical_event
 
@@ -66,6 +66,50 @@ def market_values(value:Any)->dict[str,Any]:
         fields["bid"]=value.bids[0][0]; fields["ask"]=value.asks[0][0]
     return fields
 
+async def process_raw_row(conn: Any, row: Any) -> tuple[QualityEvidencePersistenceResult, Any | None]:
+    """Process one authoritative raw acquisition row through P3 evidence before canonical gating."""
+    envelope=envelope_from_row(row)
+    provenance=ProvenanceRef(
+        envelope.provenance.provenance_id,
+        envelope.provider.provider_id,
+        envelope.provenance.acquisition_method,
+    )
+
+    if envelope.state is not AcquisitionState.AVAILABLE:
+        # Provider failure/unavailable outcomes are already authoritative P2 evidence.
+        # Do not validate, normalize, or fabricate a market payload for them.
+        assessment=assess_quality(
+            QualityInput(
+                None,
+                QualitySignals(validation_status=Decimal("0.00")),
+                provenance,
+                envelope.event_id,
+                envelope.event_id,
+                record_available=False,
+            )
+        )
+        quality_evidence=build_quality_evidence(envelope,assessment)
+        evidence_result=await QualityEvidencePersistence(conn).persist(quality_evidence)
+        return evidence_result, None
+
+    structural=validate_acquisition_envelope(envelope)
+    temporal=validate_temporal_evidence(envelope)
+    normalized=normalize(envelope)
+    issues=list(structural.outcome.issues)+list(temporal.outcome.issues)
+    if normalized.valid:
+        issues.extend(validate_market_semantics(market_values(normalized.value)).issues)
+    outcome=_quality_validation_outcome(issues, normalized.result)
+    signals=QualitySignals(validation_status=Decimal("1.00") if outcome.result.value=="valid" else Decimal("0.00"))
+    assessment=assess_quality(QualityInput(outcome,signals,provenance,envelope.event_id,envelope.event_id))
+    quality_evidence=build_quality_evidence(envelope,assessment)
+    evidence_result=await QualityEvidencePersistence(conn).persist(quality_evidence)
+    if not normalized.valid or not assessment.canonical_eligible:
+        return evidence_result, None
+
+    record,event=build_canonical_event(normalized.value,assessment,1)
+    result=await CanonicalPersistence(conn).persist(record,event.to_json(),assessment)
+    return evidence_result, result
+
 async def main()->int:
     import asyncpg
     import redis.asyncio as redis
@@ -74,28 +118,25 @@ async def main()->int:
     try:
         async with pool.acquire() as conn:
             event_id=os.environ.get("MEYLUX_VERTICAL_SLICE_EVENT_ID")
-            row=await conn.fetchrow("SELECT event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json FROM meylux.raw_acquisition_events WHERE acquisition_state='AVAILABLE' AND ($1::text IS NULL OR event_id=$1) ORDER BY event_time,event_id LIMIT 1",event_id)
+            row=await conn.fetchrow("SELECT event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json FROM meylux.raw_acquisition_events WHERE ($1::text IS NULL OR event_id=$1) ORDER BY event_time,event_id LIMIT 1",event_id)
             if row is None:
-                print("vertical slice: no governed AVAILABLE raw record was found; no fallback data was fabricated",flush=True); return 2
-            envelope=envelope_from_row(row)
-            structural=validate_acquisition_envelope(envelope)
-            temporal=validate_temporal_evidence(envelope)
-            normalized=normalize(envelope)
-            issues=list(structural.outcome.issues)+list(temporal.outcome.issues)
-            if normalized.valid:
-                issues.extend(validate_market_semantics(market_values(normalized.value)).issues)
-            outcome=_quality_validation_outcome(issues, normalized.result)
-            provenance=ProvenanceRef(envelope.provenance.provenance_id,envelope.provider.provider_id,envelope.provenance.acquisition_method)
-            signals=QualitySignals(validation_status=Decimal("1.00") if outcome.result.value=="valid" else Decimal("0.00"))
-            assessment=assess_quality(QualityInput(outcome,signals,provenance,envelope.event_id,envelope.event_id))
-            quality_evidence=build_quality_evidence(envelope,assessment)
-            evidence_result=await QualityEvidencePersistence(conn).persist(quality_evidence)
-            print(f"vertical slice: raw_event={envelope.event_id} structural={structural.outcome.result.value} temporal={temporal.outcome.result.value} normalized={normalized.result.value} quality={assessment.quality.quality_state.value} canonical_eligible={assessment.canonical_eligible} quality_evidence={evidence_result.evidence_id} inserted={evidence_result.inserted} contradictory={evidence_result.contradictory}",flush=True)
-            if not normalized.valid or not assessment.canonical_eligible:
+                print("vertical slice: no governed raw acquisition record was found; no fallback data was fabricated",flush=True)
+                return 2
+            evidence_result,canonical_result=await process_raw_row(conn,row)
+            envelope_state=str(row["acquisition_state"])
+            print(
+                f"vertical slice: raw_event={row['event_id']} acquisition_state={envelope_state} "
+                f"quality_evidence={evidence_result.evidence_id} inserted={evidence_result.inserted} "
+                f"contradictory={evidence_result.contradictory}",
+                flush=True,
+            )
+            if canonical_result is None:
                 return 3
-            record,event=build_canonical_event(normalized.value,assessment,1)
-            result=await CanonicalPersistence(conn).persist(record,event.to_json(),assessment)
-            print(f"canonical persistence: inserted={result.inserted} record_id={result.record_id} outbox_sequence={result.outbox_sequence}",flush=True)
+            print(
+                f"canonical persistence: inserted={canonical_result.inserted} "
+                f"record_id={canonical_result.record_id} outbox_sequence={canonical_result.outbox_sequence}",
+                flush=True,
+            )
             count=await CanonicalEventRelay(CanonicalPersistence(conn),client).publish_pending()
             print(f"canonical event handoff: published={count} stream=stream:canonical:market_events",flush=True)
             return 0
