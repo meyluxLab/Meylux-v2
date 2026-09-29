@@ -11,6 +11,7 @@ from contracts.acquisition import (
     InstrumentIdentity,
     ProviderIdentity,
     Provenance,
+    ProviderError,
 )
 from contracts.canonical.foundation import ProvenanceRef, ValidationOutcome, ValidationResult
 from contracts.quality import QualityInput, QualitySignals, assess_quality
@@ -108,6 +109,23 @@ class P3009QualityEvidenceTests(unittest.TestCase):
             with self.subTest(validation=validation):
                 e=build_quality_evidence(envelope(),assessment(validation))
                 self.assertEqual(e.quality_state,state)
+
+    def test_unavailable_acquisition_evidence_is_persistable_without_fabrication(self):
+        unavailable=AcquisitionEnvelope(
+            PROVIDER,INSTRUMENT,PROVENANCE,EventType.CANDLE,
+            datetime(2026,9,29,12,0,tzinfo=UTC),
+            datetime(2026,9,29,12,0,2,tzinfo=UTC),
+            AcquisitionState.UNAVAILABLE,{"timeframe":"15m","venue":"BINANCE"},
+            "43",ProviderError("UPSTREAM_DOWN","availability","provider unavailable")
+        )
+        unavailable_assessment=assess_quality(QualityInput(
+            None,SCORES,ProvenanceRef("binance:test","binance","WS"),
+            unavailable.event_id,unavailable.event_id,record_available=False
+        ))
+        record=build_quality_evidence(unavailable,unavailable_assessment)
+        self.assertEqual(record.quality_state,DataQualityState.UNAVAILABLE)
+        self.assertEqual(record.knowledge_time,unavailable.received_at)
+        self.assertEqual(record.source_record_id,unavailable.event_id)
 
     def test_missing_context_is_preserved_not_fabricated(self):
         e=build_quality_evidence(envelope(payload={"close":"100"}),assessment())
