@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P3-009",
-  "last_build_report": "BR-P4-010",
-  "last_audit_report": "AR-P4-017",
+  "last_build_report": "BR-P3-009",
+  "last_audit_report": "AR-P3-009",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P3-009",
-  "completed_task_order": "TO-P4-010",
-  "completion_audit": "AR-P5-002",
+  "active_task_order": null,
+  "completed_task_order": "TO-P3-009",
+  "completion_audit": "AR-P3-009",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -273,7 +273,10 @@
     "TO-P4-010",
     "BR-P4-010",
     "TST-P4-010",
-    "AR-P4-017"
+    "AR-P4-017",
+    "BR-P3-009",
+    "TST-P3-009",
+    "AR-P3-009"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -324,8 +327,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "f0f6a48e61b0a187a969a7aa2be303f17aacfe40",
-  "updated_at_utc": "2026-09-29T12:24:00Z",
+  "last_verified_commit": "021030f921b5f7ecc498ebe3e93b7b1bcd849764",
+  "updated_at_utc": "2026-09-29T16:10:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
