@@ -2714,3 +2714,51 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED
       machine_readback: COMPLETED — AR-P3-009 and current checkpoint re-read
+
+
+  - ledger_id: CL-P3-009-CLOSURE-20260929
+    recorded_at: "2026-09-29"
+    authority: CONTROL / ROL-V2-001
+    action: "CONTROL-OWNED FINAL VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P3-009"
+    basis: "AR-P3-009 final independent audit; final PR #51 head 11e3063d77d817fdb60e0199d5cef4fc1d4d3119; functional revision 021030f921b5f7ecc498ebe3e93b7b1bcd849764; CI Core #1505; Docker Foundation #454"
+    disposition:
+      task_order: TO-P3-009
+      audit: AR-P3-009
+      status: "VERIFIED / COMPLETE"
+      prq4: "RESOLVED"
+      step_p5_003: "NOT ACTIVATED"
+    closure_effect:
+      historical_phase_3: "PH-P3 remains CLOSED / VERIFIED; STEP-P3-007 and STEP-P3-008 remain COMPLETE / VERIFIED; G-3 historical evidence preserved."
+      phase_5: "PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED."
+      active_task_order: null
+      completed_task_order: TO-P3-009
+    evidence:
+      functional_implementation_revision: 021030f921b5f7ecc498ebe3e93b7b1bcd849764
+      integration_test_revision: 0f61b6bb26fe2668c088c461dda98d334f7cde82
+      semantic_documentation_revision: 2978ae477e82c03ee52c2c2720080367e25c32ba
+      final_pr_head: 11e3063d77d817fdb60e0199d5cef4fc1d4d3119
+      ci_core_run_id: 36590657791
+      ci_core_run_number: 1505
+      ci_core_result: SUCCESS
+      ci_docker_run_id: 36590657612
+      ci_docker_run_number: 454
+      ci_docker_result: SUCCESS
+      dedicated_postgresql_tests: 6
+      concurrent_duplicate_test: VERIFIED
+      unavailable_acquisition_runtime: VERIFIED
+      p5_evidence_ref_boundary: VERIFIED
+      historical_inventory: VERIFIED
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      database_registry: UPDATED
+      security_registry: UPDATED
+      runtime_registry: UPDATED
+      contracts_registry: UPDATED
+      requirements_registry: UPDATED
+      phase_registry: CHECKED — PH-P3 historical closure and PH-P5/STEP-P5-002 lifecycle preserved
+      readme: UPDATED
+      open_questions: UPDATED — OQ-P5-002-PRQ4-QUALITY-EVIDENCE RESOLVED
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+      machine_readback: PENDING_FINAL_READBACK
