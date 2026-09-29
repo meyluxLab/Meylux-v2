@@ -814,6 +814,12 @@ records:
     artifact_path: docs/task-orders/TO-P3-008.md
     traceability: PH-P3 / STEP-P3-008 / STEP-P3-007 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive
     status: VERIFIED / COMPLETE
+  - stable_id: TO-P3-009
+    canonical_name: Task Order — Persisted Quality / Acquisition Evidence Corrective Resolution
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-009.md
+    traceability: PH-P3 post-closure corrective boundary / PRQ-4 / PH-P5 / STEP-P5-002 / STEP-P5-003 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive 2026-09-29
+    status: AUTHORIZED TO EXECUTE
   - stable_id: TO-P3-007
     canonical_name: Task Order — Data Quality, Quarantine, DLQ & Lineage
     entity_type: TO
