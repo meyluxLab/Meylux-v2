@@ -390,3 +390,21 @@ records:
       docker_foundation_result: SUCCESS
       final_implementation_baseline: 0f819b9b5c2193165ba8491850b5e0c6b0d9acdf
       independent_control_disposition: VERIFIED
+
+  - stable_id: TST-P3-009
+    canonical_name: P3-009 Quality / Acquisition Evidence and PostgreSQL Behavioral Tests
+    entity_type: TST
+    phase: PH-P5
+    step: STEP-P5-002
+    task_order: TO-P3-009
+    artifact_path: tests/test_p3_009_quality_evidence.py
+    traceability: TO-P3-009 / BR-P3-009 / AR-P3-009
+    status: VERIFIED
+    evidence:
+      ci_workflow: CI Core
+      workflow_run_id: 36590657791
+      workflow_run_number: 1505
+      result: SUCCESS
+      foundation_test_count: 573
+      dedicated_postgresql_test_count: 6
+      concurrent_duplicate_test: VERIFIED
