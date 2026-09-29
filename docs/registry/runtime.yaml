@@ -121,3 +121,20 @@ records:
       data_preservation: VERIFIED
       recovery_point: /var/backups/meylux-v2-p5-corrective-20260924T140710Z
     status: VERIFIED
+
+  - stable_id: RUN-P3-009
+    canonical_name: P3-009 Repository Runtime Quality Evidence Verification
+    entity_type: RUN
+    phase: PH-P5
+    step: STEP-P5-002
+    task_order: TO-P3-009
+    evidence:
+      ci_core_run_id: 36590657791
+      ci_core_run_number: 1505
+      result: SUCCESS
+      actual_unavailable_acquisition_route: VERIFIED
+      p5_evidence_ref_temporal_boundary: VERIFIED
+      concurrent_duplicate_persistence: VERIFIED
+      governed_vps_execution: NONE
+      control_audit: AR-P3-009
+    status: VERIFIED
