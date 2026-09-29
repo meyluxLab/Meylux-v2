@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 from datetime import datetime, timezone
+from decimal import Decimal
 from typing import Any, Mapping
 
 from meylux.queue import NonRetryableProcessingError
@@ -49,6 +50,19 @@ def _utc(value: Any, field: str) -> datetime:
     return value
 
 
+
+def _decode_normalised(value: Any) -> Any:
+    if isinstance(value, Mapping):
+        if set(value) == {"__decimal__"}:
+            try:
+                return Decimal(value["__decimal__"])
+            except Exception as exc:
+                raise S10SemanticError("invalid canonical Decimal encoding") from exc
+        return {key: _decode_normalised(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [_decode_normalised(item) for item in value]
+    return value
+
 def _ref(raw: Mapping[str, Any]) -> EvidenceRef:
     return EvidenceRef(
         evidence_id=raw["evidence_id"],
@@ -80,7 +94,7 @@ def snapshot_from_json(value: str) -> InputSnapshot:
         facts = []
         for item in raw["facts"]:
             refs = tuple(_ref(ref) for ref in item["evidence_refs"])
-            metadata = dict(item.get("metadata") or {})
+            metadata = dict(_decode_normalised(item.get("metadata") or {}))
             event_time = metadata.get("event_time")
             if isinstance(event_time, str):
                 metadata["event_time"] = _utc(datetime.fromisoformat(event_time.replace("Z", "+00:00")), "metadata.event_time")
@@ -91,7 +105,7 @@ def snapshot_from_json(value: str) -> InputSnapshot:
                 SnapshotFact(
                     fact_id=item["fact_id"],
                     status=FactStatus(item["status"]),
-                    value=item.get("value"),
+                    value=_decode_normalised(item.get("value")),
                     knowledge_time=_utc(
                         datetime.fromisoformat(item["knowledge_time"].replace("Z", "+00:00")),
                         "knowledge_time",
