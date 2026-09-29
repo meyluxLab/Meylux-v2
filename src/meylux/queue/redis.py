@@ -190,21 +190,6 @@ class RedisQueue:
             emit(_LOG, Severity.INFO, "queue.retry", queue=self.policy.name, message_id=envelope.message_id, correlation_key=envelope.message_id, correlation_id=envelope.message_id, outcome="RETRY", reason=reason, attempt=envelope.attempt)
             return ProcessingOutcome("RETRY", envelope.attempt, reason)
 
-        now = await self._client.time()
-        now_ms = int(now[0]) * 1000 + int(now[1]) // 1000
-        cutoff = max(0, now_ms - self.policy.retention_seconds * 1000)
-        await self._client.eval(
-            _DLQ_LUA,
-            3,
-            self.stream,
-            self.backlog_key,
-            self.dlq_stream,
-            self.group,
-            entry_id,
-            envelope.to_json(),
-            reason,
-            f"{cutoff}-0",
-        )
         return await self.dead_letter(entry_id, envelope, reason)
 
     async def recover_stale(self, consumer: str, min_idle_ms: int) -> list[tuple[str, QueueEnvelope]]:
