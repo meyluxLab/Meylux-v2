@@ -109,9 +109,19 @@ class QualityEvidencePersistence:
             )
         return rows[0] if rows else None
 
-    async def resolve_evidence_ref(self, logical_fact_key: str) -> dict[str, Any] | None:
+    async def resolve_evidence_ref(
+        self,
+        logical_fact_key: str,
+        *,
+        require_timeframe: bool = False,
+        require_venue: bool = False,
+    ) -> dict[str, Any] | None:
         row = await self.resolve(logical_fact_key)
         if row is None or row["knowledge_time"] is None:
+            return None
+        if require_timeframe and row["timeframe"] is None:
+            return None
+        if require_venue and row["venue"] is None:
             return None
         return {
             "evidence_id": str(row["evidence_id"]),
