@@ -75,3 +75,17 @@ records:
       application_role_db_connectivity: VERIFIED
       secret_values_recorded: false
     status: VERIFIED
+
+  - stable_id: SEC-P3-009
+    canonical_name: P3-009 Authoritative Quality Evidence Security Boundary
+    entity_type: SECURITY
+    phase: PH-P5
+    step: STEP-P5-002
+    task_order: TO-P3-009
+    evidence:
+      table: meylux.quality_evidence
+      append_only_trigger: ENABLED
+      application_select_insert: ALLOWED
+      application_update_delete_truncate: DENIED
+      control_audit: AR-P3-009
+    status: VERIFIED
