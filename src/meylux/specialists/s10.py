@@ -5,6 +5,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any, Mapping
 
+from meylux.queue import NonRetryableProcessingError
 from contracts.specialist import (
     EvidenceRef,
     FactStatus,
@@ -18,7 +19,7 @@ from contracts.specialist import (
 )
 
 
-class S10SemanticError(ValueError):
+class S10SemanticError(NonRetryableProcessingError):
     """Non-retryable input/contract failure for the S-10 runtime boundary."""
 
 
