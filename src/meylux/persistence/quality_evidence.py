@@ -42,6 +42,7 @@ class QualityEvidencePersistence:
             $18::jsonb,$19,$20,$21,$22,$23,$24
         )
         ON CONFLICT (evidence_id) DO NOTHING
+        RETURNING evidence_id
     """
 
     FETCH_BY_ID_SQL = """
@@ -75,10 +76,7 @@ class QualityEvidencePersistence:
             raise TypeError("record must be QualityEvidenceRecord")
         async with self._connection.transaction():
             inserted_row = await self._connection.fetchrow(
-                self.INSERT_SQL.replace(
-                    "ON CONFLICT (evidence_id) DO NOTHING",
-                    "ON CONFLICT (evidence_id) DO NOTHING RETURNING evidence_id",
-                ),
+                self.INSERT_SQL,
                 record.evidence_id, record.logical_fact_key, record.source_record_id,
                 record.source_identity_hash, record.provider_id, record.adapter_id,
                 record.adapter_version, record.canonical_instrument_id,
