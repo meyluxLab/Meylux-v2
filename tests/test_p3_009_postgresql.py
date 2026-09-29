@@ -228,6 +228,42 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         self.assertNotEqual(failed.returncode,0)
         self.assertEqual(self._psql("SELECT count(*) FROM meylux.quality_evidence WHERE evidence_id='p3009-rollback';").stdout.strip(),"0")
 
+    def test_concurrent_duplicate_persistence_has_deterministic_insert_result(self):
+        async def run():
+            envelope,assessment=self._record(venue="BINANCE",sequence="concurrent-duplicate")
+            from contracts.quality_evidence import build_quality_evidence
+            evidence=build_quality_evidence(envelope,assessment)
+
+            connections=await asyncio.gather(self._connect(),self._connect())
+            try:
+                barrier=asyncio.Barrier(2)
+
+                async def persist_one(conn):
+                    await barrier.wait()
+                    return await QualityEvidencePersistence(conn).persist(evidence)
+
+                first,second=await asyncio.gather(
+                    persist_one(connections[0]),
+                    persist_one(connections[1]),
+                )
+                results=(first,second)
+                self.assertCountEqual([result.inserted for result in results],[True,False])
+                self.assertEqual(
+                    {result.evidence_id for result in results},
+                    {evidence.evidence_id},
+                )
+                self.assertTrue(all(not result.contradictory for result in results))
+
+                persisted_count=await connections[0].fetchval(
+                    "SELECT count(*) FROM meylux.quality_evidence WHERE evidence_id=$1",
+                    evidence.evidence_id,
+                )
+                self.assertEqual(persisted_count,1)
+            finally:
+                await asyncio.gather(*(conn.close() for conn in connections))
+
+        asyncio.run(run())
+
     def test_duplicate_and_contradiction_behavior_on_real_postgresql(self):
         async def run():
             conn=await self._connect()
