@@ -819,7 +819,19 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-009.md
     traceability: PH-P3 post-closure corrective boundary / PRQ-4 / PH-P5 / STEP-P5-002 / STEP-P5-003 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive 2026-09-29
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P3-009
+    canonical_name: Build Report — Persisted Quality / Acquisition Evidence Corrective Resolution
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-009.md
+    traceability: TO-P3-009 / PR #51 / AR-P3-009
+    status: VERIFIED
+  - stable_id: TST-P3-009
+    canonical_name: P3-009 Quality / Acquisition Evidence and PostgreSQL Behavioral Tests
+    entity_type: TST
+    artifact_path: tests/test_p3_009_quality_evidence.py
+    traceability: TO-P3-009 / BR-P3-009 / AR-P3-009
+    status: VERIFIED
   - stable_id: TO-P3-007
     canonical_name: Task Order — Data Quality, Quarantine, DLQ & Lineage
     entity_type: TO
@@ -1449,9 +1461,8 @@ records:
     artifact_path: docs/audits/AR-P4-017.md
     traceability: TO-P4-010 / BR-P4-010 / TST-P4-010 / PH-P4 / STEP-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED  - stable_id: AR-P3-009
-    canonical_name: CONTROL Independent Audit — Persisted Quality / Acquisition Evidence Corrective Resolution
+    canonical_name: CONTROL Final Independent Audit — Persisted Quality / Acquisition Evidence Corrective Resolution
     entity_type: AR
     artifact_path: docs/audits/AR-P3-009.md
     traceability: BR-P3-009 / TO-P3-009 / PR #51 / PRQ-4 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: REQUIRES CORRECTION
-
+    status: APPROVED / VERIFIED
