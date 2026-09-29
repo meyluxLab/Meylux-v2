@@ -2678,3 +2678,39 @@ entries:
       docker_conclusion: SUCCESS
     runtime_vps: "NONE — no VPS/SentinelX mutation performed"
     next_boundary: "Producer correction cycle under existing TO-P3-009, followed by independent CONTROL re-audit"
+
+  - ledger_id: CL-P3-009-REAUDIT-20260929
+    recorded_at: "2026-09-29"
+    authority: CONTROL / ROL-V2-001
+    action: "INDEPENDENT RE-AUDIT OF TO-P3-009 — C5/C6 CORRECTION REQUIRED"
+    basis: "AR-P3-009 re-audit against functional revision 5e79848315fe12d83f8521ebeff85abbbd0e41b9, current PR head 2e16fb322b87d87c885c41f9d1d1140c7ecfef4b, PostgreSQL evidence, P5 Snapshot boundary, legacy inventory, and current CI"
+    disposition:
+      task_order: TO-P3-009
+      audit: AR-P3-009
+      status: "REQUIRES CORRECTION"
+      prq4: "NOT YET RESOLVED"
+      step_p5_003: "NOT ACTIVATED"
+    findings:
+      accepted: [C1_REAL_UNAVAILABLE_RUNTIME_PATH, C2_END_TO_END_P5_EVIDENCE_REF, C3_HISTORICAL_EVIDENCE_BOUNDARY, C4_POSTGRES_BEHAVIORAL_VERIFICATION]
+      correction_required: [C5_BUILD_REPORT_FINAL_CI_LIFECYCLE, C6_CONCURRENT_DUPLICATE_PERSISTENCE]
+    current_revision:
+      functional_implementation: "5e79848315fe12d83f8521ebeff85abbbd0e41b9"
+      current_pr_head: "2e16fb322b87d87c885c41f9d1d1140c7ecfef4b"
+      core_run: 36584659720
+      core_run_number: 1497
+      core_conclusion: SUCCESS
+      docker_run: 36584659610
+      docker_run_number: 444
+      docker_conclusion: SUCCESS
+    c6_basis: "QualityEvidencePersistence performs a pre-insert existence check followed by INSERT ... ON CONFLICT DO NOTHING without deriving inserted from the actual INSERT outcome; concurrent identical callers can therefore produce a false inserted=True result for the losing invocation. TO-P3-009 requires concurrent duplicate-attempt coverage."
+    runtime_vps: "NONE — no VPS/SentinelX mutation performed"
+    next_boundary: "Producer correction under existing TO-P3-009, then final independent CONTROL re-audit"
+    g12:
+      artifact_registry: UPDATED — AR-P3-009 remains REQUIRES CORRECTION
+      checkpoint: CHECKED — active_task_order remains TO-P3-009
+      phase_registry: CHECKED — PH-P3 historical closure unchanged
+      readme: CHECKED — active TO remains correctly represented; no closure-state change
+      specialized_registries: CHECKED — no final verification status mutation permitted
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+      machine_readback: COMPLETED — AR-P3-009 and current checkpoint re-read
