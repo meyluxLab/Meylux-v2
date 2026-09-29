@@ -95,7 +95,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         return asyncpg.connect(host=TestP3009PostgreSQLBehavior.db_host,port=5432,database=DB,user=APP,password=APP_PASSWORD)
 
     @staticmethod
-    def _record(*,timeframe="15m",venue="BINANCE",knowledge=T0):
+    def _record(*,timeframe="15m",venue="BINANCE",knowledge=T0,sequence="p3009-sequence"):
         from contracts.acquisition import AcquisitionEnvelope,EventType,InstrumentIdentity,ProviderIdentity,Provenance,AcquisitionState
         provider=ProviderIdentity("binance","binance-acquisition","1.0.0")
         instrument=InstrumentIdentity("BINANCE:BTCUSDT","BTCUSDT")
@@ -104,7 +104,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
             provider,instrument,provenance,EventType.CANDLE,T0-timedelta(minutes=15),knowledge,
             AcquisitionState.AVAILABLE,
             {"timeframe":timeframe,"venue":venue,"close":"100"},
-            "p3009-sequence-"+str(timeframe)+"-"+str(venue),
+            sequence,
         )
         assessment=assess_quality(QualityInput(
             ValidationOutcome(ValidationResult.VALID),
@@ -150,7 +150,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         async def run():
             conn=await self._connect()
             try:
-                envelope,assessment=self._record(venue="BINANCE")
+                envelope,assessment=self._record(venue="BINANCE",sequence="snapshot")
                 from contracts.quality_evidence import build_quality_evidence
                 evidence=build_quality_evidence(envelope,assessment)
                 repo=QualityEvidencePersistence(conn)
@@ -232,7 +232,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         async def run():
             conn=await self._connect()
             try:
-                envelope,assessment=self._record(venue="BINANCE")
+                envelope,assessment=self._record(venue="BINANCE",sequence="duplicate")
                 from contracts.quality_evidence import build_quality_evidence
                 evidence=build_quality_evidence(envelope,assessment)
                 repo=QualityEvidencePersistence(conn)
