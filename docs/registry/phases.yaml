@@ -447,11 +447,11 @@ records:
     entry_gate_role: phase boundary
     entry_approval: PROJECT-OWNER-PHASE-5-REDIRECTION-AND-SIMPLIFIED-ESTABLISHMENT-2026-09-23
     first_step: STEP-P5-001
-    next_valid_step: STEP-P5-003
+    next_valid_step: STEP-P5-004
     final_step: STEP-P5-012
     g4_status: ESTABLISHED / VERIFIED
-    active_task_order: null
-    current_step: STEP-P5-002
+    active_task_order: TO-P5-003
+    current_step: STEP-P5-003
     completed_task_order: TO-P5-002
     completion_audit: AR-P5-002
     authorization_criteria:
@@ -487,6 +487,25 @@ records:
     purpose: Establish the authoritative Stage-1 Input Snapshot boundary and Fact Requirements Matrix using existing authoritative persisted facts, with deterministic identity, provenance, no-lookahead and explicit availability semantics.
     repository_scope: Snapshot builder, FRM, deterministic serialization/identity, availability/status semantics, tests and traceability within STEP-P5-002 only.
     vps_scope: CONTROL-only read-only SentinelX verification; no runtime mutation, provider activation, migration, restart or deployment.
+
+  - sid: STEP-P5-003
+    logical_name: Runtime Harness & Reference Specialist (S-10)
+    entity_type: STEP
+    phase: PH-P5
+    status: ACTIVE / AUTHORIZED
+    authorization_state: ACTIVE / AUTHORIZED
+    order: 3
+    predecessor: STEP-P5-002
+    activation_basis: PROJECT-OWNER-STEP-P5-003-AUTHORIZATION-2026-09-29
+    active_task_order: TO-P5-003
+    purpose: Establish the bounded Stage-1 end-to-end runtime harness and deterministic S-10 reference specialist using the authoritative Input Snapshot, FRM and verified PRQ-4 evidence.
+    repository_scope: Runtime harness, bounded execution, timeout/isolation/retry/DLQ/overload semantics, idempotent specialist persistence/read-back, replay determinism, S-10 and runtime/resource baseline within STEP-P5-003 only.
+    dependency_boundary:
+      resolved: PRQ-4 / TO-P3-009 / AR-P3-009
+      excluded_without_actual_dependency: PRQ-1 / PRQ-2 / PRQ-3 / TO-P2-013 / migration 0008 / upstream P2-P4 capability expansion
+    vps_scope: CONTROL-owned SentinelX-only runtime deployment and independent verification required by TO-P5-003.
+    closure_owner: ROL-V2-001
+    producer_role: ROL-V2-002
 
   - sid: STEP-P5-001
     logical_name: Contract, Evidence Model, Config & Persistence Foundation
