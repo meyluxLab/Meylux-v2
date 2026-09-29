@@ -2,7 +2,7 @@
   "schema_version": "2.0",
   "project_version": "V2",
   "phase": "PH-P5",
-  "step": "STEP-P5-002",
+  "step": "STEP-P5-003",
   "gate": "Phase progression authority",
   "status": "ACTIVE / AUTHORIZED",
   "formation_stage": "PP-12",
@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P3-009",
+  "last_approved_task_order": "TO-P5-003",
   "last_build_report": "BR-P3-009",
   "last_audit_report": "AR-P3-009",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": null,
+  "active_task_order": "TO-P5-003",
   "completed_task_order": "TO-P3-009",
   "completion_audit": "AR-P3-009",
   "verified_artifacts": [
@@ -322,13 +322,14 @@
     "Phase 5 remains NOT AUTHORIZED.",
     "STEP-P5-001 is COMPLETE / VERIFIED under AR-P5-001; TO-P5-001 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later Phase-5 Step is activated.",
     "Owner authorized Phase 5 continuation on 2026-09-23; CONTROL established STEP-P5-002 and TO-P5-002 from the repository roadmap. STEP-P5-002 has no PRQ delivery gate and is limited to existing authoritative persisted facts plus CONTROL-owned read-only SentinelX verification.",
-    "Project Owner directed full technical resolution of the MEXC finality semantic inconsistency exposed by TO-P2-009; CONTROL established TO-P2-010 as a bounded post-closure corrective implementation. PH-P2 remains CLOSED / VERIFIED and STEP-P2-006 remains COMPLETE / VERIFIED."
+    "Project Owner directed full technical resolution of the MEXC finality semantic inconsistency exposed by TO-P2-009; CONTROL established TO-P2-010 as a bounded post-closure corrective implementation. PH-P2 remains CLOSED / VERIFIED and STEP-P2-006 remains COMPLETE / VERIFIED.",
+    "Project Owner authorized STEP-P5-003 for governed progression on 2026-09-29 after PRQ-4 resolution; CONTROL formalized and activated TO-P5-003. STEP-P5-003 is ACTIVE / AUTHORIZED; TO-P5-003 is AUTHORIZED TO EXECUTE; PRQ-1/PRQ-2/PRQ-3, TO-P2-013 and migration 0008 remain outside scope absent a demonstrated dependency."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "021030f921b5f7ecc498ebe3e93b7b1bcd849764",
-  "updated_at_utc": "2026-09-29T16:10:00Z",
+  "updated_at_utc": "2026-09-29T16:35:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
