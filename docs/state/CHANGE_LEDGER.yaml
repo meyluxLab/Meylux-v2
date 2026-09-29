@@ -2762,3 +2762,35 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED
       machine_readback: COMPLETED
+
+  - ledger_id: CL-P5-003-ACTIVATION-20260929
+    recorded_at: "2026-09-29"
+    authority: CONTROL / ROL-V2-001
+    action: "CONTROL FORMALIZATION AND ACTIVATION — STEP-P5-003 / TO-P5-003"
+    basis: "Project Owner authorization dated 2026-09-29; current Source of Truth read-back; STEP-P5-002 COMPLETE / VERIFIED; TO-P3-009 VERIFIED / COMPLETE; AR-P3-009 APPROVED / VERIFIED; PRQ-4 RESOLVED"
+    disposition:
+      phase: PH-P5
+      step: STEP-P5-003
+      step_status: "ACTIVE / AUTHORIZED"
+      task_order: TO-P5-003
+      task_order_status: "AUTHORIZED TO EXECUTE"
+      predecessor: STEP-P5-002
+      active_task_order: TO-P5-003
+    scope:
+      included: "Runtime Harness & Reference Specialist (S-10), bounded Stage-1 execution, deterministic ordering, timeout/isolation/retry/DLQ/overload semantics, idempotent persistence/read-back, replay determinism, runtime/resource baseline"
+      excluded: "PRQ-1, PRQ-2, PRQ-3, TO-P2-013, migration 0008_p4_knowledge_time_persistence.sql, provider-runtime expansion, P2/P3/P4 reopening, other specialist groups, cross-specialist synthesis, LLM, trading/capital/custody/execution"
+    prerequisites:
+      prq4: "RESOLVED / VERIFIED under TO-P3-009 / AR-P3-009"
+      active_task_order_before_activation: null
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
+    runtime_effect: "Only the runtime operations explicitly required by TO-P5-003 are authorized; all VPS operations remain CONTROL-owned and SentinelX-only."
+    closure_boundary: "Producer implementation and Build Report are followed by independent CONTROL audit and ADR-GOVERNANCE-012 closure synchronization."
+    g12:
+      artifacts_registry: UPDATED
+      phases_registry: UPDATED
+      checkpoint: UPDATED
+      readme: UPDATED
+      specialized_registries: CHECKED — no implementation/runtime/test artifact was created by activation itself
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+      machine_readback: PENDING — required after activation writes before any closure claim
