@@ -64,7 +64,7 @@ class _DB:
   return None
 class TestPersistence(unittest.TestCase):
  def test_duplicate_replay_idempotent(self):
-  db=_DB(); p=SpecialistPersistence(db); self.assertTrue(asyncio.run(p.persist(output()))); self.assertFalse(asyncio.run(p.persist(output()))); self.assertIn("ON CONFLICT (identity_hash) DO NOTHING",db.sql[0][0])
+  db=_DB(); p=SpecialistPersistence(db); self.assertTrue(asyncio.run(p.persist(output()))); self.assertFalse(asyncio.run(p.persist(output()))); self.assertIn("ON CONFLICT (identity_hash) DO NOTHING",db.sql[0][0]); self.assertIn("RETURNING record_id",db.sql[0][0])
  def test_failure_has_no_fake_finding(self):
   failed=output(SpecialistStatus.FAILED); self.assertEqual(failed.findings,()); self.assertTrue(asyncio.run(SpecialistPersistence(_DB()).persist(failed)))
 class TestMigration(unittest.TestCase):
