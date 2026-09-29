@@ -21,6 +21,7 @@ PSQL=(psql --host="${MEYLUX_DB_HOST}" --port="${MEYLUX_DB_PORT}" --username="${M
 "${PSQL[@]}" -f "${ROOT_DIR}/migrations/versions/0006_application_role_grant_hardening.sql"
 "${PSQL[@]}" -f "${ROOT_DIR}/migrations/versions/0007_specialist_foundation.sql"
 "${PSQL[@]}" -f "${ROOT_DIR}/migrations/versions/0008_p4_knowledge_time_persistence.sql"
+"${PSQL[@]}" -f "${ROOT_DIR}/migrations/versions/0009_quality_evidence_persistence.sql"
 
 if [[ -n "${MEYLUX_APP_PASSWORD:-}" ]]; then
   printf '%s\n' "ALTER ROLE meylux_app LOGIN PASSWORD :'app_password';" \
