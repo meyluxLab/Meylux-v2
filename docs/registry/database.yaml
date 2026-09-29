@@ -162,3 +162,25 @@ records:
       existing_data_counts_preserved: true
       reexecution: VERIFIED
     status: VERIFIED
+
+  - stable_id: DB-P3-009
+    canonical_name: P3-009 Authoritative Quality Evidence Persistence
+    entity_type: DB
+    phase: PH-P5
+    step: STEP-P5-002
+    task_order: TO-P3-009
+    table: meylux.quality_evidence
+    migration: 0009_quality_evidence_persistence
+    evidence:
+      ci_core_run_id: 36590657791
+      ci_core_run_number: 1505
+      ci_core_result: SUCCESS
+      ci_docker_foundation_run_id: 36590657612
+      ci_docker_foundation_run_number: 454
+      append_only: VERIFIED
+      application_select_insert: ALLOWED
+      application_update_delete_truncate: DENIED
+      migration_idempotency: VERIFIED
+      concurrent_duplicate_persistence: VERIFIED
+      control_audit: AR-P3-009
+    status: VERIFIED
