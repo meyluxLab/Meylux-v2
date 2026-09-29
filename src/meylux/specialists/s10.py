@@ -122,8 +122,12 @@ class S10DataQualityAnalyst:
     specialist_id = "S-10"
     output_version = "1.0.0"
 
-    def __init__(self, config: SpecialistConfigRef) -> None:
+    def __init__(self, config: SpecialistConfigRef, *, max_findings: int = 100, max_evidence_refs: int = 100) -> None:
+        if max_findings < 1 or max_evidence_refs < 1:
+            raise ValueError("S-10 output bounds must be positive")
         self.config = config
+        self.max_findings = max_findings
+        self.max_evidence_refs = max_evidence_refs
 
     def analyze(self, snapshot: InputSnapshot) -> SpecialistOutput:
         if not isinstance(snapshot, InputSnapshot):
@@ -147,6 +151,8 @@ class S10DataQualityAnalyst:
                 refs[ref.evidence_id] = canonical
 
         ordered = tuple(sorted(snapshot.facts, key=lambda fact: fact.fact_id))
+        if len(refs) > self.max_evidence_refs:
+            raise S10SemanticError("S-10 evidence reference bound exceeded")
         worst = max(ordered, key=lambda fact: (_STATUS_RANK[fact.status], fact.fact_id)).status if ordered else FactStatus.UNAVAILABLE
         counts: dict[str, int] = {}
         for fact in ordered:
@@ -185,6 +191,8 @@ class S10DataQualityAnalyst:
                 )
             )
 
+        if len(findings) > self.max_findings:
+            raise S10SemanticError("S-10 finding bound exceeded")
         if worst is FactStatus.VALID:
             status = SpecialistStatus.SUCCESS
             reason = "all Snapshot facts are VALID"
