@@ -2612,3 +2612,44 @@ entries:
       supplemental_staging_registry: CHECKED
       machine_readback: COMPLETED — corrected Task Order and current checkpoint re-read
     correction_commit: a1f6bcbb1f9e932816fa7eef81fddb4b20bdd91f
+
+  - ledger_id: CL-P3-009-AUTHORIZATION-20260929
+    recorded_at: "2026-09-29"
+    authority: PROJECT OWNER / CONTROL
+    action: "OWNER-DIRECTED PRQ-4 GENUINE RESOLUTION AND ACTIVATION OF TO-P3-009"
+    basis: "Project Owner directive 2026-09-29 requiring actual resolution of PRQ-4 before STEP-P5-003 + current Source-of-Truth root-cause evidence + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P3-009
+      - PH-P3
+      - STEP-P3-007
+      - STEP-P3-008
+      - PH-P5
+      - STEP-P5-002
+      - STEP-P5-003
+      - OQ-P5-002-PRQ4-QUALITY-EVIDENCE
+    control_disposition:
+      task_order: TO-P3-009
+      status: "AUTHORIZED TO EXECUTE"
+      active_task_order: TO-P3-009
+      objective: "Establish the underlying authoritative persisted quality/acquisition evidence capability required by PRQ-4; do not cross the P5-003 boundary by merely accepting the existing limitation."
+      historical_phase_effect: "PH-P3 remains CLOSED / VERIFIED; STEP-P3-007 and STEP-P3-008 remain COMPLETE / VERIFIED."
+      p5_effect: "PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; STEP-P5-003 remains NOT ACTIVATED pending genuine PRQ-4 resolution and its normal governed authorization path."
+      non_scope: "No P5-003 implementation, no P5-002 weakening, no PRQ-1/2/3 implementation, no unrelated P2/P4 work, no trading/capital functionality."
+    root_cause_basis:
+      - "P3 quality classification already exists for VALID/DEGRADED/STALE/INCOMPLETE/CONTRADICTORY/REJECTED/UNAVAILABLE."
+      - "QuarantineRecord is routing evidence, not authoritative persistence."
+      - "CanonicalPersistence currently writes data_quality_logs only after successful canonical insertion, so non-VALID quality outcomes do not have a complete authoritative persisted evidence path."
+      - "Current data_quality_logs does not by itself establish the complete P5 S-10 EvidenceRef/knowledge_time surface."
+      - "logged_at is operational persistence time and is not a valid substitute for knowledge_time."
+    implementation_effect: "Producer implementation authorized strictly under TO-P3-009; implementation method remains Producer-level design authority within the Task Order."
+    runtime_effect: "NONE — no VPS/SentinelX mutation authorized or performed by this activation."
+    closure_ownership: "CONTROL retains full independent audit and ADR-GOVERNANCE-012 closure synchronization responsibility."
+    g12:
+      artifact_registry: UPDATED
+      checkpoint: UPDATED
+      readme: UPDATED
+      phase_registry: CHECKED — no PH-P3 lifecycle mutation
+      specialized_registries: CHECKED — no implementation/test/runtime evidence exists yet
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+      machine_readback: PENDING — to be completed after the activation writes and before any closure claim
