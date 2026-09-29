@@ -4,10 +4,11 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import asyncpg
 from typing import Any
 
 from meylux.observability import HealthState, Severity, configure_logging, emit
-from meylux.queue import AsyncWorker, QueueEnvelope, QueuePolicy, RedisQueue
+from meylux.queue import AsyncWorker, QueueEnvelope, QueuePolicy, RedisQueue, RetryableProcessingError
 from meylux.specialists.config import load_specialists_config
 from meylux.specialists.persistence import SpecialistPersistence
 from meylux.specialists.s10 import S10DataQualityAnalyst, S10SemanticError, snapshot_from_json
@@ -100,11 +101,20 @@ class SpecialistWorkerHandler:
             max_findings=int(self.config.parameter("max_findings")),
             max_evidence_refs=int(self.config.parameter("max_evidence_refs")),
         )
-        output = analyst.analyze(snapshot)
-        async with self.pool.acquire() as connection:
-            persistence = SpecialistPersistence(connection)
-            inserted = await persistence.persist(output)
-            persisted = await persistence.fetch_by_identity(output.identity_hash)
+        try:
+            output = analyst.analyze(snapshot)
+        except S10SemanticError:
+            raise
+        except Exception as exc:
+            raise S10SemanticError("unexpected S-10 semantic/contract failure") from exc
+
+        try:
+            async with self.pool.acquire() as connection:
+                persistence = SpecialistPersistence(connection)
+                inserted = await persistence.persist(output)
+                persisted = await persistence.fetch_by_identity(output.identity_hash)
+        except (asyncpg.PostgresError, ConnectionError, TimeoutError) as exc:
+            raise RetryableProcessingError("transient specialist persistence failure") from exc
         if persisted is None:
             raise RuntimeError("specialist output was not readable after persistence")
         emit(
