@@ -6,7 +6,7 @@ import os
 from collections.abc import Mapping
 from decimal import Decimal
 from typing import Any
-from contracts.acquisition import AcquisitionEnvelope, AcquisitionState, EventType, InstrumentIdentity, ProviderIdentity, Provenance
+from contracts.acquisition import AcquisitionEnvelope, AcquisitionState, EventType, InstrumentIdentity, ProviderError, ProviderIdentity, Provenance
 from contracts.canonical.foundation import ProvenanceRef, ValidationOutcome, ValidationResult, validation_outcome
 from contracts.market_semantic import validate_market_semantics
 from contracts.normalization import normalize
@@ -44,7 +44,27 @@ def envelope_from_row(row:Any)->AcquisitionEnvelope:
     instrument=InstrumentIdentity(str(row["canonical_instrument_id"]),str(row["provider_instrument_id"]))
     provenance=Provenance(str(row["provenance_id"]),provider,str(row["acquisition_method"]))
     payload=_payload_mapping_from_row(row["payload_json"])
-    return AcquisitionEnvelope(provider,instrument,provenance,EventType(str(row["event_type"])),row["event_time"],row["received_at"],AcquisitionState(str(row["acquisition_state"])),payload,str(row["source_sequence"]) if row["source_sequence"] is not None else None)
+    provider_error=None
+    canonical_bytes=row.get("canonical_bytes") if hasattr(row,"get") else None
+    if canonical_bytes:
+        try:
+            canonical=json.loads(bytes(canonical_bytes).decode("utf-8"))
+            raw_error=canonical.get("provider_error")
+            if raw_error is not None:
+                provider_error=ProviderError(
+                    str(raw_error["code"]),
+                    str(raw_error["category"]),
+                    str(raw_error["message"]),
+                    bool(raw_error.get("retryable",False)),
+                )
+        except (KeyError, TypeError, ValueError, UnicodeDecodeError) as exc:
+            raise ValueError("raw canonical_bytes contains malformed provider_error evidence") from exc
+    return AcquisitionEnvelope(
+        provider,instrument,provenance,EventType(str(row["event_type"])),
+        row["event_time"],row["received_at"],AcquisitionState(str(row["acquisition_state"])),
+        payload,str(row["source_sequence"]) if row["source_sequence"] is not None else None,
+        provider_error=provider_error,
+    )
 
 def _quality_validation_outcome(issues: list[Any], normalized_result: ValidationResult) -> ValidationOutcome:
     """Normalize the two existing validation result contracts at the quality boundary.
@@ -118,7 +138,7 @@ async def main()->int:
     try:
         async with pool.acquire() as conn:
             event_id=os.environ.get("MEYLUX_VERTICAL_SLICE_EVENT_ID")
-            row=await conn.fetchrow("SELECT event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json FROM meylux.raw_acquisition_events WHERE ($1::text IS NULL OR event_id=$1) ORDER BY event_time,event_id LIMIT 1",event_id)
+            row=await conn.fetchrow("SELECT event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json,canonical_bytes FROM meylux.raw_acquisition_events WHERE ($1::text IS NULL OR event_id=$1) ORDER BY event_time,event_id LIMIT 1",event_id)
             if row is None:
                 print("vertical slice: no governed raw acquisition record was found; no fallback data was fabricated",flush=True)
                 return 2
