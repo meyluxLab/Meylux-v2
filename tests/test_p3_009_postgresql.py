@@ -12,7 +12,7 @@ from urllib.error import URLError
 from decimal import Decimal
 
 from contracts.acquisition import AcquisitionState
-from contracts.canonical.foundation import ProvenanceRef
+from contracts.canonical.foundation import ProvenanceRef, ValidationOutcome, ValidationResult
 from contracts.quality import QualityInput, QualitySignals, assess_quality
 from contracts.specialist import FactStatus
 from meylux.acquisition.binance import BinanceAdapter
@@ -65,7 +65,10 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
             "0009_quality_evidence_persistence.sql",
         ):
             cls._psql_file(f"migrations/versions/{name}")
-        cls._psql(f"ALTER ROLE {APP} LOGIN PASSWORD '{APP_PASSWORD}';")
+        cls._psql(f"ALTER ROLE {APP} LOGIN PASSWORD '{APP_PASSWORD};")
+        cls.db_host=cls._run([cls.docker,"inspect","-f","{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}",CONTAINER]).stdout.strip()
+        if not cls.db_host:
+            raise RuntimeError("unable to resolve ephemeral PostgreSQL container address")
 
     @classmethod
     def tearDownClass(cls):
@@ -89,7 +92,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
     @classmethod
     def _connect(cls):
         import asyncpg
-        return asyncpg.connect(host="127.0.0.1",port=5432,database=DB,user=APP,password=APP_PASSWORD)
+        return asyncpg.connect(host=self.db_host,port=5432,database=DB,user=APP,password=APP_PASSWORD)
 
     @staticmethod
     def _record(*,timeframe="15m",venue="BINANCE",knowledge=T0):
@@ -104,9 +107,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
             "p3009-sequence",
         )
         assessment=assess_quality(QualityInput(
-            __import__("contracts.canonical.foundation",fromlist=["ValidationOutcome"]).ValidationOutcome(
-                __import__("contracts.canonical.foundation",fromlist=["ValidationResult"]).ValidationResult.VALID
-            ),
+            ValidationOutcome(ValidationResult.VALID),
             QualitySignals(*(Decimal("1.00") for _ in range(6))),
             ProvenanceRef("binance:p3009","binance","TEST"),
             envelope.event_id,envelope.event_id,
@@ -241,9 +242,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 self.assertFalse(second.inserted)
                 contradictory=envelope
                 bad_assessment=assess_quality(QualityInput(
-                    __import__("contracts.canonical.foundation",fromlist=["ValidationOutcome"]).ValidationOutcome(
-                        __import__("contracts.canonical.foundation",fromlist=["ValidationResult"]).ValidationResult.REJECTED
-                    ),
+                    ValidationOutcome(ValidationResult.REJECTED),
                     QualitySignals(*(Decimal("1.00") for _ in range(6))),
                     ProvenanceRef("binance:p3009","binance","TEST"),
                     contradictory.event_id,contradictory.event_id,
