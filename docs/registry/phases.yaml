@@ -501,7 +501,7 @@ records:
     purpose: Establish the bounded Stage-1 end-to-end runtime harness and deterministic S-10 reference specialist using the authoritative Input Snapshot, FRM and verified PRQ-4 evidence.
     repository_scope: Runtime harness, bounded execution, timeout/isolation/retry/DLQ/overload semantics, idempotent specialist persistence/read-back, replay determinism, S-10 and runtime/resource baseline within STEP-P5-003 only.
     dependency_boundary:
-      resolved: PRQ-4 / TO-P3-009 / AR-P3-009
+      resolved: PRQ-4 / TO-P3-009 / AR-P3-009 / TO-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001
       excluded_without_actual_dependency: PRQ-1 / PRQ-2 / PRQ-3 / TO-P2-013 / migration 0008 / upstream P2-P4 capability expansion
     vps_scope: CONTROL-owned SentinelX-only runtime deployment and independent verification required by TO-P5-003.
     closure_owner: ROL-V2-001
