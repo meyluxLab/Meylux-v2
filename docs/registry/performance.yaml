@@ -56,3 +56,17 @@ records:
       market_structure_cumulative_s: 0.180
       orchestration_frame_direct_s: 0.004
     owner_decision_boundary: 'No EMA/Market Structure engine reopening or target revision authorized.'
+
+  - stable_id: PERF-P5-003
+    canonical_name: P5-003 Runtime Resource Baseline
+    entity_type: PERFORMANCE
+    phase: PH-P5
+    step: STEP-P5-003
+    task_order: TO-P5-003
+    methodology: warm governed worker observation after deployment of final verified revision
+    observed:
+      worker_cpu_observation: approximately 0.14%
+      worker_memory_observation: approximately 29.36 MiB
+    interpretation: resource observation only; not a production capacity or latency guarantee
+    status: VERIFIED
+    control_audit: AR-P5-003
