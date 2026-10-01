@@ -1507,4 +1507,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P5-004.md
     traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: ALLOCATED / NOT YET PRODUCED
+    status: PRODUCED / AWAITING CONTROL VERIFICATION
