@@ -151,15 +151,20 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
 
     def test_binance_nested_interval_real_postgres_snapshot_s10_and_readback(self):
         """Exercise adapter envelope -> raw DB -> quality evidence -> P5 -> S-10 -> DB."""
-        row = [
-            1778155200000, "100", "101", "99", "100.5", "10",
-            1778155259999, "1000", 2, "5", "500", "0",
-        ]
-        adapter = BinanceAdapter(
-            http_get=lambda _url, _timeout: json.dumps([row]).encode("utf-8"),
-            clock=lambda: T0,
-        )
-        envelope = adapter.fetch_klines("BTCUSDT", "15m", limit=1)[0]
+        open_ms = int((T0 - timedelta(minutes=16)).timestamp() * 1000)
+        close_ms = open_ms + 15 * 60 * 1000 - 1
+        event_ms = close_ms + 500
+        message = {
+            "e": "kline", "E": event_ms, "s": "BTCUSDT",
+            "k": {
+                "t": open_ms, "T": close_ms, "s": "BTCUSDT", "i": "15m",
+                "f": 1, "L": 2, "o": "100", "c": "100.5", "h": "101",
+                "l": "99", "v": "10", "n": 2, "x": True, "q": "1000",
+            },
+        }
+        adapter = BinanceAdapter(clock=lambda: T0)
+        envelope = adapter.parse_stream_message(json.dumps(message))
+        self.assertIsNotNone(envelope)
         self.assertEqual(envelope.payload["k"]["i"], "15m")
         self.assertEqual(envelope.payload["venue"], "BINANCE")
         self.assertEqual(envelope.provider.provider_id, "binance")
@@ -189,6 +194,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 self.assertNotEqual(persisted["event_time"], persisted["knowledge_time"])
                 self.assertEqual(persisted["source_record_id"], envelope.event_id)
                 self.assertEqual(persisted["source_identity_hash"], envelope.event_id)
+                self.assertEqual(persisted["quality_state"], "VALID")
 
                 ref = await evidence_repo.resolve_evidence_ref(
                     persisted["logical_fact_key"], require_timeframe=True, require_venue=True
@@ -206,14 +212,11 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                     "version": persisted["adapter_version"], "event_time": ref["event_time"],
                     "knowledge_time": ref["knowledge_time"],
                 }
-                status = persisted["quality_state"]
                 record = {
-                    "fact_id": envelope.event_id, "status": status,
-                    "value": {"quality_state": status, "timeframe": ref["timeframe"]},
+                    "fact_id": envelope.event_id, "status": "VALID",
+                    "value": {"quality_state": persisted["quality_state"], "timeframe": ref["timeframe"]},
                     "event_time": ref["event_time"], "knowledge_time": ref["knowledge_time"],
-                    "evidence_refs": (ref,),
-                    "reason": None if status == "VALID" else f"persisted quality state is {status}",
-                    "metadata": metadata,
+                    "evidence_refs": (ref,), "reason": None, "metadata": metadata,
                 }
                 snapshot = InputSnapshotBuilder().build(
                     as_of=ref["knowledge_time"], records=[record]
