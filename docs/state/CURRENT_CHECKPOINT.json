@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P5-003",
-  "last_build_report": "BR-P3-009-REATTACH-001",
-  "last_audit_report": "AR-P3-009-REATTACH-001",
+  "last_build_report": "BR-P5-004",
+  "last_audit_report": "AR-P5-003",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P5-003-CORRECTIVE-001",
-  "completed_task_order": "TO-P3-009-REATTACH-001",
-  "completion_audit": "AR-P3-009-REATTACH-001",
+  "active_task_order": null,
+  "completed_task_order": "TO-P5-003",
+  "completion_audit": "AR-P5-003",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -280,7 +280,21 @@
     "TO-P3-009-REATTACH-001",
     "BR-P3-009-REATTACH-001",
     "AR-P3-009-REATTACH-001",
-    "TO-P5-003-CORRECTIVE-001"
+    "TO-P5-003-CORRECTIVE-001",
+    "TO-P5-003",
+    "BR-P5-004",
+    "AR-P5-003",
+    "STEP-P5-003",
+    "CMP-P5-003",
+    "CTR-P5-003-TRANSPORT",
+    "REQ-P5-003",
+    "TST-P5-003",
+    "RUN-P5-003",
+    "DB-P5-003",
+    "SEC-P5-003",
+    "CFG-P5-003",
+    "PERF-P5-003",
+    "OBS-P5-003"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -334,8 +348,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "c0518c99f84c1a74ead21704355d1cb585498fd3",
-  "updated_at_utc": "2026-10-01T09:00:00Z",
+  "last_verified_commit": "02394ba59eece109c4bbe0ab7893d47523382fac",
+  "updated_at_utc": "2026-10-01T15:54:14Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -419,7 +433,8 @@
     "CONTROL formalized and activated TO-P4-010 on 2026-09-28 under the Owner-authorized P4 knowledge_time correction direction. PH-P4 remains CLOSED / VERIFIED; STEP-P4-006 remains COMPLETE / VERIFIED; G-4 remains ESTABLISHED / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-002 remains COMPLETE / VERIFIED; no P5-003 or unrelated PRQ route is activated.",
     "CONTROL independently verified TO-P4-010 under AR-P4-017 against implementation baseline 0f819b9b5c2193165ba8491850b5e0c6b0d9acdf, merged revision f0f6a48e61b0a187a969a7aa2be303f17aacfe40, historical 3/1/1 evidence, and final CI evidence. TO-P4-010 is VERIFIED / COMPLETE as post-closure hardening; PH-P4 / STEP-P4-006 / G-4 historical closure remains unchanged; PH-P5 / STEP-P5-002 remains COMPLETE / VERIFIED; no active Task Order remains.",
     "Project Owner authorized genuine PRQ-4 resolution on 2026-09-29 and authorized progression through the normal governed workflow toward STEP-P5-003. CONTROL issued TO-P3-009 as a post-closure P3 corrective implementation to establish authoritative persisted quality/acquisition evidence; PH-P3/STEP-P3-007/STEP-P3-008 historical closure remains unchanged; STEP-P5-003 is not activated.",
-    "Project Owner ratified Option A — Controlled Reattachment of P3-009 into current authoritative SoT. CONTROL activated TO-P3-009-REATTACH-001 from current mainline; historical PR #51 / BR-P3-009 / AR-P3-009 remain preserved as historical evidence. TO-P5-003 implementation remains preserved and its independent verification remains prerequisite-blocked until fresh current-mainline P3-009 verification succeeds."
+    "Project Owner ratified Option A — Controlled Reattachment of P3-009 into current authoritative SoT. CONTROL activated TO-P3-009-REATTACH-001 from current mainline; historical PR #51 / BR-P3-009 / AR-P3-009 remain preserved as historical evidence. TO-P5-003 implementation remains preserved and its independent verification remains prerequisite-blocked until fresh current-mainline P3-009 verification succeeds.",
+    "CONTROL independently verified STEP-P5-003 and TO-P5-003 under AR-P5-003 on authoritative main 02394ba59eece109c4bbe0ab7893d47523382fac; Snapshot transport UTC reconstruction and HealthState.NORMAL worker completion were corrected; live Redis→worker→S-10→PostgreSQL ACK/readback, duplicate rejection, semantic DLQ and restart recovery passed; Closure Synchronization completed under ADR-GOVERNANCE-012."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
