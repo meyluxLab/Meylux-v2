@@ -825,7 +825,19 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-009-REATTACH-001.md
     traceability: PH-P5 / STEP-P5-003 / TO-P3-009 / BR-P3-009 / AR-P3-009 / PR #51 / Owner Ratification — Option A / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P3-009-REATTACH-001
+    canonical_name: Build Report — Controlled Reattachment of P3-009 into Current SoT
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-009-REATTACH-001.md
+    traceability: TO-P3-009-REATTACH-001 / PR #54 / c0518c99f84c1a74ead21704355d1cb585498fd3 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+  - stable_id: AR-P3-009-REATTACH-001
+    canonical_name: CONTROL Independent Audit — Controlled Reattachment of P3-009 into Current SoT
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-009-REATTACH-001.md
+    traceability: BR-P3-009-REATTACH-001 / TO-P3-009-REATTACH-001 / PR #54 / PR #51 historical / PRQ-4 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
   - stable_id: BR-P3-009
     canonical_name: Build Report — Persisted Quality / Acquisition Evidence Corrective Resolution
     entity_type: BR
