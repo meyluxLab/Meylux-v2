@@ -184,3 +184,22 @@ records:
       concurrent_duplicate_persistence: VERIFIED
       control_audit: AR-P3-009-REATTACH-001
     status: VERIFIED
+
+  - stable_id: DB-P5-003
+    canonical_name: P5-003 Specialist Runtime Persistence and Read-Back Verification
+    entity_type: DB
+    phase: PH-P5
+    step: STEP-P5-003
+    task_order: TO-P5-003
+    table: meylux.specialist_outputs
+    migration: 0007_specialist_foundation
+    evidence:
+      deployed_revision: 02394ba59eece109c4bbe0ab7893d47523382fac
+      append_only: VERIFIED
+      successful_s10_persistence: VERIFIED
+      deterministic_identity_readback: VERIFIED
+      duplicate_replay_inserted: false
+      application_select_insert: ALLOWED
+      application_update_delete: DENIED
+      control_audit: AR-P5-003
+    status: VERIFIED
