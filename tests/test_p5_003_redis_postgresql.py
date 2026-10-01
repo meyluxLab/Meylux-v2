@@ -5,15 +5,17 @@ import json
 import os
 import unittest
 import uuid
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 
 from contracts.specialist import EvidenceRef, FactStatus, InputSnapshot, SnapshotFact
-from meylux.queue.model import DuplicateMessage, QueuePolicy
+from meylux.queue.model import DuplicateMessage
 from meylux.queue.redis import AsyncWorker, RedisQueue
 from meylux.specialists.config import load_specialists_config
 from meylux.specialists.runtime import SpecialistDispatcher, SpecialistWorkerHandler, specialist_policy
+from meylux.specialists.s10 import S10DataQualityAnalyst
 
 RUN_INTEGRATION = os.environ.get("MEYLUX_RUN_P5003_REDIS_INTEGRATION") == "1"
 
@@ -46,13 +48,7 @@ class TestP5003RedisPostgreSQLTransport(unittest.TestCase):
         )
         suffix = uuid.uuid4().hex
         queue_name = f"p5-003-transport-{suffix}"
-        policy = QueuePolicy(
-            **{
-                **specialist_policy(config).__dict__,
-                "name": queue_name,
-                "dlq_name": queue_name,
-            }
-        )
+        policy = replace(specialist_policy(config), name=queue_name, dlq_name=queue_name)
         queue = RedisQueue(client, policy, f"worker-{suffix}")
         snapshot = None
         try:
@@ -146,15 +142,11 @@ class TestP5003RedisPostgreSQLTransport(unittest.TestCase):
                 self.assertIsNotNone(persisted)
                 self.assertEqual(persisted["identity_hash"], row["identity_hash"])
                 replay_inserted = await SpecialistPersistence(connection).persist(
-                    # Reconstruct the same output through the canonical Snapshot
-                    # and runtime analyst, using the exact worker configuration.
-                    __import__("meylux.specialists.s10", fromlist=["S10DataQualityAnalyst"])
-                    .S10DataQualityAnalyst(
+                    S10DataQualityAnalyst(
                         config.ref(),
                         max_findings=int(config.parameter("max_findings")),
                         max_evidence_refs=int(config.parameter("max_evidence_refs")),
-                    )
-                    .analyze(snapshot)
+                    ).analyze(snapshot)
                 )
                 self.assertFalse(replay_inserted)
                 reread = await SpecialistPersistence(connection).fetch_by_identity(row["identity_hash"])
