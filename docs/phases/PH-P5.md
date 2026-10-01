@@ -2,7 +2,7 @@
 
 **Status:** ACTIVE / AUTHORIZED
 **Current Step Lifecycle:** `STEP-P5-003` — COMPLETE / VERIFIED
-**Active Task Order:** `null` — AUTHORIZED TO EXECUTE
+**Active Task Order:** `null`
 **Last Completed Task Order:** `TO-P5-003`
 **Completion Audit:** `AR-P5-003`
 **Phase SID:** `PH-P5`
