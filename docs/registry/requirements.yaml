@@ -30,3 +30,13 @@ records:
     traceability: TO-P3-009 / BR-P3-009 / TO-P3-009-REATTACH-001 / BR-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001
     disposition: VERIFIED
     status: VERIFIED
+
+  - stable_id: REQ-P5-003
+    canonical_name: P5-003 Runtime Harness and S-10 Acceptance Requirements
+    entity_type: REQUIREMENT
+    phase: PH-P5
+    step: STEP-P5-003
+    task_order: TO-P5-003
+    traceability: TO-P5-003 / TO-P5-003-CORRECTIVE-001 / BR-P5-004 / AR-P5-003
+    disposition: VERIFIED
+    status: VERIFIED
