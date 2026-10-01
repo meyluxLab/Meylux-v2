@@ -1507,7 +1507,7 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P5-004.md
     traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: PRODUCED / AWAITING CONTROL VERIFICATION
+    status: VERIFIED
   - stable_id: TO-P5-003-CORRECTIVE-001
     canonical_name: Corrective Task Order — Authoritative Evidence-Context and Snapshot Transport Resolution
     entity_type: TO
