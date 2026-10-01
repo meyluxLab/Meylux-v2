@@ -102,12 +102,6 @@ class TestP5003RedisPostgreSQLTransport(unittest.TestCase):
                 consumer=f"worker-{suffix}",
             ).run_once()
             self.assertIsNotNone(outcome)
-            if outcome.status != "ACKED":
-                # Preserve the original failure with a traceback during test
-                # diagnosis; the retry entry carries the same serialized body.
-                retry_item = await queue.read(f"diagnostic-{suffix}")
-                if retry_item is not None:
-                    await SpecialistWorkerHandler(pool, config)(retry_item[1])
             self.assertEqual(outcome.status, "ACKED")
 
             rows = await pool.fetch(
