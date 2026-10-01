@@ -482,8 +482,8 @@ records:
     predecessor: STEP-P5-001
     activation_basis: PROJECT-OWNER-PHASE-5-CONTINUATION-AUTHORIZATION-2026-09-23 / AR-P5-001
     active_task_order: null
-    completed_task_order: TO-P5-002
-    completion_audit: AR-P5-002
+    completed_task_order: TO-P5-003
+    completion_audit: AR-P5-003
     purpose: Establish the authoritative Stage-1 Input Snapshot boundary and Fact Requirements Matrix using existing authoritative persisted facts, with deterministic identity, provenance, no-lookahead and explicit availability semantics.
     repository_scope: Snapshot builder, FRM, deterministic serialization/identity, availability/status semantics, tests and traceability within STEP-P5-002 only.
     vps_scope: CONTROL-only read-only SentinelX verification; no runtime mutation, provider activation, migration, restart or deployment.
