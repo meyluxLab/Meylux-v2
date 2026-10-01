@@ -2813,3 +2813,31 @@ entries:
     runtime_effect: "No Producer VPS operation; no unauthorized runtime/provider/trading/capital activity."
     p5_effect: "Existing TO-P5-003 implementation is preserved; its independent verification may resume from the previously established boundary."
     closure_sync: "CONTROL completed artifact, phase, checkpoint, README, requirements, tests, database, runtime, contract, security, Build Report, Audit Report and Change Ledger synchronization; machine read-back follows."
+
+  - ledger_id: CL-P5-003-CLOSURE-20261001
+    action: "CONTROL FINAL VERIFICATION AND STEP CLOSURE SYNCHRONIZATION — STEP-P5-003 / TO-P5-003"
+    date_utc: "2026-10-01"
+    actor: ROL-V2-001
+    affected_ids:
+      - STEP-P5-003
+      - TO-P5-003
+      - TO-P5-003-CORRECTIVE-001
+      - BR-P5-004
+      - AR-P5-003
+      - CMP-P5-003
+      - CTR-P5-003-TRANSPORT
+      - REQ-P5-003
+      - TST-P5-003
+      - RUN-P5-003
+      - DB-P5-003
+      - SEC-P5-003
+      - CFG-P5-003
+      - PERF-P5-003
+      - OBS-P5-003
+    predecessor_state: "STEP-P5-003 ACTIVE / AUTHORIZED; TO-P5-003 AUTHORIZED TO EXECUTE; TO-P5-003-CORRECTIVE-001 VERIFIED implementation boundary pending independent verification."
+    resulting_state: "STEP-P5-003 COMPLETE / VERIFIED; TO-P5-003 VERIFIED / COMPLETE; TO-P5-003-CORRECTIVE-001 VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; active_task_order null."
+    implementation_effect: "Authoritative Binance nested interval and explicit venue context now survive quality-evidence persistence and P5 Snapshot/S-10 runtime; canonical Snapshot temporal fields reconstruct correctly across Redis transport; worker success reporting uses HealthState.NORMAL."
+    evidence_effect: "Final Core and Docker CI succeeded; real PostgreSQL/Redis integration passed; CONTROL independently verified live Redis→worker→S-10→PostgreSQL ACK/readback, duplicate rejection, semantic DLQ and restart recovery on main 02394ba59eece109c4bbe0ab7893d47523382fac."
+    architecture_effect: "No frozen architecture redesign, migration 0008 change, provider-to-venue inference, new provider, or cross-phase reopening occurred."
+    runtime_effect: "CONTROL executed all deployment/restart/runtime verification only through SentinelX; final worker pending count was 0."
+    closure_sync: "CONTROL synchronized README, phase specification, phase registry, artifact registry, contracts, requirements, tests, runtime, database, security, configuration, performance/resource and observability registries, this Change Ledger, and CURRENT_CHECKPOINT; final machine read-back follows."
