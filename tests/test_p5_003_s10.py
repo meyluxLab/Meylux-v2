@@ -82,6 +82,13 @@ class TestS10(unittest.TestCase):
         self.assertEqual(reconstructed.snapshot_id, source.snapshot_id)
         self.assertEqual(reconstructed.serialize(), source.serialize())
         restored = reconstructed.facts[0].evidence_refs[0]
+        self.assertEqual(restored.evidence_id, ref.evidence_id)
+        self.assertEqual(restored.source_type, ref.source_type)
+        self.assertEqual(restored.source_reference, ref.source_reference)
+        self.assertEqual(restored.identity_hash, ref.identity_hash)
+        self.assertEqual(restored.content_version, ref.content_version)
+        self.assertEqual(restored.source_family, ref.source_family)
+        self.assertEqual(restored.record_id, ref.record_id)
         self.assertEqual(restored.observed_at_utc, observed)
         self.assertEqual(restored.event_time, event)
         self.assertEqual(restored.knowledge_time, knowledge)
