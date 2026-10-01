@@ -492,12 +492,14 @@ records:
     logical_name: Runtime Harness & Reference Specialist (S-10)
     entity_type: STEP
     phase: PH-P5
-    status: ACTIVE / AUTHORIZED
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: COMPLETE / VERIFIED
     order: 3
     predecessor: STEP-P5-002
     activation_basis: PROJECT-OWNER-STEP-P5-003-AUTHORIZATION-2026-09-29
-    active_task_order: TO-P5-003
+    active_task_order: null
+    completed_task_order: TO-P5-003
+    completion_audit: AR-P5-003
     purpose: Establish the bounded Stage-1 end-to-end runtime harness and deterministic S-10 reference specialist using the authoritative Input Snapshot, FRM and verified PRQ-4 evidence.
     repository_scope: Runtime harness, bounded execution, timeout/isolation/retry/DLQ/overload semantics, idempotent specialist persistence/read-back, replay determinism, S-10 and runtime/resource baseline within STEP-P5-003 only.
     dependency_boundary:
