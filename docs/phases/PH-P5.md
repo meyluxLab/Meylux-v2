@@ -84,11 +84,11 @@ Required evidence includes the final FRM, deterministic Snapshot identity/replay
 ### `STEP-P5-003` — Runtime Harness & Reference Specialist (S-10)
 
 **Order:** 3  
-**Status:** ACTIVE / AUTHORIZED  
-**Authorization state:** ACTIVE / AUTHORIZED  
+**Status:** COMPLETE / VERIFIED  
+**Authorization state:** COMPLETE / VERIFIED  
 **Predecessor:** `STEP-P5-002` — COMPLETE / VERIFIED  
 **Activation basis:** Project Owner authorization — `STEP-P5-003 = AUTHORIZED FOR GOVERNED PROGRESSION` — 2026-09-29  
-**Active Task Order:** `TO-P5-003`
+**Active Task Order:** `null`
 
 Purpose: establish the real bounded end-to-end Stage-1 runtime harness and the reference specialist `S-10`, using the authoritative Input Snapshot / FRM boundary and the independently verified P3 quality/acquisition evidence established by `TO-P3-009`.
 
