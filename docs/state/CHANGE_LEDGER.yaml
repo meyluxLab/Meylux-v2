@@ -2794,3 +2794,22 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED
       machine_readback: PENDING — required after activation writes before any closure claim
+
+  - ledger_id: CL-P3-009-REATTACH-CLOSURE-20261001
+    action: "CONTROL-OWNED FINAL VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P3-009-REATTACH-001"
+    basis: "AR-P3-009-REATTACH-001; resulting authoritative main commit c0518c99f84c1a74ead21704355d1cb585498fd3; CI Core 36825603601; Docker Foundation 36825603711; Owner-ratified Option A"
+    affected_ids:
+      - TO-P3-009-REATTACH-001
+      - BR-P3-009-REATTACH-001
+      - AR-P3-009-REATTACH-001
+      - PRQ-4
+      - STEP-P5-003
+      - TO-P5-003
+    predecessor_state: "P3-009 current-mainline integration pending; PRQ-4 current reproducible basis not yet re-established; STEP-P5-003 continuation blocked at the P3-009 evidence boundary."
+    resulting_state: "TO-P3-009-REATTACH-001 VERIFIED / COMPLETE; BR-P3-009-REATTACH-001 VERIFIED; AR-P3-009-REATTACH-001 APPROVED / VERIFIED; PRQ-4 RESOLVED / VERIFIED; PH-P3 historical closure unchanged; STEP-P5-003 ACTIVE / AUTHORIZED; TO-P5-003 AUTHORIZED TO EXECUTE."
+    implementation_effect: "P3-009 quality/acquisition evidence capability is present on authoritative main through controlled PR #54 integration; historical PR #51 remains OPEN / UNMERGED and preserved as historical evidence."
+    evidence_effect: "Fresh resulting-main CI independently verified the reattached capability: Core 573 foundation tests OK plus 6 real-PostgreSQL P3-009 tests OK; Docker Foundation SUCCESS with migration, semantic and database-boundary evidence."
+    architecture_effect: "No frozen architecture or upstream phase closure was reopened or redesigned."
+    runtime_effect: "No Producer VPS operation; no unauthorized runtime/provider/trading/capital activity."
+    p5_effect: "Existing TO-P5-003 implementation is preserved; its independent verification may resume from the previously established boundary."
+    closure_sync: "CONTROL completed artifact, phase, checkpoint, README, requirements, tests, database, runtime, contract, security, Build Report, Audit Report and Change Ledger synchronization; machine read-back follows."
