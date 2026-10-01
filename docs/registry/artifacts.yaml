@@ -1508,3 +1508,33 @@ records:
     artifact_path: docs/build-reports/BR-P5-004.md
     traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: PRODUCED / AWAITING CONTROL VERIFICATION
+  - stable_id: TO-P5-003-CORRECTIVE-001
+    canonical_name: Corrective Task Order — Authoritative Evidence-Context and Snapshot Transport Resolution
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P5-003-CORRECTIVE-001.md
+    traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / BR-P5-004 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive 2026-10-01
+    status: VERIFIED / COMPLETE
+  - stable_id: TO-P5-003
+    canonical_name: Task Order — Runtime Harness & Reference Specialist (S-10)
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P5-003.md
+    traceability: PH-P5 / STEP-P5-003 / BR-P5-004 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P5-004
+    canonical_name: Build Report — Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P5-004.md
+    traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+  - stable_id: AR-P5-003
+    canonical_name: CONTROL Final Independent Verification — STEP-P5-003 / TO-P5-003
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-003.md
+    traceability: BR-P5-004 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / PH-P5 / STEP-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+  - stable_id: STEP-P5-003
+    canonical_name: Runtime Harness & Reference Specialist (S-10)
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P5.md
+    traceability: PH-P5 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / BR-P5-004 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: COMPLETE / VERIFIED
