@@ -77,7 +77,7 @@ jobs:
           MEYLUX_DB_PASSWORD: ci-admin-password
           MEYLUX_APP_PASSWORD: ci-app-password
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
-        run: docker compose -f infrastructure/compose/docker-compose.yml up -d db
+        run: docker compose -f infrastructure/compose/docker-compose.yml up -d db redis
 
       - name: Wait for database
         env:
@@ -93,6 +93,20 @@ jobs:
           done
           exit 1
 
+      - name: Wait for Redis
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          for i in $(seq 1 30); do
+            if [ "$(docker compose -f infrastructure/compose/docker-compose.yml exec -T redis redis-cli ping | tr -d '\r')" = "PONG" ]; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+
       - name: Run database migration harness
         env:
           MEYLUX_DB_NAME: meylux_ci
@@ -101,6 +115,35 @@ jobs:
           MEYLUX_APP_PASSWORD: ci-app-password
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: docker compose -f infrastructure/compose/docker-compose.yml exec -T -e MEYLUX_DB_NAME="$MEYLUX_DB_NAME" -e MEYLUX_DB_USER="$MEYLUX_DB_USER" -e MEYLUX_DB_PASSWORD="$MEYLUX_DB_PASSWORD" -e MEYLUX_APP_PASSWORD="$MEYLUX_APP_PASSWORD" -e MEYLUX_BACKUP_PASSWORD="$MEYLUX_BACKUP_PASSWORD" db bash /workspace/infrastructure/postgres/migrate.sh
+
+      - name: Re-run PostgreSQL-backed P3/P5 evidence path
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
+            -v "$PWD/tests:/app/tests:ro" \
+            -e MEYLUX_TEST_DATABASE_URL="postgresql://meylux_app:ci-app-password@db:5432/meylux_ci" \
+            -e MEYLUX_RUN_P3009_POSTGRESQL=1 \
+            --entrypoint python api \
+            -m unittest discover -s /app/tests -p 'test_p3_009_postgresql.py' -v
+
+      - name: Re-run real Redis to worker-specialist S-10 persistence path
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
+            -v "$PWD/tests:/app/tests:ro" \
+            -e MEYLUX_RUN_P5003_REDIS_INTEGRATION=1 \
+            --entrypoint python api \
+            -m unittest discover -s /app/tests -p 'test_p5_003_redis_postgresql.py' -v
 
       - name: Verify legacy knowledge-time migration and idempotency
         env:
