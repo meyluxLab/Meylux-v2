@@ -276,3 +276,18 @@ records:
       - src/meylux/persistence/quality_evidence.py
     provenance: BR-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001
     lifecycle_status: VERIFIED
+
+  - sid: CTR-P5-003-TRANSPORT
+    version: 1.0.0
+    logical_name: Stage-1 Snapshot Queue Transport Boundary
+    entity_type: CTR
+    phase: PH-P5
+    step: STEP-P5-003
+    tier: REQ-BEHAVIOR
+    purpose: Preserve canonical InputSnapshot identity and authoritative EvidenceRef temporal/context semantics across Redis transport into S-10.
+    implementation_paths:
+      - src/meylux/specialists/s10.py
+      - src/meylux/specialists/runtime.py
+    validation: canonical JSON round-trip; explicit UTC temporal reconstruction; Snapshot identity revalidation; provider/venue/timeframe preservation; semantic failures are non-retryable.
+    provenance: BR-P5-004 / AR-P5-003
+    status: VERIFIED
