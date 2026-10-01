@@ -1,10 +1,10 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-003` — ACTIVE / AUTHORIZED
-**Active Task Order:** `TO-P5-003` — AUTHORIZED TO EXECUTE
-**Last Completed Task Order:** `TO-P5-002`
-**Completion Audit:** `AR-P5-002`
+**Current Step Lifecycle:** `STEP-P5-003` — COMPLETE / VERIFIED
+**Active Task Order:** `null` — AUTHORIZED TO EXECUTE
+**Last Completed Task Order:** `TO-P5-003`
+**Completion Audit:** `AR-P5-003`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
 **Predecessor:** `PH-P4` CLOSED / VERIFIED; `G-4` ESTABLISHED / VERIFIED
