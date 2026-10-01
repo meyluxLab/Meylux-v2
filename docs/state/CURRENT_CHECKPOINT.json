@@ -402,7 +402,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "a543a3e881d94e577209e01421a752a7b1743b77",
+  "last_governance_sync_base_commit": "ef0d6f0009d13d2d69091a91345599965695bb3f",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -434,7 +434,8 @@
     "CONTROL independently verified TO-P4-010 under AR-P4-017 against implementation baseline 0f819b9b5c2193165ba8491850b5e0c6b0d9acdf, merged revision f0f6a48e61b0a187a969a7aa2be303f17aacfe40, historical 3/1/1 evidence, and final CI evidence. TO-P4-010 is VERIFIED / COMPLETE as post-closure hardening; PH-P4 / STEP-P4-006 / G-4 historical closure remains unchanged; PH-P5 / STEP-P5-002 remains COMPLETE / VERIFIED; no active Task Order remains.",
     "Project Owner authorized genuine PRQ-4 resolution on 2026-09-29 and authorized progression through the normal governed workflow toward STEP-P5-003. CONTROL issued TO-P3-009 as a post-closure P3 corrective implementation to establish authoritative persisted quality/acquisition evidence; PH-P3/STEP-P3-007/STEP-P3-008 historical closure remains unchanged; STEP-P5-003 is not activated.",
     "Project Owner ratified Option A — Controlled Reattachment of P3-009 into current authoritative SoT. CONTROL activated TO-P3-009-REATTACH-001 from current mainline; historical PR #51 / BR-P3-009 / AR-P3-009 remain preserved as historical evidence. TO-P5-003 implementation remains preserved and its independent verification remains prerequisite-blocked until fresh current-mainline P3-009 verification succeeds.",
-    "CONTROL independently verified STEP-P5-003 and TO-P5-003 under AR-P5-003 on authoritative main 02394ba59eece109c4bbe0ab7893d47523382fac; Snapshot transport UTC reconstruction and HealthState.NORMAL worker completion were corrected; live Redis→worker→S-10→PostgreSQL ACK/readback, duplicate rejection, semantic DLQ and restart recovery passed; Closure Synchronization completed under ADR-GOVERNANCE-012."
+    "CONTROL independently verified STEP-P5-003 and TO-P5-003 under AR-P5-003 on authoritative main 02394ba59eece109c4bbe0ab7893d47523382fac; Snapshot transport UTC reconstruction and HealthState.NORMAL worker completion were corrected; live Redis→worker→S-10→PostgreSQL ACK/readback, duplicate rejection, semantic DLQ and restart recovery passed; Closure Synchronization completed under ADR-GOVERNANCE-012.",
+    "CONTROL final machine read-back completed after P5-003 Closure Synchronization; Checkpoint, PH-P5 specification/registry, artifacts registry, README, Change Ledger and specialized evidence registries are synchronized; active_task_order is null."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
