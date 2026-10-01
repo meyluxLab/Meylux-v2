@@ -7,9 +7,9 @@
 **Phase:** `PH-P5`
 **Issuing Role:** `ROL-V2-001` — CONTROL / REVIEWER
 **Producer Role:** `ROL-V2-002` — PRODUCER / ARCHITECT-BUILDER
-**Status:** AUTHORIZED TO EXECUTE
+**Status:** VERIFIED / COMPLETE
 **Owner Authorization:** Project Owner directive — corrective continuation of STEP-P5-003 — 2026-10-01
-**Precondition:** `TO-P5-003` remains ACTIVE / AUTHORIZED; its implementation/verification distinction is preserved.
+**Completion:** CONTROL independently verified the corrective outcome under `AR-P5-003`; the implementation/verification distinction is preserved and the corrective Task Order is now VERIFIED / COMPLETE.
 **Governance Basis:** `ADR-GOVERNANCE-012`, `ADR-GOVERNANCE-013`, `ARTIFACT_PROTOCOL_V2.md`
 
 ## 1. Authority and Objective
@@ -229,3 +229,8 @@ Historical P3-009 evidence and PR #51 remain preserved. No historical closure re
 This is an outcome-driven corrective Task Order. It authorizes the Producer to determine and implement the technically correct bounded solution to the established evidence-context defect, including directly necessary supporting changes, while preserving frozen architecture, semantic contracts, evidence discipline and phase boundaries.
 
 **Status:** AUTHORIZED TO EXECUTE
+
+
+## 14. CONTROL Closure Disposition
+
+CONTROL independently verified the corrected authoritative evidence-context and Snapshot transport path on deployed main. `TO-P5-003-CORRECTIVE-001` is **VERIFIED / COMPLETE**. Closure synchronization is recorded in `CL-P5-003-CLOSURE-20261001`.
