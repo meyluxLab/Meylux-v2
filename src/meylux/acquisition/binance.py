@@ -256,6 +256,10 @@ class BinanceAdapter(ProviderAdapter):
                 return (self._failure_envelope(self._instrument(symbol), EventType.CANDLE, failure),)
             event_time = open_time
             payload = {
+                # This adapter is bound to Binance Spot's /api/v3/klines source
+                # contract. Venue is explicit source context, not a fallback
+                # derived by the quality-evidence layer from provider_id.
+                "venue": "BINANCE",
                 "row": row,
                 "k": {
                     "t": row[0],
@@ -396,12 +400,18 @@ class BinanceAdapter(ProviderAdapter):
             "kline": EventType.CANDLE,
             "bookTicker": EventType.UPDATE,
         }.get(event, EventType.UPDATE)
+        payload = data
+        if event == "kline":
+            # Binance Spot supplies the authoritative interval under k.i.
+            # Preserve the wire fields and attach source-scoped venue context.
+            payload = dict(data)
+            payload["venue"] = "BINANCE"
         return self._envelope(
             instrument=self._instrument(symbol),
             event_type=event_type,
             event_time=event_time,
             received_at=self._utc_now(),
-            payload=data,
+            payload=payload,
             source_sequence=sequence,
             state=AcquisitionState.AVAILABLE,
         )
