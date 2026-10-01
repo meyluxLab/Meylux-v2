@@ -51,6 +51,38 @@ def _optional_context(payload: Mapping[str, Any], *keys: str) -> str | None:
         raise ValueError(f"conflicting explicit context values: {', '.join(keys)}")
     return values[0]
 
+def _timeframe_context(payload: Mapping[str, Any]) -> str | None:
+    """Resolve timeframe from explicit, mutually consistent envelope context.
+
+    Binance candle envelopes carry their interval at k.i; provider-neutral
+    adapters may expose timeframe or interval at the payload root. All supplied
+    representations are checked together to prevent silently choosing a value
+    when authoritative context contradicts itself.
+    """
+    candidates: list[tuple[str, Any]] = [
+        (key, payload[key])
+        for key in ("timeframe", "interval")
+        if key in payload and payload[key] is not None
+    ]
+    if "k" in payload:
+        kline = payload["k"]
+        if not isinstance(kline, Mapping):
+            raise ValueError("k must be an object when supplied for timeframe context")
+        if "i" in kline and kline["i"] is not None:
+            candidates.append(("k.i", kline["i"]))
+
+    values: list[tuple[str, str]] = []
+    for key, value in candidates:
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"{key} must be a non-empty string when supplied")
+        values.append((key, value.strip()))
+    if not values:
+        return None
+    if len({value for _, value in values}) != 1:
+        fields = ", ".join(key for key, _ in values)
+        raise ValueError(f"conflicting explicit timeframe values: {fields}")
+    return values[0][1]
+
 
 @dataclass(frozen=True, slots=True)
 class QualityEvidenceRecord:
@@ -141,7 +173,7 @@ def build_quality_evidence(
     if not isinstance(assessment, QualityAssessment):
         raise TypeError("assessment must be QualityAssessment")
 
-    timeframe = _optional_context(envelope.payload, "timeframe", "interval")
+    timeframe = _timeframe_context(envelope.payload)
     venue = _optional_context(envelope.payload, "venue", "venue_context")
 
     source_identity_hash = envelope.event_id

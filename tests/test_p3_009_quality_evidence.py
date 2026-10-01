@@ -145,6 +145,36 @@ class P3009QualityEvidenceTests(unittest.TestCase):
         self.assertIsNone(e.timeframe)
         self.assertIsNone(e.venue)
 
+    def test_binance_nested_kline_interval_resolves_without_provider_venue_fallback(self):
+        e=build_quality_evidence(
+            envelope(payload={"row":[1], "k":{"i":"15m"}, "close":"100"}),
+            assessment(),
+        )
+        self.assertEqual(e.timeframe,"15m")
+        self.assertIsNone(e.venue)
+        self.assertEqual(e.provider_id,"binance")
+
+    def test_nested_and_root_timeframe_context_must_agree(self):
+        e=build_quality_evidence(
+            envelope(payload={"timeframe":"15m","k":{"i":"15m"},"venue":"BINANCE"}),
+            assessment(),
+        )
+        self.assertEqual(e.timeframe,"15m")
+        with self.assertRaisesRegex(ValueError,"conflicting explicit timeframe"):
+            build_quality_evidence(
+                envelope(payload={"timeframe":"15m","k":{"i":"1h"}}),
+                assessment(),
+            )
+
+    def test_malformed_nested_kline_context_is_rejected(self):
+        for payload in (
+            {"k":"not-an-object","timeframe":"15m"},
+            {"k":{"i":15}},
+            {"k":{"i":" "}},
+        ):
+            with self.subTest(payload=payload), self.assertRaises(ValueError):
+                build_quality_evidence(envelope(payload=payload),assessment())
+
     def test_conflicting_context_is_rejected(self):
         with self.assertRaises(ValueError):
             build_quality_evidence(envelope(payload={"timeframe":"15m","interval":"1h"}),assessment())

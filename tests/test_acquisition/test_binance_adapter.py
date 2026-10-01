@@ -214,6 +214,20 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(envelope.payload["k"]["T"], row[6])
         self.assertIsNone(envelope.payload["k"]["x"])
         self.assertEqual(envelope.payload["k"]["i"], "15m")
+        self.assertEqual(envelope.payload["venue"], "BINANCE")
+        self.assertEqual(envelope.provider.provider_id, "binance")
+
+    def test_stream_kline_preserves_authoritative_interval_and_explicit_venue(self):
+        message = {
+            "e": "kline", "E": 1778155200000, "s": "BTCUSDT",
+            "k": {"t": 1778155200000, "T": 1778155259999, "s": "BTCUSDT",
+                  "i": "15m", "x": True},
+        }
+        adapter = self.make_adapter()
+        envelope = adapter.parse_stream_message(json.dumps(message))
+        self.assertEqual(envelope.payload["k"]["i"], "15m")
+        self.assertEqual(envelope.payload["venue"], "BINANCE")
+        self.assertEqual(envelope.provider.provider_id, "binance")
 
     def test_stream_trade_mapping_and_provenance(self):
         connector = FakeConnector([

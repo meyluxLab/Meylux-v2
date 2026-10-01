@@ -1502,3 +1502,9 @@ records:
     artifact_path: docs/audits/AR-P3-009.md
     traceability: BR-P3-009 / TO-P3-009 / PR #51 / PRQ-4 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+  - stable_id: BR-P5-004
+    canonical_name: Build Report — Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P5-004.md
+    traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: PRODUCED / AWAITING CONTROL VERIFICATION
