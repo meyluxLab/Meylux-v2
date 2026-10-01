@@ -7,7 +7,7 @@
 **Boundary:** `PH-P5 / STEP-P5-003` prerequisite correction  
 **Historical Boundary:** `PH-P3 = CLOSED / VERIFIED` and `STEP-P3-007/008 = COMPLETE / VERIFIED` remain unchanged  
 **Governance Class:** Post-closure lineage/integration correction  
-**Status:** AUTHORIZED TO EXECUTE  
+**Status:** VERIFIED / COMPLETE  
 **Owner Authorization:** Project Owner Ratification — Controlled Reattachment of P3-009 into Current SoT, 2026-10-01  
 **Historical predecessor:** `TO-P3-009 / BR-P3-009 / AR-P3-009`
 
