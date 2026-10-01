@@ -274,5 +274,5 @@ records:
     implementation_paths:
       - contracts/quality_evidence.py
       - src/meylux/persistence/quality_evidence.py
-    provenance: BR-P3-009 / AR-P3-009
+    provenance: BR-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001
     lifecycle_status: VERIFIED
