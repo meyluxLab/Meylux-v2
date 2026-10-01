@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -14,12 +15,14 @@ from decimal import Decimal
 from contracts.acquisition import AcquisitionState
 from contracts.canonical.foundation import ProvenanceRef, ValidationOutcome, ValidationResult
 from contracts.quality import QualityInput, QualitySignals, assess_quality
-from contracts.specialist import FactStatus
+from contracts.specialist import FactStatus, SpecialistConfigRef
 from meylux.acquisition.binance import BinanceAdapter
 from meylux.acquisition.persistence import RawStagingRepository
 from meylux.persistence.quality_evidence import QualityEvidencePersistence
 from meylux.runtime.p3_008_vertical_slice import process_raw_row
 from meylux.specialists.snapshot import InputSnapshotBuilder, LookaheadFactError
+from meylux.specialists.s10 import S10DataQualityAnalyst
+from meylux.specialists.persistence import SpecialistPersistence
 
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -142,6 +145,96 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 self.assertEqual(persisted["quality_state"],"UNAVAILABLE")
                 self.assertEqual(persisted["knowledge_time"],persisted["received_at"])
                 self.assertEqual(persisted["source_record_id"],envelope.event_id)
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+    def test_binance_nested_interval_real_postgres_snapshot_s10_and_readback(self):
+        """Exercise adapter envelope -> raw DB -> quality evidence -> P5 -> S-10 -> DB."""
+        row = [
+            1778155200000, "100", "101", "99", "100.5", "10",
+            1778155259999, "1000", 2, "5", "500", "0",
+        ]
+        adapter = BinanceAdapter(
+            http_get=lambda _url, _timeout: json.dumps([row]).encode("utf-8"),
+            clock=lambda: T0,
+        )
+        envelope = adapter.fetch_klines("BTCUSDT", "15m", limit=1)[0]
+        self.assertEqual(envelope.payload["k"]["i"], "15m")
+        self.assertEqual(envelope.payload["venue"], "BINANCE")
+        self.assertEqual(envelope.provider.provider_id, "binance")
+
+        async def run():
+            conn = await self._connect()
+            try:
+                raw_result = await RawStagingRepository(conn).persist(envelope)
+                self.assertTrue(raw_result.inserted)
+                raw = await conn.fetchrow(
+                    """SELECT event_id,provider_id,adapter_id,adapter_version,
+                              canonical_instrument_id,provider_instrument_id,event_type,
+                              event_time,received_at,acquisition_state,source_sequence,
+                              provenance_id,acquisition_method,payload_json,canonical_bytes
+                         FROM meylux.raw_acquisition_events WHERE event_id=$1""",
+                    envelope.event_id,
+                )
+                self.assertIsNotNone(raw)
+                evidence_result, _ = await process_raw_row(conn, raw)
+                evidence_repo = QualityEvidencePersistence(conn)
+                persisted = await evidence_repo.fetch(evidence_result.evidence_id)
+                self.assertIsNotNone(persisted)
+                self.assertEqual(persisted["timeframe"], "15m")
+                self.assertEqual(persisted["venue"], "BINANCE")
+                self.assertEqual(persisted["provider_id"], "binance")
+                self.assertEqual(persisted["knowledge_time"], persisted["received_at"])
+                self.assertNotEqual(persisted["event_time"], persisted["knowledge_time"])
+                self.assertEqual(persisted["source_record_id"], envelope.event_id)
+                self.assertEqual(persisted["source_identity_hash"], envelope.event_id)
+
+                ref = await evidence_repo.resolve_evidence_ref(
+                    persisted["logical_fact_key"], require_timeframe=True, require_venue=True
+                )
+                self.assertIsNotNone(ref)
+                self.assertEqual(ref["timeframe"], "15m")
+                self.assertEqual(ref["venue"], "BINANCE")
+                self.assertEqual(ref["record_id"], envelope.event_id)
+                self.assertEqual(ref["identity_hash"], envelope.event_id)
+
+                metadata = {
+                    "symbol": "BTCUSDT", "venue": ref["venue"], "product": "Spot",
+                    "timeframe": ref["timeframe"], "source_table": "meylux.quality_evidence",
+                    "record_id": ref["record_id"], "identity_hash": ref["identity_hash"],
+                    "version": persisted["adapter_version"], "event_time": ref["event_time"],
+                    "knowledge_time": ref["knowledge_time"],
+                }
+                status = persisted["quality_state"]
+                record = {
+                    "fact_id": envelope.event_id, "status": status,
+                    "value": {"quality_state": status, "timeframe": ref["timeframe"]},
+                    "event_time": ref["event_time"], "knowledge_time": ref["knowledge_time"],
+                    "evidence_refs": (ref,),
+                    "reason": None if status == "VALID" else f"persisted quality state is {status}",
+                    "metadata": metadata,
+                }
+                snapshot = InputSnapshotBuilder().build(
+                    as_of=ref["knowledge_time"], records=[record]
+                )
+                self.assertEqual(snapshot.facts[0].evidence_refs[0].timeframe, "15m")
+                self.assertEqual(snapshot.facts[0].evidence_refs[0].venue, "BINANCE")
+                config = SpecialistConfigRef("p5-specialists", "1.1.0", "b" * 64, "development")
+                output = S10DataQualityAnalyst(config).analyze(snapshot)
+                self.assertEqual(output.snapshot_id, snapshot.snapshot_id)
+                self.assertEqual(output.specialist_id, "S-10")
+                specialist_repo = SpecialistPersistence(conn)
+                inserted = await specialist_repo.persist(output)
+                self.assertTrue(inserted)
+                read_back = await specialist_repo.fetch_by_identity(output.identity_hash)
+                self.assertIsNotNone(read_back)
+                self.assertEqual(read_back["identity_hash"], output.identity_hash)
+                self.assertEqual(read_back["snapshot_id"], snapshot.snapshot_id)
+                replay_inserted = await specialist_repo.persist(output)
+                self.assertFalse(replay_inserted)
+                replay = await specialist_repo.fetch_by_identity(output.identity_hash)
+                self.assertEqual(replay["identity_hash"], read_back["identity_hash"])
             finally:
                 await conn.close()
         asyncio.run(run())
