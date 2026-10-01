@@ -3,7 +3,7 @@
 **Task Order:** `TO-P3-009-REATTACH-001`  
 **Role:** `ROL-V2-002` — PRODUCER / ARCHITECT-BUILDER  
 **Boundary:** `PH-P5 / STEP-P5-003` prerequisite correction  
-**Status:** IMPLEMENTED / TESTED BY FRESH CURRENT-MAINLINE CI / DELIVERED FOR INDEPENDENT CONTROL AUDIT  
+**Status:** VERIFIED by independent CONTROL audit  
 **Producer lifecycle statement:** This report does not declare VERIFIED, COMPLETE, CLOSED, or PRQ-4 independently resolved.
 
 ## 1. Producer conclusion
