@@ -26,7 +26,7 @@ records:
     entity_type: REQUIREMENT
     phase: PH-P5
     step: STEP-P5-002
-    task_order: TO-P3-009
-    traceability: TO-P3-009 / BR-P3-009 / AR-P3-009
+    task_order: TO-P3-009-REATTACH-001
+    traceability: TO-P3-009 / BR-P3-009 / TO-P3-009-REATTACH-001 / BR-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001
     disposition: VERIFIED
     status: VERIFIED
