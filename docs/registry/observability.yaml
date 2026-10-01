@@ -56,3 +56,20 @@ records:
       dependency_health: db and redis healthy
       final_real_data_worker_recovery: PASS
       execution_log: EXEC-LOG-TO-P4-007-CONTROL-RUNTIME-20260919
+
+  - stable_id: OBS-P5-003
+    canonical_name: P5-003 Stage-1 Runtime Observability
+    entity_type: OBSERVABILITY
+    phase: PH-P5
+    step: STEP-P5-003
+    task_order: TO-P5-003
+    status: VERIFIED
+    evidence:
+      queue_dispatch: ENQUEUED
+      worker_completion: ACKED
+      health_state: NORMAL
+      readback: true
+      semantic_dlq: OBSERVED
+      restart_recovery: OBSERVED
+      duplicate_event: OBSERVED
+      control_audit: AR-P5-003
