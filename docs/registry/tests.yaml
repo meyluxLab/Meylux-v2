@@ -408,3 +408,25 @@ records:
       foundation_test_count: 573
       dedicated_postgresql_test_count: 6
       concurrent_duplicate_test: VERIFIED
+
+  - stable_id: TST-P5-003
+    canonical_name: P5-003 Runtime Harness, Snapshot Transport and S-10 Tests
+    entity_type: TST
+    phase: PH-P5
+    step: STEP-P5-003
+    task_order: TO-P5-003
+    artifact_path: tests/test_p5_003_s10.py
+    traceability: TO-P5-003 / TO-P5-003-CORRECTIVE-001 / BR-P5-004 / AR-P5-003
+    status: VERIFIED
+    evidence:
+      ci_core_run_id: 36886811444
+      ci_core_run_number: 1575
+      ci_core_result: SUCCESS
+      foundation_tests: 591
+      skipped: 3
+      dedicated_postgresql_tests: 7
+      ci_docker_run_id: 36886803399
+      ci_docker_run_number: 506
+      ci_docker_result: SUCCESS
+      redis_worker_integration: PASS
+      live_control_runtime: PASS
