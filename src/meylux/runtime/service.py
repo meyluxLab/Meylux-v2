@@ -11,6 +11,7 @@ from meylux.runtime.quant_worker import QuantWorkerHandler
 from meylux.queue import AsyncWorker,QueuePolicy,RedisQueue
 from meylux.orchestration import QuantOrchestrationConfig
 from meylux.quantitative.regime_venue import RegimeConfig
+from meylux.specialists.runtime import run_specialist_worker
 
 def _required(n:str)->str:
     v=os.environ.get(n)
@@ -37,11 +38,14 @@ def _config()->QuantOrchestrationConfig:
 
 async def main():
     service=os.environ.get("MEYLUX_SERVICE","")
+    if service == "worker-specialist":
+        await run_specialist_worker()
+        return
     if service in {"collector","worker-ai"}:
         print(f"meylux-v2 foundation service started: {service}", flush=True)
         while True:
             await asyncio.sleep(3600)
-    if service not in {"api","worker-quant"}:
+    if service not in {"api","worker-quant","worker-specialist"}:
         raise SystemExit(f"unsupported Phase-4 service: {service!r}")
     pool=await asyncpg.create_pool(
         host=_required("MEYLUX_DB_HOST"),port=int(os.environ.get("MEYLUX_DB_PORT","5432")),

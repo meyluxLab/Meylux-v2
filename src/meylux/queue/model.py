@@ -105,6 +105,12 @@ class QueueOverloaded(RuntimeError):
 class DuplicateMessage(RuntimeError):
     """Raised when an idempotency key is already accepted by the queue."""
 
+class NonRetryableProcessingError(RuntimeError):
+    """Handler failure that must go directly to the DLQ without retry."""
+
+class RetryableProcessingError(RuntimeError):
+    """Handler failure explicitly classified as transient/infrastructure."""
+
 
 @dataclass(frozen=True, slots=True)
 class ProcessingOutcome:

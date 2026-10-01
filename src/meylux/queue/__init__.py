@@ -2,6 +2,8 @@
 
 from .model import (
     DuplicateMessage,
+    NonRetryableProcessingError,
+    RetryableProcessingError,
     ProcessingOutcome,
     QueueEnvelope,
     QueueOverloaded,
@@ -13,6 +15,8 @@ from .redis import AsyncWorker, RedisQueue
 __all__ = [
     "AsyncWorker",
     "DuplicateMessage",
+    "NonRetryableProcessingError",
+    "RetryableProcessingError",
     "ProcessingOutcome",
     "QueueEnvelope",
     "QueueOverloaded",
