@@ -58,7 +58,20 @@ class Conn:
     def transaction(self): return Tx()
     async def fetchrow(self,query,*args):
         self.calls.append(("fetchrow",query,args))
-        if "WHERE evidence_id=$1" in query:
+        if "INSERT INTO meylux.quality_evidence" in query:
+            if args[0] in self.rows:
+                return None
+            keys=(
+                "evidence_id","logical_fact_key","source_record_id","source_identity_hash",
+                "provider_id","adapter_id","adapter_version","canonical_instrument_id",
+                "provider_instrument_id","event_type","event_time","received_at",
+                "knowledge_time","acquisition_state","quality_state","lifecycle_state",
+                "quality_score","reason_codes","validation_result","provenance_id",
+                "lineage_parent_id","payload_fingerprint","timeframe","venue"
+            )
+            self.rows[args[0]]=dict(zip(keys,args))
+            return {"evidence_id":args[0]}
+        if "WHERE evidence_id = $1" in query:
             return self.rows.get(args[0])
         if "WHERE logical_fact_key = $1" in query:
             values=[v for v in self.rows.values() if v["logical_fact_key"]==args[0]]
