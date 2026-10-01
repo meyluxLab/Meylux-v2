@@ -62,6 +62,80 @@ class TestS10(unittest.TestCase):
         with self.assertRaises(S10SemanticError):
             snapshot_from_json(json.dumps(raw))
 
+    def test_canonical_snapshot_round_trip_preserves_identity_and_all_evidence_context(self):
+        observed = datetime(2025, 12, 31, 23, 58, tzinfo=UTC)
+        event = datetime(2025, 12, 31, 23, 59, tzinfo=UTC)
+        knowledge = T0
+        ref = EvidenceRef(
+            "transport-roundtrip", "p3-quality", "quality/transport-roundtrip",
+            "c" * 64, observed, "1.0.0", "quality", "transport-roundtrip",
+            event, knowledge, "15m", "BINANCE",
+        )
+        fact = SnapshotFact(
+            "transport-fact", FactStatus.VALID, Decimal("100"), knowledge, (ref,),
+            metadata={"event_time": event, "knowledge_time": knowledge,
+                      "timeframe": "15m", "venue": "BINANCE"},
+        )
+        source = _snapshot(fact)
+        reconstructed = snapshot_from_json(source.serialize())
+
+        self.assertEqual(reconstructed.snapshot_id, source.snapshot_id)
+        self.assertEqual(reconstructed.serialize(), source.serialize())
+        restored = reconstructed.facts[0].evidence_refs[0]
+        self.assertEqual(restored.evidence_id, ref.evidence_id)
+        self.assertEqual(restored.source_type, ref.source_type)
+        self.assertEqual(restored.source_reference, ref.source_reference)
+        self.assertEqual(restored.identity_hash, ref.identity_hash)
+        self.assertEqual(restored.content_version, ref.content_version)
+        self.assertEqual(restored.source_family, ref.source_family)
+        self.assertEqual(restored.record_id, ref.record_id)
+        self.assertEqual(restored.observed_at_utc, observed)
+        self.assertEqual(restored.event_time, event)
+        self.assertEqual(restored.knowledge_time, knowledge)
+        self.assertEqual(restored.timeframe, "15m")
+        self.assertEqual(restored.venue, "BINANCE")
+        output = S10DataQualityAnalyst(self.config).analyze(reconstructed)
+        self.assertEqual(output.snapshot_id, source.snapshot_id)
+        self.assertEqual(output.status, SpecialistStatus.SUCCESS)
+
+    def test_canonical_snapshot_round_trip_preserves_explicitly_unavailable_optional_context(self):
+        ref = EvidenceRef(
+            "transport-unavailable", "p3-quality", "quality/transport-unavailable",
+            "d" * 64, None, None, "quality", "transport-unavailable",
+            None, T0, None, None,
+        )
+        source = _snapshot(SnapshotFact(
+            "unavailable-context", FactStatus.VALID, Decimal("100"), T0, (ref,)
+        ))
+        reconstructed = snapshot_from_json(source.serialize())
+        self.assertEqual(reconstructed.snapshot_id, source.snapshot_id)
+        restored = reconstructed.facts[0].evidence_refs[0]
+        self.assertIsNone(restored.observed_at_utc)
+        self.assertIsNone(restored.event_time)
+        self.assertEqual(restored.knowledge_time, T0)
+        self.assertIsNone(restored.timeframe)
+        self.assertIsNone(restored.venue)
+        self.assertEqual(
+            S10DataQualityAnalyst(self.config).analyze(reconstructed).status,
+            SpecialistStatus.SUCCESS,
+        )
+
+    def test_supplied_evidence_ref_temporal_fields_must_be_valid_explicit_utc(self):
+        ref = _ref("malformed-temporal")
+        source = _snapshot(SnapshotFact(
+            "malformed-temporal", FactStatus.VALID, Decimal("1"), T0, (ref,)
+        ))
+        for field, value in (
+            ("observed_at_utc", "not-a-timestamp"),
+            ("event_time", "2026-01-01T00:00:00+01:00"),
+            ("knowledge_time", ""),
+        ):
+            with self.subTest(field=field, value=value):
+                raw = json.loads(source.serialize())
+                raw["facts"][0]["evidence_refs"][0][field] = value
+                with self.assertRaises(S10SemanticError):
+                    snapshot_from_json(json.dumps(raw))
+
     def test_unresolvable_evidence_is_rejected(self):
         ref = _ref("fact")
         snap = _snapshot(SnapshotFact("fact", FactStatus.VALID, Decimal("1"), T0, (ref,)))

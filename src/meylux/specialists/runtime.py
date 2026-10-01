@@ -123,7 +123,7 @@ class SpecialistWorkerHandler:
             _LOG,
             Severity.INFO,
             "specialist.completed",
-            health_state=HealthState.OK.value,
+            health_state=HealthState.NORMAL.value,
             specialist_id=SPECIALIST_ID,
             snapshot_id=snapshot.snapshot_id,
             output_identity_hash=output.identity_hash,

@@ -63,18 +63,39 @@ def _decode_normalised(value: Any) -> Any:
         return [_decode_normalised(item) for item in value]
     return value
 
+def _ref_utc(value: Any, field: str) -> datetime | None:
+    """Decode an optional EvidenceRef timestamp from canonical queue JSON.
+
+    Contract objects carry UTC datetime instances, while canonical JSON encodes
+    them as ISO-8601 strings. Accept both representations, but keep the same
+    explicit-UTC validation and reject malformed supplied values instead of
+    treating them as unavailable.
+    """
+    if value is None:
+        return None
+    if isinstance(value, datetime):
+        return _utc(value, field)
+    if not isinstance(value, str) or not value.strip():
+        raise S10SemanticError(f"{field} must be explicit UTC datetime")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise S10SemanticError(f"{field} must be valid ISO-8601 UTC text") from exc
+    return _utc(parsed, field)
+
+
 def _ref(raw: Mapping[str, Any]) -> EvidenceRef:
     return EvidenceRef(
         evidence_id=raw["evidence_id"],
         source_type=raw["source_type"],
         source_reference=raw["source_reference"],
         identity_hash=raw["identity_hash"],
-        observed_at_utc=_utc(raw["observed_at_utc"], "observed_at_utc") if raw.get("observed_at_utc") else None,
+        observed_at_utc=_ref_utc(raw.get("observed_at_utc"), "observed_at_utc"),
         content_version=raw.get("content_version"),
         source_family=raw.get("source_family"),
         record_id=raw.get("record_id"),
-        event_time=_utc(raw["event_time"], "event_time") if raw.get("event_time") else None,
-        knowledge_time=_utc(raw["knowledge_time"], "knowledge_time") if raw.get("knowledge_time") else None,
+        event_time=_ref_utc(raw.get("event_time"), "event_time"),
+        knowledge_time=_ref_utc(raw.get("knowledge_time"), "knowledge_time"),
         timeframe=raw.get("timeframe"),
         venue=raw.get("venue"),
     )
