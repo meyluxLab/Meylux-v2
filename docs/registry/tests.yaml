@@ -401,13 +401,19 @@ records:
     traceability: TO-P3-009 / BR-P3-009 / AR-P3-009
     status: VERIFIED
     evidence:
-      ci_workflow: CI Core
-      workflow_run_id: 36825603601
-      workflow_run_number: current-main-merge
-      result: SUCCESS
-      foundation_test_count: 573
-      dedicated_postgresql_test_count: 6
+      ci_core_run_id: 37037626221
+      ci_core_result: SUCCESS
+      ci_docker_foundation_run_id: 37037626180
+      ci_docker_foundation_result: SUCCESS
+      merged_main_commit: 56ba10f5c964319e966b8272c008823c3128b765
+      implementation_commit: fd20194bb9d0887b6c94cdd14671c5f42712e1d0
+      dedicated_postgresql_test_count: 7
+      dedicated_postgresql_result: SUCCESS
+      readiness_race_correction: VERIFIED
+      ordered_migrations_0001_0009: VERIFIED
+      diagnostics_and_setup_cleanup: VERIFIED
       concurrent_duplicate_test: VERIFIED
+      control_audit: AR-P3-010
 
   - stable_id: TST-P5-003
     canonical_name: P5-003 Runtime Harness, Snapshot Transport and S-10 Tests
