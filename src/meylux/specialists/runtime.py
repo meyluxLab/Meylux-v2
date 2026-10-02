@@ -1,4 +1,4 @@
-"""Stage-1 S-10 queue dispatch and worker boundary."""
+"""Stage-1 specialist queue dispatch and worker boundary."""
 from __future__ import annotations
 
 import asyncio
@@ -11,6 +11,7 @@ from meylux.queue import AsyncWorker, QueueEnvelope, QueuePolicy, RedisQueue, Re
 from meylux.specialists.config import load_specialists_config
 from meylux.specialists.persistence import SpecialistPersistence
 from meylux.specialists.s10 import S10DataQualityAnalyst, S10SemanticError, snapshot_from_json
+from meylux.specialists.group_a import ANALYSTS, GroupASemanticError
 
 _LOG = configure_logging(logger_name="meylux.specialist")
 
@@ -18,6 +19,7 @@ PAYLOAD_CONTRACT = "CTR-P5-SPECIALIST-SNAPSHOT-1.0"
 QUEUE_NAME = "specialist-stage1"
 DLQ_NAME = "specialist-stage1"
 SPECIALIST_ID = "S-10"
+SUPPORTED_SPECIALIST_IDS = frozenset({"S-10", "S-01", "S-06", "S-08"})
 
 
 def specialist_policy(config: Any) -> QueuePolicy:
@@ -26,7 +28,7 @@ def specialist_policy(config: Any) -> QueuePolicy:
         owner="ROL-V2-001",
         producer="stage1-snapshot-dispatch",
         consumer="worker-specialist",
-        purpose="execute deterministic Stage-1 S-10 against authoritative InputSnapshot",
+        purpose="execute authorized deterministic Stage-1 specialists against authoritative InputSnapshot",
         payload_contract=PAYLOAD_CONTRACT,
         dlq_name=DLQ_NAME,
         max_backlog=int(config.parameter("max_backlog")),
@@ -46,15 +48,17 @@ class SpecialistDispatcher:
         self.queue = queue
         self.config = config
 
-    async def publish(self, snapshot: Any, *, message_id: str | None = None) -> str:
+    async def publish(self, snapshot: Any, *, message_id: str | None = None, specialist_id: str = SPECIALIST_ID) -> str:
         if not hasattr(snapshot, "serialize"):
             raise ValueError("dispatcher requires an InputSnapshot")
+        if specialist_id not in SUPPORTED_SPECIALIST_IDS:
+            raise ValueError("specialist dispatcher is not authorized for this Stable ID")
         envelope = QueueEnvelope(
-            message_id=message_id or snapshot.snapshot_id,
-            idempotency_key=f"{SPECIALIST_ID}:{snapshot.snapshot_id}:{self.config.identity_hash}",
+            message_id=message_id or (snapshot.snapshot_id if specialist_id == SPECIALIST_ID else f"{specialist_id}:{snapshot.snapshot_id}"),
+            idempotency_key=f"{specialist_id}:{snapshot.snapshot_id}:{self.config.identity_hash}",
             payload_contract=PAYLOAD_CONTRACT,
             payload={
-                "specialist_id": SPECIALIST_ID,
+                "specialist_id": specialist_id,
                 "snapshot_id": snapshot.snapshot_id,
                 "snapshot_json": snapshot.serialize(),
                 "config_name": self.config.name,
@@ -64,7 +68,7 @@ class SpecialistDispatcher:
             },
         )
         entry = await self.queue.publish(envelope)
-        emit(_LOG, Severity.INFO, "specialist.dispatch", queue=QUEUE_NAME, specialist_id=SPECIALIST_ID, snapshot_id=snapshot.snapshot_id, entry_id=entry, outcome="ENQUEUED")
+        emit(_LOG, Severity.INFO, "specialist.dispatch", queue=QUEUE_NAME, specialist_id=specialist_id, snapshot_id=snapshot.snapshot_id, entry_id=entry, outcome="ENQUEUED")
         return entry
 
 
@@ -81,7 +85,8 @@ class SpecialistWorkerHandler:
         missing = [key for key in required if key not in payload]
         if missing:
             raise S10SemanticError(f"queue payload missing required fields: {missing}")
-        if payload["specialist_id"] != SPECIALIST_ID:
+        specialist_id = payload["specialist_id"]
+        if specialist_id not in SUPPORTED_SPECIALIST_IDS:
             raise S10SemanticError("worker-specialist received an unauthorized specialist")
         if (
             payload["config_name"] != self.config.name
@@ -95,17 +100,20 @@ class SpecialistWorkerHandler:
         if snapshot.snapshot_id != payload["snapshot_id"]:
             raise S10SemanticError("queue payload snapshot identity mismatch")
 
-        analyst = S10DataQualityAnalyst(
-            self.config.ref(),
-            max_findings=int(self.config.parameter("max_findings")),
-            max_evidence_refs=int(self.config.parameter("max_evidence_refs")),
-        )
         try:
-            output = analyst.analyze(snapshot)
-        except S10SemanticError:
+            if specialist_id == "S-10":
+                analyst = S10DataQualityAnalyst(
+                    self.config.ref(),
+                    max_findings=int(self.config.parameter("max_findings")),
+                    max_evidence_refs=int(self.config.parameter("max_evidence_refs")),
+                )
+                output = analyst.analyze(snapshot)
+            else:
+                output = ANALYSTS[specialist_id](snapshot, self.config)
+        except (S10SemanticError, GroupASemanticError):
             raise
         except Exception as exc:
-            raise S10SemanticError("unexpected S-10 semantic/contract failure") from exc
+            raise S10SemanticError("unexpected specialist semantic/contract failure") from exc
 
         try:
             async with self.pool.acquire() as connection:
@@ -124,7 +132,7 @@ class SpecialistWorkerHandler:
             Severity.INFO,
             "specialist.completed",
             health_state=HealthState.NORMAL.value,
-            specialist_id=SPECIALIST_ID,
+            specialist_id=specialist_id,
             snapshot_id=snapshot.snapshot_id,
             output_identity_hash=output.identity_hash,
             inserted=inserted,
