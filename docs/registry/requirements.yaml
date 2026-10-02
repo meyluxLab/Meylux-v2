@@ -40,3 +40,21 @@ records:
     traceability: TO-P5-003 / TO-P5-003-CORRECTIVE-001 / BR-P5-004 / AR-P5-003
     disposition: VERIFIED
     status: VERIFIED
+
+  - stable_id: REQ-P4-011
+    canonical_name: P4-011 Group-A PRQ-1 Delivery Requirements
+    entity_type: REQUIREMENT
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-011
+    traceability: TO-P4-011 / PRQ-1 / STEP-P5-004 / BR-P4-011 / AR-P4-018
+    disposition: VERIFIED — GROUP-A CAPABILITY ESTABLISHED
+    status: VERIFIED
+    constraints_preserved:
+      - P4 ownership of deterministic mathematical truth
+      - existing knowledge_time semantics
+      - existing append-only persistence boundary
+      - no-lookahead
+      - identity/provenance/replay
+      - no P5 recomputation
+      - STEP-P5-004 remains separately governed
