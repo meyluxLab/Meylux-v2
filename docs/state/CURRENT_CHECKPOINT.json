@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P5-003",
+  "last_approved_task_order": "TO-P4-011",
   "last_build_report": "BR-P5-004",
   "last_audit_report": "AR-P5-003",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": null,
+  "active_task_order": "TO-P4-011",
   "completed_task_order": "TO-P5-003",
   "completion_audit": "AR-P5-003",
   "verified_artifacts": [
@@ -343,13 +343,14 @@
     "Project Owner directed full technical resolution of the MEXC finality semantic inconsistency exposed by TO-P2-009; CONTROL established TO-P2-010 as a bounded post-closure corrective implementation. PH-P2 remains CLOSED / VERIFIED and STEP-P2-006 remains COMPLETE / VERIFIED.",
     "Project Owner authorized STEP-P5-003 for governed progression on 2026-09-29 after PRQ-4 resolution; CONTROL formalized and activated TO-P5-003. STEP-P5-003 is ACTIVE / AUTHORIZED; TO-P5-003 is AUTHORIZED TO EXECUTE; PRQ-1/PRQ-2/PRQ-3, TO-P2-013 and migration 0008 remain outside scope absent a demonstrated dependency.",
     "CONTROL independently verified the controlled P3-009 reattachment on authoritative main commit c0518c99f84c1a74ead21704355d1cb585498fd3; PRQ-4 is RESOLVED / VERIFIED under AR-P3-009-REATTACH-001; TO-P5-003 remains the active authorized continuation boundary.",
-    "CONTROL activated TO-P5-003-CORRECTIVE-001 under Owner directive 2026-10-01 to resolve the established authoritative evidence-context defect blocking P5 Input Snapshot construction; parent STEP-P5-003 remains ACTIVE / AUTHORIZED and its implementation/verification distinction is preserved."
+    "CONTROL activated TO-P5-003-CORRECTIVE-001 under Owner directive 2026-10-01 to resolve the established authoritative evidence-context defect blocking P5 Input Snapshot construction; parent STEP-P5-003 remains ACTIVE / AUTHORIZED and its implementation/verification distinction is preserved.",
+    "Project Owner selected PRQ-1 Route A on 2026-10-02 and authorized CONTROL to establish a bounded additive P4-owned delivery for the exact Group-A dependency of intended STEP-P5-004; CONTROL formalized and activated TO-P4-011. STEP-P5-004 remains NOT ACTIVATED until independent verification establishes its dependency boundary."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "02394ba59eece109c4bbe0ab7893d47523382fac",
-  "updated_at_utc": "2026-10-01T15:54:14Z",
+  "updated_at_utc": "2026-10-02T10:01:52Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
