@@ -48,12 +48,12 @@ The following audit is repository-derived from the Phase-3 canonical persistence
 
 | Specialist | Authoritative source | Identity / columns checked | Runtime status at Producer boundary | Knowledge-time semantics |
 |---|---|---|---|---|
-| S-01 | `meylux.calculated_indicator_vectors` | `record_id`, `symbol`, `timeframe`, `event_time`, `source_ref`, `venue_context`, `version`, `calculation_version`, `status`, `reason`, `payload_json`, `identity_hash` | UNVERIFIED_BY_PRODUCER | No dedicated `knowledge_time`; `persisted_at` is not substituted |
+| S-01 | `meylux.calculated_indicator_vectors` | `record_id`, `symbol`, `timeframe`, `event_time`, `source_ref`, `venue_context`, `version`, `calculation_version`, `status`, `reason`, `payload_json`, `identity_hash` | VERIFIED — Group-A PRQ-1 surface under TO-P4-011 / AR-P4-018 | Authoritative `knowledge_time` persisted and independently verified for new Group-A facts |
 | S-02 | `meylux.market_structure_events`, `meylux.market_structure_zones` | event/zone `record_id`, `symbol`, `timeframe`, `event_time`, status/reason, payload, identity | UNVERIFIED_BY_PRODUCER | No dedicated `knowledge_time` |
 | S-03 | canonical candle + quantitative vector facts | candle/vector identity, event time, payload | UNVERIFIED_BY_PRODUCER | No dedicated `knowledge_time` |
 | S-04 | `meylux.canonical_derivatives` | canonical identity/provenance/event fields + payload | UNVERIFIED | No dedicated `knowledge_time` |
 | S-05 | `meylux.canonical_trades` / `meylux.canonical_orderbook_depth` + P4 order-flow facts | canonical identity/provenance/event fields + payload | UNVERIFIED | No dedicated `knowledge_time` |
-| S-06 | P4 quantitative/structure persisted families | record identity, symbol/timeframe/event time/status/reason/payload | UNVERIFIED | No dedicated `knowledge_time` |
+| S-06 | P4 quantitative/structure persisted families | record identity, symbol/timeframe/event time/status/reason/payload | PARTIAL — Group-A quantitative facts VERIFIED; structure families future-owned/JIT | Group-A quantitative facts expose verified knowledge_time; structure families remain separately governed |
 | S-07 | canonical market tables with venue carried through payload/provenance context | canonical identity/event/provenance/payload | UNVERIFIED; second venue not evidenced | No dedicated `knowledge_time`; no silent venue substitution |
 | S-08 | `meylux.calculated_indicator_vectors` | vector identity, symbol/timeframe/event time/status/reason/payload | UNVERIFIED | No dedicated `knowledge_time` |
 | S-09 | all contributing authoritative source facts | source-specific record identity | UNVERIFIED | Each source must independently expose `knowledge_time`; current P4 schemas do not |
@@ -90,3 +90,19 @@ The governing persistence/data-growth doctrine requires explicit treatment of:
 P5-002 introduces none of these as a new durable high-volume persistence owner. The Snapshot remains deterministic/in-memory and FRM remains version-controlled. No runtime retention mechanism, migration, high-volume writer, archive policy, or durable Snapshot store is introduced. Any future durable Snapshot/Execution persistence must undergo a separately governed Step/change assessment using the complete §37 field set.
 
 Existing P2/P3/P4 persistence ownership remains unchanged.
+
+
+## CONTROL PRQ-1 Readiness Disposition — 2026-10-02
+
+| PRQ-1 surface | Authoritative disposition | Gate |
+|---|---|---|
+| Group A — Technical / MTF / Volatility | **ESTABLISHED / VERIFIED** — TO-P4-011 / AR-P4-018 | STEP-P5-004 |
+| Group B — Structure / Price Action / Liquidity P4 persisted events/zones | **FUTURE-OWNED / JIT**; not required by STEP-P5-004 | STEP-P5-005 |
+| Group C — Volume / Volume Profile | **FUTURE-OWNED / JIT**; not required by STEP-P5-004 | STEP-P5-006 |
+| Group D — Order Flow P4 facts | **FUTURE-OWNED / JIT** and additionally dependent on PRQ-2 | STEP-P5-007 |
+| Group D — Derivatives | **NOT A CURRENT PRQ-1 DELIVERY CLAIM**; governed by PRQ-3 and future STEP-P5-007 | STEP-P5-007 |
+| Group E — Risk/cross-venue P4 fact inputs | **FUTURE-OWNED / JIT** and additionally dependent on PRQ-2 where venue data is required | STEP-P5-008 |
+| Group F — Historical/setup P4 fact inputs | **FUTURE-OWNED / JIT** | STEP-P5-009 |
+| Group G — Contrarian source facts | **FUTURE-OWNED / JIT** | STEP-P5-010 |
+
+This disposition is complete for the current pre-STEP-P5-004 boundary. It does not claim full PRQ-1 implementation across later Groups B–G.
