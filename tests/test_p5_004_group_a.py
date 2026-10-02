@@ -44,9 +44,10 @@ def _fact(symbol, timeframe, name, value, *, source="meylux.calculated_indicator
 
 
 def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
-              ema_periods=(20, 50, 200), direction_by_tf=None, missing=(), extra=()):
+              ema_periods=(20, 50, 200), direction_by_tf=None, missing=(), extra=(), overrides=None):
     facts = list(extra)
     direction_by_tf = direction_by_tf or {}
+    overrides = overrides or {}
     for symbol in symbols:
         for timeframe in timeframes:
             base = AS_OF - {"15m": timedelta(minutes=15), "1h": timedelta(hours=1), "4h": timedelta(hours=4)}.get(timeframe, timedelta(minutes=15))
@@ -61,6 +62,9 @@ def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
             if direction_by_tf.get(timeframe) == "BEARISH":
                 values.update({"MACD": Decimal("-1"), "MACD_SIGNAL": Decimal("-0.5"),
                                "MACD_HISTOGRAM": Decimal("-0.5"), "RSI": Decimal("30")})
+            for (override_symbol, override_tf, override_name), override_value in overrides.items():
+                if (override_symbol, override_tf) == (symbol, timeframe):
+                    values[override_name] = override_value
             for period in ema_periods:
                 values[f"EMA_{period}"] = Decimal(str(100 - period / 10))
             facts.append(_fact(symbol, timeframe, "CLOSE", Decimal("100"), source="meylux.canonical_candles", event=base, knowledge=base))
@@ -187,8 +191,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
             volatility_expanding_ratio_threshold=Decimal("1.2")))
         self.assertEqual(_finding(exact, "VOLATILITY:BTCUSDT:15m:CLASSIFICATION").value["state"], "HIGH")
         self.assertEqual(_finding(exact, "VOLATILITY:BTCUSDT:15m:EXPANSION_STATE").value["state"], "EXPANDING")
-        low_ratio = _snapshot(extra=(_fact("BTCUSDT", "15m", "VOLATILITY_EXPANSION_RATIO", Decimal("0.8"),
-                                           event=AS_OF, knowledge=AS_OF, record_suffix="ratio-low"),))
+        low_ratio = _snapshot(overrides={("BTCUSDT", "15m", "VOLATILITY_EXPANSION_RATIO"): Decimal("0.8")})
         contracting = analyze_s08(low_ratio, self.config)
         self.assertEqual(_finding(contracting, "VOLATILITY:BTCUSDT:15m:EXPANSION_STATE").value["state"], "CONTRACTING")
 
