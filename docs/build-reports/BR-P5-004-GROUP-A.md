@@ -139,7 +139,10 @@ All results below are real CI observations; no test result is inferred from sour
 
 - **CI Core, run 37051899822** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37051899822), SUCCESS on implementation/unit-test head 01e67af6dff02eaa41fe0248b5ffe9e0b3fd977b. Foundation suite: 614 tests in 30.221s; dedicated P3-009 PostgreSQL suite: 7 tests in 5.749s, OK.
 - **CI Docker Foundation, run 37052524169** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37052524169), SUCCESS on exact final code/test head 21204c8bc77d3f8b0770cb95458eff3994f01c81. Foundation self-check: 612 tests in 1.402s; TO-P4-011 PostgreSQL check: 2 tests in 0.201s; P3-009 PostgreSQL evidence: 7 tests in 5.832s; Group-A Redis/worker/PostgreSQL integration: 1 test, OK. The full Docker Foundation workflow completed successfully.
-- **CI Core, run 37052524164** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37052524164), FAILURE in two unrelated foundation PostgreSQL harness tests: test_governed_grant_hardening_on_real_postgresql (P4-009) and test_real_postgresql_persistence_and_privileges (P5-001). Both failed because psql could not connect to the ephemeral container socket (No such file or directory) while applying the first migration. The Group-A tests themselves did not fail in that run. Core had passed on the immediately preceding head with the same specialist and unit-test implementation; this latest failure is retained, not rewritten as a pass.
+- **CI Core, run 37052524164** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37052524164), FAILURE in two unrelated foundation PostgreSQL harness tests: test_governed_grant_hardening_on_real_postgresql (P4-009) and test_real_postgresql_persistence_and_privileges (P5-001). Both failed while applying their first migration because the ephemeral PostgreSQL server was shutting down or its socket was unavailable. The Group-A tests themselves did not fail.
+- **Repeated CI Core, run 37052954717** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37052954717), on report-only head 579b5acf55a49ce887cdc4032755aa6cb284b935, reproduced the same two out-of-scope PostgreSQL startup failures; all 614 tests ran, with failures confined to those two tests. This is retained as a repeated environment/harness failure, not rewritten as a pass.
+- **Docker Foundation, run 37052954684** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37052954684), SUCCESS on that same report-only head; the complete Docker Foundation workflow passed.
+Core had passed on implementation/unit-test head 01e67af6dff02eaa41fe0248b5ffe9e0b3fd977b with the same specialist and unit-test implementation.
 - Earlier correction cycles also included failed Group-A unit assertions, which were corrected before the successful runs above. The failed histories are preserved in GitHub Actions.
 
 ### 9.2 Reproducible CI resource baseline
@@ -201,7 +204,7 @@ The generic worker's startup loop does not call the available stale-claim recove
 | Failure isolation | unsupported Stable ID rejected; existing queue foundation retry/DLQ tests | Partial; deployed worker failure/restart boundary remains CONTROL evidence |
 | Restart/pending-work | generic recover_stale exists but worker startup does not invoke it | Open; escalated in §10E |
 | Real Redis → worker → PostgreSQL path | Docker Foundation Group-A integration test | Tested with controlled Snapshot fixture; not proof of live P4 source resolution |
-| CI/regression | Core success run 37051899822; Docker full success 37052524169; latest Core failure 37052524164 retained | Core latest-run flake remains visible |
+| CI/regression | Core success run 37051899822; Docker full successes 37052524169 and 37052954684; repeated Core failures 37052524164 and 37052954717 retained | Core latest-run flake remains visible |
 | Performance/resource baseline | run 37052518932, metrics in §9.2 | CI baseline measured; deployed runtime baseline remains CONTROL-owned |
 | P4 ownership/G-4/frozen architecture | no P4 math/migration or architecture/closure files changed | Scope preserved; source provenance dependency escalated |
 
