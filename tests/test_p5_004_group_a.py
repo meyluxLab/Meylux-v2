@@ -9,6 +9,7 @@ from pathlib import Path
 
 from contracts.specialist import EvidenceRef, FactStatus, InputSnapshot, SnapshotFact
 from meylux.specialists.config import SpecialistConfig, load_specialists_config
+from meylux.specialists.snapshot import InputSnapshotBuilder, SnapshotRecord
 from meylux.specialists.group_a import analyze_s01, analyze_s06, analyze_s08
 
 UTC = timezone.utc
@@ -40,7 +41,7 @@ def _fact(symbol, timeframe, name, value, *, source="meylux.calculated_indicator
         "version": "1.0.0", "event_time": event, "knowledge_time": knowledge,
     }
     reason = None if status is FactStatus.VALID else "explicit test state"
-    return SnapshotFact(record_id, status, payload, knowledge, (ref,), reason, metadata)
+    return SnapshotRecord(record_id, status, payload, event, knowledge, (ref,), reason, metadata)
 
 
 def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
@@ -72,8 +73,7 @@ def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
                 if (symbol, timeframe, name) in missing:
                     continue
                 facts.append(_fact(symbol, timeframe, name, value, event=base, knowledge=base))
-    return InputSnapshot.build(as_of=AS_OF, version="1.2.0", facts=tuple(facts),
-                               provenance_refs=tuple(ref for fact in facts for ref in fact.evidence_refs))
+    return InputSnapshotBuilder().build(as_of=AS_OF, version="1.2.0", records=tuple(facts))
 
 
 def _finding(output, code):

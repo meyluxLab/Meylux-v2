@@ -13,7 +13,8 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from pathlib import Path
 
-from contracts.specialist import EvidenceRef, FactStatus, InputSnapshot, SnapshotFact
+from contracts.specialist import EvidenceRef, FactStatus
+from meylux.specialists.snapshot import InputSnapshotBuilder, SnapshotRecord
 from meylux.queue import QueueEnvelope
 from meylux.queue.redis import AsyncWorker, RedisQueue
 from meylux.specialists.config import load_specialists_config
@@ -57,9 +58,8 @@ def _integration_snapshot(suffix: str) -> InputSnapshot:
             "source_table": table, "record_id": record_id, "identity_hash": identity,
             "version": "1.0.0", "event_time": event, "knowledge_time": event,
         }
-        facts.append(SnapshotFact(record_id, FactStatus.VALID, value, event, (ref,), None, metadata))
-    return InputSnapshot.build(as_of=as_of, version="1.2.0", facts=tuple(facts),
-        provenance_refs=tuple(ref for fact in facts for ref in fact.evidence_refs))
+        facts.append(SnapshotRecord(record_id, FactStatus.VALID, value, event, event, (ref,), None, metadata))
+    return InputSnapshotBuilder().build(as_of=as_of, version="1.2.0", records=tuple(facts))
 
 
 def _percentile(values, percentile):

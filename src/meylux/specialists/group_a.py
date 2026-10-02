@@ -109,6 +109,10 @@ def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[s
         matched.append((fact, event_time))
     if not matched:
         return Metric("MISSING", None, (), "required authoritative Group-A fact is missing")
+    post_boundary = tuple(fact for fact, event_time in matched if event_time > snapshot.as_of)
+    if post_boundary:
+        return Metric("POST_BOUNDARY", None, _refs(post_boundary),
+            "authoritative event_time is after snapshot.as_of", post_boundary)
     latest_time = max(event_time for _, event_time in matched)
     latest = tuple(fact for fact, event_time in matched if event_time == latest_time)
     if len(latest) > 1:
@@ -161,6 +165,10 @@ def _price(snapshot: InputSnapshot, symbol: str, timeframe: str, *, boundary=Non
         matched.append((fact, event_time))
     if not matched:
         return Metric("MISSING", None, (), "authoritative closed-candle close is missing")
+    post_boundary = tuple(fact for fact, event_time in matched if event_time > snapshot.as_of)
+    if post_boundary:
+        return Metric("POST_BOUNDARY", None, _refs(post_boundary),
+            "closed-candle event_time is after snapshot.as_of", post_boundary)
     latest_time = max(event_time for _, event_time in matched)
     latest = tuple(fact for fact, event_time in matched if event_time == latest_time)
     if len(latest) > 1:
@@ -198,6 +206,8 @@ def _metric_state_status(metric: Metric) -> SpecialistStatus:
         return SpecialistStatus.SUCCESS
     if metric.state in {"INSUFFICIENT_DATA", "MISSING"}:
         return SpecialistStatus.INSUFFICIENT_DATA
+    if metric.state in {"POST_BOUNDARY", "CONTRADICTORY"}:
+        return SpecialistStatus.PARTIAL
     if metric.state == "UNAVAILABLE":
         return SpecialistStatus.UNAVAILABLE_INPUT
     return SpecialistStatus.PARTIAL
@@ -274,7 +284,11 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                     emas.append((period, metric.value))
                 else:
                     missing_periods.append({"period": period, "state": metric.state, "reason": metric.reason})
-            if not _same_event_time(*ema_metrics):
+            if any(metric.state == "POST_BOUNDARY" for metric in ema_metrics):
+                alignment_value = {"state": "POST_BOUNDARY", "available_periods": [p for p, _ in emas],
+                    "missing_periods": missing_periods}
+                alignment_status = SpecialistStatus.PARTIAL
+            elif not _same_event_time(*ema_metrics):
                 alignment_value = {"state": "CONTRADICTORY_CONTEXT", "available_periods": [p for p, _ in emas],
                     "missing_periods": missing_periods, "reason": "EMA facts refer to different event times"}
                 alignment_status = SpecialistStatus.PARTIAL
@@ -295,8 +309,10 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
             primary_ema = _metric(snapshot, symbol, timeframe, _ema_names(primary_period, primary_period))
             price_refs = tuple(sorted({r.evidence_id:r for r in (*price.refs, *primary_ema.refs)}.values(), key=lambda r:r.evidence_id))
             if price.state != "VALID" or primary_ema.state != "VALID":
-                value = {"state": "INSUFFICIENT_DATA", "price_state": price.state, "ema_state": primary_ema.state}
-                fstatus, reason = SpecialistStatus.INSUFFICIENT_DATA, "price and configured primary EMA are both required"
+                state = "POST_BOUNDARY" if "POST_BOUNDARY" in {price.state, primary_ema.state} else "INSUFFICIENT_DATA"
+                value = {"state": state, "price_state": price.state, "ema_state": primary_ema.state}
+                fstatus = SpecialistStatus.PARTIAL if state == "POST_BOUNDARY" else SpecialistStatus.INSUFFICIENT_DATA
+                reason = "price and configured primary EMA are both required and must be inside the snapshot boundary"
             elif not _same_event_time(price, primary_ema):
                 value = {"state": "CONTRADICTORY_CONTEXT", "price_event_time": price.facts[0].metadata.get("event_time"),
                     "ema_event_time": primary_ema.facts[0].metadata.get("event_time")}
@@ -310,8 +326,10 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
             macd, signal, histogram = (_metric(snapshot, symbol, timeframe, (name,)) for name in ("MACD", "MACD_SIGNAL", "MACD_HISTOGRAM"))
             macd_refs = _refs(tuple(f for metric in (macd, signal, histogram) for f in metric.facts))
             if any(metric.state != "VALID" for metric in (macd, signal, histogram)):
-                value = {"state": "INSUFFICIENT_DATA", "macd": macd.state, "signal": signal.state, "histogram": histogram.state}
-                fstatus, reason = SpecialistStatus.INSUFFICIENT_DATA, "MACD, signal and histogram authoritative facts are all required"
+                state = "POST_BOUNDARY" if any(metric.state == "POST_BOUNDARY" for metric in (macd, signal, histogram)) else "INSUFFICIENT_DATA"
+                value = {"state": state, "macd": macd.state, "signal": signal.state, "histogram": histogram.state}
+                fstatus = SpecialistStatus.PARTIAL if state == "POST_BOUNDARY" else SpecialistStatus.INSUFFICIENT_DATA
+                reason = "MACD, signal and histogram authoritative facts are all required and must be inside the snapshot boundary"
             elif not _same_event_time(macd, signal, histogram):
                 value, fstatus, reason = {"state": "CONTRADICTORY_CONTEXT"}, SpecialistStatus.PARTIAL, "MACD components refer to different event times"
             else:
@@ -345,8 +363,11 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                 ("BOLLINGER_UPPER", "BOLLINGER_LOWER", "BOLLINGER_MIDDLE"))
             band_refs = _refs(tuple(f for metric in (price, upper, lower, middle) for f in metric.facts))
             if any(metric.state != "VALID" for metric in (price, upper, lower, middle)):
-                value = {"state": "INSUFFICIENT_DATA", "price": price.state, "upper": upper.state, "lower": lower.state, "middle": middle.state}
-                fstatus, reason = SpecialistStatus.INSUFFICIENT_DATA, "price and all three authoritative Bollinger bands are required"
+                post = any(metric.state == "POST_BOUNDARY" for metric in (price, upper, lower, middle))
+                value = {"state": "POST_BOUNDARY" if post else "INSUFFICIENT_DATA",
+                    "price": price.state, "upper": upper.state, "lower": lower.state, "middle": middle.state}
+                fstatus = SpecialistStatus.PARTIAL if post else SpecialistStatus.INSUFFICIENT_DATA
+                reason = "price and all three authoritative Bollinger bands are required inside the snapshot boundary"
             elif not _same_event_time(price, upper, lower, middle):
                 value, fstatus, reason = {"state": "CONTRADICTORY_CONTEXT"}, SpecialistStatus.PARTIAL, "price and Bollinger bands refer to different event times"
             elif upper.value < lower.value or middle.value < lower.value or middle.value > upper.value:
@@ -375,9 +396,10 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
     return _base(snapshot, config, "S-01", findings)
 
 
-def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_period: int, primary_boundary):
-    if primary_boundary is None:
-        return "INSUFFICIENT_DATA", (), "primary timeframe has no authoritative closed-candle boundary"
+def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_period: int,
+               primary_event_boundary, primary_knowledge_boundary):
+    if primary_event_boundary is None or primary_knowledge_boundary is None:
+        return "INSUFFICIENT_DATA", (), "primary timeframe has no authoritative closed-candle event/knowledge boundary"
     future = []
     for fact in snapshot.facts:
         metadata = fact.metadata or {}
@@ -387,14 +409,14 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_per
             raise GroupASemanticError("authoritative timeframe fact lacks symbol/timeframe context")
         if _symbol(metadata.get("symbol")) != symbol or _tf(metadata.get("timeframe")) != timeframe:
             continue
-        if fact.knowledge_time > primary_boundary:
+        if fact.knowledge_time > primary_knowledge_boundary or fact.event_time > primary_event_boundary:
             future.append(fact)
     if future:
-        return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe knowledge_time exceeds the primary timeframe boundary"
-    ema = _metric(snapshot, symbol, timeframe, _ema_names(primary_period, primary_period), boundary=primary_boundary)
-    macd = _metric(snapshot, symbol, timeframe, ("MACD",), boundary=primary_boundary)
-    signal = _metric(snapshot, symbol, timeframe, ("MACD_SIGNAL",), boundary=primary_boundary)
-    rsi = _metric(snapshot, symbol, timeframe, ("RSI",), boundary=primary_boundary)
+        return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe event_time or knowledge_time exceeds the corresponding primary boundary"
+    ema = _metric(snapshot, symbol, timeframe, _ema_names(primary_period, primary_period), boundary=primary_knowledge_boundary)
+    macd = _metric(snapshot, symbol, timeframe, ("MACD",), boundary=primary_knowledge_boundary)
+    signal = _metric(snapshot, symbol, timeframe, ("MACD_SIGNAL",), boundary=primary_knowledge_boundary)
+    rsi = _metric(snapshot, symbol, timeframe, ("RSI",), boundary=primary_knowledge_boundary)
     refs = _refs(tuple(f for metric in (ema, macd, signal, rsi) for f in metric.facts))
     if any(metric.state != "VALID" for metric in (ema, macd, signal, rsi)):
         return "INSUFFICIENT_DATA", refs, "EMA/MACD/RSI facts are required to interpret this timeframe"
@@ -419,10 +441,12 @@ def analyze_s06(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
     findings = []
     for symbol in symbols:
         primary_price = _price(snapshot, symbol, primary_timeframe)
-        primary_boundary = primary_price.facts[0].knowledge_time if primary_price.state == "VALID" else None
+        primary_event_boundary = primary_price.facts[0].metadata.get("event_time") if primary_price.state == "VALID" else None
+        primary_knowledge_boundary = primary_price.facts[0].knowledge_time if primary_price.state == "VALID" else None
         directions = []
         for timeframe in timeframes:
-            state, refs, reason = _direction(snapshot, symbol, timeframe, primary_period, primary_boundary)
+            state, refs, reason = _direction(snapshot, symbol, timeframe, primary_period,
+                primary_event_boundary, primary_knowledge_boundary)
             directions.append((timeframe, state))
             status = SpecialistStatus.SUCCESS if state in {"BULLISH", "BEARISH", "NEUTRAL"} else \
                 SpecialistStatus.PARTIAL if state in {"POST_BOUNDARY_EVIDENCE", "CONTRADICTORY_CONTEXT"} else SpecialistStatus.INSUFFICIENT_DATA
@@ -448,7 +472,8 @@ def analyze_s06(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
         if primary_price.refs:
             overall_refs = tuple(sorted({r.evidence_id:r for r in (*overall_refs, *primary_price.refs)}.values(), key=lambda r:r.evidence_id))
         findings.append(_finding(f"MTF:{symbol}:OVERALL", {"outcome": outcome, "timeframes": dict(directions),
-            "primary_timeframe": primary_timeframe, "primary_boundary": primary_boundary,
+            "primary_timeframe": primary_timeframe, "primary_event_boundary": primary_event_boundary,
+            "primary_knowledge_boundary": primary_knowledge_boundary,
             "missing_timeframes": missing, "invalid_timeframes": invalid_timeframes}, reason, overall_refs, status))
     return _base(snapshot, config, "S-06", findings)
 
@@ -476,8 +501,10 @@ def analyze_s08(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
             required = (("ATR", atr), ("ATR_PERCENTILE", percentile), ("HISTORICAL_VOLATILITY", hv), ("BOLLINGER_BANDWIDTH", bandwidth))
             if any(metric.state != "VALID" for _, metric in required):
                 missing = {name: metric.state for name, metric in required if metric.state != "VALID"}
-                class_value = {"state": "INSUFFICIENT_DATA", "missing": missing}
-                class_status, class_reason = SpecialistStatus.INSUFFICIENT_DATA, "ATR, ATR percentile, historical volatility and Bollinger bandwidth are required"
+                future = any(metric.state == "POST_BOUNDARY" for _, metric in required)
+                class_value = {"state": "POST_BOUNDARY" if future else "INSUFFICIENT_DATA", "missing": missing}
+                class_status = SpecialistStatus.PARTIAL if future else SpecialistStatus.INSUFFICIENT_DATA
+                class_reason = "volatility facts must be present, valid and inside the snapshot boundary"
             elif not _same_event_time(atr, percentile, hv, bandwidth):
                 class_value = {"state": "CONTRADICTORY_CONTEXT", "reason": "volatility facts refer to different event times"}
                 class_status, class_reason = SpecialistStatus.PARTIAL, "volatility classification cannot combine mismatched event times"
