@@ -2861,3 +2861,63 @@ entries:
     exclusions: "No P5 implementation; no STEP-P5-004 activation; no P4 engine redesign; no G-4 reopening; no PRQ-2/3/4; no MEXC/Futures/Forex; no trading/capital/execution/custody."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN. PH-P4, STEP-P4-006 and G-4 remain historical closure states."
     runtime_effect: "Producer has no VPS mutation authority. Any required runtime verification is CONTROL-owned and SentinelX-only within the Task Order boundary."
+
+  - ledger_id: CL-P4-011-CLOSURE-20261002
+    recorded_at: "2026-10-02"
+    authority: ROL-V2-001 / CONTROL
+    action: "CONTROL FINAL INDEPENDENT VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P4-011"
+    basis: "AR-P4-018 + BR-P4-011 + TO-P4-011 + PR #57 + CI Core 37015640934 + Docker Foundation 37015633194 / 37015641046 + CONTROL isolated PostgreSQL execution + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P4-011
+      - BR-P4-011
+      - TST-P4-011
+      - DB-P4-011
+      - REQ-P4-011
+      - CFG-P4-011
+      - RUN-P4-011
+      - AR-P4-018
+      - PRQ-1
+      - STEP-P5-004
+      - STEP-P5-003
+      - PH-P5
+      - PH-P4
+      - STEP-P4-006
+      - G-4
+    predecessor_state: "TO-P4-011 AUTHORIZED TO EXECUTE; active_task_order TO-P4-011; STEP-P5-004 NOT ACTIVATED."
+    resulting_state: "TO-P4-011 VERIFIED / COMPLETE; active_task_order null; completed_task_order TO-P4-011; STEP-P5-004 remains NOT ACTIVATED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-003 remains COMPLETE / VERIFIED; PH-P4 / STEP-P4-006 / G-4 historical closure preserved."
+    dependency_disposition: "PRQ-1 GROUP-A CAPABILITY ESTABLISHED / VERIFIED; later PRQ-1 groups remain separately governed."
+    implementation_baseline: "0cdffeadd7c4632c4c57731cb87dd4c687296df4"
+    merge_commit: "4fb62d907a777b7a43eb39a79c62fa6532616abc"
+    control_independent_execution:
+      isolated_postgresql_migrations: "0001..0009 PASS"
+      dedicated_tests: "2/2 PASS"
+      test_runtime: "0.811s"
+      governed_production_database_mutation: false
+      temporary_environment_cleanup: VERIFIED
+    ci:
+      core_run_id: 37015640934
+      core_result: SUCCESS
+      docker_run_id: 37015633194
+      docker_t0411_step_result: SUCCESS
+      docker_retry_run_id: 37015641046
+      docker_retry_t0411_step_result: SUCCESS
+      overall_docker_result: "FAILURE — separate P3-009 PostgreSQL evidence failure"
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; PH-P4, STEP-P4-006 and G-4 remain unchanged."
+    runtime_effect: "No governed application deployment/restart/migration or production database mutation by CONTROL; temporary isolated verification environment only."
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      database_registry: UPDATED
+      requirements_registry: UPDATED
+      configuration_registry: UPDATED
+      runtime_registry: UPDATED
+      security_registry: CHECKED — no mutation required
+      contracts_registry: CHECKED — no mutation required
+      performance_registry: CHECKED — no mutation required
+      observability_registry: CHECKED — no mutation required
+      phase_registry: CHECKED — historical PH-P4 / STEP-P4-006 lifecycle unchanged; PH-P5 / STEP-P5-003 lifecycle preserved; STEP-P5-004 not activated
+      readme: UPDATED
+      standalone_status_documents: CHECKED
+      open_questions: UPDATED — Group-A PRQ-1 capability established; broader PRQ-1 remains separately governed
+      supplemental_staging_registry: CHECKED
+      machine_readback: COMPLETED
