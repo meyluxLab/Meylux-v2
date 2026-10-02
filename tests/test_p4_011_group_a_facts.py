@@ -165,6 +165,8 @@ class TestP4011GroupAFacts(unittest.TestCase):
         self.assertTrue(all(args[3] == result.higher_timeframe_facts["1h"].knowledge_time for args in higher_rows))
         self.assertTrue(all("knowledge_time" not in query.lower() for query, _ in indicator_rows))
         self.assertEqual(len({args[-1] for _, args in indicator_rows}), 28)
+        self.assertTrue(all(args[4] == "source:15m:39" for args in primary_rows))
+        self.assertTrue(all(args[4] == "source:1h:9" for args in higher_rows))
 
     def test_existing_readback_path_filters_independently_by_timeframe(self):
         db = _DB()
@@ -176,18 +178,22 @@ class TestP4011GroupAFacts(unittest.TestCase):
 
     def test_persistence_rejects_a_future_timeframe_fact_even_if_constructed_directly(self):
         from dataclasses import replace
+        from meylux.orchestration.engine import TimeframeQuantitativeFacts
 
         result = QuantitativeOrchestrator().process(bars(20), config())
-        future_candles = tuple(
-            candle(i, "1h", interval_minutes=60) for i in range(20)
+        future_time = result.knowledge_time + timedelta(hours=1)
+        future_facts = TimeframeQuantitativeFacts(
+            symbol=result.symbol,
+            timeframe="1h",
+            event_time=future_time,
+            knowledge_time=future_time,
+            configuration_version=result.configuration_version,
+            indicators=result.indicators,
+            source_provenance=result.source_provenance,
         )
-        # A normal orchestrator call rejects this series. This assertion separately
-        # exercises the persistence guard by replacing the result's MTF facts.
-        with self.assertRaises(ValueError):
-            QuantitativeOrchestrator().process(
-                bars(20), config(), higher_timeframes={"1h": future_candles}
-            )
-        self.assertEqual(replace(result, higher_timeframe_facts={}), result)
+        malformed = replace(result, higher_timeframe_facts={"1h": future_facts})
+        with self.assertRaisesRegex(ValueError, "exceeds primary knowledge boundary"):
+            asyncio.run(QuantitativePersistence(_DB()).persist_orchestration(malformed))
 
 
 if __name__ == "__main__":
