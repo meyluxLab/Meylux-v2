@@ -59,3 +59,23 @@ records:
       secret_values_recorded: false
       control_audit: AR-P5-003
     status: VERIFIED
+
+  - stable_id: CFG-P4-011
+    canonical_name: P4-011 Quantitative Orchestration Configuration Evidence
+    entity_type: CONFIGURATION
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-011
+    evidence:
+      implementation_commit: 0cdffeadd7c4632c4c57731cb87dd4c687296df4
+      deterministic_indicator_defaults: VERIFIED
+      macd_12_26_9: VERIFIED
+      bollinger_20_2: VERIFIED
+      rsi_14: VERIFIED
+      atr_14: VERIFIED
+      adx_14: VERIFIED
+      historical_volatility_existing_definition: VERIFIED
+      atr_percentile_existing_definition: VERIFIED
+      volatility_expansion_existing_definition: VERIFIED
+      control_audit: AR-P4-018
+    status: VERIFIED
