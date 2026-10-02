@@ -119,7 +119,7 @@ def align_higher_timeframe(primary: CanonicalCandle, higher: Iterable[CanonicalC
         previous = candle
         last = candle
     timeframe = expected_timeframe or primary.timeframe
-    return MTFAlignment(primary.close_time, timeframe, last, None if last is None else last.close_time)
+    return MTFAlignment(primary.close_time, primary.timeframe, last, None if last is None else last.close_time)
 
 
 @dataclass(frozen=True, slots=True)
