@@ -157,8 +157,8 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         db = _DB()
         result = QuantitativeOrchestrator().process(bars(), config())
         inserted = asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
-        self.assertEqual(inserted, 5)
-        self.assertEqual(len(db.sql), 5)
+        self.assertEqual(inserted, 16)
+        self.assertEqual(len(db.sql), 16)
         indicator_and_regime = [
             (query, args) for query, args in db.sql
             if "calculated_indicator_vectors" in query or "market_regime_states" in query
@@ -167,7 +167,7 @@ class TestP4010KnowledgeTime(unittest.TestCase):
             (query, args) for query, args in db.sql
             if "market_structure_events" in query
         ]
-        self.assertEqual(len(indicator_and_regime), 4)
+        self.assertEqual(len(indicator_and_regime), 15)
         self.assertEqual(len(structure), 1)
         for query, args in indicator_and_regime:
             self.assertNotIn("persisted_at", query.lower())
