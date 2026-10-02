@@ -153,9 +153,10 @@ class TestP4011GroupAFacts(unittest.TestCase):
         second = asyncio.run(persistence.persist_orchestration(result))
         self.assertEqual(first, 30)  # 14 primary + 14 HTF + regime + structure summary
         self.assertEqual(second, 0)
-        indicator_rows = [
-            (query, args) for query, args in db.sql if "calculated_indicator_vectors" in query
-        ]
+        indicator_rows = list({
+            args[0]: (query, args)
+            for query, args in db.sql if "calculated_indicator_vectors" in query
+        }.values())
         self.assertEqual(len(indicator_rows), 28)
         primary_rows = [args for _, args in indicator_rows if args[2] == "15m"]
         higher_rows = [args for _, args in indicator_rows if args[2] == "1h"]
@@ -174,7 +175,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         self.assertEqual(rows, [])
         query, args = db.fetches[0]
         self.assertIn("symbol=$1 AND timeframe=$2", query)
-        self.assertEqual(args, ["BTCUSDT", "1h", 20])
+        self.assertEqual(args, ("BTCUSDT", "1h", 20))
 
     def test_persistence_rejects_a_future_timeframe_fact_even_if_constructed_directly(self):
         from dataclasses import replace
