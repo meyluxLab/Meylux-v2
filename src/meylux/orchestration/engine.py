@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation
 from typing import Iterable, Mapping
 
 from contracts.canonical.candle import CanonicalCandle
@@ -74,10 +75,15 @@ class TimeframeQuantitativeFacts:
             raise ValueError("timeframe fact knowledge_time must equal its authoritative closed-candle event_time")
         if not isinstance(self.configuration_version, str) or not self.configuration_version:
             raise ValueError("configuration_version must be non-empty")
-        if not isinstance(self.indicators, Mapping):
-            raise TypeError("indicators must be a mapping")
+        if not isinstance(self.indicators, Mapping) or not self.indicators:
+            raise TypeError("indicators must be a non-empty mapping")
+        if any(not isinstance(name, str) or not name or not isinstance(value, CalculationResult)
+               for name, value in self.indicators.items()):
+            raise TypeError("indicators must map non-empty names to CalculationResult values")
         if not isinstance(self.source_provenance, tuple) or not self.source_provenance:
             raise ValueError("source_provenance must be a non-empty tuple")
+        if any(not isinstance(value, str) or not value for value in self.source_provenance):
+            raise ValueError("source_provenance entries must be non-empty strings")
 
 
 def align_higher_timeframe(primary: CanonicalCandle, higher: Iterable[CanonicalCandle]) -> MTFAlignment:
@@ -154,6 +160,15 @@ class QuantOrchestrationConfig:
             raise ValueError("bollinger_deviations must be a non-empty decimal string")
         if not isinstance(self.historical_volatility_periods_per_year, str) or not self.historical_volatility_periods_per_year:
             raise ValueError("historical_volatility_periods_per_year must be a non-empty decimal string")
+        try:
+            deviations = Decimal(self.bollinger_deviations)
+            annual_periods = Decimal(self.historical_volatility_periods_per_year)
+        except InvalidOperation as exc:
+            raise ValueError("decimal configuration values must be valid decimals") from exc
+        if not deviations.is_finite() or deviations < 0:
+            raise ValueError("bollinger_deviations must be finite and non-negative")
+        if not annual_periods.is_finite() or annual_periods <= 0:
+            raise ValueError("historical_volatility_periods_per_year must be finite and positive")
         if not isinstance(self.version, str) or not self.version:
             raise ValueError("version must be non-empty")
 
