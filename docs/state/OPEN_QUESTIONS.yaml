@@ -99,8 +99,8 @@ items:
     affected_phase: PH-P5
     affected_step: STEP-P5-002
     authority: CONTROL / REVIEWER
-    current_disposition: "TO-P4-010 independently established the P4 knowledge_time persistence boundary for the proven Class-B indicator/regime families, but the Group-A PRQ-1 requirement remains unestablished because the required indicator/volatility fact surface is not yet operationally persisted per eligible timeframe."
-    trigger: "TO-P4-011 — bounded additive P4 delivery for STEP-P5-004 Group A. Reclassify only after CONTROL independently verifies the resulting persisted Group-A fact surface and evidence boundary."
+    current_disposition: "Group-A PRQ-1 capability is now ESTABLISHED / VERIFIED under TO-P4-011 and AR-P4-018: the required deterministic indicator/volatility fact surface is operationally persisted per eligible timeframe through the governed P4 Worker → Orchestrator → Persistence → PostgreSQL boundary. Later PRQ-1 surfaces remain separately governed."
+    trigger: "For later PRQ-1 groups, reopen only through their owning governed boundary after concrete dependency evidence is established."
     constraints:
       - "Do not infer AVAILABLE_PERSISTED from source-code capability or table existence alone."
       - "Do not implement PRQ-1 inside P5-002."
