@@ -69,6 +69,10 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 ready=cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
                                 "psql","-X","-At","-U",ADMIN,"-d",DB,"-c","SELECT 1;"],check=False)
                 if ready.returncode==0 and ready.stdout.strip()=="1":
+                    print(
+                        "P3-009 readiness: Timescale entrypoint init-complete marker observed; final PostgreSQL SELECT 1 passed.",
+                        flush=True,
+                    )
                     break
             time.sleep(1)
         else:
@@ -170,6 +174,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         try:
             cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
                       "psql","-X","-v","ON_ERROR_STOP=1","-U",ADMIN,"-d",DB,"-f",f"/workspace/{path}"])
+            print(f"P3-009 migration applied successfully: {path}",flush=True)
         except subprocess.CalledProcessError:
             print(f"P3-009 migration failed: {path}",file=sys.stderr)
             raise
