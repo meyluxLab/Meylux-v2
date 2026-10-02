@@ -156,7 +156,6 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                       "psql","-X","-v","ON_ERROR_STOP=1","-U",ADMIN,"-d",DB,"-f",f"/workspace/{path}"])
         except subprocess.CalledProcessError:
             print(f"P3-009 migration failed: {path}",file=sys.stderr)
-            cls._emit_container_diagnostics(f"migration failed: {path}")
             raise
 
     @classmethod
