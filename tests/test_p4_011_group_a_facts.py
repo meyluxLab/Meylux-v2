@@ -9,6 +9,10 @@ from contracts.canonical.candle import CanonicalCandle
 from contracts.quantitative.base import CalculationStatus
 from meylux.orchestration import QuantOrchestrationConfig, QuantitativeOrchestrator
 from meylux.persistence.quantitative import QuantitativePersistence, _json
+from meylux.quantitative.indicators import (
+    adx, atr, atr_percentile, bollinger_bandwidth, bollinger_bands,
+    ema_candles, historical_volatility, macd, rsi, volatility_expansion_ratio,
+)
 from meylux.quantitative.regime_venue import RegimeConfig
 
 UTC = timezone.utc
@@ -83,8 +87,36 @@ class _DB:
 
 class TestP4011GroupAFacts(unittest.TestCase):
     def test_complete_group_a_fact_vocabulary_uses_existing_deterministic_engine(self):
-        result = QuantitativeOrchestrator().process(bars(), config())
+        xs = bars()
+        cfg = config()
+        result = QuantitativeOrchestrator().process(xs, cfg)
         self.assertEqual(set(result.indicators), EXPECTED_FACTS)
+        expected_macd = macd(xs, 12, 26, 9)[-1]
+        expected_bands = bollinger_bands(xs, 20, "2")[-1]
+        expected = {
+            "EMA": ema_candles(xs, 20)[-1],
+            "RSI": rsi(xs, 14)[-1],
+            "MACD": expected_macd.macd,
+            "MACD_SIGNAL": expected_macd.signal,
+            "MACD_HISTOGRAM": expected_macd.histogram,
+            "ATR": atr(xs, 14)[-1],
+            "ADX": adx(xs, 14)[-1],
+            "BOLLINGER_MIDDLE": expected_bands.middle,
+            "BOLLINGER_UPPER": expected_bands.upper,
+            "BOLLINGER_LOWER": expected_bands.lower,
+            "HISTORICAL_VOLATILITY": historical_volatility(xs, 20, "365")[-1],
+            "ATR_PERCENTILE": atr_percentile(xs, 14, 100)[-1],
+            "VOLATILITY_EXPANSION_RATIO": volatility_expansion_ratio(xs, 14, 20)[-1],
+        }
+        for name, calculation in expected.items():
+            self.assertEqual(result.indicators[name], calculation, name)
+        bandwidth = bollinger_bandwidth(xs, 20, "2")[-1]
+        self.assertEqual(
+            (result.indicators["BOLLINGER_BANDWIDTH"].value,
+             result.indicators["BOLLINGER_BANDWIDTH"].status,
+             result.indicators["BOLLINGER_BANDWIDTH"].reason),
+            (bandwidth.value, bandwidth.status, bandwidth.reason),
+        )
         self.assertEqual(result.knowledge_time, result.as_of)
         for name, calculation in result.indicators.items():
             self.assertIsNotNone(calculation.context, name)
