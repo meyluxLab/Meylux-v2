@@ -1591,5 +1591,21 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P3-010.md
     traceability: TO-P3-009 / TO-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001 / PRQ-4 / PH-P5 / STEP-P5-004 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+    completion_audit: AR-P3-010
     lifecycle_context: POST-CLOSURE CORRECTIVE EVIDENCE-HARNESS
+
+
+  - stable_id: BR-P3-010
+    canonical_name: Build Report — P3-009 Docker PostgreSQL Evidence Harness Stabilization
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P3-010.md
+    traceability: TO-P3-010 / TO-P3-009 / PR #58 / AR-P3-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+
+  - stable_id: AR-P3-010
+    canonical_name: CONTROL Final Independent Audit — TO-P3-010
+    entity_type: AR
+    artifact_path: docs/audits/AR-P3-010.md
+    traceability: TO-P3-010 / BR-P3-010 / TST-P3-009 / PH-P5 / STEP-P5-003 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
