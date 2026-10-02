@@ -203,3 +203,29 @@ records:
       application_update_delete: DENIED
       control_audit: AR-P5-003
     status: VERIFIED
+
+  - stable_id: DB-P4-011
+    canonical_name: P4-011 Group-A Quantitative Fact Persistence Evidence
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-011
+    table: meylux.calculated_indicator_vectors
+    migration: 0008_p4_knowledge_time_persistence.sql (reused; unchanged)
+    evidence:
+      ci_dedicated_postgresql_step: PASS
+      ci_docker_run_id: 37015633194
+      ci_docker_retry_run_id: 37015641046
+      primary_indicator_rows: 14
+      higher_timeframe_indicator_rows: 14
+      timeframes: [15m, 1h]
+      replay_additional_rows: 0
+      identity_hash_equals_record_id: VERIFIED
+      provenance_readback: VERIFIED
+      event_time_readback: VERIFIED
+      knowledge_time_readback: VERIFIED
+      future_htf_rejected_before_persistence: VERIFIED
+      control_isolated_postgresql_execution: 2/2 PASS
+      append_only_boundary: PRESERVED
+      control_audit: AR-P4-018
+    status: VERIFIED
