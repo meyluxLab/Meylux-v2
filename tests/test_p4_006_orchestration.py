@@ -112,6 +112,8 @@ class TestWorkerAPI(unittest.TestCase):
         self.assertEqual(len(p.results),1)
         self.assertIn("1h",p.results[0].htf)
         self.assertIsNotNone(p.results[0].htf["1h"].candle)
+        self.assertIn("1h",p.results[0].higher_timeframe_facts)
+        self.assertEqual(p.results[0].higher_timeframe_facts["1h"].timeframe, "1h")
 
     def test_api_rejects_negative_limit(self):
         response=asyncio.run(QuantitativeAPI(_FakePersistence()).handle("GET","/v1/quantitative/regime/BTCUSDT/15m",{"limit":"-1"}))
