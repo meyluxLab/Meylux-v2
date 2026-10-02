@@ -125,6 +125,28 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(inclusive, "MTF:BTCUSDT:15m").value["state"], "BULLISH")
         self.assertEqual(_finding(strict, "MTF:BTCUSDT:15m").value["state"], "NEUTRAL")
 
+    def test_negative_expansion_ratio_and_missing_evidence_ref_are_rejected(self):
+        negative = _snapshot(overrides={("BTCUSDT", "15m", "VOLATILITY_EXPANSION_RATIO"): Decimal("-0.1")})
+        output = analyze_s08(negative, self.config)
+        self.assertEqual(_finding(output, "VOLATILITY:BTCUSDT:15m:EXPANSION_STATE").value["state"], "INVALID")
+
+        snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",))
+        event = AS_OF - timedelta(minutes=15)
+        malformed = SnapshotFact(
+            "fact-without-ref", FactStatus.VALID,
+            {"fact_name": "RSI", "value": "70", "status": "valid"},
+            event, (), None,
+            {"symbol": "BTCUSDT", "timeframe": "15m",
+             "source_table": "meylux.calculated_indicator_vectors", "fact_name": "RSI",
+             "event_time": event, "knowledge_time": event},
+        )
+        malformed_snapshot = InputSnapshot.build(
+            as_of=AS_OF, version="1.2.0", facts=(*snapshot.facts, malformed),
+            provenance_refs=snapshot.provenance_refs,
+        )
+        with self.assertRaises(GroupASemanticError):
+            analyze_s01(malformed_snapshot, self.config)
+
     def test_s08_low_classification_uses_configured_bandwidth_boundary(self):
         snapshot = _snapshot(overrides={
             ("BTCUSDT", "15m", "ATR_PERCENTILE"): Decimal("25"),
