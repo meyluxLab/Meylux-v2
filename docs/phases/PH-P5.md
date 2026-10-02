@@ -104,6 +104,27 @@ VPS/runtime work required by this Step is CONTROL-owned and SentinelX-only under
 
 Required evidence includes actual end-to-end runtime execution, failure isolation, bounded retry, DLQ, overload, duplicate/replay behavior, append-only persistence/read-back, security, CI coverage and the Step performance/resource baseline. Passing tests alone does not constitute Step verification.
 
+
+### `STEP-P5-004` — Group A: Technical, Multi-Timeframe, Volatility
+
+**Order:** 4  
+**Status:** ACTIVE / AUTHORIZED  
+**Authorization state:** AUTHORIZED TO EXECUTE  
+**Predecessor:** `STEP-P5-003` — COMPLETE / VERIFIED  
+**Active Task Order:** `TO-P5-004`  
+**Activation basis:** Project Owner directive — `STEP-P5-004` normal governed continuation — 2026-10-02  
+**Upstream dependency:** `PRQ-1 GROUP-A CAPABILITY = ESTABLISHED / VERIFIED` under `TO-P4-011 / AR-P4-018`
+
+Purpose: establish the real deterministic Group-A specialist capability for `S-01` Technical, `S-06` Multi-Timeframe and `S-08` Volatility using the authoritative Stage-1 Input Snapshot and the independently verified P4 Group-A fact surface.
+
+The Step consumes authoritative P4 facts; it does not create new P4 mathematical truth. It preserves Stage-1 specialist independence, no-lookahead, deterministic evidence identity, provenance, append-only specialist persistence and explicit unavailable/insufficient semantics.
+
+The Group-A boundary includes configured technical facts (EMA, RSI-14, MACD 12/26/9, ADX-14, Bollinger 20/2 and bandwidth), multi-timeframe interpretation across the governed timeframes, and volatility facts/classification (ATR-14, historical volatility, ATR percentile, expansion ratio and Bollinger bandwidth). Indicator divergence is outside this Step.
+
+Required evidence includes deterministic specialist behavior, boundary/golden-vector tests, no-lookahead, real `INSUFFICIENT_DATA` behavior where applicable, EvidenceRef resolution, replay/idempotency, append-only persistence/read-back, specialist independence, applicable runtime/VPS evidence and a reproducible performance/resource baseline.
+
+VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation remains within the authorized development workspace. `STEP-P5-005` and later Steps remain unauthorized and out of scope.
+
 ## Continuation and Dependency Rule
 
 Phase 5 follows just-in-time dependency completion. A dependency is not treated as a blanket Phase prerequisite merely because the Roadmap mentions it. When an authorized Step demonstrates an actual dependency, CONTROL routes that dependency through the correct ownership and change-control mechanism and continues the Step after the dependency is legitimately resolved or explicitly dispositioned unavailable.
