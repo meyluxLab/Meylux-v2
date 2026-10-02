@@ -7,6 +7,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import time
 import unittest
 from urllib.error import URLError
@@ -52,26 +53,55 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                   "--env",f"POSTGRES_DB={DB}","--env",f"POSTGRES_USER={ADMIN}",
                   "--env",f"POSTGRES_PASSWORD={ADMIN_PASSWORD}","--volume",f"{ROOT}:/workspace:ro",
                   IMAGE])
+        # A successful SELECT 1 alone is not a sufficient startup boundary for
+        # this image: the Timescale entrypoint can start a temporary init server,
+        # run timescaledb-tune, and shut that server down before starting the final
+        # server. Do not begin migrations until the entrypoint's init-complete
+        # marker has appeared, then verify SQL readiness against the final server.
+        init_complete_marker="PostgreSQL init process complete; ready for start up."
         for _ in range(60):
-            ready=cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
-                            "psql","-X","-At","-U",ADMIN,"-d",DB,"-c","SELECT 1;"],check=False)
-            if ready.returncode==0 and ready.stdout.strip()=="1":
-                break
+            startup_logs=subprocess.run(
+                [cls.docker,"logs",CONTAINER],
+                text=True,capture_output=True,check=False,
+            )
+            combined_logs=startup_logs.stdout + startup_logs.stderr
+            if init_complete_marker in combined_logs:
+                ready=cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
+                                "psql","-X","-At","-U",ADMIN,"-d",DB,"-c","SELECT 1;"],check=False)
+                if ready.returncode==0 and ready.stdout.strip()=="1":
+                    print(
+                        "P3-009 readiness: Timescale entrypoint init-complete marker observed; final PostgreSQL SELECT 1 passed.",
+                        flush=True,
+                    )
+                    break
             time.sleep(1)
         else:
-            raise RuntimeError("ephemeral PostgreSQL did not become ready")
-        for name in (
-            "0001_database_foundation.sql","0002_raw_acquisition_staging.sql",
-            "0003_canonical_persistence_event_outbox.sql","0004_canonical_quality_state_alignment.sql",
-            "0005_quantitative_foundation.sql","0006_application_role_grant_hardening.sql",
-            "0007_specialist_foundation.sql","0008_p4_knowledge_time_persistence.sql",
-            "0009_quality_evidence_persistence.sql",
-        ):
-            cls._psql_file(f"migrations/versions/{name}")
-        cls._psql(f"ALTER ROLE {APP} LOGIN PASSWORD '{APP_PASSWORD}';")
-        cls.db_host=cls._run([cls.docker,"inspect","-f","{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}",CONTAINER]).stdout.strip()
-        if not cls.db_host:
-            raise RuntimeError("unable to resolve ephemeral PostgreSQL container address")
+            cls._emit_container_diagnostics(
+                "PostgreSQL did not complete image initialization and pass final SELECT 1 readiness within 60 probes"
+            )
+            cls._remove_container()
+            raise RuntimeError(
+                "ephemeral PostgreSQL did not complete initialization and become ready; diagnostics emitted above"
+            )
+        try:
+            for name in (
+                "0001_database_foundation.sql","0002_raw_acquisition_staging.sql",
+                "0003_canonical_persistence_event_outbox.sql","0004_canonical_quality_state_alignment.sql",
+                "0005_quantitative_foundation.sql","0006_application_role_grant_hardening.sql",
+                "0007_specialist_foundation.sql","0008_p4_knowledge_time_persistence.sql",
+                "0009_quality_evidence_persistence.sql",
+            ):
+                cls._psql_file(f"migrations/versions/{name}")
+            cls._psql(f"ALTER ROLE {APP} LOGIN PASSWORD '{APP_PASSWORD}';")
+            cls.db_host=cls._run([cls.docker,"inspect","-f","{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}",CONTAINER]).stdout.strip()
+            if not cls.db_host:
+                raise RuntimeError("unable to resolve ephemeral PostgreSQL container address")
+        except Exception:
+            # unittest does not call tearDownClass when setUpClass itself fails.
+            # Preserve database diagnostics first, then clean up the failed fixture.
+            cls._emit_container_diagnostics("P3-009 PostgreSQL setup/migration failure")
+            cls._remove_container()
+            raise
 
     @classmethod
     def tearDownClass(cls):
@@ -80,7 +110,59 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
 
     @classmethod
     def _run(cls,args,check=True):
-        return subprocess.run(args,text=True,capture_output=True,check=check)
+        # Keep stdout/stderr captured for callers, but never hide diagnostics when
+        # a required subprocess fails. subprocess.run(check=True) alone raises
+        # CalledProcessError without printing its captured streams to CI.
+        result=subprocess.run(args,text=True,capture_output=True,check=False)
+        if check and result.returncode != 0:
+            print(f"P3-009 subprocess failed (exit={result.returncode}): {args!r}",file=sys.stderr)
+            if result.stdout:
+                print("----- subprocess stdout -----",file=sys.stderr)
+                print(result.stdout,file=sys.stderr)
+            if result.stderr:
+                print("----- subprocess stderr -----",file=sys.stderr)
+                print(result.stderr,file=sys.stderr)
+            raise subprocess.CalledProcessError(
+                result.returncode,args,output=result.stdout,stderr=result.stderr
+            )
+        return result
+
+    @classmethod
+    def _emit_container_diagnostics(cls,context):
+        print(f"----- P3-009 PostgreSQL diagnostics: {context} -----",file=sys.stderr)
+        if not getattr(cls,"docker",None):
+            print("Docker executable unavailable; no container diagnostics possible.",file=sys.stderr)
+            return
+        inspect=subprocess.run(
+            [cls.docker,"inspect","-f",
+             "state={{.State.Status}} running={{.State.Running}} exit={{.State.ExitCode}} error={{.State.Error}} started={{.State.StartedAt}} image={{.Config.Image}}",
+             CONTAINER],
+            text=True,capture_output=True,check=False,
+        )
+        print(f"container inspect exit={inspect.returncode}",file=sys.stderr)
+        if inspect.stdout:
+            print(inspect.stdout,file=sys.stderr)
+        if inspect.stderr:
+            print(inspect.stderr,file=sys.stderr)
+        logs=subprocess.run(
+            [cls.docker,"logs","--tail","200",CONTAINER],
+            text=True,capture_output=True,check=False,
+        )
+        print(f"container logs exit={logs.returncode} (last 200 lines)",file=sys.stderr)
+        if logs.stdout:
+            print(logs.stdout,file=sys.stderr)
+        if logs.stderr:
+            print(logs.stderr,file=sys.stderr)
+
+    @classmethod
+    def _remove_container(cls):
+        if getattr(cls,"docker",None):
+            result=subprocess.run(
+                [cls.docker,"rm","-f",CONTAINER],
+                text=True,capture_output=True,check=False,
+            )
+            if result.returncode not in (0,1):
+                print(f"Warning: failed to remove P3-009 fixture container: {result.stderr}",file=sys.stderr)
 
     @classmethod
     def _psql(cls,sql,user=ADMIN,password=None,check=True):
@@ -89,8 +171,13 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
 
     @classmethod
     def _psql_file(cls,path):
-        cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
-                  "psql","-X","-v","ON_ERROR_STOP=1","-U",ADMIN,"-d",DB,"-f",f"/workspace/{path}"])
+        try:
+            cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
+                      "psql","-X","-v","ON_ERROR_STOP=1","-U",ADMIN,"-d",DB,"-f",f"/workspace/{path}"])
+            print(f"P3-009 migration applied successfully: {path}",flush=True)
+        except subprocess.CalledProcessError:
+            print(f"P3-009 migration failed: {path}",file=sys.stderr)
+            raise
 
     @classmethod
     def _connect(cls):

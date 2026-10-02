@@ -51,6 +51,8 @@ on:
       - "tests/test_quantitative_foundation.py"
       - "tests/test_p4_011_group_a_facts.py"
       - "tests/test_p4_011_postgresql.py"
+      - "tests/test_p3_009_postgresql.py"
+      - "tests/test_p3_009_quality_evidence.py"
       - "tests/golden_vectors/p4_001_primitives.json"
       - "pyproject.toml"
       - ".dockerignore"
