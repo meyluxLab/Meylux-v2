@@ -64,7 +64,7 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                 [cls.docker,"logs",CONTAINER],
                 text=True,capture_output=True,check=False,
             )
-            combined_logs=f"{startup_logs.stdout}\\n{startup_logs.stderr}"
+            combined_logs=startup_logs.stdout + startup_logs.stderr
             if init_complete_marker in combined_logs:
                 ready=cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
                                 "psql","-X","-At","-U",ADMIN,"-d",DB,"-c","SELECT 1;"],check=False)
