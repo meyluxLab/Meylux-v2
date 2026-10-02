@@ -217,7 +217,7 @@ class QuantitativePersistence:
                         f"INSERT INTO {self.TABLES[family]} "
                         "(record_id,symbol,timeframe,event_time,regime_state,source_ref,venue_context,version,"
                         "calculation_version,status,reason,value_numeric,payload_json,identity_hash) "
-                        "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb,$13) "
+                        "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) "
                         "ON CONFLICT(identity_hash) DO NOTHING"
                     )
                     args = (
@@ -232,7 +232,7 @@ class QuantitativePersistence:
                         f"INSERT INTO {self.TABLES[family]} "
                         "(record_id,symbol,timeframe,event_time,event_type,source_ref,venue_context,version,"
                         "calculation_version,status,reason,value_numeric,payload_json,identity_hash) "
-                        "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12::jsonb,$13) "
+                        "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14) "
                         "ON CONFLICT(identity_hash) DO NOTHING"
                     )
                     args = (
