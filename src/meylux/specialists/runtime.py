@@ -1,4 +1,4 @@
-"""Stage-1 S-10 queue dispatch and worker boundary."""
+"""Stage-1 specialist queue dispatch and worker boundary."""
 from __future__ import annotations
 
 import asyncio

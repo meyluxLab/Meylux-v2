@@ -86,7 +86,7 @@
     "technical_ema_periods": {
       "type": "string",
       "unit": "comma-separated EMA periods",
-      "value": "20,50,200"
+      "value": "9,20,21,50,200"
     },
     "technical_primary_ema_period": {
       "type": "integer",
@@ -164,6 +164,25 @@
       "type": "decimal",
       "unit": "bandwidth ratio",
       "value": "0.10",
+      "minimum": "0"
+    },
+    "rsi_midline": {
+      "type": "decimal",
+      "unit": "RSI points",
+      "value": "50",
+      "minimum": "0",
+      "maximum": "100"
+    },
+    "macd_histogram_neutral_threshold": {
+      "type": "decimal",
+      "unit": "MACD histogram ratio",
+      "value": "0",
+      "minimum": "0"
+    },
+    "bollinger_low_bandwidth_threshold": {
+      "type": "decimal",
+      "unit": "bandwidth ratio",
+      "value": "0.05",
       "minimum": "0"
     }
   }

@@ -267,8 +267,9 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
         raise GroupASemanticError("technical_primary_ema_period must be included in technical_ema_periods")
     rsi_low, rsi_high = _decimal(config.parameter("rsi_oversold")), _decimal(config.parameter("rsi_overbought"))
     adx_threshold = _decimal(config.parameter("adx_trend_threshold"))
+    macd_neutral = _decimal(config.parameter("macd_histogram_neutral_threshold"))
     squeeze_threshold = _decimal(config.parameter("bollinger_squeeze_bandwidth_threshold"))
-    if rsi_low < 0 or rsi_high > 100 or rsi_low >= rsi_high or adx_threshold < 0 or squeeze_threshold < 0:
+    if rsi_low < 0 or rsi_high > 100 or rsi_low >= rsi_high or adx_threshold < 0 or macd_neutral < 0 or squeeze_threshold < 0:
         raise GroupASemanticError("invalid S-01 threshold ordering")
 
     findings = []
@@ -333,8 +334,8 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
             elif not _same_event_time(macd, signal, histogram):
                 value, fstatus, reason = {"state": "CONTRADICTORY_CONTEXT"}, SpecialistStatus.PARTIAL, "MACD components refer to different event times"
             else:
-                state = "BULLISH" if macd.value > signal.value and histogram.value > 0 else \
-                    "BEARISH" if macd.value < signal.value and histogram.value < 0 else "NEUTRAL"
+                state = "BULLISH" if macd.value > signal.value and histogram.value > macd_neutral else \
+                    "BEARISH" if macd.value < signal.value and histogram.value < -macd_neutral else "NEUTRAL"
                 value = {"state": state, "macd": macd.value, "signal": signal.value, "histogram": histogram.value}
                 fstatus, reason = SpecialistStatus.SUCCESS, "MACD state uses persisted MACD, signal and histogram values"
             findings.append(_finding(f"TECHNICAL:{symbol}:{timeframe}:MACD_STATE", value, reason, macd_refs, fstatus))
@@ -397,7 +398,7 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
 
 
 def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_period: int,
-               primary_event_boundary, primary_knowledge_boundary):
+               primary_event_boundary, primary_knowledge_boundary, rsi_midline: Decimal):
     if primary_event_boundary is None or primary_knowledge_boundary is None:
         return "INSUFFICIENT_DATA", (), "primary timeframe has no authoritative closed-candle event/knowledge boundary"
     future = []
@@ -422,8 +423,8 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_per
         return "INSUFFICIENT_DATA", refs, "EMA/MACD/RSI facts are required to interpret this timeframe"
     if not _same_event_time(ema, macd, signal, rsi):
         return "CONTRADICTORY_CONTEXT", refs, "higher-timeframe interpretation combines facts from different event times"
-    bullish = macd.value > signal.value and rsi.value >= Decimal("50")
-    bearish = macd.value < signal.value and rsi.value < Decimal("50")
+    bullish = macd.value > signal.value and rsi.value >= rsi_midline
+    bearish = macd.value < signal.value and rsi.value < rsi_midline
     if bullish:
         return "BULLISH", refs, "persisted EMA/MACD/RSI facts align bullishly"
     if bearish:
@@ -436,6 +437,9 @@ def analyze_s06(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
     timeframes = _config_csv(config, "group_a_timeframes", str)
     primary_timeframe = _tf(config.parameter("primary_timeframe"))
     primary_period = int(config.parameter("technical_primary_ema_period"))
+    rsi_midline = _decimal(config.parameter("rsi_midline"))
+    if not Decimal(0) <= rsi_midline <= Decimal(100):
+        raise GroupASemanticError("rsi_midline must be within [0,100]")
     if primary_timeframe not in timeframes:
         raise GroupASemanticError("primary_timeframe must be included in group_a_timeframes")
     findings = []
@@ -446,7 +450,7 @@ def analyze_s06(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
         directions = []
         for timeframe in timeframes:
             state, refs, reason = _direction(snapshot, symbol, timeframe, primary_period,
-                primary_event_boundary, primary_knowledge_boundary)
+                primary_event_boundary, primary_knowledge_boundary, rsi_midline)
             directions.append((timeframe, state))
             status = SpecialistStatus.SUCCESS if state in {"BULLISH", "BEARISH", "NEUTRAL"} else \
                 SpecialistStatus.PARTIAL if state in {"POST_BOUNDARY_EVIDENCE", "CONTRADICTORY_CONTEXT"} else SpecialistStatus.INSUFFICIENT_DATA
@@ -485,9 +489,10 @@ def analyze_s08(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
     low_hv, high_hv = _decimal(config.parameter("historical_volatility_low_threshold")), _decimal(config.parameter("historical_volatility_high_threshold"))
     expanding = _decimal(config.parameter("volatility_expanding_ratio_threshold"))
     contracting = _decimal(config.parameter("volatility_contracting_ratio_threshold"))
+    bandwidth_low = _decimal(config.parameter("bollinger_low_bandwidth_threshold"))
     bandwidth_high = _decimal(config.parameter("bollinger_high_bandwidth_threshold"))
     if not (Decimal(0) <= low_pct < high_pct <= Decimal(100) and Decimal(0) <= low_hv < high_hv and
-            Decimal(0) < contracting < expanding and Decimal(0) <= bandwidth_high):
+            Decimal(0) < contracting < expanding and Decimal(0) <= bandwidth_low < bandwidth_high):
         raise GroupASemanticError("invalid S-08 threshold configuration")
     findings = []
     for symbol in symbols:
@@ -514,12 +519,12 @@ def analyze_s08(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                 class_status, class_reason = SpecialistStatus.PARTIAL, "volatility inputs violate their valid numeric domain"
             else:
                 high = percentile.value >= high_pct or hv.value >= high_hv or bandwidth.value >= bandwidth_high
-                low = percentile.value <= low_pct and hv.value <= low_hv and bandwidth.value < bandwidth_high
+                low = percentile.value <= low_pct and hv.value <= low_hv and bandwidth.value <= bandwidth_low
                 state = "HIGH" if high else "LOW" if low else "NORMAL"
                 class_value = {"state": state, "atr": atr.value, "atr_percentile": percentile.value,
                     "historical_volatility": hv.value, "bandwidth": bandwidth.value, "low_percentile": low_pct,
                     "high_percentile": high_pct, "historical_volatility_high_threshold": high_hv,
-                    "bandwidth_high_threshold": bandwidth_high}
+                    "bandwidth_low_threshold": bandwidth_low, "bandwidth_high_threshold": bandwidth_high}
                 class_status, class_reason = SpecialistStatus.SUCCESS, "classification combines authoritative ATR, ATR percentile, historical volatility and Bollinger bandwidth"
             findings.append(_finding(f"VOLATILITY:{symbol}:{timeframe}:CLASSIFICATION", class_value, class_reason, refs, class_status))
 

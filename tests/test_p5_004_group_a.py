@@ -45,7 +45,7 @@ def _fact(symbol, timeframe, name, value, *, source="meylux.calculated_indicator
 
 
 def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
-              ema_periods=(20, 50, 200), direction_by_tf=None, missing=(), extra=(), overrides=None):
+              ema_periods=(9, 20, 21, 50, 200), direction_by_tf=None, missing=(), extra=(), overrides=None):
     facts = list(extra)
     direction_by_tf = direction_by_tf or {}
     overrides = overrides or {}
@@ -112,6 +112,26 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:BOLLINGER_SQUEEZE").value["state"], "SQUEEZE")
         changed = analyze_s01(snapshot, _config(rsi_overbought=Decimal("71")))
         self.assertEqual(_finding(changed, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"], "NEUTRAL")
+
+    def test_macd_and_mtf_midline_thresholds_are_versioned_configuration(self):
+        snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",))
+        macd_output = analyze_s01(snapshot, _config(macd_histogram_neutral_threshold=Decimal("0.5")))
+        self.assertEqual(_finding(macd_output, "TECHNICAL:BTCUSDT:15m:MACD_STATE").value["state"], "NEUTRAL")
+
+        midline_snapshot = _snapshot(overrides={("BTCUSDT", "15m", "RSI"): Decimal("50")})
+        inclusive = analyze_s06(midline_snapshot, _config(rsi_midline=Decimal("50")))
+        strict = analyze_s06(midline_snapshot, _config(rsi_midline=Decimal("51")))
+        self.assertEqual(_finding(inclusive, "MTF:BTCUSDT:15m").value["state"], "BULLISH")
+        self.assertEqual(_finding(strict, "MTF:BTCUSDT:15m").value["state"], "NEUTRAL")
+
+    def test_s08_low_classification_uses_configured_bandwidth_boundary(self):
+        snapshot = _snapshot(overrides={
+            ("BTCUSDT", "15m", "ATR_PERCENTILE"): Decimal("25"),
+            ("BTCUSDT", "15m", "HISTORICAL_VOLATILITY"): Decimal("0.15"),
+            ("BTCUSDT", "15m", "BOLLINGER_BANDWIDTH"): Decimal("0.05"),
+        })
+        output = analyze_s08(snapshot, self.config)
+        self.assertEqual(_finding(output, "VOLATILITY:BTCUSDT:15m:CLASSIFICATION").value["state"], "LOW")
 
     def test_ema_200_missing_is_explicit_and_never_recomputed(self):
         snapshot = _snapshot(ema_periods=(20,), symbols=("BTCUSDT",), timeframes=("15m",))
