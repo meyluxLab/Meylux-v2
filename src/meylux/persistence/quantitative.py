@@ -265,15 +265,15 @@ class QuantitativePersistence:
         if start is not None:
             if start.tzinfo is None or start.utcoffset() != timezone.utc.utcoffset(start):
                 raise ValueError("start must be UTC")
-            sql += f" AND event_time>\u0024{len(args) + 1}"
+            sql += f" AND event_time>{chr(36)}{len(args) + 1}"
             args.append(start)
         if end is not None:
             if end.tzinfo is None or end.utcoffset() != timezone.utc.utcoffset(end):
                 raise ValueError("end must be UTC")
             if start is not None and end < start:
                 raise ValueError("end must not precede start")
-            sql += f" AND event_time<\u0024{len(args) + 1}"
+            sql += f" AND event_time<{chr(36)}{len(args) + 1}"
             args.append(end)
-        sql += f" ORDER BY event_time,record_id LIMIT \u0024{len(args) + 1}"
+        sql += f" ORDER BY event_time,record_id LIMIT {chr(36)}{len(args) + 1}"
         args.append(limit)
         return list(await self._connection.fetch(sql, *args))
