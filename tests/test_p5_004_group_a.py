@@ -187,7 +187,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(partial, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")
         self.assertIn("1h", _finding(partial, "MTF:BTCUSDT:OVERALL").value["missing_timeframes"])
 
-    def test_s06_higher_timeframe_knowledge_must_not_exceed_primary_boundary(self):
+    def test_s06_higher_timeframe_event_and_knowledge_must_not_exceed_primary_boundary(self):
         primary_close = AS_OF - timedelta(minutes=15)
         future_htf = _fact("BTCUSDT", "1h", "RSI", Decimal("60"), event=AS_OF, knowledge=AS_OF - timedelta(minutes=15), record_suffix="future-htf")
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",), extra=(future_htf,))
@@ -195,6 +195,13 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(output, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")
         self.assertEqual(_finding(output, "MTF:BTCUSDT:1h").value["state"], "POST_BOUNDARY_EVIDENCE")
         self.assertLessEqual(primary_close, AS_OF)
+
+        future_knowledge = _fact("BTCUSDT", "1h", "RSI", Decimal("60"),
+            event=AS_OF - timedelta(hours=1), knowledge=AS_OF, record_suffix="future-knowledge")
+        knowledge_snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",), extra=(future_knowledge,))
+        knowledge_output = analyze_s06(knowledge_snapshot, self.config)
+        self.assertEqual(_finding(knowledge_output, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")
+        self.assertEqual(_finding(knowledge_output, "MTF:BTCUSDT:1h").value["state"], "POST_BOUNDARY_EVIDENCE")
 
     def test_s08_classification_expansion_and_risk_flag_are_deterministic(self):
         snapshot = _snapshot()
