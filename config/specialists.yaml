@@ -1,18 +1,170 @@
 {
-  "name":"p5-specialists",
-  "schema_version":"1.0.0",
-  "configuration_version":"1.1.0",
-  "environment":"development",
-  "provenance":"repo:config/specialists.yaml",
-  "safety":{"read_only":true,"allow_private_provider_access":false,"allow_trading":false,"allow_capital_movement":false,"allow_custody":false},
-  "parameters":{
-    "execution_timeout_ms":{"type":"integer","unit":"ms","value":5000,"minimum":1,"maximum":600000},
-    "max_concurrency":{"type":"integer","unit":"workers","value":2,"minimum":1,"maximum":32},
-    "max_attempts":{"type":"integer","unit":"attempts","value":3,"minimum":1,"maximum":10},
-    "retry_backoff_ms":{"type":"integer","unit":"ms","value":100,"minimum":0,"maximum":60000},
-    "max_backlog":{"type":"integer","unit":"messages","value":1000,"minimum":1,"maximum":100000},
-    "retention_seconds":{"type":"integer","unit":"seconds","value":86400,"minimum":60,"maximum":2592000},
-    "max_findings":{"type":"integer","unit":"count","value":100,"minimum":1,"maximum":10000},
-    "max_evidence_refs":{"type":"integer","unit":"count","value":100,"minimum":1,"maximum":1000}
+  "name": "p5-specialists",
+  "schema_version": "1.0.0",
+  "configuration_version": "1.2.0",
+  "environment": "development",
+  "provenance": "repo:config/specialists.yaml",
+  "safety": {
+    "read_only": true,
+    "allow_private_provider_access": false,
+    "allow_trading": false,
+    "allow_capital_movement": false,
+    "allow_custody": false
+  },
+  "parameters": {
+    "execution_timeout_ms": {
+      "type": "integer",
+      "unit": "ms",
+      "value": 5000,
+      "minimum": 1,
+      "maximum": 600000
+    },
+    "max_concurrency": {
+      "type": "integer",
+      "unit": "workers",
+      "value": 2,
+      "minimum": 1,
+      "maximum": 32
+    },
+    "max_attempts": {
+      "type": "integer",
+      "unit": "attempts",
+      "value": 3,
+      "minimum": 1,
+      "maximum": 10
+    },
+    "retry_backoff_ms": {
+      "type": "integer",
+      "unit": "ms",
+      "value": 100,
+      "minimum": 0,
+      "maximum": 60000
+    },
+    "max_backlog": {
+      "type": "integer",
+      "unit": "messages",
+      "value": 1000,
+      "minimum": 1,
+      "maximum": 100000
+    },
+    "retention_seconds": {
+      "type": "integer",
+      "unit": "seconds",
+      "value": 86400,
+      "minimum": 60,
+      "maximum": 2592000
+    },
+    "max_findings": {
+      "type": "integer",
+      "unit": "count",
+      "value": 100,
+      "minimum": 1,
+      "maximum": 10000
+    },
+    "max_evidence_refs": {
+      "type": "integer",
+      "unit": "count",
+      "value": 100,
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "group_a_symbols": {
+      "type": "string",
+      "unit": "comma-separated symbols",
+      "value": "BTCUSDT,SOLUSDT"
+    },
+    "primary_timeframe": {
+      "type": "string",
+      "unit": "timeframe",
+      "value": "15m"
+    },
+    "group_a_timeframes": {
+      "type": "string",
+      "unit": "comma-separated timeframes",
+      "value": "15m,1h,4h"
+    },
+    "technical_ema_periods": {
+      "type": "string",
+      "unit": "comma-separated EMA periods",
+      "value": "20,50,200"
+    },
+    "technical_primary_ema_period": {
+      "type": "integer",
+      "unit": "periods",
+      "value": 20,
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "rsi_oversold": {
+      "type": "decimal",
+      "unit": "RSI points",
+      "value": "30",
+      "minimum": "0",
+      "maximum": "100"
+    },
+    "rsi_overbought": {
+      "type": "decimal",
+      "unit": "RSI points",
+      "value": "70",
+      "minimum": "0",
+      "maximum": "100"
+    },
+    "adx_trend_threshold": {
+      "type": "decimal",
+      "unit": "ADX points",
+      "value": "25",
+      "minimum": "0",
+      "maximum": "100"
+    },
+    "bollinger_squeeze_bandwidth_threshold": {
+      "type": "decimal",
+      "unit": "bandwidth ratio",
+      "value": "0.05",
+      "minimum": "0"
+    },
+    "volatility_low_percentile": {
+      "type": "decimal",
+      "unit": "percentile points",
+      "value": "25",
+      "minimum": "0",
+      "maximum": "100"
+    },
+    "volatility_high_percentile": {
+      "type": "decimal",
+      "unit": "percentile points",
+      "value": "75",
+      "minimum": "0",
+      "maximum": "100"
+    },
+    "historical_volatility_low_threshold": {
+      "type": "decimal",
+      "unit": "annualized volatility ratio",
+      "value": "0.15",
+      "minimum": "0"
+    },
+    "historical_volatility_high_threshold": {
+      "type": "decimal",
+      "unit": "annualized volatility ratio",
+      "value": "0.50",
+      "minimum": "0"
+    },
+    "volatility_expanding_ratio_threshold": {
+      "type": "decimal",
+      "unit": "ratio",
+      "value": "1.20",
+      "minimum": "0"
+    },
+    "volatility_contracting_ratio_threshold": {
+      "type": "decimal",
+      "unit": "ratio",
+      "value": "0.80",
+      "minimum": "0"
+    },
+    "bollinger_high_bandwidth_threshold": {
+      "type": "decimal",
+      "unit": "bandwidth ratio",
+      "value": "0.10",
+      "minimum": "0"
+    }
   }
 }
