@@ -99,8 +99,8 @@ items:
     affected_phase: PH-P5
     affected_step: STEP-P5-002
     authority: CONTROL / REVIEWER
-    current_disposition: "Group-A PRQ-1 capability is now ESTABLISHED / VERIFIED under TO-P4-011 and AR-P4-018: the required deterministic indicator/volatility fact surface is operationally persisted per eligible timeframe through the governed P4 Worker → Orchestrator → Persistence → PostgreSQL boundary. Later PRQ-1 surfaces remain separately governed."
-    trigger: "For later PRQ-1 groups, reopen only through their owning governed boundary after concrete dependency evidence is established."
+    current_disposition: "AUTHORITATIVE PRQ-1 DISPOSITION: Group-A (STEP-P5-004: S-01/S-06/S-08 indicator, MTF and volatility facts) = ESTABLISHED / VERIFIED under TO-P4-011 / AR-P4-018. Remaining PRQ-1 capability is not silently treated as delivered: Group-B structure events/zones = FUTURE-OWNED / JIT for STEP-P5-005; Group-C volume/volume-profile = FUTURE-OWNED / JIT for STEP-P5-006; Group-D order-flow facts = FUTURE-OWNED / JIT for STEP-P5-007 and additionally depends on PRQ-2; Group-D derivatives facts = outside PRQ-1 delivery until PRQ-3 and future STEP-P5-007; Group-E risk/cross-venue PRQ-1 facts = FUTURE-OWNED / JIT for STEP-P5-008 and additionally depends on PRQ-2; Group-F historical/setup PRQ-1 facts = FUTURE-OWNED / JIT for STEP-P5-009; Group-G counter-evidence PRQ-1 facts = FUTURE-OWNED / JIT for STEP-P5-010. No remaining PRQ-1 item required by STEP-P5-004 is unresolved. No later PRQ-1 capability is claimed as delivered."
+    trigger: "Reopen each future-owned PRQ-1 surface only at its named P5 Step gate, through the owning P4 boundary and with fresh evidence; do not activate or implement it early. If the applicable future Step is reached and the owning capability is unavailable, record explicit UNAVAILABLE disposition under the P5 PRQ gate rule."
     constraints:
       - "Do not infer AVAILABLE_PERSISTED from source-code capability or table existence alone."
       - "Do not implement PRQ-1 inside P5-002."
