@@ -82,8 +82,31 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 self.assertTrue(all(row["identity_hash"] == row["record_id"] for row in primary_rows + higher_rows))
                 self.assertEqual({row["source_ref"] for row in primary_rows}, {primary[-1].provenance_id})
                 self.assertEqual({row["source_ref"] for row in higher_rows}, {higher[-1].provenance_id})
+                primary_payloads = {
+                    row["record_id"]: (
+                        row["payload_json"] if isinstance(row["payload_json"], dict)
+                        else json.loads(row["payload_json"])
+                    )
+                    for row in primary_rows
+                }
+                higher_payloads = {
+                    row["record_id"]: (
+                        row["payload_json"] if isinstance(row["payload_json"], dict)
+                        else json.loads(row["payload_json"])
+                    )
+                    for row in higher_rows
+                }
+                expected_names = {
+                    "EMA", "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
+                    "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
+                    "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
+                    "VOLATILITY_EXPANSION_RATIO",
+                }
+                self.assertEqual({p["fact_name"] for p in primary_payloads.values()}, expected_names)
+                self.assertEqual({p["fact_name"] for p in higher_payloads.values()}, expected_names)
                 self.assertEqual(
-                    {row["status"] for row in primary_rows if row["name"] == "EMA"},
+                    {row["status"] for row in primary_rows
+                     if primary_payloads[row["record_id"]]["fact_name"] == "EMA"},
                     {"valid"},
                 )
                 for row in primary_rows + higher_rows:
@@ -91,6 +114,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     if isinstance(payload, str):
                         payload = json.loads(payload)
                     self.assertEqual(payload["context"]["timeframe"], row["timeframe"])
+                    self.assertTrue(payload["fact_name"])
                     self.assertEqual(payload["context"]["timestamp"], row["event_time"].isoformat().replace("+00:00", "Z"))
                     self.assertEqual(payload["context"]["source_ref"], row["source_ref"])
 
