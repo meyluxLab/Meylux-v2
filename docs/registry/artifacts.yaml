@@ -1473,7 +1473,8 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-011.md
     traceability: PH-P4 / STEP-P4-006 / PRQ-1 Group-A dependency / STEP-P5-004 / Owner Decision — Route A 2026-10-02 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+    completion_audit: AR-P4-018
     lifecycle_context: POST-CLOSURE BOUNDED ADDITIVE HARDENING — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
 
   - stable_id: BR-P4-010
@@ -1534,4 +1535,53 @@ records:
     entity_type: AR
     artifact_path: docs/audits/AR-P5-003.md
     traceability: BR-P5-004 / TO-P5-003 / TO-P5-003-CORRECTIVE-001 / PH-P5 / STEP-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+
+  - stable_id: BR-P4-011
+    canonical_name: Build Report — Bounded Additive P4 Fact Operationalization for P5-004 Group A
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-011.md
+    traceability: TO-P4-011 / PH-P4 / STEP-P4-006 / STEP-P5-004 / AR-P4-018
+    status: VERIFIED
+
+  - stable_id: TST-P4-011
+    canonical_name: Bounded Additive P4 Group-A Fact and Worker/PostgreSQL Integration Tests
+    entity_type: TST
+    artifact_path: tests/test_p4_011_postgresql.py
+    traceability: TO-P4-011 / BR-P4-011 / AR-P4-018
+    status: VERIFIED
+
+  - stable_id: DB-P4-011
+    canonical_name: P4-011 Group-A Quantitative Fact Persistence Evidence
+    entity_type: DB
+    artifact_path: docs/build-reports/BR-P4-011.md
+    traceability: TO-P4-011 / BR-P4-011 / AR-P4-018
+    status: VERIFIED
+
+  - stable_id: REQ-P4-011
+    canonical_name: P4-011 Group-A PRQ-1 Delivery Requirements
+    entity_type: REQUIREMENT
+    artifact_path: docs/task-orders/TO-P4-011.md
+    traceability: TO-P4-011 / PRQ-1 / STEP-P5-004 / AR-P4-018
+    status: VERIFIED
+
+  - stable_id: CFG-P4-011
+    canonical_name: P4-011 Quantitative Orchestration Configuration Evidence
+    entity_type: CONFIGURATION
+    artifact_path: src/meylux/orchestration/engine.py
+    traceability: TO-P4-011 / BR-P4-011 / AR-P4-018
+    status: VERIFIED
+
+  - stable_id: RUN-P4-011
+    canonical_name: CONTROL Independent TO-P4-011 PostgreSQL Integration Execution
+    entity_type: RUN
+    artifact_path: docs/audits/AR-P4-018.md
+    traceability: TO-P4-011 / AR-P4-018
+    status: VERIFIED
+
+  - stable_id: AR-P4-018
+    canonical_name: CONTROL Final Independent Audit — TO-P4-011
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-018.md
+    traceability: TO-P4-011 / BR-P4-011 / TST-P4-011 / DB-P4-011 / REQ-P4-011 / CFG-P4-011 / RUN-P4-011 / PH-P4 / STEP-P4-006 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
