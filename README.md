@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-003` — `COMPLETE / VERIFIED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Active Task Order:** `none` — `TO-P4-011` is `VERIFIED / COMPLETE` under `AR-P4-018`; Group-A PRQ-1 capability is established at the P4-owned boundary. `STEP-P5-004` remains not activated and requires separate CONTROL formalization/activation.
+- **Active Task Order:** `TO-P3-010` — pre-`STEP-P5-004` P3-009 Docker evidence-harness remediation; `STEP-P5-004` remains not activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
