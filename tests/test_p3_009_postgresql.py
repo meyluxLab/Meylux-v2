@@ -98,10 +98,10 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
             print(f"P3-009 subprocess failed (exit={result.returncode}): {args!r}",file=sys.stderr)
             if result.stdout:
                 print("----- subprocess stdout -----",file=sys.stderr)
-                print(result.stdout,file=sys.stderr,end="" if result.stdout.endswith("\\n") else "\\n")
+                print(result.stdout,file=sys.stderr)
             if result.stderr:
                 print("----- subprocess stderr -----",file=sys.stderr)
-                print(result.stderr,file=sys.stderr,end="" if result.stderr.endswith("\\n") else "\\n")
+                print(result.stderr,file=sys.stderr)
             raise subprocess.CalledProcessError(
                 result.returncode,args,output=result.stdout,stderr=result.stderr
             )
@@ -121,18 +121,18 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
         )
         print(f"container inspect exit={inspect.returncode}",file=sys.stderr)
         if inspect.stdout:
-            print(inspect.stdout,file=sys.stderr,end="" if inspect.stdout.endswith("\\n") else "\\n")
+            print(inspect.stdout,file=sys.stderr)
         if inspect.stderr:
-            print(inspect.stderr,file=sys.stderr,end="" if inspect.stderr.endswith("\\n") else "\\n")
+            print(inspect.stderr,file=sys.stderr)
         logs=subprocess.run(
             [cls.docker,"logs","--tail","200",CONTAINER],
             text=True,capture_output=True,check=False,
         )
         print(f"container logs exit={logs.returncode} (last 200 lines)",file=sys.stderr)
         if logs.stdout:
-            print(logs.stdout,file=sys.stderr,end="" if logs.stdout.endswith("\\n") else "\\n")
+            print(logs.stdout,file=sys.stderr)
         if logs.stderr:
-            print(logs.stderr,file=sys.stderr,end="" if logs.stderr.endswith("\\n") else "\\n")
+            print(logs.stderr,file=sys.stderr)
 
     @classmethod
     def _remove_container(cls):
