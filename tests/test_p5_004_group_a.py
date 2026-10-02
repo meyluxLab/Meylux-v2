@@ -133,9 +133,9 @@ class TestP5004GroupASemantics(unittest.TestCase):
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",))
         event = AS_OF - timedelta(minutes=15)
         malformed = SnapshotFact(
-            "fact-without-ref", FactStatus.VALID,
-            {"fact_name": "RSI", "value": "70", "status": "valid"},
-            event, (), None,
+            "fact-without-ref", FactStatus.UNAVAILABLE,
+            {"fact_name": "RSI", "value": "70", "status": "unavailable"},
+            event, (), "source reference absent",
             {"symbol": "BTCUSDT", "timeframe": "15m",
              "source_table": "meylux.calculated_indicator_vectors", "fact_name": "RSI",
              "event_time": event, "knowledge_time": event},
