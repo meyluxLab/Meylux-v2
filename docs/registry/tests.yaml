@@ -430,3 +430,25 @@ records:
       ci_docker_result: SUCCESS
       redis_worker_integration: PASS
       live_control_runtime: PASS
+
+  - stable_id: TST-P4-011
+    canonical_name: P4-011 Group-A Fact and Worker/PostgreSQL Integration Tests
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-011
+    artifact_path: tests/test_p4_011_postgresql.py
+    traceability: TO-P4-011 / BR-P4-011 / AR-P4-018
+    status: VERIFIED
+    evidence:
+      implementation_commit: 0cdffeadd7c4632c4c57731cb87dd4c687296df4
+      ci_core_run_id: 37015640934
+      ci_core_result: SUCCESS
+      ci_docker_run_id: 37015633194
+      ci_docker_dedicated_step_result: SUCCESS
+      ci_docker_retry_run_id: 37015641046
+      ci_docker_retry_dedicated_step_result: SUCCESS
+      dedicated_postgresql_tests: 2/2 PASS
+      control_independent_postgresql_tests: 2/2 PASS
+      control_execution_time: 0.811s
+      coverage: deterministic Group-A fact vocabulary, per-timeframe persistence, Worker-to-PostgreSQL MTF path, knowledge-time boundary, provenance, identity, replay idempotency, post-boundary HTF rejection and no-write negative path
