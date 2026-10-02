@@ -53,6 +53,8 @@ def _symbol(value: Any) -> str:
 def _refs(facts) -> tuple[EvidenceRef, ...]:
     unique = {}
     for fact in facts:
+        if not fact.evidence_refs:
+            raise GroupASemanticError("authoritative Group-A fact lacks an EvidenceRef")
         for ref in fact.evidence_refs:
             if not ref.record_id or not ref.source_family or not ref.timeframe or not ref.venue:
                 raise GroupASemanticError("Group-A EvidenceRef lacks source record/timeframe/venue context")
@@ -410,7 +412,12 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_per
             raise GroupASemanticError("authoritative timeframe fact lacks symbol/timeframe context")
         if _symbol(metadata.get("symbol")) != symbol or _tf(metadata.get("timeframe")) != timeframe:
             continue
-        if fact.knowledge_time > primary_knowledge_boundary or metadata.get("event_time", fact.evidence_refs[0].event_time) > primary_event_boundary:
+        event_time = metadata.get("event_time")
+        if event_time is None:
+            if not fact.evidence_refs:
+                raise GroupASemanticError("authoritative timeframe fact lacks event_time and EvidenceRef")
+            event_time = fact.evidence_refs[0].event_time
+        if fact.knowledge_time > primary_knowledge_boundary or event_time > primary_event_boundary:
             future.append(fact)
     if future:
         return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe event_time or knowledge_time exceeds the corresponding primary boundary"
@@ -535,6 +542,9 @@ def analyze_s08(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
             elif all(metric.state == "VALID" for metric in (atr, percentile, hv, bandwidth)) and not _same_event_time(ratio, atr, percentile, hv, bandwidth):
                 state_value = {"state": "CONTRADICTORY_CONTEXT", "reason": "expansion ratio and volatility facts refer to different event times"}
                 state_status, state_reason = SpecialistStatus.PARTIAL, "expansion ratio is not aligned with the volatility fact event time"
+            elif ratio.value < 0:
+                state_value = {"state": "INVALID", "ratio": ratio.value, "reason": "expansion ratio cannot be negative"}
+                state_status, state_reason = SpecialistStatus.PARTIAL, "authoritative expansion ratio violates its numeric domain"
             elif ratio.value >= expanding:
                 state_value = {"state": "EXPANDING", "ratio": ratio.value, "threshold": expanding, "boundary_inclusive": True}
                 state_status, state_reason = SpecialistStatus.SUCCESS, "ratio at or above configured expansion threshold is expanding"
