@@ -168,7 +168,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
 
     def test_s06_higher_timeframe_knowledge_must_not_exceed_primary_boundary(self):
         primary_close = AS_OF - timedelta(minutes=15)
-        future_htf = _fact("BTCUSDT", "1h", "RSI", Decimal("60"), event=AS_OF, knowledge=AS_OF, record_suffix="future-htf")
+        future_htf = _fact("BTCUSDT", "1h", "RSI", Decimal("60"), event=AS_OF, knowledge=AS_OF - timedelta(minutes=15), record_suffix="future-htf")
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",), extra=(future_htf,))
         output = analyze_s06(snapshot, self.config)
         self.assertEqual(_finding(output, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")

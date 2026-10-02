@@ -409,7 +409,7 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_per
             raise GroupASemanticError("authoritative timeframe fact lacks symbol/timeframe context")
         if _symbol(metadata.get("symbol")) != symbol or _tf(metadata.get("timeframe")) != timeframe:
             continue
-        if fact.knowledge_time > primary_knowledge_boundary or fact.event_time > primary_event_boundary:
+        if fact.knowledge_time > primary_knowledge_boundary or metadata.get("event_time", fact.evidence_refs[0].event_time) > primary_event_boundary:
             future.append(fact)
     if future:
         return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe event_time or knowledge_time exceeds the corresponding primary boundary"
