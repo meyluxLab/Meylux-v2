@@ -2939,3 +2939,52 @@ entries:
     to_state: "TO-P3-010 AUTHORIZED TO EXECUTE; PH-P3 historical closure preserved; PH-P5 ACTIVE / AUTHORIZED; STEP-P5-004 NOT ACTIVATED."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no P3 semantic or P4 mathematical redesign authorized."
     runtime_effect: "No governed VPS mutation authorized by this activation."
+
+
+  - ledger_id: CL-P3-010-CLOSURE-20261002
+    recorded_at: "2026-10-02"
+    authority: ROL-V2-001 / CONTROL
+    action: "CONTROL FINAL INDEPENDENT VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P3-010"
+    basis: "AR-P3-010 + BR-P3-010 + TO-P3-010 + PR #58 + merged commit 56ba10f5c964319e966b8272c008823c3128b765 + CI Core 37037626221 + Docker Foundation 37037626180 / 37038000854 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P3-010
+      - BR-P3-010
+      - AR-P3-010
+      - TST-P3-009
+      - TO-P3-009
+      - TO-P3-009-REATTACH-001
+      - PH-P3
+      - PH-P5
+      - STEP-P5-003
+      - STEP-P5-004
+    predecessor_state: "TO-P3-010 AUTHORIZED TO EXECUTE; active_task_order TO-P3-010; PH-P3 historical closure preserved; STEP-P5-004 NOT ACTIVATED."
+    resulting_state: "TO-P3-010 VERIFIED / COMPLETE; active_task_order null; completed_task_order TO-P3-010; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-003 remains COMPLETE / VERIFIED; STEP-P5-004 remains NOT ACTIVATED; PH-P3 historical closure preserved."
+    implementation_baseline: "fd20194bb9d0887b6c94cdd14671c5f42712e1d0"
+    merge_commit: "56ba10f5c964319e966b8272c008823c3128b765"
+    control_conclusion: "Reproduced Timescale/PostgreSQL readiness race corrected; actionable diagnostics and setup cleanup verified; ordered migrations 0001..0009 and seven-test P3-009 PostgreSQL path repeatedly passed in Docker/Core CI."
+    ci:
+      core_run_id: 37037626221
+      core_result: SUCCESS
+      docker_foundation_run_id: 37037626180
+      docker_foundation_result: SUCCESS
+      later_docker_run_id: 37038000854
+      later_docker_result: SUCCESS
+    runtime_effect: "No VPS/SentinelX operation required; no governed application or production database mutation performed."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; PH-P3 historical closure, PH-P5 and STEP-P5-003 lifecycle preserved; STEP-P5-004 not activated."
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      database_registry: CHECKED — no database implementation/schema change
+      requirements_registry: CHECKED — no new requirement artifact
+      configuration_registry: CHECKED — no governed configuration change
+      runtime_registry: CHECKED — no runtime mutation
+      security_registry: CHECKED — append-only/security behavior preserved
+      contracts_registry: CHECKED — no contract change
+      performance_registry: CHECKED — no performance target change
+      observability_registry: CHECKED — diagnostics improvement confined to test evidence path
+      phase_registry: CHECKED — PH-P3 historical closure and PH-P5 / STEP-P5-003 lifecycle unchanged; STEP-P5-004 not activated
+      readme: UPDATED
+      standalone_status_documents: CHECKED
+      open_questions: CHECKED — no open question resolved or created by this closure
+      supplemental_staging_registry: CHECKED
+      machine_readback: COMPLETED
