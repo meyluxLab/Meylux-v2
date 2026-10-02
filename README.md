@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-003` — `COMPLETE / VERIFIED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Active Task Order:** `TO-P3-010` — pre-`STEP-P5-004` P3-009 Docker evidence-harness remediation; `STEP-P5-004` remains not activated.
+- **Active Task Order:** `null` — `TO-P3-010` P3-009 Docker evidence-harness remediation is `VERIFIED / COMPLETE` under `AR-P3-010`; `STEP-P5-004` remains not activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -75,5 +75,8 @@ Phase 5 is established and authorized under the Project Owner Phase 5 Re-Directi
 
 
 ## Post-Closure Investigation State
+
+`TO-P3-010` is `VERIFIED / COMPLETE` under `AR-P3-010`; PR #58 merged as `56ba10f5c964319e966b8272c008823c3128b765`. The corrected P3-009 Docker evidence harness now requires Timescale initialization completion plus final-server SQL readiness before migrations and preserves actionable subprocess/container diagnostics. Historical P3-009 failures remain preserved; no P3/P5 semantic boundary or Phase/Step closure was reopened. `STEP-P5-004` remains NOT ACTIVATED.
+
 
 TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed under `AR-P2-AUDIT-009`; `MEXC_FINALITY` remains `UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED`. `TO-P2-010` reached `VERIFIED / COMPLETE` under `AR-P2-AUDIT-010`; `TO-P2-011` and `TO-P2-012` are also `VERIFIED / COMPLETE`; `TO-P2-013` remains `PREPARED / NOT ACTIVATED`. These post-closure P2 records remain separate from the active `PH-P5 / STEP-P5-003` boundary.
