@@ -414,17 +414,18 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, primary_per
             future.append(fact)
     if future:
         return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe event_time or knowledge_time exceeds the corresponding primary boundary"
+    price = _price(snapshot, symbol, timeframe, boundary=primary_knowledge_boundary)
     ema = _metric(snapshot, symbol, timeframe, _ema_names(primary_period, primary_period), boundary=primary_knowledge_boundary)
     macd = _metric(snapshot, symbol, timeframe, ("MACD",), boundary=primary_knowledge_boundary)
     signal = _metric(snapshot, symbol, timeframe, ("MACD_SIGNAL",), boundary=primary_knowledge_boundary)
     rsi = _metric(snapshot, symbol, timeframe, ("RSI",), boundary=primary_knowledge_boundary)
-    refs = _refs(tuple(f for metric in (ema, macd, signal, rsi) for f in metric.facts))
-    if any(metric.state != "VALID" for metric in (ema, macd, signal, rsi)):
-        return "INSUFFICIENT_DATA", refs, "EMA/MACD/RSI facts are required to interpret this timeframe"
-    if not _same_event_time(ema, macd, signal, rsi):
+    refs = _refs(tuple(f for metric in (price, ema, macd, signal, rsi) for f in metric.facts))
+    if any(metric.state != "VALID" for metric in (price, ema, macd, signal, rsi)):
+        return "INSUFFICIENT_DATA", refs, "closed price, EMA, MACD and RSI facts are required to interpret this timeframe"
+    if not _same_event_time(price, ema, macd, signal, rsi):
         return "CONTRADICTORY_CONTEXT", refs, "higher-timeframe interpretation combines facts from different event times"
-    bullish = macd.value > signal.value and rsi.value >= rsi_midline
-    bearish = macd.value < signal.value and rsi.value < rsi_midline
+    bullish = price.value > ema.value and macd.value > signal.value and rsi.value >= rsi_midline
+    bearish = price.value < ema.value and macd.value < signal.value and rsi.value < rsi_midline
     if bullish:
         return "BULLISH", refs, "persisted EMA/MACD/RSI facts align bullishly"
     if bearish:

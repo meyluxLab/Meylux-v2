@@ -68,7 +68,8 @@ def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
                     values[override_name] = override_value
             for period in ema_periods:
                 values[f"EMA_{period}"] = Decimal(str(100 - period / 10))
-            facts.append(_fact(symbol, timeframe, "CLOSE", Decimal("100"), source="meylux.canonical_candles", event=base, knowledge=base))
+            close_value = Decimal("90") if direction_by_tf.get(timeframe) == "BEARISH" else Decimal("100")
+            facts.append(_fact(symbol, timeframe, "CLOSE", close_value, source="meylux.canonical_candles", event=base, knowledge=base))
             for name, value in values.items():
                 if (symbol, timeframe, name) in missing:
                     continue
