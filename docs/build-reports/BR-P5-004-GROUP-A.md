@@ -5,8 +5,8 @@
 **Producer role:** ROL-V2-002  
 **Implementation-code revision:** 21204c8bc77d3f8b0770cb95458eff3994f01c81  
 **Final audited PR/test head:** 48231c2e04cdc846a5de0766600b6f4ad824be24  
-**Current PR-head CI Core:** [37053858406 — SUCCESS](https://github.com/meyluxLab/Meylux-v2/actions/runs/37053858406)  
-**Current PR-head CI Docker Foundation:** [37053858545 — SUCCESS](https://github.com/meyluxLab/Meylux-v2/actions/runs/37053858545)  
+**Audited implementation/test-head CI Core:** [37053858406 — SUCCESS](https://github.com/meyluxLab/Meylux-v2/actions/runs/37053858406)  
+**Audited implementation/test-head CI Docker Foundation:** [37053858545 — SUCCESS](https://github.com/meyluxLab/Meylux-v2/actions/runs/37053858545)  
 **Pull Request:** [#59 — TO-P5-004 Group-A specialists](https://github.com/meyluxLab/Meylux-v2/pull/59)  
 **Report disposition:** Implementation and CI evidence delivered for independent audit. This report does not declare the Task Order VERIFIED, COMPLETE or CLOSED. Several acceptance boundaries require CONTROL resolution/evidence, as detailed in §10.
 
@@ -140,12 +140,14 @@ The integration input is explicitly labeled a controlled synthetic test Snapshot
 
 All results below are real CI observations; no test result is inferred from source inspection.
 
-**Current audited PR-head results (head `48231c2e04cdc846a5de0766600b6f4ad824be24`):**
+**Successful CI results on final audited implementation/test head `48231c2e04cdc846a5de0766600b6f4ad824be24`:**
 
 - **CI Core, run 37053858406** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37053858406), SUCCESS on the final audited PR/test head.
 - **CI Docker Foundation, run 37053858545** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37053858545), SUCCESS on the final audited PR/test head.
 
-These current-head successes are separate observations from the historical runs below. The earlier Core failures remain recorded as historical failures and are not reclassified. The Docker integration remains a controlled synthetic Snapshot test and does not establish authoritative P4 source-row/EvidenceRef resolution, deployed PR-head runtime, or deployed performance acceptance.
+These audited-head successes are separate observations from the historical runs below. The earlier Core failures remain recorded as historical failures and are not reclassified. The Docker integration remains a controlled synthetic Snapshot test and does not establish authoritative P4 source-row/EvidenceRef resolution, deployed PR-head runtime, or deployed performance acceptance.
+
+**Report-only correction commit:** `0cb063cf6c3fbe81087392d972b5be6c22461d97`. CI runs triggered for that report-only commit are [CI Core 37058670711](https://github.com/meyluxLab/Meylux-v2/actions/runs/37058670711) and [CI Docker Foundation 37058670571](https://github.com/meyluxLab/Meylux-v2/actions/runs/37058670571); they were queued when this report revision was inspected. Their results must not be represented as successful until completed. This report-only commit changes reporting metadata/text, not specialist implementation or tests.
 
 - **CI Core, run 37051899822** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37051899822), SUCCESS on implementation/unit-test head 01e67af6dff02eaa41fe0248b5ffe9e0b3fd977b. Foundation suite: 614 tests in 30.221s; dedicated P3-009 PostgreSQL suite: 7 tests in 5.749s, OK.
 - **CI Docker Foundation, run 37052524169** — [workflow](https://github.com/meyluxLab/Meylux-v2/actions/runs/37052524169), SUCCESS on exact final code/test head 21204c8bc77d3f8b0770cb95458eff3994f01c81. Foundation self-check: 612 tests in 1.402s; TO-P4-011 PostgreSQL check: 2 tests in 0.201s; P3-009 PostgreSQL evidence: 7 tests in 5.832s; Group-A Redis/worker/PostgreSQL integration: 1 test, OK. The full Docker Foundation workflow completed successfully.
