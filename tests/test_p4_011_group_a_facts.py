@@ -176,6 +176,16 @@ class TestP4011GroupAFacts(unittest.TestCase):
         query, args = db.fetches[0]
         self.assertIn("symbol=$1 AND timeframe=$2", query)
         self.assertEqual(args, ("BTCUSDT", "1h", 20))
+        start = T0
+        end = T0 + timedelta(days=1)
+        asyncio.run(QuantitativePersistence(db).fetch_family(
+            "indicator", "BTCUSDT", "1h", start=start, end=end, limit=20
+        ))
+        bounded_query, bounded_args = db.fetches[1]
+        self.assertIn("event_time>$3", bounded_query)
+        self.assertIn("event_time<$4", bounded_query)
+        self.assertIn("LIMIT $5", bounded_query)
+        self.assertEqual(bounded_args, ("BTCUSDT", "1h", start, end, 20))
 
     def test_persistence_rejects_a_future_timeframe_fact_even_if_constructed_directly(self):
         from dataclasses import replace
