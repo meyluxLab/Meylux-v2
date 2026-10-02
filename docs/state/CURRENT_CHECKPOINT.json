@@ -22,7 +22,7 @@
   "last_build_report": "BR-P4-011",
   "last_audit_report": "AR-P4-018",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": null,
+  "active_task_order": "TO-P3-010",
   "completed_task_order": "TO-P4-011",
   "completion_audit": "AR-P4-018",
   "verified_artifacts": [
@@ -358,7 +358,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "0cdffeadd7c4632c4c57731cb87dd4c687296df4",
-  "updated_at_utc": "2026-10-02T14:09:26.960242Z",
+  "updated_at_utc": "2026-10-02T16:38:32.158Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -446,7 +446,8 @@
     "CONTROL independently verified STEP-P5-003 and TO-P5-003 under AR-P5-003 on authoritative main 02394ba59eece109c4bbe0ab7893d47523382fac; Snapshot transport UTC reconstruction and HealthState.NORMAL worker completion were corrected; live Redis→worker→S-10→PostgreSQL ACK/readback, duplicate rejection, semantic DLQ and restart recovery passed; Closure Synchronization completed under ADR-GOVERNANCE-012.",
     "CONTROL final machine read-back completed after P5-003 Closure Synchronization; Checkpoint, PH-P5 specification/registry, artifacts registry, README, Change Ledger and specialized evidence registries are synchronized; active_task_order is null.",
     "Final status-bearing documents were synchronized after independent verification: TO-P5-003, TO-P5-003-CORRECTIVE-001, BR-P5-004 and AR-P5-003 now reflect the verified/closed boundary.",
-    "CONTROL independently verified TO-P4-011 under AR-P4-018 after the Producer correction. PR #57 merged as 4fb62d907a777b7a43eb39a79c62fa6532616abc. Group-A PRQ-1 capability is established; PH-P4 / STEP-P4-006 / G-4 historical closure is preserved; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-003 remains COMPLETE / VERIFIED; STEP-P5-004 remains NOT ACTIVATED."
+    "CONTROL independently verified TO-P4-011 under AR-P4-018 after the Producer correction. PR #57 merged as 4fb62d907a777b7a43eb39a79c62fa6532616abc. Group-A PRQ-1 capability is established; PH-P4 / STEP-P4-006 / G-4 historical closure is preserved; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-003 remains COMPLETE / VERIFIED; STEP-P5-004 remains NOT ACTIVATED.",
+    "Owner pre-STEP-P5-004 technical-debt directive initiated TO-P3-010 to resolve/reproduce the current Docker Foundation P3-009 PostgreSQL evidence failure; STEP-P5-004 remains NOT ACTIVATED. Full PRQ-1 disposition is being formalized: Group-A VERIFIED; later groups remain explicitly future-owned/JIT or UNAVAILABLE according to their future P5 gates."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
