@@ -7,6 +7,7 @@ import os
 import resource
 import statistics
 import time
+import shutil
 import unittest
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -193,6 +194,14 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                 await handler(invalid_envelope)
 
             cpu_end = resource.getrusage(resource.RUSAGE_SELF)
+            disk = shutil.disk_usage("/")
+            queue_depth = int(await client.get(queue.backlog_key) or 0)
+            pending_summary = await client.xpending(queue.stream, queue.group)
+            queue_state = {
+                "active_backlog": queue_depth,
+                "pending_entries": int(pending_summary.get("pending", 0)),
+                "stream_entries_retained": int(await client.xlen(queue.stream)),
+            }
             print("P5-004_PERF_BASELINE " + json.dumps({
                 "revision": os.environ.get("GITHUB_SHA", "CI checkout revision"),
                 "environment": "Docker Foundation CI; real Redis 7.4.6 + TimescaleDB/PostgreSQL; controlled synthetic Snapshot fixture",
@@ -205,6 +214,8 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                 "process_resource_delta": {"user_cpu_seconds": cpu_end.ru_utime - cpu_start.ru_utime,
                     "system_cpu_seconds": cpu_end.ru_stime - cpu_start.ru_stime,
                     "max_rss_platform_units": cpu_end.ru_maxrss},
+                "disk_observation_bytes": {"total": disk.total, "used": disk.used, "free": disk.free},
+                "queue_observation": queue_state,
                 "interpretation": "CI baseline only; CONTROL must separately measure deployed runtime CPU/RAM/disk/queue and latency.",
             }, sort_keys=True))
         finally:

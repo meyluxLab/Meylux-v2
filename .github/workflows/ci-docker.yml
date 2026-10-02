@@ -189,6 +189,7 @@ jobs:
           docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
             -v "$PWD/tests:/app/tests:ro" \
             -e MEYLUX_RUN_P5004_REDIS_INTEGRATION=1 \
+            -e GITHUB_SHA="$GITHUB_SHA" \
             --entrypoint python api \
             -m unittest discover -s /app/tests -p 'test_p5_004_redis_postgresql.py' -v
 
