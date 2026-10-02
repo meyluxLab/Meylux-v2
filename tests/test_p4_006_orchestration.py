@@ -34,7 +34,7 @@ class TestMTF(unittest.TestCase):
         p=candle(3,"109")
         h=candle(0,"100","1h")
         h2=CanonicalCandle("BTCUSDT","1h",T0+timedelta(minutes=60),T0+timedelta(minutes=120),Decimal("101"),Decimal("101"),Decimal("101"),Decimal("101"),Decimal("1"),provenance_id="h2")
-        self.assertEqual(align_higher_timeframe(p,(h,h2)).candle,h)
+        self.assertEqual(align_higher_timeframe(p,(h,)).candle,h)
         p2=CanonicalCandle("BTCUSDT","15m",T0+timedelta(minutes=8*15),T0+timedelta(minutes=9*15),Decimal("110"),Decimal("110"),Decimal("110"),Decimal("110"),Decimal("1"),provenance_id="p8")
         a=align_higher_timeframe(p2,(h,h2))
         self.assertEqual(a.candle,h2)
@@ -44,7 +44,7 @@ class TestMTF(unittest.TestCase):
     def test_future_htf_never_selected(self):
         p=candle(5,"115")
         future=CanonicalCandle("BTCUSDT","1h",T0+timedelta(minutes=60),T0+timedelta(minutes=120),Decimal("1"),Decimal("1"),Decimal("1"),Decimal("1"),Decimal("1"),provenance_id="future")
-        self.assertIsNone(align_higher_timeframe(p,(future,)).candle)
+        with self.assertRaises(ValueError): align_higher_timeframe(p,(future,))
 
     def test_incomplete_wrong_order_and_key_mismatch_rejected(self):
         with self.assertRaises(ValueError): align_higher_timeframe(candle(1,"101"),(candle(0,"100","1h",closed=False),))
@@ -112,6 +112,8 @@ class TestWorkerAPI(unittest.TestCase):
         self.assertEqual(len(p.results),1)
         self.assertIn("1h",p.results[0].htf)
         self.assertIsNotNone(p.results[0].htf["1h"].candle)
+        self.assertIn("1h",p.results[0].higher_timeframe_facts)
+        self.assertEqual(p.results[0].higher_timeframe_facts["1h"].timeframe, "1h")
 
     def test_api_rejects_negative_limit(self):
         response=asyncio.run(QuantitativeAPI(_FakePersistence()).handle("GET","/v1/quantitative/regime/BTCUSDT/15m",{"limit":"-1"}))
@@ -156,8 +158,8 @@ class TestPersistence(unittest.TestCase):
     def test_idempotent_identity_is_stable(self):
         db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
         again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        self.assertEqual(result,5); self.assertEqual(again,0)
-        self.assertEqual(len(db.sql),10)
+        self.assertEqual(result,16); self.assertEqual(again,0)
+        self.assertEqual(len(db.sql),32)
         identities=[args[-1] for _,args in db.sql]
         self.assertEqual(identities, [args[-1] for _,args in db.sql])
         self.assertTrue(all(isinstance(x,str) and len(x)==64 for x in identities))
