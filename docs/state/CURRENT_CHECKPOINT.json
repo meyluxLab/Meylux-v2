@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-011",
-  "last_build_report": "BR-P5-004",
-  "last_audit_report": "AR-P5-003",
+  "last_build_report": "BR-P4-011",
+  "last_audit_report": "AR-P4-018",
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P4-011",
-  "completed_task_order": "TO-P5-003",
-  "completion_audit": "AR-P5-003",
+  "active_task_order": null,
+  "completed_task_order": "TO-P4-011",
+  "completion_audit": "AR-P4-018",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -294,7 +294,14 @@
     "SEC-P5-003",
     "CFG-P5-003",
     "PERF-P5-003",
-    "OBS-P5-003"
+    "OBS-P5-003",
+    "BR-P4-011",
+    "TST-P4-011",
+    "DB-P4-011",
+    "REQ-P4-011",
+    "CFG-P4-011",
+    "RUN-P4-011",
+    "AR-P4-018"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -349,8 +356,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "02394ba59eece109c4bbe0ab7893d47523382fac",
-  "updated_at_utc": "2026-10-02T10:01:52Z",
+  "last_verified_commit": "0cdffeadd7c4632c4c57731cb87dd4c687296df4",
+  "updated_at_utc": "2026-10-02T14:04:01Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -403,7 +410,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "56a06cdabbafcb08f5425720453fad5767dfc683",
+  "last_governance_sync_base_commit": "4fb62d907a777b7a43eb39a79c62fa6532616abc",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -437,7 +444,8 @@
     "Project Owner ratified Option A — Controlled Reattachment of P3-009 into current authoritative SoT. CONTROL activated TO-P3-009-REATTACH-001 from current mainline; historical PR #51 / BR-P3-009 / AR-P3-009 remain preserved as historical evidence. TO-P5-003 implementation remains preserved and its independent verification remains prerequisite-blocked until fresh current-mainline P3-009 verification succeeds.",
     "CONTROL independently verified STEP-P5-003 and TO-P5-003 under AR-P5-003 on authoritative main 02394ba59eece109c4bbe0ab7893d47523382fac; Snapshot transport UTC reconstruction and HealthState.NORMAL worker completion were corrected; live Redis→worker→S-10→PostgreSQL ACK/readback, duplicate rejection, semantic DLQ and restart recovery passed; Closure Synchronization completed under ADR-GOVERNANCE-012.",
     "CONTROL final machine read-back completed after P5-003 Closure Synchronization; Checkpoint, PH-P5 specification/registry, artifacts registry, README, Change Ledger and specialized evidence registries are synchronized; active_task_order is null.",
-    "Final status-bearing documents were synchronized after independent verification: TO-P5-003, TO-P5-003-CORRECTIVE-001, BR-P5-004 and AR-P5-003 now reflect the verified/closed boundary."
+    "Final status-bearing documents were synchronized after independent verification: TO-P5-003, TO-P5-003-CORRECTIVE-001, BR-P5-004 and AR-P5-003 now reflect the verified/closed boundary.",
+    "CONTROL independently verified TO-P4-011 under AR-P4-018 after the Producer correction. PR #57 merged as 4fb62d907a777b7a43eb39a79c62fa6532616abc. Group-A PRQ-1 capability is established; PH-P4 / STEP-P4-006 / G-4 historical closure is preserved; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-003 remains COMPLETE / VERIFIED; STEP-P5-004 remains NOT ACTIVATED."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
