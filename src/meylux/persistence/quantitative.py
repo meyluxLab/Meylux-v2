@@ -121,8 +121,12 @@ class QuantitativePersistence:
                 raise TypeError(f"higher_timeframe_facts[{timeframe}] must be TimeframeQuantitativeFacts")
             if timeframe != facts.timeframe:
                 raise ValueError("higher timeframe fact key must match its timeframe")
+            if timeframe == result.timeframe:
+                raise ValueError("higher timeframe fact timeframe must differ from primary timeframe")
             if facts.symbol != result.symbol:
                 raise ValueError("higher timeframe fact instrument must match primary")
+            if facts.configuration_version != result.configuration_version:
+                raise ValueError("higher timeframe fact configuration must match primary configuration")
             if facts.knowledge_time > primary_knowledge_time:
                 raise ValueError("higher timeframe fact knowledge_time exceeds primary knowledge boundary")
             if facts.knowledge_time != facts.event_time:
