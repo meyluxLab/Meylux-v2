@@ -1468,6 +1468,14 @@ records:
     completion_audit: AR-P4-017
 
 
+  - stable_id: TO-P4-011
+    canonical_name: Task Order — Bounded Additive P4 Fact Operationalization for P5-004 Group A
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-011.md
+    traceability: PH-P4 / STEP-P4-006 / PRQ-1 Group-A dependency / STEP-P5-004 / Owner Decision — Route A 2026-10-02 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
+    lifecycle_context: POST-CLOSURE BOUNDED ADDITIVE HARDENING — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
+
   - stable_id: BR-P4-010
     canonical_name: Build Report — P4 Authoritative Knowledge-Time Semantic & Persistence Correction
     entity_type: BR
