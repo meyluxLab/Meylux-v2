@@ -2841,3 +2841,23 @@ entries:
     architecture_effect: "No frozen architecture redesign, migration 0008 change, provider-to-venue inference, new provider, or cross-phase reopening occurred."
     runtime_effect: "CONTROL executed all deployment/restart/runtime verification only through SentinelX; final worker pending count was 0."
     closure_sync: "CONTROL synchronized README, phase specification, phase registry, artifact registry, contracts, requirements, tests, runtime, database, security, configuration, performance/resource and observability registries, this Change Ledger, and CURRENT_CHECKPOINT; final machine read-back follows."
+
+  - ledger_id: CL-P4-011-ACTIVATION-20261002
+    recorded_at: "2026-10-02"
+    authority: ROL-V2-001 / Project Owner Decision — PRQ-1 Route A
+    action: "CONTROL FORMALIZATION AND ACTIVATION — TO-P4-011"
+    basis: "Project Owner selected ROUTE A — BOUNDED ADDITIVE GOVERNED P4 ROUTE on 2026-10-02; TO-P4-010 / AR-P4-017 established the knowledge-time persistence boundary but did not operationalize the full Group-A fact surface required by intended STEP-P5-004."
+    affected_ids:
+      - TO-P4-011
+      - PRQ-1
+      - STEP-P5-004
+      - STEP-P5-003
+      - TO-P4-010
+      - AR-P4-017
+      - G-4
+    predecessor_state: "STEP-P5-003 COMPLETE / VERIFIED; PH-P5 ACTIVE / AUTHORIZED; active_task_order null; PRQ-1 Group-A dependency not yet operationally established."
+    resulting_state: "TO-P4-011 AUTHORIZED TO EXECUTE; active_task_order TO-P4-011; STEP-P5-004 remains NOT ACTIVATED; PH-P5 and STEP-P5-003 lifecycle states preserved."
+    scope: "Bounded additive P4 operationalization and persistence of the existing deterministic fact surface required by S-01, S-06 and S-08, including eligible multi-timeframe handling, knowledge-time preservation, provenance, identity, replay/idempotency and explicit insufficient-history semantics."
+    exclusions: "No P5 implementation; no STEP-P5-004 activation; no P4 engine redesign; no G-4 reopening; no PRQ-2/3/4; no MEXC/Futures/Forex; no trading/capital/execution/custody."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN. PH-P4, STEP-P4-006 and G-4 remain historical closure states."
+    runtime_effect: "Producer has no VPS mutation authority. Any required runtime verification is CONTROL-owned and SentinelX-only within the Task Order boundary."
