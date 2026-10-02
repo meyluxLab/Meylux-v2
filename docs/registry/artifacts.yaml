@@ -1585,3 +1585,11 @@ records:
     artifact_path: docs/audits/AR-P4-018.md
     traceability: TO-P4-011 / BR-P4-011 / TST-P4-011 / DB-P4-011 / REQ-P4-011 / CFG-P4-011 / RUN-P4-011 / PH-P4 / STEP-P4-006 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+
+  - stable_id: TO-P3-010
+    canonical_name: P3-009 Docker PostgreSQL Evidence Harness Stabilization
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P3-010.md
+    traceability: TO-P3-009 / TO-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001 / PRQ-4 / PH-P5 / STEP-P5-004 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
+    lifecycle_context: POST-CLOSURE CORRECTIVE EVIDENCE-HARNESS
