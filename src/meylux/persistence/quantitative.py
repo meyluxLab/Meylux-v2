@@ -79,7 +79,9 @@ class QuantitativePersistence:
         calculation: CalculationResult,
         provenance: tuple[str, ...],
     ) -> tuple[Any, ...]:
-        payload = _calc(calculation)
+        if not isinstance(name, str) or not name:
+            raise ValueError("indicator fact name must be non-empty")
+        payload = {"fact_name": name, **_calc(calculation)}
         material = {
             "family": "indicator",
             "name": name,
