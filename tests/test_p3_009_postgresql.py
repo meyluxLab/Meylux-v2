@@ -53,16 +53,32 @@ class TestP3009PostgreSQLBehavior(unittest.TestCase):
                   "--env",f"POSTGRES_DB={DB}","--env",f"POSTGRES_USER={ADMIN}",
                   "--env",f"POSTGRES_PASSWORD={ADMIN_PASSWORD}","--volume",f"{ROOT}:/workspace:ro",
                   IMAGE])
+        # A successful SELECT 1 alone is not a sufficient startup boundary for
+        # this image: the Timescale entrypoint can start a temporary init server,
+        # run timescaledb-tune, and shut that server down before starting the final
+        # server. Do not begin migrations until the entrypoint's init-complete
+        # marker has appeared, then verify SQL readiness against the final server.
+        init_complete_marker="PostgreSQL init process complete; ready for start up."
         for _ in range(60):
-            ready=cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
-                            "psql","-X","-At","-U",ADMIN,"-d",DB,"-c","SELECT 1;"],check=False)
-            if ready.returncode==0 and ready.stdout.strip()=="1":
-                break
+            startup_logs=subprocess.run(
+                [cls.docker,"logs",CONTAINER],
+                text=True,capture_output=True,check=False,
+            )
+            combined_logs=f"{startup_logs.stdout}\\n{startup_logs.stderr}"
+            if init_complete_marker in combined_logs:
+                ready=cls._run([cls.docker,"exec","--env",f"PGPASSWORD={ADMIN_PASSWORD}",CONTAINER,
+                                "psql","-X","-At","-U",ADMIN,"-d",DB,"-c","SELECT 1;"],check=False)
+                if ready.returncode==0 and ready.stdout.strip()=="1":
+                    break
             time.sleep(1)
         else:
-            cls._emit_container_diagnostics("PostgreSQL readiness timeout after 60 SELECT 1 probes")
+            cls._emit_container_diagnostics(
+                "PostgreSQL did not complete image initialization and pass final SELECT 1 readiness within 60 probes"
+            )
             cls._remove_container()
-            raise RuntimeError("ephemeral PostgreSQL did not become ready; container diagnostics emitted above")
+            raise RuntimeError(
+                "ephemeral PostgreSQL did not complete initialization and become ready; diagnostics emitted above"
+            )
         try:
             for name in (
                 "0001_database_foundation.sql","0002_raw_acquisition_staging.sql",
