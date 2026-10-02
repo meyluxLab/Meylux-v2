@@ -10,7 +10,7 @@ from pathlib import Path
 from contracts.specialist import EvidenceRef, FactStatus, InputSnapshot, SnapshotFact
 from meylux.specialists.config import SpecialistConfig, load_specialists_config
 from meylux.specialists.snapshot import InputSnapshotBuilder, SnapshotRecord
-from meylux.specialists.group_a import analyze_s01, analyze_s06, analyze_s08
+from meylux.specialists.group_a import GroupASemanticError, analyze_s01, analyze_s06, analyze_s08
 
 UTC = timezone.utc
 AS_OF = datetime(2026, 10, 2, 12, 0, tzinfo=UTC)
