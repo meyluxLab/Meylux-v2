@@ -301,7 +301,8 @@
     "REQ-P4-011",
     "CFG-P4-011",
     "RUN-P4-011",
-    "AR-P4-018"
+    "AR-P4-018",
+    "TO-P4-011"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
