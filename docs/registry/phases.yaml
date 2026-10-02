@@ -450,8 +450,8 @@ records:
     next_valid_step: STEP-P5-004
     final_step: STEP-P5-012
     g4_status: ESTABLISHED / VERIFIED
-    active_task_order: null
-    current_step: STEP-P5-003
+     active_task_order: TO-P5-004
+     current_step: STEP-P5-004
     completed_task_order: TO-P5-003
     completion_audit: AR-P5-003
     authorization_criteria:
@@ -506,6 +506,27 @@ records:
       resolved: PRQ-4 / TO-P3-009 / AR-P3-009 / TO-P3-009-REATTACH-001 / AR-P3-009-REATTACH-001
       excluded_without_actual_dependency: PRQ-1 / PRQ-2 / PRQ-3 / TO-P2-013 / migration 0008 / upstream P2-P4 capability expansion
     vps_scope: CONTROL-owned SentinelX-only runtime deployment and independent verification required by TO-P5-003.
+    closure_owner: ROL-V2-001
+    producer_role: ROL-V2-002
+
+  - sid: STEP-P5-004
+    logical_name: Group A: Technical, Multi-Timeframe, Volatility
+    entity_type: STEP
+    phase: PH-P5
+    status: ACTIVE / AUTHORIZED
+    authorization_state: AUTHORIZED TO EXECUTE
+    order: 4
+    predecessor: STEP-P5-003
+    activation_basis: PROJECT-OWNER-STEP-P5-004-CONTINUATION-AUTHORIZATION-2026-10-02
+    active_task_order: TO-P5-004
+    completed_task_order: null
+    completion_audit: null
+    purpose: Establish deterministic Group-A specialist capability for S-01 Technical, S-06 Multi-Timeframe and S-08 Volatility using authoritative P4 Group-A facts through the Stage-1 Input Snapshot.
+    repository_scope: S-01/S-06/S-08 contracts and implementations, Group-A evidence interpretation, persistence/read-back, deterministic replay/idempotency, tests and required runtime evidence within STEP-P5-004 only.
+    dependency_boundary:
+      resolved: PRQ-1 Group-A / TO-P4-011 / AR-P4-018
+      excluded_without_actual_dependency: PRQ-1 Groups B-G / PRQ-2 / PRQ-3 / later P5 Steps / P6 synthesis
+    vps_scope: CONTROL-owned SentinelX-only runtime deployment and independent verification required by TO-P5-004.
     closure_owner: ROL-V2-001
     producer_role: ROL-V2-002
 
