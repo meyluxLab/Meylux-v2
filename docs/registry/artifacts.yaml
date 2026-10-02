@@ -936,19 +936,32 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-003-CORRECTIVE-001.md
     traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / PRQ-4 / P3 quality-evidence context / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-01
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: STEP-P5-003
     canonical_name: Runtime Harness & Reference Specialist (S-10)
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-002 / TO-P5-003 / PRQ-4 / TO-P3-009 / AR-P3-009 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-09-29
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: TO-P5-003
     canonical_name: Runtime Harness & Reference Specialist (S-10)
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-003.md
     traceability: PH-P5 / STEP-P5-003 / STEP-P5-002 / PRQ-4 / TO-P3-009 / AR-P3-009 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-09-29
+    status: VERIFIED / COMPLETE
+  - stable_id: STEP-P5-004
+    canonical_name: Group A: Technical, Multi-Timeframe, Volatility
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P5.md
+    traceability: PH-P5 / STEP-P5-003 / TO-P5-004 / PRQ-1 Group-A / TO-P4-011 / AR-P4-018 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-02
+    status: ACTIVE / AUTHORIZED
+  - stable_id: TO-P5-004
+    canonical_name: Group A: Technical, Multi-Timeframe, Volatility
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P5-004.md
+    traceability: PH-P5 / STEP-P5-004 / STEP-P5-003 / PRQ-1 Group-A / TO-P4-011 / AR-P4-018 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-02
     status: AUTHORIZED TO EXECUTE
+
   - stable_id: STEP-P5-002
     canonical_name: Input Snapshot Builder & Fact Availability Verification
     entity_type: STEP
