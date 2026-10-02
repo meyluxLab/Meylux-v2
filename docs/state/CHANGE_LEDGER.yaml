@@ -2921,3 +2921,21 @@ entries:
       open_questions: UPDATED — Group-A PRQ-1 capability established; broader PRQ-1 remains separately governed
       supplemental_staging_registry: CHECKED
       machine_readback: COMPLETED
+
+  - id: CL-P3-010-ACTIVATION-20261002
+    date_utc: '2026-10-02'
+    change_type: GOVERNANCE_STATE_TRANSITION
+    subject: TO-P3-010 activation for P3-009 Docker PostgreSQL evidence-harness stabilization
+    basis: Project Owner pre-STEP-P5-004 technical-debt/evidence-integrity directive 2026-10-02 + ADR-GOVERNANCE-013
+    affected_ids:
+      - TO-P3-010
+      - TO-P3-009
+      - TO-P3-009-REATTACH-001
+      - PRQ-4
+      - PH-P3
+      - PH-P5
+      - STEP-P5-004
+    from_state: "No active corrective Task Order; TO-P4-011 VERIFIED / COMPLETE; STEP-P5-004 NOT ACTIVATED."
+    to_state: "TO-P3-010 AUTHORIZED TO EXECUTE; PH-P3 historical closure preserved; PH-P5 ACTIVE / AUTHORIZED; STEP-P5-004 NOT ACTIVATED."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; no P3 semantic or P4 mathematical redesign authorized."
+    runtime_effect: "No governed VPS mutation authorized by this activation."
