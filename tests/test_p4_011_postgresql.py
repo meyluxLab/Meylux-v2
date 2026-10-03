@@ -86,14 +86,14 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 30)
+                self.assertEqual(inserted, 40)
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
                 primary_rows = await persistence.fetch_family("indicator", SYMBOL, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", SYMBOL, "1h", limit=100)
-                self.assertEqual(len(primary_rows), 14)
-                self.assertEqual(len(higher_rows), 14)
+                self.assertEqual(len(primary_rows), 19)
+                self.assertEqual(len(higher_rows), 19)
                 self.assertEqual({row["timeframe"] for row in primary_rows}, {"15m"})
                 self.assertEqual({row["timeframe"] for row in higher_rows}, {"1h"})
                 self.assertEqual({row["event_time"] for row in primary_rows}, {primary[-1].close_time})
@@ -121,7 +121,8 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     for row in higher_rows
                 }
                 expected_names = {
-                    "EMA", "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
+                    "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
+                    "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
                     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
                     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
                     "VOLATILITY_EXPANSION_RATIO",
@@ -147,7 +148,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "WHERE symbol=$1 GROUP BY timeframe ORDER BY timeframe",
                     SYMBOL,
                 )
-                self.assertEqual([(row["timeframe"], row["n"]) for row in counts], [("15m", 14), ("1h", 14)])
+                self.assertEqual([(row["timeframe"], row["n"]) for row in counts], [("15m", 19), ("1h", 19)])
             finally:
                 await conn.close()
         asyncio.run(run())
@@ -194,10 +195,11 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 higher_rows = await persistence.fetch_family(
                     "indicator", worker_symbol, "1h", limit=100
                 )
-                self.assertEqual(len(primary_rows), 14)
-                self.assertEqual(len(higher_rows), 14)
+                self.assertEqual(len(primary_rows), 19)
+                self.assertEqual(len(higher_rows), 19)
                 expected_names = {
-                    "EMA", "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
+                    "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
+                    "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
                     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
                     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
                     "VOLATILITY_EXPANSION_RATIO",
@@ -244,7 +246,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(
                     [(row["timeframe"], row["n"]) for row in before_counts],
-                    [("15m", 14), ("1h", 14)],
+                    [("15m", 19), ("1h", 19)],
                 )
 
                 # Same governed envelope through the same worker is replay-safe.
@@ -270,7 +272,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(
                     [(row["timeframe"], row["n"]) for row in after_counts],
-                    [("15m", 14), ("1h", 14)],
+                    [("15m", 19), ("1h", 19)],
                 )
 
                 # A distinct symbol makes the negative-path no-write assertion unambiguous.
