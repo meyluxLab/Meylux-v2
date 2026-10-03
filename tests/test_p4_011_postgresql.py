@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import json
 import os
+from dataclasses import replace
 import unittest
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
@@ -86,14 +88,14 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 30)
+                self.assertEqual(inserted, 40)
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
                 primary_rows = await persistence.fetch_family("indicator", SYMBOL, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", SYMBOL, "1h", limit=100)
-                self.assertEqual(len(primary_rows), 14)
-                self.assertEqual(len(higher_rows), 14)
+                self.assertEqual(len(primary_rows), 19)
+                self.assertEqual(len(higher_rows), 19)
                 self.assertEqual({row["timeframe"] for row in primary_rows}, {"15m"})
                 self.assertEqual({row["timeframe"] for row in higher_rows}, {"1h"})
                 self.assertEqual({row["event_time"] for row in primary_rows}, {primary[-1].close_time})
@@ -121,7 +123,8 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     for row in higher_rows
                 }
                 expected_names = {
-                    "EMA", "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
+                    "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
+                    "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
                     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
                     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
                     "VOLATILITY_EXPANSION_RATIO",
@@ -133,6 +136,17 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                      if primary_payloads[row["record_id"]]["fact_name"] == "EMA"},
                     {"valid"},
                 )
+                primary_status = {
+                    primary_payloads[row["record_id"]]["fact_name"]: (row["status"], row["value_numeric"], row["reason"])
+                    for row in primary_rows
+                }
+                for period in (9, 20, 21):
+                    self.assertEqual(primary_status[f"EMA_{period}"][0], "valid")
+                    self.assertIsNotNone(primary_status[f"EMA_{period}"][1])
+                for period in (50, 200):
+                    self.assertEqual(primary_status[f"EMA_{period}"][0], "insufficient_history")
+                    self.assertIsNone(primary_status[f"EMA_{period}"][1])
+                    self.assertIn(f"requires_at_least_{period}_observations", primary_status[f"EMA_{period}"][2])
                 for row in primary_rows + higher_rows:
                     payload = row["payload_json"]
                     if isinstance(payload, str):
@@ -147,11 +161,86 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "WHERE symbol=$1 GROUP BY timeframe ORDER BY timeframe",
                     SYMBOL,
                 )
-                self.assertEqual([(row["timeframe"], row["n"]) for row in counts], [("15m", 14), ("1h", 14)])
+                self.assertEqual([(row["timeframe"], row["n"]) for row in counts], [("15m", 19), ("1h", 19)])
             finally:
                 await conn.close()
         asyncio.run(run())
 
+
+    def test_explicit_raw_venue_context_is_persisted_and_replayed_idempotently(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"],
+                port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"],
+                user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"],
+                timeout=10,
+                command_timeout=30,
+            )
+            try:
+                symbol = "TO-P4-012-CI-VENUE:BTCUSDT"
+                primary = tuple(
+                    replace(item, instrument_id=symbol,
+                            provenance_id=f"p4-012-ci:{item.timeframe}:{index}")
+                    for index, item in enumerate(_candles("15m", 40, 15, symbol))
+                )
+                higher = tuple(
+                    replace(item, instrument_id=symbol,
+                            provenance_id=f"p4-012-ci:{item.timeframe}:{index}")
+                    for index, item in enumerate(_candles("1h", 10, 60, symbol))
+                )
+                # These are explicitly labeled CI fixtures. They exercise the
+                # SQL resolver but are not authoritative runtime acceptance evidence.
+                for timeframe_candles in (primary, higher):
+                    for index, candle in enumerate(timeframe_candles):
+                        event_id = f"p4-012-ci-venue:{candle.timeframe}:{index}"
+                        payload = {"venue": "BINANCE"}
+                        payload_json = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+                        identity_hash = hashlib.sha256(
+                            ("p4-012-ci-venue-identity:" + event_id).encode()
+                        ).hexdigest()
+                        await conn.execute(
+                            "INSERT INTO meylux.raw_acquisition_events ("
+                            "event_id,provider_id,adapter_id,adapter_version,"
+                            "canonical_instrument_id,provider_instrument_id,event_type,"
+                            "event_time,received_at,acquisition_state,source_sequence,"
+                            "provenance_id,acquisition_method,payload_json,canonical_bytes,identity_hash"
+                            ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14::jsonb,$15,$16) "
+                            "ON CONFLICT (event_id) DO NOTHING",
+                            event_id, "binance", "binance-acquisition", "1.0.0",
+                            symbol, "BTCUSDT", "CANDLE", candle.open_time, candle.open_time,
+                            "AVAILABLE", str(index), candle.provenance_id, "CI_FIXTURE",
+                            payload_json, payload_json.encode("utf-8"), identity_hash,
+                        )
+                config = QuantOrchestrationConfig(
+                    RegimeConfig(2, 2, Decimal("0.10"), Decimal("0.05"), Decimal("0.10"), Decimal("0.05"))
+                )
+                result = QuantitativeOrchestrator().process(
+                    primary, config, higher_timeframes={"1h": higher}
+                )
+                persistence = QuantitativePersistence(conn)
+                self.assertEqual(await persistence.persist_orchestration(result), 40)
+                primary_rows = await persistence.fetch_family("indicator", symbol, "15m", limit=100)
+                higher_rows = await persistence.fetch_family("indicator", symbol, "1h", limit=100)
+                self.assertEqual(len(primary_rows), 19)
+                self.assertEqual(len(higher_rows), 19)
+                for rows, timeframe in ((primary_rows, "15m"), (higher_rows, "1h")):
+                    self.assertEqual({row["venue_context"] for row in rows}, {"BINANCE"})
+                    for row in rows:
+                        payload = row["payload_json"]
+                        if isinstance(payload, str):
+                            payload = json.loads(payload)
+                        self.assertEqual(payload["context"]["venue_context"], "BINANCE")
+                        self.assertEqual(payload["context"]["timeframe"], timeframe)
+                self.assertEqual(await persistence.persist_orchestration(result), 0)
+                self.assertEqual(
+                    {row["record_id"] for row in await persistence.fetch_family("indicator", symbol, "15m", limit=100)},
+                    {row["record_id"] for row in primary_rows},
+                )
+            finally:
+                await conn.close()
+        asyncio.run(run())
 
     def test_governed_worker_envelope_persists_mtf_to_postgresql_and_rejects_future_htf(self):
         async def run():
@@ -194,10 +283,11 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 higher_rows = await persistence.fetch_family(
                     "indicator", worker_symbol, "1h", limit=100
                 )
-                self.assertEqual(len(primary_rows), 14)
-                self.assertEqual(len(higher_rows), 14)
+                self.assertEqual(len(primary_rows), 19)
+                self.assertEqual(len(higher_rows), 19)
                 expected_names = {
-                    "EMA", "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
+                    "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
+                    "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
                     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
                     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
                     "VOLATILITY_EXPANSION_RATIO",
@@ -244,7 +334,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(
                     [(row["timeframe"], row["n"]) for row in before_counts],
-                    [("15m", 14), ("1h", 14)],
+                    [("15m", 19), ("1h", 19)],
                 )
 
                 # Same governed envelope through the same worker is replay-safe.
@@ -270,7 +360,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(
                     [(row["timeframe"], row["n"]) for row in after_counts],
-                    [("15m", 14), ("1h", 14)],
+                    [("15m", 19), ("1h", 19)],
                 )
 
                 # A distinct symbol makes the negative-path no-write assertion unambiguous.

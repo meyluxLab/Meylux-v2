@@ -34,6 +34,10 @@ def _config()->QuantOrchestrationConfig:
         int(os.environ.get("MEYLUX_RSI_PERIOD","14")),
         int(os.environ.get("MEYLUX_ATR_PERIOD","14")),
         os.environ.get("MEYLUX_QUANT_CONFIG_VERSION","1.0.0"),
+        ema_periods=tuple(
+            int(item.strip())
+            for item in os.environ.get("MEYLUX_EMA_PERIODS", "9,20,21,50,200").split(",")
+        ),
     )
 
 async def main():

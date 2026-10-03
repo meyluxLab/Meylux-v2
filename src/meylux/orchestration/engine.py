@@ -139,6 +139,9 @@ class QuantOrchestrationConfig:
     historical_volatility_periods_per_year: str = "365"
     atr_percentile_lookback: int = 100
     volatility_expansion_baseline_window: int = 20
+    # Additional configured periods use the existing deterministic EMA engine.
+    # The legacy "EMA" fact below remains for existing P4 consumers.
+    ema_periods: tuple[int, ...] = (9, 20, 21, 50, 200)
 
     def __post_init__(self) -> None:
         if not isinstance(self.regime, RegimeConfig):
@@ -152,6 +155,12 @@ class QuantOrchestrationConfig:
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, int) or value < 1:
                 raise ValueError(f"{name} must be positive")
+        if not isinstance(self.ema_periods, tuple) or not self.ema_periods:
+            raise ValueError("ema_periods must be a non-empty tuple of positive integers")
+        if any(isinstance(period, bool) or not isinstance(period, int) or period < 1 for period in self.ema_periods):
+            raise ValueError("ema_periods must contain only positive integers")
+        if len(set(self.ema_periods)) != len(self.ema_periods):
+            raise ValueError("ema_periods must not contain duplicates")
         if self.macd_fast_period >= self.macd_slow_period:
             raise ValueError("macd_fast_period must be less than macd_slow_period")
         if self.historical_volatility_window < 2:
@@ -214,8 +223,13 @@ def _indicator_facts(candles: tuple[CanonicalCandle, ...], config: QuantOrchestr
     last = candles[-1]
     macd_point = macd(candles, config.macd_fast_period, config.macd_slow_period, config.macd_signal_period)[-1]
     bands = bollinger_bands(candles, config.bollinger_window, config.bollinger_deviations)[-1]
+    # Calculate each distinct configured period once through the established
+    # EMA implementation. "EMA" remains the backward-compatible legacy fact.
+    ema_periods = tuple(dict.fromkeys((config.ema_period, *config.ema_periods)))
+    ema_results = {period: ema_candles(candles, period)[-1] for period in ema_periods}
     facts = {
-        "EMA": ema_candles(candles, config.ema_period)[-1],
+        "EMA": ema_results[config.ema_period],
+        **{f"EMA_{period}": ema_results[period] for period in config.ema_periods},
         "RSI": rsi(candles, config.rsi_period)[-1],
         "MACD": macd_point.macd,
         "MACD_SIGNAL": macd_point.signal,
