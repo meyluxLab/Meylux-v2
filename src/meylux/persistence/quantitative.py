@@ -167,7 +167,11 @@ class QuantitativePersistence:
     @staticmethod
     def _with_venue_context(calculation: CalculationResult, venue: str | None) -> CalculationResult:
         context = calculation.context
-        if context is None or context.venue_context is not None or venue is None:
+        if context is None or venue is None:
+            return calculation
+        if context.venue_context is not None:
+            if context.venue_context != venue:
+                raise ValueError("calculation venue_context conflicts with explicit raw acquisition context")
             return calculation
         return replace(calculation, context=replace(context, venue_context=venue))
 
