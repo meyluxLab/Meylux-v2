@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P5-004",
+  "last_approved_task_order": "TO-P4-012",
   "last_build_report": null,
   "last_audit_report": null,
   "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P5-004",
+  "active_task_order": "TO-P4-012",
   "completed_task_order": null,
   "completion_audit": null,
   "verified_artifacts": [
@@ -356,7 +356,8 @@
     "CONTROL independently verified the controlled P3-009 reattachment on authoritative main commit c0518c99f84c1a74ead21704355d1cb585498fd3; PRQ-4 is RESOLVED / VERIFIED under AR-P3-009-REATTACH-001; TO-P5-003 remains the active authorized continuation boundary.",
     "CONTROL activated TO-P5-003-CORRECTIVE-001 under Owner directive 2026-10-01 to resolve the established authoritative evidence-context defect blocking P5 Input Snapshot construction; parent STEP-P5-003 remains ACTIVE / AUTHORIZED and its implementation/verification distinction is preserved.",
     "Project Owner selected PRQ-1 Route A on 2026-10-02 and authorized CONTROL to establish a bounded additive P4-owned delivery for the exact Group-A dependency of intended STEP-P5-004; CONTROL formalized and activated TO-P4-011. STEP-P5-004 remains NOT ACTIVATED until independent verification establishes its dependency boundary.",
-    "TO-P3-010 is VERIFIED / COMPLETE under AR-P3-010; PR #58 merged as 56ba10f5c964319e966b8272c008823c3128b765; P3-009 Docker evidence-harness readiness/diagnostic boundary is restored; PH-P3 historical closure and PH-P5 / STEP-P5-003 lifecycle remain unchanged; STEP-P5-004 remains NOT ACTIVATED."
+    "TO-P3-010 is VERIFIED / COMPLETE under AR-P3-010; PR #58 merged as 56ba10f5c964319e966b8272c008823c3128b765; P3-009 Docker evidence-harness readiness/diagnostic boundary is restored; PH-P3 historical closure and PH-P5 / STEP-P5-003 lifecycle remain unchanged; STEP-P5-004 remains NOT ACTIVATED.",
+    "Project Owner explicitly authorized full root-cause continuation on 2026-10-04; TO-P4-012 is the active post-closure corrective dependency for unresolved STEP-P5-004 Group-A authoritative provenance/fact population. TO-P5-004 and STEP-P5-004 remain ACTIVE / AUTHORIZED and unresolved; PH-P4 / STEP-P4-006 / G-4 historical closure remains preserved."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
