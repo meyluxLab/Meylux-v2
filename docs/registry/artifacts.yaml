@@ -1490,6 +1490,15 @@ records:
     completion_audit: AR-P4-018
     lifecycle_context: POST-CLOSURE BOUNDED ADDITIVE HARDENING — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
 
+  - stable_id: TO-P4-012
+    canonical_name: Task Order — Group-A Upstream Root-Cause Resolution for P5-004
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-012.md
+    traceability: PH-P4 / STEP-P4-006 / STEP-P5-004 / TO-P4-011 / AR-P4-018 / Project Owner Directive — Full Root-Cause Resolution of TO-P5-004 Underlying Requirement 2026-10-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE
+    lifecycle_context: POST-CLOSURE GOVERNED CORRECTIVE CONTINUATION — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
+    downstream_task_order: TO-P5-004
+
   - stable_id: BR-P4-010
     canonical_name: Build Report — P4 Authoritative Knowledge-Time Semantic & Persistence Correction
     entity_type: BR
