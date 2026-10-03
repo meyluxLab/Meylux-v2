@@ -1,8 +1,9 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-003` — COMPLETE / VERIFIED
-**Active Task Order:** `null`
+**Current Step Lifecycle:** `STEP-P5-004` — ACTIVE / AUTHORIZED
+**Active Task Order:** `TO-P5-004` — primary Step boundary
+**Active Corrective Dependency:** `TO-P4-012` — upstream Group-A root-cause resolution
 **Last Completed Task Order:** `TO-P5-003`
 **Completion Audit:** `AR-P5-003`
 **Phase SID:** `PH-P5`
