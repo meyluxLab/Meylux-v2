@@ -93,8 +93,12 @@ class QuantitativePersistence:
         }
         record_id = self._id(material)
         context = calculation.context
-        source_ref = context.source_ref if context and context.source_ref else f"canonical-provenance:{'|'.join(provenance)}"
-        venue = context.venue_context if context else None
+        if context is None or not context.source_ref:
+            raise ValueError("indicator fact requires explicit calculation context and source_ref")
+        if context.source_ref not in provenance:
+            raise ValueError("indicator source_ref is not present in orchestration provenance")
+        source_ref = context.source_ref
+        venue = context.venue_context
         return (
             "indicator", record_id, name, calculation.status.value, calculation.reason,
             calculation.value, context, payload, "1.0.0", symbol, timeframe,
@@ -165,9 +169,17 @@ class QuantitativePersistence:
         return next(iter(resolved)) if len(resolved) == 1 else None
 
     @staticmethod
-    def _with_venue_context(calculation: CalculationResult, venue: str | None) -> CalculationResult:
+    def _with_venue_context(
+        calculation: CalculationResult,
+        venue: str | None,
+        provenance: tuple[str, ...],
+    ) -> CalculationResult:
         context = calculation.context
-        if context is None or venue is None:
+        if context is None or not context.source_ref:
+            raise ValueError("indicator fact requires explicit calculation context and source_ref")
+        if context.source_ref not in provenance:
+            raise ValueError("indicator source_ref is not present in orchestration provenance")
+        if venue is None:
             return calculation
         if context.venue_context is not None:
             if context.venue_context != venue:
@@ -183,7 +195,7 @@ class QuantitativePersistence:
         # Primary timeframe and each eligible higher timeframe use the same
         # existing P4 indicator engine and the same authoritative append-only table.
         for name, calculation in result.indicators.items():
-            calculation = self._with_venue_context(calculation, primary_venue)
+            calculation = self._with_venue_context(calculation, primary_venue, result.source_provenance)
             rows.append(self._indicator_row(
                 symbol=result.symbol,
                 timeframe=result.timeframe,
@@ -211,7 +223,7 @@ class QuantitativePersistence:
                 raise ValueError("higher timeframe fact knowledge_time must equal event_time")
             higher_venue = await self._resolve_venue_context(facts.source_provenance)
             for name, calculation in facts.indicators.items():
-                calculation = self._with_venue_context(calculation, higher_venue)
+                calculation = self._with_venue_context(calculation, higher_venue, facts.source_provenance)
                 rows.append(self._indicator_row(
                     symbol=facts.symbol,
                     timeframe=facts.timeframe,

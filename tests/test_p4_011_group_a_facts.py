@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import unittest
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
@@ -260,6 +261,36 @@ class TestP4011GroupAFacts(unittest.TestCase):
             self.assertEqual(payload["context"]["venue_context"], "BINANCE")
             self.assertEqual(payload["context"]["source_ref"], args[4])
         self.assertIn("payload_json->>'venue'", db.source_queries[0][0])
+
+    def test_missing_or_contradictory_calculation_source_ref_is_rejected_before_writes(self):
+        result = QuantitativeOrchestrator().process(bars(4), config())
+        original = result.indicators["EMA"]
+        bad_cases = {
+            "missing context": replace(original, context=None),
+            "missing source_ref": replace(
+                original, context=replace(original.context, source_ref=None)
+            ),
+            "source_ref outside lineage": replace(
+                original, context=replace(original.context, source_ref="unrelated-source")
+            ),
+            "venue conflicts with raw evidence": replace(
+                original, context=replace(original.context, venue_context="MEXC")
+            ),
+        }
+        for label, bad_calculation in bad_cases.items():
+            with self.subTest(label=label):
+                bad_result = replace(
+                    result,
+                    indicators={**result.indicators, "EMA": bad_calculation},
+                )
+                db = _DB()
+                if label == "venue conflicts with raw evidence":
+                    db.provenance_rows = [
+                        self._source_row(ref) for ref in result.source_provenance
+                    ]
+                with self.assertRaisesRegex(ValueError, "source_ref|venue_context"):
+                    asyncio.run(QuantitativePersistence(db).persist_orchestration(bad_result))
+                self.assertEqual(db.sql, [], "invalid lineage must fail before any persistence")
 
     def test_provider_identity_alone_never_becomes_venue(self):
         result = QuantitativeOrchestrator().process(bars(4), config())
