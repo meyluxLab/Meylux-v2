@@ -1,7 +1,7 @@
 """Append-only adapter to the existing authoritative Phase-4 quantitative tables."""
 from __future__ import annotations
 
-from dataclasses import asdict, is_dataclass
+from dataclasses import asdict, is_dataclass, replace
 from datetime import datetime, timezone
 from decimal import Decimal
 import hashlib
@@ -101,13 +101,85 @@ class QuantitativePersistence:
             event_time, source_ref, venue, configuration_version,
         )
 
+    async def _resolve_venue_context(self, provenance: tuple[str, ...]) -> str | None:
+        """Resolve venue only from explicit source context in authoritative raw evidence.
+
+        Provider identity is deliberately not promoted to venue. Every provenance
+        identifier must resolve to one provider/adapter identity and one explicit,
+        non-conflicting venue value from AVAILABLE raw candle evidence. Missing,
+        malformed, unknown, or contradictory lineage remains unresolved.
+        """
+        refs = tuple(dict.fromkeys(provenance))
+        if not refs or any(not isinstance(ref, str) or not ref.strip() for ref in refs):
+            return None
+        records = await self._connection.fetch(
+            "SELECT DISTINCT provenance_id, provider_id, adapter_id, adapter_version, "
+            "payload_json->>'venue' AS venue, payload_json->>'venue_context' AS venue_context, "
+            "jsonb_typeof(payload_json->'venue') AS venue_type, "
+            "jsonb_typeof(payload_json->'venue_context') AS venue_context_type "
+            "FROM meylux.raw_acquisition_events "
+            "WHERE provenance_id = ANY($1::text[]) AND event_type = 'CANDLE' "
+            "AND acquisition_state = 'AVAILABLE'",
+            list(refs),
+        )
+        by_provenance: dict[str, list[Any]] = {ref: [] for ref in refs}
+        for record in records:
+            provenance_id = record["provenance_id"]
+            if provenance_id in by_provenance:
+                by_provenance[provenance_id].append(record)
+
+        resolved: set[str] = set()
+        for ref in refs:
+            candidates = by_provenance[ref]
+            if not candidates:
+                return None
+            identities = {
+                (row["provider_id"], row["adapter_id"], row["adapter_version"])
+                for row in candidates
+            }
+            if len(identities) != 1 or any(
+                not isinstance(value, str) or not value.strip()
+                for identity in identities for value in identity
+            ):
+                return None
+            source_venues: set[str] = set()
+            for row in candidates:
+                row_venues: set[str] = set()
+                for field, type_field in (
+                    ("venue", "venue_type"),
+                    ("venue_context", "venue_context_type"),
+                ):
+                    value = row[field]
+                    value_type = row[type_field]
+                    if value is None and value_type is None:
+                        continue
+                    if value_type != "string" or not isinstance(value, str) or not value.strip():
+                        return None
+                    row_venues.add(value.strip())
+                if len(row_venues) > 1:
+                    return None
+                source_venues.update(row_venues)
+            if len(source_venues) != 1:
+                return None
+            resolved.update(source_venues)
+        return next(iter(resolved)) if len(resolved) == 1 else None
+
+    @staticmethod
+    def _with_venue_context(calculation: CalculationResult, venue: str | None) -> CalculationResult:
+        context = calculation.context
+        if context is None or context.venue_context is not None or venue is None:
+            return calculation
+        return replace(calculation, context=replace(context, venue_context=venue))
+
     async def persist_orchestration(self, result: QuantOrchestrationResult) -> int:
         primary_knowledge_time = _knowledge_time(result)
         rows: list[tuple[Any, ...]] = []
+        primary_venue = await self._resolve_venue_context(result.source_provenance)
 
         # Primary timeframe and each eligible higher timeframe use the same
         # existing P4 indicator engine and the same authoritative append-only table.
         for name, calculation in result.indicators.items():
+            calculation = self._with_venue_context(calculation, primary_venue)
             rows.append(self._indicator_row(
                 symbol=result.symbol,
                 timeframe=result.timeframe,
@@ -133,7 +205,9 @@ class QuantitativePersistence:
                 raise ValueError("higher timeframe fact knowledge_time exceeds primary knowledge boundary")
             if facts.knowledge_time != facts.event_time:
                 raise ValueError("higher timeframe fact knowledge_time must equal event_time")
+            higher_venue = await self._resolve_venue_context(facts.source_provenance)
             for name, calculation in facts.indicators.items():
+                calculation = self._with_venue_context(calculation, higher_venue)
                 rows.append(self._indicator_row(
                     symbol=facts.symbol,
                     timeframe=facts.timeframe,
