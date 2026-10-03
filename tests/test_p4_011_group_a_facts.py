@@ -146,6 +146,49 @@ class TestP4011GroupAFacts(unittest.TestCase):
             self.assertTrue(calculation.reason, name)
             self.assertEqual(calculation.context.timestamp, result.knowledge_time, name)
 
+    def test_all_configured_ema_periods_produce_values_with_sufficient_history(self):
+        xs = bars(240)
+        result = QuantitativeOrchestrator().process(xs, config())
+        for period in (9, 20, 21, 50, 200):
+            with self.subTest(period=period):
+                fact = result.indicators[f"EMA_{period}"]
+                expected = ema_candles(xs, period)[-1]
+                self.assertEqual(fact.status, CalculationStatus.VALID)
+                self.assertIsNotNone(fact.value)
+                self.assertEqual((fact.value, fact.status, fact.reason),
+                                 (expected.value, expected.status, expected.reason))
+
+    def test_real_binance_provenance_requires_and_accepts_explicit_source_venue(self):
+        xs = tuple(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        result = QuantitativeOrchestrator().process(xs, config())
+        db = _DB()
+        db.provenance_rows = [
+            self._source_row("binance:binance-acquisition", venue="BINANCE")
+        ]
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.calculated_indicator_vectors" in query
+        ]
+        self.assertEqual(len(rows), 19)
+        self.assertTrue(all(args[4] == "binance:binance-acquisition" for args in rows))
+        self.assertTrue(all(args[5] == "BINANCE" for args in rows))
+
+    def test_ci_provenance_without_authoritative_raw_mapping_remains_unresolved(self):
+        xs = tuple(
+            replace(candle, provenance_id=f"p4-011-ci:15m:{index}")
+            for index, candle in enumerate(bars(4))
+        )
+        result = QuantitativeOrchestrator().process(xs, config())
+        db = _DB()
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.calculated_indicator_vectors" in query
+        ]
+        self.assertTrue(rows)
+        self.assertTrue(all(args[5] is None for args in rows))
+
     def test_each_configured_ema_period_has_valid_or_explicit_insufficient_history(self):
         result = QuantitativeOrchestrator().process(bars(40), config())
         for period in (9, 20, 21):
