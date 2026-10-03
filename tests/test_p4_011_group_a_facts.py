@@ -145,6 +145,18 @@ class TestP4011GroupAFacts(unittest.TestCase):
             self.assertTrue(calculation.reason, name)
             self.assertEqual(calculation.context.timestamp, result.knowledge_time, name)
 
+    def test_each_configured_ema_period_has_valid_or_explicit_insufficient_history(self):
+        result = QuantitativeOrchestrator().process(bars(40), config())
+        for period in (9, 20, 21):
+            fact = result.indicators[f"EMA_{period}"]
+            self.assertEqual(fact.status, CalculationStatus.VALID, f"EMA_{period}")
+            self.assertIsNotNone(fact.value, f"EMA_{period}")
+        for period in (50, 200):
+            fact = result.indicators[f"EMA_{period}"]
+            self.assertEqual(fact.status, CalculationStatus.INSUFFICIENT_HISTORY, f"EMA_{period}")
+            self.assertIsNone(fact.value, f"EMA_{period}")
+            self.assertIn(f"requires_at_least_{period}_observations", fact.reason)
+
     def test_each_eligible_higher_timeframe_gets_independent_fact_set(self):
         primary = bars(40)
         higher = higher_bars(10)  # final 1h close equals the primary knowledge boundary
