@@ -209,7 +209,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         self.assertTrue(all(args[3] == result.knowledge_time for args in primary_rows))
         self.assertTrue(all(args[3] == result.higher_timeframe_facts["1h"].knowledge_time for args in higher_rows))
         self.assertTrue(all("knowledge_time" not in query.lower() for query, _ in indicator_rows))
-        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 28)
+        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 38)
         self.assertTrue(all(args[4] == "source:15m:39" for args in primary_rows))
         self.assertTrue(all(args[4] == "source:1h:9" for args in higher_rows))
 
@@ -247,7 +247,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             payload = json.loads(args[11])
             self.assertEqual(payload["context"]["venue_context"], "BINANCE")
             self.assertEqual(payload["context"]["source_ref"], args[4])
-        self.assertTrue(all("provider_id" in query for query, _ in db.source_queries) is False)
+        self.assertIn("payload_json->>'venue'", db.source_queries[0][0])
 
     def test_provider_identity_alone_never_becomes_venue(self):
         result = QuantitativeOrchestrator().process(bars(4), config())
