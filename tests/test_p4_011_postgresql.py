@@ -407,6 +407,12 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     invalid_symbol,
                 )
                 self.assertEqual(no_rows[0]["n"], 0)
+                for table in ("market_structure_events", "market_structure_zones"):
+                    no_structural_rows = await conn.fetchval(
+                        f"SELECT count(*) FROM meylux.{table} WHERE symbol=$1",
+                        invalid_symbol,
+                    )
+                    self.assertEqual(no_structural_rows, 0, f"future HTF input must not persist {table}")
             finally:
                 await conn.close()
         asyncio.run(run())
