@@ -224,12 +224,16 @@ class QuantitativePersistence:
         timeframe: str,
         events: tuple[StructuralEvent, ...],
         event_provenance: Mapping[str, tuple[str, ...]],
+        event_history: Mapping[str, tuple[int, str, str]],
         snapshot_as_of: datetime,
         configuration_version: str,
         venue_cache: dict[tuple[str, ...], str | None],
     ) -> list[tuple[Any, ...]]:
         rows: list[tuple[Any, ...]] = []
         seen: set[str] = set()
+        expected_ids = {event.identity for event in events}
+        if set(event_history) != expected_ids:
+            raise ValueError("structural history assessment must cover exactly the emitted events")
         for event in events:
             self._validate_structural_event(event, snapshot_as_of=snapshot_as_of)
             if event.identity in seen:
@@ -249,6 +253,14 @@ class QuantitativePersistence:
             if any(not token.strip() for token in source_members):
                 raise ValueError("structural source/member identities must be non-empty")
             source_event_identity = source_members[0] if len(source_members) == 1 else None
+            history = event_history[event.identity]
+            if (
+                not isinstance(history, tuple) or len(history) != 3
+                or isinstance(history[0], bool) or not isinstance(history[0], int) or history[0] < 1
+                or history[1] not in ("INSUFFICIENT_HISTORY", "AVAILABLE")
+                or not isinstance(history[2], str) or not history[2]
+            ):
+                raise ValueError("structural swing-history assessment is malformed")
             semantic_version = event.result().calculation_version
             payload = {
                 "structural_identity": event.identity,
@@ -269,6 +281,12 @@ class QuantitativePersistence:
                 "calculation_version": semantic_version,
                 "configuration_version": configuration_version,
                 "source_candle_provenance": list(refs),
+                "swing_history_assessment": {
+                    "contiguous_closed_candle_count": history[0],
+                    "status": history[1],
+                    "reason": history[2],
+                    "required_contiguous_closed_candles": 11,
+                },
                 "venue_context": venue,
             }
             event_id = self._id({
@@ -356,6 +374,7 @@ class QuantitativePersistence:
             timeframe=result.timeframe,
             events=result.structure_events,
             event_provenance=result.structure_event_provenance,
+            event_history=result.structure_event_history,
             snapshot_as_of=primary_knowledge_time,
             configuration_version=result.configuration_version,
             venue_cache=venue_cache,
@@ -375,12 +394,15 @@ class QuantitativePersistence:
                 timeframe=timeframe,
                 events=events,
                 event_provenance=result.higher_timeframe_structure_event_provenance.get(timeframe, {}),
+                event_history=result.higher_timeframe_structure_event_history.get(timeframe, {}),
                 snapshot_as_of=primary_knowledge_time,
                 configuration_version=result.configuration_version,
                 venue_cache=venue_cache,
             ))
         if set(result.higher_timeframe_structure_event_provenance) - set(result.higher_timeframe_structure_events):
             raise ValueError("higher timeframe structural provenance contains an unknown timeframe")
+        if set(result.higher_timeframe_structure_event_history) - set(result.higher_timeframe_structure_events):
+            raise ValueError("higher timeframe structural history contains an unknown timeframe")
 
         regime_payload = {
             "state": result.regime.state,
