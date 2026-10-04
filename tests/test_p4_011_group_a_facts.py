@@ -207,7 +207,14 @@ class TestP4011GroupAFacts(unittest.TestCase):
                                  (expected.value, expected.status, expected.reason))
 
     def test_real_binance_provenance_requires_and_accepts_explicit_source_venue(self):
-        xs = tuple(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        xs = list(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        xs[0] = replace(xs[0], open=Decimal("100"), high=Decimal("101"),
+                        low=Decimal("99"), close=Decimal("100"))
+        xs[1] = replace(xs[1], open=Decimal("102"), high=Decimal("103"),
+                        low=Decimal("101"), close=Decimal("102"))
+        xs[2] = replace(xs[2], open=Decimal("105"), high=Decimal("107"),
+                        low=Decimal("104"), close=Decimal("106"))
+        xs = tuple(xs)
         result = QuantitativeOrchestrator().process(xs, config())
         db = _DB()
         db.provenance_rows = [
