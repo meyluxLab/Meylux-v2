@@ -571,9 +571,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             args for query, args in db.sql
             if "INSERT INTO meylux.market_structure_events" in query and args[4] != "ORCHESTRATION"
         ]
-        event_ids = {args[-2] for args in event_rows if "knowledge_time)" in next(
-            query.lower() for query, candidate_args in db.sql if candidate_args is args
-        )}
+        event_ids = {args[-2] for args in event_rows}
         for args in event_rows:
             payload = json.loads(args[12])
             if args[4] in {"HH", "HL", "LH", "LL"}:
