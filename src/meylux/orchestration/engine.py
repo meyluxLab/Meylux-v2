@@ -21,7 +21,7 @@ from meylux.quantitative.indicators import (
     rsi,
     volatility_expansion_ratio,
 )
-from meylux.quantitative.market_structure import MarketStructureEngine, StructuralEvent
+from meylux.quantitative.market_structure import MarketStructureEngine, StructuralEvent, _INTERVALS
 from meylux.quantitative.regime_venue import MarketRegimeEngine, RegimeConfig
 
 
@@ -201,6 +201,8 @@ class QuantOrchestrationResult:
     structure_event_provenance: Mapping[str, tuple[str, ...]] = field(default_factory=dict)
     higher_timeframe_structure_events: Mapping[str, tuple[StructuralEvent, ...]] = field(default_factory=dict)
     higher_timeframe_structure_event_provenance: Mapping[str, Mapping[str, tuple[str, ...]]] = field(default_factory=dict)
+    structure_event_history: Mapping[str, tuple[int, str, str]] = field(default_factory=dict)
+    higher_timeframe_structure_event_history: Mapping[str, Mapping[str, tuple[int, str, str]]] = field(default_factory=dict)
 
 
 def _contextualize(result: CalculationResult, candle: CanonicalCandle) -> CalculationResult:
@@ -295,6 +297,36 @@ def _structure_event_provenance(
     return out
 
 
+def _structure_event_history(
+    candles: tuple[CanonicalCandle, ...],
+    events: tuple[StructuralEvent, ...],
+) -> dict[str, tuple[int, str, str]]:
+    """Describe 5/5 swing-history availability using only candles knowable at each fact."""
+    by_close = {candle.close_time: index for index, candle in enumerate(candles)}
+    out: dict[str, tuple[int, str, str]] = {}
+    for event in events:
+        end = by_close.get(event.knowledge_time)
+        if end is None:
+            raise ValueError("structural event knowledge_time must map to a closed canonical candle")
+        start = end
+        while start > 0:
+            interval = _INTERVALS.get(candles[start - 1].timeframe)
+            if interval is None or candles[start - 1].open_time + interval != candles[start].open_time:
+                break
+            start -= 1
+        contiguous_count = end - start + 1
+        if contiguous_count < 11:
+            status = "INSUFFICIENT_HISTORY"
+            reason = "requires_11_contiguous_closed_candles_for_5_5_swing_confirmation"
+        else:
+            status = "AVAILABLE"
+            reason = "minimum_5_5_swing_history_available"
+        if event.identity in out:
+            raise ValueError("structural event history identities must be unique within a timeframe")
+        out[event.identity] = (contiguous_count, status, reason)
+    return out
+
+
 class QuantitativeOrchestrator:
     def __init__(self) -> None:
         self._regime = MarketRegimeEngine()
@@ -331,11 +363,13 @@ class QuantitativeOrchestrator:
         structure = self._structure.analyze(xs)
         structure_events = structure.events
         structure_event_provenance = _structure_event_provenance(xs, structure_events)
+        structure_event_history = _structure_event_history(xs, structure_events)
         indicators = _indicator_facts(xs, config)
         htf: dict[str, MTFAlignment] = {}
         htf_facts: dict[str, TimeframeQuantitativeFacts] = {}
         htf_structure_events: dict[str, tuple[StructuralEvent, ...]] = {}
         htf_structure_provenance: dict[str, Mapping[str, tuple[str, ...]]] = {}
+        htf_structure_history: dict[str, Mapping[str, tuple[int, str, str]]] = {}
         for timeframe, series in (higher_timeframes or {}).items():
             if not isinstance(timeframe, str) or not timeframe:
                 raise ValueError("higher timeframe key must be non-empty")
@@ -371,6 +405,9 @@ class QuantitativeOrchestrator:
                     htf_structure_provenance[timeframe] = _structure_event_provenance(
                         selected, htf_structure.events
                     )
+                    htf_structure_history[timeframe] = _structure_event_history(
+                        selected, htf_structure.events
+                    )
 
         knowledge_time = xs[-1].close_time
         return QuantOrchestrationResult(
@@ -391,4 +428,6 @@ class QuantitativeOrchestrator:
             structure_event_provenance,
             htf_structure_events,
             htf_structure_provenance,
+            structure_event_history,
+            htf_structure_history,
         )
