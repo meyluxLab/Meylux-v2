@@ -43,7 +43,7 @@ class TestContracts(unittest.TestCase):
   a=output().serialize(); b=output().serialize(); self.assertEqual(a,b); self.assertNotIn("NaN",a); self.assertNotIn("Infinity",a)
 class TestConfig(unittest.TestCase):
  def test_scaffold(self):
-  cfg=load_specialists_config(Path("config/specialists.yaml")); self.assertEqual(cfg.version,"1.1.0"); self.assertEqual(cfg.parameter("execution_timeout_ms"),5000); self.assertEqual(cfg.parameter("max_concurrency"),2); self.assertEqual(len(cfg.identity_hash),64)
+  cfg=load_specialists_config(Path("config/specialists.yaml")); self.assertEqual(cfg.version,"1.2.0"); self.assertEqual(cfg.parameter("execution_timeout_ms"),5000); self.assertEqual(cfg.parameter("max_concurrency"),2); self.assertEqual(len(cfg.identity_hash),64)
  def test_bounds(self):
   raw=json.loads(Path("config/specialists.yaml").read_text()); raw["parameters"]["execution_timeout_ms"]["value"]=0
   with self.assertRaises(SpecialistConfigError): SpecialistConfig.from_mapping(raw)

@@ -19,6 +19,8 @@ on:
       - "tests/test_p3_009_postgresql.py"
       - "tests/test_p5_003_s10.py"
       - "tests/test_p5_003_redis_postgresql.py"
+      - "tests/test_p5_004_group_a.py"
+      - "tests/test_p5_004_redis_postgresql.py"
       - "tests/test_acquisition/**"
       - "tests/test_quantitative_foundation.py"
       - "tests/test_p4_010_knowledge_time.py"
@@ -28,6 +30,8 @@ on:
       - "tests/test_p3_009_postgresql.py"
       - "tests/test_p5_003_s10.py"
       - "tests/test_p5_003_redis_postgresql.py"
+      - "tests/test_p5_004_group_a.py"
+      - "tests/test_p5_004_redis_postgresql.py"
       - "tests/golden_vectors/p4_001_primitives.json"
       - "pyproject.toml"
       - ".dockerignore"
@@ -172,6 +176,21 @@ jobs:
             -e MEYLUX_RUN_P5003_REDIS_INTEGRATION=1 \
             --entrypoint python api \
             -m unittest discover -s /app/tests -p 'test_p5_003_redis_postgresql.py' -v
+
+      - name: Run real Redis to worker-specialist Group-A PostgreSQL persistence/read-back
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
+            -v "$PWD/tests:/app/tests:ro" \
+            -e MEYLUX_RUN_P5004_REDIS_INTEGRATION=1 \
+            -e GITHUB_SHA="$GITHUB_SHA" \
+            --entrypoint python api \
+            -m unittest discover -s /app/tests -p 'test_p5_004_redis_postgresql.py' -v
 
       - name: Verify legacy knowledge-time migration and idempotency
         env:
