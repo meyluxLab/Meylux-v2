@@ -251,7 +251,17 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 40)  # 19 primary + 19 HTF + regime + structure summary
+        expected_events = len(result.structure_events) + sum(
+            len(events) for events in result.higher_timeframe_structure_events.values()
+        )
+        expected_zones = sum(
+            1 for event in result.structure_events
+            if event.lower_bound is not None and event.upper_bound is not None
+        ) + sum(
+            1 for events in result.higher_timeframe_structure_events.values()
+            for event in events if event.lower_bound is not None and event.upper_bound is not None
+        )
+        self.assertEqual(first, 40 + expected_events + expected_zones)
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
