@@ -173,12 +173,36 @@ class _DB:
 
 class TestPersistence(unittest.TestCase):
     def test_idempotent_identity_is_stable(self):
-        db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        self.assertEqual(result,21); self.assertEqual(again,0)
-        self.assertEqual(len(db.sql),42)
-        identities=[args[-1] for _,args in db.sql]
-        self.assertEqual(identities, [args[-1] for _,args in db.sql])
+        db=_DB()
+        orchestration=QuantitativeOrchestrator().process(bars(),config())
+        persistence=QuantitativePersistence(db)
+        inserted=asyncio.run(persistence.persist_orchestration(orchestration))
+        replay_inserted=asyncio.run(persistence.persist_orchestration(
+            QuantitativeOrchestrator().process(bars(),config())
+        ))
+        zone_types={"FVG","FVG_LIFECYCLE","ORDER_BLOCK","ORDER_BLOCK_INVALIDATION",
+                    "BREAKER","BREAKER_INVALIDATION","LIQUIDITY_POOL","LIQUIDITY_POOL_SWEEP"}
+        expected_structural=sum(
+            len(facts.events)+sum(
+                event.event_type in zone_types
+                and (event.lower_bound is not None or event.upper_bound is not None
+                     or event.event_type in {"LIQUIDITY_POOL","LIQUIDITY_POOL_SWEEP"})
+                for event in facts.events
+            )
+            for facts in orchestration.structural_facts.values()
+        )
+        expected=21+expected_structural
+        self.assertEqual(inserted,expected)
+        self.assertEqual(replay_inserted,0)
+        self.assertEqual(len(db.sql),expected*2)
+        identities=[
+            args[-2] if "knowledge_time)" in query.lower()
+            and ("insert into meylux.market_structure_events" in query.lower()
+                 or "insert into meylux.market_structure_zones" in query.lower())
+            else args[-1]
+            for query,args in db.sql
+        ]
+        self.assertEqual(identities[:expected],identities[expected:])
         self.assertTrue(all(isinstance(x,str) and len(x)==64 for x in identities))
 
 if __name__=="__main__": unittest.main()
