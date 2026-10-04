@@ -18,6 +18,25 @@ from meylux.quantitative.regime_venue import RegimeConfig
 
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
+
+_ZONE_EVENT_TYPES = {
+    "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
+    "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
+}
+
+
+def _expected_structural_rows(result) -> int:
+    count = 0
+    for facts in result.structural_facts.values():
+        count += len(facts.events)
+        count += sum(
+            event.event_type in _ZONE_EVENT_TYPES
+            and (event.lower_bound is not None or event.upper_bound is not None
+                 or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})
+            for event in facts.events
+        )
+    return count
+
 EXPECTED_FACTS = {
     "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
     "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
@@ -280,7 +299,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 40)  # 19 primary + 19 HTF + regime + structure summary
+        self.assertEqual(first, 40 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
