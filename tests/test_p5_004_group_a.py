@@ -259,7 +259,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
             with self.subTest(value=invalid_symbols):
                 with self.assertRaises(GroupASemanticError):
                     analyze_s01(snapshot, _config(group_a_symbols=invalid_symbols))
-        for invalid_timeframes in ("15m,,1h", "15m,1H"):
+        for invalid_timeframes in ("15m,,1h", "1h,1H"):
             with self.subTest(value=invalid_timeframes):
                 with self.assertRaises(GroupASemanticError):
                     analyze_s01(snapshot, _config(group_a_timeframes=invalid_timeframes))
