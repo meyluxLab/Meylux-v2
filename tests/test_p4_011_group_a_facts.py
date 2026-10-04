@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import unittest
+from dataclasses import replace
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
@@ -18,7 +19,8 @@ from meylux.quantitative.regime_venue import RegimeConfig
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
 EXPECTED_FACTS = {
-    "EMA", "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
+    "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
+    "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
     "VOLATILITY_EXPANSION_RATIO",
@@ -65,6 +67,8 @@ class _DB:
         self.sql = []
         self.seen = set()
         self.fetches = []
+        self.source_queries = []
+        self.provenance_rows = []
 
     def transaction(self):
         return _Tx()
@@ -78,6 +82,10 @@ class _DB:
         return "INSERT 0 1"
 
     async def fetch(self, query, *args):
+        if "FROM meylux.raw_acquisition_events" in query:
+            self.source_queries.append((query, args))
+            refs = set(args[0])
+            return [row for row in self.provenance_rows if row["provenance_id"] in refs]
         self.fetches.append((query, args))
         return []
 
@@ -95,6 +103,11 @@ class TestP4011GroupAFacts(unittest.TestCase):
         expected_bands = bollinger_bands(xs, 20, "2")[-1]
         expected = {
             "EMA": ema_candles(xs, 20)[-1],
+            "EMA_9": ema_candles(xs, 9)[-1],
+            "EMA_20": ema_candles(xs, 20)[-1],
+            "EMA_21": ema_candles(xs, 21)[-1],
+            "EMA_50": ema_candles(xs, 50)[-1],
+            "EMA_200": ema_candles(xs, 200)[-1],
             "RSI": rsi(xs, 14)[-1],
             "MACD": expected_macd.macd,
             "MACD_SIGNAL": expected_macd.signal,
@@ -132,6 +145,61 @@ class TestP4011GroupAFacts(unittest.TestCase):
             self.assertEqual(calculation.status, CalculationStatus.INSUFFICIENT_HISTORY, name)
             self.assertTrue(calculation.reason, name)
             self.assertEqual(calculation.context.timestamp, result.knowledge_time, name)
+
+    def test_all_configured_ema_periods_produce_values_with_sufficient_history(self):
+        xs = bars(240)
+        result = QuantitativeOrchestrator().process(xs, config())
+        for period in (9, 20, 21, 50, 200):
+            with self.subTest(period=period):
+                fact = result.indicators[f"EMA_{period}"]
+                expected = ema_candles(xs, period)[-1]
+                self.assertEqual(fact.status, CalculationStatus.VALID)
+                self.assertIsNotNone(fact.value)
+                self.assertEqual((fact.value, fact.status, fact.reason),
+                                 (expected.value, expected.status, expected.reason))
+
+    def test_real_binance_provenance_requires_and_accepts_explicit_source_venue(self):
+        xs = tuple(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        result = QuantitativeOrchestrator().process(xs, config())
+        db = _DB()
+        db.provenance_rows = [
+            self._source_row("binance:binance-acquisition", venue="BINANCE")
+        ]
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.calculated_indicator_vectors" in query
+        ]
+        self.assertEqual(len(rows), 19)
+        self.assertTrue(all(args[4] == "binance:binance-acquisition" for args in rows))
+        self.assertTrue(all(args[5] == "BINANCE" for args in rows))
+
+    def test_ci_provenance_without_authoritative_raw_mapping_remains_unresolved(self):
+        xs = tuple(
+            replace(candle, provenance_id=f"p4-011-ci:15m:{index}")
+            for index, candle in enumerate(bars(4))
+        )
+        result = QuantitativeOrchestrator().process(xs, config())
+        db = _DB()
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.calculated_indicator_vectors" in query
+        ]
+        self.assertTrue(rows)
+        self.assertTrue(all(args[5] is None for args in rows))
+
+    def test_each_configured_ema_period_has_valid_or_explicit_insufficient_history(self):
+        result = QuantitativeOrchestrator().process(bars(40), config())
+        for period in (9, 20, 21):
+            fact = result.indicators[f"EMA_{period}"]
+            self.assertEqual(fact.status, CalculationStatus.VALID, f"EMA_{period}")
+            self.assertIsNotNone(fact.value, f"EMA_{period}")
+        for period in (50, 200):
+            fact = result.indicators[f"EMA_{period}"]
+            self.assertEqual(fact.status, CalculationStatus.INSUFFICIENT_HISTORY, f"EMA_{period}")
+            self.assertIsNone(fact.value, f"EMA_{period}")
+            self.assertIn(f"requires_at_least_{period}_observations", fact.reason)
 
     def test_each_eligible_higher_timeframe_gets_independent_fact_set(self):
         primary = bars(40)
@@ -183,23 +251,146 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 30)  # 14 primary + 14 HTF + regime + structure summary
+        self.assertEqual(first, 40)  # 19 primary + 19 HTF + regime + structure summary
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
             for query, args in db.sql if "calculated_indicator_vectors" in query
         }.values())
-        self.assertEqual(len(indicator_rows), 28)
+        self.assertEqual(len(indicator_rows), 38)
         primary_rows = [args for _, args in indicator_rows if args[2] == "15m"]
         higher_rows = [args for _, args in indicator_rows if args[2] == "1h"]
-        self.assertEqual(len(primary_rows), 14)
-        self.assertEqual(len(higher_rows), 14)
+        self.assertEqual(len(primary_rows), 19)
+        self.assertEqual(len(higher_rows), 19)
         self.assertTrue(all(args[3] == result.knowledge_time for args in primary_rows))
         self.assertTrue(all(args[3] == result.higher_timeframe_facts["1h"].knowledge_time for args in higher_rows))
         self.assertTrue(all("knowledge_time" not in query.lower() for query, _ in indicator_rows))
-        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 28)
+        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 38)
         self.assertTrue(all(args[4] == "source:15m:39" for args in primary_rows))
         self.assertTrue(all(args[4] == "source:1h:9" for args in higher_rows))
+
+    @staticmethod
+    def _source_row(provenance_id, *, venue="BINANCE", venue_context=None,
+                    venue_type="string", venue_context_type=None,
+                    provider_id="binance", adapter_id="binance-acquisition",
+                    adapter_version="1.0.0"):
+        return {
+            "provenance_id": provenance_id,
+            "provider_id": provider_id,
+            "adapter_id": adapter_id,
+            "adapter_version": adapter_version,
+            "venue": venue,
+            "venue_context": venue_context,
+            "venue_type": venue_type,
+            "venue_context_type": venue_context_type,
+        }
+
+    def test_persistence_resolves_venue_from_explicit_raw_provenance_context(self):
+        result = QuantitativeOrchestrator().process(bars(40), config())
+        db = _DB()
+        db.provenance_rows = [
+            self._source_row(ref) for ref in result.source_provenance
+        ]
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.calculated_indicator_vectors" in query
+        ]
+        self.assertEqual(len(rows), 19)
+        self.assertTrue(all(args[5] == "BINANCE" for args in rows))
+        import json
+        for args in rows:
+            payload = json.loads(args[11])
+            self.assertEqual(payload["context"]["venue_context"], "BINANCE")
+            self.assertEqual(payload["context"]["source_ref"], args[4])
+        self.assertIn("payload_json->>'venue'", db.source_queries[0][0])
+
+    def test_missing_or_contradictory_calculation_source_ref_is_rejected_before_writes(self):
+        result = QuantitativeOrchestrator().process(bars(4), config())
+        original = result.indicators["EMA"]
+        bad_cases = {
+            "missing context": replace(original, context=None),
+            "missing source_ref": replace(
+                original, context=replace(original.context, source_ref=None)
+            ),
+            "source_ref outside lineage": replace(
+                original, context=replace(original.context, source_ref="unrelated-source")
+            ),
+            "venue conflicts with raw evidence": replace(
+                original, context=replace(original.context, venue_context="MEXC")
+            ),
+        }
+        for label, bad_calculation in bad_cases.items():
+            with self.subTest(label=label):
+                bad_result = replace(
+                    result,
+                    indicators={**result.indicators, "EMA": bad_calculation},
+                )
+                db = _DB()
+                if label == "venue conflicts with raw evidence":
+                    db.provenance_rows = [
+                        self._source_row(ref) for ref in result.source_provenance
+                    ]
+                with self.assertRaisesRegex(ValueError, "source_ref|venue_context"):
+                    asyncio.run(QuantitativePersistence(db).persist_orchestration(bad_result))
+                self.assertEqual(db.sql, [], "invalid lineage must fail before any persistence")
+
+    def test_provider_identity_alone_never_becomes_venue(self):
+        result = QuantitativeOrchestrator().process(bars(4), config())
+        db = _DB()
+        db.provenance_rows = [
+            self._source_row(ref, venue=None, venue_type=None)
+            for ref in result.source_provenance
+        ]
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.calculated_indicator_vectors" in query
+        ]
+        self.assertTrue(rows)
+        self.assertTrue(all(args[5] is None for args in rows))
+        import json
+        self.assertTrue(all(json.loads(args[11])["context"]["venue_context"] is None for args in rows))
+
+    def test_missing_malformed_or_contradictory_provenance_stays_unresolved(self):
+        result = QuantitativeOrchestrator().process(bars(4), config())
+        refs = tuple(dict.fromkeys(result.source_provenance))
+        scenarios = {
+            "missing source row": [
+                self._source_row(ref) for ref in refs[:-1]
+            ],
+            "contradictory venue": [
+                self._source_row(ref) for ref in refs
+            ] + [self._source_row(refs[0], venue="MEXC")],
+            "malformed venue type": [
+                self._source_row(ref, venue="123", venue_type="number") for ref in refs
+            ],
+            "conflicting venue fields": [
+                self._source_row(ref, venue="BINANCE", venue_context="MEXC",
+                                 venue_type="string", venue_context_type="string")
+                for ref in refs
+            ],
+            "conflicting provider identity": [
+                self._source_row(ref) for ref in refs
+            ] + [self._source_row(refs[0], adapter_id="unrecognized-adapter")],
+        }
+        for label, source_rows in scenarios.items():
+            with self.subTest(label=label):
+                db = _DB()
+                db.provenance_rows = source_rows
+                asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+                rows = [
+                    args for query, args in db.sql
+                    if "INSERT INTO meylux.calculated_indicator_vectors" in query
+                ]
+                self.assertTrue(rows)
+                self.assertTrue(all(args[5] is None for args in rows), label)
+
+    def test_ema_period_configuration_rejects_empty_duplicate_and_invalid_periods(self):
+        for periods in ((), (9, 9), (9, 0), (9, True), [9, 20]):
+            with self.subTest(periods=periods):
+                with self.assertRaises(ValueError):
+                    QuantOrchestrationConfig(config().regime, ema_periods=periods)
 
     def test_existing_readback_path_filters_independently_by_timeframe(self):
         db = _DB()
