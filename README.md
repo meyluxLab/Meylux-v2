@@ -76,7 +76,7 @@ Phase 5 is established and authorized under the Project Owner Phase 5 Re-Directi
 
 ## Post-Closure Investigation State
 
-`TO-P3-010` is `VERIFIED / COMPLETE` under `AR-P3-010`; PR #58 merged as `56ba10f5c964319e966b8272c008823c3128b765`. The corrected P3-009 Docker evidence harness now requires Timescale initialization completion plus final-server SQL readiness before migrations and preserves actionable subprocess/container diagnostics. Historical P3-009 failures remain preserved; no P3/P5 semantic boundary or Phase/Step closure was reopened. `STEP-P5-004` is ACTIVE / AUTHORIZED under `TO-P5-004`.
+`TO-P3-010` is `VERIFIED / COMPLETE` under `AR-P3-010`; PR #58 merged as `56ba10f5c964319e966b8272c008823c3128b765`. The corrected P3-009 Docker evidence harness now requires Timescale initialization completion plus final-server SQL readiness before migrations and preserves actionable subprocess/container diagnostics. Historical P3-009 failures remain preserved; no P3/P5 semantic boundary or Phase/Step closure was reopened. `STEP-P5-004` is ACTIVE / AUTHORIZED under `TO-P5-004`. The upstream corrective dependency `TO-P4-012` was independently verified and closed under `AR-P4-019`; the active P5-004 implementation boundary is unchanged.
 
 
 TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed under `AR-P2-AUDIT-009`; `MEXC_FINALITY` remains `UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED`. `TO-P2-010` reached `VERIFIED / COMPLETE` under `AR-P2-AUDIT-010`; `TO-P2-011` and `TO-P2-012` are also `VERIFIED / COMPLETE`; `TO-P2-013` remains `PREPARED / NOT ACTIVATED`. These post-closure P2 records remain separate from the active `PH-P5 / STEP-P5-003` boundary.

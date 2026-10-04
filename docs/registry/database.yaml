@@ -229,3 +229,26 @@ records:
       append_only_boundary: PRESERVED
       control_audit: AR-P4-018
     status: VERIFIED
+
+  - stable_id: DB-P4-012
+    canonical_name: TO-P4-012 Governed Runtime Quantitative Persistence Evidence
+    entity_type: DB
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-012
+    table: meylux.calculated_indicator_vectors
+    evidence:
+      raw_acquisition_events: 2996
+      available_binance_candle_events: 2995
+      canonical_candles: 158
+      canonical_binance_provenance: 158
+      explicit_runtime_venue_rows: 1
+      first_execution_new_venue_complete_facts: 57
+      replay_additional_rows: 0
+      timeframes: [15m, 1h, 4h]
+      knowledge_time: VERIFIED
+      append_only: VERIFIED
+      nonfinite_numeric_leakage: 0
+      control_execution_log: EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004
+      control_audit: AR-P4-019
+    status: VERIFIED

@@ -18,13 +18,13 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P4-012",
-  "last_build_report": null,
-  "last_audit_report": null,
-  "last_execution_log": "EXEC-LOG-P5-CORRECTIVE-VPS-RECON-20260924",
-  "active_task_order": "TO-P4-012",
-  "completed_task_order": null,
-  "completion_audit": null,
+  "last_approved_task_order": "TO-P5-004",
+  "last_build_report": "BR-P4-012",
+  "last_audit_report": "AR-P4-019",
+  "last_execution_log": "EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004",
+  "active_task_order": "TO-P5-004",
+  "completed_task_order": "TO-P4-012",
+  "completion_audit": "AR-P4-019",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -305,7 +305,13 @@
     "TO-P4-011",
     "BR-P3-010",
     "AR-P3-010",
-    "TO-P3-010"
+    "TO-P3-010",
+    "BR-P4-012",
+    "TST-P4-012",
+    "DB-P4-012",
+    "CFG-P4-012",
+    "RUN-P4-012",
+    "AR-P4-019"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -357,13 +363,14 @@
     "CONTROL activated TO-P5-003-CORRECTIVE-001 under Owner directive 2026-10-01 to resolve the established authoritative evidence-context defect blocking P5 Input Snapshot construction; parent STEP-P5-003 remains ACTIVE / AUTHORIZED and its implementation/verification distinction is preserved.",
     "Project Owner selected PRQ-1 Route A on 2026-10-02 and authorized CONTROL to establish a bounded additive P4-owned delivery for the exact Group-A dependency of intended STEP-P5-004; CONTROL formalized and activated TO-P4-011. STEP-P5-004 remains NOT ACTIVATED until independent verification establishes its dependency boundary.",
     "TO-P3-010 is VERIFIED / COMPLETE under AR-P3-010; PR #58 merged as 56ba10f5c964319e966b8272c008823c3128b765; P3-009 Docker evidence-harness readiness/diagnostic boundary is restored; PH-P3 historical closure and PH-P5 / STEP-P5-003 lifecycle remain unchanged; STEP-P5-004 remains NOT ACTIVATED.",
-    "Project Owner explicitly authorized full root-cause continuation on 2026-10-04; TO-P4-012 is the active post-closure corrective dependency for unresolved STEP-P5-004 Group-A authoritative provenance/fact population. TO-P5-004 and STEP-P5-004 remain ACTIVE / AUTHORIZED and unresolved; PH-P4 / STEP-P4-006 / G-4 historical closure remains preserved."
+    "Project Owner explicitly authorized full root-cause continuation on 2026-10-04; TO-P4-012 is the active post-closure corrective dependency for unresolved STEP-P5-004 Group-A authoritative provenance/fact population. TO-P5-004 and STEP-P5-004 remain ACTIVE / AUTHORIZED and unresolved; PH-P4 / STEP-P4-006 / G-4 historical closure remains preserved.",
+    "TO-P4-012 is VERIFIED / COMPLETE under AR-P4-019 after independent CI, full-suite, governed-runtime, persistence, replay and P5 EvidenceRef verification; STEP-P5-004 / TO-P5-004 remain the active downstream implementation boundary."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "56ba10f5c964319e966b8272c008823c3128b765",
-  "updated_at_utc": "2026-10-02T16:38:32.158Z",
+  "last_verified_commit": "a95f23eabf6d0324fcaacbbed06862881a7e52fa",
+  "updated_at_utc": "2026-10-04T11:31:09.859104Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -416,7 +423,7 @@
     "g4_preserved": true,
     "runtime_source_observation": "deployed migration mount predates repository TO-P4-009; authorized SQL applied directly through SentinelX; no unapproved source/deployment synchronization performed"
   },
-  "last_governance_sync_base_commit": "4fb62d907a777b7a43eb39a79c62fa6532616abc",
+  "last_governance_sync_base_commit": "a95f23eabf6d0324fcaacbbed06862881a7e52fa",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -454,7 +461,8 @@
     "CONTROL independently verified TO-P4-011 under AR-P4-018 after the Producer correction. PR #57 merged as 4fb62d907a777b7a43eb39a79c62fa6532616abc. Group-A PRQ-1 capability is established; PH-P4 / STEP-P4-006 / G-4 historical closure is preserved; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-003 remains COMPLETE / VERIFIED; STEP-P5-004 remains NOT ACTIVATED.",
     "Owner pre-STEP-P5-004 technical-debt directive initiated TO-P3-010 to resolve/reproduce the current Docker Foundation P3-009 PostgreSQL evidence failure; STEP-P5-004 remains NOT ACTIVATED. Full PRQ-1 disposition is being formalized: Group-A VERIFIED; later groups remain explicitly future-owned/JIT or UNAVAILABLE according to their future P5 gates.",
     "Project Owner authorized normal governed continuation of STEP-P5-004 on 2026-10-02 after independent verification of the Group-A PRQ-1 dependency under TO-P4-011 / AR-P4-018. CONTROL formalized and activated TO-P5-004. STEP-P5-004 is ACTIVE / AUTHORIZED; TO-P5-004 is AUTHORIZED TO EXECUTE; later P5 Steps and Group-B/G PRQ-1 surfaces remain outside scope.",
-    "Before activation, CONTROL corrected canonical registry drift showing closed STEP-P5-003 / TO-P5-003 artifacts as active/authorized; current registry state now reflects STEP-P5-003 COMPLETE / VERIFIED and TO-P5-003 / TO-P5-003-CORRECTIVE-001 VERIFIED / COMPLETE."
+    "Before activation, CONTROL corrected canonical registry drift showing closed STEP-P5-003 / TO-P5-003 artifacts as active/authorized; current registry state now reflects STEP-P5-003 COMPLETE / VERIFIED and TO-P5-003 / TO-P5-003-CORRECTIVE-001 VERIFIED / COMPLETE.",
+    "CONTROL independently verified TO-P4-012 under AR-P4-019 after PR #61 merged as a95f23eabf6d0324fcaacbbed06862881a7e52fa. The Group-A provenance/venue and EMA coverage dependency is resolved; PH-P4 / STEP-P4-006 / G-4 historical closure remains preserved. STEP-P5-004 / TO-P5-004 remain ACTIVE / AUTHORIZED."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {

@@ -3,8 +3,9 @@
 **Status:** ACTIVE / AUTHORIZED
 **Current Step Lifecycle:** `STEP-P5-004` — ACTIVE / AUTHORIZED
 **Active Task Order:** `TO-P5-004` — primary Step boundary
-**Active Corrective Dependency:** `TO-P4-012` — upstream Group-A root-cause resolution
-**Last Completed Task Order:** `TO-P5-003`
+**Active Corrective Dependency:** None — `TO-P4-012` VERIFIED / COMPLETE under `AR-P4-019`
+**Last Completed Task Order:** `TO-P5-003`  
+**Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`
 **Completion Audit:** `AR-P5-003`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
@@ -114,7 +115,7 @@ Required evidence includes actual end-to-end runtime execution, failure isolatio
 **Predecessor:** `STEP-P5-003` — COMPLETE / VERIFIED  
 **Active Task Order:** `TO-P5-004`  
 **Activation basis:** Project Owner directive — `STEP-P5-004` normal governed continuation — 2026-10-02  
-**Upstream dependency:** `PRQ-1 GROUP-A CAPABILITY = ESTABLISHED / VERIFIED` under `TO-P4-011 / AR-P4-018`
+**Upstream dependency:** `PRQ-1 GROUP-A CAPABILITY = ESTABLISHED / VERIFIED`; corrective root-cause dependency `TO-P4-012 / AR-P4-019` is VERIFIED / COMPLETE
 
 Purpose: establish the real deterministic Group-A specialist capability for `S-01` Technical, `S-06` Multi-Timeframe and `S-08` Volatility using the authoritative Stage-1 Input Snapshot and the independently verified P4 Group-A fact surface.
 
