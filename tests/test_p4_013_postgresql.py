@@ -29,6 +29,8 @@ def _candles(timeframe: str, count: int, interval_minutes: int, symbol: str = SY
         # Two exact-equal confirmed swing highs yield a liquidity pool with member IDs.
         if index in (10, 20):
             high_value = Decimal("110")
+        if index == 30:
+            high_value = Decimal("112")
         if index == 15:
             low_value = Decimal("90")
         if index == count - 1:
