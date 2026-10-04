@@ -442,7 +442,13 @@ class TestP4011GroupAFacts(unittest.TestCase):
                              low=Decimal("101"), close=Decimal("102"))
         primary[2] = replace(primary[2], open=Decimal("105"), high=Decimal("107"),
                              low=Decimal("104"), close=Decimal("106"))
-        higher_1h = higher_bars(10)
+        higher_1h = list(higher_bars(10))
+        higher_1h[0] = replace(higher_1h[0], open=Decimal("100"), high=Decimal("101"),
+                               low=Decimal("99"), close=Decimal("100"))
+        higher_1h[1] = replace(higher_1h[1], open=Decimal("102"), high=Decimal("103"),
+                               low=Decimal("101"), close=Decimal("102"))
+        higher_1h[2] = replace(higher_1h[2], open=Decimal("105"), high=Decimal("107"),
+                               low=Decimal("104"), close=Decimal("106"))
         higher_4h = tuple(candle(i, "4h", interval_minutes=240) for i in range(2))
         result = QuantitativeOrchestrator().process(
             tuple(primary), config(),
