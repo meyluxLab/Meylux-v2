@@ -194,6 +194,15 @@ class TestP4013StructuralFacts(unittest.TestCase):
         ]
         self.assertTrue(exact_boundary)
 
+        final_fvg = next(
+            payload for payload in payloads
+            if payload["event_type"] == "FVG"
+            and payload["event_location"].replace("Z", "+00:00") == primary[-1].open_time.isoformat()
+        )
+        self.assertEqual(len(final_fvg["source_candle_provenance"]), 3)
+        pool_payload = next(payload for payload in payloads if payload["event_type"] == "LIQUIDITY_POOL")
+        self.assertGreaterEqual(len(pool_payload["source_candle_provenance"]), 11)
+
         # Readback filtering is inclusive at as_of and excludes later-known facts.
         asyncio.run(persistence.fetch_family("structure_event", result.symbol, result.timeframe, as_of=result.as_of))
         query, args = db.fetches[-1]
