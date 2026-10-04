@@ -78,7 +78,16 @@ def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
 
 
 def _finding(output, code):
-    return next(item for item in output.findings if item.code == code)
+    exact = next((item for item in output.findings if item.code == code), None)
+    if exact is not None:
+        return exact
+    parts = code.split(":")
+    if len(parts) >= 3:
+        venue_code = ":".join((parts[0], parts[1], "BINANCE", *parts[2:]))
+        exact = next((item for item in output.findings if item.code == venue_code), None)
+        if exact is not None:
+            return exact
+    raise AssertionError(f"finding not found: {code}")
 
 
 def _config(**overrides):
@@ -90,7 +99,7 @@ def _config(**overrides):
 
 class TestP5004GroupASemantics(unittest.TestCase):
     def setUp(self):
-        self.config = load_specialists_config(Path("config/specialists.yaml"))
+        self.config = _config(group_a_venues="BINANCE")
 
     def test_s01_is_deterministic_and_uses_authoritative_fact_families(self):
         snapshot = _snapshot()
@@ -289,6 +298,20 @@ class TestP5004GroupASemantics(unittest.TestCase):
         )
         with self.assertRaises(GroupASemanticError):
             analyze_s01(candidate, self.config)
+
+    def test_qualified_instrument_identity_is_matched_only_against_explicit_venue(self):
+        records = []
+        for venue, prefix, value in (("BINANCE", "BINANCE", Decimal("70")), ("MEXC", "MEXC", Decimal("30"))):
+            record = _fact(f"{prefix}:BTCUSDT", "15m", "RSI", value, event=AS_OF, knowledge=AS_OF, record_suffix=venue)
+            # The venue remains an independent authoritative field; it is not inferred from the symbol prefix.
+            record = replace(record, metadata={**dict(record.metadata), "venue": venue},
+                             evidence_refs=tuple(replace(ref, venue=venue) for ref in record.evidence_refs))
+            records.append(record)
+        snapshot = InputSnapshotBuilder().build(as_of=AS_OF, version="1.2.0", records=tuple(records))
+        cfg = _config(group_a_symbols="BTCUSDT", group_a_timeframes="15m", group_a_venues="BINANCE,MEXC")
+        output = analyze_s01(snapshot, cfg)
+        self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"], "OVERBOUGHT")
+        self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:MEXC:15m:RSI_ZONE").value["state"], "OVERSOLD")
 
     def test_stage1_independence_is_static_and_runtime_output_is_forbidden(self):
         module = Path(__file__).parents[1] / "src" / "meylux" / "specialists" / "group_a.py"
