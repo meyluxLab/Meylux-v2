@@ -148,16 +148,34 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                 )
                 self.assertEqual(count, 1)
                 if specialist_id == "S-01":
-                    with self.assertRaises(asyncpg.InsufficientPrivilegeError):
-                        await pool.execute(
-                            "UPDATE meylux.specialist_outputs SET reason='forbidden' WHERE identity_hash=$1",
+                    # Capture the complete persisted row, including identity, payload,
+                    # evidence, status/reason and persisted_at. The governed trigger
+                    # raises PostgreSQL P0001 (RAISE EXCEPTION); assert stable SQLSTATE
+                    # and contract message rather than an asyncpg subclass.
+                    before_json = await pool.fetchval(
+                        "SELECT to_jsonb(s) FROM meylux.specialist_outputs AS s WHERE identity_hash=$1",
+                        row["identity_hash"],
+                    )
+                    self.assertIsNotNone(before_json)
+                    before_row = json.loads(before_json) if isinstance(before_json, str) else before_json
+                    for operation, statement in (
+                        ("UPDATE", "UPDATE meylux.specialist_outputs SET reason='forbidden' WHERE identity_hash=$1"),
+                        ("DELETE", "DELETE FROM meylux.specialist_outputs WHERE identity_hash=$1"),
+                    ):
+                        with self.assertRaises(asyncpg.PostgresError) as rejected:
+                            await pool.execute(statement, row["identity_hash"])
+                        self.assertEqual(rejected.exception.sqlstate, "P0001")
+                        self.assertIn(
+                            f"authoritative canonical history is append-only: {operation} is not permitted on specialist_outputs",
+                            str(rejected.exception),
+                        )
+                        after_json = await pool.fetchval(
+                            "SELECT to_jsonb(s) FROM meylux.specialist_outputs AS s WHERE identity_hash=$1",
                             row["identity_hash"],
                         )
-                    with self.assertRaises(asyncpg.InsufficientPrivilegeError):
-                        await pool.execute(
-                            "DELETE FROM meylux.specialist_outputs WHERE identity_hash=$1",
-                            row["identity_hash"],
-                        )
+                        self.assertIsNotNone(after_json)
+                        after_row = json.loads(after_json) if isinstance(after_json, str) else after_json
+                        self.assertEqual(after_row, before_row, f"{operation} changed persisted specialist output")
                     unchanged = await pool.fetchval(
                         "SELECT count(*) FROM meylux.specialist_outputs WHERE identity_hash=$1",
                         row["identity_hash"],
