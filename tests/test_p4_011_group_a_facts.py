@@ -174,8 +174,8 @@ class TestP4011GroupAFacts(unittest.TestCase):
             if "INSERT INTO meylux.calculated_indicator_vectors" in query
         ]
         self.assertEqual(len(rows), 19)
-        self.assertTrue(all(args[4].startswith("canonical-provenance:") for args in rows))
-        self.assertTrue(all(all(candle.provenance_id in args[4] for candle in xs) for args in rows))
+        self.assertTrue(all(args[4] in {candle.provenance_id for candle in xs} for args in rows))
+        self.assertTrue(all(args[4] == xs[-1].provenance_id for args in rows))
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
 
     def test_ci_provenance_without_authoritative_raw_mapping_remains_unresolved(self):
