@@ -3023,3 +3023,46 @@ entries:
     registry_correction:
       finding: "Canonical artifact registry contained stale P5-003 active/authorized statuses despite verified closure."
       corrected: "STEP-P5-003 -> COMPLETE / VERIFIED; TO-P5-003 -> VERIFIED / COMPLETE; TO-P5-003-CORRECTIVE-001 -> VERIFIED / COMPLETE."
+  - ledger_id: CL-P4-012-CLOSURE-20261004
+    recorded_at: "2026-10-04"
+    authority: CONTROL / ROL-V2-001
+    action: "CONTROL INDEPENDENT VERIFICATION AND CLOSURE — TO-P4-012"
+    basis: "Project Owner full root-cause continuation authorization 2026-10-04; Producer BR-P4-012; implementation 0b85a8abe9378c6cc213d3b69249ae66d491bd05; PR #61 merge a95f23eabf6d0324fcaacbbed06862881a7e52fa; AR-P4-019; ADR-GOVERNANCE-012; ADR-GOVERNANCE-013"
+    disposition:
+      phase: PH-P4
+      historical_step_boundary: STEP-P4-006
+      downstream_step: STEP-P5-004
+      task_order: TO-P4-012
+      task_order_status: "VERIFIED / COMPLETE"
+      completion_audit: AR-P4-019
+      active_task_order_after_closure: TO-P5-004
+      downstream_step_status: "ACTIVE / AUTHORIZED"
+      phase_status: "PH-P5 ACTIVE / AUTHORIZED"
+    evidence:
+      implementation_revision: 0b85a8abe9378c6cc213d3b69249ae66d491bd05
+      merged_revision: a95f23eabf6d0324fcaacbbed06862881a7e52fa
+      execution_log: EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004
+      runtime_result: "57 new venue-complete quantitative facts; replay additional rows 0"
+      regression: "606 tests; OK (skipped=6)"
+      ci_core: "37155184431 / #1714 / SUCCESS"
+      ci_docker: "37155184423 / #599 / SUCCESS"
+      evidence_ref: "9 representative records accepted by P5 InputSnapshotBuilder; pre-boundary as_of rejected"
+      ema_history: "15m 117; 1h 31; 4h 10; insufficient periods explicit"
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; historical PH-P4 / STEP-P4-006 / G-4 closure preserved."
+    closure_boundary: "TO-P4-012 is closed as the upstream corrective dependency only; TO-P5-004 / STEP-P5-004 remain active."
+    peripheral_sync:
+      readme: CHECKED / UPDATED
+      artifacts_registry: UPDATED
+      phases_registry: UPDATED
+      tests_registry: UPDATED
+      database_registry: UPDATED
+      runtime_registry: UPDATED
+      configuration_registry: UPDATED
+      contracts_registry: CHECKED — no contract change
+      security_registry: CHECKED — no security-boundary change
+      performance_registry: CHECKED — no performance target change
+      observability_registry: CHECKED — no production observability contract change
+      standalone_status_documents: UPDATED
+      supplemental_staging_registry: CHECKED — none
+      machine_readback: COMPLETED
+
