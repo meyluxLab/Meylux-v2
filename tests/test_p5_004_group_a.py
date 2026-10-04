@@ -313,6 +313,19 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"], "OVERBOUGHT")
         self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:MEXC:15m:RSI_ZONE").value["state"], "OVERSOLD")
 
+        contradictory = _fact("MEXC:BTCUSDT", "15m", "RSI", Decimal("50"), event=AS_OF,
+                              knowledge=AS_OF, record_suffix="venue-mismatch")
+        inconsistent_snapshot = InputSnapshotBuilder().build(
+            as_of=AS_OF, version="1.2.0", records=(replace(
+                contradictory, metadata={**dict(contradictory.metadata), "venue": "BINANCE"},
+                evidence_refs=tuple(replace(ref, venue="BINANCE") for ref in contradictory.evidence_refs)
+            ),)
+        )
+        with self.assertRaises(GroupASemanticError):
+            analyze_s01(inconsistent_snapshot, _config(
+                group_a_symbols="BTCUSDT", group_a_timeframes="15m", group_a_venues="BINANCE"
+            ))
+
     def test_stage1_independence_is_static_and_runtime_output_is_forbidden(self):
         module = Path(__file__).parents[1] / "src" / "meylux" / "specialists" / "group_a.py"
         tree = ast.parse(module.read_text(encoding="utf-8"))
