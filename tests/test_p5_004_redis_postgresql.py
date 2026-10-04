@@ -152,6 +152,15 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                     # evidence, status/reason and persisted_at. The governed trigger
                     # raises PostgreSQL P0001 (RAISE EXCEPTION); assert stable SQLSTATE
                     # and contract message rather than an asyncpg subclass.
+                    trigger = await pool.fetchrow(
+                        "SELECT t.tgenabled, pg_get_triggerdef(t.oid) AS definition "
+                        "FROM pg_trigger AS t WHERE t.tgrelid='meylux.specialist_outputs'::regclass "
+                        "AND t.tgname='trg_specialist_outputs_append_only' AND NOT t.tgisinternal"
+                    )
+                    self.assertIsNotNone(trigger, "governed append-only trigger must exist")
+                    self.assertEqual(trigger["tgenabled"], "O", "governed append-only trigger must be enabled")
+                    self.assertIn("reject_canonical_mutation", trigger["definition"])
+
                     before_json = await pool.fetchval(
                         "SELECT to_jsonb(s) FROM meylux.specialist_outputs AS s WHERE identity_hash=$1",
                         row["identity_hash"],
@@ -164,11 +173,22 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                     ):
                         with self.assertRaises(asyncpg.PostgresError) as rejected:
                             await pool.execute(statement, row["identity_hash"])
-                        self.assertEqual(rejected.exception.sqlstate, "P0001")
-                        self.assertIn(
-                            f"authoritative canonical history is append-only: {operation} is not permitted on specialist_outputs",
-                            str(rejected.exception),
-                        )
+                        # Depending on the governed connection role, PostgreSQL may
+                        # reject the mutation at the grant boundary (42501) before the
+                        # trigger runs, or the trigger itself may reject it via RAISE
+                        # EXCEPTION (P0001). Accept only these two explicit protections.
+                        if rejected.exception.sqlstate == "P0001":
+                            self.assertIn(
+                                f"authoritative canonical history is append-only: {operation} is not permitted on specialist_outputs",
+                                str(rejected.exception),
+                            )
+                        elif rejected.exception.sqlstate == "42501":
+                            self.assertIn("permission denied for table specialist_outputs", str(rejected.exception).lower())
+                        else:
+                            self.fail(
+                                f"{operation} rejected with unexpected SQLSTATE "
+                                f"{rejected.exception.sqlstate}: {rejected.exception}"
+                            )
                         after_json = await pool.fetchval(
                             "SELECT to_jsonb(s) FROM meylux.specialist_outputs AS s WHERE identity_hash=$1",
                             row["identity_hash"],
