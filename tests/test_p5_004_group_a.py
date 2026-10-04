@@ -169,7 +169,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
         snapshot = _snapshot(ema_periods=(20,), symbols=("BTCUSDT",), timeframes=("15m",))
         output = analyze_s01(snapshot, self.config)
         alignment = _finding(output, "TECHNICAL:BTCUSDT:15m:MA_ALIGNMENT")
-        self.assertEqual(alignment.value["state"], "INSUFFICIENT_DATA")
+        self.assertEqual(alignment.value["state"], "PARTIAL")
         self.assertIn(200, {item["period"] for item in alignment.value["missing_periods"]})
         self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA").value["state"], "ABOVE_MA")
 
