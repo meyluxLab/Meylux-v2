@@ -458,3 +458,23 @@ records:
       control_independent_postgresql_tests: 2/2 PASS
       control_execution_time: 0.811s
       coverage: deterministic Group-A fact vocabulary, per-timeframe persistence, Worker-to-PostgreSQL MTF path, knowledge-time boundary, provenance, identity, replay idempotency, post-boundary HTF rejection and no-write negative path
+
+  - stable_id: TST-P4-012
+    canonical_name: TO-P4-012 Venue Provenance and EMA Coverage Regression Evidence
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-012
+    artifact_path: tests/test_p4_011_group_a_facts.py
+    traceability: TO-P4-012 / BR-P4-012 / AR-P4-019
+    status: VERIFIED
+    evidence:
+      implementation_commit: 0b85a8abe9378c6cc213d3b69249ae66d491bd05
+      independent_full_suite: 606 tests; OK (skipped=6)
+      ci_core_run_id: 37155184431
+      ci_core_run_number: 1714
+      ci_core_result: SUCCESS
+      ci_docker_run_id: 37155184423
+      ci_docker_run_number: 599
+      ci_docker_result: SUCCESS
+      control_audit: AR-P4-019
