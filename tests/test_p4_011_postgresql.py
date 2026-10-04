@@ -88,7 +88,17 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 40)
+                expected_structure_events = len(result.structure_events) + sum(
+                    len(events) for events in result.higher_timeframe_structure_events.values()
+                )
+                expected_structure_zones = sum(
+                    1 for event in result.structure_events
+                    if event.lower_bound is not None and event.upper_bound is not None
+                ) + sum(
+                    1 for events in result.higher_timeframe_structure_events.values()
+                    for event in events if event.lower_bound is not None and event.upper_bound is not None
+                )
+                self.assertEqual(inserted, 40 + expected_structure_events + expected_structure_zones)
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
