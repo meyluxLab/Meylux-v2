@@ -20,6 +20,24 @@ UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
 SYMBOL = "TO-P4-011-CI:BTCUSDT"
 
+_ZONE_EVENT_TYPES = {
+    "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
+    "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
+}
+
+
+def _expected_structural_rows(result) -> int:
+    count = 0
+    for facts in result.structural_facts.values():
+        count += len(facts.events)
+        count += sum(
+            event.event_type in _ZONE_EVENT_TYPES
+            and (event.lower_bound is not None or event.upper_bound is not None
+                 or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})
+            for event in facts.events
+        )
+    return count
+
 
 def _candles(
     timeframe: str, count: int, interval_minutes: int, symbol: str = SYMBOL
@@ -88,7 +106,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 40)
+                self.assertEqual(inserted, 40 + _expected_structural_rows(result))
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
@@ -220,7 +238,10 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     primary, config, higher_timeframes={"1h": higher}
                 )
                 persistence = QuantitativePersistence(conn)
-                self.assertEqual(await persistence.persist_orchestration(result), 40)
+                self.assertEqual(
+                    await persistence.persist_orchestration(result),
+                    40 + _expected_structural_rows(result),
+                )
                 primary_rows = await persistence.fetch_family("indicator", symbol, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", symbol, "1h", limit=100)
                 self.assertEqual(len(primary_rows), 19)
