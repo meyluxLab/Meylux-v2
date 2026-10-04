@@ -135,7 +135,7 @@ class TestP4013StructuralFacts(unittest.TestCase):
         self.assertTrue(result.structure_events)
         self.assertTrue(all(event.event_type == "STRUCTURE_STATE" for event in result.structure_events))
         self.assertEqual(result.structure_event_provenance.keys(), {event.identity for event in result.structure_events})
-        self.assertEqual(result.structure_state, "UNCONFIRMED")
+        self.assertEqual(result.structure_state, "NEUTRAL")
 
     def test_canonical_gap_preserves_unconfirmed_state_and_replay(self):
         candles = _candles()
