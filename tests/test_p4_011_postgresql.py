@@ -200,6 +200,16 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             provenance_id=f"p4-012-ci:{item.timeframe}:{index}")
                     for index, item in enumerate(_candles("1h", 10, 60, symbol))
                 )
+                primary = tuple(
+                    replace(item, open=Decimal("150"), high=Decimal("151"), low=Decimal("150"), close=Decimal("150"))
+                    if index == len(primary) - 1 else item
+                    for index, item in enumerate(primary)
+                )
+                higher = tuple(
+                    replace(item, open=Decimal("150"), high=Decimal("151"), low=Decimal("150"), close=Decimal("150"))
+                    if index == len(higher) - 1 else item
+                    for index, item in enumerate(higher)
+                )
                 # These are explicitly labeled CI fixtures. They exercise the
                 # SQL resolver but are not authoritative runtime acceptance evidence.
                 for timeframe_candles in (primary, higher):
