@@ -440,14 +440,15 @@
       "artifact_registry": "UPDATED",
       "phases_registry": "UPDATED",
       "specialized_registries": "UPDATED",
-      "readme": "PENDING_FINAL_SYNC",
-      "change_ledger": "PENDING_FINAL_SYNC",
+      "readme": "UPDATED",
+      "change_ledger": "UPDATED",
       "standalone_status_documents": "CHECKED",
       "supplemental_staging_registry": "CHECKED",
-      "machine_readback": "PENDING_FINAL_SYNC"
+      "machine_readback": "COMPLETED",
+      "final_sync_commit": "79508fecd9d69348f39c9ceb23574c1388e20f1d"
     }
   },
-  "last_governance_sync_base_commit": "8f014e216a03378853cd2d74b869ef03d65e907b",
+  "last_governance_sync_base_commit": "79508fecd9d69348f39c9ceb23574c1388e20f1d",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
