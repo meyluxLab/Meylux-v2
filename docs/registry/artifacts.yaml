@@ -1495,7 +1495,8 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-012.md
     traceability: PH-P4 / STEP-P4-006 / STEP-P5-004 / TO-P4-011 / AR-P4-018 / Project Owner Directive — Full Root-Cause Resolution of TO-P5-004 Underlying Requirement 2026-10-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+    completion_audit: AR-P4-019
     lifecycle_context: POST-CLOSURE GOVERNED CORRECTIVE CONTINUATION — PH-P4 / STEP-P4-006 / G-4 historical closure preserved
     downstream_task_order: TO-P5-004
 
@@ -1542,7 +1543,50 @@ records:
     traceability: TO-P4-012 / BR-P4-012 / TST-P4-012 / DB-P4-012 / CFG-P4-012 / RUN-P4-012 / PH-P5 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
 
-  - stable_id: BR-P4-010
+
+  - stable_id: BR-P4-012
+    canonical_name: Build Report — Group-A Upstream Root-Cause Resolution for P5-004
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-012.md
+    traceability: TO-P4-012 / STEP-P5-004 / AR-P4-019 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+
+  - stable_id: TST-P4-012
+    canonical_name: TO-P4-012 Venue Provenance and EMA Coverage Regression Evidence
+    entity_type: TST
+    artifact_path: tests/test_p4_011_group_a_facts.py
+    traceability: TO-P4-012 / BR-P4-012 / AR-P4-019
+    status: VERIFIED
+
+  - stable_id: DB-P4-012
+    canonical_name: TO-P4-012 Governed Runtime Quantitative Persistence Evidence
+    entity_type: DB
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004.md
+    traceability: TO-P4-012 / AR-P4-019
+    status: VERIFIED
+
+  - stable_id: CFG-P4-012
+    canonical_name: TO-P4-012 EMA Period and Venue-Resolution Configuration Evidence
+    entity_type: CONFIGURATION
+    artifact_path: src/meylux/orchestration/engine.py
+    traceability: TO-P4-012 / BR-P4-012 / AR-P4-019
+    status: VERIFIED
+
+  - stable_id: RUN-P4-012
+    canonical_name: CONTROL Independent TO-P4-012 Runtime Acceptance Execution
+    entity_type: RUN
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004.md
+    traceability: TO-P4-012 / AR-P4-019 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+
+  - stable_id: AR-P4-019
+    canonical_name: CONTROL Independent Audit — TO-P4-012 Group-A Upstream Root-Cause Resolution
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-019.md
+    traceability: TO-P4-012 / BR-P4-012 / TST-P4-012 / DB-P4-012 / CFG-P4-012 / RUN-P4-012 / PH-P5 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+
+  - stable_id: TO-P4-012
     canonical_name: Build Report — P4 Authoritative Knowledge-Time Semantic & Persistence Correction
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-010.md
