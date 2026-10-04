@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import unittest
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
@@ -543,6 +544,50 @@ class TestP4011GroupAFacts(unittest.TestCase):
             QuantitativeOrchestrator().process(
                 tuple(primary), config(), higher_timeframes={"1h": future_1h}
             )
+
+    def test_structural_classification_members_and_zone_sources_are_persisted(self):
+        values = []
+        pattern = (100, 103, 106, 110, 106, 101)
+        for index in range(60):
+            close = Decimal(pattern[index % 6] + 2 * (index // 6))
+            opened = close + Decimal("1") if index % 6 in (4, 5) else close
+            high = max(opened, close) + Decimal("1")
+            low = min(opened, close) - Decimal("1")
+            opened_at = T0 + timedelta(minutes=15 * index)
+            values.append(CanonicalCandle(
+                "BTCUSDT", "15m", opened_at, opened_at + timedelta(minutes=15),
+                opened, high, low, close, Decimal("1"),
+                provenance_id="canonical:test-structure-series",
+            ))
+        result = QuantitativeOrchestrator().process(tuple(values), config())
+        facts = result.structural_facts["15m"]
+        classifications = [
+            event for event in facts.events if event.event_type in {"HH", "HL", "LH", "LL"}
+        ]
+        self.assertTrue(classifications, "fixture must produce confirmed swing classifications")
+        db = _DB()
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        event_rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.market_structure_events" in query and args[4] != "ORCHESTRATION"
+        ]
+        event_ids = {args[-2] for args in event_rows if "knowledge_time)" in next(
+            query.lower() for query, candidate_args in db.sql if candidate_args is args
+        )}
+        for args in event_rows:
+            payload = json.loads(args[12])
+            if args[4] in {"HH", "HL", "LH", "LL"}:
+                self.assertEqual(len(payload["source_member_identities"]), 2)
+                self.assertEqual(payload["source_event_identity"], None)
+                for member_id in payload["source_member_identities"]:
+                    self.assertIn(member_id, event_ids)
+        zone_rows = [
+            args for query, args in db.sql if "INSERT INTO meylux.market_structure_zones" in query
+        ]
+        self.assertTrue(any(args[4] == "ORDER_BLOCK" for args in zone_rows),
+                        "the governed BOS-to-Order-Block path must reach zone persistence")
+        self.assertTrue(all(args[6] is None for args in event_rows + zone_rows),
+                        "unmapped canonical provenance must remain explicitly unresolved")
 
     def test_ema_period_configuration_rejects_empty_duplicate_and_invalid_periods(self):
         for periods in ((), (9, 9), (9, 0), (9, True), [9, 20]):
