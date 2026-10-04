@@ -83,7 +83,7 @@ class _DB:
 
 class TestP4013StructuralFacts(unittest.TestCase):
     def test_primary_and_higher_timeframe_events_keep_temporal_and_lineage_fields(self):
-        primary = _candles()
+        primary = _candles(count=60)
         higher = _candles("1h", 12, 60)
         result = QuantitativeOrchestrator().process(
             primary, _config(), higher_timeframes={"1h": higher}
@@ -113,7 +113,7 @@ class TestP4013StructuralFacts(unittest.TestCase):
         # The exact-equality liquidity pool retains both confirmed member identities.
         pool = next(event for event in result.structure_events if event.event_type == "LIQUIDITY_POOL")
         self.assertEqual(len(pool.source_event_identity.split(",")), 2)
-        self.assertEqual(pool.source_event_identity.split(",")[0], pool.source_event_identity.split(",")[0])
+        self.assertNotEqual(pool.source_event_identity.split(",")[0], pool.source_event_identity.split(",")[1])
 
     def test_replay_is_deterministic_and_insufficient_history_does_not_fabricate_structure(self):
         candles = _candles()
@@ -137,7 +137,7 @@ class TestP4013StructuralFacts(unittest.TestCase):
         self.assertEqual(result.structure_state, "NEUTRAL")
 
     def test_persistence_writes_individual_events_and_zones_with_as_of_read_filter(self):
-        primary = _candles()
+        primary = _candles(count=60)
         higher = _candles("1h", 12, 60)
         result = QuantitativeOrchestrator().process(primary, _config(), higher_timeframes={"1h": higher})
         db = _DB()
