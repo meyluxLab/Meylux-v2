@@ -183,6 +183,18 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertIn(_finding(invalid_output, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"],
                       {"INVALID", "INSUFFICIENT_DATA"})
 
+        boolean_value = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",),
+                                  overrides={("BTCUSDT", "15m", "RSI"): True})
+        boolean_output = analyze_s01(boolean_value, self.config)
+        self.assertEqual(_finding(boolean_output, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"], "INVALID")
+
+        stale_fact = _fact("BTCUSDT", "15m", "RSI", Decimal("60"), status=FactStatus.STALE,
+                           event=AS_OF - timedelta(minutes=15), knowledge=AS_OF - timedelta(minutes=15))
+        stale_snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",),
+                                   missing={("BTCUSDT", "15m", "RSI")}, extra=(stale_fact,))
+        stale_output = analyze_s01(stale_snapshot, self.config)
+        self.assertEqual(_finding(stale_output, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"], "STALE")
+
     def test_s01_contradictory_same_time_values_are_not_silently_selected(self):
         timestamp = AS_OF - timedelta(minutes=15)
         contradictory = _fact("BTCUSDT", "15m", "RSI", Decimal("40"), event=timestamp, record_suffix="second")
