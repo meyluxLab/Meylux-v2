@@ -221,6 +221,17 @@ class TestP4011GroupAFacts(unittest.TestCase):
         self.assertEqual(len(rows), 19)
         self.assertTrue(all(args[4] == "binance:binance-acquisition" for args in rows))
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
+        event_rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.market_structure_events" in query and args[4] != "ORCHESTRATION"
+        ]
+        zone_rows = [
+            args for query, args in db.sql if "INSERT INTO meylux.market_structure_zones" in query
+        ]
+        self.assertTrue(event_rows, "individual structural facts must be persisted with explicit venue context")
+        self.assertTrue(zone_rows, "structure-bearing zones must be persisted with explicit venue context")
+        self.assertTrue(all(args[5].startswith("canonical-provenance:") for args in event_rows + zone_rows))
+        self.assertTrue(all(args[6] == "BINANCE" for args in event_rows + zone_rows))
 
     def test_ci_provenance_without_authoritative_raw_mapping_remains_unresolved(self):
         xs = tuple(
