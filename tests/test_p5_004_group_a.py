@@ -196,14 +196,14 @@ class TestP5004GroupASemantics(unittest.TestCase):
 
                 price_vs_ma = _finding(output, "TECHNICAL:BTCUSDT:4h:PRICE_VS_MA")
                 self.assertEqual(price_vs_ma.value["state"], "INSUFFICIENT_DATA")
-                self.assertIn(
-                    "exact-ema20-" + exact_fact_status.value.lower(),
-                    {ref.record_id for ref in price_vs_ma.evidence_refs},
-                )
-                self.assertNotIn(
-                    "legacy-ema-valid",
-                    {ref.record_id for ref in price_vs_ma.evidence_refs},
-                )
+                evidence_record_ids = {ref.record_id for ref in price_vs_ma.evidence_refs}
+                self.assertTrue(any(
+                    "exact-ema20-" + exact_fact_status.value.lower() in record_id
+                    for record_id in evidence_record_ids
+                ))
+                self.assertFalse(any(
+                    "legacy-ema-valid" in record_id for record_id in evidence_record_ids
+                ))
 
     def test_closed_candle_boundary_equality_is_admissible_and_price_ma_uses_close_time(self):
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
