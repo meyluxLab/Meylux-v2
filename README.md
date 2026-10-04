@@ -16,8 +16,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
-- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. Current Step: `STEP-P5-004` — `ACTIVE / AUTHORIZED`. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Active Task Order:** `TO-P5-004` — Group A Technical / Multi-Timeframe / Volatility; `TO-P4-011` / `AR-P4-018` established the Group-A PRQ-1 dependency; `STEP-P5-004` is authorized and active.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-004` — `COMPLETE / VERIFIED` under `AR-P5-004`; no active P5 Task Order is currently active. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
+- **Latest completed Task Order:** `TO-P5-004` — Group A Technical / Multi-Timeframe / Volatility; independently verified under `AR-P5-004`; `active_task_order = null`; no later P5 Step is activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -71,7 +71,7 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-004` — `ACTIVE / AUTHORIZED`; Active Task Order: `TO-P5-004`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-004` — `COMPLETE / VERIFIED`; Active Task Order: `null`; Completion Audit: `AR-P5-004`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
 
 
 ## Post-Closure Investigation State
@@ -80,3 +80,8 @@ Phase 5 is established and authorized under the Project Owner Phase 5 Re-Directi
 
 
 TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed under `AR-P2-AUDIT-009`; `MEXC_FINALITY` remains `UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED`. `TO-P2-010` reached `VERIFIED / COMPLETE` under `AR-P2-AUDIT-010`; `TO-P2-011` and `TO-P2-012` are also `VERIFIED / COMPLETE`; `TO-P2-013` remains `PREPARED / NOT ACTIVATED`. These post-closure P2 records remain separate from the active `PH-P5 / STEP-P5-003` boundary.
+
+
+## TO-P5-004 Closure
+
+`TO-P5-004` / `STEP-P5-004` — Group A Technical, Multi-Timeframe and Volatility — is independently verified and closed under `AR-P5-004`. The corrected implementation/test revision is `45915b9f4ceb4c84349835d4e47d00897ba74eca`, PR #63 merged as `8f014e216a03378853cd2d74b869ef03d65e907b`. CONTROL independently verified the authoritative EMA alias semantics, closed-candle temporal boundary, EvidenceRef provenance, Redis → specialist worker → PostgreSQL persistence/read-back, replay idempotency, append-only UPDATE/DELETE protection, and runtime performance/resource baseline. No later Phase 5 Step is activated.
