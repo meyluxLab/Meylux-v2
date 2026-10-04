@@ -121,6 +121,50 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(first, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA").value["state"], "ABOVE_MA")
         self.assertEqual(first.status.value, "SUCCESS")
 
+    def test_primary_ema_legacy_alias_equal_value_does_not_create_false_contradiction(self):
+        close_boundary = AS_OF - timedelta(milliseconds=1)
+        legacy = _fact("BTCUSDT", "15m", "EMA", Decimal("98"),
+                       event=close_boundary, knowledge=close_boundary, record_suffix="legacy-equal")
+        output = analyze_s01(_snapshot(symbols=("BTCUSDT",), timeframes=("15m",), extra=(legacy,)), self.config)
+        alignment = _finding(output, "TECHNICAL:BTCUSDT:15m:MA_ALIGNMENT")
+        price_vs_ma = _finding(output, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA")
+        self.assertNotEqual(alignment.value["state"], "CONTRADICTORY")
+        self.assertEqual(price_vs_ma.value["state"], "ABOVE_MA")
+
+    def test_primary_ema_legacy_alias_conflict_remains_explicit(self):
+        close_boundary = AS_OF - timedelta(milliseconds=1)
+        legacy = _fact("BTCUSDT", "15m", "EMA", Decimal("97"),
+                       event=close_boundary, knowledge=close_boundary, record_suffix="legacy-conflict")
+        output = analyze_s01(_snapshot(symbols=("BTCUSDT",), timeframes=("15m",), extra=(legacy,)), self.config)
+        self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:MA_ALIGNMENT").value["state"], "CONTRADICTORY")
+        self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA").value["state"], "CONTRADICTORY")
+
+    def test_primary_ema_legacy_alias_is_fallback_only_when_exact_alias_is_absent(self):
+        close_boundary = AS_OF - timedelta(milliseconds=1)
+        legacy = _fact("BTCUSDT", "15m", "EMA", Decimal("98"),
+                       event=close_boundary, knowledge=close_boundary, record_suffix="legacy-fallback")
+        snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",),
+                             ema_periods=(9, 21, 50, 200), extra=(legacy,))
+        output = analyze_s01(snapshot, self.config)
+        self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA").value["state"], "ABOVE_MA")
+        alignment = _finding(output, "TECHNICAL:BTCUSDT:15m:MA_ALIGNMENT")
+        self.assertNotIn(20, {item["period"] for item in alignment.value.get("missing_periods", [])})
+
+    def test_closed_candle_boundary_equality_is_admissible_and_price_ma_uses_close_time(self):
+        snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
+        candle = next(f for f in snapshot.facts if f.metadata.get("source_table") == "meylux.canonical_candles"
+                      and f.metadata.get("symbol") == "BTCUSDT" and f.metadata.get("timeframe") == "15m")
+        ema = next(f for f in snapshot.facts if f.metadata.get("fact_name") == "EMA_20"
+                   and f.metadata.get("symbol") == "BTCUSDT" and f.metadata.get("timeframe") == "15m")
+        self.assertLess(candle.metadata["event_time"], ema.metadata["event_time"])
+        self.assertEqual(candle.value["close_time"], ema.metadata["event_time"].isoformat().replace("+00:00", "Z"))
+        technical = analyze_s01(snapshot, self.config)
+        self.assertEqual(_finding(technical, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA").value["state"], "ABOVE_MA")
+        mtf = analyze_s06(snapshot, self.config)
+        self.assertEqual(_finding(mtf, "MTF:BTCUSDT:15m").value["state"], "BULLISH")
+        self.assertNotIn("POST_BOUNDARY_EVIDENCE",
+                         {_finding(mtf, f"MTF:BTCUSDT:{tf}").value["state"] for tf in ("15m", "1h", "4h")})
+
     def test_s01_threshold_equality_is_inclusive_and_config_driven(self):
         snapshot = _snapshot()
         config = _config(rsi_overbought=Decimal("70"), adx_trend_threshold=Decimal("25"),
