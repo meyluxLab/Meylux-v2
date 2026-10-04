@@ -21,7 +21,7 @@ from meylux.quantitative.indicators import (
     rsi,
     volatility_expansion_ratio,
 )
-from meylux.quantitative.market_structure import MarketStructureEngine
+from meylux.quantitative.market_structure import MarketStructureEngine, StructuralEvent
 from meylux.quantitative.regime_venue import MarketRegimeEngine, RegimeConfig
 
 
@@ -197,6 +197,10 @@ class QuantOrchestrationResult:
     htf: Mapping[str, MTFAlignment]
     source_provenance: tuple[str, ...]
     higher_timeframe_facts: Mapping[str, TimeframeQuantitativeFacts] = field(default_factory=dict)
+    structure_events: tuple[StructuralEvent, ...] = ()
+    structure_event_provenance: Mapping[str, tuple[str, ...]] = field(default_factory=dict)
+    higher_timeframe_structure_events: Mapping[str, tuple[StructuralEvent, ...]] = field(default_factory=dict)
+    higher_timeframe_structure_event_provenance: Mapping[str, Mapping[str, tuple[str, ...]]] = field(default_factory=dict)
 
 
 def _contextualize(result: CalculationResult, candle: CanonicalCandle) -> CalculationResult:
@@ -255,6 +259,42 @@ def _indicator_facts(candles: tuple[CanonicalCandle, ...], config: QuantOrchestr
     return facts
 
 
+def _structure_event_provenance(
+    candles: tuple[CanonicalCandle, ...],
+    events: tuple[StructuralEvent, ...],
+) -> dict[str, tuple[str, ...]]:
+    """Map each engine fact to the canonical candles that locate and confirm it.
+
+    A 5/5 swing/classification retains its full eleven-candle confirmation window.
+    Other facts retain their event-location and confirmation candles; structural
+    source/member identities remain separately linked in the event payload.
+    """
+    by_open = {candle.open_time: index for index, candle in enumerate(candles)}
+    by_close = {candle.close_time: index for index, candle in enumerate(candles)}
+    swing_types = {"SWING_HIGH", "SWING_LOW", "HH", "HL", "LH", "LL"}
+    out: dict[str, tuple[str, ...]] = {}
+    for event in events:
+        if not event.identity or event.event_location not in by_open or event.confirmation_time not in by_close:
+            raise ValueError("structural event must map to canonical event-location and confirmation candles")
+        location_index = by_open[event.event_location]
+        confirmation_index = by_close[event.confirmation_time]
+        if location_index > confirmation_index:
+            raise ValueError("structural event location cannot follow its confirmation candle")
+        indices = {location_index, confirmation_index}
+        if event.event_type in swing_types:
+            # DOC-P4-002 confirms a 5/5 pivot only after its full eleven-candle window.
+            if confirmation_index != location_index + 5 or location_index < 5:
+                raise ValueError("confirmed swing lineage must contain its complete 5/5 window")
+            indices.update(range(location_index - 5, confirmation_index + 1))
+        refs = tuple(dict.fromkeys(candles[index].provenance_id for index in sorted(indices)))
+        if not refs or any(not isinstance(ref, str) or not ref.strip() for ref in refs):
+            raise ValueError("structural event requires explicit canonical candle provenance")
+        if event.identity in out:
+            raise ValueError("structural event identities must be unique within a timeframe")
+        out[event.identity] = refs
+    return out
+
+
 class QuantitativeOrchestrator:
     def __init__(self) -> None:
         self._regime = MarketRegimeEngine()
@@ -289,9 +329,13 @@ class QuantitativeOrchestrator:
 
         regime = self._regime.classify(xs, config.regime, previous_state=previous_regime)
         structure = self._structure.analyze(xs)
+        structure_events = structure.events
+        structure_event_provenance = _structure_event_provenance(xs, structure_events)
         indicators = _indicator_facts(xs, config)
         htf: dict[str, MTFAlignment] = {}
         htf_facts: dict[str, TimeframeQuantitativeFacts] = {}
+        htf_structure_events: dict[str, tuple[StructuralEvent, ...]] = {}
+        htf_structure_provenance: dict[str, Mapping[str, tuple[str, ...]]] = {}
         for timeframe, series in (higher_timeframes or {}).items():
             if not isinstance(timeframe, str) or not timeframe:
                 raise ValueError("higher timeframe key must be non-empty")
@@ -322,6 +366,11 @@ class QuantitativeOrchestrator:
                         indicators=_indicator_facts(selected, config),
                         source_provenance=tuple(c.provenance_id for c in selected),
                     )
+                    htf_structure = self._structure.analyze(selected)
+                    htf_structure_events[timeframe] = htf_structure.events
+                    htf_structure_provenance[timeframe] = _structure_event_provenance(
+                        selected, htf_structure.events
+                    )
 
         knowledge_time = xs[-1].close_time
         return QuantOrchestrationResult(
@@ -338,4 +387,8 @@ class QuantitativeOrchestrator:
             htf,
             tuple(c.provenance_id for c in xs),
             htf_facts,
+            structure_events,
+            structure_event_provenance,
+            htf_structure_events,
+            htf_structure_provenance,
         )
