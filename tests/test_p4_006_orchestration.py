@@ -156,10 +156,22 @@ class _DB:
 
 class TestPersistence(unittest.TestCase):
     def test_idempotent_identity_is_stable(self):
-        db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        self.assertEqual(result,21); self.assertEqual(again,0)
-        self.assertEqual(len(db.sql),42)
+        db=_DB()
+        orchestration=QuantitativeOrchestrator().process(bars(),config())
+        expected=(
+            21
+            + len(orchestration.structure_events)
+            + sum(1 for event in orchestration.structure_events if event.lower_bound is not None and event.upper_bound is not None)
+            + sum(len(events) for events in orchestration.higher_timeframe_structure_events.values())
+            + sum(
+                1 for events in orchestration.higher_timeframe_structure_events.values()
+                for event in events if event.lower_bound is not None and event.upper_bound is not None
+            )
+        )
+        result=asyncio.run(QuantitativePersistence(db).persist_orchestration(orchestration))
+        again=asyncio.run(QuantitativePersistence(db).persist_orchestration(orchestration))
+        self.assertEqual(result,expected); self.assertEqual(again,0)
+        self.assertEqual(len(db.sql),expected*2)
         identities=[args[-1] for _,args in db.sql]
         self.assertEqual(identities, [args[-1] for _,args in db.sql])
         self.assertTrue(all(isinstance(x,str) and len(x)==64 for x in identities))
