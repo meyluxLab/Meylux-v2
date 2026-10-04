@@ -547,7 +547,10 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         table, f"trg_{table}_append_only",
                     )
                     self.assertIsNotNone(trigger, f"{table} append-only trigger must exist")
-                    self.assertEqual(trigger["tgenabled"], "O")
+                    trigger_enabled = trigger["tgenabled"]
+                    if isinstance(trigger_enabled, bytes):
+                        trigger_enabled = trigger_enabled.decode("ascii")
+                    self.assertEqual(trigger_enabled, "O")
                     self.assertIn("reject_canonical_mutation", trigger["definition"])
                     row = (events if table == "market_structure_events" else zones)[0]
                     before = await conn.fetchval(
