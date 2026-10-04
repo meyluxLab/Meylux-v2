@@ -131,6 +131,13 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertNotEqual(alignment.value["state"], "CONTRADICTORY")
         self.assertEqual(price_vs_ma.value["state"], "ABOVE_MA")
 
+    def test_exact_primary_ema_alias_is_not_superseded_by_legacy_alias_at_later_time(self):
+        later_legacy = _fact("BTCUSDT", "15m", "EMA", Decimal("97"),
+                             event=AS_OF, knowledge=AS_OF, record_suffix="legacy-later")
+        output = analyze_s01(_snapshot(symbols=("BTCUSDT",), timeframes=("15m",), extra=(later_legacy,)), self.config)
+        self.assertEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:PRICE_VS_MA").value["state"], "ABOVE_MA")
+        self.assertNotEqual(_finding(output, "TECHNICAL:BTCUSDT:15m:MA_ALIGNMENT").value["state"], "CONTRADICTORY")
+
     def test_primary_ema_legacy_alias_conflict_remains_explicit(self):
         close_boundary = AS_OF - timedelta(milliseconds=1)
         legacy = _fact("BTCUSDT", "15m", "EMA", Decimal("97"),
