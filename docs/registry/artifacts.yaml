@@ -1750,4 +1750,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-013.md
     traceability: TO-P4-013 / PH-P4 / STEP-P4-006 / STEP-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: ALLOCATED / NOT YET PRODUCED
+    status: PRODUCED / PENDING CONTROL AUDIT
