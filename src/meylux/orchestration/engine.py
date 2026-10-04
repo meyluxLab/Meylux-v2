@@ -265,14 +265,11 @@ def _structure_event_provenance(
     candles: tuple[CanonicalCandle, ...],
     events: tuple[StructuralEvent, ...],
 ) -> dict[str, tuple[str, ...]]:
-    """Map each engine fact to the canonical candles that locate and confirm it.
-
-    A 5/5 swing/classification retains its full eleven-candle confirmation window.
-    Other facts retain their event-location and confirmation candles; structural
-    source/member identities remain separately linked in the event payload.
-    """
+    """Map facts to canonical candles that establish them, including source chains."""
     by_open = {candle.open_time: index for index, candle in enumerate(candles)}
     by_close = {candle.close_time: index for index, candle in enumerate(candles)}
+    by_provenance = {candle.provenance_id: index for index, candle in enumerate(candles)}
+    event_by_id = {event.identity: event for event in events}
     swing_types = {"SWING_HIGH", "SWING_LOW", "HH", "HL", "LH", "LL"}
     out: dict[str, tuple[str, ...]] = {}
     for event in events:
@@ -288,6 +285,54 @@ def _structure_event_provenance(
             if confirmation_index != location_index + 5 or location_index < 5:
                 raise ValueError("confirmed swing lineage must contain its complete 5/5 window")
             indices.update(range(location_index - 5, confirmation_index + 1))
+        elif event.event_type == "FVG":
+            if location_index < 2:
+                raise ValueError("FVG lineage must contain its complete three-candle window")
+            indices.update(range(location_index - 2, location_index + 1))
+
+        source_ids = tuple(token for token in (event.source_event_identity or "").split(",") if token)
+        for source_id in source_ids:
+            if source_id not in event_by_id or source_id not in out:
+                raise ValueError("structural source/member identity must resolve to an earlier event")
+            for ref in out[source_id]:
+                if ref not in by_provenance:
+                    raise ValueError("source event provenance must resolve to canonical candle input")
+                indices.add(by_provenance[ref])
+
+        # DOC-P4-002 classifies a new swing relative to the immediately previous
+        # confirmed swing of the same side. Preserve that support lineage without
+        # changing the ratified engine's deterministic event identity.
+        if event.event_type in {"HH", "LH", "HL", "LL"}:
+            required_type = "SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW"
+            prior = [
+                candidate for candidate in events
+                if candidate.event_type == required_type
+                and candidate.event_location < event.event_location
+                and candidate.knowledge_time < event.knowledge_time
+                and candidate.identity in out
+            ]
+            if prior:
+                source = max(prior, key=lambda candidate: (candidate.knowledge_time, candidate.event_location))
+                indices.update(by_provenance[ref] for ref in out[source.identity])
+
+        # Break facts are level-based in the existing P4 engine. Link the latest
+        # previously knowable exact-level swing for provenance, without rewriting
+        # the engine event identity or adding alternative break mathematics.
+        if event.event_type in {"BOS", "CHOCH", "MSS"} and event.level is not None:
+            required_type = "SWING_HIGH" if event.direction == "bullish" else "SWING_LOW"
+            prior = [
+                candidate for candidate in events
+                if candidate.event_type == required_type
+                and candidate.level == event.level
+                and candidate.event_location < event.event_location
+                and candidate.knowledge_time < event.knowledge_time
+                and candidate.identity in out
+            ]
+            if not prior:
+                raise ValueError("structural break must resolve its exact-level supporting swing identity")
+            source = max(prior, key=lambda candidate: (candidate.knowledge_time, candidate.event_location))
+            indices.update(by_provenance[ref] for ref in out[source.identity])
+
         refs = tuple(dict.fromkeys(candles[index].provenance_id for index in sorted(indices)))
         if not refs or any(not isinstance(ref, str) or not ref.strip() for ref in refs):
             raise ValueError("structural event requires explicit canonical candle provenance")
