@@ -954,13 +954,13 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-003 / TO-P5-004 / PRQ-1 Group-A / TO-P4-011 / AR-P4-018 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-02
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: TO-P5-004
     canonical_name: Group A: Technical, Multi-Timeframe, Volatility
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-004.md
     traceability: PH-P5 / STEP-P5-004 / STEP-P5-003 / PRQ-1 Group-A / TO-P4-011 / AR-P4-018 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-02
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
 
   - stable_id: STEP-P5-002
     canonical_name: Input Snapshot Builder & Fact Availability Verification
@@ -1724,3 +1724,16 @@ records:
     artifact_path: docs/build-reports/BR-P5-005.md
     traceability: TO-P5-004 / PH-P5 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: PRODUCED / PENDING CONTROL AUDIT
+
+  - stable_id: BR-P5-005
+    canonical_name: Build Report — TO-P5-004 Group A
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P5-005.md
+    traceability: TO-P5-004 / PH-P5 / STEP-P5-004 / AR-P5-004
+    status: VERIFIED
+  - stable_id: AR-P5-004
+    canonical_name: CONTROL Independent Final Verification — TO-P5-004
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-004.md
+    traceability: BR-P5-005 / TO-P5-004 / PH-P5 / STEP-P5-004 / EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
