@@ -487,6 +487,39 @@ class TestP4011GroupAFacts(unittest.TestCase):
             event.event_type == "STRUCTURE_STATE" and event.structural_state == "UNCONFIRMED"
             for event in gap_result.structural_facts["15m"].events
         ))
+        gap_db = _DB()
+        asyncio.run(QuantitativePersistence(gap_db).persist_orchestration(gap_result))
+        self.assertTrue(any(
+            "INSERT INTO meylux.market_structure_events" in query
+            and args[4] == "STRUCTURE_STATE"
+            and args[9] == "unconfirmed"
+            and '"structural_state":"UNCONFIRMED"' in args[12]
+            for query, args in gap_db.sql
+        ), "canonical gaps must persist as UNCONFIRMED rather than being repaired")
+
+        from meylux.orchestration.engine import TimeframeStructuralFacts
+        malformed_event = replace(
+            fvg,
+            confirmation_time=fvg.confirmation_time.replace(tzinfo=None),
+            knowledge_time=fvg.knowledge_time.replace(tzinfo=None),
+        )
+        with self.assertRaisesRegex(ValueError, "must use UTC"):
+            replace(result.structural_facts["15m"], events=(malformed_event,))
+
+        conflict_db = _DB()
+        conflict_persistence = QuantitativePersistence(conflict_db)
+        asyncio.run(conflict_persistence.persist_orchestration(result))
+        alternate_lineage = tuple(
+            replace(item, provenance_id=item.provenance_id + ":alternate")
+            for item in primary
+        )
+        conflicting = QuantitativeOrchestrator().process(
+            alternate_lineage, config(),
+            higher_timeframes={"1h": tuple(higher_1h), "4h": higher_4h},
+        )
+        with self.assertRaisesRegex(ValueError, "identity collision"):
+            asyncio.run(conflict_persistence.persist_orchestration(conflicting))
+
         future_1h = higher_bars(11)
         with self.assertRaisesRegex(ValueError, "after primary knowledge boundary"):
             QuantitativeOrchestrator().process(
