@@ -445,10 +445,10 @@
       "standalone_status_documents": "CHECKED",
       "supplemental_staging_registry": "CHECKED",
       "machine_readback": "COMPLETED",
-      "final_sync_commit": "79508fecd9d69348f39c9ceb23574c1388e20f1d"
+      "final_sync_commit": "1f3bb91606c0551ecb4c1b815c0966ae6bfbee2b"
     }
   },
-  "last_governance_sync_base_commit": "79508fecd9d69348f39c9ceb23574c1388e20f1d",
+  "last_governance_sync_base_commit": "1f3bb91606c0551ecb4c1b815c0966ae6bfbee2b",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
