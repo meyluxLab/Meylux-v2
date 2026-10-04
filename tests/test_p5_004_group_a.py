@@ -218,6 +218,20 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(partial, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")
         self.assertIn("1h", _finding(partial, "MTF:BTCUSDT:OVERALL").value["missing_timeframes"])
 
+    def test_higher_timeframe_insufficient_history_is_explicit_with_ema_200_boundary(self):
+        snapshot = _snapshot(
+            symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"),
+            ema_periods=(9, 20, 21, 50),
+            missing={("BTCUSDT", "4h", "EMA_20")},
+        )
+        config = _config(group_a_venues="BINANCE")
+        mtf = analyze_s06(snapshot, config)
+        self.assertEqual(_finding(mtf, "MTF:BTCUSDT:4h").value["state"], "INSUFFICIENT_DATA")
+        technical = analyze_s01(snapshot, config)
+        alignment = _finding(technical, "TECHNICAL:BTCUSDT:4h:MA_ALIGNMENT")
+        self.assertEqual(alignment.value["state"], "INSUFFICIENT_DATA")
+        self.assertIn(200, {item["period"] for item in alignment.value["missing_periods"]})
+
     def test_s06_higher_timeframe_event_and_knowledge_must_not_exceed_primary_boundary(self):
         primary_close = AS_OF - timedelta(minutes=15)
         future_htf = _fact("BTCUSDT", "1h", "RSI", Decimal("60"), event=AS_OF, knowledge=AS_OF - timedelta(minutes=15), record_suffix="future-htf")
