@@ -334,7 +334,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
             higher,
             value={**higher.value, "close_time": later_close.isoformat().replace("+00:00", "Z")},
         )
-        facts = tuple(changed_higher if fact.record_id == higher.record_id else fact for fact in snapshot.facts)
+        facts = tuple(changed_higher if fact.fact_id == higher.fact_id else fact for fact in snapshot.facts)
         candidate = InputSnapshot.build(
             as_of=snapshot.as_of, version=snapshot.version, facts=facts,
             provenance_refs=snapshot.provenance_refs,
