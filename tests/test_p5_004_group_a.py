@@ -154,7 +154,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
         candle = next(f for f in snapshot.facts if f.metadata.get("source_table") == "meylux.canonical_candles"
                       and f.metadata.get("symbol") == "BTCUSDT" and f.metadata.get("timeframe") == "15m")
-        ema = next(f for f in snapshot.facts if f.metadata.get("fact_name") == "EMA_20"
+        ema = next(f for f in snapshot.facts if isinstance(f.value, dict) and f.value.get("fact_name") == "EMA_20"
                    and f.metadata.get("symbol") == "BTCUSDT" and f.metadata.get("timeframe") == "15m")
         self.assertLess(candle.metadata["event_time"], ema.metadata["event_time"])
         self.assertEqual(candle.value["close_time"], ema.metadata["event_time"].isoformat().replace("+00:00", "Z"))
@@ -249,7 +249,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(stale_output, "TECHNICAL:BTCUSDT:15m:RSI_ZONE").value["state"], "STALE")
 
     def test_s01_contradictory_same_time_values_are_not_silently_selected(self):
-        timestamp = AS_OF - timedelta(minutes=15)
+        timestamp = AS_OF - timedelta(milliseconds=1)
         contradictory = _fact("BTCUSDT", "15m", "RSI", Decimal("40"), event=timestamp, record_suffix="second")
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m",),
                              extra=(contradictory,))
