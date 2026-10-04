@@ -504,9 +504,16 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     self.assertTrue(data["source_candle_provenance"])
                     self.assertTrue(data["confirmation_candle_provenance"])
                     self.assertTrue(data["source_window_provenance"])
+                    self.assertIsInstance(data["source_member_identities"], list)
+                    for member_id in data["source_member_identities"]:
+                        self.assertIn(member_id, event_ids)
+                    if row["event_type"] in {"HH", "HL", "LH", "LL"}:
+                        self.assertEqual(len(data["source_member_identities"]), 2)
                     if data["source_event_identity"]:
-                        for source_id in data["source_event_identity"].split(","):
+                        source_ids = data["source_event_identity"].split(",")
+                        for source_id in source_ids:
                             self.assertIn(source_id, event_ids)
+                        self.assertEqual(data["source_member_identities"], source_ids)
                 self.assertTrue(any(row["event_type"] == "FVG" for row in events))
                 self.assertTrue(any(row["zone_type"] == "FVG" for row in zones))
                 fvg_lifecycle_zones = [
