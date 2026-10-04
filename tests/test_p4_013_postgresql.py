@@ -223,6 +223,8 @@ class TestP4013StructuralPostgreSQL(unittest.TestCase):
                         "SELECT tgenabled FROM pg_trigger WHERE tgname=$1 AND NOT tgisinternal",
                         trigger,
                     )
+                    if isinstance(enabled, bytes):
+                        enabled = enabled.decode("ascii")
                     self.assertIn(enabled, ("O", "A", "R"))
                     can_update = await conn.fetchval(
                         "SELECT has_table_privilege(current_user, $1, 'UPDATE')", f"meylux.{table}"
