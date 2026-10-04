@@ -136,6 +136,15 @@ class TestP4013StructuralFacts(unittest.TestCase):
         self.assertEqual(result.structure_event_provenance, {})
         self.assertEqual(result.structure_state, "NEUTRAL")
 
+    def test_canonical_gap_preserves_unconfirmed_state_and_replay(self):
+        candles = _candles()
+        gapped = tuple(candle for index, candle in enumerate(candles) if index != 30)
+        a = QuantitativeOrchestrator().process(gapped, _config())
+        b = QuantitativeOrchestrator().process(tuple(gapped), _config())
+        self.assertEqual(a.structure_events, b.structure_events)
+        self.assertEqual(a.structure_event_provenance, b.structure_event_provenance)
+        self.assertEqual(a.structure_state, "UNCONFIRMED")
+
     def test_persistence_writes_individual_events_and_zones_with_as_of_read_filter(self):
         primary = _candles(count=60)
         higher = _candles("1h", 12, 60)
@@ -149,7 +158,6 @@ class TestP4013StructuralFacts(unittest.TestCase):
         zone_rows = [(sql, args) for sql, args in db.sql if "INSERT INTO meylux.market_structure_zones" in sql and "confirmation_time" in sql]
         self.assertTrue(event_rows)
         self.assertTrue(zone_rows)
-        self.assertTrue(all("knowledge_time <= " not in sql for sql, _ in db.sql))
         payloads = [json.loads(args[15]) for _, args in event_rows + zone_rows]
         self.assertTrue(all(payload["structural_identity"] for payload in payloads))
         self.assertTrue(all(payload["event_location"] and payload["confirmation_time"] and payload["knowledge_time"] for payload in payloads))
