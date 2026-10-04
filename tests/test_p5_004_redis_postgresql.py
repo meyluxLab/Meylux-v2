@@ -30,7 +30,8 @@ UTC = timezone.utc
 
 def _integration_snapshot(suffix: str) -> InputSnapshot:
     as_of = datetime.now(UTC).replace(microsecond=0)
-    event = as_of - timedelta(minutes=1)
+    close_boundary = as_of - timedelta(milliseconds=1)
+    candle_open_time = close_boundary - timedelta(minutes=15) + timedelta(milliseconds=1)
     facts = []
     values = {
         "EMA": Decimal("100"), "RSI": Decimal("70"), "MACD": Decimal("1"),
@@ -41,26 +42,30 @@ def _integration_snapshot(suffix: str) -> InputSnapshot:
         "HISTORICAL_VOLATILITY": Decimal("0.6"), "ATR_PERCENTILE": Decimal("75"),
         "VOLATILITY_EXPANSION_RATIO": Decimal("1.2"),
     }
-    records = [("CLOSE", {"close": Decimal("101")}, "meylux.canonical_candles")]
+    records = [("CLOSE", {"close": Decimal("101"),
+                               "close_time": close_boundary.isoformat().replace("+00:00", "Z")},
+                "meylux.canonical_candles")]
     records.extend((name, {"fact_name": name, "value": value, "status": "valid", "reason": "controlled integration fixture"},
                     "meylux.calculated_indicator_vectors") for name, value in values.items())
     for name, value, table in records:
         record_id = f"p5-004:{suffix}:BTCUSDT:15m:{name}"
         identity = __import__("hashlib").sha256(record_id.encode()).hexdigest()
+        event_time = candle_open_time if table.endswith("canonical_candles") else close_boundary
+        knowledge_time = close_boundary
         ref = EvidenceRef(
             evidence_id=f"ev-{suffix}-{name}", source_type="postgresql",
             source_reference=f"{table}:{record_id}", identity_hash=identity,
-            observed_at_utc=event, content_version="1.0.0",
+            observed_at_utc=knowledge_time, content_version="1.0.0",
             source_family="canonical_market" if table.endswith("canonical_candles") else "indicator",
-            record_id=record_id, event_time=event, knowledge_time=event,
+            record_id=record_id, event_time=event_time, knowledge_time=knowledge_time,
             timeframe="15m", venue="BINANCE",
         )
         metadata = {
             "symbol": "BTCUSDT", "venue": "BINANCE", "product": "spot", "timeframe": "15m",
             "source_table": table, "record_id": record_id, "identity_hash": identity,
-            "version": "1.0.0", "event_time": event, "knowledge_time": event,
+            "version": "1.0.0", "event_time": event_time, "knowledge_time": knowledge_time,
         }
-        facts.append(SnapshotRecord(record_id, FactStatus.VALID, value, event, event, (ref,), None, metadata))
+        facts.append(SnapshotRecord(record_id, FactStatus.VALID, value, event_time, knowledge_time, (ref,), None, metadata))
     return InputSnapshotBuilder().build(as_of=as_of, version="1.2.0", records=tuple(facts))
 
 
