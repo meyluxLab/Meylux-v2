@@ -220,6 +220,7 @@ class TestP4013StructuralFacts(unittest.TestCase):
             result,
             structure_events=(malformed,),
             structure_event_provenance={malformed.identity: result.structure_event_provenance[original.identity]},
+            structure_event_history={malformed.identity: result.structure_event_history[original.identity]},
         )
         with self.assertRaisesRegex(ValueError, "structural confirmation_time must be UTC"):
             asyncio.run(QuantitativePersistence(_DB()).persist_orchestration(broken))
@@ -233,6 +234,7 @@ class TestP4013StructuralFacts(unittest.TestCase):
             result,
             structure_events=(malformed,),
             structure_event_provenance={malformed.identity: result.structure_event_provenance[original.identity]},
+            structure_event_history={malformed.identity: result.structure_event_history[original.identity]},
         )
         db = _DB()
         with self.assertRaisesRegex(ValueError, "exceeds snapshot.as_of"):
