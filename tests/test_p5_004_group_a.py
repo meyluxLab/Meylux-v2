@@ -31,7 +31,12 @@ def _fact(symbol, timeframe, name, value, *, source="meylux.calculated_indicator
         timeframe=timeframe, venue="BINANCE",
     )
     if source == "meylux.canonical_candles":
-        payload = {"close": value}
+        duration = {"15m": timedelta(minutes=15), "1h": timedelta(hours=1),
+                    "4h": timedelta(hours=4)}.get(timeframe)
+        if duration is None:
+            raise AssertionError(f"unsupported candle timeframe in fixture: {timeframe}")
+        close_time = event + duration - timedelta(milliseconds=1)
+        payload = {"close": value, "close_time": close_time.isoformat().replace("+00:00", "Z")}
     else:
         payload = {"fact_name": name, "value": value, "status": "valid", "reason": "test-authoritative-value",
                    "context": {"timeframe": timeframe, "timestamp": event}}
@@ -51,7 +56,8 @@ def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
     overrides = overrides or {}
     for symbol in symbols:
         for timeframe in timeframes:
-            base = AS_OF - {"15m": timedelta(minutes=15), "1h": timedelta(hours=1), "4h": timedelta(hours=4)}.get(timeframe, timedelta(minutes=15))
+            open_time = AS_OF - {"15m": timedelta(minutes=15), "1h": timedelta(hours=1), "4h": timedelta(hours=4)}.get(timeframe, timedelta(minutes=15))
+            close_boundary = open_time + {"15m": timedelta(minutes=15), "1h": timedelta(hours=1), "4h": timedelta(hours=4)}.get(timeframe, timedelta(minutes=15)) - timedelta(milliseconds=1)
             values = {
                 "MACD": Decimal("1"), "MACD_SIGNAL": Decimal("0.5"), "MACD_HISTOGRAM": Decimal("0.5"),
                 "RSI": Decimal("70"), "ADX": Decimal("25"), "BOLLINGER_UPPER": Decimal("110"),
@@ -69,11 +75,14 @@ def _snapshot(*, symbols=("BTCUSDT", "SOLUSDT"), timeframes=("15m", "1h", "4h"),
             for period in ema_periods:
                 values[f"EMA_{period}"] = Decimal(str(100 - period / 10))
             close_value = Decimal("90") if direction_by_tf.get(timeframe) == "BEARISH" else Decimal("100")
-            facts.append(_fact(symbol, timeframe, "CLOSE", close_value, source="meylux.canonical_candles", event=base, knowledge=base))
+            # Canonical row provenance retains candle open_time as event_time; the
+            # persisted payload's close_time is the semantic closed-candle boundary.
+            facts.append(_fact(symbol, timeframe, "CLOSE", close_value, source="meylux.canonical_candles",
+                               event=open_time, knowledge=close_boundary))
             for name, value in values.items():
                 if (symbol, timeframe, name) in missing:
                     continue
-                facts.append(_fact(symbol, timeframe, name, value, event=base, knowledge=base))
+                facts.append(_fact(symbol, timeframe, name, value, event=close_boundary, knowledge=close_boundary))
     return InputSnapshotBuilder().build(as_of=AS_OF, version="1.2.0", records=tuple(facts))
 
 
