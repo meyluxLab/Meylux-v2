@@ -121,6 +121,7 @@ class TestP4013StructuralFacts(unittest.TestCase):
         b = QuantitativeOrchestrator().process(tuple(candles), _config())
         self.assertEqual(a.structure_events, b.structure_events)
         self.assertEqual(a.structure_event_provenance, b.structure_event_provenance)
+        self.assertEqual(a.structure_event_history, b.structure_event_history)
         short = tuple(
             CanonicalCandle(
                 "TO-P4-013-SHORT:BTCUSDT", "15m",
@@ -135,7 +136,9 @@ class TestP4013StructuralFacts(unittest.TestCase):
         self.assertTrue(result.structure_events)
         self.assertTrue(all(event.event_type == "STRUCTURE_STATE" for event in result.structure_events))
         self.assertEqual(result.structure_event_provenance.keys(), {event.identity for event in result.structure_events})
+        self.assertEqual(result.structure_event_history.keys(), {event.identity for event in result.structure_events})
         self.assertEqual(result.structure_state, "NEUTRAL")
+        self.assertTrue(all(value[1] == "INSUFFICIENT_HISTORY" for value in result.structure_event_history.values()))
 
     def test_canonical_gap_preserves_unconfirmed_state_and_replay(self):
         candles = _candles()
@@ -144,7 +147,11 @@ class TestP4013StructuralFacts(unittest.TestCase):
         b = QuantitativeOrchestrator().process(tuple(gapped), _config())
         self.assertEqual(a.structure_events, b.structure_events)
         self.assertEqual(a.structure_event_provenance, b.structure_event_provenance)
+        self.assertEqual(a.structure_event_history, b.structure_event_history)
         self.assertEqual(a.structure_state, "UNCONFIRMED")
+        final_state = next(event for event in reversed(a.structure_events) if event.event_type == "STRUCTURE_STATE")
+        self.assertEqual(a.structure_event_history[final_state.identity][1], "INSUFFICIENT_HISTORY")
+        self.assertEqual(a.structure_event_history[final_state.identity][0], 9)
 
     def test_persistence_writes_individual_events_and_zones_with_as_of_read_filter(self):
         primary = _candles(count=60)
@@ -164,6 +171,20 @@ class TestP4013StructuralFacts(unittest.TestCase):
         self.assertTrue(all(payload["event_location"] and payload["confirmation_time"] and payload["knowledge_time"] for payload in payloads))
         self.assertTrue(all(payload["source_candle_provenance"] for payload in payloads))
         self.assertTrue(all(payload["configuration_version"] == result.configuration_version for payload in payloads))
+        first_state = next(
+            payload for payload in payloads
+            if payload["event_type"] == "STRUCTURE_STATE"
+            and payload["event_location"].replace("Z", "+00:00") == primary[0].open_time.isoformat()
+        )
+        self.assertEqual(first_state["swing_history_assessment"]["status"], "INSUFFICIENT_HISTORY")
+        self.assertEqual(first_state["swing_history_assessment"]["contiguous_closed_candle_count"], 1)
+        last_state = next(
+            payload for payload in payloads
+            if payload["event_type"] == "STRUCTURE_STATE"
+            and payload["event_location"].replace("Z", "+00:00") == primary[-1].open_time.isoformat()
+        )
+        self.assertEqual(last_state["swing_history_assessment"]["status"], "AVAILABLE")
+        self.assertEqual(last_state["swing_history_assessment"]["contiguous_closed_candle_count"], 60)
         pool = next(payload for payload in payloads if payload["event_type"] == "LIQUIDITY_POOL")
         self.assertEqual(len(pool["source_member_identities"]), 2)
         exact_boundary = [
