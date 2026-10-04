@@ -330,7 +330,8 @@ def _config_csv(config: Any, key: str, converter):
 
 def _base(snapshot: InputSnapshot, config: Any, specialist_id: str, findings: list[SpecialistFinding]) -> SpecialistOutput:
     refs = tuple(sorted({r.evidence_id: r for f in findings for r in f.evidence_refs}.values(), key=lambda r: r.evidence_id))
-    if len(findings) > int(config.parameter("max_findings")):
+    finding_limit_key = "group_a_max_findings" if specialist_id in {"S-01", "S-06", "S-08"} else "max_findings"
+    if len(findings) > int(config.parameter(finding_limit_key)):
         raise GroupASemanticError("Group-A finding bound exceeded")
     if len(refs) > int(config.parameter("max_evidence_refs")):
         raise GroupASemanticError("Group-A evidence reference bound exceeded")
