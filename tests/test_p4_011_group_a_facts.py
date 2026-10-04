@@ -434,6 +434,59 @@ class TestP4011GroupAFacts(unittest.TestCase):
                 self.assertTrue(rows)
                 self.assertTrue(all(args[5] is None for args in rows), label)
 
+    def test_group_b_structural_facts_are_reproducible_per_timeframe_and_no_lookahead(self):
+        primary = list(bars(40))
+        primary[0] = replace(primary[0], open=Decimal("100"), high=Decimal("101"),
+                             low=Decimal("99"), close=Decimal("100"))
+        primary[1] = replace(primary[1], open=Decimal("102"), high=Decimal("103"),
+                             low=Decimal("101"), close=Decimal("102"))
+        primary[2] = replace(primary[2], open=Decimal("105"), high=Decimal("107"),
+                             low=Decimal("104"), close=Decimal("106"))
+        higher_1h = higher_bars(10)
+        higher_4h = tuple(candle(i, "4h", interval_minutes=240) for i in range(2))
+        result = QuantitativeOrchestrator().process(
+            tuple(primary), config(),
+            higher_timeframes={"1h": higher_1h, "4h": higher_4h},
+        )
+        self.assertEqual(set(result.structural_facts), {"15m", "1h", "4h"})
+        self.assertEqual(result.structural_facts["15m"].as_of, result.as_of)
+        self.assertEqual(result.structural_facts["1h"].as_of, result.as_of)
+        self.assertLessEqual(result.structural_facts["4h"].as_of, result.as_of)
+        for timeframe, facts in result.structural_facts.items():
+            self.assertEqual(facts.symbol, result.symbol)
+            self.assertEqual(facts.timeframe, timeframe)
+            self.assertTrue(facts.events)
+            self.assertEqual(len({event.identity for event in facts.events}), len(facts.events))
+            self.assertTrue(all(event.knowledge_time <= result.as_of for event in facts.events))
+            self.assertTrue(all(event.confirmation_time == event.knowledge_time for event in facts.events))
+        fvg = next(event for event in result.structural_facts["15m"].events if event.event_type == "FVG")
+        self.assertEqual(fvg.event_location, primary[2].open_time)
+        self.assertEqual(fvg.confirmation_time, primary[2].close_time)
+        self.assertEqual(fvg.knowledge_time, primary[2].close_time)
+        self.assertEqual(fvg.lower_bound, Decimal("101"))
+        self.assertEqual(fvg.upper_bound, Decimal("104"))
+        self.assertTrue(any(event.event_type == "FVG" for event in result.structural_facts["1h"].events))
+        self.assertTrue(any(
+            event.event_type == "STRUCTURE_STATE" and event.knowledge_time == result.as_of
+            for event in result.structural_facts["1h"].events
+        ))
+        self.assertTrue(any(
+            event.event_type == "STRUCTURE_STATE" and event.structural_state == "NEUTRAL"
+            for event in result.structural_facts["4h"].events
+        ))
+
+        gap_primary = tuple(primary[:20] + primary[21:])
+        gap_result = QuantitativeOrchestrator().process(gap_primary, config())
+        self.assertTrue(any(
+            event.event_type == "STRUCTURE_STATE" and event.structural_state == "UNCONFIRMED"
+            for event in gap_result.structural_facts["15m"].events
+        ))
+        future_1h = higher_bars(11)
+        with self.assertRaisesRegex(ValueError, "after primary knowledge boundary"):
+            QuantitativeOrchestrator().process(
+                tuple(primary), config(), higher_timeframes={"1h": future_1h}
+            )
+
     def test_ema_period_configuration_rejects_empty_duplicate_and_invalid_periods(self):
         for periods in ((), (9, 9), (9, 0), (9, True), [9, 20]):
             with self.subTest(periods=periods):
