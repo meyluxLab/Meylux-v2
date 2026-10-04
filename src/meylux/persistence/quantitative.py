@@ -448,6 +448,42 @@ class QuantitativePersistence:
                         calculation_version, status, reason, value,
                         json.dumps(_json(payload), sort_keys=True, separators=(",", ":")), record_id,
                     )
+                elif family == "structure_fact_event":
+                    (_, record_id, event_type, status, reason, value, payload, calculation_version,
+                     symbol, timeframe, event_time, source_ref, venue, version, confirmation_time,
+                     knowledge_time, source_event_identity) = row
+                    sql = (
+                        f"INSERT INTO {self.TABLES['structure_event']} "
+                        "(record_id,symbol,timeframe,event_time,confirmation_time,knowledge_time,event_type,"
+                        "source_event_identity,source_ref,venue_context,version,calculation_version,status,reason,"
+                        "value_numeric,payload_json,identity_hash) "
+                        "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16::jsonb,$17) "
+                        "ON CONFLICT(identity_hash) DO NOTHING"
+                    )
+                    args = (
+                        record_id, symbol, timeframe, event_time, confirmation_time, knowledge_time,
+                        event_type, source_event_identity, source_ref, venue, version, calculation_version,
+                        status, reason, value,
+                        json.dumps(_json(payload), sort_keys=True, separators=(",", ":")), record_id,
+                    )
+                elif family == "structure_fact_zone":
+                    (_, record_id, zone_type, status, reason, value, payload, calculation_version,
+                     symbol, timeframe, event_time, source_ref, venue, version, confirmation_time,
+                     knowledge_time, source_event_identity) = row
+                    sql = (
+                        f"INSERT INTO {self.TABLES['structure_zone']} "
+                        "(record_id,symbol,timeframe,event_time,confirmation_time,knowledge_time,zone_type,"
+                        "source_event_identity,source_ref,venue_context,version,calculation_version,status,reason,"
+                        "value_numeric,payload_json,identity_hash) "
+                        "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16::jsonb,$17) "
+                        "ON CONFLICT(identity_hash) DO NOTHING"
+                    )
+                    args = (
+                        record_id, symbol, timeframe, event_time, confirmation_time, knowledge_time,
+                        zone_type, source_event_identity, source_ref, venue, version, calculation_version,
+                        status, reason, value,
+                        json.dumps(_json(payload), sort_keys=True, separators=(",", ":")), record_id,
+                    )
                 elif family == "regime":
                     (_, record_id, state, status, reason, value, context, payload, calculation_version,
                      symbol, timeframe, event_time, version) = row
@@ -493,6 +529,7 @@ class QuantitativePersistence:
         start: datetime | None = None,
         end: datetime | None = None,
         limit: int = 100,
+        as_of: datetime | None = None,
     ) -> list[Any]:
         if family not in self.TABLES:
             raise ValueError("unsupported quantitative family")
@@ -502,6 +539,11 @@ class QuantitativePersistence:
             raise ValueError("limit must be 1..1000")
         sql = f"SELECT * FROM {self.TABLES[family]} WHERE symbol=$1 AND timeframe=$2"
         args: list[Any] = [symbol, timeframe]
+        if as_of is not None:
+            if not isinstance(as_of, datetime) or as_of.tzinfo is None or as_of.utcoffset() != timezone.utc.utcoffset(as_of):
+                raise ValueError("as_of must be UTC")
+            sql += f" AND knowledge_time <= {chr(36)}{len(args) + 1}"
+            args.append(as_of)
         if start is not None:
             if start.tzinfo is None or start.utcoffset() != timezone.utc.utcoffset(start):
                 raise ValueError("start must be UTC")
