@@ -320,6 +320,29 @@ class TestP5004GroupASemantics(unittest.TestCase):
         self.assertEqual(_finding(knowledge_output, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")
         self.assertEqual(_finding(knowledge_output, "MTF:BTCUSDT:1h").value["state"], "POST_BOUNDARY_EVIDENCE")
 
+    def test_s06_rejects_higher_timeframe_candle_close_after_primary_boundary(self):
+        snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
+        primary = next(f for f in snapshot.facts
+                       if f.metadata.get("source_table") == "meylux.canonical_candles"
+                       and f.metadata.get("timeframe") == "15m")
+        higher = next(f for f in snapshot.facts
+                      if f.metadata.get("source_table") == "meylux.canonical_candles"
+                      and f.metadata.get("timeframe") == "1h")
+        primary_boundary = datetime.fromisoformat(primary.value["close_time"].replace("Z", "+00:00"))
+        later_close = primary_boundary + timedelta(milliseconds=1)
+        changed_higher = replace(
+            higher,
+            value={**higher.value, "close_time": later_close.isoformat().replace("+00:00", "Z")},
+        )
+        facts = tuple(changed_higher if fact.record_id == higher.record_id else fact for fact in snapshot.facts)
+        candidate = InputSnapshot.build(
+            as_of=snapshot.as_of, version=snapshot.version, facts=facts,
+            provenance_refs=snapshot.provenance_refs,
+        )
+        output = analyze_s06(candidate, self.config)
+        self.assertEqual(_finding(output, "MTF:BTCUSDT:1h").value["state"], "POST_BOUNDARY_EVIDENCE")
+        self.assertEqual(_finding(output, "MTF:BTCUSDT:OVERALL").value["outcome"], "PARTIAL")
+
     def test_s08_classification_expansion_and_risk_flag_are_deterministic(self):
         snapshot = _snapshot()
         first, second = analyze_s08(snapshot, self.config), analyze_s08(snapshot, self.config)
