@@ -101,6 +101,38 @@ def _source_table(fact) -> str:
     return value.strip().lower() if isinstance(value, str) else ""
 
 
+def _fact_event_boundary(fact) -> datetime:
+    """Return the semantic closed-candle boundary without rewriting source provenance.
+
+    Canonical-candle metadata/EvidenceRef event_time remains the source row's open
+    boundary. For temporal comparison only, use the persisted payload close_time.
+    Indicator facts continue to use their authoritative event_time.
+    """
+    if _source_table(fact) == "meylux.canonical_candles":
+        payload = fact.value
+        raw = payload.get("close_time") if isinstance(payload, Mapping) else None
+        if isinstance(raw, str):
+            try:
+                raw = datetime.fromisoformat(raw.replace("Z", "+00:00"))
+            except ValueError as exc:
+                raise GroupASemanticError("canonical candle close_time is not a valid ISO-8601 timestamp") from exc
+        if (
+            not isinstance(raw, datetime)
+            or raw.tzinfo is None
+            or raw.utcoffset() != timezone.utc.utcoffset(raw)
+        ):
+            raise GroupASemanticError("canonical candle requires an explicit UTC close_time for temporal alignment")
+        return raw
+    event_time = (fact.metadata or {}).get("event_time")
+    if (
+        not isinstance(event_time, datetime)
+        or event_time.tzinfo is None
+        or event_time.utcoffset() != timezone.utc.utcoffset(event_time)
+    ):
+        raise GroupASemanticError("authoritative fact event_time must be an explicit UTC datetime")
+    return event_time
+
+
 def _symbol_matches(raw_symbol: Any, expected_symbol: str, explicit_venue: str) -> bool:
     if not isinstance(raw_symbol, str) or not raw_symbol.strip():
         raise GroupASemanticError("authoritative Group-A fact lacks an explicit instrument identifier")
@@ -169,9 +201,7 @@ def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[s
             raise GroupASemanticError("post-boundary Group-A evidence reached specialist execution")
         if boundary is not None and fact.knowledge_time > boundary:
             continue
-        event_time = (fact.metadata or {}).get("event_time")
-        if event_time is None:
-            raise GroupASemanticError("authoritative Group-A fact lacks event_time")
+        event_time = _fact_event_boundary(fact)
         matched.append((fact, event_time))
     if not matched:
         return Metric("MISSING", None, (), "required authoritative Group-A fact is missing")
@@ -181,7 +211,35 @@ def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[s
             "authoritative event_time is after snapshot.as_of", post_boundary)
     latest_time = max(event_time for _, event_time in matched)
     latest = tuple(fact for fact, event_time in matched if event_time == latest_time)
-    if len(latest) > 1:
+    # The primary EMA's legacy "EMA" name is an alias for the configured period,
+    # not an independent indicator. When exact and legacy records share a boundary,
+    # accept them only if they agree; prefer the exact EMA_<period> record.
+    if len(latest) > 1 and "EMA" in names and any(name.startswith("EMA_") for name in names):
+        exact_name = next((name for name in names if name.startswith("EMA_")), None)
+        exact = tuple(fact for fact in latest if _name(fact) == exact_name)
+        legacy = tuple(fact for fact in latest if _name(fact) == "EMA")
+        if exact and legacy and len(exact) == 1 and len(legacy) == 1 and len(latest) == 2:
+            exact_fact, legacy_fact = exact[0], legacy[0]
+            exact_value = exact_fact.value.get("value") if isinstance(exact_fact.value, Mapping) else None
+            legacy_value = legacy_fact.value.get("value") if isinstance(legacy_fact.value, Mapping) else None
+            try:
+                equal_values = (
+                    exact_fact.status is legacy_fact.status
+                    and _decimal(exact_value) == _decimal(legacy_value)
+                    and str(exact_fact.value.get("status", "VALID")).upper()
+                        == str(legacy_fact.value.get("status", "VALID")).upper()
+                )
+            except (InvalidOperation, ValueError, TypeError, AttributeError):
+                equal_values = exact_fact.status is legacy_fact.status and exact_fact.value == legacy_fact.value
+            if equal_values:
+                latest = (exact_fact,)
+            else:
+                return Metric("CONTRADICTORY", None, _refs(latest),
+                    "exact configured EMA and legacy EMA alias disagree at the same event boundary", latest)
+        else:
+            return Metric("CONTRADICTORY", None, _refs(latest),
+                "multiple authoritative records exist for the same logical EMA and event time", latest)
+    elif len(latest) > 1:
         # Different records at the same authoritative event time are ambiguous even
         # when their numeric payload happens to agree.
         return Metric("CONTRADICTORY", None, _refs(latest),
@@ -226,9 +284,7 @@ def _price(snapshot: InputSnapshot, symbol: str, timeframe: str, *, boundary=Non
             raise GroupASemanticError("post-boundary price evidence reached specialist execution")
         if boundary is not None and fact.knowledge_time > boundary:
             continue
-        event_time = (fact.metadata or {}).get("event_time")
-        if event_time is None:
-            raise GroupASemanticError("authoritative closed candle lacks event_time")
+        event_time = _fact_event_boundary(fact)
         matched.append((fact, event_time))
     if not matched:
         return Metric("MISSING", None, (), "authoritative closed-candle close is missing")
@@ -253,15 +309,14 @@ def _price(snapshot: InputSnapshot, symbol: str, timeframe: str, *, boundary=Non
     return Metric("VALID", number, _refs((fact,)), "latest persisted closed-candle close resolved", (fact,))
 
 def _ema_names(period: int, primary_period: int) -> tuple[str, ...]:
-    names = [f"EMA_{period}", f"EMA{period}"]
-    if period == primary_period:
-        names.append("EMA")
-    return tuple(names)
+    # Exact configured alias is authoritative; the unqualified legacy alias is
+    # permitted only as fallback for the configured primary period.
+    return (f"EMA_{period}", "EMA") if period == primary_period else (f"EMA_{period}",)
 
 
 def _same_event_time(*metrics: Metric) -> bool:
     times = {
-        fact.metadata.get("event_time")
+        _fact_event_boundary(fact)
         for metric in metrics if metric.state == "VALID"
         for fact in metric.facts
     }
@@ -402,8 +457,8 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                     fstatus = SpecialistStatus.PARTIAL if state == "POST_BOUNDARY" else SpecialistStatus.INSUFFICIENT_DATA
                     reason = "price and configured primary EMA are both required and must be inside the snapshot boundary"
                 elif not _same_event_time(price, primary_ema):
-                    value = {"state": "CONTRADICTORY_CONTEXT", "price_event_time": price.facts[0].metadata.get("event_time"),
-                        "ema_event_time": primary_ema.facts[0].metadata.get("event_time")}
+                    value = {"state": "CONTRADICTORY_CONTEXT", "price_event_time": _fact_event_boundary(price.facts[0]),
+                        "ema_event_time": _fact_event_boundary(primary_ema.facts[0])}
                     fstatus, reason = SpecialistStatus.PARTIAL, "price and EMA refer to different event times"
                 else:
                     value = {"state": "ABOVE_MA" if price.value > primary_ema.value else "BELOW_MA" if price.value < primary_ema.value else "AT_MA",
@@ -498,11 +553,7 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, venue: str,
             raise GroupASemanticError("authoritative timeframe fact lacks symbol/timeframe context")
         if not _context_matches(fact, symbol, timeframe, venue):
             continue
-        event_time = metadata.get("event_time")
-        if event_time is None:
-            if not fact.evidence_refs:
-                raise GroupASemanticError("authoritative timeframe fact lacks event_time and EvidenceRef")
-            event_time = fact.evidence_refs[0].event_time
+        event_time = _fact_event_boundary(fact)
         if fact.knowledge_time > primary_knowledge_boundary or event_time > primary_event_boundary:
             future.append(fact)
     if future:
@@ -541,7 +592,7 @@ def analyze_s06(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
     for symbol in symbols:
         for venue in venues:
             primary_price = _price(snapshot, symbol, primary_timeframe, venue=venue)
-            primary_event_boundary = primary_price.facts[0].metadata.get("event_time") if primary_price.state == "VALID" else None
+            primary_event_boundary = _fact_event_boundary(primary_price.facts[0]) if primary_price.state == "VALID" else None
             primary_knowledge_boundary = primary_price.facts[0].knowledge_time if primary_price.state == "VALID" else None
             directions = []
             for timeframe in timeframes:
