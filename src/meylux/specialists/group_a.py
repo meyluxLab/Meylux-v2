@@ -306,7 +306,7 @@ def _price(snapshot: InputSnapshot, symbol: str, timeframe: str, *, boundary=Non
     post_boundary = tuple(fact for fact, event_time in matched if event_time > snapshot.as_of)
     if post_boundary:
         return Metric("POST_BOUNDARY", None, _refs(post_boundary),
-            "closed-candle event_time is after snapshot.as_of", post_boundary)
+            "closed-candle close_time is after snapshot.as_of", post_boundary)
     latest_time = max(event_time for _, event_time in matched)
     latest = tuple(fact for fact, event_time in matched if event_time == latest_time)
     if len(latest) > 1:
@@ -577,7 +577,7 @@ def _direction(snapshot: InputSnapshot, symbol: str, timeframe: str, venue: str,
         if fact.knowledge_time > primary_knowledge_boundary or event_time > primary_event_boundary:
             future.append(fact)
     if future:
-        return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe event_time or knowledge_time exceeds the corresponding primary boundary"
+        return "POST_BOUNDARY_EVIDENCE", _refs(future), "higher-timeframe closed-candle event boundary or knowledge_time exceeds the corresponding primary boundary"
     price = _price(snapshot, symbol, timeframe, boundary=primary_knowledge_boundary, venue=venue)
     ema = _metric(snapshot, symbol, timeframe, _ema_names(primary_period, primary_period), boundary=primary_knowledge_boundary, venue=venue)
     macd = _metric(snapshot, symbol, timeframe, ("MACD",), boundary=primary_knowledge_boundary, venue=venue)
