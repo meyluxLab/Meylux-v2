@@ -132,9 +132,10 @@ class TestP4013StructuralFacts(unittest.TestCase):
             for index in range(10)
         )
         result = QuantitativeOrchestrator().process(short, _config())
-        self.assertEqual(result.structure_events, ())
-        self.assertEqual(result.structure_event_provenance, {})
-        self.assertEqual(result.structure_state, "NEUTRAL")
+        self.assertTrue(result.structure_events)
+        self.assertTrue(all(event.event_type == "STRUCTURE_STATE" for event in result.structure_events))
+        self.assertEqual(result.structure_event_provenance.keys(), {event.identity for event in result.structure_events})
+        self.assertEqual(result.structure_state, "UNCONFIRMED")
 
     def test_canonical_gap_preserves_unconfirmed_state_and_replay(self):
         candles = _candles()
@@ -176,12 +177,12 @@ class TestP4013StructuralFacts(unittest.TestCase):
         asyncio.run(persistence.fetch_family("structure_event", result.symbol, result.timeframe, as_of=result.as_of))
         query, args = db.fetches[-1]
         self.assertIn("knowledge_time <= $3", query)
-        self.assertEqual(args[-1], result.as_of)
+        self.assertEqual(args[-2], result.as_of)
         earlier = result.as_of - timedelta(minutes=15)
         asyncio.run(persistence.fetch_family("structure_zone", result.symbol, result.timeframe, as_of=earlier))
         query, args = db.fetches[-1]
         self.assertIn("knowledge_time <= $3", query)
-        self.assertEqual(args[-1], earlier)
+        self.assertEqual(args[-2], earlier)
 
     def test_non_utc_as_of_and_malformed_structural_temporal_values_are_rejected(self):
         db = _DB()
