@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P5-004",
+  "last_approved_task_order": "TO-P4-013",
   "last_build_report": "BR-P5-005",
   "last_audit_report": "AR-P5-004",
   "last_execution_log": "EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004",
-  "active_task_order": null,
+  "active_task_order": "TO-P4-013",
   "completed_task_order": "TO-P5-004",
   "completion_audit": "AR-P5-004",
   "verified_artifacts": [
@@ -488,7 +488,8 @@
     "Project Owner authorized normal governed continuation of STEP-P5-004 on 2026-10-02 after independent verification of the Group-A PRQ-1 dependency under TO-P4-011 / AR-P4-018. CONTROL formalized and activated TO-P5-004. STEP-P5-004 is ACTIVE / AUTHORIZED; TO-P5-004 is AUTHORIZED TO EXECUTE; later P5 Steps and Group-B/G PRQ-1 surfaces remain outside scope.",
     "Before activation, CONTROL corrected canonical registry drift showing closed STEP-P5-003 / TO-P5-003 artifacts as active/authorized; current registry state now reflects STEP-P5-003 COMPLETE / VERIFIED and TO-P5-003 / TO-P5-003-CORRECTIVE-001 VERIFIED / COMPLETE.",
     "CONTROL independently verified TO-P4-012 under AR-P4-019 after PR #61 merged as a95f23eabf6d0324fcaacbbed06862881a7e52fa. The Group-A provenance/venue and EMA coverage dependency is resolved; PH-P4 / STEP-P4-006 / G-4 historical closure remains preserved. STEP-P5-004 / TO-P5-004 remain ACTIVE / AUTHORIZED.",
-    "CONTROL independently verified TO-P5-004 under AR-P5-004 after Producer correction cycle. Exact EMA alias authority, closed-candle temporal semantics, authoritative PostgreSQL EvidenceRefs, Redis→worker→PostgreSQL persistence/read-back, replay idempotency, append-only UPDATE/DELETE protection, and real runtime performance baseline passed. PR #63 merged as 8f014e216a03378853cd2d74b869ef03d65e907b. STEP-P5-004 is COMPLETE / VERIFIED; TO-P5-004 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later Step is activated."
+    "CONTROL independently verified TO-P5-004 under AR-P5-004 after Producer correction cycle. Exact EMA alias authority, closed-candle temporal semantics, authoritative PostgreSQL EvidenceRefs, Redis→worker→PostgreSQL persistence/read-back, replay idempotency, append-only UPDATE/DELETE protection, and real runtime performance baseline passed. PR #63 merged as 8f014e216a03378853cd2d74b869ef03d65e907b. STEP-P5-004 is COMPLETE / VERIFIED; TO-P5-004 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later Step is activated.",
+    "Project Owner authorized complete resolution of the Group-B dependency for intended STEP-P5-005 on 2026-10-04; CONTROL created and activated TO-P4-013 as a post-closure P4-owned additive continuation. STEP-P5-005 remains NOT ACTIVATED pending independent verification of PRQ-1 Group-B structural event/zone capability."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
