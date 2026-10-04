@@ -513,14 +513,14 @@ records:
     logical_name: Group A: Technical, Multi-Timeframe, Volatility
     entity_type: STEP
     phase: PH-P5
-    status: ACTIVE / AUTHORIZED
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: COMPLETE / VERIFIED
+    authorization_state: COMPLETE / VERIFIED
     order: 4
     predecessor: STEP-P5-003
     activation_basis: PROJECT-OWNER-STEP-P5-004-CONTINUATION-AUTHORIZATION-2026-10-02
-    active_task_order: TO-P5-004
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P5-004
+    completion_audit: AR-P5-004
     purpose: Establish deterministic Group-A specialist capability for S-01 Technical, S-06 Multi-Timeframe and S-08 Volatility using authoritative P4 Group-A facts through the Stage-1 Input Snapshot.
     repository_scope: S-01/S-06/S-08 contracts and implementations, Group-A evidence interpretation, persistence/read-back, deterministic replay/idempotency, tests and required runtime evidence within STEP-P5-004 only.
     dependency_boundary:
