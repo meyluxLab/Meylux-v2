@@ -156,25 +156,35 @@ class TestP4010KnowledgeTime(unittest.TestCase):
     def test_persistence_writes_authoritative_knowledge_time_only_for_proven_families(self):
         db = _DB()
         result = QuantitativeOrchestrator().process(bars(), config())
+        expected_zones = sum(
+            1 for event in result.structure_events
+            if event.lower_bound is not None and event.upper_bound is not None
+        )
+        expected = 21 + len(result.structure_events) + expected_zones
         inserted = asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
-        self.assertEqual(inserted, 21)
-        self.assertEqual(len(db.sql), 21)
+        self.assertEqual(inserted, expected)
+        self.assertEqual(len(db.sql), expected)
         indicator_and_regime = [
             (query, args) for query, args in db.sql
             if "calculated_indicator_vectors" in query or "market_regime_states" in query
         ]
         structure = [
             (query, args) for query, args in db.sql
-            if "market_structure_events" in query
+            if "INSERT INTO meylux.market_structure_events" in query
         ]
+        summary = [(query, args) for query, args in structure if "knowledge_time" not in query.lower()]
+        facts = [(query, args) for query, args in structure if "knowledge_time" in query.lower()]
         self.assertEqual(len(indicator_and_regime), 20)
-        self.assertEqual(len(structure), 1)
+        self.assertEqual(len(summary), 1)
+        self.assertEqual(len(facts), len(result.structure_events))
         for query, args in indicator_and_regime:
             self.assertNotIn("persisted_at", query.lower())
             self.assertEqual(args[3], result.knowledge_time)
             self.assertIsInstance(args[3], datetime)
-        self.assertEqual(structure[0][1][3], result.as_of)
-        self.assertNotIn("knowledge_time", structure[0][0].lower())
+        self.assertEqual(summary[0][1][3], result.as_of)
+        self.assertNotIn("knowledge_time", summary[0][0].lower())
+        self.assertTrue(all(args[5] <= result.as_of for _, args in facts))
+        self.assertTrue(all(args[4] == args[5] for _, args in facts))
 
     def test_persistence_rejects_non_utc_or_mismatched_knowledge_time(self):
         result = QuantitativeOrchestrator().process(bars(), config())

@@ -88,7 +88,17 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 40)
+                expected_structure_events = len(result.structure_events) + sum(
+                    len(events) for events in result.higher_timeframe_structure_events.values()
+                )
+                expected_structure_zones = sum(
+                    1 for event in result.structure_events
+                    if event.lower_bound is not None and event.upper_bound is not None
+                ) + sum(
+                    1 for events in result.higher_timeframe_structure_events.values()
+                    for event in events if event.lower_bound is not None and event.upper_bound is not None
+                )
+                self.assertEqual(inserted, 40 + expected_structure_events + expected_structure_zones)
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
@@ -190,6 +200,16 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             provenance_id=f"p4-012-ci:{item.timeframe}:{index}")
                     for index, item in enumerate(_candles("1h", 10, 60, symbol))
                 )
+                primary = tuple(
+                    replace(item, open=Decimal("150"), high=Decimal("151"), low=Decimal("150"), close=Decimal("150"))
+                    if index == len(primary) - 1 else item
+                    for index, item in enumerate(primary)
+                )
+                higher = tuple(
+                    replace(item, open=Decimal("150"), high=Decimal("151"), low=Decimal("150"), close=Decimal("150"))
+                    if index == len(higher) - 1 else item
+                    for index, item in enumerate(higher)
+                )
                 # These are explicitly labeled CI fixtures. They exercise the
                 # SQL resolver but are not authoritative runtime acceptance evidence.
                 for timeframe_candles in (primary, higher):
@@ -220,7 +240,20 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     primary, config, higher_timeframes={"1h": higher}
                 )
                 persistence = QuantitativePersistence(conn)
-                self.assertEqual(await persistence.persist_orchestration(result), 40)
+                expected_events = len(result.structure_events) + sum(
+                    len(events) for events in result.higher_timeframe_structure_events.values()
+                )
+                expected_zones = sum(
+                    1 for event in result.structure_events
+                    if event.lower_bound is not None and event.upper_bound is not None
+                ) + sum(
+                    1 for events in result.higher_timeframe_structure_events.values()
+                    for event in events if event.lower_bound is not None and event.upper_bound is not None
+                )
+                self.assertEqual(
+                    await persistence.persist_orchestration(result),
+                    40 + expected_events + expected_zones,
+                )
                 primary_rows = await persistence.fetch_family("indicator", symbol, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", symbol, "1h", limit=100)
                 self.assertEqual(len(primary_rows), 19)
@@ -233,6 +266,18 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             payload = json.loads(payload)
                         self.assertEqual(payload["context"]["venue_context"], "BINANCE")
                         self.assertEqual(payload["context"]["timeframe"], timeframe)
+                for family in ("structure_event", "structure_zone"):
+                    for timeframe in ("15m", "1h"):
+                        structural_rows = await persistence.fetch_family(
+                            family, symbol, timeframe, limit=1000, as_of=result.as_of
+                        )
+                        self.assertTrue(structural_rows, f"{family} missing for {timeframe}")
+                        self.assertEqual({row["venue_context"] for row in structural_rows}, {"BINANCE"})
+                        for row in structural_rows:
+                            payload = row["payload_json"]
+                            if isinstance(payload, str):
+                                payload = json.loads(payload)
+                            self.assertEqual(payload["venue_context"], "BINANCE")
                 self.assertEqual(await persistence.persist_orchestration(result), 0)
                 self.assertEqual(
                     {row["record_id"] for row in await persistence.fetch_family("indicator", symbol, "15m", limit=100)},

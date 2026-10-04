@@ -21,7 +21,7 @@ from meylux.quantitative.indicators import (
     rsi,
     volatility_expansion_ratio,
 )
-from meylux.quantitative.market_structure import MarketStructureEngine
+from meylux.quantitative.market_structure import MarketStructureEngine, StructuralEvent, _INTERVALS
 from meylux.quantitative.regime_venue import MarketRegimeEngine, RegimeConfig
 
 
@@ -197,6 +197,12 @@ class QuantOrchestrationResult:
     htf: Mapping[str, MTFAlignment]
     source_provenance: tuple[str, ...]
     higher_timeframe_facts: Mapping[str, TimeframeQuantitativeFacts] = field(default_factory=dict)
+    structure_events: tuple[StructuralEvent, ...] = ()
+    structure_event_provenance: Mapping[str, tuple[str, ...]] = field(default_factory=dict)
+    higher_timeframe_structure_events: Mapping[str, tuple[StructuralEvent, ...]] = field(default_factory=dict)
+    higher_timeframe_structure_event_provenance: Mapping[str, Mapping[str, tuple[str, ...]]] = field(default_factory=dict)
+    structure_event_history: Mapping[str, tuple[int, str, str]] = field(default_factory=dict)
+    higher_timeframe_structure_event_history: Mapping[str, Mapping[str, tuple[int, str, str]]] = field(default_factory=dict)
 
 
 def _contextualize(result: CalculationResult, candle: CanonicalCandle) -> CalculationResult:
@@ -255,6 +261,119 @@ def _indicator_facts(candles: tuple[CanonicalCandle, ...], config: QuantOrchestr
     return facts
 
 
+def _structure_event_provenance(
+    candles: tuple[CanonicalCandle, ...],
+    events: tuple[StructuralEvent, ...],
+) -> dict[str, tuple[str, ...]]:
+    """Map facts to canonical candles that establish them, including source chains."""
+    by_open = {candle.open_time: index for index, candle in enumerate(candles)}
+    by_close = {candle.close_time: index for index, candle in enumerate(candles)}
+    by_provenance = {candle.provenance_id: index for index, candle in enumerate(candles)}
+    if len(by_provenance) != len(candles):
+        raise ValueError("canonical candle provenance identifiers must be unique within a timeframe")
+    event_by_id = {event.identity: event for event in events}
+    swing_types = {"SWING_HIGH", "SWING_LOW", "HH", "HL", "LH", "LL"}
+    out: dict[str, tuple[str, ...]] = {}
+    for event in events:
+        if not event.identity or event.event_location not in by_open or event.confirmation_time not in by_close:
+            raise ValueError("structural event must map to canonical event-location and confirmation candles")
+        location_index = by_open[event.event_location]
+        confirmation_index = by_close[event.confirmation_time]
+        if location_index > confirmation_index:
+            raise ValueError("structural event location cannot follow its confirmation candle")
+        indices = {location_index, confirmation_index}
+        if event.event_type in swing_types:
+            # DOC-P4-002 confirms a 5/5 pivot only after its full eleven-candle window.
+            if confirmation_index != location_index + 5 or location_index < 5:
+                raise ValueError("confirmed swing lineage must contain its complete 5/5 window")
+            indices.update(range(location_index - 5, confirmation_index + 1))
+        elif event.event_type == "FVG":
+            if location_index < 2:
+                raise ValueError("FVG lineage must contain its complete three-candle window")
+            indices.update(range(location_index - 2, location_index + 1))
+
+        source_ids = tuple(token for token in (event.source_event_identity or "").split(",") if token)
+        for source_id in source_ids:
+            if source_id not in event_by_id or source_id not in out:
+                raise ValueError("structural source/member identity must resolve to an earlier event")
+            for ref in out[source_id]:
+                if ref not in by_provenance:
+                    raise ValueError("source event provenance must resolve to canonical candle input")
+                indices.add(by_provenance[ref])
+
+        # DOC-P4-002 classifies a new swing relative to the immediately previous
+        # confirmed swing of the same side. Preserve that support lineage without
+        # changing the ratified engine's deterministic event identity.
+        if event.event_type in {"HH", "LH", "HL", "LL"}:
+            required_type = "SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW"
+            prior = [
+                candidate for candidate in events
+                if candidate.event_type == required_type
+                and candidate.event_location < event.event_location
+                and candidate.knowledge_time < event.knowledge_time
+                and candidate.identity in out
+            ]
+            if prior:
+                source = max(prior, key=lambda candidate: (candidate.knowledge_time, candidate.event_location))
+                indices.update(by_provenance[ref] for ref in out[source.identity])
+
+        # Break facts are level-based in the existing P4 engine. Link the latest
+        # previously knowable exact-level swing for provenance, without rewriting
+        # the engine event identity or adding alternative break mathematics.
+        if event.event_type in {"BOS", "CHOCH", "MSS"} and event.level is not None:
+            required_type = "SWING_HIGH" if event.direction == "bullish" else "SWING_LOW"
+            prior = [
+                candidate for candidate in events
+                if candidate.event_type == required_type
+                and candidate.level == event.level
+                and candidate.event_location < event.event_location
+                and candidate.knowledge_time < event.knowledge_time
+                and candidate.identity in out
+            ]
+            if not prior:
+                raise ValueError("structural break must resolve its exact-level supporting swing identity")
+            source = max(prior, key=lambda candidate: (candidate.knowledge_time, candidate.event_location))
+            indices.update(by_provenance[ref] for ref in out[source.identity])
+
+        refs = tuple(dict.fromkeys(candles[index].provenance_id for index in sorted(indices)))
+        if not refs or any(not isinstance(ref, str) or not ref.strip() for ref in refs):
+            raise ValueError("structural event requires explicit canonical candle provenance")
+        if event.identity in out:
+            raise ValueError("structural event identities must be unique within a timeframe")
+        out[event.identity] = refs
+    return out
+
+
+def _structure_event_history(
+    candles: tuple[CanonicalCandle, ...],
+    events: tuple[StructuralEvent, ...],
+) -> dict[str, tuple[int, str, str]]:
+    """Describe 5/5 swing-history availability using only candles knowable at each fact."""
+    by_close = {candle.close_time: index for index, candle in enumerate(candles)}
+    out: dict[str, tuple[int, str, str]] = {}
+    for event in events:
+        end = by_close.get(event.knowledge_time)
+        if end is None:
+            raise ValueError("structural event knowledge_time must map to a closed canonical candle")
+        start = end
+        while start > 0:
+            interval = _INTERVALS.get(candles[start - 1].timeframe)
+            if interval is None or candles[start - 1].open_time + interval != candles[start].open_time:
+                break
+            start -= 1
+        contiguous_count = end - start + 1
+        if contiguous_count < 11:
+            status = "INSUFFICIENT_HISTORY"
+            reason = "requires_11_contiguous_closed_candles_for_5_5_swing_confirmation"
+        else:
+            status = "AVAILABLE"
+            reason = "minimum_5_5_swing_history_available"
+        if event.identity in out:
+            raise ValueError("structural event history identities must be unique within a timeframe")
+        out[event.identity] = (contiguous_count, status, reason)
+    return out
+
+
 class QuantitativeOrchestrator:
     def __init__(self) -> None:
         self._regime = MarketRegimeEngine()
@@ -289,9 +408,15 @@ class QuantitativeOrchestrator:
 
         regime = self._regime.classify(xs, config.regime, previous_state=previous_regime)
         structure = self._structure.analyze(xs)
+        structure_events = structure.events
+        structure_event_provenance = _structure_event_provenance(xs, structure_events)
+        structure_event_history = _structure_event_history(xs, structure_events)
         indicators = _indicator_facts(xs, config)
         htf: dict[str, MTFAlignment] = {}
         htf_facts: dict[str, TimeframeQuantitativeFacts] = {}
+        htf_structure_events: dict[str, tuple[StructuralEvent, ...]] = {}
+        htf_structure_provenance: dict[str, Mapping[str, tuple[str, ...]]] = {}
+        htf_structure_history: dict[str, Mapping[str, tuple[int, str, str]]] = {}
         for timeframe, series in (higher_timeframes or {}).items():
             if not isinstance(timeframe, str) or not timeframe:
                 raise ValueError("higher timeframe key must be non-empty")
@@ -322,6 +447,14 @@ class QuantitativeOrchestrator:
                         indicators=_indicator_facts(selected, config),
                         source_provenance=tuple(c.provenance_id for c in selected),
                     )
+                    htf_structure = self._structure.analyze(selected)
+                    htf_structure_events[timeframe] = htf_structure.events
+                    htf_structure_provenance[timeframe] = _structure_event_provenance(
+                        selected, htf_structure.events
+                    )
+                    htf_structure_history[timeframe] = _structure_event_history(
+                        selected, htf_structure.events
+                    )
 
         knowledge_time = xs[-1].close_time
         return QuantOrchestrationResult(
@@ -338,4 +471,10 @@ class QuantitativeOrchestrator:
             htf,
             tuple(c.provenance_id for c in xs),
             htf_facts,
+            structure_events,
+            structure_event_provenance,
+            htf_structure_events,
+            htf_structure_provenance,
+            structure_event_history,
+            htf_structure_history,
         )

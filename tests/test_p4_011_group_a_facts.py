@@ -159,11 +159,14 @@ class TestP4011GroupAFacts(unittest.TestCase):
                                  (expected.value, expected.status, expected.reason))
 
     def test_real_binance_provenance_requires_and_accepts_explicit_source_venue(self):
-        xs = tuple(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        xs = tuple(
+            replace(candle, provenance_id=f"binance:binance-acquisition:{index}")
+            for index, candle in enumerate(bars(40))
+        )
         result = QuantitativeOrchestrator().process(xs, config())
         db = _DB()
         db.provenance_rows = [
-            self._source_row("binance:binance-acquisition", venue="BINANCE")
+            self._source_row(candle.provenance_id, venue="BINANCE") for candle in xs
         ]
         asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
         rows = [
@@ -171,7 +174,8 @@ class TestP4011GroupAFacts(unittest.TestCase):
             if "INSERT INTO meylux.calculated_indicator_vectors" in query
         ]
         self.assertEqual(len(rows), 19)
-        self.assertTrue(all(args[4] == "binance:binance-acquisition" for args in rows))
+        self.assertTrue(all(args[4] in {candle.provenance_id for candle in xs} for args in rows))
+        self.assertTrue(all(args[4] == xs[-1].provenance_id for args in rows))
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
 
     def test_ci_provenance_without_authoritative_raw_mapping_remains_unresolved(self):
@@ -251,7 +255,17 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 40)  # 19 primary + 19 HTF + regime + structure summary
+        expected_events = len(result.structure_events) + sum(
+            len(events) for events in result.higher_timeframe_structure_events.values()
+        )
+        expected_zones = sum(
+            1 for event in result.structure_events
+            if event.lower_bound is not None and event.upper_bound is not None
+        ) + sum(
+            1 for events in result.higher_timeframe_structure_events.values()
+            for event in events if event.lower_bound is not None and event.upper_bound is not None
+        )
+        self.assertEqual(first, 40 + expected_events + expected_zones)
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
