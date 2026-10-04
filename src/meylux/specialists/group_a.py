@@ -431,6 +431,10 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                     alignment_value = {"state": "POST_BOUNDARY", "available_periods": [p for p, _ in emas],
                         "missing_periods": missing_periods}
                     alignment_status = SpecialistStatus.PARTIAL
+                elif any(metric.state == "CONTRADICTORY" for metric in ema_metrics):
+                    alignment_value = {"state": "CONTRADICTORY", "available_periods": [p for p, _ in emas],
+                        "missing_periods": missing_periods, "reason": "authoritative EMA aliases or records conflict"}
+                    alignment_status = SpecialistStatus.PARTIAL
                 elif not _same_event_time(*ema_metrics):
                     alignment_value = {"state": "CONTRADICTORY_CONTEXT", "available_periods": [p for p, _ in emas],
                         "missing_periods": missing_periods, "reason": "EMA facts refer to different event times"}
@@ -452,9 +456,10 @@ def analyze_s01(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                 primary_ema = _metric(snapshot, symbol, timeframe, _ema_names(primary_period, primary_period), venue=venue)
                 price_refs = tuple(sorted({r.evidence_id:r for r in (*price.refs, *primary_ema.refs)}.values(), key=lambda r:r.evidence_id))
                 if price.state != "VALID" or primary_ema.state != "VALID":
-                    state = "POST_BOUNDARY" if "POST_BOUNDARY" in {price.state, primary_ema.state} else "INSUFFICIENT_DATA"
+                    states = {price.state, primary_ema.state}
+                    state = "POST_BOUNDARY" if "POST_BOUNDARY" in states else "CONTRADICTORY" if "CONTRADICTORY" in states else "INSUFFICIENT_DATA"
                     value = {"state": state, "price_state": price.state, "ema_state": primary_ema.state}
-                    fstatus = SpecialistStatus.PARTIAL if state == "POST_BOUNDARY" else SpecialistStatus.INSUFFICIENT_DATA
+                    fstatus = SpecialistStatus.PARTIAL if state in {"POST_BOUNDARY", "CONTRADICTORY"} else SpecialistStatus.INSUFFICIENT_DATA
                     reason = "price and configured primary EMA are both required and must be inside the snapshot boundary"
                 elif not _same_event_time(price, primary_ema):
                     value = {"state": "CONTRADICTORY_CONTEXT", "price_event_time": _fact_event_boundary(price.facts[0]),
