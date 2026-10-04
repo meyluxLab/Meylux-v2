@@ -31,6 +31,8 @@ def _candles(
         high_value, low_value = Decimal("101"), Decimal("99")
         if index in (10, 20):
             high_value = Decimal("110")
+        if index == 30:
+            high_value = Decimal("112")
         if index == 15:
             low_value = Decimal("90")
         if index == count - 1:
@@ -185,6 +187,9 @@ class TestP4013StructuralFacts(unittest.TestCase):
         )
         self.assertEqual(last_state["swing_history_assessment"]["status"], "AVAILABLE")
         self.assertEqual(last_state["swing_history_assessment"]["contiguous_closed_candle_count"], 60)
+        classified_high = next(payload for payload in payloads if payload["event_type"] == "HH")
+        self.assertEqual(classified_high["source_identity_origin"], "DETERMINISTIC_PRIOR_SWING")
+        self.assertEqual(classified_high["source_event_identity"], classified_high["source_member_identities"][0])
         pool = next(payload for payload in payloads if payload["event_type"] == "LIQUIDITY_POOL")
         self.assertEqual(len(pool["source_member_identities"]), 2)
         exact_boundary = [
