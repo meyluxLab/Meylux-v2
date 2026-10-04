@@ -209,15 +209,27 @@ def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[s
         exact_name = next(name for name in names if name.startswith("EMA_"))
         exact_matches = [(fact, event_time) for fact, event_time in matched if _name(fact) == exact_name]
         if exact_matches:
-            # Legacy records are considered only at the selected exact alias boundary
-            # to detect an actual same-context disagreement. They cannot supersede an
-            # available exact configured alias from another event boundary.
+            # The exact configured alias is authoritative even when its state is
+            # non-valid. A numeric legacy value must never mask insufficient history,
+            # invalidity, unavailability, or another explicit exact-alias state.
+            # Compare aliases only when one valid exact fact and one valid legacy fact
+            # share the latest exact event boundary. Otherwise keep the exact facts
+            # alone so the normal state/duplicate handling below remains authoritative.
             latest_exact_time = max(event_time for _, event_time in exact_matches)
-            matched = [
-                (fact, event_time) for fact, event_time in matched
-                if _name(fact) == exact_name
-                or (_name(fact) == "EMA" and event_time == latest_exact_time)
+            exact_at_boundary = [
+                (fact, event_time) for fact, event_time in exact_matches
+                if event_time == latest_exact_time
             ]
+            if len(exact_at_boundary) == 1 and exact_at_boundary[0][0].status is FactStatus.VALID:
+                legacy_valid_at_boundary = [
+                    (fact, event_time) for fact, event_time in matched
+                    if _name(fact) == "EMA"
+                    and event_time == latest_exact_time
+                    and fact.status is FactStatus.VALID
+                ]
+                matched = exact_at_boundary + legacy_valid_at_boundary
+            else:
+                matched = exact_at_boundary
         else:
             matched = [(fact, event_time) for fact, event_time in matched if _name(fact) == "EMA"]
     post_boundary = tuple(fact for fact, event_time in matched if event_time > snapshot.as_of)
