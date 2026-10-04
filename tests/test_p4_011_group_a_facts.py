@@ -546,17 +546,36 @@ class TestP4011GroupAFacts(unittest.TestCase):
             )
 
     def test_structural_classification_members_and_zone_sources_are_persisted(self):
+        count = 60
+        closes = [Decimal("102")] * count
+        opens = [Decimal("102")] * count
+        highs = [Decimal("103")] * count
+        lows = [Decimal("101")] * count
+        pivots = {
+            7: (96, 97, 95), 12: (104, 105, 103), 17: (101, 102, 100),
+            22: (111, 112, 110), 27: (108, 109, 107), 32: (110, 118, 109),
+        }
+        for index, (opened, high, low) in pivots.items():
+            opens[index] = closes[index] = Decimal(opened)
+            highs[index], lows[index] = Decimal(high), Decimal(low)
+        for index in list(range(23, 27)) + list(range(28, 32)):
+            opens[index] = closes[index] = Decimal("109")
+            highs[index], lows[index] = Decimal("110"), Decimal("108")
+        for index in range(33, 37):
+            opens[index] = closes[index] = Decimal("110")
+            highs[index], lows[index] = Decimal("110"), Decimal("109")
+        opens[37] = closes[37] = Decimal("110")
+        highs[37], lows[37] = Decimal("110"), Decimal("109")
+        opens[38], closes[38] = Decimal("118"), Decimal("117")
+        highs[38], lows[38] = Decimal("118"), Decimal("116")
+        opens[39] = closes[39] = Decimal("121")
+        highs[39], lows[39] = Decimal("121"), Decimal("120")
         values = []
-        pattern = (100, 103, 106, 110, 106, 101)
-        for index in range(60):
-            close = Decimal(pattern[index % 6] + 2 * (index // 6))
-            opened = close + Decimal("1") if index % 6 in (4, 5) else close
-            high = max(opened, close) + Decimal("1")
-            low = min(opened, close) - Decimal("1")
+        for index in range(count):
             opened_at = T0 + timedelta(minutes=15 * index)
             values.append(CanonicalCandle(
                 "BTCUSDT", "15m", opened_at, opened_at + timedelta(minutes=15),
-                opened, high, low, close, Decimal("1"),
+                opens[index], highs[index], lows[index], closes[index], Decimal("1"),
                 provenance_id="canonical:test-structure-series",
             ))
         result = QuantitativeOrchestrator().process(tuple(values), config())
