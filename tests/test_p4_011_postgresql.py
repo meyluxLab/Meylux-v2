@@ -256,6 +256,18 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             payload = json.loads(payload)
                         self.assertEqual(payload["context"]["venue_context"], "BINANCE")
                         self.assertEqual(payload["context"]["timeframe"], timeframe)
+                for family in ("structure_event", "structure_zone"):
+                    for timeframe in ("15m", "1h"):
+                        structural_rows = await persistence.fetch_family(
+                            family, symbol, timeframe, limit=1000, as_of=result.as_of
+                        )
+                        self.assertTrue(structural_rows, f"{family} missing for {timeframe}")
+                        self.assertEqual({row["venue_context"] for row in structural_rows}, {"BINANCE"})
+                        for row in structural_rows:
+                            payload = row["payload_json"]
+                            if isinstance(payload, str):
+                                payload = json.loads(payload)
+                            self.assertEqual(payload["venue_context"], "BINANCE")
                 self.assertEqual(await persistence.persist_orchestration(result), 0)
                 self.assertEqual(
                     {row["record_id"] for row in await persistence.fetch_family("indicator", symbol, "15m", limit=100)},
