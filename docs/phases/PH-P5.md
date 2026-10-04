@@ -110,10 +110,12 @@ Required evidence includes actual end-to-end runtime execution, failure isolatio
 ### `STEP-P5-004` — Group A: Technical, Multi-Timeframe, Volatility
 
 **Order:** 4  
-**Status:** ACTIVE / AUTHORIZED  
-**Authorization state:** AUTHORIZED TO EXECUTE  
+**Status:** COMPLETE / VERIFIED  
+**Authorization state:** COMPLETE / VERIFIED  
 **Predecessor:** `STEP-P5-003` — COMPLETE / VERIFIED  
-**Active Task Order:** `TO-P5-004`  
+**Active Task Order:** `null`
+**Completed Task Order:** `TO-P5-004`
+**Completion Audit:** `AR-P5-004`  
 **Activation basis:** Project Owner directive — `STEP-P5-004` normal governed continuation — 2026-10-02  
 **Upstream dependency:** `PRQ-1 GROUP-A CAPABILITY = ESTABLISHED / VERIFIED`; corrective root-cause dependency `TO-P4-012 / AR-P4-019` is VERIFIED / COMPLETE
 
