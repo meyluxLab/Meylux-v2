@@ -509,6 +509,16 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             self.assertIn(source_id, event_ids)
                 self.assertTrue(any(row["event_type"] == "FVG" for row in events))
                 self.assertTrue(any(row["zone_type"] == "FVG" for row in zones))
+                fvg_lifecycle_zones = [
+                    row for row in zones if payload(row)["event_type"] == "FVG_LIFECYCLE"
+                ]
+                self.assertTrue(fvg_lifecycle_zones, "zone lifecycle must be appended under its stable zone type")
+                for row in fvg_lifecycle_zones:
+                    self.assertEqual(row["zone_type"], "FVG")
+                    self.assertLessEqual(
+                        datetime.fromisoformat(payload(row)["zone_formation_time"].replace("Z", "+00:00")),
+                        row["event_time"],
+                    )
                 self.assertTrue(any(
                     row["timeframe"] == "4h" and row["event_type"] == "STRUCTURE_STATE"
                     and row["status"] == "insufficient_history"
