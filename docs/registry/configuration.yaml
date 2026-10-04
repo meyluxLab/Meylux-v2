@@ -79,3 +79,19 @@ records:
       volatility_expansion_existing_definition: VERIFIED
       control_audit: AR-P4-018
     status: VERIFIED
+
+  - stable_id: CFG-P4-012
+    canonical_name: TO-P4-012 EMA Period and Venue-Resolution Configuration Evidence
+    entity_type: CONFIGURATION
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-012
+    evidence:
+      implementation_commit: 0b85a8abe9378c6cc213d3b69249ae66d491bd05
+      ema_periods: [9, 20, 21, 50, 200]
+      deterministic_engine_reused: VERIFIED
+      venue_source: explicit raw acquisition venue / venue_context only
+      provider_to_venue_inference: PROHIBITED
+      invalid_period_validation: VERIFIED
+      control_audit: AR-P4-019
+    status: VERIFIED
