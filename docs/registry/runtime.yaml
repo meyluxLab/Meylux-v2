@@ -201,3 +201,34 @@ records:
       temporary_container_cleanup: VERIFIED
       control_audit: AR-P4-019
     status: VERIFIED
+
+
+  - stable_id: RUN-P5-004
+    canonical_name: CONTROL Independent TO-P5-004 Group-A Runtime Verification
+    entity_type: RUN
+    phase: PH-P5
+    step: STEP-P5-004
+    task_order: TO-P5-004
+    runtime_target: server-l6rf
+    evidence:
+      execution_log: EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004
+      executor_role: ROL-V2-001
+      mechanism: SentinelX isolated exact-revision runtime
+      implementation_revision: 45915b9f4ceb4c84349835d4e47d00897ba74eca
+      final_pr_head: be6c9f434272e030e0cb7167ea230485b3929781
+      merged_revision: 8f014e216a03378853cd2d74b869ef03d65e907b
+      authoritative_snapshot_id: 05e5e49b2ef6a33337e4b98df59e05f1b904294d298bd4348e6d73f341d854d5
+      authoritative_as_of: 2026-10-01T18:35:00Z
+      authoritative_fact_count: 60
+      s01_worker: ACKED / READBACK
+      s06_worker: ACKED / READBACK
+      s08_worker: ACKED / READBACK
+      replay_output_count_per_specialist: 1
+      real_4h_ema20: INSUFFICIENT_DATA
+      real_4h_ema200: INSUFFICIENT_DATA
+      real_15m_s08: HIGH / EXPANDING / HIGH_VOLATILITY
+      append_only_update_sqlstate: 42501
+      append_only_delete_sqlstate: 42501
+      row_immutability: VERIFIED
+      control_audit: AR-P5-004
+    status: VERIFIED
