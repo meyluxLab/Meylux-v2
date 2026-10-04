@@ -253,6 +253,47 @@ class QuantitativePersistence:
         return refs, location_ref, confirmation_ref, location_index
 
     @staticmethod
+    def _structural_source_members(
+        facts: TimeframeStructuralFacts, event: Any,
+        event_by_identity: Mapping[str, Any], by_open: Mapping[datetime, int],
+        interval: timedelta | None,
+    ) -> tuple[str, ...]:
+        if event.source_event_identity:
+            members = tuple(event.source_event_identity.split(","))
+            if any(not member or member not in event_by_identity for member in members):
+                raise ValueError("structural source/member identity does not resolve to an event in the authoritative analysis")
+            return members
+        if event.event_type not in {"HH", "HL", "LH", "LL"}:
+            return ()
+        swing_type = "SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW"
+        location_index = by_open.get(event.event_location)
+        if location_index is None or interval is None:
+            raise ValueError("classified swing does not resolve to a governed source candle")
+        segment_start = location_index
+        while (segment_start > 0
+               and facts.candles[segment_start].open_time
+               == facts.candles[segment_start - 1].open_time + interval):
+            segment_start -= 1
+        current = [
+            candidate for candidate in facts.events
+            if candidate.event_type == swing_type
+            and candidate.event_location == event.event_location
+            and candidate.knowledge_time == event.knowledge_time
+            and candidate.level == event.level
+        ]
+        previous = [
+            candidate for candidate in facts.events
+            if candidate.event_type == swing_type
+            and candidate.event_location < event.event_location
+            and by_open.get(candidate.event_location, -1) >= segment_start
+            and candidate.knowledge_time <= event.knowledge_time
+        ]
+        if len(current) != 1 or not previous:
+            raise ValueError("classified swing source/member identity cannot be reconstructed unambiguously")
+        prior = max(previous, key=lambda candidate: candidate.event_location)
+        return current[0].identity, prior.identity
+
+    @staticmethod
     def _canonical_payload(value: Any) -> str:
         if isinstance(value, str):
             value = json.loads(value)
@@ -487,6 +528,9 @@ class QuantitativePersistence:
                     "lifecycle": event.lifecycle,
                     "structural_state": event.structural_state,
                     "source_event_identity": event.source_event_identity,
+                    "source_member_identities": list(self._structural_source_members(
+                        facts, event, event_by_identity, by_open, interval
+                    )),
                     "prior_structural_state": event.prior_structural_state,
                     "semantic_version": facts.calculation_version,
                     "source_candle_provenance": location_ref,
