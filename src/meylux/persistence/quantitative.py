@@ -202,27 +202,25 @@ class QuantitativePersistence:
         return replace(calculation, context=replace(context, venue_context=venue))
 
     @staticmethod
-    def _structural_status(facts: TimeframeStructuralFacts, event: Any, location_index: int) -> str:
+    def _structural_status(
+        facts: TimeframeStructuralFacts, event: Any, location_index: int,
+        contiguous_history_counts: tuple[int, ...],
+    ) -> str:
         if event.event_type != "STRUCTURE_STATE":
             return "valid"
         if event.structural_state == "UNCONFIRMED":
             return "unconfirmed"
-        interval = _STRUCTURE_INTERVALS.get(facts.timeframe)
-        if interval is None:
+        if facts.timeframe not in _STRUCTURE_INTERVALS:
             return "unavailable"
-        first = location_index
-        while first > 0 and facts.candles[first].open_time == facts.candles[first - 1].open_time + interval:
-            first -= 1
-        if location_index - first + 1 < 11:
+        if contiguous_history_counts[location_index] < 11:
             return "insufficient_history"
         return "valid"
 
     @staticmethod
     def _structural_source_window(
-        facts: TimeframeStructuralFacts, event: Any
+        facts: TimeframeStructuralFacts, event: Any,
+        by_open: Mapping[datetime, int], by_close: Mapping[datetime, int],
     ) -> tuple[tuple[str, ...], str, str, int]:
-        by_open = {candle.open_time: index for index, candle in enumerate(facts.candles)}
-        by_close = {candle.close_time: index for index, candle in enumerate(facts.candles)}
         if event.event_location not in by_open:
             raise ValueError("structural event location does not resolve to a source canonical candle")
         if event.confirmation_time not in by_close:
@@ -418,6 +416,17 @@ class QuantitativePersistence:
                 raise ValueError("structural timeframe knowledge boundary exceeds primary snapshot")
             provenance = tuple(dict.fromkeys(c.provenance_id for c in facts.candles))
             venue = await self._resolve_venue_context(provenance)
+            by_open = {candle.open_time: index for index, candle in enumerate(facts.candles)}
+            by_close = {candle.close_time: index for index, candle in enumerate(facts.candles)}
+            interval = _STRUCTURE_INTERVALS.get(facts.timeframe)
+            history_counts: list[int] = []
+            for index, candle in enumerate(facts.candles):
+                if (index == 0 or interval is None
+                        or candle.open_time != facts.candles[index - 1].open_time + interval):
+                    history_counts.append(1)
+                else:
+                    history_counts.append(history_counts[-1] + 1)
+            contiguous_history_counts = tuple(history_counts)
             seen_identities: set[str] = set()
             for event in facts.events:
                 if event.identity in seen_identities:
@@ -434,9 +443,11 @@ class QuantitativePersistence:
                     raise ValueError("confirmed structural event confirmation_time must equal knowledge_time")
                 if event.knowledge_time > primary_knowledge_time:
                     raise ValueError("structural event knowledge_time exceeds primary snapshot boundary")
-                refs, location_ref, confirmation_ref, location_index = self._structural_source_window(facts, event)
+                refs, location_ref, confirmation_ref, location_index = self._structural_source_window(
+                    facts, event, by_open, by_close
+                )
                 source_ref = "canonical-provenance:" + "|".join(refs)
-                status = self._structural_status(facts, event, location_index)
+                status = self._structural_status(facts, event, location_index, contiguous_history_counts)
                 reason = event.reason or event.event_type
                 if status == "insufficient_history":
                     reason = f"{reason};requires_11_contiguous_closed_candles"
