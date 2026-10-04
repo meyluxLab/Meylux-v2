@@ -8,6 +8,7 @@ import resource
 import statistics
 import time
 import shutil
+import sys
 import unittest
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -202,18 +203,27 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                 "pending_entries": int(pending_summary.get("pending", 0)),
                 "stream_entries_retained": int(await client.xlen(queue.stream)),
             }
+            max_rss_bytes = cpu_end.ru_maxrss * (1024 if sys.platform.startswith("linux") else 1)
             print("P5-004_PERF_BASELINE " + json.dumps({
                 "revision": os.environ.get("GITHUB_SHA", "CI checkout revision"),
                 "environment": "Docker Foundation CI; real Redis 7.4.6 + TimescaleDB/PostgreSQL; controlled synthetic Snapshot fixture",
                 "workload": "one InputSnapshot, sequential first queue/worker execution for S-01/S-06/S-08, then concurrent duplicate handler replay and 30 warm persistence/read-back replays",
                 "sample_size": {"cold_first_path_per_specialist": 3, "warm_replay": len(warm_samples)},
                 "condition": "first path after DB/Redis setup; warm replay after persisted identity exists",
+                "measurement_method": {
+                    "cold_first_path": "time.perf_counter_ns around dispatcher.publish plus AsyncWorker.run_once",
+                    "warm_replay": "time.perf_counter_ns around direct handler replay after the append-only identity exists",
+                    "percentiles": "statistics.median for p50; sorted-sample index floor((n-1)*0.95) for p95",
+                    "cpu_and_memory": "resource.getrusage process user/system CPU and maximum resident set size; Linux ru_maxrss converted from KiB to bytes",
+                    "disk": "shutil.disk_usage('/')",
+                    "queue": "Redis backlog key, XPENDING summary, and XLen",
+                },
                 "concurrency": {"initial_queue_workers": 1, "duplicate_replay": 2},
                 "cold_first_path_ms": cold_ms,
                 "warm_replay_ms": {"p50": statistics.median(warm_samples), "p95": _percentile(warm_samples, 0.95)},
                 "process_resource_delta": {"user_cpu_seconds": cpu_end.ru_utime - cpu_start.ru_utime,
                     "system_cpu_seconds": cpu_end.ru_stime - cpu_start.ru_stime,
-                    "max_rss_platform_units": cpu_end.ru_maxrss},
+                    "max_rss_platform_units": cpu_end.ru_maxrss, "max_rss_bytes": max_rss_bytes},
                 "disk_observation_bytes": {"total": disk.total, "used": disk.used, "free": disk.free},
                 "queue_observation": queue_state,
                 "interpretation": "CI baseline only; CONTROL must separately measure deployed runtime CPU/RAM/disk/queue and latency.",
