@@ -161,7 +161,7 @@ class TestP5004GroupASemantics(unittest.TestCase):
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
         candle = next(f for f in snapshot.facts if f.metadata.get("source_table") == "meylux.canonical_candles"
                       and f.metadata.get("symbol") == "BTCUSDT" and f.metadata.get("timeframe") == "15m")
-        ema = next(f for f in snapshot.facts if isinstance(f.value, dict) and f.value.get("fact_name") == "EMA_20"
+        ema = next(f for f in snapshot.facts if ":EMA_20:" in f.metadata.get("record_id", "")
                    and f.metadata.get("symbol") == "BTCUSDT" and f.metadata.get("timeframe") == "15m")
         self.assertLess(candle.metadata["event_time"], ema.metadata["event_time"])
         self.assertEqual(candle.value["close_time"], ema.metadata["event_time"].isoformat().replace("+00:00", "Z"))
