@@ -1,12 +1,12 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-004` — ACTIVE / AUTHORIZED
-**Active Task Order:** `TO-P5-004` — primary Step boundary
+**Current Step Lifecycle:** `STEP-P5-004` — COMPLETE / VERIFIED
+**Active Task Order:** `null`
 **Active Corrective Dependency:** None — `TO-P4-012` VERIFIED / COMPLETE under `AR-P4-019`
-**Last Completed Task Order:** `TO-P5-003`  
+**Last Completed Task Order:** `TO-P5-004`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`
-**Completion Audit:** `AR-P5-003`
+**Completion Audit:** `AR-P5-004`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
 **Predecessor:** `PH-P4` CLOSED / VERIFIED; `G-4` ESTABLISHED / VERIFIED
@@ -134,3 +134,8 @@ Phase 5 follows just-in-time dependency completion. A dependency is not treated 
 ## Exit Boundary
 
 This Phase is not CLOSED by this establishment. Each Step requires its own Build Report, independent Audit Report, evidence review, and ADR-GOVERNANCE-012 closure synchronization. Phase-level closure requires independent verification of the complete Phase boundary and G-5 evidence.
+
+
+## STEP-P5-004 Closure
+
+`STEP-P5-004` / `TO-P5-004` is COMPLETE / VERIFIED under `AR-P5-004`. CONTROL independently verified the corrected Group-A implementation against CI, authoritative P4 PostgreSQL records, Redis → specialist worker → PostgreSQL persistence/read-back, replay/idempotency, append-only security boundaries and runtime performance/resource evidence. `PH-P5` remains ACTIVE / AUTHORIZED; no later Step is activated.
