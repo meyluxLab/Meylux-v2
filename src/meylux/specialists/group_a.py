@@ -205,6 +205,21 @@ def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[s
         matched.append((fact, event_time))
     if not matched:
         return Metric("MISSING", None, (), "required authoritative Group-A fact is missing")
+    if "EMA" in names and any(name.startswith("EMA_") for name in names):
+        exact_name = next(name for name in names if name.startswith("EMA_"))
+        exact_matches = [(fact, event_time) for fact, event_time in matched if _name(fact) == exact_name]
+        if exact_matches:
+            # Legacy records are considered only at the selected exact alias boundary
+            # to detect an actual same-context disagreement. They cannot supersede an
+            # available exact configured alias from another event boundary.
+            latest_exact_time = max(event_time for _, event_time in exact_matches)
+            matched = [
+                (fact, event_time) for fact, event_time in matched
+                if _name(fact) == exact_name
+                or (_name(fact) == "EMA" and event_time == latest_exact_time)
+            ]
+        else:
+            matched = [(fact, event_time) for fact, event_time in matched if _name(fact) == "EMA"]
     post_boundary = tuple(fact for fact, event_time in matched if event_time > snapshot.as_of)
     if post_boundary:
         return Metric("POST_BOUNDARY", None, _refs(post_boundary),
