@@ -73,3 +73,4 @@ records:
       restart_recovery: OBSERVED
       duplicate_event: OBSERVED
       control_audit: AR-P5-003
+\n\n  - stable_id: OBS-P5-004\n    canonical_name: P5-004 Group-A Worker Runtime Observability Evidence\n    entity_type: OBSERVABILITY\n    phase: PH-P5\n    step: STEP-P5-004\n    task_order: TO-P5-004\n    evidence:\n      worker_completion: ACKED\n      readback: VERIFIED\n      duplicate_replay: INSERTED_FALSE / deterministic identity preserved\n      specialist_statuses: S-01 PARTIAL; S-06 PARTIAL; S-08 PARTIAL\n      runtime_health: NORMAL\n      control_audit: AR-P5-004\n    status: VERIFIED\n
