@@ -269,6 +269,8 @@ def _structure_event_provenance(
     by_open = {candle.open_time: index for index, candle in enumerate(candles)}
     by_close = {candle.close_time: index for index, candle in enumerate(candles)}
     by_provenance = {candle.provenance_id: index for index, candle in enumerate(candles)}
+    if len(by_provenance) != len(candles):
+        raise ValueError("canonical candle provenance identifiers must be unique within a timeframe")
     event_by_id = {event.identity: event for event in events}
     swing_types = {"SWING_HIGH", "SWING_LOW", "HH", "HL", "LH", "LL"}
     out: dict[str, tuple[str, ...]] = {}
