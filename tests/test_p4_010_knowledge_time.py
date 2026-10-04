@@ -87,6 +87,7 @@ class _DB:
     def __init__(self):
         self.sql = []
         self.seen = set()
+        self.structural_rows = {}
 
     def transaction(self):
         return _Tx()
