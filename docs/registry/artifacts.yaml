@@ -1744,3 +1744,10 @@ records:
     artifact_path: docs/audits/AR-P5-004.md
     traceability: BR-P5-005 / TO-P5-004 / PH-P5 / STEP-P5-004 / EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+
+  - stable_id: BR-P4-013
+    canonical_name: Build Report — Group-B Upstream Structural-Fact Operationalization for P5-005
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-013.md
+    traceability: TO-P4-013 / PH-P4 / STEP-P4-006 / STEP-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: ALLOCATED / NOT YET PRODUCED
