@@ -157,6 +157,38 @@ class TestP5004GroupASemantics(unittest.TestCase):
         alignment = _finding(output, "TECHNICAL:BTCUSDT:15m:MA_ALIGNMENT")
         self.assertNotIn(20, {item["period"] for item in alignment.value.get("missing_periods", [])})
 
+    def test_nonvalid_exact_primary_ema_is_not_overridden_by_valid_legacy_alias(self):
+        close_boundary = AS_OF - timedelta(milliseconds=1)
+        exact_insufficient = _fact(
+            "BTCUSDT", "4h", "EMA_20", Decimal("98"),
+            status=FactStatus.INSUFFICIENT_DATA,
+            event=close_boundary, knowledge=close_boundary,
+            record_suffix="exact-ema20-insufficient",
+        )
+        legacy_valid = _fact(
+            "BTCUSDT", "4h", "EMA", Decimal("98"),
+            status=FactStatus.VALID,
+            event=close_boundary, knowledge=close_boundary,
+            record_suffix="legacy-ema-valid",
+        )
+        snapshot = _snapshot(
+            symbols=("BTCUSDT",), timeframes=("4h",),
+            missing={("BTCUSDT", "4h", "EMA_20")},
+            extra=(exact_insufficient, legacy_valid),
+        )
+        output = analyze_s01(snapshot, self.config)
+
+        alignment = _finding(output, "TECHNICAL:BTCUSDT:4h:MA_ALIGNMENT")
+        primary_ema = next(
+            item for item in alignment.value["missing_periods"] if item["period"] == 20
+        )
+        self.assertEqual(primary_ema["state"], "INSUFFICIENT_DATA")
+        self.assertNotEqual(alignment.value["state"], "CONTRADICTORY")
+
+        price_vs_ma = _finding(output, "TECHNICAL:BTCUSDT:4h:PRICE_VS_MA")
+        self.assertEqual(price_vs_ma.value["state"], "INSUFFICIENT_DATA")
+        self.assertIn("INSUFFICIENT", price_vs_ma.reason.upper())
+
     def test_closed_candle_boundary_equality_is_admissible_and_price_ma_uses_close_time(self):
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
         candle = next(f for f in snapshot.facts if f.metadata.get("source_table") == "meylux.canonical_candles"
