@@ -230,7 +230,20 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     primary, config, higher_timeframes={"1h": higher}
                 )
                 persistence = QuantitativePersistence(conn)
-                self.assertEqual(await persistence.persist_orchestration(result), 40)
+                expected_events = len(result.structure_events) + sum(
+                    len(events) for events in result.higher_timeframe_structure_events.values()
+                )
+                expected_zones = sum(
+                    1 for event in result.structure_events
+                    if event.lower_bound is not None and event.upper_bound is not None
+                ) + sum(
+                    1 for events in result.higher_timeframe_structure_events.values()
+                    for event in events if event.lower_bound is not None and event.upper_bound is not None
+                )
+                self.assertEqual(
+                    await persistence.persist_orchestration(result),
+                    40 + expected_events + expected_zones,
+                )
                 primary_rows = await persistence.fetch_family("indicator", symbol, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", symbol, "1h", limit=100)
                 self.assertEqual(len(primary_rows), 19)
