@@ -2,10 +2,11 @@
 
 **Status:** ACTIVE / AUTHORIZED
 **Current Step Lifecycle:** `STEP-P5-004` — COMPLETE / VERIFIED
-**Active Task Order:** `null`
-**Active Corrective Dependency:** None — `TO-P4-012` VERIFIED / COMPLETE under `AR-P4-019`
+**Active Task Order:** `TO-P4-013`
+**Active Corrective Dependency:** `TO-P4-013` — Group-B upstream structural-fact operationalization for future `STEP-P5-005`
 **Last Completed Task Order:** `TO-P5-004`  
-**Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`
+**Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
+**Current Corrective Task Order:** `TO-P4-013` — AUTHORIZED TO EXECUTE
 **Completion Audit:** `AR-P5-004`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
