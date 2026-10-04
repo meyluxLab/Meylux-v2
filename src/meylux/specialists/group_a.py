@@ -323,6 +323,8 @@ def _config_csv(config: Any, key: str, converter):
         values = tuple(value.upper() for value in values)
     elif key == "group_a_timeframes":
         values = tuple(value.lower() for value in values)
+    elif key == "group_a_venues":
+        values = tuple(value.upper() for value in values)
     return values
 
 
@@ -537,7 +539,7 @@ def analyze_s06(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
     findings = []
     for symbol in symbols:
         for venue in venues:
-            primary_price = _price(snapshot, symbol, primary_timeframe)
+            primary_price = _price(snapshot, symbol, primary_timeframe, venue=venue)
             primary_event_boundary = primary_price.facts[0].metadata.get("event_time") if primary_price.state == "VALID" else None
             primary_knowledge_boundary = primary_price.facts[0].knowledge_time if primary_price.state == "VALID" else None
             directions = []
