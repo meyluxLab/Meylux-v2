@@ -159,35 +159,44 @@ class TestP5004GroupASemantics(unittest.TestCase):
 
     def test_nonvalid_exact_primary_ema_is_not_overridden_by_valid_legacy_alias(self):
         close_boundary = AS_OF - timedelta(milliseconds=1)
-        exact_insufficient = _fact(
-            "BTCUSDT", "4h", "EMA_20", Decimal("98"),
-            status=FactStatus.INSUFFICIENT_DATA,
-            event=close_boundary, knowledge=close_boundary,
-            record_suffix="exact-ema20-insufficient",
-        )
         legacy_valid = _fact(
             "BTCUSDT", "4h", "EMA", Decimal("98"),
             status=FactStatus.VALID,
             event=close_boundary, knowledge=close_boundary,
             record_suffix="legacy-ema-valid",
         )
-        snapshot = _snapshot(
-            symbols=("BTCUSDT",), timeframes=("4h",),
-            missing={("BTCUSDT", "4h", "EMA_20")},
-            extra=(exact_insufficient, legacy_valid),
-        )
-        output = analyze_s01(snapshot, self.config)
+        for exact_fact_status in (FactStatus.INSUFFICIENT_DATA, FactStatus.VALID):
+            with self.subTest(exact_fact_status=exact_fact_status.value):
+                exact_insufficient = _fact(
+                    "BTCUSDT", "4h", "EMA_20", Decimal("98"),
+                    status=exact_fact_status,
+                    event=close_boundary, knowledge=close_boundary,
+                    record_suffix=f"exact-ema20-{exact_fact_status.value.lower()}",
+                )
+                # The governed surface can represent insufficient history in the
+                # calculation payload even when the enclosing persisted fact row is
+                # structurally VALID. Both forms must keep exact EMA_20 authoritative.
+                exact_insufficient = replace(
+                    exact_insufficient,
+                    value={**exact_insufficient.value, "status": "INSUFFICIENT_HISTORY"},
+                )
+                snapshot = _snapshot(
+                    symbols=("BTCUSDT",), timeframes=("4h",),
+                    missing={("BTCUSDT", "4h", "EMA_20")},
+                    extra=(exact_insufficient, legacy_valid),
+                )
+                output = analyze_s01(snapshot, self.config)
 
-        alignment = _finding(output, "TECHNICAL:BTCUSDT:4h:MA_ALIGNMENT")
-        primary_ema = next(
-            item for item in alignment.value["missing_periods"] if item["period"] == 20
-        )
-        self.assertEqual(primary_ema["state"], "INSUFFICIENT_DATA")
-        self.assertNotEqual(alignment.value["state"], "CONTRADICTORY")
+                alignment = _finding(output, "TECHNICAL:BTCUSDT:4h:MA_ALIGNMENT")
+                primary_ema = next(
+                    item for item in alignment.value["missing_periods"] if item["period"] == 20
+                )
+                self.assertEqual(primary_ema["state"], "INSUFFICIENT_DATA")
+                self.assertNotEqual(alignment.value["state"], "CONTRADICTORY")
 
-        price_vs_ma = _finding(output, "TECHNICAL:BTCUSDT:4h:PRICE_VS_MA")
-        self.assertEqual(price_vs_ma.value["state"], "INSUFFICIENT_DATA")
-        self.assertIn("INSUFFICIENT", price_vs_ma.reason.upper())
+                price_vs_ma = _finding(output, "TECHNICAL:BTCUSDT:4h:PRICE_VS_MA")
+                self.assertEqual(price_vs_ma.value["state"], "INSUFFICIENT_DATA")
+                self.assertIn("INSUFFICIENT", price_vs_ma.reason.upper())
 
     def test_closed_candle_boundary_equality_is_admissible_and_price_ma_uses_close_time(self):
         snapshot = _snapshot(symbols=("BTCUSDT",), timeframes=("15m", "1h", "4h"))
