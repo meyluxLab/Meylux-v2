@@ -185,6 +185,19 @@ def _context_matches(fact, symbol: str, timeframe: str, venue: str | None = None
     return True
 
 
+def _valid_ema_alias_fact(fact) -> bool:
+    """Return whether an EMA alias carries a usable numeric calculation."""
+    if fact.status is not FactStatus.VALID or not isinstance(fact.value, Mapping) or "value" not in fact.value:
+        return False
+    if str(fact.value.get("status", "VALID")).upper() not in {"VALID", "SUCCESS", "OK"}:
+        return False
+    try:
+        _decimal(fact.value["value"])
+    except (InvalidOperation, ValueError, TypeError):
+        return False
+    return True
+
+
 def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[str, ...],
             *, source: str = "meylux.calculated_indicator_vectors", boundary=None,
             venue: str | None = None) -> Metric:
@@ -220,12 +233,12 @@ def _metric(snapshot: InputSnapshot, symbol: str, timeframe: str, names: tuple[s
                 (fact, event_time) for fact, event_time in exact_matches
                 if event_time == latest_exact_time
             ]
-            if len(exact_at_boundary) == 1 and exact_at_boundary[0][0].status is FactStatus.VALID:
+            if len(exact_at_boundary) == 1 and _valid_ema_alias_fact(exact_at_boundary[0][0]):
                 legacy_valid_at_boundary = [
                     (fact, event_time) for fact, event_time in matched
                     if _name(fact) == "EMA"
                     and event_time == latest_exact_time
-                    and fact.status is FactStatus.VALID
+                    and _valid_ema_alias_fact(fact)
                 ]
                 matched = exact_at_boundary + legacy_valid_at_boundary
             else:
