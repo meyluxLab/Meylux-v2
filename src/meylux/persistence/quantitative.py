@@ -231,7 +231,8 @@ class QuantitativePersistence:
     ) -> list[tuple[Any, ...]]:
         rows: list[tuple[Any, ...]] = []
         seen: set[str] = set()
-        expected_ids = {event.identity for event in events}
+        event_by_id = {event.identity: event for event in events}
+        expected_ids = set(event_by_id)
         if set(event_history) != expected_ids:
             raise ValueError("structural history assessment must cover exactly the emitted events")
         for event in events:
@@ -249,9 +250,38 @@ class QuantitativePersistence:
                 venue_cache[refs] = await self._resolve_venue_context(refs)
             venue = venue_cache[refs]
             source_ref = f"canonical-provenance:{'|'.join(refs)}"
-            source_members = tuple(token for token in (event.source_event_identity or "").split(",") if token)
-            if any(not token.strip() for token in source_members):
+            raw_source = event.source_event_identity
+            if raw_source is not None and any(not token.strip() for token in raw_source.split(",")):
                 raise ValueError("structural source/member identities must be non-empty")
+            source_members = tuple(raw_source.split(",")) if raw_source else ()
+            source_identity_origin = "ENGINE" if source_members else "NONE"
+            if not source_members and event.event_type in {"HH", "LH", "HL", "LL"}:
+                required_type = "SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW"
+                prior = [
+                    candidate for candidate in events
+                    if candidate.event_type == required_type
+                    and candidate.event_location < event.event_location
+                    and candidate.knowledge_time < event.knowledge_time
+                ]
+                if not prior:
+                    raise ValueError("swing classification must resolve its prior confirmed swing identity")
+                source_members = (max(prior, key=lambda candidate: (candidate.knowledge_time, candidate.event_location)).identity,)
+                source_identity_origin = "DETERMINISTIC_PRIOR_SWING"
+            elif not source_members and event.event_type in {"BOS", "CHOCH", "MSS"}:
+                if event.level is None:
+                    raise ValueError("structural break identity requires an exact level")
+                required_type = "SWING_HIGH" if event.direction == "bullish" else "SWING_LOW"
+                prior = [
+                    candidate for candidate in events
+                    if candidate.event_type == required_type
+                    and candidate.level == event.level
+                    and candidate.event_location < event.event_location
+                    and candidate.knowledge_time < event.knowledge_time
+                ]
+                if not prior:
+                    raise ValueError("structural break must resolve its exact-level supporting swing identity")
+                source_members = (max(prior, key=lambda candidate: (candidate.knowledge_time, candidate.event_location)).identity,)
+                source_identity_origin = "DETERMINISTIC_PRIOR_SWING"
             source_event_identity = source_members[0] if len(source_members) == 1 else None
             history = event_history[event.identity]
             if (
@@ -276,6 +306,7 @@ class QuantitativePersistence:
                 "structural_state": event.structural_state,
                 "source_event_identity": source_event_identity,
                 "source_member_identities": list(source_members),
+                "source_identity_origin": source_identity_origin,
                 "prior_structural_state": event.prior_structural_state,
                 "reason": event.reason or event.event_type,
                 "calculation_version": semantic_version,
@@ -294,6 +325,7 @@ class QuantitativePersistence:
                 "symbol": symbol,
                 "timeframe": timeframe,
                 "structural_identity": event.identity,
+                "source_member_identities": list(source_members),
             })
             rows.append((
                 "structure_fact_event", event_id, event.event_type, "valid",
@@ -308,6 +340,7 @@ class QuantitativePersistence:
                     "symbol": symbol,
                     "timeframe": timeframe,
                     "structural_identity": event.identity,
+                    "source_member_identities": list(source_members),
                 })
                 rows.append((
                     "structure_fact_zone", zone_id, event.event_type, "valid",
