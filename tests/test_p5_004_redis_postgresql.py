@@ -158,7 +158,10 @@ class TestP5004RedisPostgreSQL(unittest.TestCase):
                         "AND t.tgname='trg_specialist_outputs_append_only' AND NOT t.tgisinternal"
                     )
                     self.assertIsNotNone(trigger, "governed append-only trigger must exist")
-                    self.assertEqual(trigger["tgenabled"], "O", "governed append-only trigger must be enabled")
+                    trigger_enabled = trigger["tgenabled"]
+                    if isinstance(trigger_enabled, bytes):
+                        trigger_enabled = trigger_enabled.decode("ascii")
+                    self.assertEqual(trigger_enabled, "O", "governed append-only trigger must be enabled")
                     self.assertIn("reject_canonical_mutation", trigger["definition"])
 
                     before_json = await pool.fetchval(
