@@ -16,8 +16,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
-- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-004` — `COMPLETE / VERIFIED` under `AR-P5-004`; no active P5 Task Order is currently active. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
-- **Latest completed Task Order:** `TO-P5-004` — Group A Technical / Multi-Timeframe / Volatility; independently verified under `AR-P5-004`; `active_task_order = null`; no later P5 Step is activated.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-004` — `COMPLETE / VERIFIED` under `AR-P5-004`; active upstream corrective dependency `TO-P4-013` is authorized for Group-B resolution; `STEP-P5-005` remains NOT ACTIVATED. Scope: Spot + Futures, `BTCUSDT` and `SOLUSDT`, Binance and MEXC; Forex remains future intent only.
+- **Latest completed Task Order:** `TO-P5-004` — Group A Technical / Multi-Timeframe / Volatility; independently verified under `AR-P5-004`; `active_task_order = TO-P4-013`; no later P5 Step is activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
