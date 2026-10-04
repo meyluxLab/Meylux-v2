@@ -3066,3 +3066,60 @@ entries:
       supplemental_staging_registry: CHECKED — none
       machine_readback: COMPLETED
 
+
+
+  - ledger_id: CL-P5-004-CLOSURE-20261004
+    recorded_at: "2026-10-04"
+    authority: CONTROL / ROL-V2-001
+    action: "CONTROL INDEPENDENT VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P5-004"
+    basis: "AR-P5-004 + BR-P5-005 + TO-P5-004 + PR #63 + merged commit 8f014e216a03378853cd2d74b869ef03d65e907b + EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P5-004
+      - BR-P5-005
+      - AR-P5-004
+      - TST-P5-004
+      - DB-P5-004
+      - SEC-P5-004
+      - CFG-P5-004
+      - PERF-P5-004
+      - OBS-P5-004
+      - CMP-P5-004
+      - REQ-P5-004
+      - RUN-P5-004
+      - STEP-P5-004
+      - PH-P5
+    predecessor_state: "TO-P5-004 AUTHORIZED TO EXECUTE; active_task_order TO-P5-004; STEP-P5-004 ACTIVE / AUTHORIZED; PH-P5 ACTIVE / AUTHORIZED."
+    resulting_state: "TO-P5-004 VERIFIED / COMPLETE; active_task_order null; completed_task_order TO-P5-004; STEP-P5-004 COMPLETE / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; no later P5 Step activated."
+    implementation_revision: 45915b9f4ceb4c84349835d4e47d00897ba74eca
+    merged_revision: 8f014e216a03378853cd2d74b869ef03d65e907b
+    runtime_evidence:
+      snapshot_id: 05e5e49b2ef6a33337e4b98df59e05f1b904294d298bd4348e6d73f341d854d5
+      as_of: 2026-10-01T18:35:00Z
+      authoritative_fact_count: 60
+      s01_s06_s08_worker_path: ACKED / READBACK
+      replay_output_count_per_specialist: 1
+      append_only_update_delete: DENIED / VERIFIED
+      performance_p50_ms: 246.2099335
+      performance_p95_ms: 270.70033
+      performance_max_ms: 296.435471
+    control_conclusion: "All TO-P5-004 acceptance criteria were independently verified. Prior EMA-alias and closed-candle correction findings are closed. No unresolved authoritative conflict remains."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; P4 mathematical ownership and historical P4/G-4 closure remain unchanged."
+    runtime_effect: "No governed production service was left modified by the audit probes; temporary isolated runtime artifacts were removed and the pre-existing specialist worker container files were restored."
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      database_registry: UPDATED
+      requirements_registry: UPDATED
+      configuration_registry: UPDATED
+      runtime_registry: UPDATED
+      security_registry: UPDATED
+      contracts_registry: CHECKED — no contract change
+      performance_registry: UPDATED
+      observability_registry: UPDATED
+      components_registry: UPDATED
+      phases_registry: UPDATED
+      readme: UPDATED
+      standalone_status_documents: CHECKED
+      open_questions: CHECKED — no closure-blocking question created
+      supplemental_staging_registry: CHECKED — none
+      machine_readback: COMPLETED
