@@ -71,7 +71,7 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-004` — `COMPLETE / VERIFIED`; Active Task Order: `null`; Completion Audit: `AR-P5-004`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-004` — `COMPLETE / VERIFIED`; Active Task Order: `TO-P4-013`; Completion Audit: `AR-P5-004`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
 
 
 ## Post-Closure Investigation State
