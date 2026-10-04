@@ -44,6 +44,16 @@ _ZONE_LIFECYCLE_EVENTS = {
     "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
     "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
 }
+_ZONE_TYPE_BY_EVENT = {
+    "FVG": "FVG",
+    "FVG_LIFECYCLE": "FVG",
+    "ORDER_BLOCK": "ORDER_BLOCK",
+    "ORDER_BLOCK_INVALIDATION": "ORDER_BLOCK",
+    "BREAKER": "BREAKER",
+    "BREAKER_INVALIDATION": "BREAKER",
+    "LIQUIDITY_POOL": "LIQUIDITY_POOL",
+    "LIQUIDITY_POOL_SWEEP": "LIQUIDITY_POOL",
+}
 
 
 def _knowledge_time(result: QuantOrchestrationResult) -> datetime:
@@ -427,6 +437,7 @@ class QuantitativePersistence:
                 else:
                     history_counts.append(history_counts[-1] + 1)
             contiguous_history_counts = tuple(history_counts)
+            event_by_identity = {event.identity: event for event in facts.events}
             seen_identities: set[str] = set()
             for event in facts.events:
                 if event.identity in seen_identities:
@@ -451,10 +462,22 @@ class QuantitativePersistence:
                 reason = event.reason or event.event_type
                 if status == "insufficient_history":
                     reason = f"{reason};requires_11_contiguous_closed_candles"
+                zone_formation_time = event.event_location
+                if event.event_type in {
+                    "FVG_LIFECYCLE", "ORDER_BLOCK_INVALIDATION",
+                    "BREAKER_INVALIDATION", "LIQUIDITY_POOL_SWEEP",
+                }:
+                    source_identity = event.source_event_identity
+                    if not source_identity or "," in source_identity or source_identity not in event_by_identity:
+                        raise ValueError("structural lifecycle transition must resolve one authoritative source event identity")
+                    zone_formation_time = event_by_identity[source_identity].event_location
+                    if zone_formation_time > event.event_location:
+                        raise ValueError("structural lifecycle transition precedes its source zone formation")
                 payload = {
                     "event_identity": event.identity,
                     "event_type": event.event_type,
                     "event_location": _json(event.event_location),
+                    "zone_formation_time": _json(zone_formation_time),
                     "confirmation_time": _json(event.confirmation_time),
                     "knowledge_time": _json(event.knowledge_time),
                     "direction": event.direction,
@@ -490,7 +513,9 @@ class QuantitativePersistence:
                 if (event.event_type in _ZONE_LIFECYCLE_EVENTS
                         and (event.lower_bound is not None or event.upper_bound is not None
                              or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})):
-                    structural_rows.append({"family": "structure_zone", **common})
+                    zone_row = dict(common)
+                    zone_row["event_type"] = _ZONE_TYPE_BY_EVENT[event.event_type]
+                    structural_rows.append({"family": "structure_zone", **zone_row})
 
         async with self._connection.transaction():
             inserted = 0
