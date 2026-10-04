@@ -129,3 +129,4 @@ records:
       control_audit: AR-P5-003
       live_worker_ack: VERIFIED
       status: VERIFIED
+\n\n  - stable_id: CMP-P5-004\n    canonical_name: Stage-1 Group-A Specialists\n    entity_type: COMPONENT\n    phase: PH-P5\n    step: STEP-P5-004\n    task_order: TO-P5-004\n    artifact_path: src/meylux/specialists/group_a.py\n    evidence:\n      specialists: S-01,S-06,S-08\n      implementation_revision: 45915b9f4ceb4c84349835d4e47d00897ba74eca\n      control_audit: AR-P5-004\n    status: VERIFIED\n
