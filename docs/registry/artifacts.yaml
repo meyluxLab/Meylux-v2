@@ -1718,3 +1718,9 @@ records:
     artifact_path: docs/audits/AR-P3-010.md
     traceability: TO-P3-010 / BR-P3-010 / TST-P3-009 / PH-P5 / STEP-P5-003 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+  - stable_id: BR-P5-005
+    canonical_name: Build Report — TO-P5-004 Group-A Technical, Multi-Timeframe, Volatility Specialists
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P5-005.md
+    traceability: TO-P5-004 / PH-P5 / STEP-P5-004 / PR #59 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: PRODUCED / PENDING CONTROL AUDIT
