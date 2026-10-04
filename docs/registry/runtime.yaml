@@ -179,3 +179,25 @@ records:
       temporary_environment_cleanup: VERIFIED
       control_audit: AR-P4-018
     status: VERIFIED
+
+  - stable_id: RUN-P4-012
+    canonical_name: CONTROL Independent TO-P4-012 Runtime Acceptance Execution
+    entity_type: RUN
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-012
+    runtime_target: server-l6rf
+    evidence:
+      executor_role: ROL-V2-001
+      mechanism: SentinelX only
+      implementation_revision: 0b85a8abe9378c6cc213d3b69249ae66d491bd05
+      merged_revision: a95f23eabf6d0324fcaacbbed06862881a7e52fa
+      execution_log: EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004
+      worker_path: QueueEnvelope -> QuantWorkerHandler -> QuantitativeOrchestrator -> QuantitativePersistence -> PostgreSQL
+      first_execution_new_rows: 57
+      replay_additional_rows: 0
+      p5_evidence_ref_build: VERIFIED
+      lookahead_rejection: VERIFIED
+      temporary_container_cleanup: VERIFIED
+      control_audit: AR-P4-019
+    status: VERIFIED
