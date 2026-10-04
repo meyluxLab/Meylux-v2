@@ -21,7 +21,7 @@ from meylux.quantitative.indicators import (
     rsi,
     volatility_expansion_ratio,
 )
-from meylux.quantitative.market_structure import MarketStructureEngine
+from meylux.quantitative.market_structure import MarketStructureEngine, StructuralEvent
 from meylux.quantitative.regime_venue import MarketRegimeEngine, RegimeConfig
 
 
@@ -183,6 +183,56 @@ class QuantOrchestrationConfig:
 
 
 @dataclass(frozen=True, slots=True)
+class TimeframeStructuralFacts:
+    """Existing P4 engine output and its exact closed-candle source sequence."""
+
+    symbol: str
+    timeframe: str
+    as_of: datetime
+    events: tuple[StructuralEvent, ...]
+    candles: tuple[CanonicalCandle, ...]
+    calculation_version: str
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.symbol, str) or not self.symbol:
+            raise ValueError("structural symbol must be non-empty")
+        if not isinstance(self.timeframe, str) or not self.timeframe:
+            raise ValueError("structural timeframe must be non-empty")
+        _utc(self.as_of, "structural as_of")
+        if not isinstance(self.candles, tuple) or not self.candles:
+            raise ValueError("structural facts require a non-empty canonical candle tuple")
+        if not isinstance(self.events, tuple):
+            raise TypeError("structural events must be a tuple")
+        if not isinstance(self.calculation_version, str) or not self.calculation_version:
+            raise ValueError("structural calculation_version must be non-empty")
+        previous = None
+        for index, candle in enumerate(self.candles):
+            if not isinstance(candle, CanonicalCandle):
+                raise TypeError(f"structural candles[{index}] must be CanonicalCandle")
+            if not candle.is_closed:
+                raise ValueError(f"structural candles[{index}] must be closed")
+            if candle.instrument_id != self.symbol or candle.timeframe != self.timeframe:
+                raise ValueError("structural candle symbol/timeframe must match its fact set")
+            if previous is not None and candle.open_time <= previous.open_time:
+                raise ValueError("structural candles must be strictly ordered")
+            previous = candle
+        if self.candles[-1].close_time != self.as_of:
+            raise ValueError("structural as_of must equal the final closed candle close_time")
+        for index, event in enumerate(self.events):
+            if not isinstance(event, StructuralEvent):
+                raise TypeError(f"structural events[{index}] must be StructuralEvent")
+            _utc(event.event_location, f"structural events[{index}].event_location")
+            _utc(event.confirmation_time, f"structural events[{index}].confirmation_time")
+            _utc(event.knowledge_time, f"structural events[{index}].knowledge_time")
+            if event.event_location > event.confirmation_time:
+                raise ValueError("structural event location cannot follow confirmation time")
+            if event.confirmation_time != event.knowledge_time:
+                raise ValueError("confirmed structural event confirmation_time must equal knowledge_time")
+            if event.knowledge_time > self.as_of:
+                raise ValueError("structural event knowledge_time exceeds its closed-candle boundary")
+
+
+@dataclass(frozen=True, slots=True)
 class QuantOrchestrationResult:
     symbol: str
     timeframe: str
@@ -197,6 +247,7 @@ class QuantOrchestrationResult:
     htf: Mapping[str, MTFAlignment]
     source_provenance: tuple[str, ...]
     higher_timeframe_facts: Mapping[str, TimeframeQuantitativeFacts] = field(default_factory=dict)
+    structural_facts: Mapping[str, TimeframeStructuralFacts] = field(default_factory=dict)
 
 
 def _contextualize(result: CalculationResult, candle: CanonicalCandle) -> CalculationResult:
@@ -289,6 +340,16 @@ class QuantitativeOrchestrator:
 
         regime = self._regime.classify(xs, config.regime, previous_state=previous_regime)
         structure = self._structure.analyze(xs)
+        structural_facts: dict[str, TimeframeStructuralFacts] = {
+            xs[-1].timeframe: TimeframeStructuralFacts(
+                symbol=xs[-1].instrument_id,
+                timeframe=xs[-1].timeframe,
+                as_of=xs[-1].close_time,
+                events=structure.events,
+                candles=xs,
+                calculation_version=structure.calculation_version,
+            )
+        }
         indicators = _indicator_facts(xs, config)
         htf: dict[str, MTFAlignment] = {}
         htf_facts: dict[str, TimeframeQuantitativeFacts] = {}
@@ -322,6 +383,15 @@ class QuantitativeOrchestrator:
                         indicators=_indicator_facts(selected, config),
                         source_provenance=tuple(c.provenance_id for c in selected),
                     )
+                    htf_structure = self._structure.analyze(selected)
+                    structural_facts[timeframe] = TimeframeStructuralFacts(
+                        symbol=latest.instrument_id,
+                        timeframe=timeframe,
+                        as_of=latest.close_time,
+                        events=htf_structure.events,
+                        candles=selected,
+                        calculation_version=htf_structure.calculation_version,
+                    )
 
         knowledge_time = xs[-1].close_time
         return QuantOrchestrationResult(
@@ -338,4 +408,5 @@ class QuantitativeOrchestrator:
             htf,
             tuple(c.provenance_id for c in xs),
             htf_facts,
+            structural_facts,
         )
