@@ -10,6 +10,7 @@ from typing import Any, Mapping
 
 from contracts.quantitative.base import CalculationResult
 from meylux.orchestration.engine import QuantOrchestrationResult, TimeframeQuantitativeFacts
+from meylux.quantitative.market_structure import StructuralEvent
 
 
 def _json(value: Any) -> Any:
@@ -187,9 +188,125 @@ class QuantitativePersistence:
             return calculation
         return replace(calculation, context=replace(context, venue_context=venue))
 
+    @staticmethod
+    def _validate_structural_event(
+        event: StructuralEvent,
+        *,
+        snapshot_as_of: datetime,
+    ) -> None:
+        if not isinstance(event, StructuralEvent):
+            raise TypeError("structural facts must be StructuralEvent values")
+        if not isinstance(event.identity, str) or not event.identity:
+            raise ValueError("structural event identity is required")
+        for name in ("event_location", "confirmation_time", "knowledge_time"):
+            value = getattr(event, name)
+            if not isinstance(value, datetime) or value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value):
+                raise ValueError(f"structural {name} must be UTC")
+        if event.event_location > event.confirmation_time:
+            raise ValueError("structural event location must not follow confirmation time")
+        if event.confirmation_time != event.knowledge_time:
+            raise ValueError("DOC-P4-002 confirmed-event confirmation_time must equal knowledge_time")
+        if event.knowledge_time > snapshot_as_of:
+            raise ValueError("structural knowledge_time exceeds snapshot.as_of")
+        for name in ("level", "lower_bound", "upper_bound"):
+            value = getattr(event, name)
+            if value is not None and (not isinstance(value, Decimal) or not value.is_finite()):
+                raise ValueError(f"structural {name} must be a finite Decimal")
+        if (event.lower_bound is None) != (event.upper_bound is None):
+            raise ValueError("structural zone must provide both lower_bound and upper_bound")
+        if event.lower_bound is not None and event.lower_bound > event.upper_bound:
+            raise ValueError("structural zone lower_bound must not exceed upper_bound")
+
+    async def _structural_rows(
+        self,
+        *,
+        symbol: str,
+        timeframe: str,
+        events: tuple[StructuralEvent, ...],
+        event_provenance: Mapping[str, tuple[str, ...]],
+        snapshot_as_of: datetime,
+        configuration_version: str,
+        venue_cache: dict[tuple[str, ...], str | None],
+    ) -> list[tuple[Any, ...]]:
+        rows: list[tuple[Any, ...]] = []
+        seen: set[str] = set()
+        for event in events:
+            self._validate_structural_event(event, snapshot_as_of=snapshot_as_of)
+            if event.identity in seen:
+                raise ValueError("duplicate structural event identity in one timeframe")
+            seen.add(event.identity)
+            refs = event_provenance.get(event.identity)
+            if not isinstance(refs, tuple) or not refs or any(
+                not isinstance(ref, str) or not ref.strip() for ref in refs
+            ):
+                raise ValueError("structural event requires explicit canonical candle provenance")
+            refs = tuple(dict.fromkeys(refs))
+            if refs not in venue_cache:
+                venue_cache[refs] = await self._resolve_venue_context(refs)
+            venue = venue_cache[refs]
+            source_ref = f"canonical-provenance:{'|'.join(refs)}"
+            source_members = tuple(token for token in (event.source_event_identity or "").split(",") if token)
+            if any(not token.strip() for token in source_members):
+                raise ValueError("structural source/member identities must be non-empty")
+            source_event_identity = source_members[0] if len(source_members) == 1 else None
+            semantic_version = event.result().calculation_version
+            payload = {
+                "structural_identity": event.identity,
+                "event_type": event.event_type,
+                "event_location": event.event_location,
+                "confirmation_time": event.confirmation_time,
+                "knowledge_time": event.knowledge_time,
+                "direction": event.direction,
+                "level": event.level,
+                "lower_bound": event.lower_bound,
+                "upper_bound": event.upper_bound,
+                "lifecycle": event.lifecycle,
+                "structural_state": event.structural_state,
+                "source_event_identity": source_event_identity,
+                "source_member_identities": list(source_members),
+                "prior_structural_state": event.prior_structural_state,
+                "reason": event.reason or event.event_type,
+                "calculation_version": semantic_version,
+                "configuration_version": configuration_version,
+                "source_candle_provenance": list(refs),
+                "venue_context": venue,
+            }
+            event_id = self._id({
+                "family": "structure_event",
+                "symbol": symbol,
+                "timeframe": timeframe,
+                "structural_identity": event.identity,
+            })
+            rows.append((
+                "structure_fact_event", event_id, event.event_type, "valid",
+                event.reason or event.event_type, event.level, payload, semantic_version,
+                symbol, timeframe, event.event_location, source_ref, venue,
+                configuration_version, event.confirmation_time, event.knowledge_time,
+                source_event_identity,
+            ))
+            if event.lower_bound is not None and event.upper_bound is not None:
+                zone_id = self._id({
+                    "family": "structure_zone",
+                    "symbol": symbol,
+                    "timeframe": timeframe,
+                    "structural_identity": event.identity,
+                })
+                rows.append((
+                    "structure_fact_zone", zone_id, event.event_type, "valid",
+                    event.reason or event.event_type, event.level, payload, semantic_version,
+                    symbol, timeframe, event.event_location, source_ref, venue,
+                    configuration_version, event.confirmation_time, event.knowledge_time,
+                    source_event_identity,
+                ))
+        unexpected = set(event_provenance) - seen
+        if unexpected:
+            raise ValueError("structural provenance contains identities without corresponding events")
+        return rows
+
     async def persist_orchestration(self, result: QuantOrchestrationResult) -> int:
         primary_knowledge_time = _knowledge_time(result)
         rows: list[tuple[Any, ...]] = []
+        venue_cache: dict[tuple[str, ...], str | None] = {}
         primary_venue = await self._resolve_venue_context(result.source_provenance)
 
         # Primary timeframe and each eligible higher timeframe use the same
@@ -233,6 +350,37 @@ class QuantitativePersistence:
                     calculation=calculation,
                     provenance=facts.source_provenance,
                 ))
+
+        rows.extend(await self._structural_rows(
+            symbol=result.symbol,
+            timeframe=result.timeframe,
+            events=result.structure_events,
+            event_provenance=result.structure_event_provenance,
+            snapshot_as_of=primary_knowledge_time,
+            configuration_version=result.configuration_version,
+            venue_cache=venue_cache,
+        ))
+        for timeframe, events in sorted(result.higher_timeframe_structure_events.items()):
+            if timeframe == result.timeframe:
+                raise ValueError("higher timeframe structural facts must differ from primary timeframe")
+            if timeframe not in result.higher_timeframe_facts:
+                raise ValueError("higher timeframe structural facts require eligible timeframe evidence")
+            facts = result.higher_timeframe_facts[timeframe]
+            if facts.symbol != result.symbol or facts.timeframe != timeframe:
+                raise ValueError("higher timeframe structural facts must preserve symbol/timeframe isolation")
+            if facts.knowledge_time > primary_knowledge_time:
+                raise ValueError("higher timeframe structural knowledge_time exceeds primary snapshot boundary")
+            rows.extend(await self._structural_rows(
+                symbol=facts.symbol,
+                timeframe=timeframe,
+                events=events,
+                event_provenance=result.higher_timeframe_structure_event_provenance.get(timeframe, {}),
+                snapshot_as_of=primary_knowledge_time,
+                configuration_version=result.configuration_version,
+                venue_cache=venue_cache,
+            ))
+        if set(result.higher_timeframe_structure_event_provenance) - set(result.higher_timeframe_structure_events):
+            raise ValueError("higher timeframe structural provenance contains an unknown timeframe")
 
         regime_payload = {
             "state": result.regime.state,
