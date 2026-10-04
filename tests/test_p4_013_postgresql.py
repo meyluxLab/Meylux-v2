@@ -167,6 +167,48 @@ class TestP4013StructuralPostgreSQL(unittest.TestCase):
                 self.assertEqual(len(pool_payload["source_member_identities"]), 2)
                 self.assertIsNone(pool["source_event_identity"])
 
+                # Database CHECK constraints reject direct inserts that bypass the Python writer.
+                invalid_time = primary[-2].close_time
+                future_knowledge = invalid_time + timedelta(milliseconds=1)
+                invalid_payload = json.dumps({"test": "invalid-temporal-boundary"}, sort_keys=True)
+                for table, family_column, family_value, constraint in (
+                    ("market_structure_events", "event_type", "TO-P4-013-INVALID-TIME", "ck_structure_events_fact_temporal"),
+                    ("market_structure_zones", "zone_type", "TO-P4-013-INVALID-TIME", "ck_structure_zones_fact_temporal"),
+                ):
+                    record_id = ("e" if table == "market_structure_events" else "z") * 64
+                    try:
+                        if table == "market_structure_events":
+                            await conn.execute(
+                                "INSERT INTO meylux.market_structure_events ("
+                                "record_id,symbol,timeframe,event_time,confirmation_time,knowledge_time,event_type,"
+                                "source_event_identity,source_ref,venue_context,version,calculation_version,status,reason,"
+                                "value_numeric,payload_json,identity_hash"
+                                ") VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,$8,NULL,$9,$10,$11,$12,NULL,$13::jsonb,$14)",
+                                record_id, SYMBOL, "15m", primary[-2].open_time, invalid_time, future_knowledge,
+                                family_value, "test-invalid-temporal", "1.0.0", "1.0.0", "valid",
+                                "invalid temporal boundary", invalid_payload, record_id,
+                            )
+                        else:
+                            await conn.execute(
+                                "INSERT INTO meylux.market_structure_zones ("
+                                "record_id,symbol,timeframe,event_time,confirmation_time,knowledge_time,zone_type,"
+                                "source_event_identity,source_ref,venue_context,version,calculation_version,status,reason,"
+                                "value_numeric,payload_json,identity_hash"
+                                ") VALUES ($1,$2,$3,$4,$5,$6,$7,NULL,$8,NULL,$9,$10,$11,$12,NULL,$13::jsonb,$14)",
+                                record_id, SYMBOL, "15m", primary[-2].open_time, invalid_time, future_knowledge,
+                                family_value, "test-invalid-temporal", "1.0.0", "1.0.0", "valid",
+                                "invalid temporal boundary", invalid_payload, record_id,
+                            )
+                    except self.asyncpg.CheckViolationError as exc:
+                        self.assertEqual(exc.sqlstate, "23514")
+                        self.assertIn(constraint, str(exc))
+                    else:
+                        self.fail(f"database accepted an invalid temporal fact in {table}")
+                    self.assertEqual(
+                        await conn.fetchval(f"SELECT count(*) FROM meylux.{table} WHERE record_id=$1", record_id),
+                        0,
+                    )
+
                 # The final-candle FVG is eligible at exact knowledge_time == snapshot.as_of.
                 exact = next(
                     row for row in events_15m
