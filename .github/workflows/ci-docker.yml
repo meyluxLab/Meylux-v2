@@ -26,6 +26,7 @@ on:
       - "tests/test_p4_010_knowledge_time.py"
       - "tests/test_p4_011_group_a_facts.py"
       - "tests/test_p4_011_postgresql.py"
+      - "tests/test_p4_013_postgresql.py"
       - "tests/test_p3_009_quality_evidence.py"
       - "tests/test_p3_009_postgresql.py"
       - "tests/test_p5_003_s10.py"
@@ -55,6 +56,7 @@ on:
       - "tests/test_quantitative_foundation.py"
       - "tests/test_p4_011_group_a_facts.py"
       - "tests/test_p4_011_postgresql.py"
+      - "tests/test_p4_013_postgresql.py"
       - "tests/test_p3_009_postgresql.py"
       - "tests/test_p3_009_quality_evidence.py"
       - "tests/golden_vectors/p4_001_primitives.json"
@@ -155,6 +157,26 @@ jobs:
             --entrypoint python api \
             -m unittest discover -s /app/tests -p 'test_p4_011_postgresql.py' -v
 
+      - name: Run real closed-candle Group-B structural event/zone persistence and read-back
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
+            -v "$PWD/tests:/app/tests:ro" \
+            -e PYTHONPATH=src \
+            -e MEYLUX_RUN_P4013_POSTGRESQL=1 \
+            -e MEYLUX_DB_HOST=db \
+            -e MEYLUX_DB_PORT=5432 \
+            -e MEYLUX_DB_NAME="$MEYLUX_DB_NAME" \
+            -e MEYLUX_DB_USER=meylux_app \
+            -e MEYLUX_DB_PASSWORD="$MEYLUX_APP_PASSWORD" \
+            --entrypoint python api \
+            -m unittest discover -s /app/tests -p 'test_p4_013_postgresql.py' -v
+
       - name: Re-run PostgreSQL-backed P3/P5 evidence path
         env:
           PYTHONPATH: src
@@ -217,6 +239,12 @@ jobs:
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.market_structure_zones;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT knowledge_time IS NULL FROM meylux.volume_profile_sessions;")" = "t"
             test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT count(*) FROM meylux.calculated_indicator_vectors; SELECT count(*) FROM meylux.market_structure_events; SELECT count(*) FROM meylux.market_structure_zones; SELECT count(*) FROM meylux.volume_profile_sessions; SELECT count(*) FROM meylux.market_regime_states;" | tr -d "\r" | tr "\n" " ")" = "1 1 1 1 1 "
+            psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -f /workspace/migrations/versions/0010_p4_structural_fact_operationalization.sql
+            psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -v ON_ERROR_STOP=1 -f /workspace/migrations/versions/0010_p4_structural_fact_operationalization.sql
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT confirmation_time IS NULL AND source_event_identity IS NULL AND knowledge_time IS NULL FROM meylux.market_structure_events;")" = "t"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT confirmation_time IS NULL AND source_event_identity IS NULL AND knowledge_time IS NULL FROM meylux.market_structure_zones;")" = "t"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT count(*) FROM meylux.schema_migrations WHERE version = '0010_p4_structural_fact_operationalization';")" = "1"
+            test "$(psql -At -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d meylux_legacy_ci -c "SELECT count(*) FROM meylux.market_structure_events; SELECT count(*) FROM meylux.market_structure_zones;" | tr -d "\r" | tr "\n" " ")" = "1 1 "
             psql -h 127.0.0.1 -U "$MEYLUX_DB_USER" -d postgres -v ON_ERROR_STOP=1 -c "DROP DATABASE IF EXISTS meylux_legacy_ci;"
           '
 
@@ -235,6 +263,7 @@ jobs:
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0004_canonical_quality_state_alignment';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0005_quantitative_foundation';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0008_p4_knowledge_time_persistence';"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT version FROM meylux.schema_migrations WHERE version = '0010_p4_structural_fact_operationalization';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT table_name, column_name, is_nullable FROM information_schema.columns WHERE table_schema = 'meylux' AND column_name = 'knowledge_time' ORDER BY table_name;"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT to_regclass('meylux.calculated_indicator_vectors'), to_regclass('meylux.market_structure_events'), to_regclass('meylux.market_structure_zones'), to_regclass('meylux.volume_profile_sessions'), to_regclass('meylux.market_regime_states');"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 -c "SELECT has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','SELECT'), has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','INSERT'), has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','UPDATE'), has_table_privilege('meylux_app','meylux.calculated_indicator_vectors','DELETE');"
