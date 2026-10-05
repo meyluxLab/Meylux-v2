@@ -162,6 +162,13 @@ def _close_time(fact: Any) -> datetime:
     return _utc(raw, "candle.close_time")
 
 
+def _close(fact: Any) -> Decimal:
+    payload = _payload(fact)
+    if "close" not in payload:
+        raise GroupBSemanticError("candle payload missing close")
+    return _decimal(payload["close"], "candle.close")
+
+
 def _ohlc(fact: Any) -> tuple[Decimal, Decimal, Decimal, Decimal]:
     payload = _payload(fact)
     try:
@@ -333,7 +340,7 @@ def analyze_s02(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                             candle_times.append((close, candle))
                     if candle_times:
                         current_close_time, current = max(candle_times, key=lambda item: (item[0], str((item[1].metadata or {}).get("record_id"))))
-                        current_price = _ohlc(current)[3]
+                        current_price = _close(current)
                         protected_level = _decimal(_payload(latest_protected)["level"], "protected.level")
                         relation = "ABOVE" if current_price > protected_level else "BELOW" if current_price < protected_level else "AT"
                         difference = current_price - protected_level
@@ -356,7 +363,7 @@ def analyze_s02(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
 
                 if candles:
                     current_times = [(_close_time(candle), candle) for candle in candles if _close_time(candle) <= snapshot.as_of]
-                    current_price = _ohlc(max(current_times, key=lambda item: item[0])[1])[3] if current_times else None
+                    current_price = _close(max(current_times, key=lambda item: item[0])[1]) if current_times else None
                 else:
                     current_price = None
                 if current_price is None:
