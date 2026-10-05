@@ -1891,3 +1891,10 @@ records:
       - append-only specialist persistence
       - explicit unavailable/insufficient behavior
       - no later P5 scope
+
+  - stable_id: ADR-GOVERNANCE-014
+    canonical_name: Required Capability Continuation & No-Drop Prerequisite Resolution
+    entity_type: ADR
+    artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-014.md
+    traceability: Project Owner Ratification 2026-10-05 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: RATIFIED / AUTHORIZED
