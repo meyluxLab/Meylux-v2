@@ -1759,3 +1759,16 @@ records:
     artifact_path: docs/audits/AR-P4-020.md
     traceability: BR-P4-013 / TO-P4-013 / PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-005 dependency / EXEC-LOG-TO-P4-013-CONTROL-RUNTIME-20261005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
+
+  - stable_id: STEP-P5-005
+    canonical_name: Group B: Market Structure, Price Action, Liquidity
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P5.md
+    traceability: PH-P5 / STEP-P5-004 / TO-P5-005 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
+    status: ACTIVE / AUTHORIZED
+  - stable_id: TO-P5-005
+    canonical_name: Group B: Market Structure, Price Action, Liquidity
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P5-005.md
+    traceability: PH-P5 / STEP-P5-005 / STEP-P5-004 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
+    status: AUTHORIZED TO EXECUTE
