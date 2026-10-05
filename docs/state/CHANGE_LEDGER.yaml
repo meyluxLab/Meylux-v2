@@ -3212,3 +3212,35 @@ entries:
       readme: UPDATED
       standalone_task_order: CREATED
       machine_readback: COMPLETED
+  - ledger_id: CL-P5-005-CLOSURE-20261005
+    date: 2026-10-05
+    actor_role: ROL-V2-001
+    action: CONTROL INDEPENDENT VERIFICATION AND CLOSURE — STEP-P5-005 / TO-P5-005
+    predecessor_state: STEP-P5-005 ACTIVE / AUTHORIZED; TO-P5-005 AUTHORIZED TO EXECUTE; active_task_order TO-P5-005
+    evidence:
+      producer_build_report: BR-P5-006
+      correction_implementation_revision: 22fad8ff7db31a1541e2027727fabf307001d5e5
+      correction_test_revision: 045151f71dc93f7870dfccf3c4702eebd759c1ec
+      merged_revision: 779201ea95c3f067d5a115d0f532be660b5f7454
+      audit_report: AR-P5-005
+      execution_log: EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005
+      runtime_snapshot: b4197da28bfea856fe9817f8bfe0cdf67ac4d85379078783f4a677dbea1d65f8
+      group_b_tests: 10/10 PASS
+      docker_ci: 37353188986 SUCCESS
+      core_ci: 37353188995 FAILURE in existing foundation-test stage; not claimed green
+      replay_idempotency: VERIFIED
+      specialist_readback: VERIFIED
+      application_immutability: VERIFIED
+    resulting_state: STEP-P5-005 COMPLETE / VERIFIED; TO-P5-005 VERIFIED / COMPLETE; active_task_order null; PH-P5 ACTIVE / AUTHORIZED
+    scope: S-02 Market Structure; S-11 Price Action; S-12 Liquidity; authoritative InputSnapshot; EvidenceRef resolution; temporal/no-lookahead; replay/idempotency; persistence/read-back; append-only/security
+    exclusions: STEP-P5-006 and later; PRQ-2/PRQ-3 expansion; provider expansion; Futures/Forex expansion; new P4 mathematics; P4 reopening; P6 synthesis; trading/capital/execution
+    synchronization:
+      checkpoint: UPDATED
+      phases_registry: UPDATED
+      artifacts_registry: UPDATED
+      specialized_registries: UPDATED
+      readme: PENDING
+      task_order: UPDATED
+      audit_report: CREATED
+      execution_log: CREATED
+    note: S-12 real-data runtime returned explicit INSUFFICIENT_DATA because authoritative LIQUIDITY_POOL records are absent; no synthetic fallback or provider expansion was introduced. Producer Build Report test-count discrepancy is preserved in AR-P5-005.
