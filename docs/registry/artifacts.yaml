@@ -1898,3 +1898,12 @@ records:
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-014.md
     traceability: Project Owner Ratification 2026-10-05 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: RATIFIED / AUTHORIZED
+
+  - stable_id: DOC-P5-003
+    canonical_name: Retrospective / Corrective Assessment — P5-005 / S-12 Liquidity
+    entity_type: DOCUMENT
+    artifact_type: ASSESSMENT
+    artifact_path: docs/operations/RETRO-P5-005-S12-CORRECTIVE-ASSESSMENT.md
+    traceability: ADR-GOVERNANCE-014 / PH-P5 / STEP-P5-005 / TO-P5-005 / BR-P5-006 / AR-P5-005 / EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005
+    status: PRODUCED / UNVERIFIED
+    disposition: D — UNRESOLVED REQUIRED PREREQUISITE / CAUSAL RESOLUTION REQUIRED
