@@ -13,6 +13,7 @@ ADRs:
 - `ADR-GOVERNANCE-011` — SentinelX Broad Operational Privilege Model — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
 - `ADR-GOVERNANCE-012` — Mandatory Peripheral Synchronization Checklist — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
 - `ADR-GOVERNANCE-013` — Standing Role Operating Rules & Session Anti-Drift Mechanism — RATIFIED / AUTHORIZED FOR IMPLEMENTATION
+- `ADR-GOVERNANCE-014` — Required Capability Continuation & No-Drop Prerequisite Resolution — RATIFIED / AUTHORIZED
 - `ADR-QUANTITATIVE-001` — Authoritative Market Structure Semantics for STEP-P4-003 — RATIFIED / AUTHORIZED
 - `ADR-QUANTITATIVE-002` — Volume Profile, Order Flow & Derivatives Semantics — RATIFIED / AUTHORIZED
 
