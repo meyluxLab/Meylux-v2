@@ -3269,3 +3269,30 @@ entries:
       machine_readback: COMPLETED
     note: P5-005 / S-12 is intentionally not embedded in ADR-GOVERNANCE-014; its retrospective/corrective assessment remains a separate case-specific artifact and no corrective implementation is authorized by this ratification.
     final_checkpoint_sync_commit: e79f2ebe45fa7eb41eb9a7cb1ae4eeb715395491
+
+  - ledger_id: CL-GOV-P5-005-S12-RETRO-20261005
+    date: 2026-10-05
+    actor_role: ROL-V2-001
+    action: CONTROL RETROSPECTIVE / CORRECTIVE ASSESSMENT — P5-005 / S-12 UNDER ADR-GOVERNANCE-014
+    predecessor_state: ADR-GOVERNANCE-014 RATIFIED / AUTHORIZED; PH-P5 ACTIVE / AUTHORIZED; STEP-P5-005 COMPLETE / VERIFIED; TO-P5-005 VERIFIED / COMPLETE; active_task_order null
+    evidence:
+      assessment: DOC-P5-003
+      historical_task_order: TO-P5-005
+      historical_build_report: BR-P5-006
+      historical_audit_report: AR-P5-005
+      historical_runtime: EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005
+      authoritative_p4_semantics: DOC-P4-002 / ADR-QUANTITATIVE-001
+      p5_fact_matrix: docs/requirements/P5_002_FACT_REQUIREMENTS_MATRIX.md
+    resulting_state: DOC-P5-003 PRODUCED / UNVERIFIED; classification D — UNRESOLVED REQUIRED PREREQUISITE / CAUSAL RESOLUTION REQUIRED
+    scope: Determine whether the questioned S-12 prerequisite is genuinely required before selecting any corrective mechanism
+    exclusions: No historical evidence mutation; no P5-005 reopening; no corrective implementation; no provider/data-source/calculation/database/schema/contract solution selected
+    synchronization:
+      assessment_artifact: CREATED
+      artifacts_registry: UPDATED
+      checkpoint: UPDATED
+      historical_evidence: UNCHANGED
+      specialized_registries: NOT APPLICABLE
+      readme: CHECKED — current Phase/Step summary remains accurate
+      standalone_case_artifact: REGISTERED
+      machine_readback: COMPLETED
+    note: The assessment distinguishes the required authoritative liquidity fact/evaluation surface from the non-required condition of having at least one liquidity-pool record in every runtime snapshot. Causal resolution remains required before any corrective mechanism is selected.
