@@ -140,11 +140,11 @@ class TestP5005GroupB(unittest.TestCase):
         current_open = T0 + timedelta(hours=1, minutes=15)
         records = [
             _record("c1", "meylux.canonical_candles", {
-                "open": "105", "high": "106", "low": "103", "close": "103.5",
+                "open": "104.5", "high": "105", "low": "103", "close": "103.5",
                 "close_time": (previous_open + timedelta(minutes=15)).isoformat().replace("+00:00", "Z"),
             }, event_time=previous_open, knowledge_time=previous_open + timedelta(minutes=15)),
             _record("c2", "meylux.canonical_candles", {
-                "open": "103", "high": "104.5", "low": "100", "close": "104.5",
+                "open": "103", "high": "104.6", "low": "100", "close": "104.5",
                 "close_time": (current_open + timedelta(minutes=15)).isoformat().replace("+00:00", "Z"),
             }, event_time=current_open, knowledge_time=current_open + timedelta(minutes=15)),
             _record("zone", "meylux.market_structure_zones", {
@@ -202,7 +202,7 @@ class TestP5005GroupB(unittest.TestCase):
         record = _record("bad", "meylux.market_structure_events", {
             "event_type": "STRUCTURE_STATE", "structural_state": "TRENDING_UP",
             "event_location": T0,
-        }, venue="MEXC", event_time=T0, knowledge_time=T0)
+        }, symbol="BINANCE:BTCUSDT", venue="MEXC", event_time=T0, knowledge_time=T0)
         with self.assertRaises(GroupBSemanticError):
             analyze_s02(_snapshot(record), CONFIG)
 
