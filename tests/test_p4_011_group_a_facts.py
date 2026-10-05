@@ -595,9 +595,36 @@ class TestP4011GroupAFacts(unittest.TestCase):
             payload = json.loads(args[12])
             if args[4] in {"HH", "HL", "LH", "LL"}:
                 self.assertEqual(len(payload["source_member_identities"]), 2)
-                self.assertEqual(payload["source_event_identity"], None)
+                self.assertIsNotNone(payload["source_event_identity"])
+                self.assertIn(payload["source_event_identity"], event_ids)
+                self.assertEqual(payload["source_member_identities"][0], payload["source_event_identity"])
                 for member_id in payload["source_member_identities"]:
                     self.assertIn(member_id, event_ids)
+
+        # DOC-P4-002 source-sensitive identity: each classification identity must
+        # be derived from the immediately preceding confirmed same-side swing.
+        for event in classifications:
+            same_side = [
+                candidate for candidate in facts.events
+                if candidate.event_type == ("SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW")
+                and candidate.event_location < event.event_location
+                and candidate.identity == event.source_event_identity
+            ]
+            self.assertEqual(len(same_side), 1)
+            expected_source = same_side[0].identity
+            self.assertEqual(event.source_event_identity, expected_source)
+
+        replay = QuantitativeOrchestrator().process(tuple(values), config()).structural_facts["15m"].events
+        first_class = {
+            (event.event_type, event.event_location): event.identity
+            for event in classifications
+        }
+        replay_class = {
+            (event.event_type, event.event_location): event.identity
+            for event in replay
+            if event.event_type in {"HH", "HL", "LH", "LL"}
+        }
+        self.assertEqual(first_class, replay_class)
         zone_rows = [
             args for query, args in db.sql if "INSERT INTO meylux.market_structure_zones" in query
         ]
