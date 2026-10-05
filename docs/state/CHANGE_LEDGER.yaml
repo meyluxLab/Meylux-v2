@@ -3244,3 +3244,26 @@ entries:
       audit_report: CREATED
       execution_log: CREATED
     note: S-12 real-data runtime returned explicit INSUFFICIENT_DATA because authoritative LIQUIDITY_POOL records are absent; no synthetic fallback or provider expansion was introduced. Producer Build Report test-count discrepancy is preserved in AR-P5-005.
+
+  - ledger_id: CL-GOV-ADR-014-RATIFICATION-20261005
+    date: 2026-10-05
+    actor_role: ROL-V2-001
+    action: CONTROL GOVERNANCE RATIFICATION SYNCHRONIZATION — ADR-GOVERNANCE-014
+    predecessor_state: ADR-GOVERNANCE-014 absent from repository; Project Owner accepted the revised project-wide structure and authorized formal ratification
+    evidence:
+      adr: docs/decisions/ADR/ADR-GOVERNANCE-014.md
+      adr_commit: 10005d8064c6eedfb1c9d89fe3b5b6b68fd295af
+      adr_index_sync_commit: 9ce813102e7810f7f3173c3c5ea08514131cbce6
+      artifact_protocol_sync_commit: 94152b8c69a67f4f53c324bc2f0204641d0e2412
+      artifacts_registry_sync_commit: 3e1a14cf3813c2ee87e0b2faccc701f6bcb0bb9e
+    resulting_state: ADR-GOVERNANCE-014 RATIFIED / AUTHORIZED; project-wide normative governance rule established
+    scope: Governance policy only; runtime, VPS, implementation, corrective Task Order authorization and historical case state unchanged
+    preserved_state: PH-P5 ACTIVE / AUTHORIZED; STEP-P5-005 COMPLETE / VERIFIED; TO-P5-005 VERIFIED / COMPLETE; active_task_order null
+    synchronization:
+      adr_index: UPDATED
+      artifact_protocol: UPDATED
+      artifacts_registry: UPDATED
+      checkpoint: PENDING IN SAME GOVERNANCE CYCLE
+      historical_evidence: UNCHANGED
+      unrelated_project_state: UNCHANGED
+    note: P5-005 / S-12 is intentionally not embedded in ADR-GOVERNANCE-014; its retrospective/corrective assessment remains a separate case-specific artifact and no corrective implementation is authorized by this ratification.
