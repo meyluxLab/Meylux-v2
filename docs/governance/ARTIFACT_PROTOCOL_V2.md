@@ -247,3 +247,42 @@ Phase/Step: <current> | Active TO: <id or null>
 ```
 
 The footer is a reporting device only. It does not grant authority, and `R2 INCLUDED ABOVE` is valid only when the required message was actually produced.
+
+
+## Required Capability Continuation & No-Drop Prerequisite Resolution
+
+Established by `ADR-GOVERNANCE-014`, ratified by the Project Owner.
+
+### Normative rule
+
+Where a capability remains within the authoritative required boundary and a prerequisite necessary to establish that capability is missing, unavailable, unresolved, or not yet authoritative, that prerequisite creates an explicit **resolution obligation**. It is not a permanent completion endpoint and the required capability may not be silently abandoned.
+
+### Runtime status versus capability completion
+
+**RUNTIME STATUS ≠ CAPABILITY COMPLETION STATUS.** Runtime status records what an actual execution established under the evidence and prerequisites available at that execution. Capability completion records whether the intended capability satisfied its authoritative requirements, prerequisites, acceptance conditions, evidence requirements, and independent verification requirements.
+
+Truthful states such as `PARTIAL`, `INSUFFICIENT_DATA`, `UNAVAILABLE`, `UNAVAILABLE_INPUT`, or `SKIPPED` remain valid where they accurately describe execution. They do not, by themselves, establish completion of a currently required capability.
+
+### Resolution obligation
+
+For an unresolved required prerequisite, the affected record must preserve, as applicable: the affected capability; computable/verifiable portion; uncomputable/unverifiable portion; exact limitation; missing prerequisite; resolution question/path; responsible boundary; evidence required for resolution; and acceptance consequence.
+
+No fabricated value, synthetic evidence presented as authoritative, unjustified fallback, silent data repair, or silent provider/contract/schema substitution may be used to manufacture capability completion.
+
+### Bounded corrective work
+
+Corrective expansion is permitted only to the extent necessary to resolve the identified prerequisite and establish the required capability. It must remain bounded, outcome-driven, authorized, traceable, and independently verifiable. Unrelated improvements remain outside the corrective boundary.
+
+A capability may cease to create a resolution obligation only when it is formally removed from the applicable required boundary through the proper governance authority. Runtime difficulty or an incomplete runtime status does not constitute such removal.
+
+### Historical evidence and retrospective review
+
+Historical Build Reports, Audit Reports, Task Orders, runtime evidence, execution evidence, statuses, closure records, and other evidence-bearing artifacts remain unchanged unless a separate governed correction mechanism explicitly authorizes otherwise. Later evidence establishes later state; it does not rewrite a historical execution.
+
+Retrospective application of this rule must classify each affected case individually and distinguish: no impact; legitimate investigation/disposition; resolved upstream dependency; unresolved required prerequisite; boundary ambiguity; and architectural/contract conflict. Corrective classification does not itself authorize implementation.
+
+### Governance relationships
+
+`ADR-GOVERNANCE-012` remains authoritative for CONTROL-owned closure synchronization. `ADR-GOVERNANCE-013` remains authoritative for continuation, same-response communication, large-artifact retrieval, SentinelX-only VPS execution, and maximum-quality requirements. `ADR-GOVERNANCE-014` adds the required-capability continuation/no-drop semantic and does not replace or weaken those decisions.
+
+This section does not authorize any Phase, Step, Task Order, VPS/runtime action, architectural change, or implementation by itself.
