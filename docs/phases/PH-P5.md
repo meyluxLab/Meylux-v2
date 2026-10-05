@@ -2,7 +2,7 @@
 
 **Status:** ACTIVE / AUTHORIZED
 **Current Step Lifecycle:** `STEP-P5-005` — ACTIVE / AUTHORIZED
-**Active Task Order:** `null`
+**Active Task Order:** `TO-P5-005`
 **Active Corrective Dependency:** `null` — `TO-P4-013` VERIFIED / COMPLETE under `AR-P4-020`
 **Last Completed Task Order:** `TO-P5-004`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
@@ -57,7 +57,7 @@ Phase 5 interprets authoritative upstream facts through independent specialist d
 **Completion Audit:** `AR-P5-002`
 **Authorization state:** COMPLETE / VERIFIED
 **Predecessor:** `STEP-P4-006` — COMPLETE / VERIFIED
-**Active Task Order:** `null`
+**Active Task Order:** `TO-P5-005`
 **Activation basis:** Project Owner — PHASE 5 RE-DIRECTION AND SIMPLIFIED ESTABLISHMENT DIRECTIVE — 2026-09-23
 
 Purpose: establish the specialist contract/evidence model, configuration and append-only persistence foundation required by later Phase 5 execution, while preserving Stage-1 independence and the frozen architecture.
@@ -73,7 +73,7 @@ Required evidence includes deterministic contract semantics, explicit status/rea
 **Authorization state:** COMPLETE / VERIFIED  
 **Completion Audit:** `AR-P5-002`  
 **Predecessor:** `STEP-P5-001` — COMPLETE / VERIFIED  
-**Active Task Order:** `null`  
+**Active Task Order:** `TO-P5-005`  
 **Activation basis:** Project Owner — PHASE 5 CONTINUATION AUTHORIZATION — 2026-09-23
 
 Purpose: establish the authoritative Stage-1 Input Snapshot boundary and the Fact Requirements Matrix (FRM), using only existing authoritative persisted facts and preserving no-lookahead, provenance, deterministic identity and specialist independence.
