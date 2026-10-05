@@ -967,7 +967,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-013.md
     traceability: PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-005 dependency / PRQ-1 Group-B / TO-P4-012 / AR-P4-019 / DOC-P4-002 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-04
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
 
   - stable_id: STEP-P5-002
     canonical_name: Input Snapshot Builder & Fact Availability Verification
@@ -1750,4 +1750,12 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-013.md
     traceability: TO-P4-013 / PH-P4 / STEP-P4-006 / STEP-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: PRODUCED / PENDING CONTROL AUDIT
+    status: VERIFIED
+
+
+  - stable_id: AR-P4-020
+    canonical_name: CONTROL Independent Verification — TO-P4-013
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-020.md
+    traceability: BR-P4-013 / TO-P4-013 / PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-005 dependency / EXEC-LOG-TO-P4-013-CONTROL-RUNTIME-20261005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
