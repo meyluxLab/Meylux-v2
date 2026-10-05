@@ -514,14 +514,14 @@ records:
     logical_name: Group B: Market Structure, Price Action, Liquidity
     entity_type: STEP
     phase: PH-P5
-    status: ACTIVE / AUTHORIZED
-    authorization_state: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
+    authorization_state: COMPLETE / VERIFIED
     order: 5
     predecessor: STEP-P5-004
     activation_basis: PROJECT-OWNER-NEXT-GOVERNED-STEP-DETERMINATION-2026-10-05
-    active_task_order: TO-P5-005
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P5-005
+    completion_audit: AR-P5-005
     purpose: Establish deterministic Group-B specialist capability for S-02 Market Structure, S-11 Price Action and S-12 Liquidity using authoritative P4 persisted events/zones through the Stage-1 Input Snapshot.
     repository_scope: S-02/S-11/S-12 contracts and implementations, Group-B evidence interpretation, EvidenceRef resolution, persistence/read-back, deterministic replay/idempotency, tests and required runtime evidence within STEP-P5-005 only.
     dependency_boundary:
