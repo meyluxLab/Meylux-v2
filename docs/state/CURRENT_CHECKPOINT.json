@@ -339,7 +339,8 @@
     "CMP-P5-005",
     "OBS-P5-005",
     "REQ-P5-005",
-    "CTR-P5-005"
+    "CTR-P5-005",
+    "ADR-GOVERNANCE-014"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -401,7 +402,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "779201ea95c3f067d5a115d0f532be660b5f7454",
-  "updated_at_utc": "2026-10-05T19:17:07.637Z",
+  "updated_at_utc": "2026-10-05T20:13Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -468,7 +469,7 @@
       "final_sync_commit": "1f3bb91606c0551ecb4c1b815c0966ae6bfbee2b"
     }
   },
-  "last_governance_sync_base_commit": "e7efb0ae675e6c8941072225075f068ef8acc40d",
+  "last_governance_sync_base_commit": "3e1a14cf3813c2ee87e0b2faccc701f6bcb0bb9e",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -512,7 +513,8 @@
     "Project Owner authorized complete resolution of the Group-B dependency for intended STEP-P5-005 on 2026-10-04; CONTROL created and activated TO-P4-013 as a post-closure P4-owned additive continuation. STEP-P5-005 remains NOT ACTIVATED pending independent verification of PRQ-1 Group-B structural event/zone capability.",
     "CONTROL independently verified TO-P4-013 under AR-P4-020 after PR #65 merged as 0be8406454ad933a23ac1d33609553731ab23000. Exact implementation revision 7c809edc38cb08451f605383af568febb9ef6827 passed final CI and isolated SentinelX runtime execution using 117 15m, 31 1h and 10 4h authoritative canonical candles; first execution produced 248 structural events and 64 zones, replay added zero; Group-B PRQ-1 is ESTABLISHED / VERIFIED; STEP-P5-005 remains NOT ACTIVATED.",
     "CONTROL synchronized the standalone TO-P4-013 status-bearing document to VERIFIED / COMPLETE after AR-P4-020; no Producer implementation content was rewritten.",
-    "CONTROL activated STEP-P5-005 / TO-P5-005 on 2026-10-05 after independent SoT review. Group-B upstream dependency TO-P4-013 / AR-P4-020 is VERIFIED / COMPLETE; no unresolved prerequisite remains. 5m is explicitly out of the current governed acceptance boundary unless a real in-scope dependency is demonstrated."
+    "CONTROL activated STEP-P5-005 / TO-P5-005 on 2026-10-05 after independent SoT review. Group-B upstream dependency TO-P4-013 / AR-P4-020 is VERIFIED / COMPLETE; no unresolved prerequisite remains. 5m is explicitly out of the current governed acceptance boundary unless a real in-scope dependency is demonstrated.",
+    "Project Owner ratified ADR-GOVERNANCE-014 on 2026-10-05 as the project-wide Required Capability Continuation & No-Drop Prerequisite Resolution rule. ADR index, Artifact Protocol, artifact registry, and Change Ledger were synchronized; PH-P5 / STEP-P5-005 historical closure remains unchanged and no corrective implementation is authorized by this ratification."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
