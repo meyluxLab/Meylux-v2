@@ -1,7 +1,7 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-004` — COMPLETE / VERIFIED
+**Current Step Lifecycle:** `STEP-P5-005` — ACTIVE / AUTHORIZED
 **Active Task Order:** `null`
 **Active Corrective Dependency:** `null` — `TO-P4-013` VERIFIED / COMPLETE under `AR-P4-020`
 **Last Completed Task Order:** `TO-P5-004`  
@@ -128,7 +128,7 @@ The Group-A boundary includes configured technical facts (EMA, RSI-14, MACD 12/2
 
 Required evidence includes deterministic specialist behavior, boundary/golden-vector tests, no-lookahead, real `INSUFFICIENT_DATA` behavior where applicable, EvidenceRef resolution, replay/idempotency, append-only persistence/read-back, specialist independence, applicable runtime/VPS evidence and a reproducible performance/resource baseline.
 
-VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation remains within the authorized development workspace. `STEP-P5-005` and later Steps remain unauthorized and out of scope.
+VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation remains within the authorized development workspace. `STEP-P5-006` and later Steps remain unauthorized and out of scope.
 
 ## Continuation and Dependency Rule
 
@@ -141,4 +141,15 @@ This Phase is not CLOSED by this establishment. Each Step requires its own Build
 
 ## STEP-P5-004 Closure
 
-`STEP-P5-004` / `TO-P5-004` is COMPLETE / VERIFIED under `AR-P5-004`. CONTROL independently verified the corrected Group-A implementation against CI, authoritative P4 PostgreSQL records, Redis → specialist worker → PostgreSQL persistence/read-back, replay/idempotency, append-only security boundaries and runtime performance/resource evidence. `PH-P5` remains ACTIVE / AUTHORIZED; no later Step is activated.
+`STEP-P5-004` / `TO-P5-004` is COMPLETE / VERIFIED under `AR-P5-004`. CONTROL independently verified the corrected Group-A implementation against CI, authoritative P4 PostgreSQL records, Redis → specialist worker → PostgreSQL persistence/read-back, replay/idempotency, append-only security boundaries and runtime performance/resource evidence. `PH-P5` remains ACTIVE / AUTHORIZED; `STEP-P5-005` is the active governed Step; no later Step is activated.
+
+
+## STEP-P5-005 Activation
+
+`STEP-P5-005` / `TO-P5-005` is ACTIVE / AUTHORIZED under the Project Owner next-step determination directive dated 2026-10-05.
+
+The prerequisite `PRQ-1 Group-B P4 capability` is ESTABLISHED / VERIFIED under `TO-P4-013 / AR-P4-020`. The active scope is S-02 Market Structure, S-11 Price Action and S-12 Liquidity using authoritative persisted P4 facts through the Stage-1 Input Snapshot.
+
+The governed acceptance boundary remains BTCUSDT 15m primary with eligible 1h/4h context. The repository's 5m capability is supported and semantically defined but has not been independently runtime-verified and is not required by this Step absent an actual dependency.
+
+`STEP-P5-006` and later Steps remain unauthorized.
