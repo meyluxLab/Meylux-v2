@@ -87,11 +87,23 @@ def _context(fact: Any, symbol: str, timeframe: str, venue: str) -> bool:
     if not all(isinstance(value, str) and value.strip() for value in (raw_symbol, raw_timeframe, raw_venue)):
         raise GroupBSemanticError("Group-B fact lacks explicit symbol/timeframe/venue context")
     normalized_symbol = raw_symbol.strip().upper()
-    if normalized_symbol != symbol and normalized_symbol != f"{venue}:{symbol}":
-        if ":" in normalized_symbol and normalized_symbol.split(":", 1)[1] == symbol:
+    normalized_venue = raw_venue.strip().upper()
+    if ":" in normalized_symbol:
+        qualified_venue, qualified_symbol = normalized_symbol.split(":", 1)
+        if qualified_symbol != symbol:
+            return False
+        # A qualified instrument is authoritative venue context. A fact whose
+        # explicit venue disagrees with that qualification is intrinsically
+        # contradictory and must remain rejected. A well-formed fact belonging
+        # to another configured venue is simply outside this venue's candidate
+        # set and must not poison the current venue evaluation.
+        if qualified_venue != normalized_venue:
             raise GroupBSemanticError("qualified instrument conflicts with explicit venue")
+        if qualified_venue != venue:
+            return False
+    elif normalized_symbol != symbol:
         return False
-    if raw_timeframe.strip().lower() != timeframe or raw_venue.strip().upper() != venue:
+    if normalized_venue != venue or raw_timeframe.strip().lower() != timeframe:
         return False
     event_time = metadata.get("event_time")
     knowledge_time = metadata.get("knowledge_time", fact.knowledge_time)
