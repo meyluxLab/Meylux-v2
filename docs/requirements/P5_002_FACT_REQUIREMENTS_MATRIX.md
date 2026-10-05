@@ -97,7 +97,7 @@ Existing P2/P3/P4 persistence ownership remains unchanged.
 | PRQ-1 surface | Authoritative disposition | Gate |
 |---|---|---|
 | Group A — Technical / MTF / Volatility | **ESTABLISHED / VERIFIED** — TO-P4-011 / AR-P4-018 | STEP-P5-004 |
-| Group B — Structure / Price Action / Liquidity P4 persisted events/zones | **FUTURE-OWNED / JIT**; not required by STEP-P5-004 | STEP-P5-005 |
+| Group B — Structure / Price Action / Liquidity P4 persisted events/zones | **ESTABLISHED / VERIFIED** — TO-P4-013 / AR-P4-020 | STEP-P5-005 |
 | Group C — Volume / Volume Profile | **FUTURE-OWNED / JIT**; not required by STEP-P5-004 | STEP-P5-006 |
 | Group D — Order Flow P4 facts | **FUTURE-OWNED / JIT** and additionally dependent on PRQ-2 | STEP-P5-007 |
 | Group D — Derivatives | **NOT A CURRENT PRQ-1 DELIVERY CLAIM**; governed by PRQ-3 and future STEP-P5-007 | STEP-P5-007 |
@@ -105,4 +105,4 @@ Existing P2/P3/P4 persistence ownership remains unchanged.
 | Group F — Historical/setup P4 fact inputs | **FUTURE-OWNED / JIT** | STEP-P5-009 |
 | Group G — Contrarian source facts | **FUTURE-OWNED / JIT** | STEP-P5-010 |
 
-This disposition is complete for the current pre-STEP-P5-004 boundary. It does not claim full PRQ-1 implementation across later Groups B–G.
+This disposition is now updated for the STEP-P5-005 activation boundary. Group-B upstream P4 capability is ESTABLISHED / VERIFIED; the P5 Group-B specialist implementation itself remains ACTIVE / AUTHORIZED under TO-P5-005. Later Groups C–G remain separately governed.
