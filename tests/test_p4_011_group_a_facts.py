@@ -597,7 +597,8 @@ class TestP4011GroupAFacts(unittest.TestCase):
                 self.assertEqual(len(payload["source_member_identities"]), 2)
                 self.assertIsNotNone(payload["source_event_identity"])
                 self.assertIn(payload["source_event_identity"], event_ids)
-                self.assertEqual(payload["source_member_identities"][0], payload["source_event_identity"])
+                self.assertEqual(payload["source_member_identities"][0], args[-2])
+                self.assertEqual(payload["source_member_identities"][1], payload["source_event_identity"])
                 for member_id in payload["source_member_identities"]:
                     self.assertIn(member_id, event_ids)
 
