@@ -291,3 +291,20 @@ records:
     validation: canonical JSON round-trip; explicit UTC temporal reconstruction; Snapshot identity revalidation; provider/venue/timeframe preservation; semantic failures are non-retryable.
     provenance: BR-P5-004 / AR-P5-003
     status: VERIFIED
+
+- stable_id: CTR-P5-005
+    canonical_name: TO-P5-005 Group-B Specialist Contract Acceptance
+    entity_type: CONTRACT
+    phase: PH-P5
+    step: STEP-P5-005
+    task_order: TO-P5-005
+    traceability: TO-P5-005 / BR-P5-006 / AR-P5-005
+    contract_boundary: InputSnapshot -> EvidenceRef-resolved S-02/S-11/S-12 -> SpecialistOutput
+    evidence:
+      venue_isolation: VERIFIED
+      contradiction_rejection: VERIFIED
+      temporal_boundary: VERIFIED
+      deterministic_identity: VERIFIED
+      specialist_independence: VERIFIED
+      control_audit: AR-P5-005
+    status: VERIFIED
