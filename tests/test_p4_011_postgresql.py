@@ -513,7 +513,10 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         source_ids = data["source_event_identity"].split(",")
                         for source_id in source_ids:
                             self.assertIn(source_id, event_ids)
-                        self.assertEqual(data["source_member_identities"], source_ids)
+                        if row["event_type"] in {"HH", "HL", "LH", "LL"}:
+                            self.assertEqual(data["source_member_identities"], [row["record_id"], *source_ids])
+                        else:
+                            self.assertEqual(data["source_member_identities"], source_ids)
                 self.assertTrue(any(row["event_type"] == "FVG" for row in events))
                 self.assertTrue(any(row["zone_type"] == "FVG" for row in zones))
                 fvg_lifecycle_zones = [
