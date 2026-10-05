@@ -388,7 +388,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "7c809edc38cb08451f605383af568febb9ef6827",
-  "updated_at_utc": "2026-10-05T06:11:54.037Z",
+  "updated_at_utc": "2026-10-05T06:13:25.186Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -455,7 +455,7 @@
       "final_sync_commit": "1f3bb91606c0551ecb4c1b815c0966ae6bfbee2b"
     }
   },
-  "last_governance_sync_base_commit": "0be8406454ad933a23ac1d33609553731ab23000",
+  "last_governance_sync_base_commit": "e7efb0ae675e6c8941072225075f068ef8acc40d",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -497,7 +497,8 @@
     "CONTROL independently verified TO-P4-012 under AR-P4-019 after PR #61 merged as a95f23eabf6d0324fcaacbbed06862881a7e52fa. The Group-A provenance/venue and EMA coverage dependency is resolved; PH-P4 / STEP-P4-006 / G-4 historical closure remains preserved. STEP-P5-004 / TO-P5-004 remain ACTIVE / AUTHORIZED.",
     "CONTROL independently verified TO-P5-004 under AR-P5-004 after Producer correction cycle. Exact EMA alias authority, closed-candle temporal semantics, authoritative PostgreSQL EvidenceRefs, Redis→worker→PostgreSQL persistence/read-back, replay idempotency, append-only UPDATE/DELETE protection, and real runtime performance baseline passed. PR #63 merged as 8f014e216a03378853cd2d74b869ef03d65e907b. STEP-P5-004 is COMPLETE / VERIFIED; TO-P5-004 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later Step is activated.",
     "Project Owner authorized complete resolution of the Group-B dependency for intended STEP-P5-005 on 2026-10-04; CONTROL created and activated TO-P4-013 as a post-closure P4-owned additive continuation. STEP-P5-005 remains NOT ACTIVATED pending independent verification of PRQ-1 Group-B structural event/zone capability.",
-    "CONTROL independently verified TO-P4-013 under AR-P4-020 after PR #65 merged as 0be8406454ad933a23ac1d33609553731ab23000. Exact implementation revision 7c809edc38cb08451f605383af568febb9ef6827 passed final CI and isolated SentinelX runtime execution using 117 15m, 31 1h and 10 4h authoritative canonical candles; first execution produced 248 structural events and 64 zones, replay added zero; Group-B PRQ-1 is ESTABLISHED / VERIFIED; STEP-P5-005 remains NOT ACTIVATED."
+    "CONTROL independently verified TO-P4-013 under AR-P4-020 after PR #65 merged as 0be8406454ad933a23ac1d33609553731ab23000. Exact implementation revision 7c809edc38cb08451f605383af568febb9ef6827 passed final CI and isolated SentinelX runtime execution using 117 15m, 31 1h and 10 4h authoritative canonical candles; first execution produced 248 structural events and 64 zones, replay added zero; Group-B PRQ-1 is ESTABLISHED / VERIFIED; STEP-P5-005 remains NOT ACTIVATED.",
+    "CONTROL synchronized the standalone TO-P4-013 status-bearing document to VERIFIED / COMPLETE after AR-P4-020; no Producer implementation content was rewritten."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
