@@ -3191,3 +3191,24 @@ entries:
       open_questions: CHECKED — no closure-blocking question created
       supplemental_staging_registry: CHECKED — none
       machine_readback: COMPLETED
+
+  - ledger_id: CL-P5-005-ACTIVATION-20261005
+    date_utc: 2026-10-05
+    authority: CONTROL / ROL-V2-001 under Project Owner next-step determination directive
+    role: ROL-V2-001
+    action: "CONTROL FORMALIZATION AND ACTIVATION — STEP-P5-005 / TO-P5-005"
+    basis: "Current SoT read-back + TO-P4-013 / AR-P4-020 VERIFIED + PH-P5 JIT dependency rule + PHASE5_ROADMAP Group-B gate + P5_002_FACT_REQUIREMENTS_MATRIX + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    predecessor_state: "STEP-P5-004 COMPLETE / VERIFIED; TO-P5-004 VERIFIED / COMPLETE; TO-P4-013 VERIFIED / COMPLETE; PRQ-1 Group-B ESTABLISHED / VERIFIED; active_task_order null; PH-P5 ACTIVE / AUTHORIZED."
+    resulting_state: "STEP-P5-005 ACTIVE / AUTHORIZED; TO-P5-005 AUTHORIZED TO EXECUTE; active_task_order TO-P5-005; PH-P5 remains ACTIVE / AUTHORIZED; later P5 Steps remain unauthorized."
+    scope: "S-02 Market Structure, S-11 Price Action, S-12 Liquidity; authoritative Input Snapshot consumption; EvidenceRef resolution; deterministic temporal/no-lookahead behavior; replay/idempotency; applicable persistence/read-back and runtime verification."
+    excluded: "STEP-P5-006 and later; PRQ-2/PRQ-3 unless an actual in-scope dependency is demonstrated; provider expansion; new P4 mathematics; P4 reopening; P6 synthesis; trading/capital/custody/execution."
+    timeframe_disposition: "5m is supported/semantically defined but not independently runtime-verified; it is not required by STEP-P5-005 and is not activated merely because the engine supports it. Governed acceptance remains BTCUSDT 15m primary with eligible 1h/4h context."
+    governance_sync:
+      checkpoint: UPDATED
+      phases_registry: UPDATED
+      artifacts_registry: UPDATED
+      requirements_matrix: UPDATED
+      open_questions: UPDATED
+      readme: UPDATED
+      standalone_task_order: CREATED
+      machine_readback: COMPLETED
