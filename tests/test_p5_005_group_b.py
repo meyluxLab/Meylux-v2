@@ -219,6 +219,66 @@ class TestP5005GroupB(unittest.TestCase):
         self.assertEqual(value["depth_state"], "PARTIAL")
         self.assertIn("no depth-dependent conclusion", value["depth_interpretation"])
 
+    def test_group_b_isolates_unrelated_qualified_venue_across_all_specialists(self):
+        records = [
+            _record(
+                "binance-state", "meylux.market_structure_events",
+                {"event_type": "STRUCTURE_STATE", "structural_state": "TRENDING_UP"},
+                symbol="BINANCE:BTCUSDT", venue="BINANCE",
+                event_time=T0, knowledge_time=T0,
+            ),
+            _record(
+                "mexc-state", "meylux.market_structure_events",
+                {"event_type": "STRUCTURE_STATE", "structural_state": "TRENDING_DOWN"},
+                symbol="MEXC:BTCUSDT", venue="MEXC",
+                event_time=T0, knowledge_time=T0,
+            ),
+            _record(
+                "mexc-candle-1", "meylux.canonical_candles",
+                {"open": "100", "high": "101", "low": "99", "close": "100",
+                 "close_time": (T0 + timedelta(minutes=15)).isoformat().replace("+00:00", "Z")},
+                symbol="MEXC:BTCUSDT", venue="MEXC",
+                event_time=T0, knowledge_time=T0 + timedelta(minutes=15),
+            ),
+            _record(
+                "mexc-candle-2", "meylux.canonical_candles",
+                {"open": "100", "high": "102", "low": "99", "close": "101",
+                 "close_time": (T0 + timedelta(minutes=30)).isoformat().replace("+00:00", "Z")},
+                symbol="MEXC:BTCUSDT", venue="MEXC",
+                event_time=T0 + timedelta(minutes=15), knowledge_time=T0 + timedelta(minutes=30),
+            ),
+            _record(
+                "mexc-liquidity", "meylux.market_structure_zones",
+                {"event_type": "LIQUIDITY_POOL", "lifecycle": "ACTIVE",
+                 "level": "100", "lower_bound": "100", "upper_bound": "100",
+                 "direction": "bullish", "event_location": T0},
+                symbol="MEXC:BTCUSDT", venue="MEXC",
+                event_time=T0, knowledge_time=T0,
+            ),
+        ]
+        snapshot = _snapshot(*records)
+
+        s02 = analyze_s02(snapshot, CONFIG)
+        s11 = analyze_s11(snapshot, CONFIG)
+        s12 = analyze_s12(snapshot, CONFIG)
+
+        self.assertEqual(
+            _finding(s02, "STRUCTURE:BTCUSDT:BINANCE:15m:STATE").value["state"],
+            "TRENDING_UP",
+        )
+        self.assertEqual(
+            _finding(s02, "STRUCTURE:BTCUSDT:MEXC:15m:STATE").value["state"],
+            "TRENDING_DOWN",
+        )
+        self.assertEqual(
+            _finding(s11, "PRICE_ACTION:BTCUSDT:MEXC:15m:PIN_BAR").value["state"],
+            "NOT_DETECTED",
+        )
+        self.assertEqual(
+            _finding(s12, "LIQUIDITY:BTCUSDT:MEXC:15m").value["zones"][0]["record_id"],
+            "mexc-liquidity",
+        )
+
     def test_group_b_rejects_conflicting_venue_context(self):
         record = _record("bad", "meylux.market_structure_events", {
             "event_type": "STRUCTURE_STATE", "structural_state": "TRENDING_UP",
