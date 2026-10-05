@@ -259,7 +259,9 @@ class QuantitativePersistence:
         interval: timedelta | None,
     ) -> tuple[str, ...]:
         if event.source_event_identity:
-            members = (event.identity, *tuple(event.source_event_identity.split(",")))
+            members = tuple(event.source_event_identity.split(","))
+            if event.event_type in {"HH", "HL", "LH", "LL"}:
+                members = (event.identity, *members)
             if any(not member or member not in event_by_identity for member in members):
                 raise ValueError("structural source/member identity does not resolve to an event in the authoritative analysis")
             return members
