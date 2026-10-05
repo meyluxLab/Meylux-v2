@@ -1,10 +1,10 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-005` — ACTIVE / AUTHORIZED
-**Active Task Order:** `TO-P5-005`
+**Current Step Lifecycle:** `STEP-P5-005` — COMPLETE / VERIFIED under `AR-P5-005`
+**Active Task Order:** `null`
 **Active Corrective Dependency:** `null` — `TO-P4-013` VERIFIED / COMPLETE under `AR-P4-020`
-**Last Completed Task Order:** `TO-P5-004`  
+**Last Completed Task Order:** `TO-P5-005`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
 **Current Corrective Task Order:** `null`
 **Completion Audit:** `AR-P5-004`
@@ -141,10 +141,10 @@ This Phase is not CLOSED by this establishment. Each Step requires its own Build
 
 ## STEP-P5-004 Closure
 
-`STEP-P5-004` / `TO-P5-004` is COMPLETE / VERIFIED under `AR-P5-004`. CONTROL independently verified the corrected Group-A implementation against CI, authoritative P4 PostgreSQL records, Redis → specialist worker → PostgreSQL persistence/read-back, replay/idempotency, append-only security boundaries and runtime performance/resource evidence. `PH-P5` remains ACTIVE / AUTHORIZED; `STEP-P5-005` is the active governed Step; no later Step is activated.
+`STEP-P5-004` / `TO-P5-004` is COMPLETE / VERIFIED under `AR-P5-004`. CONTROL independently verified the corrected Group-A implementation against CI, authoritative P4 PostgreSQL records, Redis → specialist worker → PostgreSQL persistence/read-back, replay/idempotency, append-only security boundaries and runtime performance/resource evidence. `PH-P5` remains ACTIVE / AUTHORIZED; `STEP-P5-005` is COMPLETE / VERIFIED under `AR-P5-005`; no later Step is activated.
 
 
-## STEP-P5-005 Activation
+## STEP-P5-005 Closure
 
 `STEP-P5-005` / `TO-P5-005` is COMPLETE / VERIFIED under `AR-P5-005`; independent runtime acceptance and closure synchronization were completed on merged revision `779201ea95c3f067d5a115d0f532be660b5f7454`.
 
