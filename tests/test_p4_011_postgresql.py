@@ -20,6 +20,24 @@ UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
 SYMBOL = "TO-P4-011-CI:BTCUSDT"
 
+_ZONE_EVENT_TYPES = {
+    "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
+    "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
+}
+
+
+def _expected_structural_rows(result) -> int:
+    count = 0
+    for facts in result.structural_facts.values():
+        count += len(facts.events)
+        count += sum(
+            event.event_type in _ZONE_EVENT_TYPES
+            and (event.lower_bound is not None or event.upper_bound is not None
+                 or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})
+            for event in facts.events
+        )
+    return count
+
 
 def _candles(
     timeframe: str, count: int, interval_minutes: int, symbol: str = SYMBOL
@@ -88,7 +106,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 40)
+                self.assertEqual(inserted, 40 + _expected_structural_rows(result))
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
@@ -220,7 +238,10 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     primary, config, higher_timeframes={"1h": higher}
                 )
                 persistence = QuantitativePersistence(conn)
-                self.assertEqual(await persistence.persist_orchestration(result), 40)
+                self.assertEqual(
+                    await persistence.persist_orchestration(result),
+                    40 + _expected_structural_rows(result),
+                )
                 primary_rows = await persistence.fetch_family("indicator", symbol, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", symbol, "1h", limit=100)
                 self.assertEqual(len(primary_rows), 19)
@@ -386,6 +407,206 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     invalid_symbol,
                 )
                 self.assertEqual(no_rows[0]["n"], 0)
+                for table in ("market_structure_events", "market_structure_zones"):
+                    no_structural_rows = await conn.fetchval(
+                        f"SELECT count(*) FROM meylux.{table} WHERE symbol=$1",
+                        invalid_symbol,
+                    )
+                    self.assertEqual(no_structural_rows, 0, f"future HTF input must not persist {table}")
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+
+    def test_group_b_structural_events_zones_persist_replay_and_remain_append_only(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"],
+                port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"],
+                user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"],
+                timeout=10,
+                command_timeout=60,
+            )
+            try:
+                config = QuantOrchestrationConfig(
+                    RegimeConfig(2, 2, Decimal("0.10"), Decimal("0.05"), Decimal("0.10"), Decimal("0.05"))
+                )
+                symbol = "TO-P4-013-STRUCTURE:BTCUSDT"
+
+                def with_fvg(candles):
+                    values = list(candles)
+                    for index, fields in enumerate((
+                        {"open": Decimal("100"), "high": Decimal("101"), "low": Decimal("99"), "close": Decimal("100")},
+                        {"open": Decimal("102"), "high": Decimal("103"), "low": Decimal("101"), "close": Decimal("102")},
+                        {"open": Decimal("105"), "high": Decimal("107"), "low": Decimal("104"), "close": Decimal("106")},
+                    )):
+                        values[index] = replace(values[index], **fields)
+                    return tuple(values)
+
+                primary = with_fvg(_candles("15m", 40, 15, symbol))
+                higher_1h = with_fvg(_candles("1h", 10, 60, symbol))
+                higher_4h = _candles("4h", 2, 240, symbol)
+                envelope = QueueEnvelope(
+                    "p4-013-structural-worker-001",
+                    "p4-013-structural-worker-001",
+                    "CTR-P4-QUANT-CANDLE-CLOSE-1.0",
+                    {
+                        "candles": [_wire_candle(item) for item in primary],
+                        "higher_timeframes": {
+                            "1h": [_wire_candle(item) for item in higher_1h],
+                            "4h": [_wire_candle(item) for item in higher_4h],
+                        },
+                    },
+                )
+                persistence = QuantitativePersistence(conn)
+                handler = QuantWorkerHandler(persistence, config)
+                await handler(envelope)
+
+                events = await conn.fetch(
+                    "SELECT * FROM meylux.market_structure_events "
+                    "WHERE symbol=$1 AND event_type <> 'ORCHESTRATION' "
+                    "ORDER BY timeframe,event_time,record_id",
+                    symbol,
+                )
+                zones = await conn.fetch(
+                    "SELECT * FROM meylux.market_structure_zones "
+                    "WHERE symbol=$1 ORDER BY timeframe,event_time,record_id",
+                    symbol,
+                )
+                self.assertTrue(events, "individual StructuralEvent rows must be persisted")
+                self.assertTrue(zones, "zone-bearing structural facts must be persisted")
+                self.assertEqual({row["timeframe"] for row in events}, {"15m", "1h", "4h"})
+                self.assertEqual({row["timeframe"] for row in zones}, {"15m", "1h"})
+                self.assertTrue(all(row["knowledge_time"] is not None for row in events))
+                self.assertTrue(all(row["knowledge_time"] is not None for row in zones))
+                self.assertTrue(all(row["knowledge_time"] <= primary[-1].close_time for row in events + zones))
+                self.assertTrue(all(row["event_time"] <= row["knowledge_time"] for row in events + zones))
+                self.assertTrue(all(row["venue_context"] is None for row in events + zones),
+                                "fixture provenance must not be promoted to an inferred venue")
+
+                def payload(row):
+                    value = row["payload_json"]
+                    return value if isinstance(value, dict) else json.loads(value)
+
+                event_ids = {row["record_id"] for row in events}
+                for row in events:
+                    data = payload(row)
+                    self.assertEqual(row["record_id"], row["identity_hash"])
+                    self.assertEqual(data["event_identity"], row["record_id"])
+                    self.assertEqual(data["event_type"], row["event_type"])
+                    self.assertEqual(data["event_location"], row["event_time"].isoformat().replace("+00:00", "Z"))
+                    self.assertEqual(
+                        datetime.fromisoformat(data["confirmation_time"].replace("Z", "+00:00")),
+                        row["knowledge_time"],
+                    )
+                    self.assertTrue(data["source_candle_provenance"])
+                    self.assertTrue(data["confirmation_candle_provenance"])
+                    self.assertTrue(data["source_window_provenance"])
+                    self.assertIsInstance(data["source_member_identities"], list)
+                    for member_id in data["source_member_identities"]:
+                        self.assertIn(member_id, event_ids)
+                    if row["event_type"] in {"HH", "HL", "LH", "LL"}:
+                        self.assertEqual(len(data["source_member_identities"]), 2)
+                    if data["source_event_identity"]:
+                        source_ids = data["source_event_identity"].split(",")
+                        for source_id in source_ids:
+                            self.assertIn(source_id, event_ids)
+                        if row["event_type"] in {"HH", "HL", "LH", "LL"}:
+                            self.assertEqual(data["source_member_identities"], [row["record_id"], *source_ids])
+                        else:
+                            self.assertEqual(data["source_member_identities"], source_ids)
+                self.assertTrue(any(row["event_type"] == "FVG" for row in events))
+                self.assertTrue(any(row["zone_type"] == "FVG" for row in zones))
+                fvg_lifecycle_zones = [
+                    row for row in zones if payload(row)["event_type"] == "FVG_LIFECYCLE"
+                ]
+                self.assertTrue(fvg_lifecycle_zones, "zone lifecycle must be appended under its stable zone type")
+                for row in fvg_lifecycle_zones:
+                    self.assertEqual(row["zone_type"], "FVG")
+                    self.assertLessEqual(
+                        datetime.fromisoformat(payload(row)["zone_formation_time"].replace("Z", "+00:00")),
+                        row["event_time"],
+                    )
+                self.assertTrue(any(
+                    row["timeframe"] == "4h" and row["event_type"] == "STRUCTURE_STATE"
+                    and row["status"] == "insufficient_history"
+                    for row in events
+                ), "short 4h history must remain explicit, not fabricated")
+                self.assertTrue(any(
+                    row["timeframe"] == "1h" and row["knowledge_time"] == primary[-1].close_time
+                    for row in events
+                ), "exact primary boundary knowledge_time must be eligible")
+
+                event_ids_before = {row["record_id"] for row in events}
+                zone_ids_before = {row["record_id"] for row in zones}
+                await handler(envelope)
+                replay_events = await conn.fetch(
+                    "SELECT * FROM meylux.market_structure_events "
+                    "WHERE symbol=$1 AND event_type <> 'ORCHESTRATION' ORDER BY timeframe,event_time,record_id",
+                    symbol,
+                )
+                replay_zones = await conn.fetch(
+                    "SELECT * FROM meylux.market_structure_zones "
+                    "WHERE symbol=$1 ORDER BY timeframe,event_time,record_id",
+                    symbol,
+                )
+                self.assertEqual({row["record_id"] for row in replay_events}, event_ids_before)
+                self.assertEqual({row["record_id"] for row in replay_zones}, zone_ids_before)
+                self.assertEqual(len(replay_events), len(events))
+                self.assertEqual(len(replay_zones), len(zones))
+
+                for table in ("market_structure_events", "market_structure_zones"):
+                    trigger = await conn.fetchrow(
+                        "SELECT t.tgname,t.tgenabled,pg_get_triggerdef(t.oid) AS definition "
+                        "FROM pg_trigger t JOIN pg_class c ON c.oid=t.tgrelid "
+                        "JOIN pg_namespace n ON n.oid=c.relnamespace "
+                        "WHERE n.nspname='meylux' AND c.relname=$1 "
+                        "AND t.tgname=$2 AND NOT t.tgisinternal",
+                        table, f"trg_{table}_append_only",
+                    )
+                    self.assertIsNotNone(trigger, f"{table} append-only trigger must exist")
+                    trigger_enabled = trigger["tgenabled"]
+                    if isinstance(trigger_enabled, bytes):
+                        trigger_enabled = trigger_enabled.decode("ascii")
+                    self.assertEqual(trigger_enabled, "O")
+                    self.assertIn("reject_canonical_mutation", trigger["definition"])
+                    row = (events if table == "market_structure_events" else zones)[0]
+                    before = await conn.fetchval(
+                        f"SELECT to_jsonb(s) FROM meylux.{table} AS s WHERE record_id=$1",
+                        row["record_id"],
+                    )
+                    self.assertIsNotNone(before)
+                    for operation in ("UPDATE", "DELETE"):
+                        try:
+                            if operation == "UPDATE":
+                                await conn.execute(
+                                    f"UPDATE meylux.{table} SET reason=reason || '_forbidden' WHERE record_id=$1",
+                                    row["record_id"],
+                                )
+                            else:
+                                await conn.execute(
+                                    f"DELETE FROM meylux.{table} WHERE record_id=$1",
+                                    row["record_id"],
+                                )
+                        except self.asyncpg.PostgresError as exc:
+                            if exc.sqlstate == "P0001":
+                                self.assertEqual(
+                                    str(exc),
+                                    f"authoritative canonical history is append-only: {operation} is not permitted on {table}",
+                                )
+                            elif exc.sqlstate == "42501":
+                                self.assertIn(f"permission denied for table {table}", str(exc))
+                            else:
+                                self.fail(f"unexpected SQLSTATE for {operation} on {table}: {exc.sqlstate} {exc}")
+                        else:
+                            self.fail(f"{operation} unexpectedly mutated {table}")
+                        after = await conn.fetchval(
+                            f"SELECT to_jsonb(s) FROM meylux.{table} AS s WHERE record_id=$1",
+                            row["record_id"],
+                        )
+                        self.assertEqual(after, before, f"{table} row changed after rejected {operation}")
             finally:
                 await conn.close()
         asyncio.run(run())

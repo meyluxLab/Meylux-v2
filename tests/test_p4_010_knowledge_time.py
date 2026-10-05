@@ -21,6 +21,24 @@ from meylux.specialists.snapshot import (
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
 
+_ZONE_EVENT_TYPES = {
+    "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
+    "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
+}
+
+
+def _expected_structural_rows(result) -> int:
+    count = 0
+    for facts in result.structural_facts.values():
+        count += len(facts.events)
+        count += sum(
+            event.event_type in _ZONE_EVENT_TYPES
+            and (event.lower_bound is not None or event.upper_bound is not None
+                 or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})
+            for event in facts.events
+        )
+    return count
+
 
 def candle(i: int) -> CanonicalCandle:
     t = T0 + timedelta(minutes=15 * i)
@@ -69,23 +87,52 @@ class _DB:
     def __init__(self):
         self.sql = []
         self.seen = set()
+        self.structural_rows = {}
 
     def transaction(self):
         return _Tx()
 
     async def execute(self, query, *args):
         self.sql.append((query, args))
-        identity = args[-1]
-        if identity in self.seen:
+        structural = "knowledge_time)" in query.lower() and (
+            "insert into meylux.market_structure_events" in query.lower()
+            or "insert into meylux.market_structure_zones" in query.lower()
+        )
+        table = (
+            "meylux.market_structure_events" if "insert into meylux.market_structure_events" in query.lower()
+            else "meylux.market_structure_zones" if "insert into meylux.market_structure_zones" in query.lower()
+            else query.lower().split("insert into ", 1)[1].split()[0] if "insert into " in query.lower()
+            else "unknown"
+        )
+        identity = args[-2] if structural else args[-1]
+        key = (table, identity)
+        if key in self.seen:
             return "INSERT 0 0"
-        self.seen.add(identity)
+        self.seen.add(key)
+        if structural:
+            type_column = "event_type" if table.endswith("market_structure_events") else "zone_type"
+            fields = (
+                "record_id", "symbol", "timeframe", "event_time", type_column,
+                "source_ref", "venue_context", "version", "calculation_version",
+                "status", "reason", "value_numeric", "payload_json", "identity_hash",
+                "knowledge_time",
+            )
+            import json
+            self.structural_rows[key] = dict(zip(fields, args))
+            self.structural_rows[key]["payload_json"] = json.loads(args[12])
         return "INSERT 0 1"
 
     async def fetch(self, *args):
         return []
 
-    async def fetchrow(self, *args):
-        return None
+    async def fetchrow(self, query, *args):
+        lowered = query.lower()
+        table = (
+            "meylux.market_structure_events" if "from meylux.market_structure_events" in lowered
+            else "meylux.market_structure_zones" if "from meylux.market_structure_zones" in lowered
+            else None
+        )
+        return None if table is None else self.structural_rows.get((table, args[0]))
 
 
 def p5_record(*, knowledge_time: datetime, event_time: datetime | None = None) -> SnapshotRecord:
@@ -157,8 +204,9 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         db = _DB()
         result = QuantitativeOrchestrator().process(bars(), config())
         inserted = asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
-        self.assertEqual(inserted, 21)
-        self.assertEqual(len(db.sql), 21)
+        expected_structural = _expected_structural_rows(result)
+        self.assertEqual(inserted, 21 + expected_structural)
+        self.assertEqual(len(db.sql), 21 + expected_structural)
         indicator_and_regime = [
             (query, args) for query, args in db.sql
             if "calculated_indicator_vectors" in query or "market_regime_states" in query
@@ -168,13 +216,18 @@ class TestP4010KnowledgeTime(unittest.TestCase):
             if "market_structure_events" in query
         ]
         self.assertEqual(len(indicator_and_regime), 20)
-        self.assertEqual(len(structure), 1)
+        summaries = [(query, args) for query, args in structure if len(args) > 4 and args[4] == "ORCHESTRATION"]
+        structural_facts = [(query, args) for query, args in structure if len(args) > 4 and args[4] != "ORCHESTRATION"]
+        self.assertEqual(len(summaries), 1)
+        self.assertEqual(len(structural_facts), len(result.structural_facts["15m"].events))
         for query, args in indicator_and_regime:
             self.assertNotIn("persisted_at", query.lower())
             self.assertEqual(args[3], result.knowledge_time)
             self.assertIsInstance(args[3], datetime)
-        self.assertEqual(structure[0][1][3], result.as_of)
-        self.assertNotIn("knowledge_time", structure[0][0].lower())
+        self.assertEqual(summaries[0][1][3], result.as_of)
+        self.assertNotIn("knowledge_time", summaries[0][0].lower())
+        self.assertTrue(all("knowledge_time" in query.lower() for query, _ in structural_facts))
+        self.assertTrue(all(args[-1] <= result.as_of for _, args in structural_facts))
 
     def test_persistence_rejects_non_utc_or_mismatched_knowledge_time(self):
         result = QuantitativeOrchestrator().process(bars(), config())

@@ -143,25 +143,66 @@ class _Tx:
     async def __aenter__(self): return self
     async def __aexit__(self,*args): return False
 class _DB:
-    def __init__(self): self.sql=[]; self.seen=set()
+    def __init__(self): self.sql=[]; self.seen=set(); self.structural_rows={}
     def transaction(self): return _Tx()
     async def execute(self,query,*args):
         self.sql.append((query,args))
-        identity=args[-1]
-        if identity in self.seen: return "INSERT 0 0"
-        self.seen.add(identity)
+        lowered=query.lower()
+        structural="knowledge_time)" in lowered and ("insert into meylux.market_structure_events" in lowered or "insert into meylux.market_structure_zones" in lowered)
+        table=("meylux.market_structure_events" if "insert into meylux.market_structure_events" in lowered
+               else "meylux.market_structure_zones" if "insert into meylux.market_structure_zones" in lowered
+               else lowered.split("insert into ",1)[1].split()[0] if "insert into " in lowered else "unknown")
+        identity=args[-2] if structural else args[-1]
+        key=(table,identity)
+        if key in self.seen: return "INSERT 0 0"
+        self.seen.add(key)
+        if structural:
+            import json
+            type_column="event_type" if table.endswith("market_structure_events") else "zone_type"
+            fields=("record_id","symbol","timeframe","event_time",type_column,"source_ref","venue_context","version",
+                    "calculation_version","status","reason","value_numeric","payload_json","identity_hash","knowledge_time")
+            self.structural_rows[key]=dict(zip(fields,args))
+            self.structural_rows[key]["payload_json"]=json.loads(args[12])
         return "INSERT 0 1"
     async def fetch(self,*args): return []
-    async def fetchrow(self,*args): return None
+    async def fetchrow(self,query,*args):
+        lowered=query.lower()
+        table=("meylux.market_structure_events" if "from meylux.market_structure_events" in lowered
+               else "meylux.market_structure_zones" if "from meylux.market_structure_zones" in lowered else None)
+        return None if table is None else self.structural_rows.get((table,args[0]))
 
 class TestPersistence(unittest.TestCase):
     def test_idempotent_identity_is_stable(self):
-        db=_DB(); result=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        again=asyncio.run(QuantitativePersistence(db).persist_orchestration(QuantitativeOrchestrator().process(bars(),config())))
-        self.assertEqual(result,21); self.assertEqual(again,0)
-        self.assertEqual(len(db.sql),42)
-        identities=[args[-1] for _,args in db.sql]
-        self.assertEqual(identities, [args[-1] for _,args in db.sql])
+        db=_DB()
+        orchestration=QuantitativeOrchestrator().process(bars(),config())
+        persistence=QuantitativePersistence(db)
+        inserted=asyncio.run(persistence.persist_orchestration(orchestration))
+        replay_inserted=asyncio.run(persistence.persist_orchestration(
+            QuantitativeOrchestrator().process(bars(),config())
+        ))
+        zone_types={"FVG","FVG_LIFECYCLE","ORDER_BLOCK","ORDER_BLOCK_INVALIDATION",
+                    "BREAKER","BREAKER_INVALIDATION","LIQUIDITY_POOL","LIQUIDITY_POOL_SWEEP"}
+        expected_structural=sum(
+            len(facts.events)+sum(
+                event.event_type in zone_types
+                and (event.lower_bound is not None or event.upper_bound is not None
+                     or event.event_type in {"LIQUIDITY_POOL","LIQUIDITY_POOL_SWEEP"})
+                for event in facts.events
+            )
+            for facts in orchestration.structural_facts.values()
+        )
+        expected=21+expected_structural
+        self.assertEqual(inserted,expected)
+        self.assertEqual(replay_inserted,0)
+        self.assertEqual(len(db.sql),expected*2)
+        identities=[
+            args[-2] if "knowledge_time)" in query.lower()
+            and ("insert into meylux.market_structure_events" in query.lower()
+                 or "insert into meylux.market_structure_zones" in query.lower())
+            else args[-1]
+            for query,args in db.sql
+        ]
+        self.assertEqual(identities[:expected],identities[expected:])
         self.assertTrue(all(isinstance(x,str) and len(x)==64 for x in identities))
 
 if __name__=="__main__": unittest.main()

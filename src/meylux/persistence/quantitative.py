@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 from dataclasses import asdict, is_dataclass, replace
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import hashlib
 import json
 from typing import Any, Mapping
 
 from contracts.quantitative.base import CalculationResult
-from meylux.orchestration.engine import QuantOrchestrationResult, TimeframeQuantitativeFacts
+from meylux.orchestration.engine import QuantOrchestrationResult, TimeframeQuantitativeFacts, TimeframeStructuralFacts
 
 
 def _json(value: Any) -> Any:
@@ -30,6 +30,30 @@ def _json(value: Any) -> Any:
     if isinstance(value, (str, int, bool)) or value is None:
         return value
     raise TypeError(f"unsupported value: {type(value).__name__}")
+
+_STRUCTURE_INTERVALS = {
+    "1m": timedelta(minutes=1),
+    "5m": timedelta(minutes=5),
+    "15m": timedelta(minutes=15),
+    "1h": timedelta(hours=1),
+    "4h": timedelta(hours=4),
+    "1d": timedelta(days=1),
+}
+_STRUCTURE_CLASSIFICATION_EVENTS = {"SWING_HIGH", "SWING_LOW", "HH", "HL", "LH", "LL"}
+_ZONE_LIFECYCLE_EVENTS = {
+    "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
+    "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
+}
+_ZONE_TYPE_BY_EVENT = {
+    "FVG": "FVG",
+    "FVG_LIFECYCLE": "FVG",
+    "ORDER_BLOCK": "ORDER_BLOCK",
+    "ORDER_BLOCK_INVALIDATION": "ORDER_BLOCK",
+    "BREAKER": "BREAKER",
+    "BREAKER_INVALIDATION": "BREAKER",
+    "LIQUIDITY_POOL": "LIQUIDITY_POOL",
+    "LIQUIDITY_POOL_SWEEP": "LIQUIDITY_POOL",
+}
 
 
 def _knowledge_time(result: QuantOrchestrationResult) -> datetime:
@@ -187,9 +211,159 @@ class QuantitativePersistence:
             return calculation
         return replace(calculation, context=replace(context, venue_context=venue))
 
+    @staticmethod
+    def _structural_status(
+        facts: TimeframeStructuralFacts, event: Any, location_index: int,
+        contiguous_history_counts: tuple[int, ...],
+    ) -> str:
+        if event.event_type != "STRUCTURE_STATE":
+            return "valid"
+        if event.structural_state == "UNCONFIRMED":
+            return "unconfirmed"
+        if facts.timeframe not in _STRUCTURE_INTERVALS:
+            return "unavailable"
+        if contiguous_history_counts[location_index] < 11:
+            return "insufficient_history"
+        return "valid"
+
+    @staticmethod
+    def _structural_source_window(
+        facts: TimeframeStructuralFacts, event: Any,
+        by_open: Mapping[datetime, int], by_close: Mapping[datetime, int],
+    ) -> tuple[tuple[str, ...], str, str, int]:
+        if event.event_location not in by_open:
+            raise ValueError("structural event location does not resolve to a source canonical candle")
+        if event.confirmation_time not in by_close:
+            raise ValueError("structural confirmation_time does not resolve to a closed source candle")
+        location_index = by_open[event.event_location]
+        confirmation_index = by_close[event.confirmation_time]
+        if location_index > confirmation_index:
+            raise ValueError("structural event location follows its confirmation candle")
+        start_index = location_index
+        if event.event_type in _STRUCTURE_CLASSIFICATION_EVENTS:
+            start_index = max(0, location_index - 5)
+        elif event.event_type == "FVG":
+            start_index = max(0, location_index - 2)
+        source_window = facts.candles[start_index:confirmation_index + 1]
+        refs = tuple(dict.fromkeys(candle.provenance_id for candle in source_window))
+        if not refs or any(not isinstance(ref, str) or not ref.strip() for ref in refs):
+            raise ValueError("structural source window has missing or malformed provenance")
+        location_ref = facts.candles[location_index].provenance_id
+        confirmation_ref = facts.candles[confirmation_index].provenance_id
+        return refs, location_ref, confirmation_ref, location_index
+
+    @staticmethod
+    def _structural_source_members(
+        facts: TimeframeStructuralFacts, event: Any,
+        event_by_identity: Mapping[str, Any], by_open: Mapping[datetime, int],
+        interval: timedelta | None,
+    ) -> tuple[str, ...]:
+        if event.source_event_identity:
+            members = tuple(event.source_event_identity.split(","))
+            if event.event_type in {"HH", "HL", "LH", "LL"}:
+                members = (event.identity, *members)
+            if any(not member or member not in event_by_identity for member in members):
+                raise ValueError("structural source/member identity does not resolve to an event in the authoritative analysis")
+            return members
+        if event.event_type not in {"HH", "HL", "LH", "LL"}:
+            return ()
+        swing_type = "SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW"
+        location_index = by_open.get(event.event_location)
+        if location_index is None or interval is None:
+            raise ValueError("classified swing does not resolve to a governed source candle")
+        segment_start = location_index
+        while (segment_start > 0
+               and facts.candles[segment_start].open_time
+               == facts.candles[segment_start - 1].open_time + interval):
+            segment_start -= 1
+        current = [
+            candidate for candidate in facts.events
+            if candidate.event_type == swing_type
+            and candidate.event_location == event.event_location
+            and candidate.knowledge_time == event.knowledge_time
+            and candidate.level == event.level
+        ]
+        previous = [
+            candidate for candidate in facts.events
+            if candidate.event_type == swing_type
+            and candidate.event_location < event.event_location
+            and by_open.get(candidate.event_location, -1) >= segment_start
+            and candidate.knowledge_time <= event.knowledge_time
+        ]
+        if len(current) != 1 or not previous:
+            raise ValueError("classified swing source/member identity cannot be reconstructed unambiguously")
+        prior = max(previous, key=lambda candidate: candidate.event_location)
+        return current[0].identity, prior.identity
+
+    @staticmethod
+    def _canonical_payload(value: Any) -> str:
+        if isinstance(value, str):
+            value = json.loads(value)
+        return json.dumps(_json(value), sort_keys=True, separators=(",", ":"))
+
+    async def _insert_structural_row(
+        self,
+        *,
+        family: str,
+        record_id: str,
+        symbol: str,
+        timeframe: str,
+        event_time: datetime,
+        event_type: str,
+        source_ref: str,
+        venue_context: str | None,
+        version: str,
+        calculation_version: str,
+        status: str,
+        reason: str,
+        value_numeric: Decimal | None,
+        payload: Mapping[str, Any],
+        knowledge_time: datetime,
+    ) -> int:
+        if family not in ("structure_event", "structure_zone"):
+            raise ValueError("unsupported structural persistence family")
+        table = self.TABLES[family]
+        type_column = "event_type" if family == "structure_event" else "zone_type"
+        payload_json = json.dumps(_json(payload), sort_keys=True, separators=(",", ":"))
+        tag = str(await self._connection.execute(
+            f"INSERT INTO {table} "
+            f"(record_id,symbol,timeframe,event_time,{type_column},source_ref,venue_context,version,"
+            "calculation_version,status,reason,value_numeric,payload_json,identity_hash,knowledge_time) "
+            "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14,$15) "
+            "ON CONFLICT(identity_hash) DO NOTHING",
+            record_id, symbol, timeframe, event_time, event_type, source_ref, venue_context,
+            version, calculation_version, status, reason, value_numeric, payload_json, record_id,
+            knowledge_time,
+        )).strip()
+        if tag == "INSERT 0 1":
+            return 1
+        if tag != "INSERT 0 0":
+            raise RuntimeError(f"unexpected structural insert result: {tag}")
+        existing = await self._connection.fetchrow(
+            f"SELECT record_id,symbol,timeframe,event_time,{type_column},source_ref,venue_context,version,"
+            "calculation_version,status,reason,value_numeric,payload_json,identity_hash,knowledge_time "
+            f"FROM {table} WHERE identity_hash=$1",
+            record_id,
+        )
+        if existing is None:
+            raise ValueError("structural identity conflict has no readable authoritative row")
+        expected = (
+            record_id, symbol, timeframe, event_time, event_type, source_ref, venue_context, version,
+            calculation_version, status, reason, value_numeric, record_id, knowledge_time,
+        )
+        actual = tuple(existing[name] for name in (
+            "record_id", "symbol", "timeframe", "event_time", type_column, "source_ref", "venue_context",
+            "version", "calculation_version", "status", "reason", "value_numeric", "identity_hash",
+            "knowledge_time",
+        ))
+        if actual != expected or self._canonical_payload(existing["payload_json"]) != self._canonical_payload(payload):
+            raise ValueError("structural identity collision: persisted content differs from deterministic replay")
+        return 0
+
     async def persist_orchestration(self, result: QuantOrchestrationResult) -> int:
         primary_knowledge_time = _knowledge_time(result)
         rows: list[tuple[Any, ...]] = []
+        structural_rows: list[dict[str, Any]] = []
         primary_venue = await self._resolve_venue_context(result.source_provenance)
 
         # Primary timeframe and each eligible higher timeframe use the same
@@ -281,6 +455,114 @@ class QuantitativePersistence:
             result.configuration_version,
         ))
 
+        # Persist the existing ratified P4 engine's individual facts. The
+        # summary row above remains compatibility-only and carries no claimed
+        # structural knowledge_time.
+        for timeframe, facts in sorted(result.structural_facts.items()):
+            if not isinstance(facts, TimeframeStructuralFacts):
+                raise TypeError(f"structural_facts[{timeframe}] must be TimeframeStructuralFacts")
+            if timeframe != facts.timeframe:
+                raise ValueError("structural fact key must match its timeframe")
+            if facts.symbol != result.symbol:
+                raise ValueError("structural fact symbol must match the primary instrument")
+            if facts.as_of > primary_knowledge_time:
+                raise ValueError("structural timeframe knowledge boundary exceeds primary snapshot")
+            provenance = tuple(dict.fromkeys(c.provenance_id for c in facts.candles))
+            venue = await self._resolve_venue_context(provenance)
+            by_open = {candle.open_time: index for index, candle in enumerate(facts.candles)}
+            by_close = {candle.close_time: index for index, candle in enumerate(facts.candles)}
+            interval = _STRUCTURE_INTERVALS.get(facts.timeframe)
+            history_counts: list[int] = []
+            for index, candle in enumerate(facts.candles):
+                if (index == 0 or interval is None
+                        or candle.open_time != facts.candles[index - 1].open_time + interval):
+                    history_counts.append(1)
+                else:
+                    history_counts.append(history_counts[-1] + 1)
+            contiguous_history_counts = tuple(history_counts)
+            event_by_identity = {event.identity: event for event in facts.events}
+            seen_identities: set[str] = set()
+            for event in facts.events:
+                if event.identity in seen_identities:
+                    raise ValueError("duplicate structural identity emitted within one analysis")
+                seen_identities.add(event.identity)
+                for field_name in ("event_location", "confirmation_time", "knowledge_time"):
+                    value = getattr(event, field_name)
+                    if (not isinstance(value, datetime) or value.tzinfo is None
+                            or value.utcoffset() != timezone.utc.utcoffset(value)):
+                        raise ValueError(f"structural {field_name} must be UTC")
+                if event.event_location > event.confirmation_time:
+                    raise ValueError("structural event location must not follow confirmation_time")
+                if event.confirmation_time != event.knowledge_time:
+                    raise ValueError("confirmed structural event confirmation_time must equal knowledge_time")
+                if event.knowledge_time > primary_knowledge_time:
+                    raise ValueError("structural event knowledge_time exceeds primary snapshot boundary")
+                refs, location_ref, confirmation_ref, location_index = self._structural_source_window(
+                    facts, event, by_open, by_close
+                )
+                source_ref = "canonical-provenance:" + "|".join(refs)
+                status = self._structural_status(facts, event, location_index, contiguous_history_counts)
+                reason = event.reason or event.event_type
+                if status == "insufficient_history":
+                    reason = f"{reason};requires_11_contiguous_closed_candles"
+                zone_formation_time = event.event_location
+                if event.event_type in {
+                    "FVG_LIFECYCLE", "ORDER_BLOCK_INVALIDATION",
+                    "BREAKER_INVALIDATION", "LIQUIDITY_POOL_SWEEP",
+                }:
+                    source_identity = event.source_event_identity
+                    if not source_identity or "," in source_identity or source_identity not in event_by_identity:
+                        raise ValueError("structural lifecycle transition must resolve one authoritative source event identity")
+                    zone_formation_time = event_by_identity[source_identity].event_location
+                    if zone_formation_time > event.event_location:
+                        raise ValueError("structural lifecycle transition precedes its source zone formation")
+                payload = {
+                    "event_identity": event.identity,
+                    "event_type": event.event_type,
+                    "event_location": _json(event.event_location),
+                    "zone_formation_time": _json(zone_formation_time),
+                    "confirmation_time": _json(event.confirmation_time),
+                    "knowledge_time": _json(event.knowledge_time),
+                    "direction": event.direction,
+                    "level": _json(event.level),
+                    "lower_bound": _json(event.lower_bound),
+                    "upper_bound": _json(event.upper_bound),
+                    "lifecycle": event.lifecycle,
+                    "structural_state": event.structural_state,
+                    "source_event_identity": event.source_event_identity,
+                    "source_member_identities": list(self._structural_source_members(
+                        facts, event, event_by_identity, by_open, interval
+                    )),
+                    "prior_structural_state": event.prior_structural_state,
+                    "semantic_version": facts.calculation_version,
+                    "source_candle_provenance": location_ref,
+                    "confirmation_candle_provenance": confirmation_ref,
+                    "source_window_provenance": list(refs),
+                }
+                common = {
+                    "record_id": event.identity,
+                    "symbol": facts.symbol,
+                    "timeframe": facts.timeframe,
+                    "event_time": event.event_location,
+                    "event_type": event.event_type,
+                    "source_ref": source_ref,
+                    "venue_context": venue,
+                    "version": result.configuration_version,
+                    "calculation_version": facts.calculation_version,
+                    "status": status,
+                    "reason": reason,
+                    "value_numeric": event.level,
+                    "payload": payload,
+                    "knowledge_time": event.knowledge_time,
+                }
+                structural_rows.append({"family": "structure_event", **common})
+                if (event.event_type in _ZONE_LIFECYCLE_EVENTS
+                        and (event.lower_bound is not None or event.upper_bound is not None
+                             or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})):
+                    zone_row = dict(common)
+                    zone_row["event_type"] = _ZONE_TYPE_BY_EVENT[event.event_type]
+                    structural_rows.append({"family": "structure_zone", **zone_row})
+
         async with self._connection.transaction():
             inserted = 0
             for row in rows:
@@ -334,6 +616,8 @@ class QuantitativePersistence:
                     )
                 if str(await self._connection.execute(sql, *args)).strip() == "INSERT 0 1":
                     inserted += 1
+            for structural_row in structural_rows:
+                inserted += await self._insert_structural_row(**structural_row)
         return inserted
 
     async def fetch_family(

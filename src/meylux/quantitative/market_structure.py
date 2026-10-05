@@ -88,10 +88,11 @@ class MarketStructureEngine:
                         if ev.identity not in seen:
                             seen.add(ev.identity); bar_events.append(ev); highs.append((cand,candidate.high,ev))
                             if len(highs)>=2:
-                                previous=highs[-2][1]
+                                previous_swing=highs[-2]
+                                previous=previous_swing[1]
                                 high_class[cand]="HH" if candidate.high>previous else "LH" if candidate.high<previous else None
                                 if high_class[cand]:
-                                    ce=self._event(high_class[cand],candidate,candle.close_time,level=candidate.high,reason="swing_high_classification",index=cand)
+                                    ce=self._event(high_class[cand],candidate,candle.close_time,level=candidate.high,source=previous_swing[2].identity,reason="swing_high_classification",index=cand)
                                     if ce.identity not in seen: seen.add(ce.identity); bar_events.append(ce)
                             else: high_class[cand]=None
                     if all(candidate.low<x.low for j,x in enumerate(window) if j!=5):
@@ -99,10 +100,11 @@ class MarketStructureEngine:
                         if ev.identity not in seen:
                             seen.add(ev.identity); bar_events.append(ev); lows.append((cand,candidate.low,ev))
                             if len(lows)>=2:
-                                previous=lows[-2][1]
+                                previous_swing=lows[-2]
+                                previous=previous_swing[1]
                                 low_class[cand]="HL" if candidate.low>previous else "LL" if candidate.low<previous else None
                                 if low_class[cand]:
-                                    ce=self._event(low_class[cand],candidate,candle.close_time,level=candidate.low,reason="swing_low_classification",index=cand)
+                                    ce=self._event(low_class[cand],candidate,candle.close_time,level=candidate.low,source=previous_swing[2].identity,reason="swing_low_classification",index=cand)
                                     if ce.identity not in seen: seen.add(ce.identity); bar_events.append(ce)
                             else: low_class[cand]=None
             phase_trace.append("classification")

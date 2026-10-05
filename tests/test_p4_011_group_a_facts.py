@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 import unittest
 from dataclasses import replace
 from datetime import datetime, timedelta, timezone
@@ -18,6 +19,25 @@ from meylux.quantitative.regime_venue import RegimeConfig
 
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
+
+_ZONE_EVENT_TYPES = {
+    "FVG", "FVG_LIFECYCLE", "ORDER_BLOCK", "ORDER_BLOCK_INVALIDATION",
+    "BREAKER", "BREAKER_INVALIDATION", "LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP",
+}
+
+
+def _expected_structural_rows(result) -> int:
+    count = 0
+    for facts in result.structural_facts.values():
+        count += len(facts.events)
+        count += sum(
+            event.event_type in _ZONE_EVENT_TYPES
+            and (event.lower_bound is not None or event.upper_bound is not None
+                 or event.event_type in {"LIQUIDITY_POOL", "LIQUIDITY_POOL_SWEEP"})
+            for event in facts.events
+        )
+    return count
+
 EXPECTED_FACTS = {
     "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
     "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
@@ -69,16 +89,39 @@ class _DB:
         self.fetches = []
         self.source_queries = []
         self.provenance_rows = []
+        self.structural_rows = {}
 
     def transaction(self):
         return _Tx()
 
     async def execute(self, query, *args):
         self.sql.append((query, args))
-        identity = args[-1]
-        if identity in self.seen:
+        structural = "knowledge_time)" in query.lower() and (
+            "insert into meylux.market_structure_events" in query.lower()
+            or "insert into meylux.market_structure_zones" in query.lower()
+        )
+        table = (
+            "meylux.market_structure_events" if "insert into meylux.market_structure_events" in query.lower()
+            else "meylux.market_structure_zones" if "insert into meylux.market_structure_zones" in query.lower()
+            else query.lower().split("insert into ", 1)[1].split()[0] if "insert into " in query.lower()
+            else "unknown"
+        )
+        identity = args[-2] if structural else args[-1]
+        key = (table, identity)
+        if key in self.seen:
             return "INSERT 0 0"
-        self.seen.add(identity)
+        self.seen.add(key)
+        if structural:
+            type_column = "event_type" if table.endswith("market_structure_events") else "zone_type"
+            fields = (
+                "record_id", "symbol", "timeframe", "event_time", type_column,
+                "source_ref", "venue_context", "version", "calculation_version",
+                "status", "reason", "value_numeric", "payload_json", "identity_hash",
+                "knowledge_time",
+            )
+            import json
+            self.structural_rows[key] = dict(zip(fields, args))
+            self.structural_rows[key]["payload_json"] = json.loads(args[12])
         return "INSERT 0 1"
 
     async def fetch(self, query, *args):
@@ -89,8 +132,14 @@ class _DB:
         self.fetches.append((query, args))
         return []
 
-    async def fetchrow(self, *args):
-        return None
+    async def fetchrow(self, query, *args):
+        lowered = query.lower()
+        table = (
+            "meylux.market_structure_events" if "from meylux.market_structure_events" in lowered
+            else "meylux.market_structure_zones" if "from meylux.market_structure_zones" in lowered
+            else None
+        )
+        return None if table is None else self.structural_rows.get((table, args[0]))
 
 
 class TestP4011GroupAFacts(unittest.TestCase):
@@ -159,7 +208,14 @@ class TestP4011GroupAFacts(unittest.TestCase):
                                  (expected.value, expected.status, expected.reason))
 
     def test_real_binance_provenance_requires_and_accepts_explicit_source_venue(self):
-        xs = tuple(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        xs = list(replace(candle, provenance_id="binance:binance-acquisition") for candle in bars(40))
+        xs[0] = replace(xs[0], open=Decimal("100"), high=Decimal("101"),
+                        low=Decimal("99"), close=Decimal("100"))
+        xs[1] = replace(xs[1], open=Decimal("102"), high=Decimal("103"),
+                        low=Decimal("101"), close=Decimal("102"))
+        xs[2] = replace(xs[2], open=Decimal("105"), high=Decimal("107"),
+                        low=Decimal("104"), close=Decimal("106"))
+        xs = tuple(xs)
         result = QuantitativeOrchestrator().process(xs, config())
         db = _DB()
         db.provenance_rows = [
@@ -173,6 +229,17 @@ class TestP4011GroupAFacts(unittest.TestCase):
         self.assertEqual(len(rows), 19)
         self.assertTrue(all(args[4] == "binance:binance-acquisition" for args in rows))
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
+        event_rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.market_structure_events" in query and args[4] != "ORCHESTRATION"
+        ]
+        zone_rows = [
+            args for query, args in db.sql if "INSERT INTO meylux.market_structure_zones" in query
+        ]
+        self.assertTrue(event_rows, "individual structural facts must be persisted with explicit venue context")
+        self.assertTrue(zone_rows, "structure-bearing zones must be persisted with explicit venue context")
+        self.assertTrue(all(args[5].startswith("canonical-provenance:") for args in event_rows + zone_rows))
+        self.assertTrue(all(args[6] == "BINANCE" for args in event_rows + zone_rows))
 
     def test_ci_provenance_without_authoritative_raw_mapping_remains_unresolved(self):
         xs = tuple(
@@ -251,7 +318,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 40)  # 19 primary + 19 HTF + regime + structure summary
+        self.assertEqual(first, 40 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
@@ -385,6 +452,187 @@ class TestP4011GroupAFacts(unittest.TestCase):
                 ]
                 self.assertTrue(rows)
                 self.assertTrue(all(args[5] is None for args in rows), label)
+
+    def test_group_b_structural_facts_are_reproducible_per_timeframe_and_no_lookahead(self):
+        primary = list(bars(40))
+        primary[0] = replace(primary[0], open=Decimal("100"), high=Decimal("101"),
+                             low=Decimal("99"), close=Decimal("100"))
+        primary[1] = replace(primary[1], open=Decimal("102"), high=Decimal("103"),
+                             low=Decimal("101"), close=Decimal("102"))
+        primary[2] = replace(primary[2], open=Decimal("105"), high=Decimal("107"),
+                             low=Decimal("104"), close=Decimal("106"))
+        higher_1h = list(higher_bars(10))
+        higher_1h[0] = replace(higher_1h[0], open=Decimal("100"), high=Decimal("101"),
+                               low=Decimal("99"), close=Decimal("100"))
+        higher_1h[1] = replace(higher_1h[1], open=Decimal("102"), high=Decimal("103"),
+                               low=Decimal("101"), close=Decimal("102"))
+        higher_1h[2] = replace(higher_1h[2], open=Decimal("105"), high=Decimal("107"),
+                               low=Decimal("104"), close=Decimal("106"))
+        higher_4h = tuple(candle(i, "4h", interval_minutes=240) for i in range(2))
+        result = QuantitativeOrchestrator().process(
+            tuple(primary), config(),
+            higher_timeframes={"1h": higher_1h, "4h": higher_4h},
+        )
+        self.assertEqual(set(result.structural_facts), {"15m", "1h", "4h"})
+        self.assertEqual(result.structural_facts["15m"].as_of, result.as_of)
+        self.assertEqual(result.structural_facts["1h"].as_of, result.as_of)
+        self.assertLessEqual(result.structural_facts["4h"].as_of, result.as_of)
+        for timeframe, facts in result.structural_facts.items():
+            self.assertEqual(facts.symbol, result.symbol)
+            self.assertEqual(facts.timeframe, timeframe)
+            self.assertTrue(facts.events)
+            self.assertEqual(len({event.identity for event in facts.events}), len(facts.events))
+            self.assertTrue(all(event.knowledge_time <= result.as_of for event in facts.events))
+            self.assertTrue(all(event.confirmation_time == event.knowledge_time for event in facts.events))
+        fvg = next(event for event in result.structural_facts["15m"].events if event.event_type == "FVG")
+        self.assertEqual(fvg.event_location, primary[2].open_time)
+        self.assertEqual(fvg.confirmation_time, primary[2].close_time)
+        self.assertEqual(fvg.knowledge_time, primary[2].close_time)
+        self.assertEqual(fvg.lower_bound, Decimal("101"))
+        self.assertEqual(fvg.upper_bound, Decimal("104"))
+        self.assertTrue(any(event.event_type == "FVG" for event in result.structural_facts["1h"].events))
+        self.assertTrue(any(
+            event.event_type == "STRUCTURE_STATE" and event.knowledge_time == result.as_of
+            for event in result.structural_facts["1h"].events
+        ))
+        self.assertTrue(any(
+            event.event_type == "STRUCTURE_STATE" and event.structural_state == "NEUTRAL"
+            for event in result.structural_facts["4h"].events
+        ))
+
+        gap_primary = tuple(primary[:20] + primary[21:])
+        gap_result = QuantitativeOrchestrator().process(gap_primary, config())
+        self.assertTrue(any(
+            event.event_type == "STRUCTURE_STATE" and event.structural_state == "UNCONFIRMED"
+            for event in gap_result.structural_facts["15m"].events
+        ))
+        gap_db = _DB()
+        asyncio.run(QuantitativePersistence(gap_db).persist_orchestration(gap_result))
+        self.assertTrue(any(
+            "INSERT INTO meylux.market_structure_events" in query
+            and args[4] == "STRUCTURE_STATE"
+            and args[9] == "unconfirmed"
+            and '"structural_state":"UNCONFIRMED"' in args[12]
+            for query, args in gap_db.sql
+        ), "canonical gaps must persist as UNCONFIRMED rather than being repaired")
+
+        from meylux.orchestration.engine import TimeframeStructuralFacts
+        malformed_event = replace(
+            fvg,
+            confirmation_time=fvg.confirmation_time.replace(tzinfo=None),
+            knowledge_time=fvg.knowledge_time.replace(tzinfo=None),
+        )
+        with self.assertRaisesRegex(ValueError, "must use UTC"):
+            replace(result.structural_facts["15m"], events=(malformed_event,))
+
+        conflict_db = _DB()
+        conflict_persistence = QuantitativePersistence(conflict_db)
+        asyncio.run(conflict_persistence.persist_orchestration(result))
+        alternate_lineage = tuple(
+            replace(item, provenance_id=item.provenance_id + ":alternate")
+            for item in primary
+        )
+        conflicting = QuantitativeOrchestrator().process(
+            alternate_lineage, config(),
+            higher_timeframes={"1h": tuple(higher_1h), "4h": higher_4h},
+        )
+        with self.assertRaisesRegex(ValueError, "identity collision"):
+            asyncio.run(conflict_persistence.persist_orchestration(conflicting))
+
+        future_1h = higher_bars(11)
+        with self.assertRaisesRegex(ValueError, "after primary knowledge boundary"):
+            QuantitativeOrchestrator().process(
+                tuple(primary), config(), higher_timeframes={"1h": future_1h}
+            )
+
+    def test_structural_classification_members_and_zone_sources_are_persisted(self):
+        count = 60
+        closes = [Decimal("102")] * count
+        opens = [Decimal("102")] * count
+        highs = [Decimal("103")] * count
+        lows = [Decimal("101")] * count
+        pivots = {
+            7: (96, 97, 95), 12: (104, 105, 103), 17: (101, 102, 100),
+            22: (111, 112, 110), 27: (108, 109, 107), 32: (110, 118, 109),
+        }
+        for index, (opened, high, low) in pivots.items():
+            opens[index] = closes[index] = Decimal(opened)
+            highs[index], lows[index] = Decimal(high), Decimal(low)
+        for index in list(range(23, 27)) + list(range(28, 32)):
+            opens[index] = closes[index] = Decimal("109")
+            highs[index], lows[index] = Decimal("110"), Decimal("108")
+        for index in range(33, 37):
+            opens[index] = closes[index] = Decimal("110")
+            highs[index], lows[index] = Decimal("110"), Decimal("109")
+        opens[37] = closes[37] = Decimal("110")
+        highs[37], lows[37] = Decimal("110"), Decimal("109")
+        opens[38], closes[38] = Decimal("118"), Decimal("117")
+        highs[38], lows[38] = Decimal("118"), Decimal("116")
+        opens[39] = closes[39] = Decimal("121")
+        highs[39], lows[39] = Decimal("121"), Decimal("120")
+        values = []
+        for index in range(count):
+            opened_at = T0 + timedelta(minutes=15 * index)
+            values.append(CanonicalCandle(
+                "BTCUSDT", "15m", opened_at, opened_at + timedelta(minutes=15),
+                opens[index], highs[index], lows[index], closes[index], Decimal("1"),
+                provenance_id="canonical:test-structure-series",
+            ))
+        result = QuantitativeOrchestrator().process(tuple(values), config())
+        facts = result.structural_facts["15m"]
+        classifications = [
+            event for event in facts.events if event.event_type in {"HH", "HL", "LH", "LL"}
+        ]
+        self.assertTrue(classifications, "fixture must produce confirmed swing classifications")
+        db = _DB()
+        asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
+        event_rows = [
+            args for query, args in db.sql
+            if "INSERT INTO meylux.market_structure_events" in query and args[4] != "ORCHESTRATION"
+        ]
+        event_ids = {args[-2] for args in event_rows}
+        for args in event_rows:
+            payload = json.loads(args[12])
+            if args[4] in {"HH", "HL", "LH", "LL"}:
+                self.assertEqual(len(payload["source_member_identities"]), 2)
+                self.assertIsNotNone(payload["source_event_identity"])
+                self.assertIn(payload["source_event_identity"], event_ids)
+                self.assertEqual(payload["source_member_identities"][0], args[-2])
+                self.assertEqual(payload["source_member_identities"][1], payload["source_event_identity"])
+                for member_id in payload["source_member_identities"]:
+                    self.assertIn(member_id, event_ids)
+
+        # DOC-P4-002 source-sensitive identity: each classification identity must
+        # be derived from the immediately preceding confirmed same-side swing.
+        for event in classifications:
+            same_side = [
+                candidate for candidate in facts.events
+                if candidate.event_type == ("SWING_HIGH" if event.event_type in {"HH", "LH"} else "SWING_LOW")
+                and candidate.event_location < event.event_location
+                and candidate.identity == event.source_event_identity
+            ]
+            self.assertEqual(len(same_side), 1)
+            expected_source = same_side[0].identity
+            self.assertEqual(event.source_event_identity, expected_source)
+
+        replay = QuantitativeOrchestrator().process(tuple(values), config()).structural_facts["15m"].events
+        first_class = {
+            (event.event_type, event.event_location): event.identity
+            for event in classifications
+        }
+        replay_class = {
+            (event.event_type, event.event_location): event.identity
+            for event in replay
+            if event.event_type in {"HH", "HL", "LH", "LL"}
+        }
+        self.assertEqual(first_class, replay_class)
+        zone_rows = [
+            args for query, args in db.sql if "INSERT INTO meylux.market_structure_zones" in query
+        ]
+        self.assertTrue(any(args[4] == "ORDER_BLOCK" for args in zone_rows),
+                        "the governed BOS-to-Order-Block path must reach zone persistence")
+        self.assertTrue(all(args[6] is None for args in event_rows + zone_rows),
+                        "unmapped canonical provenance must remain explicitly unresolved")
 
     def test_ema_period_configuration_rejects_empty_duplicate_and_invalid_periods(self):
         for periods in ((), (9, 9), (9, 0), (9, True), [9, 20]):
