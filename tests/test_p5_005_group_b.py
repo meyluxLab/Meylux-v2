@@ -112,7 +112,7 @@ class TestP5005GroupB(unittest.TestCase):
         second = analyze_s02(snapshot, CONFIG)
         self.assertEqual(first.identity_hash, second.identity_hash)
         self.assertEqual(_finding(first, ":STATE").value["state"], "UNCONFIRMED")
-        self.assertEqual(_finding(first, ":LATEST_CONFIRMED").value["event_type"], "HH")
+        self.assertEqual(_finding(first, ":LATEST_CONFIRMED").value["event_type"], "BOS")
         protected = _finding(first, ":PROTECTED_LEVEL_RELATION")
         self.assertEqual(protected.value["relationship"], "ABOVE")
         self.assertEqual(protected.value["difference"], Decimal("5"))
