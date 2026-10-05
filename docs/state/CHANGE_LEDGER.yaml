@@ -3263,7 +3263,9 @@ entries:
       adr_index: UPDATED
       artifact_protocol: UPDATED
       artifacts_registry: UPDATED
-      checkpoint: PENDING IN SAME GOVERNANCE CYCLE
+      checkpoint: UPDATED
       historical_evidence: UNCHANGED
       unrelated_project_state: UNCHANGED
+      machine_readback: COMPLETED
     note: P5-005 / S-12 is intentionally not embedded in ADR-GOVERNANCE-014; its retrospective/corrective assessment remains a separate case-specific artifact and no corrective implementation is authorized by this ratification.
+    final_checkpoint_sync_commit: e79f2ebe45fa7eb41eb9a7cb1ae4eeb715395491
