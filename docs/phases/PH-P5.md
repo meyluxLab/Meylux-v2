@@ -146,7 +146,7 @@ This Phase is not CLOSED by this establishment. Each Step requires its own Build
 
 ## STEP-P5-005 Activation
 
-`STEP-P5-005` / `TO-P5-005` is ACTIVE / AUTHORIZED under the Project Owner next-step determination directive dated 2026-10-05.
+`STEP-P5-005` / `TO-P5-005` is COMPLETE / VERIFIED under `AR-P5-005`; independent runtime acceptance and closure synchronization were completed on merged revision `779201ea95c3f067d5a115d0f532be660b5f7454`.
 
 The prerequisite `PRQ-1 Group-B P4 capability` is ESTABLISHED / VERIFIED under `TO-P4-013 / AR-P4-020`. The active scope is S-02 Market Structure, S-11 Price Action and S-12 Liquidity using authoritative persisted P4 facts through the Stage-1 Input Snapshot.
 
