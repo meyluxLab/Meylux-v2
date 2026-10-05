@@ -196,6 +196,52 @@
       "value": 200,
       "minimum": 1,
       "maximum": 10000
+    },
+    "price_action_pin_wick_to_body_ratio": {
+      "type": "decimal",
+      "unit": "ratio",
+      "value": "2",
+      "minimum": "0"
+    },
+    "price_action_pin_max_body_range_ratio": {
+      "type": "decimal",
+      "unit": "range ratio",
+      "value": "0.35",
+      "minimum": "0",
+      "maximum": "1"
+    },
+    "price_action_pin_max_opposite_wick_ratio": {
+      "type": "decimal",
+      "unit": "body ratio",
+      "value": "1",
+      "minimum": "0"
+    },
+    "price_action_engulfing_min_body_ratio": {
+      "type": "decimal",
+      "unit": "ratio",
+      "value": "1",
+      "minimum": "0"
+    },
+    "price_action_zone_rejection_close_position": {
+      "type": "decimal",
+      "unit": "candle-range position",
+      "value": "0.5",
+      "minimum": "0",
+      "maximum": "1"
+    },
+    "liquidity_max_zones": {
+      "type": "integer",
+      "unit": "count",
+      "value": 10,
+      "minimum": 1,
+      "maximum": 100
+    },
+    "group_b_max_findings": {
+      "type": "integer",
+      "unit": "Group-B findings per specialist output",
+      "value": 200,
+      "minimum": 1,
+      "maximum": 10000
     }
   }
 }
