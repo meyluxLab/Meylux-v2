@@ -119,6 +119,27 @@ class TestP5005GroupB(unittest.TestCase):
         zones = _finding(first, ":NEAREST_UNMITIGATED_ZONES")
         self.assertEqual(zones.value["zones"][0]["record_id"], "zone-near")
 
+    def test_s02_preserves_15m_1h_4h_timeframe_boundaries_and_4h_insufficiency(self):
+        records = [
+            _record("15m-state", "meylux.market_structure_events", {
+                "event_type": "STRUCTURE_STATE", "structural_state": "TRENDING_UP",
+                "event_location": T0, "knowledge_time": T0,
+            }, timeframe="15m", event_time=T0, knowledge_time=T0),
+            _record("1h-state", "meylux.market_structure_events", {
+                "event_type": "STRUCTURE_STATE", "structural_state": "TRENDING_DOWN",
+                "event_location": T0, "knowledge_time": T0,
+            }, timeframe="1h", event_time=T0, knowledge_time=T0),
+            _record("4h-insufficient", "meylux.market_structure_events", {
+                "event_type": "STRUCTURE_STATE", "structural_state": "UNCONFIRMED",
+                "event_location": T0, "knowledge_time": T0,
+            }, timeframe="4h", event_time=T0, knowledge_time=T0,
+               status=FactStatus.INSUFFICIENT_DATA),
+        ]
+        result = analyze_s02(_snapshot(*records), CONFIG)
+        self.assertEqual(_finding(result, "STRUCTURE:BTCUSDT:BINANCE:15m:STATE").value["state"], "TRENDING_UP")
+        self.assertEqual(_finding(result, "STRUCTURE:BTCUSDT:BINANCE:1h:STATE").value["state"], "TRENDING_DOWN")
+        self.assertEqual(_finding(result, "STRUCTURE:BTCUSDT:BINANCE:4h:STATE").value["state"], "INSUFFICIENT_DATA")
+
     def test_s02_excludes_post_as_of_structure_and_preserves_boundary_equality(self):
         equality = T0 + timedelta(hours=2)
         valid = _record("state-eq", "meylux.market_structure_events", {
