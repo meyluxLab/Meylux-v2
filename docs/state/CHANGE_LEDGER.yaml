@@ -3136,3 +3136,58 @@ entries:
   resulting_state: PH-P5 ACTIVE / AUTHORIZED; STEP-P5-004 COMPLETE / VERIFIED; active_task_order TO-P4-013; STEP-P5-005 NOT ACTIVATED
   task_order_commit: 3656c81155eb58a97a348fb5370131d04d92372c
   closure_status: OPEN — AUTHORIZED TO EXECUTE
+
+
+  - ledger_id: CL-TO-P4-013-CLOSURE-20261005
+    date_utc: 2026-10-05
+    authority: CONTROL / ROL-V2-001
+    action: "CONTROL INDEPENDENT VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P4-013"
+    basis: "AR-P4-020 + BR-P4-013 + TO-P4-013 + PR #65 + merged commit 0be8406454ad933a23ac1d33609553731ab23000 + implementation revision 7c809edc38cb08451f605383af568febb9ef6827 + EXEC-LOG-TO-P4-013-CONTROL-RUNTIME-20261005 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013"
+    affected_ids:
+      - TO-P4-013
+      - BR-P4-013
+      - AR-P4-020
+      - TST-P4-013
+      - DB-P4-013
+      - RUN-P4-013
+      - STEP-P5-004
+      - PH-P5
+      - STEP-P5-005
+    predecessor_state: "TO-P4-013 AUTHORIZED TO EXECUTE; active_task_order TO-P4-013; STEP-P5-004 COMPLETE / VERIFIED; PH-P5 ACTIVE / AUTHORIZED."
+    resulting_state: "TO-P4-013 VERIFIED / COMPLETE; PRQ-1 Group-B ESTABLISHED / VERIFIED; active_task_order null; STEP-P5-004 COMPLETE / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-005 remains NOT ACTIVATED."
+    implementation_revision: 7c809edc38cb08451f605383af568febb9ef6827
+    merged_revision: 0be8406454ad933a23ac1d33609553731ab23000
+    runtime_evidence:
+      canonical_btcusdt_rows: 158
+      primary_15m_candles: 117
+      eligible_1h_candles: 31
+      available_4h_candles: 10
+      first_execution_new_structural_events: 248
+      first_execution_new_structural_zones: 64
+      replay_additional_structural_events: 0
+      replay_additional_structural_zones: 0
+      no_lookahead_violations: 0
+      venue_readback: BINANCE
+      append_only_event_update_delete: "DENIED / VERIFIED — SQLSTATE 42501"
+      append_only_zone_update_delete: "DENIED / VERIFIED — SQLSTATE 42501"
+    control_conclusion: "TO-P4-013 underlying requirement genuinely resolved; no closure-blocking authoritative conflict remains."
+    architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN; P4 mathematical ownership and historical P4/G-4 closure remain unchanged."
+    runtime_effect: "Isolated exact-revision runtime verification executed through SentinelX; existing governed worker was not replaced or restarted; temporary worktree/image removed."
+    g12:
+      artifact_registry: UPDATED
+      tests_registry: UPDATED
+      database_registry: UPDATED
+      runtime_registry: UPDATED
+      requirements_registry: CHECKED — no direct lifecycle mutation required
+      configuration_registry: CHECKED — no configuration lifecycle mutation required
+      security_registry: CHECKED — append-only/application privilege evidence represented in DB/runtime records; no separate lifecycle mutation required
+      contracts_registry: CHECKED — no contract identity change
+      performance_registry: CHECKED — no new performance target/claim
+      observability_registry: CHECKED — no new production observability contract
+      components_registry: CHECKED — no component lifecycle mutation required
+      phases_registry: UPDATED
+      readme: UPDATED
+      standalone_status_documents: UPDATED
+      open_questions: CHECKED — no closure-blocking question created
+      supplemental_staging_registry: CHECKED — none
+      machine_readback: COMPLETED
