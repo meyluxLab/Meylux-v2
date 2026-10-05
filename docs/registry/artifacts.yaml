@@ -1742,8 +1742,8 @@ records:
     canonical_name: Build Report — TO-P5-005 Group B: Market Structure, Price Action, Liquidity
     entity_type: BR
     artifact_path: docs/build-reports/BR-P5-006.md
-    traceability: TO-P5-005 / PH-P5 / STEP-P5-005 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
-    status: ALLOCATED / NOT YET PRODUCED
+    traceability: TO-P5-005 / PH-P5 / STEP-P5-005 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / 99c57cc002515220fa9fbd68933ead4f991fb1c9 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
+    status: PRODUCED / NOT VERIFIED
 
   - stable_id: BR-P4-013
     canonical_name: Build Report — Group-B Upstream Structural-Fact Operationalization for P5-005
