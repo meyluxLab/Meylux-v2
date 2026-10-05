@@ -418,6 +418,7 @@ class ScenarioTests(unittest.TestCase):
 
     @staticmethod
     def _golden_trace(result):
+        print("P4-013-CORRECTION-IDENTITIES", [(e.event_type, e.event_location.isoformat(), e.identity, e.source_event_identity) for e in result.events if e.event_type in {"HH", "HL", "LH", "LL"}], flush=True)
         base=result.bars[0].open_time
         out=[]
         for st in result.states:
