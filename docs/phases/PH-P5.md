@@ -57,7 +57,7 @@ Phase 5 interprets authoritative upstream facts through independent specialist d
 **Completion Audit:** `AR-P5-002`
 **Authorization state:** COMPLETE / VERIFIED
 **Predecessor:** `STEP-P4-006` — COMPLETE / VERIFIED
-**Active Task Order:** `TO-P5-005`
+**Active Task Order:** `null`
 **Activation basis:** Project Owner — PHASE 5 RE-DIRECTION AND SIMPLIFIED ESTABLISHMENT DIRECTIVE — 2026-09-23
 
 Purpose: establish the specialist contract/evidence model, configuration and append-only persistence foundation required by later Phase 5 execution, while preserving Stage-1 independence and the frozen architecture.
@@ -153,3 +153,8 @@ The prerequisite `PRQ-1 Group-B P4 capability` is ESTABLISHED / VERIFIED under `
 The governed acceptance boundary remains BTCUSDT 15m primary with eligible 1h/4h context. The repository's 5m capability is supported and semantically defined but has not been independently runtime-verified and is not required by this Step absent an actual dependency.
 
 `STEP-P5-006` and later Steps remain unauthorized.
+
+
+## Post-Closure S-12 Causal Resolution
+
+`TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL independently established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No P4/P5 implementation defect, provider expansion, synthetic liquidity, or P4 mathematical change was introduced. Historical `STEP-P5-005 / TO-P5-005` closure remains unchanged; `STEP-P5-006` is not activated.
