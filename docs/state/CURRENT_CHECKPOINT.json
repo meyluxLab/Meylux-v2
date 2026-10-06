@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P4-014",
+  "last_approved_task_order": "TO-P4-014-CORRECTIVE-001",
   "last_build_report": "BR-P5-007",
   "last_audit_report": "AR-P5-006",
   "last_execution_log": "EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006",
-  "active_task_order": "TO-P4-014",
+  "active_task_order": "TO-P4-014-CORRECTIVE-001",
   "completed_task_order": "TO-P5-005-CORRECTIVE-001",
   "completion_audit": "AR-P5-006",
   "verified_artifacts": [
@@ -406,13 +406,14 @@
     "TO-P4-013 is VERIFIED / COMPLETE under AR-P4-020 after exact-revision SentinelX runtime acceptance; PRQ-1 Group-B is ESTABLISHED / VERIFIED; STEP-P5-005 remains NOT ACTIVATED; active_task_order is null.",
     "CONTROL determined STEP-P5-005 is the next governed boundary after TO-P4-013 verification; PRQ-1 Group-B is ESTABLISHED / VERIFIED; TO-P5-005 is AUTHORIZED TO EXECUTE; 5m is supported/semantically defined but not independently runtime-verified and is not required by STEP-P5-005 absent an actual dependency.",
     "CONTROL independently verified STEP-P5-005 under AR-P5-005 on merged main revision 779201ea95c3f067d5a115d0f532be660b5f7454; TO-P5-005 is VERIFIED / COMPLETE; PH-P5 remains ACTIVE / AUTHORIZED; no later P5 Step is activated.",
-    "CONTROL determined STEP-P5-006 Group C as the next governed P5 boundary. The P5-006 gate requires PRQ-1 Group-C and PRQ-2 trade evidence. Current evidence establishes the P4 Volume Profile persistence surface but not authoritative runtime population; TO-P4-014 is activated as the bounded P4-owned prerequisite-resolution Task Order. STEP-P5-006 specialist implementation is not activated and no P5-006 completion claim is made."
+    "CONTROL determined STEP-P5-006 Group C as the next governed P5 boundary. The P5-006 gate requires PRQ-1 Group-C and PRQ-2 trade evidence. Current evidence establishes the P4 Volume Profile persistence surface but not authoritative runtime population; TO-P4-014 is activated as the bounded P4-owned prerequisite-resolution Task Order. STEP-P5-006 specialist implementation is not activated and no P5-006 completion claim is made.",
+    "CONTROL independently identified S-03 as separable from the unresolved S-17 semantic dependency and activated TO-P4-014-CORRECTIVE-001 to prevent No-Drop suspension of the actionable S-03 capability; S-17 remains unresolved and P5-006 remains inactive."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "857020c80de4753727ee8fb51cbffb88369e4635",
-  "updated_at_utc": "2026-10-06T13:39:17Z",
+  "updated_at_utc": "2026-10-06T13:54:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
