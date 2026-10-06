@@ -3531,3 +3531,41 @@ entries:
       - STEP-P5-006
     outcome: "TO-P4-014 VERIFIED / COMPLETE; PRQ-1 Group-C P4 capability ESTABLISHED / VERIFIED; trade-input prerequisite for STEP-P5-006 ESTABLISHED / VERIFIED for the governed acceptance boundary. P5-006 specialist implementation remains inactive."
 
+
+
+  - ledger_id: CL-P5-006-PRQ2-TRADE-20261006
+    date_utc: 2026-10-06
+    authority: Project Owner next governed-stage directive 2026-10-06 + PH-P5 PD-2
+    role: ROL-V2-001
+    action: CONTROL ACTIVATION — P2-OWNED PRQ-2 TRADE CAPABILITY RESOLUTION FOR STEP-P5-006
+    basis: CURRENT_CHECKPOINT / PH-P5 / PHASE5_ROADMAP / P5_002_FACT_REQUIREMENTS_MATRIX / TO-P4-014 / AR-P4-022 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    disposition:
+      next_step: STEP-P5-006
+      next_step_status: DEFINED / INACTIVE
+      prq1_group_c: ESTABLISHED / VERIFIED
+      prerequisite_task_order: TO-P2-014
+      prerequisite_task_order_status: AUTHORIZED TO EXECUTE
+      active_task_order: TO-P2-014
+      p5_specialist_activation: NOT ACTIVATED
+    findings:
+      - "TO-P4-014 / AR-P4-022 established the P4 Group-C fact surface and real governed trade lineage for the P4 S-17 acceptance boundary."
+      - "That evidence does not by itself establish a reusable governed P2 trade-acquisition capability; the repository records the collector boundary as a foundation service that does not instantiate acquisition adapters."
+      - "The roadmap assigns trade/depth acquisition ownership to P2 under PRQ-2; STEP-P5-006 specifically requires the trade portion."
+    corrective_route:
+      task_order: TO-P2-014
+      owner_boundary: PH-P2 / STEP-P2-006
+      objective: "Establish the real bounded Binance Spot trade acquisition capability required by STEP-P5-006 without reopening P2 closure or implementing P5 specialists."
+    exclusions:
+      - "No MEXC trade/depth implementation."
+      - "No second-venue implementation."
+      - "No P5 specialist implementation."
+      - "No synthetic/fabricated trade history."
+      - "No candle substitution."
+      - "No P4 mathematical or S-17 semantic changes."
+    synchronization:
+      task_order_artifact: CREATED AND ACTIVATED
+      checkpoint: UPDATED — active_task_order TO-P2-014
+      phase_definition: UPDATED — STEP-P5-006 remains DEFINED / INACTIVE; P2 trade prerequisite resolution active
+      artifacts_registry: UPDATED — TO-P2-014 AUTHORIZED TO EXECUTE
+      historical_evidence: UNCHANGED
+    continuation: "Producer is handed TO-P2-014 for implementation and Build Report delivery; CONTROL retains independent runtime verification and closure authority."
