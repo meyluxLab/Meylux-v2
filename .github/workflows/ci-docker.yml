@@ -228,7 +228,7 @@ jobs:
             -c "SELECT count(*) AS quality_evidence_rows FROM meylux.quality_evidence WHERE provider_id='binance' AND event_type='TRADE';"
           docker compose -f infrastructure/compose/docker-compose.yml exec -T db \
             psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 \
-            -c "SELECT count(*) AS canonical_trade_rows FROM meylux.canonical_trades WHERE event_id IN (SELECT event_id FROM meylux.raw_acquisition_events WHERE provider_id='binance' AND event_type='TRADE' AND acquisition_state='AVAILABLE');"
+            -c "SELECT count(*) AS canonical_trade_rows FROM meylux.canonical_trades WHERE source_record_id IN (SELECT event_id FROM meylux.raw_acquisition_events WHERE provider_id='binance' AND event_type='TRADE' AND acquisition_state='AVAILABLE');"
 
       - name: Verify legacy knowledge-time migration and idempotency
         env:
