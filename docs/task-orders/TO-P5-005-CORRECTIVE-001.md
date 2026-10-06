@@ -284,16 +284,16 @@ If this Task Order reaches its legitimate completion boundary, CONTROL performs 
 
 ## 16. Current Governance State
 
-At preparation time:
+At activation/read-back time:
 
 - `PH-P5 = ACTIVE / AUTHORIZED`;
 - `STEP-P5-005 = COMPLETE / VERIFIED`;
 - `TO-P5-005 = VERIFIED / COMPLETE`;
-- `active_task_order = null`;
+- `active_task_order = TO-P5-005-CORRECTIVE-001`;
 - `DOC-P5-003 = PRODUCED / UNVERIFIED`;
 - causal classification remains unresolved pending authoritative investigation.
 
-This Task Order is therefore **DRAFT / PENDING OWNER AUTHORIZATION AND ACTIVATION** and does not itself activate Producer execution.
+This Task Order is **AUTHORIZED TO EXECUTE** and Producer execution is activated under the Owner's explicit full-authority directive.
 
 ## 17. Definition of Done
 
@@ -301,7 +301,7 @@ The actual causal state of the historical S-12 `LIQUIDITY_POOL = 0 / INSUFFICIEN
 
 The required outcome is truthful causal resolution, not manufactured liquidity data and not a predetermined technical patch.
 
-**Producer execution remains inactive until this Task Order is formally authorized and activated.**
+**Producer execution is active under this Task Order.**
 
 
 ## CONTROL Activation Record — 2026-10-06
