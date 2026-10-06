@@ -4,8 +4,8 @@ import unittest
 from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
-from contracts.specialist import EvidenceRef, FactStatus, SnapshotRecord, SpecialistStatus
-from meylux.specialists.snapshot import InputSnapshotBuilder
+from contracts.specialist import EvidenceRef, FactStatus, SpecialistStatus
+from meylux.specialists.snapshot import InputSnapshotBuilder, SnapshotRecord
 from meylux.specialists.group_c import analyze_s03, analyze_s17, GroupCSemanticError
 
 
