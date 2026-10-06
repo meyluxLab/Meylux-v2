@@ -1,12 +1,12 @@
 # Project-Wide Retrospective No-Drop Assessment — 2026-10-06
 
-**Assessment status:** PRODUCED / UNVERIFIED
+**Assessment status:** CLOSED / VERIFIED
 **Role:** ROL-V2-001 — CONTROL / REVIEWER
 **Scope:** Project-wide retrospective assessment only
 **Authority:** Project Owner directive dated 2026-10-06; ADR-GOVERNANCE-014; ADR-GOVERNANCE-013
 **Implementation authorized by this document:** NONE
 **Historical artifact modification authorized by this document:** NONE
-**Registry synchronization authorized by this document:** NONE
+**Registry synchronization at production time:** NONE. Closure synchronization is governed by the Project Owner's explicit 2026-10-06 authorization and recorded by `AR-P5-007`.
 
 ## 1. Purpose and boundary
 
@@ -226,3 +226,18 @@ Where evidence did not establish a No-Drop violation, the assessment records **n
 No implementation, migration, provider activation, historical rewrite, registry synchronization, Phase/Step reopening, or future-Step activation was performed as part of this assessment.
 
 **Assessment conclusion: NO HISTORICAL NO-DROP VIOLATION CURRENTLY ESTABLISHED.**
+
+
+## 12. CONTROL Self-Audit / Closure Verification
+
+Under the Project Owner's explicit authorization dated 2026-10-06, CONTROL re-audited this assessment against the authoritative repository state, ADR-GOVERNANCE-014, the cited candidate evidence, and `AR-P5-006`.
+
+The project-wide classifications remain supported. The S-12 case is now causally resolved as Branch A under `AR-P5-006`, and no reviewed candidate remains established as an ADR-014 Category-D unresolved prerequisite.
+
+No unsupported conclusion, historical rewrite, implementation authorization, Phase/Step reopening, or future-Step activation was introduced.
+
+Self-audit record: `AR-P5-007`.
+
+**Self-audit result: PASS.**
+
+**Final lifecycle status: CLOSED / VERIFIED.**
