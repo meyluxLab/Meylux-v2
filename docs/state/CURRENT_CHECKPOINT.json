@@ -427,7 +427,7 @@
     "TO-P4-014 is VERIFIED / COMPLETE under AR-P4-022 after independent repository, CI, real CanonicalTrade, SentinelX runtime, persistence/read-back and replay verification.",
     "PRQ-1 Group-C P4 capability is ESTABLISHED / VERIFIED under TO-P4-014 / AR-P4-022.",
     "The trade-input prerequisite required by STEP-P5-006 is ESTABLISHED / VERIFIED for the governed acceptance boundary.",
-    "STEP-P5-006 remains DEFINED / INACTIVE; P5 specialist implementation has not been activated.",
+    "STEP-P5-006 is ACTIVE / AUTHORIZED under TO-P5-006; P5 specialist implementation is bounded to S-03/S-17 Group-C scope.",
     "Closure Synchronization for TO-P4-014 was performed by CONTROL under ADR-GOVERNANCE-012; active_task_order is null pending the next P5-006 activation determination.",
     "CONTROL activated TO-P2-014 on 2026-10-06 as a bounded post-closure P2-owned PRQ-2 trade capability delivery for STEP-P5-006; PH-P2/STEP-P2-006 historical closure remains preserved; PRQ-1 Group-C remains ESTABLISHED / VERIFIED; P5 specialist implementation remains inactive."
   ],
