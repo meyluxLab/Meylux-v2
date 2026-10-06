@@ -1359,3 +1359,22 @@ remain distinguishable at every stage.
 The Reviewer's ultimate responsibility is not to keep the project moving at any cost.
 
 It is to keep the project **moving correctly**.
+
+# 41. REQUIRED CAPABILITY NO-DROP ENFORCEMENT
+
+ADR-GOVERNANCE-014 is the authoritative No-Drop rule; this section does not create a second principle.
+
+For every governed Task Order or closure decision where the authorized work contains a required capability, CONTROL must explicitly test the capability against its prerequisite boundary before treating the work as complete or dispositioned.
+
+Where a required capability has a missing or unresolved prerequisite, CONTROL must ensure the governed record preserves, as applicable: affected capability; computable/verifiable and uncomputable/unverifiable portions; exact limitation/reason; missing or unresolved prerequisite; resolution path or resolution question; responsible boundary; evidence required for resolution; and completion consequence.
+
+A truthful runtime state such as PARTIAL, INSUFFICIENT_DATA, UNAVAILABLE, UNAVAILABLE_INPUT, or SKIPPED is not by itself a capability-completion or closure condition.
+
+Before approving completion/closure, CONTROL must establish one of the ADR-014 lawful outcomes: (1) the prerequisite is resolved and the capability is verified; (2) the capability is formally removed from the required boundary; or (3) authoritative evidence establishes that the capability was not required within the applicable boundary.
+
+If none applies, the affected capability remains unresolved and the applicable corrective/governance path must remain explicit. Any corrective expansion must be bounded to the identified prerequisite problem.
+
+Historical evidence remains immutable; later resolution evidence is recorded as later state and does not rewrite the historical execution.
+
+This enforcement applies to CONTROL Task Order authoring, Producer-output audit, verification, and closure decisions within the existing authority boundary.
+
