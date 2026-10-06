@@ -173,7 +173,7 @@ The prerequisite `PRQ-1 Group-B P4 capability` is ESTABLISHED / VERIFIED under `
 
 The governed acceptance boundary remains BTCUSDT 15m primary with eligible 1h/4h context. The repository's 5m capability is supported and semantically defined but has not been independently runtime-verified and is not required by this Step absent an actual dependency.
 
-The Group-C upstream gate is established under `TO-P4-014 / AR-P4-022`; `STEP-P5-006` specialist implementation and later Steps remain unauthorized.
+The Group-C upstream gate is established under `TO-P4-014 / AR-P4-022`; `STEP-P5-006` specialist implementation is authorized under `TO-P5-006`; later Steps remain unauthorized.
 
 
 ## Post-Closure S-12 Causal Resolution
