@@ -210,8 +210,10 @@ jobs:
             -e MEYLUX_BINANCE_TRADE_SYMBOLS=BTCUSDT,SOLUSDT \
             -e MEYLUX_BINANCE_TRADE_LIMIT=100 \
             -e MEYLUX_BINANCE_REST_BASE_URL=https://data-api.binance.vision \
+            -e MEYLUX_BINANCE_TRADE_REPLAY=1 \
             --entrypoint python api \
-            -m meylux.runtime.service
+            -m meylux.runtime.service | tee /tmp/p2-014-replay.log
+          grep -Eq "envelopes=200 .*available=200 .*raw_inserted=200 raw_duplicates=200 .*quality_evidence_inserted=200 quality_evidence_duplicates=200 quality_evidence_contradictory=0 .*canonical_inserted=200 canonical_duplicates=200 .*invalid_or_unavailable=0 replay_executed=True" /tmp/p2-014-replay.log
 
       - name: Verify TO-P2-014 real trade persistence/read-back
         env:
