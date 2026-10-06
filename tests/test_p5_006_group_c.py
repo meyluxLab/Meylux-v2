@@ -95,7 +95,7 @@ def snapshot(records):
 def indicator(name, i, value, *, status=FactStatus.VALID):
     t = T0 + timedelta(minutes=15 * i)
     return fact(
-        f"{name}:{i}", "meylux.calculated_indicator_vectors", f"iv-{name}-{i}",
+        f"{name}:{i}", "meylux.calculated_indicator_vectors", f"{name}:{i}",
         {"fact_name": name, "value": value, "status": status.value},
         t, status=status,
     )
@@ -107,7 +107,7 @@ def candle(i, close, high=None, low=None):
     high = Decimal(str(high if high is not None else close + 1))
     low = Decimal(str(low if low is not None else close - 1))
     return fact(
-        f"candle:{i}", "meylux.canonical_candles", f"c-{i}",
+        f"candle:{i}", "meylux.canonical_candles", f"candle:{i}",
         {"open": close, "high": high, "low": low, "close": close, "close_time": t + timedelta(minutes=15)},
         t,
     )
@@ -116,7 +116,7 @@ def candle(i, close, high=None, low=None):
 def profile(i, start, end, poc="100", vah="105", val="95", hvn="103", lvn="97"):
     t = end
     return fact(
-        f"profile:{i}", "meylux.volume_profile_sessions", f"vp-{i}",
+        f"profile:{i}", "meylux.volume_profile_sessions", f"profile:{i}",
         {
             "profile_interval": {"start": start, "end": end, "boundary": "[start,end)"},
             "facts": {
