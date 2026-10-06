@@ -2048,16 +2048,29 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-015.md
     traceability: ADR-GOVERNANCE-014 / TO-P5-006 / Project Owner full-resolution authorization 2026-10-06
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: TO-P4-015
     canonical_name: Group-C Authoritative Fact Population & Runtime Evidence Resolution
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-015.md
     traceability: ADR-GOVERNANCE-014 / TO-P5-006 / TO-P2-015 / Project Owner full-resolution authorization 2026-10-06
-    status: DEFINED / INACTIVE — PENDING TO-P2-015
+    status: AUTHORIZED TO EXECUTE
   - stable_id: BR-P2-015
     canonical_name: Producer Build Report — TO-P2-015 Binance Spot Trade Evidence Venue Semantics
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-015.md
     traceability: TO-P2-015 / PH-P2 / STEP-P5-006 prerequisite / TO-P5-006 / ADR-GOVERNANCE-014 / Project Owner authorization 2026-10-06
-    status: PRODUCED
+    status: VERIFIED
+
+  - stable_id: AR-P2-AUDIT-015
+    canonical_name: CONTROL Independent Audit — TO-P2-015 Binance Trade Venue Evidence
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-015.md
+    traceability: TO-P2-015 / BR-P2-015 / PR #71 / EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-014
+    status: VERIFIED
+  - stable_id: EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007
+    canonical_name: CONTROL Runtime Acceptance — TO-P2-015
+    entity_type: EXEC-LOG
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007.md
+    traceability: TO-P2-015 / AR-P2-AUDIT-015
+    status: VERIFIED
