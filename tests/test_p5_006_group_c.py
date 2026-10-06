@@ -6,6 +6,7 @@ from decimal import Decimal
 
 from contracts.specialist import EvidenceRef, FactStatus, SpecialistStatus
 from meylux.specialists.snapshot import InputSnapshotBuilder, SnapshotRecord
+from meylux.specialists.s10 import snapshot_from_json
 from meylux.specialists.group_c import analyze_s03, analyze_s17, GroupCSemanticError
 
 
@@ -238,6 +239,20 @@ class TestP5006GroupC(unittest.TestCase):
         state = next(f for f in out.findings if f.code.endswith(":STATE"))
         self.assertEqual(state.status, SpecialistStatus.INSUFFICIENT_DATA)
         self.assertEqual(state.value["state"], "INSUFFICIENT_DATA")
+
+    def test_s17_survives_canonical_snapshot_json_transport(self):
+        start = T0
+        end = T0 + timedelta(hours=1)
+        s = snapshot([
+            profile(1, start, end, poc="100", vah="105", val="95", hvn="103", lvn="97"),
+            candle(3, "102", high="103", low="101"),
+            candle(4, "104", high="105", low="103"),
+        ])
+        transported = snapshot_from_json(s.serialize())
+        out = analyze_s17(transported, CFG)
+        position = next(f for f in out.findings if f.code.endswith(":POSITION"))
+        self.assertEqual(position.status, SpecialistStatus.SUCCESS)
+        self.assertEqual(position.value["state"], "INSIDE")
 
     def test_replay_is_deterministic_without_specialist_dependency(self):
         s = snapshot([
