@@ -16,8 +16,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
-- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-005` — `COMPLETE / VERIFIED` under `AR-P5-005`; `TO-P5-005` is `VERIFIED / COMPLETE`; no later P5 Step is activated. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Latest completed Task Order:** `TO-P5-005-CORRECTIVE-001` — S-12 Liquidity Causal-Resolution Investigation; independently verified under `AR-P5-006`; `active_task_order = null`; historical `STEP-P5-005 / TO-P5-005` closure remains preserved; no later P5 Step is activated.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `DEFINED / INACTIVE`; its upstream prerequisite resolution is active under `TO-P4-014`; `STEP-P5-005` remains `COMPLETE / VERIFIED` under `AR-P5-005`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
+- **Latest completed Task Order:** `TO-P4-014` — Group-C Volume / Volume-Profile upstream prerequisite resolution; `active_task_order = TO-P4-014`; historical `STEP-P5-005 / TO-P5-005` closure remains preserved; P5-006 specialist implementation is not activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -71,7 +71,7 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current Step: `STEP-P5-005` — `COMPLETE / VERIFIED`; Active Task Order: `null`; `TO-P5-005` is `VERIFIED / COMPLETE` under `AR-P5-005`; `TO-P4-013` remains `VERIFIED / COMPLETE` under `AR-P4-020`; Completion Audit: `AR-P5-005`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current governed boundary: `STEP-P5-006` — `DEFINED / INACTIVE`; Active Task Order: `TO-P4-014` for bounded upstream Group-C prerequisite resolution; `TO-P5-005` is `VERIFIED / COMPLETE` under `AR-P5-005`; `TO-P4-013` remains `VERIFIED / COMPLETE` under `AR-P4-020`; Completion Audit: `AR-P5-005`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
 
 
 ## Post-Closure Investigation State
@@ -89,4 +89,4 @@ TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed u
 
 ## Post-Closure S-12 Causal Resolution
 
-`TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No corrective implementation is required by that investigation; historical `STEP-P5-005 / TO-P5-005` remains COMPLETE / VERIFIED and `STEP-P5-006` remains unactivated.
+`TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No corrective implementation is required by that investigation; historical `STEP-P5-005 / TO-P5-005` remains COMPLETE / VERIFIED and `STEP-P5-006` is established but remains unactivated pending independent verification of its PRQ-1 Group-C / PRQ-2 trade gate.
