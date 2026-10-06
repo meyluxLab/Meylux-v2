@@ -223,7 +223,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "VALUES($1,$2,$3,$4,$5,$6,$7,'VALID',$8,$9::jsonb,$10,$11) "
                     "ON CONFLICT(record_id) DO NOTHING",
                     "to-p4-014-s17-record-001",
-                    "to-p4-014-s17-event-001",
+                    "to-p4-014-s17-source-001",
                     symbol,
                     datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
                     "binance:s17-ci",
@@ -791,7 +791,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,"
                         "quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
                         ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT (record_id) DO NOTHING",
-                        f"vp-ci-record-{i}", f"vp-ci-event-{i}", symbol, trade.timestamp, trade.provenance_id,
+                        f"vp-ci-record-{i}", fsource_record_id, symbol, trade.timestamp, trade.provenance_id,
                         source_record_id, source_record_id, "VALID", Decimal("1.00"), canonical_json,
                         canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
                     )
