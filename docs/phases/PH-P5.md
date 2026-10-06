@@ -1,9 +1,9 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-005` — COMPLETE / VERIFIED under `AR-P5-005`
-**Active Task Order:** `null`
-**Active Corrective Dependency:** `null` — `TO-P4-013` VERIFIED / COMPLETE under `AR-P4-020`
+**Current Step Lifecycle:** `STEP-P5-006` — DEFINED / INACTIVE; upstream prerequisite resolution active under `TO-P4-014`
+**Active Task Order:** `TO-P4-014`
+**Active Corrective Dependency:** `TO-P4-014` — Group-C P4 upstream prerequisite resolution for `STEP-P5-006`
 **Last Completed Task Order:** `TO-P5-005`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
 **Current Corrective Task Order:** `null`
@@ -130,6 +130,27 @@ Required evidence includes deterministic specialist behavior, boundary/golden-ve
 
 VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation remains within the authorized development workspace. `STEP-P5-006` and later Steps remain unauthorized and out of scope.
 
+### `STEP-P5-006` — Group C: Volume, Volume Profile
+
+**Order:** 6  
+**Status:** DEFINED / INACTIVE  
+**Authorization state:** NOT ACTIVATED  
+**Predecessor:** `STEP-P5-005` — COMPLETE / VERIFIED  
+**Activation basis:** Project Owner next governed-stage directive — 2026-10-06  
+**Active Task Order:** `TO-P4-014` — bounded upstream prerequisite resolution  
+**Upstream gate:** `PRQ-1 Group-C` and `PRQ-2` trade capability required by the roadmap; current evidence does not yet establish the complete gate.
+
+Purpose: establish deterministic Group-C specialist capability for `S-03` Volume Analyst and `S-17` Volume Profile Reasoner using authoritative Stage-1 Input Snapshot facts and an independently verified P4 Group-C fact surface.
+
+The Step consumes authoritative upstream volume and Volume Profile facts. It does not create new P4 mathematical truth, acquire upstream data outside an authorized owning boundary, or silently replace missing trade facts with synthetic/fallback values.
+
+The Step acceptance boundary includes deterministic S-03 volume/RVOL interpretation and S-17 Value Area / POC / VAH / VAL / HVN / LVN interpretation, with previous-session comparison only where the required persisted session history actually exists. Real unavailable/insufficient states remain explicit where evidence warrants them.
+
+`STEP-P5-006` is not executable until CONTROL independently verifies the required upstream gate. The current gate-resolution Task Order is `TO-P4-014`; later P5 specialist implementation remains unauthorized until that dependency is independently verified.
+
+Required evidence includes deterministic specialist behavior, boundary/golden-vector tests, no-lookahead, EvidenceRef resolution, real persisted upstream facts, replay/idempotency, append-only persistence/read-back, specialist independence, applicable runtime/VPS evidence, and reproducible performance/resource evidence.
+
+
 ## Continuation and Dependency Rule
 
 Phase 5 follows just-in-time dependency completion. A dependency is not treated as a blanket Phase prerequisite merely because the Roadmap mentions it. When an authorized Step demonstrates an actual dependency, CONTROL routes that dependency through the correct ownership and change-control mechanism and continues the Step after the dependency is legitimately resolved or explicitly dispositioned unavailable.
@@ -152,7 +173,7 @@ The prerequisite `PRQ-1 Group-B P4 capability` is ESTABLISHED / VERIFIED under `
 
 The governed acceptance boundary remains BTCUSDT 15m primary with eligible 1h/4h context. The repository's 5m capability is supported and semantically defined but has not been independently runtime-verified and is not required by this Step absent an actual dependency.
 
-`STEP-P5-006` and later Steps remain unauthorized.
+The Group-C upstream gate is currently being resolved under `TO-P4-014`; `STEP-P5-006` specialist implementation and later Steps remain unauthorized.
 
 
 ## Post-Closure S-12 Causal Resolution
