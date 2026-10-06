@@ -10,11 +10,13 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 from contracts.canonical.candle import CanonicalCandle
+from contracts.canonical.trade import CanonicalTrade
 from meylux.orchestration import QuantOrchestrationConfig, QuantitativeOrchestrator
 from meylux.persistence.quantitative import QuantitativePersistence
 from meylux.queue import QueueEnvelope
 from meylux.runtime.quant_worker import QuantWorkerHandler
 from meylux.quantitative.regime_venue import RegimeConfig
+from contracts.quantitative.volume_profile import VolumeProfileConfig
 
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
@@ -607,6 +609,79 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             row["record_id"],
                         )
                         self.assertEqual(after, before, f"{table} row changed after rejected {operation}")
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+    def test_explicit_volume_profile_persists_real_canonical_trade_shape_and_replays_idempotently(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"], password=os.environ["MEYLUX_DB_PASSWORD"],
+                timeout=10, command_timeout=30,
+            )
+            try:
+                symbol = "TO-P4-014-CI:BTCUSDT"
+                start = datetime(2026, 2, 1, tzinfo=UTC)
+                end = start + timedelta(hours=1)
+                trades = tuple(
+                    CanonicalTrade(
+                        f"vp-trade-{i}", symbol, start + timedelta(minutes=10 * i),
+                        Decimal("100") + Decimal(i), Decimal("2") + Decimal(i),
+                        "BUY" if i == 0 else "SELL", provenance_id=f"vp-ci-provenance-{i}",
+                    ) for i in range(2)
+                )
+                for i, trade in enumerate(trades):
+                    event_id = f"vp-ci-raw-{i}"
+                    received = trade.timestamp + timedelta(seconds=3 + i)
+                    raw_payload = {"venue": "BINANCE"}
+                    raw_json = json.dumps(raw_payload, sort_keys=True, separators=(",", ":"))
+                    await conn.execute(
+                        "INSERT INTO meylux.raw_acquisition_events ("
+                        "event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,"
+                        "event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json,canonical_bytes,identity_hash"
+                        ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14::jsonb,$15,$16) ON CONFLICT (event_id) DO NOTHING",
+                        event_id, "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
+                        trade.timestamp, received, "AVAILABLE", str(i), trade.provenance_id, "CI_FIXTURE", raw_json, raw_json.encode(),
+                        hashlib.sha256(event_id.encode()).hexdigest(),
+                    )
+                    payload = {
+                        "trade_id": trade.trade_id, "instrument_id": trade.instrument_id, "timestamp": trade.timestamp.isoformat().replace("+00:00", "Z"),
+                        "price": str(trade.price), "quantity": str(trade.quantity), "aggressor_side": trade.aggressor_side,
+                        "quote_quantity": None, "provenance_id": trade.provenance_id,
+                    }
+                    canonical_json = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+                    await conn.execute(
+                        "INSERT INTO meylux.canonical_trades ("
+                        "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
+                        ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT (record_id) DO NOTHING",
+                        f"vp-ci-record-{i}", f"vp-ci-event-{i}", symbol, trade.timestamp, trade.provenance_id, event_id, event_id,
+                        "valid", Decimal("1.00"), canonical_json, canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
+                    )
+                persistence = QuantitativePersistence(conn)
+                config = VolumeProfileConfig(Decimal("1"), Decimal("0.50"), Decimal("0.10"))
+                inserted = await persistence.persist_volume_profile(
+                    symbol=symbol, timeframe="1h", trades=trades, interval_start=start, interval_end=end, config=config,
+                )
+                self.assertEqual(inserted, 1)
+                rows = await persistence.fetch_family("volume_profile", symbol, "1h", limit=10)
+                self.assertEqual(len(rows), 1)
+                row = rows[0]
+                self.assertEqual((row["session_start"], row["session_end"]), (start, end))
+                self.assertEqual(row["status"], "valid")
+                self.assertEqual(row["venue_context"], "BINANCE")
+                self.assertEqual(row["knowledge_time"], max(t.timestamp + timedelta(seconds=3 + i) for i, t in enumerate(trades)))
+                payload = row["payload_json"] if isinstance(row["payload_json"], dict) else json.loads(row["payload_json"])
+                self.assertEqual(payload["profile_interval"]["start"], start.isoformat().replace("+00:00", "Z"))
+                self.assertEqual(payload["profile_interval"]["end"], end.isoformat().replace("+00:00", "Z"))
+                self.assertEqual(tuple(payload["source_trade_ids"]), tuple(t.trade_id for t in trades))
+                self.assertEqual(tuple(payload["source_provenance"]), tuple(t.provenance_id for t in trades))
+                self.assertEqual(payload["poc"]["value"], "101")
+                replay = await persistence.persist_volume_profile(
+                    symbol=symbol, timeframe="1h", trades=trades, interval_start=start, interval_end=end, config=config,
+                )
+                self.assertEqual(replay, 0)
+                self.assertEqual(len(await persistence.fetch_family("volume_profile", symbol, "1h", limit=10)), 1)
             finally:
                 await conn.close()
         asyncio.run(run())
