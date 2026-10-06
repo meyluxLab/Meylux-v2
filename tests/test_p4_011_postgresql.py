@@ -220,7 +220,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "INSERT INTO meylux.canonical_trades "
                     "(record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,"
                     "lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash) "
-                    "VALUES($1,$2,$3,$4,$5,$6,$7,'valid',$8,$9::jsonb,$10,$11) "
+                    "VALUES($1,$2,$3,$4,$5,$6,$7,'VALID',$8,$9::jsonb,$10,$11) "
                     "ON CONFLICT(record_id) DO NOTHING",
                     "to-p4-014-s17-record-001",
                     "to-p4-014-s17-event-001",
