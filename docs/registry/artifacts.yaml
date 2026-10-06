@@ -1985,3 +1985,9 @@ records:
     traceability: Project Owner Item 7 directive 2026-10-06 / ADR-GOVERNANCE-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: APPROVED / VERIFIED
     disposition: No-Drop operational enforcement established across CONTROL, PRODUCER, PROJECT GUIDE, and AI continuation workflow
+  - stable_id: BR-P4-014
+    canonical_name: Producer Build Report — TO-P4-014-CORRECTIVE-001 S-03 Volume/RVOL Operational Integration
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-014.md
+    traceability: TO-P4-014-CORRECTIVE-001 / TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: PRODUCED
