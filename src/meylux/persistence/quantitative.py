@@ -9,7 +9,7 @@ import json
 from typing import Any, Mapping, Sequence
 
 from contracts.canonical.trade import CanonicalTrade
-from contracts.quantitative.base import CalculationResult
+from contracts.quantitative.base import CalculationResult, CalculationStatus
 from meylux.quantitative.volume_orderflow_derivatives import VolumeProfileConfig, VolumeProfileAnalysis, VolumeProfileEngine
 from meylux.orchestration.engine import QuantOrchestrationResult, TimeframeQuantitativeFacts, TimeframeStructuralFacts
 
