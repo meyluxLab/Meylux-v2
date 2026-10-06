@@ -433,14 +433,14 @@ class QuantitativePersistence:
             evidence = evidence_candidates[0]
             checks = (
                 (evidence["quality_source_record_id"], source_id, "source_record_id"),
-                (evidence["quality_source_identity_hash"], canonical_event_id, "source_identity_hash"),
+                (evidence["quality_source_identity_hash"], source_id, "source_identity_hash"),
                 (evidence["quality_event_type"], "TRADE", "event_type"),
                 (evidence["quality_canonical_instrument_id"], trade.instrument_id, "canonical_instrument_id"),
                 (evidence["quality_event_time"], trade.timestamp, "event_time"),
                 (evidence["quality_provenance_id"], trade.provenance_id, "provenance_id"),
                 (evidence["quality_acquisition_state"], "AVAILABLE", "acquisition_state"),
                 (evidence["quality_state"], "VALID", "quality_state"),
-                (evidence["quality_lifecycle_state"], "ACCEPTED", "lifecycle_state"),
+                (evidence["quality_lifecycle_state"], "CANONICAL", "lifecycle_state"),
             )
             for actual, expected, field in checks:
                 if actual != expected:
