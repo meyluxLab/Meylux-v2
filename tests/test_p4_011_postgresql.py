@@ -787,7 +787,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
                         ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT (record_id) DO NOTHING",
                         f"vp-ci-record-{i}", f"vp-ci-event-{i}", symbol, trade.timestamp, trade.provenance_id, event_id, event_id,
-                        "valid", Decimal("1.00"), canonical_json, canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
+                        "VALID", Decimal("1.00"), canonical_json, canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
                     )
                 persistence = QuantitativePersistence(conn)
                 config = VolumeProfileConfig(Decimal("1"), Decimal("0.50"), Decimal("0.10"))
