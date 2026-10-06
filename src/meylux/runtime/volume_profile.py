@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from decimal import Decimal
 from typing import Any, Mapping
 from contracts.canonical.trade import CanonicalTrade
-from contracts.quantitative.volume_profile import VolumeProfileConfig
+from meylux.quantitative.volume_orderflow_derivatives import VolumeProfileConfig
 from meylux.persistence.quantitative import QuantitativePersistence
 
 def _required(name: str) -> str:
