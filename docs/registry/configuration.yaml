@@ -126,3 +126,20 @@ records:
     bounded_execution: VERIFIED
     control_audit: AR-P2-AUDIT-014
   status: VERIFIED
+
+
+- stable_id: CFG-P2-015
+  canonical_name: TO-P2-015 Binance Trade Venue Evidence Configuration Boundary
+  entity_type: CFG
+  phase: PH-P2
+  step: STEP-P2-006
+  task_order: TO-P2-015
+  evidence:
+    provider: binance
+    product: Spot
+    venue_context: BINANCE
+    source_boundary: acquisition payload
+    inference_forbidden: true
+    runtime_target: server-l6rf
+    control_audit: AR-P2-AUDIT-015
+  status: VERIFIED
