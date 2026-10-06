@@ -362,65 +362,6 @@ class QuantitativePersistence:
             raise ValueError("structural identity collision: persisted content differs from deterministic replay")
         return 0
 
-    async def _resolve_trade_lineage(
-        self, provenance: tuple[str, ...]
-    ) -> tuple[str | None, datetime | None]:
-        """Resolve venue and knowledge boundary from authoritative raw trade evidence."""
-        refs = tuple(dict.fromkeys(provenance))
-        if not refs:
-            return None, None
-        records = await self._connection.fetch(
-            "SELECT provenance_id, provider_id, adapter_id, adapter_version, received_at, "
-            "payload_json->>'venue' AS venue, payload_json->>'venue_context' AS venue_context, "
-            "jsonb_typeof(payload_json->'venue') AS venue_type, "
-            "jsonb_typeof(payload_json->'venue_context') AS venue_context_type "
-            "FROM meylux.raw_acquisition_events "
-            "WHERE provenance_id = ANY($1::text[]) AND event_type = 'TRADE' "
-            "AND acquisition_state = 'AVAILABLE'",
-            list(refs),
-        )
-        by_ref: dict[str, list[Any]] = {ref: [] for ref in refs}
-        for row in records:
-            if row["provenance_id"] in by_ref:
-                by_ref[row["provenance_id"]].append(row)
-        venues: set[str] = set()
-        knowledge_times: list[datetime] = []
-        for ref in refs:
-            candidates = by_ref[ref]
-            if not candidates:
-                raise ValueError(f"missing authoritative raw TRADE lineage for provenance {ref!r}")
-            identities = {(row["provider_id"], row["adapter_id"], row["adapter_version"]) for row in candidates}
-            if len(identities) != 1 or any(not isinstance(value, str) or not value.strip() for identity in identities for value in identity):
-                raise ValueError(f"contradictory provider lineage for provenance {ref!r}")
-            for row in candidates:
-                received_at = row["received_at"]
-                if not isinstance(received_at, datetime) or received_at.tzinfo is None or received_at.utcoffset() != timezone.utc.utcoffset(received_at):
-                    raise ValueError(f"invalid raw TRADE received_at for provenance {ref!r}")
-                knowledge_times.append(received_at)
-                row_venues: set[str] = set()
-                for field, type_field in (("venue", "venue_type"), ("venue_context", "venue_context_type")):
-                    value = row[field]
-                    value_type = row[type_field]
-                    if value is None and value_type is None:
-                        continue
-                    if value_type != "string" or not isinstance(value, str) or not value.strip():
-                        raise ValueError(f"malformed raw TRADE {field} for provenance {ref!r}")
-                    row_venues.add(value.strip())
-                if len(row_venues) > 1:
-                    raise ValueError(f"contradictory raw TRADE venue context for provenance {ref!r}")
-                venues.update(row_venues)
-        if len(venues) > 1:
-            raise ValueError("contradictory venue context across profile provenance")
-        return (next(iter(venues)) if venues else None), max(knowledge_times)
-
-    @staticmethod
-    def _trade_payload(trade: CanonicalTrade) -> dict[str, Any]:
-        return {
-            "trade_id": trade.trade_id, "instrument_id": trade.instrument_id, "timestamp": trade.timestamp,
-            "price": trade.price, "quantity": trade.quantity, "aggressor_side": trade.aggressor_side,
-            "quote_quantity": trade.quote_quantity, "provenance_id": trade.provenance_id,
-        }
-
     async def persist_volume_profile(
         self, *, symbol: str, timeframe: str, trades: Sequence[CanonicalTrade],
         interval_start: datetime, interval_end: datetime, config: VolumeProfileConfig,
