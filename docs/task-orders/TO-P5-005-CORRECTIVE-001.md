@@ -284,24 +284,31 @@ If this Task Order reaches its legitimate completion boundary, CONTROL performs 
 
 ## 16. Current Governance State
 
-At activation/read-back time:
+At closure/read-back time:
 
 - `PH-P5 = ACTIVE / AUTHORIZED`;
 - `STEP-P5-005 = COMPLETE / VERIFIED`;
 - `TO-P5-005 = VERIFIED / COMPLETE`;
-- `active_task_order = TO-P5-005-CORRECTIVE-001`;
+- `active_task_order = null`;
 - `DOC-P5-003 = PRODUCED / UNVERIFIED`;
-- causal classification remains unresolved pending authoritative investigation.
+- causal classification: **Branch A — no qualifying liquidity pool existed in the authoritative P4 input/output boundary**.
 
-This Task Order is **AUTHORIZED TO EXECUTE** and Producer execution is activated under the Owner's explicit full-authority directive.
+This Task Order is **VERIFIED / COMPLETE** under `AR-P5-006`. Producer delivered `BR-P5-007`; CONTROL independently verified the causal evidence through repository and SentinelX read-only PostgreSQL evidence and completed the closure synchronization.
 
 ## 17. Definition of Done
 
-The actual causal state of the historical S-12 `LIQUIDITY_POOL = 0 / INSUFFICIENT_DATA` condition is established from authoritative evidence, or the evidence insufficiency is itself precisely demonstrated with a bounded next evidence requirement.
+The actual causal state of the historical S-12 `LIQUIDITY_POOL = 0 / INSUFFICIENT_DATA` condition is established from authoritative evidence, and the evidence-backed classification is Branch A.
 
 The required outcome is truthful causal resolution, not manufactured liquidity data and not a predetermined technical patch.
 
-**Producer execution is active under this Task Order.**
+**Final disposition:** VERIFIED / COMPLETE  
+**Completion Audit:** `AR-P5-006`  
+**Build Report:** `BR-P5-007`  
+**CONTROL Runtime Evidence:** `EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006`  
+**Historical `STEP-P5-005` / `TO-P5-005` closure:** PRESERVED  
+**`STEP-P5-006`:** NOT ACTIVATED
+
+No corrective implementation is authorized or required by this causal-resolution Task Order. Any future semantic requirement to distinguish an authoritative empty/no-applicable-liquidity state from unavailable liquidity evidence requires a separate governed boundary.
 
 
 ## CONTROL Activation Record — 2026-10-06
