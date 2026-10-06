@@ -350,7 +350,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 46 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
+        self.assertEqual(first, 48 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
