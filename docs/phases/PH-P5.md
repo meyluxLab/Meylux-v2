@@ -2,11 +2,11 @@
 
 **Status:** ACTIVE / AUTHORIZED
 **Current Step Lifecycle:** `STEP-P5-006` — ACTIVE / AUTHORIZED under `TO-P5-006`
-**Active Task Order:** `TO-P5-006`
+**Active Task Order:** `TO-P2-015`
 **Last Completed Upstream Dependency:** `TO-P2-014` — VERIFIED / COMPLETE under `AR-P2-AUDIT-014`
 **Last Completed Task Order:** `TO-P5-005`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
-**Current Corrective Task Order:** `TO-P5-006`
+**Current Corrective Task Order:** `TO-P2-015`
 **Completion Audit:** `AR-P5-004`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
@@ -179,3 +179,8 @@ The Group-C upstream gate is established under `TO-P4-014 / AR-P4-022`; `STEP-P5
 ## Post-Closure S-12 Causal Resolution
 
 `TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL independently established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No P4/P5 implementation defect, provider expansion, synthetic liquidity, or P4 mathematical change was introduced. Historical `STEP-P5-005 / TO-P5-005` closure remains unchanged; `STEP-P5-006` is not activated.
+
+
+## STEP-P5-006 Upstream Resolution Continuation
+
+The Project Owner authorized full root-cause continuation on 2026-10-06 after bounded runtime acceptance established that the specialist execution path is operational but the governed upstream Group-C fact/evidence population is incomplete. The immediate owning-boundary corrective Task Order is `TO-P2-015` (Binance Spot trade venue evidence), with `TO-P4-015` defined as the subsequent P4 fact-population/runtime-evidence resolution. `STEP-P5-006` remains ACTIVE / AUTHORIZED; no VERIFIED / COMPLETE / CLOSED claim is made for the Step.
