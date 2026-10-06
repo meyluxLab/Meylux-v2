@@ -1998,3 +1998,9 @@ records:
     artifact_path: docs/audits/AR-P4-021.md
     traceability: BR-P4-014 / TO-P4-014-CORRECTIVE-001 / TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: APPROVED / VERIFIED
+  - stable_id: BR-P4-015
+    canonical_name: Producer Build Report — TO-P4-014 S-17 Explicit-Interval Volume Profile Operational Path
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-015.md
+    traceability: TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / S-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: PRODUCED
