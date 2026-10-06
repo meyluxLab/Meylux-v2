@@ -168,3 +168,23 @@ records:
     artifact_path: docs/audits/AR-P2-AUDIT-007.md
     traceability: BR-P2-006 / TO-P2-007 / STEP-P2-006 / PH-P2 / GOV-BOUNDARY-001
     status: APPROVED / VERIFIED
+
+  - stable_id: TO-P2-014
+    entity_type: TO
+    canonical_name: Governed Binance Spot Trade Acquisition Capability for P5-006
+    artifact_path: docs/task-orders/TO-P2-014.md
+    traceability: PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / PRQ-2 trade / AR-P2-AUDIT-014
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P2-014
+    entity_type: BR
+    canonical_name: Governed Binance Spot Trade Acquisition Build Report
+    artifact_path: docs/build-reports/BR-P2-014.md
+    traceability: TO-P2-014 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / AR-P2-AUDIT-014
+    status: PRODUCER EVIDENCE / CONTROL VERIFIED
+  - stable_id: AR-P2-AUDIT-014
+    entity_type: AR
+    canonical_name: CONTROL Independent Audit of TO-P2-014
+    artifact_path: docs/audits/AR-P2-AUDIT-014.md
+    traceability: BR-P2-014 / TO-P2-014 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / PRQ-2 trade
+    status: APPROVED / VERIFIED
+
