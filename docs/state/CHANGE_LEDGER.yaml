@@ -3569,3 +3569,38 @@ entries:
       artifacts_registry: UPDATED — TO-P2-014 AUTHORIZED TO EXECUTE
       historical_evidence: UNCHANGED
     continuation: "Producer is handed TO-P2-014 for implementation and Build Report delivery; CONTROL retains independent runtime verification and closure authority."
+
+  - ledger_id: CL-P5-006-PRQ2-TRADE-CLOSURE-20261006
+    date_utc: 2026-10-06
+    authority: CONTROL independent audit AR-P2-AUDIT-014 under TO-P2-014
+    role: ROL-V2-001
+    action: CONTROL CLOSURE — P2-OWNED PRQ-2 TRADE CAPABILITY ESTABLISHED / VERIFIED
+    basis: BR-P2-014 / AR-P2-AUDIT-014 / PR #69 / implementation 41683d931a7cf4321f6655e173e8794af93f74d2 / Docker Run 37519104091 / Core Run 37519104088 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    disposition:
+      task_order: TO-P2-014
+      task_order_status: VERIFIED / COMPLETE
+      audit_report: AR-P2-AUDIT-014 APPROVED / VERIFIED
+      prq2_trade: ESTABLISHED / VERIFIED
+      p5_006_status: DEFINED / INACTIVE
+      active_task_order: null
+      p5_specialist_activation: NOT ACTIVATED
+    findings:
+      - "Real bounded Binance Spot TRADE acquisition for BTCUSDT and SOLUSDT was independently verified through the governed P2 boundary."
+      - "200 real provider-derived envelopes produced 200 raw, 200 quality-evidence and 200 canonical first-pass inserts."
+      - "Exact-evidence replay produced 200 raw duplicates, 200 quality-evidence duplicates, 0 contradictory quality evidence and 200 canonical duplicates."
+      - "Post-execution PostgreSQL read-back returned 202 Binance AVAILABLE raw rows, 214 Binance TRADE quality-evidence rows and 202 linked canonical trades; the additional rows were pre-existing CI evidence."
+      - "The finite 21-second retrieval is not treated as complete historical trade coverage."
+    synchronization:
+      audit_artifact: CREATED — AR-P2-AUDIT-014
+      artifacts_registry: UPDATED — TO-P2-014 VERIFIED / COMPLETE; BR-P2-014 and AR-P2-AUDIT-014 registered
+      phase2_artifacts_registry: UPDATED
+      tests_registry: UPDATED — TST-P2-014
+      database_registry: UPDATED — DB-P2-014
+      runtime_registry: UPDATED — RUN-P2-014
+      configuration_registry: UPDATED — CFG-P2-014
+      phase_registry: UPDATED — PRQ-2 resolved; STEP-P5-006 remains DEFINED / INACTIVE; active_task_order null
+      phase_definition: UPDATED — PH-P5 awaiting fresh STEP-P5-006 activation determination
+      checkpoint: UPDATED — completion_audit AR-P2-AUDIT-014; active_task_order null
+      readme: UPDATED — latest completed Task Order TO-P2-014
+      historical_evidence: UNCHANGED
+    next_action: "Fresh CONTROL P5-006 readiness determination; no P5 specialist implementation is activated by this closure."
