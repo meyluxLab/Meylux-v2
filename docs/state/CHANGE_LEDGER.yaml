@@ -3352,3 +3352,43 @@ entries:
       later_step_activation: NONE — STEP-P5-006 remains unactivated
       specialized_registries: CHECKED — no new test/config/security/component/contract/observability/performance implementation evidence
     conclusion: No corrective implementation is required by this causal-resolution Task Order; historical S-12 INSUFFICIENT_DATA remains unchanged.
+
+  - ledger_id: CL-P5-ASSESSMENT-SELF-AUDIT-CLOSURE-20261006
+    date_utc: 2026-10-06
+    authority: Project Owner explicit self-audit / closure authorization 2026-10-06
+    role: ROL-V2-001
+    action: CONTROL SELF-AUDIT / VERIFICATION / CLOSURE — CONTROL-AUTHORED ASSESSMENT ARTIFACTS
+    basis: AR-P5-007 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    disposition:
+      phase: PH-P5
+      current_step: STEP-P5-005
+      current_step_status: COMPLETE / VERIFIED
+      project_wide_assessment: DOC-P5-004
+      s12_assessment: DOC-P5-003
+      self_audit: AR-P5-007
+      project_wide_assessment_status: CLOSED / VERIFIED
+      s12_assessment_status: CLOSED / VERIFIED
+      s12_causal_result: Branch A — no qualifying liquidity pool existed in the authoritative P4 input/output boundary
+      active_task_order: null
+    scope: Verify and close the two already-produced CONTROL-authored assessment artifacts under explicit Owner authorization.
+    exclusions: P5-005 reopening; STEP-P5-006 activation; blanket corrective Task Order; MEXC semantic implementation; historical evidence mutation; unrelated scope.
+    verification:
+      scope_compliance: PASS
+      evidence_sufficiency: PASS
+      factual_correctness: PASS after DOC-P5-003 classification correction
+      adr_governance_014_compliance: PASS
+      lifecycle_consistency: PASS
+      historical_evidence_preservation: PASS
+      unsupported_conclusion_check: PASS
+    synchronization:
+      artifacts_registry: UPDATED — DOC-P5-003, DOC-P5-004, AR-P5-007
+      checkpoint: UPDATED — verified artifact set and unverified artifact set synchronized; current lifecycle preserved
+      change_ledger: UPDATED — this closure record
+      readme: CHECKED — no correction required
+      phase_status: CHECKED — PH-P5 remains ACTIVE / AUTHORIZED
+      specialized_registries: CHECKED — no new implementation evidence produced
+      supplemental_staging_registries: CHECKED — no retirement required
+      standalone_assessments: UPDATED — both CLOSED / VERIFIED
+    historical_evidence: UNCHANGED
+    conclusion: CONTROL self-audit PASS; both authorized assessment artifacts are CLOSED / VERIFIED.
+
