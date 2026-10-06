@@ -1784,7 +1784,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-014.md
     traceability: PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner next governed-stage directive 2026-10-06
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
 
   - stable_id: TO-P4-014-CORRECTIVE-001
     canonical_name: Complete S-03 Volume/RVOL Operational Integration
@@ -1992,6 +1992,19 @@ records:
     traceability: TO-P4-014-CORRECTIVE-001 / TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: VERIFIED
 
+  - stable_id: AR-P4-022
+    canonical_name: CONTROL Independent Verification — TO-P4-014
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-022.md
+    traceability: BR-P4-015 / TO-P4-014 / PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: APPROVED / VERIFIED
+  - stable_id: EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006
+    canonical_name: CONTROL S-17 Runtime Acceptance — TO-P4-014
+    entity_type: EXECUTION_LOG
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006.md
+    traceability: TO-P4-014 / BR-P4-015 / AR-P4-022 / SentinelX / PRQ-1 Group-C
+    status: VERIFIED
+
   - stable_id: AR-P4-021
     canonical_name: CONTROL Independent Verification — TO-P4-014-CORRECTIVE-001
     entity_type: AR
@@ -2003,4 +2016,4 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-015.md
     traceability: TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / S-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: PRODUCED
+    status: VERIFIED
