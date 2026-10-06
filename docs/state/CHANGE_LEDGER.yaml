@@ -3392,3 +3392,37 @@ entries:
     historical_evidence: UNCHANGED
     conclusion: CONTROL self-audit PASS; both authorized assessment artifacts are CLOSED / VERIFIED.
 
+  - ledger_id: CL-P5-NODROP-WORKFLOW-20261006
+    date_utc: 2026-10-06
+    authority: Project Owner Item 7 directive
+    role: ROL-V2-001
+    action: PERMANENT WORKFLOW NO-DROP ENFORCEMENT — INSPECT / GAP / CORRECT / VERIFY / CLOSE
+    basis: AR-P5-008 / ADR-GOVERNANCE-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    disposition:
+      audit: AR-P5-008
+      result: APPROVED / VERIFIED
+      operational_gap: ESTABLISHED
+      correction: MINIMUM BOUNDED GOVERNANCE/PROTOCOL CORRECTION APPLIED
+      normative_source_preserved: ADR-GOVERNANCE-014 + ARTIFACT_PROTOCOL_V2
+      duplicate_adr_created: false
+      p5_005_reopened: false
+      p5_006_activated: false
+      s12_reopened: false
+      mexc_implemented: false
+      historical_evidence_modified: false
+    changed_artifacts:
+      - docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md
+      - docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md
+      - docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md
+      - docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
+    synchronized:
+      artifacts_registry: UPDATED — AR-P5-008 registered
+      checkpoint: UPDATED — AR-P5-008 verified
+      change_ledger: UPDATED — this record
+      artifact_protocol: CHECKED — normative ADR-014 section already sufficient; no duplicate amendment required
+      readme: CHECKED — project state/structure unchanged
+      specialized_registries: CHECKED — governance-only change; no implementation/test/runtime evidence created
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED
+    conclusion: ADR-GOVERNANCE-014 No-Drop is now an explicit standing operational workflow behavior across CONTROL, PRODUCER, PROJECT GUIDE, and AI continuation within existing authority boundaries.
+
