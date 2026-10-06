@@ -152,7 +152,7 @@ class P3009QualityEvidenceTests(unittest.TestCase):
     def test_binance_trade_requires_explicit_binance_venue(self):
         record=build_quality_evidence(
             envelope(event_type=EventType.TRADE, payload={
-                "id":42,"time":1778155200000,"price":"100","qty":"1"
+                "id":42,"time":1778155200000,"price":"100","qty":"1","venue":"BINANCE"
             }),
             assessment(),
         )
