@@ -1791,7 +1791,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P4-014-CORRECTIVE-001.md
     traceability: TO-P4-014 / PH-P4 / STEP-P4-006 / S-03 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: AR-P5-005
     canonical_name: CONTROL Independent Verification — TO-P5-005
     entity_type: AR
@@ -1990,4 +1990,11 @@ records:
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-014.md
     traceability: TO-P4-014-CORRECTIVE-001 / TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: PRODUCED
+    status: VERIFIED
+
+  - stable_id: AR-P4-021
+    canonical_name: CONTROL Independent Verification — TO-P4-014-CORRECTIVE-001
+    entity_type: AR
+    artifact_path: docs/audits/AR-P4-021.md
+    traceability: BR-P4-014 / TO-P4-014-CORRECTIVE-001 / TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: APPROVED / VERIFIED
