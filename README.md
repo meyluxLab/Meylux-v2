@@ -16,8 +16,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
-- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `ACTIVE / AUTHORIZED` under `TO-P5-006`; P4 Group-C is `ESTABLISHED / VERIFIED` under `TO-P4-014 / AR-P4-022`; the trade portion of `PRQ-2` is `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Active Task Order:** `TO-P5-006` — Group C Volume / Volume Profile specialist capability, `AUTHORIZED TO EXECUTE`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `ACTIVE / AUTHORIZED` with upstream Group-C prerequisite resolution active under `TO-P2-015`; prior P4 Group-C acceptance remains historical and is being re-established against the real P5 acceptance boundary; the trade portion of `PRQ-2` is `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
+- **Active Task Order:** `TO-P2-015` — Binance Spot trade evidence venue semantics for the Group-C acceptance boundary, `AUTHORIZED TO EXECUTE`; downstream `TO-P5-006` remains authorized but awaits upstream prerequisite resolution; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -90,3 +90,8 @@ TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed u
 ## Post-Closure S-12 Causal Resolution
 
 `TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No corrective implementation is required by that investigation; historical `STEP-P5-005 / TO-P5-005` remains COMPLETE / VERIFIED and `STEP-P5-006` is ACTIVE / AUTHORIZED under `TO-P5-006`; `TO-P2-014` is VERIFIED / COMPLETE.
+
+
+## Current Group-C Resolution State
+
+`TO-P5-006` specialist runtime execution is operational but final capability acceptance is not established because the governed VPS lacks the required authoritative Group-C fact/evidence population. Project Owner full-resolution authorization is active. Immediate corrective boundary: `TO-P2-015`; subsequent P4 fact-population boundary: `TO-P4-015`. No specialist capability is declared VERIFIED / COMPLETE / CLOSED by this state transition.
