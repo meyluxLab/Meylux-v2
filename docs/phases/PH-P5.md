@@ -73,7 +73,7 @@ Required evidence includes deterministic contract semantics, explicit status/rea
 **Authorization state:** COMPLETE / VERIFIED  
 **Completion Audit:** `AR-P5-002`  
 **Predecessor:** `STEP-P5-001` — COMPLETE / VERIFIED  
-**Active Task Order:** `TO-P5-005`  
+**Active Task Order:** `null`  
 **Activation basis:** Project Owner — PHASE 5 CONTINUATION AUTHORIZATION — 2026-09-23
 
 Purpose: establish the authoritative Stage-1 Input Snapshot boundary and the Fact Requirements Matrix (FRM), using only existing authoritative persisted facts and preserving no-lookahead, provenance, deterministic identity and specialist independence.
