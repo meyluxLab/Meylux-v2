@@ -223,7 +223,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "VALUES($1,$2,$3,$4,$5,$6,$7,'VALID',$8,$9::jsonb,$10,$11) "
                     "ON CONFLICT(record_id) DO NOTHING",
                     "to-p4-014-s17-record-001",
-                    "to-p4-014-s17-source-001",
+                    "to-p4-014-s17-canonical-event-001",
                     symbol,
                     datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
                     "binance:s17-ci",
@@ -242,7 +242,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,"
                     "lineage_parent_id,payload_fingerprint,timeframe,venue) "
                     "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,'TRADE',$10,$11,$11,'AVAILABLE','VALID',"
-                    "'ACCEPTED',$12,'[]'::jsonb,NULL,$13,$14,$15,$16,$17) "
+                    "'CANONICAL',$12,'[]'::jsonb,NULL,$13,$14,$15,$16,$17) "
                     "ON CONFLICT(evidence_id) DO NOTHING",
                     "to-p4-014-s17-evidence-001",
                     "to-p4-014-s17-logical-001",
@@ -805,7 +805,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         " ON CONFLICT (evidence_id) DO NOTHING",
                         f"vp-ci-evidence-{i}", f"vp-ci-logical-{i}", source_record_id, source_record_id,
                         "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
-                        trade.timestamp, received, "AVAILABLE", "VALID", "ACCEPTED", Decimal("1.00"),
+                        trade.timestamp, received, "AVAILABLE", "VALID", "CANONICAL", Decimal("1.00"),
                         json.dumps([]), None, trade.provenance_id, source_record_id, hashlib.sha256(canonical_json.encode()).hexdigest(),
                         "1h", "BINANCE",
                     )
@@ -864,7 +864,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
             "VALUES($1,$2,$3,$4,$5,$6,$7,'VALID',$8,$9::jsonb,$10,$11) "
             "ON CONFLICT(record_id) DO NOTHING",
             f"to-p4-014-s17-correction-record-{suffix}",
-            source_record_id,
+            f"to-p4-014-s17-canonical-event-{suffix}",
             symbol,
             event_time,
             provenance,
@@ -897,9 +897,9 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 spec.get("event_type", "TRADE"),
                 spec.get("event_time", event_time),
                 received,
-                "AVAILABLE",
+                spec.get("acquisition_state", "AVAILABLE"),
                 spec.get("quality_state", "VALID"),
-                "ACCEPTED",
+                spec.get("lifecycle_state", "CANONICAL"),
                 Decimal("1.00"),
                 json.dumps([]),
                 None,
@@ -974,6 +974,11 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 ("event-type", {"event_type": "CANDLE"}, "event_type"),
                 ("instrument", {"canonical_instrument_id": "BINANCE:OTHER"}, "canonical_instrument_id"),
                 ("provenance", {"provenance_id": "binance:other"}, "provenance_id"),
+                ("source-identity", {"source_identity_hash": "0" * 64}, "source_identity_hash"),
+                ("event-time", {"event_time": datetime(2026, 3, 1, 0, 6, tzinfo=UTC)}, "event_time"),
+                ("acquisition-state", {"acquisition_state": "REJECTED"}, "acquisition_state"),
+                ("quality-state", {"quality_state": "DEGRADED"}, "quality_state"),
+                ("lifecycle-state", {"lifecycle_state": "REJECTED"}, "lifecycle_state"),
             )
             conn = await self.asyncpg.connect(
                 host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
