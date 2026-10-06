@@ -2055,3 +2055,9 @@ records:
     artifact_path: docs/task-orders/TO-P4-015.md
     traceability: ADR-GOVERNANCE-014 / TO-P5-006 / TO-P2-015 / Project Owner full-resolution authorization 2026-10-06
     status: DEFINED / INACTIVE — PENDING TO-P2-015
+  - stable_id: BR-P2-015
+    canonical_name: Producer Build Report — TO-P2-015 Binance Spot Trade Evidence Venue Semantics
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-015.md
+    traceability: TO-P2-015 / PH-P2 / STEP-P5-006 prerequisite / TO-P5-006 / ADR-GOVERNANCE-014 / Project Owner authorization 2026-10-06
+    status: PRODUCED
