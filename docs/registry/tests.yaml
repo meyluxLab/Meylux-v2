@@ -591,3 +591,27 @@ records:
     replay_quality_contradictory: 0
     replay_canonical_duplicates: 200
     control_audit: AR-P2-AUDIT-014
+
+
+  - stable_id: TST-P2-015
+    canonical_name: TO-P2-015 Binance Trade Venue-Evidence Regression and Runtime Acceptance
+    entity_type: TST
+    phase: PH-P2
+    step: STEP-P2-006
+    task_order: TO-P2-015
+    artifact_path: tests/test_acquisition/test_binance_adapter.py
+    traceability: TO-P2-015 / BR-P2-015 / AR-P2-AUDIT-015
+    status: VERIFIED
+    evidence:
+      implementation_head: 87b74954cd4fbd2d004a3212d965f42b97c3e870
+      merged_main_commit: 56bebeb4114aacd8d8999da3325b25c193db0b1a
+      ci_core_run_id: 37531793405
+      ci_core_run_number: 2124
+      ci_core_result: SUCCESS
+      ci_docker_foundation_run_id: 37531793409
+      ci_docker_foundation_run_number: 949
+      ci_docker_result: SUCCESS
+      dedicated_p3_009_postgresql_tests: 7/7 PASS
+      real_binance_runtime: VERIFIED
+      replay: VERIFIED
+      control_audit: AR-P2-AUDIT-015
