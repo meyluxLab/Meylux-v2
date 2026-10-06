@@ -193,7 +193,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             self.assertTrue(calculation.context.source_ref, name)
 
     def test_volume_rvol_thresholds_and_warmup_use_authoritative_indicator_semantics(self):
-        short = QuantitativeOrchestrator().process(bars(20), config())
+        short = QuantitativeOrchestrator().process(bars(19), config())
         for name in ("VOLUME_SMA", "RVOL", "VOLUME_SPIKE", "VOLUME_CLIMAX"):
             self.assertEqual(short.indicators[name].status, CalculationStatus.INSUFFICIENT_HISTORY, name)
             self.assertIsNone(short.indicators[name].value, name)
@@ -350,7 +350,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 40 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
+        self.assertEqual(first, 46 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
@@ -395,7 +395,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             args for query, args in db.sql
             if "INSERT INTO meylux.calculated_indicator_vectors" in query
         ]
-        self.assertEqual(len(rows), 19)
+        self.assertEqual(len(rows), 23)
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
         import json
         for args in rows:
