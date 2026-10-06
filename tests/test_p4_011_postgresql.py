@@ -16,7 +16,7 @@ from meylux.persistence.quantitative import QuantitativePersistence
 from meylux.queue import QueueEnvelope
 from meylux.runtime.quant_worker import QuantWorkerHandler
 from meylux.quantitative.regime_venue import RegimeConfig
-from contracts.quantitative.volume_profile import VolumeProfileConfig
+from meylux.quantitative.volume_orderflow_derivatives import VolumeProfileConfig
 
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
