@@ -1959,3 +1959,10 @@ records:
     artifact_path: docs/task-orders/TO-P5-005-CORRECTIVE-001.md
     traceability: PH-P5 / STEP-P5-005 / TO-P5-005 / DOC-P5-003 / BR-P5-007 / AR-P5-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner directive 2026-10-06
     status: VERIFIED / COMPLETE
+  - stable_id: AR-P5-008
+    canonical_name: Audit Report — Permanent ADR-GOVERNANCE-014 No-Drop Workflow Enforcement
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-008.md
+    traceability: Project Owner Item 7 directive 2026-10-06 / ADR-GOVERNANCE-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: APPROVED / VERIFIED
+    disposition: No-Drop operational enforcement established across CONTROL, PRODUCER, PROJECT GUIDE, and AI continuation workflow
