@@ -12,6 +12,8 @@ from meylux.queue import AsyncWorker,QueuePolicy,RedisQueue
 from meylux.orchestration import QuantOrchestrationConfig
 from meylux.quantitative.regime_venue import RegimeConfig
 from meylux.specialists.runtime import run_specialist_worker
+from meylux.acquisition.binance import BinanceAdapter
+from meylux.acquisition.trade_pipeline import AUTHORIZED_SYMBOLS, TradeAcquisitionPipeline
 
 def _required(n:str)->str:
     v=os.environ.get(n)
@@ -48,18 +50,44 @@ async def main():
     if service == "worker-specialist":
         await run_specialist_worker()
         return
-    if service in {"collector","worker-ai"}:
+    if service == "worker-ai":
         print(f"meylux-v2 foundation service started: {service}", flush=True)
         while True:
             await asyncio.sleep(3600)
-    if service not in {"api","worker-quant","worker-specialist"}:
-        raise SystemExit(f"unsupported Phase-4 service: {service!r}")
+    if service not in {"api","worker-quant","worker-specialist","collector"}:
+        raise SystemExit(f"unsupported service: {service!r}")
     pool=await asyncpg.create_pool(
         host=_required("MEYLUX_DB_HOST"),port=int(os.environ.get("MEYLUX_DB_PORT","5432")),
         database=_required("MEYLUX_DB_NAME"),user=_required("MEYLUX_DB_USER"),
         password=_required("MEYLUX_DB_PASSWORD"),min_size=1,max_size=2)
     client=redis.from_url(os.environ.get("MEYLUX_REDIS_URL","redis://redis:6379/0"),decode_responses=False)
     try:
+        if service=="collector":
+            configured=os.environ.get("MEYLUX_BINANCE_TRADE_SYMBOLS", ",".join(sorted(AUTHORIZED_SYMBOLS)))
+            symbols=TradeAcquisitionPipeline.validate_symbols(
+                tuple(item for item in configured.split(",") if item.strip())
+            )
+            limit=int(os.environ.get("MEYLUX_BINANCE_TRADE_LIMIT","1000"))
+            rest_base_url=os.environ.get("MEYLUX_BINANCE_REST_BASE_URL","https://api.binance.com")
+            replay_same_evidence=os.environ.get("MEYLUX_BINANCE_TRADE_REPLAY","0") == "1"
+            adapter=BinanceAdapter(rest_base_url=rest_base_url)
+            async with pool.acquire() as conn:
+                pipeline=TradeAcquisitionPipeline(conn, adapter=adapter, trade_limit=limit)
+                result=await pipeline.acquire_once(symbols, replay_same_evidence=replay_same_evidence)
+            print(
+                "meylux-v2 bounded Binance trade acquisition completed: "
+                f"symbols={result.symbols} envelopes={result.envelopes} "
+                f"available={result.available_trades} raw_inserted={result.raw_inserted} "
+                f"raw_duplicates={result.raw_duplicates} quality_evidence_inserted={result.quality_evidence_inserted} "
+                f"quality_evidence_duplicates={result.quality_evidence_duplicates} "
+                f"quality_evidence_contradictory={result.quality_evidence_contradictory} "
+                f"canonical_inserted={result.canonical_inserted} canonical_duplicates={result.canonical_duplicates} "
+                f"invalid_or_unavailable={result.invalid_or_unavailable} "
+                f"replay_executed={result.replay_executed} "
+                f"observed_history_seconds={result.observed_history_seconds}",
+                flush=True,
+            )
+            return
         if service=="api":
             async with pool.acquire() as conn:
                 await serve_api(os.environ.get("MEYLUX_API_HOST","0.0.0.0"),
