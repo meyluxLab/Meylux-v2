@@ -22,7 +22,7 @@
   "last_build_report": "BR-P5-006",
   "last_audit_report": "AR-P5-005",
   "last_execution_log": "EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005",
-  "active_task_order": null,
+  "active_task_order": "TO-P5-005-CORRECTIVE-001",
   "completed_task_order": "TO-P5-005",
   "completion_audit": "AR-P5-005",
   "verified_artifacts": [
@@ -344,8 +344,7 @@
   ],
   "unverified_artifacts": [
     "DOC-P5-002",
-    "DOC-P5-003",
-    "TO-P5-005-CORRECTIVE-001"
+    "DOC-P5-003"
   ],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
