@@ -1773,6 +1773,19 @@ records:
     traceability: PH-P5 / STEP-P5-005 / STEP-P5-004 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / AR-P5-005 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
     status: VERIFIED / COMPLETE
 
+  - stable_id: STEP-P5-006
+    canonical_name: Group C: Volume, Volume Profile
+    entity_type: STEP
+    artifact_path: docs/phases/PH-P5.md
+    traceability: PH-P5 / STEP-P5-005 / TO-P4-014 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner next governed-stage directive 2026-10-06
+    status: DEFINED / INACTIVE
+  - stable_id: TO-P4-014
+    canonical_name: Group-C Volume / Volume-Profile Upstream Capability for P5-006
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-014.md
+    traceability: PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner next governed-stage directive 2026-10-06
+    status: AUTHORIZED TO EXECUTE
+
   - stable_id: AR-P5-005
     canonical_name: CONTROL Independent Verification — TO-P5-005
     entity_type: AR
