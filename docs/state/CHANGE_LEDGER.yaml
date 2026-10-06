@@ -3296,3 +3296,28 @@ entries:
       standalone_case_artifact: REGISTERED
       machine_readback: COMPLETED
     note: The assessment distinguishes the required authoritative liquidity fact/evaluation surface from the non-required condition of having at least one liquidity-pool record in every runtime snapshot. Causal resolution remains required before any corrective mechanism is selected.
+
+  - ledger_id: CL-P5-005-CORRECTIVE-001-PREP-20261006
+    date_utc: 2026-10-06
+    authority: Project Owner directive 2026-10-06 / CONTROL ROL-V2-001
+    role: ROL-V2-001
+    action: CONTROL FORMALIZATION — DRAFT CAUSAL-RESOLUTION TASK ORDER
+    basis: ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / DOC-P5-003 / Project Owner explicit bounded-continuation authorization
+    disposition:
+      phase: PH-P5
+      historical_step: STEP-P5-005
+      historical_task_order: TO-P5-005
+      task_order: TO-P5-005-CORRECTIVE-001
+      task_order_status: DRAFT / PENDING AUTHORIZATION
+      active_task_order: null
+      producer_execution: NOT ACTIVATED
+    scope: Establish the authoritative causal boundary behind historical S-12 LIQUIDITY_POOL=0 / INSUFFICIENT_DATA before selecting any corrective implementation.
+    exclusions: Historical P5-005 reopening; historical artifact mutation; STEP-P5-006 activation; technical solution selection; unrelated scope.
+    evidence: DOC-P5-003; BR-P5-006; AR-P5-005; EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005; ADR-GOVERNANCE-014
+    synchronization:
+      task_order_artifact: CREATED
+      artifacts_registry: UPDATED
+      checkpoint: UPDATED — unverified artifact recorded; active_task_order remains null
+      historical_evidence: UNCHANGED
+      producer_execution: NOT STARTED
+    stop_boundary: Owner authorization / formal activation of this concrete Task Order is the next governed boundary.
