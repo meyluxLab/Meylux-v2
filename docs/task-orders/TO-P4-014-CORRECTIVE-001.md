@@ -5,7 +5,7 @@
 **Issuing Role:** CONTROL / REVIEWER — `ROL-V2-001`  
 **Producer Role:** PRODUCER / ARCHITECT-BUILDER — `ROL-V2-002`  
 **Boundary:** `PH-P4 / STEP-P4-006` — S-03 portion of Group-C upstream prerequisite resolution  
-**Status:** AUTHORIZED TO EXECUTE  
+**Status:** VERIFIED / COMPLETE  
 **Governance Basis:** continuation under `ADR-GOVERNANCE-013 R1`; No-Drop under `ADR-GOVERNANCE-014`.
 
 ## 1. CONTROL correction finding
