@@ -30,12 +30,16 @@ PROVENANCE=Provenance("binance:test",PROVIDER,"WS")
 SCORES=QualitySignals(*(Decimal("1.00") for _ in range(6)))
 
 
-def envelope(event_time=None, received_at=None, payload=None):
+def envelope(event_time=None, received_at=None, payload=None, event_type=EventType.CANDLE, provider=PROVIDER):
     event_time=event_time or datetime(2026,9,29,12,0,tzinfo=UTC)
     received_at=received_at or datetime(2026,9,29,12,0,2,tzinfo=UTC)
+    provenance=Provenance("binance:test",provider,"WS")
+    default_payload={"timeframe":"15m","venue":"BINANCE","close":"100"} if event_type is EventType.CANDLE else {
+        "id":42,"time":int(event_time.timestamp()*1000),"price":"100","qty":"1","venue":"BINANCE"
+    }
     return AcquisitionEnvelope(
-        PROVIDER,INSTRUMENT,PROVENANCE,EventType.CANDLE,event_time,received_at,
-        AcquisitionState.AVAILABLE,payload or {"timeframe":"15m","venue":"BINANCE","close":"100"},
+        provider,INSTRUMENT,provenance,event_type,event_time,received_at,
+        AcquisitionState.AVAILABLE,payload or default_payload,
         "42"
     )
 
@@ -144,6 +148,41 @@ class P3009QualityEvidenceTests(unittest.TestCase):
         e=build_quality_evidence(envelope(payload={"close":"100"}),assessment())
         self.assertIsNone(e.timeframe)
         self.assertIsNone(e.venue)
+
+    def test_binance_trade_requires_explicit_binance_venue(self):
+        record=build_quality_evidence(
+            envelope(event_type=EventType.TRADE, payload={
+                "id":42,"time":1778155200000,"price":"100","qty":"1"
+            }),
+            assessment(),
+        )
+        self.assertEqual(record.venue, "BINANCE")
+
+        with self.assertRaisesRegex(ValueError, "requires explicit BINANCE"):
+            build_quality_evidence(
+                envelope(event_type=EventType.TRADE, payload={
+                    "id":42,"time":1778155200000,"price":"100","qty":"1"
+                }),
+                assessment(),
+            )
+
+    def test_binance_trade_rejects_contradictory_or_cross_provider_venue(self):
+        with self.assertRaisesRegex(ValueError, "requires explicit BINANCE"):
+            build_quality_evidence(
+                envelope(event_type=EventType.TRADE, payload={
+                    "id":42,"time":1778155200000,"price":"100","qty":"1","venue":"MEXC"
+                }),
+                assessment(),
+            )
+
+        mexc=ProviderIdentity("mexc","mexc-adapter","1.0.0")
+        with self.assertRaisesRegex(ValueError, "authorized only for Binance"):
+            build_quality_evidence(
+                envelope(event_type=EventType.TRADE, provider=mexc, payload={
+                    "id":42,"time":1778155200000,"price":"100","qty":"1","venue":"BINANCE"
+                }),
+                assessment(),
+            )
 
     def test_binance_nested_kline_interval_resolves_without_provider_venue_fallback(self):
         e=build_quality_evidence(
