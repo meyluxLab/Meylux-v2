@@ -1004,6 +1004,37 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 await conn.close()
         asyncio.run(run())
 
+
+    def test_s17_mismatched_quality_source_record_is_unavailable(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"], timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+                symbol, start, end, _ = await self._seed_s17_trade(
+                    conn,
+                    "source-mismatch",
+                    evidence_specs=({"source_record_id": "unrelated-source-record"},),
+                )
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="15m", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.75"), lvn_threshold=Decimal("0.25"),
+                )
+                self.assertEqual(await execute(conn, request), 1)
+                row = await conn.fetchrow(
+                    "SELECT status,reason,knowledge_time FROM meylux.volume_profile_sessions "
+                    "WHERE symbol=$1 AND timeframe=$2", symbol, "15m"
+                )
+                self.assertEqual(row["status"], "unavailable")
+                self.assertEqual(row["reason"], "missing_authoritative_quality_evidence")
+                self.assertIsNone(row["knowledge_time"])
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
     def test_s17_append_only_volume_profile_behavior_remains_enforced(self):
         async def run():
             conn = await self.asyncpg.connect(
