@@ -111,3 +111,18 @@ records:
       timeframes: 15m,1h,4h
       control_audit: AR-P5-005
     status: VERIFIED
+
+- stable_id: CFG-P2-014
+  canonical_name: TO-P2-014 Bounded Binance Spot Trade Acquisition Runtime Configuration
+  entity_type: CONFIGURATION
+  phase: PH-P2
+  step: STEP-P2-006
+  task_order: TO-P2-014
+  evidence:
+    symbols: BTCUSDT,SOLUSDT
+    trade_limit_per_symbol: 100
+    rest_base_url: https://data-api.binance.vision
+    replay_mode: MEYLUX_BINANCE_TRADE_REPLAY=1
+    bounded_execution: VERIFIED
+    control_audit: AR-P2-AUDIT-014
+  status: VERIFIED
