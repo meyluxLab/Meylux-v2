@@ -191,7 +191,7 @@ class TestPersistence(unittest.TestCase):
             )
             for facts in orchestration.structural_facts.values()
         )
-        expected=21+expected_structural
+        expected=25+expected_structural
         self.assertEqual(inserted,expected)
         self.assertEqual(replay_inserted,0)
         self.assertEqual(len(db.sql),expected*2)

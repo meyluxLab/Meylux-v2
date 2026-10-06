@@ -19,7 +19,7 @@ from meylux.quantitative.indicators import (
     historical_volatility,
     macd,
     rsi,
-    volatility_expansion_ratio,
+    volatility_expansion_ratio, volume_climax, volume_sma, volume_spike, rvol,
 )
 from meylux.quantitative.market_structure import MarketStructureEngine, StructuralEvent
 from meylux.quantitative.regime_venue import MarketRegimeEngine, RegimeConfig
@@ -139,6 +139,9 @@ class QuantOrchestrationConfig:
     historical_volatility_periods_per_year: str = "365"
     atr_percentile_lookback: int = 100
     volatility_expansion_baseline_window: int = 20
+    volume_window: int = 20
+    volume_spike_threshold: str = "2"
+    volume_climax_threshold: str = "4"
     # Additional configured periods use the existing deterministic EMA engine.
     # The legacy "EMA" fact below remains for existing P4 consumers.
     ema_periods: tuple[int, ...] = (9, 20, 21, 50, 200)
@@ -150,7 +153,7 @@ class QuantOrchestrationConfig:
             "ema_period", "rsi_period", "atr_period", "macd_fast_period",
             "macd_slow_period", "macd_signal_period", "adx_period",
             "bollinger_window", "historical_volatility_window",
-            "atr_percentile_lookback", "volatility_expansion_baseline_window",
+            "atr_percentile_lookback", "volatility_expansion_baseline_window", "volume_window",
         ):
             value = getattr(self, name)
             if isinstance(value, bool) or not isinstance(value, int) or value < 1:
@@ -169,15 +172,25 @@ class QuantOrchestrationConfig:
             raise ValueError("bollinger_deviations must be a non-empty decimal string")
         if not isinstance(self.historical_volatility_periods_per_year, str) or not self.historical_volatility_periods_per_year:
             raise ValueError("historical_volatility_periods_per_year must be a non-empty decimal string")
+        if not isinstance(self.volume_spike_threshold, str) or not self.volume_spike_threshold:
+            raise ValueError("volume_spike_threshold must be a non-empty decimal string")
+        if not isinstance(self.volume_climax_threshold, str) or not self.volume_climax_threshold:
+            raise ValueError("volume_climax_threshold must be a non-empty decimal string")
         try:
             deviations = Decimal(self.bollinger_deviations)
             annual_periods = Decimal(self.historical_volatility_periods_per_year)
+            volume_spike_threshold = Decimal(self.volume_spike_threshold)
+            volume_climax_threshold = Decimal(self.volume_climax_threshold)
         except InvalidOperation as exc:
             raise ValueError("decimal configuration values must be valid decimals") from exc
         if not deviations.is_finite() or deviations < 0:
             raise ValueError("bollinger_deviations must be finite and non-negative")
         if not annual_periods.is_finite() or annual_periods <= 0:
             raise ValueError("historical_volatility_periods_per_year must be finite and positive")
+        if not volume_spike_threshold.is_finite() or volume_spike_threshold < 0:
+            raise ValueError("volume_spike_threshold must be finite and non-negative")
+        if not volume_climax_threshold.is_finite() or volume_climax_threshold < 0:
+            raise ValueError("volume_climax_threshold must be finite and non-negative")
         if not isinstance(self.version, str) or not self.version:
             raise ValueError("version must be non-empty")
 
@@ -302,6 +315,10 @@ def _indicator_facts(candles: tuple[CanonicalCandle, ...], config: QuantOrchestr
         "VOLATILITY_EXPANSION_RATIO": volatility_expansion_ratio(
             candles, config.atr_period, config.volatility_expansion_baseline_window
         )[-1],
+        "VOLUME_SMA": volume_sma(candles, config.volume_window)[-1],
+        "RVOL": rvol(candles, config.volume_window)[-1],
+        "VOLUME_SPIKE": volume_spike(candles, config.volume_window, config.volume_spike_threshold)[-1],
+        "VOLUME_CLIMAX": volume_climax(candles, config.volume_window, config.volume_climax_threshold)[-1],
     }
     return facts
 

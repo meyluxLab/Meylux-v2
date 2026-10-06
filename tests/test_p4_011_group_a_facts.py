@@ -14,6 +14,7 @@ from meylux.persistence.quantitative import QuantitativePersistence, _json
 from meylux.quantitative.indicators import (
     adx, atr, atr_percentile, bollinger_bandwidth, bollinger_bands,
     ema_candles, historical_volatility, macd, rsi, volatility_expansion_ratio,
+    volume_climax, volume_sma, volume_spike, rvol,
 )
 from meylux.quantitative.regime_venue import RegimeConfig
 
@@ -43,7 +44,7 @@ EXPECTED_FACTS = {
     "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
-    "VOLATILITY_EXPANSION_RATIO",
+    "VOLATILITY_EXPANSION_RATIO", "VOLUME_SMA", "RVOL", "VOLUME_SPIKE", "VOLUME_CLIMAX",
 }
 
 
@@ -169,6 +170,10 @@ class TestP4011GroupAFacts(unittest.TestCase):
             "HISTORICAL_VOLATILITY": historical_volatility(xs, 20, "365")[-1],
             "ATR_PERCENTILE": atr_percentile(xs, 14, 100)[-1],
             "VOLATILITY_EXPANSION_RATIO": volatility_expansion_ratio(xs, 14, 20)[-1],
+            "VOLUME_SMA": volume_sma(xs, 20)[-1],
+            "RVOL": rvol(xs, 20)[-1],
+            "VOLUME_SPIKE": volume_spike(xs, 20, "2")[-1],
+            "VOLUME_CLIMAX": volume_climax(xs, 20, "4")[-1],
         }
         for name, calculation in expected.items():
             self.assertEqual(result.indicators[name], calculation, name)
@@ -186,6 +191,33 @@ class TestP4011GroupAFacts(unittest.TestCase):
             self.assertEqual(calculation.context.timeframe, "15m", name)
             self.assertEqual(calculation.context.symbol, "BTCUSDT", name)
             self.assertTrue(calculation.context.source_ref, name)
+
+    def test_volume_rvol_thresholds_and_warmup_use_authoritative_indicator_semantics(self):
+        short = QuantitativeOrchestrator().process(bars(19), config())
+        for name in ("VOLUME_SMA", "RVOL", "VOLUME_SPIKE", "VOLUME_CLIMAX"):
+            self.assertEqual(short.indicators[name].status, CalculationStatus.INSUFFICIENT_HISTORY, name)
+            self.assertIsNone(short.indicators[name].value, name)
+
+        xs = list(bars(22))
+        xs[-1] = replace(xs[-1], volume=Decimal("1000"))
+        result = QuantitativeOrchestrator().process(tuple(xs), config())
+        self.assertEqual(result.indicators["VOLUME_SMA"].status, CalculationStatus.VALID)
+        self.assertEqual(result.indicators["RVOL"].status, CalculationStatus.VALID)
+        self.assertEqual(result.indicators["VOLUME_SPIKE"].value, Decimal("1"))
+        self.assertEqual(result.indicators["VOLUME_CLIMAX"].value, Decimal("1"))
+
+        custom = QuantOrchestrationConfig(config().regime, volume_window=20,
+                                          volume_spike_threshold="100", volume_climax_threshold="200")
+        custom_result = QuantitativeOrchestrator().process(tuple(xs), custom)
+        self.assertEqual(custom_result.indicators["VOLUME_SPIKE"].value, Decimal("0"))
+        self.assertEqual(custom_result.indicators["VOLUME_CLIMAX"].value, Decimal("0"))
+
+        zero_baseline = list(bars(22))
+        for item in range(21):
+            zero_baseline[item] = replace(zero_baseline[item], volume=Decimal("0"))
+        zero_result = QuantitativeOrchestrator().process(tuple(zero_baseline), config())
+        self.assertEqual(zero_result.indicators["RVOL"].status, CalculationStatus.INVALID_INPUT)
+        self.assertIsNone(zero_result.indicators["RVOL"].value)
 
     def test_insufficient_history_is_explicit_and_never_fabricated(self):
         result = QuantitativeOrchestrator().process(bars(3), config())
@@ -226,7 +258,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             args for query, args in db.sql
             if "INSERT INTO meylux.calculated_indicator_vectors" in query
         ]
-        self.assertEqual(len(rows), 19)
+        self.assertEqual(len(rows), 23)
         self.assertTrue(all(args[4] == "binance:binance-acquisition" for args in rows))
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
         event_rows = [
@@ -318,21 +350,21 @@ class TestP4011GroupAFacts(unittest.TestCase):
         persistence = QuantitativePersistence(db)
         first = asyncio.run(persistence.persist_orchestration(result))
         second = asyncio.run(persistence.persist_orchestration(result))
-        self.assertEqual(first, 40 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
+        self.assertEqual(first, 48 + _expected_structural_rows(result))  # Group-A rows plus individual P4 structure facts
         self.assertEqual(second, 0)
         indicator_rows = list({
             args[0]: (query, args)
             for query, args in db.sql if "calculated_indicator_vectors" in query
         }.values())
-        self.assertEqual(len(indicator_rows), 38)
+        self.assertEqual(len(indicator_rows), 46)
         primary_rows = [args for _, args in indicator_rows if args[2] == "15m"]
         higher_rows = [args for _, args in indicator_rows if args[2] == "1h"]
-        self.assertEqual(len(primary_rows), 19)
-        self.assertEqual(len(higher_rows), 19)
+        self.assertEqual(len(primary_rows), 23)
+        self.assertEqual(len(higher_rows), 23)
         self.assertTrue(all(args[3] == result.knowledge_time for args in primary_rows))
         self.assertTrue(all(args[3] == result.higher_timeframe_facts["1h"].knowledge_time for args in higher_rows))
         self.assertTrue(all("knowledge_time" not in query.lower() for query, _ in indicator_rows))
-        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 38)
+        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 46)
         self.assertTrue(all(args[4] == "source:15m:39" for args in primary_rows))
         self.assertTrue(all(args[4] == "source:1h:9" for args in higher_rows))
 
@@ -363,7 +395,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             args for query, args in db.sql
             if "INSERT INTO meylux.calculated_indicator_vectors" in query
         ]
-        self.assertEqual(len(rows), 19)
+        self.assertEqual(len(rows), 23)
         self.assertTrue(all(args[5] == "BINANCE" for args in rows))
         import json
         for args in rows:
