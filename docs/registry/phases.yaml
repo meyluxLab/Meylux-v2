@@ -540,25 +540,25 @@ records:
     logical_name: Group C: Volume, Volume Profile
     entity_type: STEP
     phase: PH-P5
-    status: DEFINED / INACTIVE — UPSTREAM DEPENDENCY RESOLVED / AWAITING P5 ACTIVATION DETERMINATION
+    status: DEFINED / INACTIVE — PRQ-1 GROUP-C AND PRQ-2 TRADE CAPABILITY ESTABLISHED / VERIFIED; AWAITING P5 ACTIVATION DETERMINATION
     authorization_state: NOT ACTIVATED
     order: 6
     predecessor: STEP-P5-005
     activation_basis: PROJECT-OWNER-NEXT-GOVERNED-STAGE-DIRECTIVE-2026-10-06
-    active_task_order: TO-P2-014
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P2-014
+    completion_audit: AR-P2-AUDIT-014
     purpose: Establish deterministic Group-C specialist capability for S-03 Volume Analyst and S-17 Volume Profile Reasoner from authoritative Stage-1 Input Snapshot facts after the required upstream P4 Group-C and trade-input gate is independently established.
     repository_scope: P5 S-03/S-17 specialist implementation, evidence interpretation, EvidenceRef resolution, persistence/read-back, replay/idempotency, tests and required runtime evidence within STEP-P5-006 only.
     dependency_boundary:
       required: PRQ-1 Group-C / PRQ-2 trade capability
-      resolved: PRQ-1 Group-C / TO-P4-014 / AR-P4-022
-      active_resolution: TO-P2-014
-      status: PRQ-1 Group-C VERIFIED; PRQ-2 trade resolution ACTIVE
-      resolved: PRQ-1 Group-C / TO-P4-014 / AR-P4-022
+      resolved: PRQ-1 Group-C / TO-P4-014 / AR-P4-022 / PRQ-2 trade / TO-P2-014 / AR-P2-AUDIT-014
       active_resolution: null
-      status: RESOLVED / VERIFIED — P4 Group-C prerequisite established; P5 specialist gate remains inactive
+      status: RESOLVED / VERIFIED — P4 Group-C and governed Binance Spot trade prerequisite established; P5 specialist gate remains inactive
       excluded_without_actual_dependency: PRQ-3 / later P5 Steps / P6 synthesis / provider expansion
+    timeframe_boundary:
+      governed_acceptance: BTCUSDT 15m primary + eligible 1h/4h context
+      trade_history_status: finite real Binance acquisition capability established; no complete historical population claim
     vps_scope: CONTROL-owned SentinelX-only runtime deployment and independent verification where required by the eventual P5-006 Task Order.
     closure_owner: ROL-V2-001
     producer_role: ROL-V2-002
