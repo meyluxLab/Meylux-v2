@@ -209,6 +209,7 @@ jobs:
             -e MEYLUX_DB_PASSWORD="$MEYLUX_APP_PASSWORD" \
             -e MEYLUX_BINANCE_TRADE_SYMBOLS=BTCUSDT,SOLUSDT \
             -e MEYLUX_BINANCE_TRADE_LIMIT=100 \
+            -e MEYLUX_BINANCE_REST_BASE_URL=https://data-api.binance.vision \
             --entrypoint python api \
             -m meylux.runtime.service
 
