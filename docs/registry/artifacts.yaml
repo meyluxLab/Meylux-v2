@@ -1786,6 +1786,12 @@ records:
     traceability: PH-P4 / STEP-P4-006 / PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner next governed-stage directive 2026-10-06
     status: AUTHORIZED TO EXECUTE
 
+  - stable_id: TO-P4-014-CORRECTIVE-001
+    canonical_name: Complete S-03 Volume/RVOL Operational Integration
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P4-014-CORRECTIVE-001.md
+    traceability: TO-P4-014 / PH-P4 / STEP-P4-006 / S-03 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: AUTHORIZED TO EXECUTE
   - stable_id: AR-P5-005
     canonical_name: CONTROL Independent Verification — TO-P5-005
     entity_type: AR
