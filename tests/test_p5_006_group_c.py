@@ -63,7 +63,7 @@ def fact(
     knowledge_time=None,
 ):
     kt = knowledge_time or event_time
-    evidence = ref(record_id, event_time, venue) if status is FactStatus.VALID else ()
+    evidence = (ref(record_id, event_time, venue),)
     metadata = {
         "symbol": "BTCUSDT",
         "venue": venue,
