@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P5-005",
-  "last_build_report": "BR-P5-006",
-  "last_audit_report": "AR-P5-005",
-  "last_execution_log": "EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005",
-  "active_task_order": "TO-P5-005-CORRECTIVE-001",
-  "completed_task_order": "TO-P5-005",
-  "completion_audit": "AR-P5-005",
+  "last_build_report": "BR-P5-007",
+  "last_audit_report": "AR-P5-006",
+  "last_execution_log": "EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006",
+  "active_task_order": null,
+  "completed_task_order": "TO-P5-005-CORRECTIVE-001",
+  "completion_audit": "AR-P5-006",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -340,7 +340,12 @@
     "OBS-P5-005",
     "REQ-P5-005",
     "CTR-P5-005",
-    "ADR-GOVERNANCE-014"
+    "ADR-GOVERNANCE-014",
+    "BR-P5-007",
+    "AR-P5-006",
+    "RUN-P5-006",
+    "DB-P5-006",
+    "TO-P5-005-CORRECTIVE-001"
   ],
   "unverified_artifacts": [
     "DOC-P5-002",
@@ -402,8 +407,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "779201ea95c3f067d5a115d0f532be660b5f7454",
-  "updated_at_utc": "2026-10-06T00:00Z",
+  "last_verified_commit": "857020c80de4753727ee8fb51cbffb88369e4635",
+  "updated_at_utc": "2026-10-06T12:00:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -516,7 +521,8 @@
     "CONTROL synchronized the standalone TO-P4-013 status-bearing document to VERIFIED / COMPLETE after AR-P4-020; no Producer implementation content was rewritten.",
     "CONTROL activated STEP-P5-005 / TO-P5-005 on 2026-10-05 after independent SoT review. Group-B upstream dependency TO-P4-013 / AR-P4-020 is VERIFIED / COMPLETE; no unresolved prerequisite remains. 5m is explicitly out of the current governed acceptance boundary unless a real in-scope dependency is demonstrated.",
     "Project Owner ratified ADR-GOVERNANCE-014 on 2026-10-05 as the project-wide Required Capability Continuation & No-Drop Prerequisite Resolution rule. ADR index, Artifact Protocol, artifact registry, and Change Ledger were synchronized; PH-P5 / STEP-P5-005 historical closure remains unchanged and no corrective implementation is authorized by this ratification.",
-    "DOC-P5-003 records the ADR-GOVERNANCE-014 retrospective assessment for P5-005/S-12: the liquidity fact/evaluation surface is genuinely required, but the absence of LIQUIDITY_POOL records is not causally resolved. No corrective mechanism, implementation, or P5-005 reopening is authorized."
+    "DOC-P5-003 records the ADR-GOVERNANCE-014 retrospective assessment for P5-005/S-12: the liquidity fact/evaluation surface is genuinely required, but the absence of LIQUIDITY_POOL records is not causally resolved. No corrective mechanism, implementation, or P5-005 reopening is authorized.",
+    "CONTROL independently verified TO-P5-005-CORRECTIVE-001 under AR-P5-006: Branch A established — no qualifying liquidity pool existed in the authoritative P4 input/output boundary; no corrective implementation required; historical STEP-P5-005 / TO-P5-005 closure preserved; STEP-P5-006 not activated."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
