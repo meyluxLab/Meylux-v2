@@ -247,7 +247,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "to-p4-014-s17-evidence-001",
                     "to-p4-014-s17-logical-001",
                     source_record_id,
-                    "b" * 64,
+                    source_record_id,
                     "binance",
                     "binance-acquisition",
                     "1.0.0",
@@ -803,7 +803,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         "validation_result,provenance_id,lineage_parent_id,payload_fingerprint,timeframe,venue"
                         ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)"
                         " ON CONFLICT (evidence_id) DO NOTHING",
-                        f"vp-ci-evidence-{i}", f"vp-ci-logical-{i}", source_record_id, hashlib.sha256(source_record_id.encode()).hexdigest(),
+                        f"vp-ci-evidence-{i}", f"vp-ci-logical-{i}", source_record_id, source_record_id,
                         "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
                         trade.timestamp, received, "AVAILABLE", "VALID", "ACCEPTED", Decimal("1.00"),
                         json.dumps([]), None, trade.provenance_id, source_record_id, hashlib.sha256(canonical_json.encode()).hexdigest(),
@@ -1034,7 +1034,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         await conn.execute(sql, before["record_id"])
                 after = await conn.fetchrow(
                     "SELECT to_jsonb(s) AS row FROM meylux.volume_profile_sessions AS s "
-                    "WHERE record_id=$1", before["row"]["record_id"]
+                    "WHERE record_id=$1", before["record_id"]
                 )
                 self.assertEqual(after["row"], before["row"])
             finally:
