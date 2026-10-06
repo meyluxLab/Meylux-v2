@@ -2,7 +2,7 @@
 
 **Status:** ACTIVE / AUTHORIZED
 **Current Step Lifecycle:** `STEP-P5-006` — ACTIVE / AUTHORIZED under `TO-P5-006`
-**Active Task Order:** `TO-P2-015`
+**Active Task Order:** `TO-P4-015`
 **Last Completed Upstream Dependency:** `TO-P2-014` — VERIFIED / COMPLETE under `AR-P2-AUDIT-014`
 **Last Completed Task Order:** `TO-P5-005`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
@@ -184,3 +184,8 @@ The Group-C upstream gate is established under `TO-P4-014 / AR-P4-022`; `STEP-P5
 ## STEP-P5-006 Upstream Resolution Continuation
 
 The Project Owner authorized full root-cause continuation on 2026-10-06 after bounded runtime acceptance established that the specialist execution path is operational but the governed upstream Group-C fact/evidence population is incomplete. The immediate owning-boundary corrective Task Order is `TO-P2-015` (Binance Spot trade venue evidence), with `TO-P4-015` defined as the subsequent P4 fact-population/runtime-evidence resolution. `STEP-P5-006` remains ACTIVE / AUTHORIZED; no VERIFIED / COMPLETE / CLOSED claim is made for the Step.
+
+
+## TO-P2-015 Closure and TO-P4-015 Activation
+
+CONTROL independently verified `TO-P2-015` under `AR-P2-AUDIT-015` using terminal CI, real Binance Spot runtime acquisition, PostgreSQL persistence/read-back, and deterministic replay evidence. `TO-P2-015` is VERIFIED / COMPLETE. The explicit Binance venue prerequisite is established. The remaining Group-C prerequisite is authoritative P4 fact population/runtime evidence; `TO-P4-015` is AUTHORIZED TO EXECUTE. `STEP-P5-006` remains ACTIVE / AUTHORIZED and is not closed.
