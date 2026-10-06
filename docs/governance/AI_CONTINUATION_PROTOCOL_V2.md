@@ -257,3 +257,18 @@ The successor AI MUST NOT:
 Continuity is successful when a successor AI can reconstruct authoritative project state, identify what is current versus historical/unverified, understand the applicable role boundaries, identify the active authorized work, and determine the next authorized action without requiring hidden chat memory.
 
 This authoritative protocol does not authorize Phase progression, runtime implementation, V1 activity, market/trading/capital activity, or architecture ratification/freeze.
+
+## 13A. Required Capability No-Drop Continuation Check
+
+ADR-GOVERNANCE-014 is the authoritative No-Drop rule. Continuity does not duplicate or replace that decision; it operationally carries its state across successor sessions.
+
+During Continuity Reconstruction and before continuing governed work, the successor AI MUST determine, where applicable: (1) whether the current required work contains a required capability with an unresolved prerequisite; (2) whether a truthful runtime limitation is being distinguished from capability completion; (3) whether the unresolved prerequisite and its resolution obligation remain traceable; (4) whether the responsible boundary and required resolution evidence are known; and (5) whether the next authorized action preserves the ADR-014 outcome rather than silently treating the capability as complete or optional.
+
+A successor AI MUST NOT infer that PARTIAL, INSUFFICIENT_DATA, UNAVAILABLE, UNAVAILABLE_INPUT, SKIPPED, or equivalent degraded runtime state means the required capability is complete.
+
+If the authoritative state does not establish whether the capability remains required, the successor AI MUST preserve the ambiguity and route it to the applicable governance authority.
+
+Historical evidence MUST remain unchanged. Later evidence establishes later resolution state.
+
+This check does not create authorization for implementation, corrective work, Phase/Step activation, or closure.
+
