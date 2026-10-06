@@ -529,6 +529,30 @@ records:
       control_runtime_replay: 0 additional structural event/zone rows
       control_audit: AR-P4-020
 
+- stable_id: TST-P4-014
+    canonical_name: TO-P4-014 S-17 Volume Profile Regression and CI Evidence
+    entity_type: TST
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-014
+    artifact_path: tests/test_p4_011_postgresql.py
+    traceability: TO-P4-014 / BR-P4-015 / AR-P4-022
+    status: VERIFIED
+    evidence:
+      implementation_revision: 73b4d73c15f1ec0e35980c6c649a941b7c100450
+      docker_foundation_run_id: 37503933559
+      docker_foundation_run_number: 885
+      docker_foundation_result: SUCCESS
+      affected_postgresql_evidence: 11/11 PASS
+      core_run_id: 37503933510
+      core_run_number: 2029
+      core_retry_job_id: 112420916363
+      core_retry_result: SUCCESS
+      core_foundation_tests: 648; skipped: 5
+      dedicated_p3_009_postgresql_tests: 7/7 PASS
+      control_runtime_execution: EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006
+      control_audit: AR-P4-022
+
 - stable_id: TST-P5-005
     canonical_name: TO-P5-005 Group-B Specialist Regression Evidence
     entity_type: TST
