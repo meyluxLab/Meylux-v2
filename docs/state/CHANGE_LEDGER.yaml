@@ -3459,6 +3459,6 @@ entries:
       artifacts_registry: UPDATED
       phase_registry: UPDATED — STEP-P5-006 defined/inactive; active corrective dependency TO-P4-014
       checkpoint: UPDATED — active_task_order TO-P4-014; no new verification claim
-      readme: PENDING — will reflect active prerequisite at this activation boundary
+      readme: UPDATED — synchronized with active prerequisite boundary
       historical_evidence: UNCHANGED
     continuation: "Producer is handed the bounded upstream Task Order; CONTROL retains independent verification and closure authority."
