@@ -13,7 +13,7 @@ from typing import Any, Protocol, Sequence
 
 from contracts.acquisition import AcquisitionEnvelope, AcquisitionState
 from contracts.canonical.foundation import ProvenanceRef
-from contracts.data_quality import ValidationResult
+from contracts.canonical.foundation import ValidationResult
 from contracts.normalization import NormalizationOutcome, normalize
 from contracts.quality import QualityInput, QualitySignals, assess_quality
 from contracts.quality_evidence import build_quality_evidence
