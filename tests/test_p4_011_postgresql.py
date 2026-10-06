@@ -106,14 +106,14 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 persistence = QuantitativePersistence(conn)
                 inserted = await persistence.persist_orchestration(result)
-                self.assertEqual(inserted, 40 + _expected_structural_rows(result))
+                self.assertEqual(inserted, 48 + _expected_structural_rows(result))
                 replay_inserted = await persistence.persist_orchestration(result)
                 self.assertEqual(replay_inserted, 0)
 
                 primary_rows = await persistence.fetch_family("indicator", SYMBOL, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", SYMBOL, "1h", limit=100)
-                self.assertEqual(len(primary_rows), 19)
-                self.assertEqual(len(higher_rows), 19)
+                self.assertEqual(len(primary_rows), 23)
+                self.assertEqual(len(higher_rows), 23)
                 self.assertEqual({row["timeframe"] for row in primary_rows}, {"15m"})
                 self.assertEqual({row["timeframe"] for row in higher_rows}, {"1h"})
                 self.assertEqual({row["event_time"] for row in primary_rows}, {primary[-1].close_time})
@@ -145,7 +145,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
                     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
                     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
-                    "VOLATILITY_EXPANSION_RATIO",
+                    "VOLATILITY_EXPANSION_RATIO", "VOLUME_SMA", "RVOL", "VOLUME_SPIKE", "VOLUME_CLIMAX",
                 }
                 self.assertEqual({p["fact_name"] for p in primary_payloads.values()}, expected_names)
                 self.assertEqual({p["fact_name"] for p in higher_payloads.values()}, expected_names)
@@ -179,7 +179,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "WHERE symbol=$1 GROUP BY timeframe ORDER BY timeframe",
                     SYMBOL,
                 )
-                self.assertEqual([(row["timeframe"], row["n"]) for row in counts], [("15m", 19), ("1h", 19)])
+                self.assertEqual([(row["timeframe"], row["n"]) for row in counts], [("15m", 23), ("1h", 23)])
             finally:
                 await conn.close()
         asyncio.run(run())
@@ -240,12 +240,12 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 persistence = QuantitativePersistence(conn)
                 self.assertEqual(
                     await persistence.persist_orchestration(result),
-                    40 + _expected_structural_rows(result),
+                    48 + _expected_structural_rows(result),
                 )
                 primary_rows = await persistence.fetch_family("indicator", symbol, "15m", limit=100)
                 higher_rows = await persistence.fetch_family("indicator", symbol, "1h", limit=100)
-                self.assertEqual(len(primary_rows), 19)
-                self.assertEqual(len(higher_rows), 19)
+                self.assertEqual(len(primary_rows), 23)
+                self.assertEqual(len(higher_rows), 23)
                 for rows, timeframe in ((primary_rows, "15m"), (higher_rows, "1h")):
                     self.assertEqual({row["venue_context"] for row in rows}, {"BINANCE"})
                     for row in rows:
@@ -304,14 +304,14 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 higher_rows = await persistence.fetch_family(
                     "indicator", worker_symbol, "1h", limit=100
                 )
-                self.assertEqual(len(primary_rows), 19)
-                self.assertEqual(len(higher_rows), 19)
+                self.assertEqual(len(primary_rows), 23)
+                self.assertEqual(len(higher_rows), 23)
                 expected_names = {
                     "EMA", "EMA_9", "EMA_20", "EMA_21", "EMA_50", "EMA_200",
                     "RSI", "MACD", "MACD_SIGNAL", "MACD_HISTOGRAM", "ATR", "ADX",
                     "BOLLINGER_MIDDLE", "BOLLINGER_UPPER", "BOLLINGER_LOWER",
                     "BOLLINGER_BANDWIDTH", "HISTORICAL_VOLATILITY", "ATR_PERCENTILE",
-                    "VOLATILITY_EXPANSION_RATIO",
+                    "VOLATILITY_EXPANSION_RATIO", "VOLUME_SMA", "RVOL", "VOLUME_SPIKE", "VOLUME_CLIMAX",
                 }
                 decoded = {}
                 for rows, timeframe, candles in (
@@ -355,7 +355,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(
                     [(row["timeframe"], row["n"]) for row in before_counts],
-                    [("15m", 19), ("1h", 19)],
+                    [("15m", 23), ("1h", 23)],
                 )
 
                 # Same governed envelope through the same worker is replay-safe.
@@ -381,7 +381,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(
                     [(row["timeframe"], row["n"]) for row in after_counts],
-                    [("15m", 19), ("1h", 19)],
+                    [("15m", 23), ("1h", 23)],
                 )
 
                 # A distinct symbol makes the negative-path no-write assertion unambiguous.
