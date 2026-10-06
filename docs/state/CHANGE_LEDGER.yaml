@@ -3321,3 +3321,34 @@ entries:
       historical_evidence: UNCHANGED
       producer_execution: ACTIVATED
     continuation: Producer execution is activated; CONTROL retains independent verification and closure synchronization authority.
+
+  - ledger_id: CL-P5-005-CORRECTIVE-001-CLOSURE-20261006
+    date_utc: 2026-10-06
+    authority: CONTROL independent verification under ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    role: ROL-V2-001
+    action: CONTROL INDEPENDENT VERIFICATION AND CLOSURE — TO-P5-005-CORRECTIVE-001
+    basis: BR-P5-007 / AR-P5-006 / EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006
+    disposition:
+      phase: PH-P5
+      historical_step: STEP-P5-005
+      historical_task_order: TO-P5-005
+      task_order: TO-P5-005-CORRECTIVE-001
+      task_order_status: VERIFIED / COMPLETE
+      active_task_order: null
+      completion_audit: AR-P5-006
+      causal_branch: A — no qualifying liquidity pool
+    scope: Causal resolution of historical S-12 LIQUIDITY_POOL=0 / INSUFFICIENT_DATA.
+    synchronization:
+      task_order_artifact: VERIFIED / COMPLETE
+      build_report: BR-P5-007 PRODUCED / VERIFIED
+      audit_report: AR-P5-006 APPROVED / VERIFIED
+      runtime_registry: UPDATED — RUN-P5-006
+      database_registry: UPDATED — DB-P5-006
+      artifacts_registry: UPDATED
+      checkpoint: UPDATED — active_task_order null; completed_task_order TO-P5-005-CORRECTIVE-001
+      readme: UPDATED
+      standalone_phase_status: UPDATED
+      historical_evidence: UNCHANGED
+      later_step_activation: NONE — STEP-P5-006 remains unactivated
+      specialized_registries: CHECKED — no new test/config/security/component/contract/observability/performance implementation evidence
+    conclusion: No corrective implementation is required by this causal-resolution Task Order; historical S-12 INSUFFICIENT_DATA remains unchanged.
