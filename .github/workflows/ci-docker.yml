@@ -200,6 +200,7 @@ jobs:
           MEYLUX_APP_PASSWORD: ci-app-password
           MEYLUX_BACKUP_PASSWORD: ci-backup-password
         run: |
+          set -o pipefail
           docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
             -e MEYLUX_SERVICE=collector \
             -e MEYLUX_DB_HOST=db \
