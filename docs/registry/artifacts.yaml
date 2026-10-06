@@ -1914,3 +1914,38 @@ records:
     traceability: ADR-GOVERNANCE-014 / PH-P5 / STEP-P5-005 / TO-P5-005 / BR-P5-006 / AR-P5-005 / EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005
     status: PRODUCED / UNVERIFIED
     disposition: D — UNRESOLVED REQUIRED PREREQUISITE / CAUSAL RESOLUTION REQUIRED
+
+  - stable_id: BR-P5-007
+    canonical_name: Producer Build Report — TO-P5-005-CORRECTIVE-001 S-12 Liquidity Causal Resolution
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P5-007.md
+    traceability: TO-P5-005-CORRECTIVE-001 / PH-P5 / STEP-P5-005 / DOC-P5-003 / BR-P5-006 / AR-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: PRODUCED / VERIFIED
+
+  - stable_id: AR-P5-006
+    canonical_name: CONTROL Independent Verification — TO-P5-005-CORRECTIVE-001
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-006.md
+    traceability: BR-P5-007 / TO-P5-005-CORRECTIVE-001 / PH-P5 / STEP-P5-005 / EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006 / DOC-P5-003 / AR-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: APPROVED / VERIFIED
+
+  - stable_id: RUN-P5-006
+    canonical_name: CONTROL SentinelX Causal Verification — TO-P5-005-CORRECTIVE-001
+    entity_type: RUN
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006.md
+    traceability: TO-P5-005-CORRECTIVE-001 / AR-P5-006 / PH-P5 / STEP-P5-005 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+
+  - stable_id: DB-P5-006
+    canonical_name: CONTROL Read-Only P4 Swing and Liquidity Database Evidence — TO-P5-005-CORRECTIVE-001
+    entity_type: DB
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006.md
+    traceability: TO-P5-005-CORRECTIVE-001 / AR-P5-006 / RUN-P5-006 / PH-P5 / STEP-P5-005
+    status: VERIFIED
+
+  - stable_id: TO-P5-005-CORRECTIVE-001
+    canonical_name: S-12 Liquidity Causal-Resolution Investigation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P5-005-CORRECTIVE-001.md
+    traceability: PH-P5 / STEP-P5-005 / TO-P5-005 / DOC-P5-003 / BR-P5-007 / AR-P5-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner directive 2026-10-06
+    status: VERIFIED / COMPLETE
