@@ -408,7 +408,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "857020c80de4753727ee8fb51cbffb88369e4635",
-  "updated_at_utc": "2026-10-06T12:00:00Z",
+  "updated_at_utc": "2026-10-06T11:54:15Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -475,7 +475,7 @@
       "final_sync_commit": "1f3bb91606c0551ecb4c1b815c0966ae6bfbee2b"
     }
   },
-  "last_governance_sync_base_commit": "a4781b2e23e84ecca315882cea2619ab81e76447",
+  "last_governance_sync_base_commit": "7674d625a8ac3c9f52ee7e27da7a4ac803c5ff4",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
