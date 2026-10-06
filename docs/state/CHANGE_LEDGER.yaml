@@ -3462,3 +3462,22 @@ entries:
       readme: UPDATED — synchronized with active prerequisite boundary
       historical_evidence: UNCHANGED
     continuation: "Producer is handed the bounded upstream Task Order; CONTROL retains independent verification and closure authority."
+
+  - ledger_id: CL-P4-GROUPC-S03-CORRECTIVE-20261006
+    date_utc: 2026-10-06
+    authority: CONTROL continuation decision under ADR-GOVERNANCE-013 R1 / ADR-GOVERNANCE-014
+    role: ROL-V2-001
+    action: BOUNDED CORRECTIVE CONTINUATION
+    parent_task_order: TO-P4-014
+    corrective_task_order: TO-P4-014-CORRECTIVE-001
+    finding: "Producer correctly established an unresolved S-17 session/trade semantic boundary, but stopped before completing the independently actionable S-03 Volume/RVOL integration."
+    disposition:
+      s03: "CONTINUE — bounded implementation/test/runtime evidence authorized."
+      s17: "REMAINS UNRESOLVED — authoritative session-boundary/trade-input semantics require governed resolution; no invented calendar or synthetic history permitted."
+      p5_006: "REMAINS DEFINED / INACTIVE."
+    synchronization:
+      artifacts_registry: UPDATED
+      phases_registry: UPDATED
+      checkpoint: UPDATED
+      readme: PENDING_FINAL_READBACK
+      historical_evidence: UNCHANGED
