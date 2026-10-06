@@ -473,6 +473,7 @@ records:
       - Stage-1 specialist independence; no specialist consumes another specialist output.
       - No new upstream mathematical truth, final scoring, cross-specialist synthesis, trading, capital, custody, or Forex implementation.
       - Genuine dependencies are resolved just-in-time through their owning governed boundary.
+  # Post-closure corrective investigation: TO-P5-005-CORRECTIVE-001 = VERIFIED / COMPLETE under AR-P5-006; historical STEP-P5-005 closure preserved; STEP-P5-006 not activated.
   - sid: STEP-P5-002
     logical_name: Input Snapshot Builder & Fact Availability Verification
     entity_type: STEP
