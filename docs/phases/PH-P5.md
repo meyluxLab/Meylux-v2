@@ -1,12 +1,12 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-006` — DEFINED / INACTIVE; upstream PRQ-2 trade prerequisite resolution active under `TO-P2-014`
-**Active Task Order:** `TO-P2-014`
-**Active Corrective Dependency:** `TO-P2-014` — bounded P2 PRQ-2 trade capability resolution for `STEP-P5-006`
+**Current Step Lifecycle:** `STEP-P5-006` — DEFINED / INACTIVE; PRQ-1 Group-C and PRQ-2 trade prerequisites ESTABLISHED / VERIFIED; awaiting fresh P5-006 activation determination
+**Active Task Order:** `null`
+**Last Completed Upstream Dependency:** `TO-P2-014` — VERIFIED / COMPLETE under `AR-P2-AUDIT-014`
 **Last Completed Task Order:** `TO-P5-005`  
 **Last Completed Corrective Dependency:** `TO-P4-012` — VERIFIED / COMPLETE under `AR-P4-019`  
-**Current Corrective Task Order:** `TO-P2-014`
+**Current Corrective Task Order:** `null`
 **Completion Audit:** `AR-P5-004`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
@@ -138,7 +138,7 @@ VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation re
 **Predecessor:** `STEP-P5-005` — COMPLETE / VERIFIED  
 **Activation basis:** Project Owner next governed-stage directive — 2026-10-06  
 **Active Task Order:** `TO-P2-014` — bounded upstream prerequisite resolution  
-**Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED`; `PRQ-2` trade capability is the active upstream resolution boundary under `TO-P2-014`. P5 specialist implementation remains inactive until CONTROL independently verifies the gate.
+**Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED`; `PRQ-2` trade capability is ESTABLISHED / VERIFIED under `TO-P2-014 / AR-P2-AUDIT-014`. P5 specialist implementation remains inactive until CONTROL independently verifies the gate.
 
 Purpose: establish deterministic Group-C specialist capability for `S-03` Volume Analyst and `S-17` Volume Profile Reasoner using authoritative Stage-1 Input Snapshot facts and an independently verified P4 Group-C fact surface.
 
@@ -173,7 +173,7 @@ The prerequisite `PRQ-1 Group-B P4 capability` is ESTABLISHED / VERIFIED under `
 
 The governed acceptance boundary remains BTCUSDT 15m primary with eligible 1h/4h context. The repository's 5m capability is supported and semantically defined but has not been independently runtime-verified and is not required by this Step absent an actual dependency.
 
-The Group-C upstream gate is currently being resolved under `TO-P4-014`; `STEP-P5-006` specialist implementation and later Steps remain unauthorized.
+The Group-C upstream gate is established under `TO-P4-014 / AR-P4-022`; `STEP-P5-006` specialist implementation and later Steps remain unauthorized.
 
 
 ## Post-Closure S-12 Causal Resolution
