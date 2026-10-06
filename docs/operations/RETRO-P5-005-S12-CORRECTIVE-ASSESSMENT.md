@@ -4,7 +4,7 @@
 **Artifact Type:** ASSESSMENT  
 **Assessment Basis:** `ADR-GOVERNANCE-014`  
 **Affected Boundary:** `PH-P5 / STEP-P5-005 / TO-P5-005`  
-**Status:** PRODUCED / UNVERIFIED  
+**Status:** CLOSED / VERIFIED  
 **Assessment Owner:** `ROL-V2-001 — CONTROL / REVIEWER`  
 **Date:** 2026-10-05
 
@@ -153,7 +153,7 @@ No one of these causes is selected without additional evidence.
 
 ## 7. Assessment Classification
 
-### **Primary Classification: D — UNRESOLVED REQUIRED PREREQUISITE**
+### **Historical Production Classification: D — UNRESOLVED REQUIRED PREREQUISITE**
 
 The authoritative requirements establish that S-12 requires a real, authoritative liquidity-zone/pool fact surface to determine the requested liquidity interpretation.
 
@@ -244,16 +244,30 @@ Producer Build Report / evidence
 CONTROL closure synchronization  
 → only after a legitimate corrective completion boundary.
 
-## 12. Current Conclusion
+## 12. Current Verified Conclusion
 
-The assessment establishes that the S-12 liquidity fact/evaluation surface is genuinely relevant to the required capability, but the historical absence of `LIQUIDITY_POOL` records is **not yet causally explained**.
+The historical S-12 liquidity fact/evaluation surface was genuinely relevant to the required capability, and the historical absence of `LIQUIDITY_POOL` records is now causally explained by `AR-P5-006`: **Branch A — no qualifying liquidity pool existed in the authoritative P4 input/output boundary.**
 
-Therefore the project must not treat the historical `INSUFFICIENT_DATA` result as the permanent end of the required capability, but it also must not invent a pool or prescribe a technical fix.
+The causal investigation found no P4 production defect, persistence defect, P5 admission defect, provider/data-source deficiency, or other unresolved prerequisite requiring corrective implementation for this historical case.
 
-**Disposition: D — UNRESOLVED REQUIRED PREREQUISITE / CAUSAL RESOLUTION REQUIRED.**
+The historical `INSUFFICIENT_DATA` result remains unchanged and truthful. No liquidity pool is to be fabricated merely to produce a non-empty runtime result.
 
-**Corrective implementation: NOT AUTHORIZED.**
+**Disposition: Causal Branch A — ESTABLISHED.**
+
+**Corrective implementation: NOT AUTHORIZED / NOT REQUIRED BY THIS INVESTIGATION.**
 
 **Historical evidence: PRESERVED.**
 
 **P5-005 reopening: NOT AUTHORIZED.**
+
+## 13. CONTROL Self-Audit / Closure Verification
+
+Under the Project Owner's explicit authorization dated 2026-10-06, CONTROL performed a self-audit of this assessment against `AR-P5-006` and the current authoritative governance state.
+
+The audit found one stale substantive field: the historical production classification remained D after the causal investigation had established Branch A. CONTROL corrected that assessment conclusion without modifying any historical evidence.
+
+Self-audit record: `AR-P5-007`.
+
+**Self-audit result: PASS.**
+
+**Final lifecycle status: CLOSED / VERIFIED.**
