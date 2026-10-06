@@ -193,7 +193,10 @@ class BinanceAdapter(ProviderAdapter):
                     ProviderError("BINANCE_INVALID_TRADE_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
                 )
                 return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, failure),)
-            payload = self._trade_payload(row)
+            try:
+                payload = self._trade_payload(row)
+            except _BinanceProviderFailure as exc:
+                return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, exc),)
             envelopes.append(self._envelope(
                 instrument=self._instrument(symbol),
                 event_type=EventType.TRADE,
