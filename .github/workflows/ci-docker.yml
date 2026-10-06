@@ -192,6 +192,43 @@ jobs:
             --entrypoint python api \
             -m unittest discover -s /app/tests -p 'test_p5_004_redis_postgresql.py' -v
 
+      - name: Run TO-P2-014 real Binance Spot trade acquisition
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
+            -e MEYLUX_SERVICE=collector \
+            -e MEYLUX_DB_HOST=db \
+            -e MEYLUX_DB_PORT=5432 \
+            -e MEYLUX_DB_NAME="$MEYLUX_DB_NAME" \
+            -e MEYLUX_DB_USER=meylux_app \
+            -e MEYLUX_DB_PASSWORD="$MEYLUX_APP_PASSWORD" \
+            -e MEYLUX_BINANCE_TRADE_SYMBOLS=BTCUSDT,SOLUSDT \
+            -e MEYLUX_BINANCE_TRADE_LIMIT=100 \
+            --entrypoint python api \
+            -m meylux.runtime.service
+
+      - name: Verify TO-P2-014 real trade persistence/read-back
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db \
+            psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 \
+            -c "SELECT provider_id, event_type, acquisition_state, count(*) FROM meylux.raw_acquisition_events WHERE provider_id='binance' AND event_type='TRADE' GROUP BY provider_id,event_type,acquisition_state ORDER BY acquisition_state;"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db \
+            psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 \
+            -c "SELECT count(*) AS quality_evidence_rows FROM meylux.quality_evidence WHERE provider_id='binance' AND event_type='TRADE';"
+          docker compose -f infrastructure/compose/docker-compose.yml exec -T db \
+            psql -U meylux_admin -d meylux_ci -v ON_ERROR_STOP=1 \
+            -c "SELECT count(*) AS canonical_trade_rows FROM meylux.canonical_trades WHERE event_id IN (SELECT event_id FROM meylux.raw_acquisition_events WHERE provider_id='binance' AND event_type='TRADE' AND acquisition_state='AVAILABLE');"
+
       - name: Verify legacy knowledge-time migration and idempotency
         env:
           MEYLUX_DB_NAME: meylux_ci
