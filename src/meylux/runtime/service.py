@@ -69,17 +69,21 @@ async def main():
             )
             limit=int(os.environ.get("MEYLUX_BINANCE_TRADE_LIMIT","1000"))
             rest_base_url=os.environ.get("MEYLUX_BINANCE_REST_BASE_URL","https://api.binance.com")
+            replay_same_evidence=os.environ.get("MEYLUX_BINANCE_TRADE_REPLAY","0") == "1"
             adapter=BinanceAdapter(rest_base_url=rest_base_url)
             async with pool.acquire() as conn:
                 pipeline=TradeAcquisitionPipeline(conn, adapter=adapter, trade_limit=limit)
-                result=await pipeline.acquire_once(symbols)
+                result=await pipeline.acquire_once(symbols, replay_same_evidence=replay_same_evidence)
             print(
                 "meylux-v2 bounded Binance trade acquisition completed: "
                 f"symbols={result.symbols} envelopes={result.envelopes} "
                 f"available={result.available_trades} raw_inserted={result.raw_inserted} "
                 f"raw_duplicates={result.raw_duplicates} quality_evidence_inserted={result.quality_evidence_inserted} "
+                f"quality_evidence_duplicates={result.quality_evidence_duplicates} "
+                f"quality_evidence_contradictory={result.quality_evidence_contradictory} "
                 f"canonical_inserted={result.canonical_inserted} canonical_duplicates={result.canonical_duplicates} "
                 f"invalid_or_unavailable={result.invalid_or_unavailable} "
+                f"replay_executed={result.replay_executed} "
                 f"observed_history_seconds={result.observed_history_seconds}",
                 flush=True,
             )
@@ -105,4 +109,4 @@ async def main():
         await pool.close()
 
 if __name__=="__main__":
-    asyncio.run(main())
+    asyncio.run(main)
