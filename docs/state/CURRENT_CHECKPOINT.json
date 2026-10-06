@@ -4,7 +4,7 @@
   "phase": "PH-P5",
   "step": "STEP-P5-006",
   "gate": "Phase progression authority",
-  "status": "DEFINED / INACTIVE — PRQ-1 GROUP-C ESTABLISHED / VERIFIED; PRQ-2 TRADE CAPABILITY RESOLUTION ACTIVE",
+  "status": "DEFINED / INACTIVE — PRQ-1 GROUP-C AND PRQ-2 TRADE CAPABILITY ESTABLISHED / VERIFIED; AWAITING P5-006 ACTIVATION DETERMINATION",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P2-014",
-  "last_build_report": "BR-P4-015",
-  "last_audit_report": "AR-P4-022",
+  "last_build_report": "BR-P2-014",
+  "last_audit_report": "AR-P2-AUDIT-014",
   "last_execution_log": "EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006",
-  "active_task_order": "TO-P2-014",
-  "completed_task_order": "TO-P4-014",
-  "completion_audit": "AR-P4-022",
+  "active_task_order": null,
+  "completed_task_order": "TO-P2-014",
+  "completion_audit": "AR-P2-AUDIT-014",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -358,7 +358,14 @@
     "EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006",
     "TST-P4-014",
     "DB-P4-014",
-    "RUN-P4-014"
+    "RUN-P4-014",
+    "TO-P2-014",
+    "BR-P2-014",
+    "AR-P2-AUDIT-014",
+    "TST-P2-014",
+    "DB-P2-014",
+    "RUN-P2-014",
+    "CFG-P2-014"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -427,8 +434,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "cda0982bcbe6304c6b1a0fcf1135b1699510472f",
-  "updated_at_utc": "2026-10-06T18:25:29Z",
+  "last_verified_commit": "41683d931a7cf4321f6655e173e8794af93f74d2",
+  "updated_at_utc": "2026-10-06T19:30:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
