@@ -7,7 +7,7 @@ not introduce a second truth source or synthesize missing market evidence.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime
 from decimal import Decimal
 from typing import Any, Protocol, Sequence
 
@@ -42,11 +42,14 @@ class TradeAcquisitionResult:
     raw_inserted: int
     raw_duplicates: int
     quality_evidence_inserted: int
+    quality_evidence_duplicates: int
+    quality_evidence_contradictory: int
     canonical_inserted: int
     canonical_duplicates: int
     invalid_or_unavailable: int
     earliest_event_time: datetime | None
     latest_event_time: datetime | None
+    replay_executed: bool
 
     @property
     def observed_history_seconds(self) -> int:
@@ -85,17 +88,66 @@ class TradeAcquisitionPipeline:
             raise ValueError(f"unauthorized Binance Spot trade symbols: {', '.join(unauthorized)}")
         return normalized
 
-    async def acquire_once(self, symbols: Sequence[str]) -> TradeAcquisitionResult:
+    async def acquire_once(
+        self,
+        symbols: Sequence[str],
+        *,
+        replay_same_evidence: bool = False,
+    ) -> TradeAcquisitionResult:
         normalized_symbols = self.validate_symbols(symbols)
-        raw = RawStagingRepository(self._connection)
-        quality_repo = QualityEvidencePersistence(self._connection)
-        canonical_repo = CanonicalPersistence(self._connection)
-
         envelopes: list[AcquisitionEnvelope] = []
         for symbol in normalized_symbols:
             envelopes.extend(self._adapter.fetch_trades(symbol, limit=self._trade_limit))
 
-        raw_inserted = raw_duplicates = quality_inserted = canonical_inserted = canonical_duplicates = invalid = 0
+        first = await self._persist_envelopes(envelopes, normalized_symbols)
+
+        if replay_same_evidence:
+            replay = await self._persist_envelopes(envelopes, normalized_symbols)
+            return TradeAcquisitionResult(
+                normalized_symbols,
+                first.envelopes,
+                first.available_trades,
+                first.raw_inserted,
+                first.raw_duplicates + replay.raw_duplicates,
+                first.quality_evidence_inserted,
+                first.quality_evidence_duplicates + replay.quality_evidence_duplicates,
+                first.quality_evidence_contradictory + replay.quality_evidence_contradictory,
+                first.canonical_inserted,
+                first.canonical_duplicates + replay.canonical_duplicates,
+                first.invalid_or_unavailable,
+                first.earliest_event_time,
+                first.latest_event_time,
+                True,
+            )
+
+        return TradeAcquisitionResult(
+            normalized_symbols,
+            first.envelopes,
+            first.available_trades,
+            first.raw_inserted,
+            first.raw_duplicates,
+            first.quality_evidence_inserted,
+            first.quality_evidence_duplicates,
+            first.quality_evidence_contradictory,
+            first.canonical_inserted,
+            first.canonical_duplicates,
+            first.invalid_or_unavailable,
+            first.earliest_event_time,
+            first.latest_event_time,
+            False,
+        )
+
+    async def _persist_envelopes(
+        self,
+        envelopes: Sequence[AcquisitionEnvelope],
+        symbols: tuple[str, ...],
+    ) -> TradeAcquisitionResult:
+        raw = RawStagingRepository(self._connection)
+        quality_repo = QualityEvidencePersistence(self._connection)
+        canonical_repo = CanonicalPersistence(self._connection)
+
+        raw_inserted = raw_duplicates = quality_inserted = quality_duplicates = quality_contradictory = 0
+        canonical_inserted = canonical_duplicates = invalid = 0
         available = 0
         times: list[datetime] = []
         canonical_sequence = 0
@@ -134,6 +186,10 @@ class TradeAcquisitionPipeline:
             evidence_result = await quality_repo.persist(evidence)
             if evidence_result.inserted:
                 quality_inserted += 1
+            else:
+                quality_duplicates += 1
+            if evidence_result.contradictory:
+                quality_contradictory += 1
 
             if envelope.state is not AcquisitionState.AVAILABLE or not outcome.valid:
                 invalid += 1
@@ -157,17 +213,20 @@ class TradeAcquisitionPipeline:
         earliest = min(times) if times else None
         latest = max(times) if times else None
         return TradeAcquisitionResult(
-            normalized_symbols,
+            symbols,
             len(envelopes),
             available,
             raw_inserted,
             raw_duplicates,
             quality_inserted,
+            quality_duplicates,
+            quality_contradictory,
             canonical_inserted,
             canonical_duplicates,
             invalid,
             earliest,
             latest,
+            False,
         )
 
 
