@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P4-014-CORRECTIVE-001",
-  "last_build_report": "BR-P5-007",
-  "last_audit_report": "AR-P5-006",
+  "last_build_report": "BR-P4-014",
+  "last_audit_report": "AR-P4-021",
   "last_execution_log": "EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006",
-  "active_task_order": "TO-P4-014-CORRECTIVE-001",
-  "completed_task_order": "TO-P5-005-CORRECTIVE-001",
-  "completion_audit": "AR-P5-006",
+  "active_task_order": "TO-P4-014",
+  "completed_task_order": "TO-P4-014-CORRECTIVE-001",
+  "completion_audit": "AR-P4-021",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -349,7 +349,9 @@
     "DOC-P5-004",
     "AR-P5-007",
     "DOC-P5-003",
-    "AR-P5-008"
+    "AR-P5-008",
+    "BR-P4-014",
+    "AR-P4-021"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -413,8 +415,8 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "857020c80de4753727ee8fb51cbffb88369e4635",
-  "updated_at_utc": "2026-10-06T13:55:00Z",
+  "last_verified_commit": "08ae9a38d786aaa555c304ccc07c3a9cc5321f6c",
+  "updated_at_utc": "2026-10-06T15:13:01Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -530,7 +532,8 @@
     "DOC-P5-003 is CLOSED / VERIFIED after authorized CONTROL self-audit AR-P5-007; its historical unresolved production classification was corrected to the AR-P5-006 Branch-A causal disposition; historical evidence remains unchanged and no corrective implementation or P5-005 reopening is authorized.",
     "CONTROL independently verified TO-P5-005-CORRECTIVE-001 under AR-P5-006: Branch A established — no qualifying liquidity pool existed in the authoritative P4 input/output boundary; no corrective implementation required; historical STEP-P5-005 / TO-P5-005 closure preserved; STEP-P5-006 not activated.",
     "CONTROL self-audit under explicit Project Owner authorization 2026-10-06 verified and closed DOC-P5-003 and the project-wide No-Drop assessment (DOC-P5-004); AR-P5-007 records the self-audit; historical evidence and Phase/Step lifecycle remain unchanged.",
-    "Project Owner Item 7 No-Drop workflow audit completed under AR-P5-008. A real operational enforcement gap was found and the minimum bounded correction was applied to the CONTROL, PRODUCER, PROJECT GUIDE, and AI Continuation workflow artifacts. ADR-GOVERNANCE-014 and ARTIFACT_PROTOCOL_V2 remain the normative source; no duplicate ADR was created."
+    "Project Owner Item 7 No-Drop workflow audit completed under AR-P5-008. A real operational enforcement gap was found and the minimum bounded correction was applied to the CONTROL, PRODUCER, PROJECT GUIDE, and AI Continuation workflow artifacts. ADR-GOVERNANCE-014 and ARTIFACT_PROTOCOL_V2 remain the normative source; no duplicate ADR was created.",
+    "CONTROL independently verified TO-P4-014-CORRECTIVE-001 under AR-P4-021 after PR #67 merged as 08ae9a38d786aaa555c304ccc07c3a9cc5321f6c. S-03 Volume/RVOL operational integration is VERIFIED; the corrective Task Order is VERIFIED / COMPLETE. Parent TO-P4-014 remains active for unresolved S-17 Group-C prerequisite resolution; STEP-P5-006 remains DEFINED / INACTIVE."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
