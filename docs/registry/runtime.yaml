@@ -271,6 +271,30 @@ records:
       control_audit: AR-P4-020
     status: VERIFIED
 
+- stable_id: RUN-P4-014
+    canonical_name: CONTROL Independent TO-P4-014 S-17 Runtime Verification
+    entity_type: RUN
+    phase: PH-P4
+    step: STEP-P4-006
+    task_order: TO-P4-014
+    runtime_target: server-l6rf
+    evidence:
+      executor_role: ROL-V2-001
+      mechanism: SentinelX isolated exact-revision runtime
+      implementation_revision: 73b4d73c15f1ec0e35980c6c649a941b7c100450
+      merged_revision: cda0982bcbe6304c6b1a0fcf1135b1699510472f
+      execution_log: EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006
+      real_trade_lineage: VERIFIED
+      explicit_interval: '[2026-09-18T17:00:00Z, 2026-09-18T18:00:00Z)'
+      first_execution_new_sessions: 1
+      replay_additional_sessions: 0
+      final_matching_sessions: 1
+      persisted_session_id: 3eab3854fa6b634320360697364cdc1239bd11dde09e793c4cf0d076db32084a
+      append_only_identity: VERIFIED
+      provider_to_venue_inference: NONE
+      control_audit: AR-P4-022
+    status: VERIFIED
+
 - stable_id: RUN-P5-005
     canonical_name: CONTROL Independent TO-P5-005 Group-B Runtime Verification
     entity_type: RUN
