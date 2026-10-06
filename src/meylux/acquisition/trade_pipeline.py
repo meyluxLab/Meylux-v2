@@ -20,7 +20,7 @@ from contracts.quality_evidence import build_quality_evidence
 from meylux.acquisition.binance import BinanceAdapter
 from meylux.persistence.canonical import CanonicalPersistence
 from meylux.persistence.factory import build_canonical_event
-from meylux.persistence.persistence import RawStagingRepository
+from meylux.acquisition.persistence import RawStagingRepository
 from meylux.persistence.quality_evidence import QualityEvidencePersistence
 
 SID = "TO-P2-014"
