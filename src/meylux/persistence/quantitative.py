@@ -507,8 +507,6 @@ class QuantitativePersistence:
             quote_quantity=None if payload.get("quote_quantity") is None else Decimal(payload["quote_quantity"]),
             provenance_id=payload["provenance_id"],
         )
-        if trade.trade_id != row["record_id"] and row.get("event_id") is None:
-            raise ValueError("canonical trade identity context is malformed")
         if trade.instrument_id != row["instrument_id"] or trade.provenance_id != row["provenance_id"]:
             raise ValueError("canonical trade row/payload identity mismatch")
         if trade.timestamp != row["event_time"]:
@@ -540,6 +538,35 @@ class QuantitativePersistence:
         if any(trade.instrument_id != symbol for trade in trades):
             raise ValueError("canonical trade query returned a cross-instrument row")
         return trades
+
+    async def fetch_canonical_trade_lineage(
+        self,
+        symbol: str,
+        interval_start: datetime,
+        interval_end: datetime,
+    ) -> tuple[tuple[CanonicalTrade, ...], tuple[str, ...]]:
+        if not isinstance(symbol, str) or not symbol.strip():
+            raise ValueError("symbol must be non-empty")
+        if interval_start.tzinfo is None or interval_start.utcoffset() != timezone.utc.utcoffset(interval_start):
+            raise ValueError("interval_start must be UTC")
+        if interval_end.tzinfo is None or interval_end.utcoffset() != timezone.utc.utcoffset(interval_end):
+            raise ValueError("interval_end must be UTC")
+        if interval_end <= interval_start:
+            raise ValueError("interval_end must be after interval_start")
+        rows = await self._connection.fetch(
+            "SELECT record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,"
+            "payload_json FROM meylux.canonical_trades "
+            "WHERE instrument_id=$1 AND event_time >= $2 AND event_time < $3 "
+            "ORDER BY event_time,record_id",
+            symbol, interval_start, interval_end,
+        )
+        trades = tuple(self._canonical_trade_from_row(row) for row in rows)
+        source_ids = tuple(row["source_record_id"] for row in rows)
+        if any(not isinstance(value, str) or not value.strip() for value in source_ids):
+            raise ValueError("canonical trade source_record_id is missing or malformed")
+        if any(trade.instrument_id != symbol for trade in trades):
+            raise ValueError("canonical trade query returned a cross-instrument row")
+        return trades, source_ids
 
     async def _profile_evidence_context(
         self,
