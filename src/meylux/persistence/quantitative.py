@@ -10,6 +10,7 @@ from typing import Any, Mapping, Sequence
 
 from contracts.canonical.trade import CanonicalTrade
 from contracts.quantitative.base import CalculationResult, CalculationStatus
+from meylux.persistence.quality_evidence import ContradictoryQualityEvidence
 from meylux.quantitative.volume_orderflow_derivatives import VolumeProfileConfig, VolumeProfileAnalysis, VolumeProfileEngine
 from meylux.orchestration.engine import QuantOrchestrationResult, TimeframeQuantitativeFacts, TimeframeStructuralFacts
 
