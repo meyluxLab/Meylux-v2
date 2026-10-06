@@ -205,8 +205,8 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         result = QuantitativeOrchestrator().process(bars(), config())
         inserted = asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
         expected_structural = _expected_structural_rows(result)
-        self.assertEqual(inserted, 23 + expected_structural)
-        self.assertEqual(len(db.sql), 21 + expected_structural)
+        self.assertEqual(inserted, 25 + expected_structural)
+        self.assertEqual(len(db.sql), 25 + expected_structural)
         indicator_and_regime = [
             (query, args) for query, args in db.sql
             if "calculated_indicator_vectors" in query or "market_regime_states" in query
@@ -215,7 +215,7 @@ class TestP4010KnowledgeTime(unittest.TestCase):
             (query, args) for query, args in db.sql
             if "market_structure_events" in query
         ]
-        self.assertEqual(len(indicator_and_regime), 20)
+        self.assertEqual(len(indicator_and_regime), 24)
         summaries = [(query, args) for query, args in structure if len(args) > 4 and args[4] == "ORCHESTRATION"]
         structural_facts = [(query, args) for query, args in structure if len(args) > 4 and args[4] != "ORCHESTRATION"]
         self.assertEqual(len(summaries), 1)
