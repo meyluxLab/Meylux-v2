@@ -342,25 +342,132 @@ class QuantitativePersistence:
         return trades, source_ids
 
     async def _profile_evidence_context(self, trades: tuple[CanonicalTrade, ...], source_record_ids: tuple[str, ...]) -> tuple[datetime | None, str | None, bool]:
-        if not trades: return None, None, False
-        if len(source_record_ids) != len(trades): raise ValueError("profile source-record lineage must align with canonical trades")
+        """Resolve one authoritative P3 evidence identity for every contributing trade.
+
+        source_record_id is lineage linkage, not evidence identity. The resolver
+        therefore joins the persisted canonical row to all matching quality-evidence
+        rows and validates the complete authoritative correspondence before the
+        profile is allowed to claim knowledge_time or venue.
+        """
+        if not trades:
+            return None, None, False
+        if len(source_record_ids) != len(trades):
+            raise ValueError("profile source-record lineage must align with canonical trades")
+        if len(set(source_record_ids)) != len(source_record_ids):
+            raise ValueError("multiple canonical trades cannot share one source_record_id")
+
         rows = await self._connection.fetch(
-            "SELECT source_record_id,knowledge_time,venue FROM meylux.quality_evidence WHERE source_record_id = ANY($1::text[])",
+            """SELECT
+                   c.source_record_id AS canonical_source_record_id,
+                   c.event_id AS canonical_event_id,
+                   c.instrument_id AS canonical_instrument_id,
+                   c.event_time AS canonical_event_time,
+                   c.provenance_id AS canonical_provenance_id,
+                   q.evidence_id,
+                   q.source_record_id,
+                   q.source_identity_hash,
+                   q.event_type,
+                   q.canonical_instrument_id,
+                   q.event_time,
+                   q.received_at,
+                   q.knowledge_time,
+                   q.acquisition_state,
+                   q.quality_state,
+                   q.lifecycle_state,
+                   q.provenance_id,
+                   q.venue
+              FROM meylux.canonical_trades AS c
+              LEFT JOIN meylux.quality_evidence AS q
+                ON q.source_record_id = c.source_record_id
+             WHERE c.source_record_id = ANY($1::text[])
+             ORDER BY c.source_record_id, q.evidence_id""",
             list(source_record_ids),
         )
-        by_source = {row["source_record_id"]: row for row in rows}
-        if set(by_source) != set(source_record_ids): return None, None, False
+
+        by_source: dict[str, list[Any]] = {source_id: [] for source_id in source_record_ids}
+        for row in rows:
+            source_id = row["canonical_source_record_id"]
+            if source_id in by_source:
+                by_source[source_id].append(row)
+
         knowledge_times: list[datetime] = []
         venues: set[str] = set()
-        for source_id in source_record_ids:
-            row = by_source[source_id]; knowledge = row["knowledge_time"]
-            if knowledge is None or knowledge.tzinfo is None or knowledge.utcoffset() != timezone.utc.utcoffset(knowledge): return None, None, False
+        for trade, source_id in zip(trades, source_record_ids):
+            candidates = by_source[source_id]
+            if not candidates:
+                return None, None, False
+
+            canonical_rows = {
+                (
+                    row["canonical_event_id"],
+                    row["canonical_instrument_id"],
+                    row["canonical_event_time"],
+                    row["canonical_provenance_id"],
+                )
+                for row in candidates
+            }
+            if len(canonical_rows) != 1:
+                raise ValueError("canonical trade lineage is contradictory for profile resolution")
+            canonical_event_id, canonical_instrument_id, canonical_event_time, canonical_provenance_id = next(iter(canonical_rows))
+            if (
+                canonical_instrument_id != trade.instrument_id
+                or canonical_event_time != trade.timestamp
+                or canonical_provenance_id != trade.provenance_id
+            ):
+                raise ValueError("canonical trade lineage does not match the contributing CanonicalTrade")
+
+            evidence_candidates = [row for row in candidates if row["evidence_id"] is not None]
+            if not evidence_candidates:
+                return None, None, False
+            evidence_ids = {str(row["evidence_id"]) for row in evidence_candidates}
+            if len(evidence_ids) > 1:
+                raise ContradictoryQualityEvidence(
+                    f"multiple distinct authoritative evidence identities exist for source_record_id={source_id}"
+                )
+
+            evidence = evidence_candidates[0]
+            checks = (
+                (evidence["source_record_id"], source_id, "source_record_id"),
+                (evidence["source_identity_hash"], canonical_event_id, "source_identity_hash"),
+                (evidence["event_type"], "TRADE", "event_type"),
+                (evidence["canonical_instrument_id"], trade.instrument_id, "canonical_instrument_id"),
+                (evidence["event_time"], trade.timestamp, "event_time"),
+                (evidence["provenance_id"], trade.provenance_id, "provenance_id"),
+                (evidence["acquisition_state"], "AVAILABLE", "acquisition_state"),
+                (evidence["quality_state"], "VALID", "quality_state"),
+                (evidence["lifecycle_state"], "ACCEPTED", "lifecycle_state"),
+            )
+            for actual, expected, field in checks:
+                if actual != expected:
+                    raise ValueError(
+                        f"quality evidence mismatch for source_record_id={source_id}: "
+                        f"{field}={actual!r} does not match authoritative trade value {expected!r}"
+                    )
+
+            received_at = evidence["received_at"]
+            knowledge = evidence["knowledge_time"]
+            if (
+                received_at is None
+                or knowledge is None
+                or received_at != knowledge
+                or knowledge.tzinfo is None
+                or knowledge.utcoffset() != timezone.utc.utcoffset(knowledge)
+            ):
+                raise ValueError(
+                    f"quality evidence has invalid authoritative knowledge boundary for source_record_id={source_id}"
+                )
             knowledge_times.append(knowledge)
-            venue = row["venue"]
+
+            venue = evidence["venue"]
             if venue is not None:
-                if not isinstance(venue, str) or not venue.strip(): return None, None, False
+                if not isinstance(venue, str) or not venue.strip():
+                    raise ValueError(
+                        f"quality evidence venue is malformed for source_record_id={source_id}"
+                    )
                 venues.add(venue.strip())
-        if len(venues) > 1: raise ValueError("profile contributing trade evidence has contradictory venue context")
+
+        if len(venues) > 1:
+            raise ValueError("profile contributing trade evidence has contradictory venue context")
         return max(knowledge_times), (next(iter(venues)) if venues else None), True
     async def _insert_structural_row(
         self,
