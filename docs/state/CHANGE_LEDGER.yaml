@@ -3481,3 +3481,36 @@ entries:
       checkpoint: UPDATED
       readme: PENDING_FINAL_READBACK
       historical_evidence: UNCHANGED
+
+  - ledger_id: CL-P4-GROUPC-S03-CORRECTIVE-CLOSURE-20261006
+    date_utc: 2026-10-06
+    authority: CONTROL independent verification under ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    role: ROL-V2-001
+    action: CONTROL INDEPENDENT VERIFICATION AND CLOSURE — TO-P4-014-CORRECTIVE-001
+    basis: BR-P4-014 / AR-P4-021 / PR #67 / merge 08ae9a38d786aaa555c304ccc07c3a9cc5321f6c
+    disposition:
+      phase: PH-P5
+      step: STEP-P5-006
+      corrective_task_order: TO-P4-014-CORRECTIVE-001
+      corrective_task_order_status: VERIFIED / COMPLETE
+      active_task_order: TO-P4-014
+      parent_task_order_status: AUTHORIZED TO EXECUTE
+      audit_report: AR-P4-021
+      s03: VERIFIED
+      s17: UNRESOLVED — OQ-P4-GROUPC-S17-SESSION-BOUNDARY
+      p5_006: DEFINED / INACTIVE
+    scope: Independent verification and closure of the bounded S-03 Volume/RVOL operational integration only.
+    exclusions: S-17 implementation; session semantics; trade-history expansion; P5-006 activation; unrelated architecture or provider scope.
+    synchronization:
+      task_order_artifact: VERIFIED / COMPLETE
+      build_report: BR-P4-014 VERIFIED
+      audit_report: AR-P4-021 APPROVED / VERIFIED
+      artifacts_registry: UPDATED
+      phase_registry: UPDATED
+      checkpoint: UPDATED — active_task_order returned to parent TO-P4-014
+      readme: UPDATED
+      historical_evidence: UNCHANGED
+      specialized_registries: CHECKED — no new registry required; existing P4-011 persistence/test registries remain applicable
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED — none requiring absorption
+    conclusion: S-03 Volume/RVOL is independently verified and the corrective Task Order is complete; parent TO-P4-014 remains active solely for unresolved Group-C/S-17 prerequisite resolution.
