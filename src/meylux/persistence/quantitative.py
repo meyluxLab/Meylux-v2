@@ -6,9 +6,12 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 import hashlib
 import json
-from typing import Any, Mapping
+from typing import Any, Mapping, Sequence
 
+from contracts.canonical.trade import CanonicalTrade
 from contracts.quantitative.base import CalculationResult
+from contracts.quantitative.volume_profile import VolumeProfileConfig, VolumeProfileAnalysis
+from meylux.quantitative.volume_orderflow_derivatives import VolumeProfileEngine
 from meylux.orchestration.engine import QuantOrchestrationResult, TimeframeQuantitativeFacts, TimeframeStructuralFacts
 
 
@@ -360,6 +363,131 @@ class QuantitativePersistence:
             raise ValueError("structural identity collision: persisted content differs from deterministic replay")
         return 0
 
+    async def _resolve_trade_lineage(
+        self, provenance: tuple[str, ...]
+    ) -> tuple[str | None, datetime | None]:
+        """Resolve venue and knowledge boundary from authoritative raw trade evidence."""
+        refs = tuple(dict.fromkeys(provenance))
+        if not refs:
+            return None, None
+        records = await self._connection.fetch(
+            "SELECT provenance_id, provider_id, adapter_id, adapter_version, received_at, "
+            "payload_json->>'venue' AS venue, payload_json->>'venue_context' AS venue_context, "
+            "jsonb_typeof(payload_json->'venue') AS venue_type, "
+            "jsonb_typeof(payload_json->'venue_context') AS venue_context_type "
+            "FROM meylux.raw_acquisition_events "
+            "WHERE provenance_id = ANY($1::text[]) AND event_type = 'TRADE' "
+            "AND acquisition_state = 'AVAILABLE'",
+            list(refs),
+        )
+        by_ref: dict[str, list[Any]] = {ref: [] for ref in refs}
+        for row in records:
+            if row["provenance_id"] in by_ref:
+                by_ref[row["provenance_id"]].append(row)
+        venues: set[str] = set()
+        knowledge_times: list[datetime] = []
+        for ref in refs:
+            candidates = by_ref[ref]
+            if not candidates:
+                raise ValueError(f"missing authoritative raw TRADE lineage for provenance {ref!r}")
+            identities = {(row["provider_id"], row["adapter_id"], row["adapter_version"]) for row in candidates}
+            if len(identities) != 1 or any(not isinstance(value, str) or not value.strip() for identity in identities for value in identity):
+                raise ValueError(f"contradictory provider lineage for provenance {ref!r}")
+            for row in candidates:
+                received_at = row["received_at"]
+                if not isinstance(received_at, datetime) or received_at.tzinfo is None or received_at.utcoffset() != timezone.utc.utcoffset(received_at):
+                    raise ValueError(f"invalid raw TRADE received_at for provenance {ref!r}")
+                knowledge_times.append(received_at)
+                row_venues: set[str] = set()
+                for field, type_field in (("venue", "venue_type"), ("venue_context", "venue_context_type")):
+                    value = row[field]
+                    value_type = row[type_field]
+                    if value is None and value_type is None:
+                        continue
+                    if value_type != "string" or not isinstance(value, str) or not value.strip():
+                        raise ValueError(f"malformed raw TRADE {field} for provenance {ref!r}")
+                    row_venues.add(value.strip())
+                if len(row_venues) > 1:
+                    raise ValueError(f"contradictory raw TRADE venue context for provenance {ref!r}")
+                venues.update(row_venues)
+        if len(venues) > 1:
+            raise ValueError("contradictory venue context across profile provenance")
+        return (next(iter(venues)) if venues else None), max(knowledge_times)
+
+    @staticmethod
+    def _trade_payload(trade: CanonicalTrade) -> dict[str, Any]:
+        return {
+            "trade_id": trade.trade_id, "instrument_id": trade.instrument_id, "timestamp": trade.timestamp,
+            "price": trade.price, "quantity": trade.quantity, "aggressor_side": trade.aggressor_side,
+            "quote_quantity": trade.quote_quantity, "provenance_id": trade.provenance_id,
+        }
+
+    async def persist_volume_profile(
+        self, *, symbol: str, timeframe: str, trades: Sequence[CanonicalTrade],
+        interval_start: datetime, interval_end: datetime, config: VolumeProfileConfig,
+        configuration_version: str = "1.0.0",
+    ) -> int:
+        """Persist one explicitly bounded P4 Volume Profile session.
+
+        The interval is caller-supplied; no session/calendar inference occurs.
+        Knowledge time is resolved only from authoritative raw TRADE receipt
+        evidence for the canonical provenance used by the profile.
+        """
+        if not isinstance(symbol, str) or not symbol.strip(): raise ValueError("symbol must be non-empty")
+        if not isinstance(timeframe, str) or not timeframe.strip(): raise ValueError("timeframe must be non-empty")
+        if not isinstance(configuration_version, str) or not configuration_version.strip(): raise ValueError("configuration_version must be non-empty")
+        if not isinstance(config, VolumeProfileConfig): raise TypeError("config must be VolumeProfileConfig")
+        start, end = interval_start, interval_end
+        for value, name in ((start, "interval_start"), (end, "interval_end")):
+            if not isinstance(value, datetime) or value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value):
+                raise ValueError(f"{name} must be UTC")
+        if end <= start: raise ValueError("interval_end must be after interval_start")
+        xs = tuple(trades)
+        if any(not isinstance(trade, CanonicalTrade) for trade in xs): raise TypeError("trades must contain CanonicalTrade instances")
+        if xs and any(trade.instrument_id != symbol for trade in xs): raise ValueError("profile trades must match symbol")
+        provenance = tuple(dict.fromkeys(trade.provenance_id for trade in xs))
+        venue, knowledge_time = await self._resolve_trade_lineage(provenance) if provenance else (None, None)
+        analysis: VolumeProfileAnalysis = VolumeProfileEngine().analyze(xs, start, end, config)
+        source_ref = analysis.context.source_ref if analysis.context is not None else None
+        if xs and not source_ref: raise ValueError("non-empty Volume Profile requires canonical provenance")
+        selected = tuple(trade for trade in xs if start <= trade.timestamp < end)
+        payload = {
+            "metric": "VOLUME_PROFILE", "profile_interval": {"start": start, "end": end},
+            "price_bin_size": config.price_bin_size, "hvn_threshold": config.hvn_threshold, "lvn_threshold": config.lvn_threshold,
+            "bins": analysis.bins, "poc": _calc(analysis.poc.result),
+            "value_area_low": _calc(analysis.value_area_low.result), "value_area_high": _calc(analysis.value_area_high.result),
+            "hvn_bins": analysis.hvn_bins, "lvn_bins": analysis.lvn_bins,
+            "hvn": _calc(analysis.hvn.result), "lvn": _calc(analysis.lvn.result),
+            "selected_value_area_bins": analysis.selected_value_area_bins,
+            "source_trade_ids": tuple(trade.trade_id for trade in selected),
+            "source_provenance": provenance, "knowledge_time": knowledge_time,
+        }
+        material = {
+            "family": "volume_profile", "symbol": symbol, "timeframe": timeframe,
+            "session_start": start, "session_end": end, "version": configuration_version,
+            "calculation_version": analysis.poc.calculation_version,
+            "trades": tuple(self._trade_payload(trade) for trade in selected), "config": payload,
+        }
+        record_id = self._id(material)
+        payload_json = json.dumps(_json(payload), sort_keys=True, separators=(",", ":"))
+        async with self._connection.transaction():
+            tag = str(await self._connection.execute(
+                "INSERT INTO meylux.volume_profile_sessions "
+                "(record_id,symbol,timeframe,session_start,session_end,source_ref,venue_context,version,calculation_version,status,reason,value_numeric,payload_json,identity_hash,knowledge_time) "
+                "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13::jsonb,$14,$15) ON CONFLICT(identity_hash) DO NOTHING",
+                record_id, symbol, timeframe, start, end, source_ref, venue, configuration_version,
+                analysis.poc.calculation_version, analysis.poc.result.status.value, analysis.poc.result.reason,
+                analysis.poc.result.value, payload_json, record_id, knowledge_time,
+            )).strip()
+        if tag == "INSERT 0 1": return 1
+        if tag != "INSERT 0 0": raise RuntimeError(f"unexpected Volume Profile insert result: {tag}")
+        existing = await self._connection.fetchrow(
+            "SELECT record_id,payload_json FROM meylux.volume_profile_sessions WHERE identity_hash=$1", record_id
+        )
+        if existing is None: raise ValueError("Volume Profile identity conflict has no readable authoritative row")
+        if str(existing["record_id"]) != record_id or self._canonical_payload(existing["payload_json"]) != payload_json:
+            raise ValueError("Volume Profile identity collision: persisted content differs from deterministic replay")
+        return 0
     async def persist_orchestration(self, result: QuantOrchestrationResult) -> int:
         primary_knowledge_time = _knowledge_time(result)
         rows: list[tuple[Any, ...]] = []
@@ -638,18 +766,16 @@ class QuantitativePersistence:
             raise ValueError("limit must be 1..1000")
         sql = f"SELECT * FROM {self.TABLES[family]} WHERE symbol=$1 AND timeframe=$2"
         args: list[Any] = [symbol, timeframe]
+        time_column = "session_start" if family == "volume_profile" else "event_time"
         if start is not None:
-            if start.tzinfo is None or start.utcoffset() != timezone.utc.utcoffset(start):
-                raise ValueError("start must be UTC")
-            sql += f" AND event_time>{chr(36)}{len(args) + 1}"
+            if start.tzinfo is None or start.utcoffset() != timezone.utc.utcoffset(start): raise ValueError("start must be UTC")
+            sql += f" AND {time_column}>{chr(36)}{len(args) + 1}"
             args.append(start)
         if end is not None:
-            if end.tzinfo is None or end.utcoffset() != timezone.utc.utcoffset(end):
-                raise ValueError("end must be UTC")
-            if start is not None and end < start:
-                raise ValueError("end must not precede start")
-            sql += f" AND event_time<{chr(36)}{len(args) + 1}"
+            if end.tzinfo is None or end.utcoffset() != timezone.utc.utcoffset(end): raise ValueError("end must be UTC")
+            if start is not None and end < start: raise ValueError("end must not precede start")
+            sql += f" AND {time_column}<{chr(36)}{len(args) + 1}"
             args.append(end)
-        sql += f" ORDER BY event_time,record_id LIMIT {chr(36)}{len(args) + 1}"
+        sql += f" ORDER BY {time_column},record_id LIMIT {chr(36)}{len(args) + 1}"
         args.append(limit)
         return list(await self._connection.fetch(sql, *args))
