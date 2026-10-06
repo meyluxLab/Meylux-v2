@@ -243,5 +243,27 @@
       "minimum": 1,
       "maximum": 10000
     }
+    ,"group_c_symbols": {
+      "type": "string",
+      "unit": "comma-separated Group-C symbols",
+      "value": "BTCUSDT,SOLUSDT"
+    },
+    "group_c_timeframes": {
+      "type": "string",
+      "unit": "comma-separated Group-C timeframes",
+      "value": "15m,1h,4h"
+    },
+    "group_c_venues": {
+      "type": "string",
+      "unit": "comma-separated authoritative Group-C venue names",
+      "value": "BINANCE,MEXC"
+    },
+    "group_c_max_findings": {
+      "type": "integer",
+      "unit": "Group-C findings per specialist output",
+      "value": 200,
+      "minimum": 1,
+      "maximum": 10000
+    }
   }
 }

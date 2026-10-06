@@ -2042,3 +2042,10 @@ records:
     artifact_path: docs/build-reports/BR-P4-015.md
     traceability: TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / S-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: VERIFIED
+
+  - stable_id: BR-P5-008
+    canonical_name: Producer Build Report — TO-P5-006 Group-C Volume and Volume Profile Specialists
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P5-008.md
+    traceability: TO-P5-006 / PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / TO-P4-014 / AR-P4-022 / TO-P2-014 / AR-P2-AUDIT-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: PRODUCED
