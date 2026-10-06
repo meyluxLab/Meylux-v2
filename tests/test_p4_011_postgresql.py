@@ -10,11 +10,13 @@ from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 from contracts.canonical.candle import CanonicalCandle
+from contracts.canonical.trade import CanonicalTrade
 from meylux.orchestration import QuantOrchestrationConfig, QuantitativeOrchestrator
 from meylux.persistence.quantitative import QuantitativePersistence
 from meylux.queue import QueueEnvelope
 from meylux.runtime.quant_worker import QuantWorkerHandler
 from meylux.quantitative.regime_venue import RegimeConfig
+from meylux.quantitative.volume_orderflow_derivatives import VolumeProfileConfig
 
 UTC = timezone.utc
 T0 = datetime(2026, 1, 1, tzinfo=UTC)
@@ -184,6 +186,137 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 await conn.close()
         asyncio.run(run())
 
+
+    def test_s17_volume_profile_uses_explicit_interval_and_persists_canonical_trade_facts(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"],
+                port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"],
+                user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"],
+                timeout=10,
+                command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+
+                symbol = "TO-P4-014-S17-CI:BTCUSDT"
+                timeframe = "15m"
+                start = datetime(2026, 1, 1, tzinfo=UTC)
+                end = start + timedelta(minutes=15)
+                source_record_id = "to-p4-014-s17-source-001"
+                trade_payload = {
+                    "trade_id": "to-p4-014-s17-trade-001",
+                    "instrument_id": symbol,
+                    "timestamp": "2026-01-01T00:05:00Z",
+                    "price": "100.25",
+                    "quantity": "2.5",
+                    "aggressor_side": "BUY",
+                    "quote_quantity": "250.625",
+                    "provenance_id": "binance:s17-ci",
+                }
+                await conn.execute(
+                    "INSERT INTO meylux.canonical_trades "
+                    "(record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,"
+                    "lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash) "
+                    "VALUES($1,$2,$3,$4,$5,$6,$7,'VALID',$8,$9::jsonb,$10,$11) "
+                    "ON CONFLICT(record_id) DO NOTHING",
+                    "to-p4-014-s17-record-001",
+                    "to-p4-014-s17-canonical-event-001",
+                    symbol,
+                    datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
+                    "binance:s17-ci",
+                    source_record_id,
+                    "to-p4-014-s17-lineage-001",
+                    Decimal("1.00"),
+                    json.dumps(trade_payload, sort_keys=True, separators=(",", ":")),
+                    json.dumps(trade_payload, sort_keys=True, separators=(",", ":")).encode(),
+                    "a" * 64,
+                )
+                await conn.execute(
+                    "INSERT INTO meylux.quality_evidence "
+                    "(evidence_id,logical_fact_key,source_record_id,source_identity_hash,"
+                    "provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,"
+                    "event_type,event_time,received_at,knowledge_time,acquisition_state,quality_state,"
+                    "lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,"
+                    "lineage_parent_id,payload_fingerprint,timeframe,venue) "
+                    "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,'TRADE',$10,$11,$11,'AVAILABLE','VALID',"
+                    "'CANONICAL',$12,'[]'::jsonb,NULL,$13,$14,$15,$16,$17) "
+                    "ON CONFLICT(evidence_id) DO NOTHING",
+                    "to-p4-014-s17-evidence-001",
+                    "to-p4-014-s17-logical-001",
+                    source_record_id,
+                    source_record_id,
+                    "binance",
+                    "binance-acquisition",
+                    "1.0.0",
+                    symbol,
+                    "BTCUSDT",
+                    datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
+                    datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
+                    Decimal("1.00"),
+                    "binance:s17-ci",
+                    "to-p4-014-s17-lineage-001",
+                    "c" * 64,
+                    timeframe,
+                    "BINANCE",
+                )
+                request = VolumeProfileRequest(
+                    symbol=symbol,
+                    timeframe=timeframe,
+                    interval_start=start,
+                    interval_end=end,
+                    price_bin_size=Decimal("1"),
+                    hvn_threshold=Decimal("0.75"),
+                    lvn_threshold=Decimal("0.25"),
+                )
+                persistence = QuantitativePersistence(conn)
+                inserted = await execute(conn, request)
+                self.assertEqual(inserted, 1)
+
+                rows = await persistence.fetch_family(
+                    "volume_profile", symbol, timeframe, limit=10
+                )
+                self.assertEqual(len(rows), 1)
+                row = rows[0]
+                self.assertEqual(row["session_start"], start)
+                self.assertEqual(row["session_end"], end)
+                self.assertEqual(row["status"], "valid")
+                self.assertEqual(row["source_ref"], "binance:s17-ci")
+                self.assertEqual(row["venue_context"], "BINANCE")
+                self.assertEqual(row["knowledge_time"], datetime(2026, 1, 1, 0, 5, tzinfo=UTC))
+                self.assertEqual(row["identity_hash"], row["record_id"])
+                payload = row["payload_json"]
+                if isinstance(payload, str):
+                    payload = json.loads(payload)
+                self.assertEqual(payload["profile_interval"]["boundary"], "[start,end)")
+                self.assertEqual(payload["trade_count"], 1)
+                self.assertEqual(payload["facts"]["POC"]["value"], "100")
+                self.assertEqual(payload["facts"]["VAL"]["value"], "100")
+                self.assertEqual(payload["facts"]["VAH"]["value"], "101")
+                self.assertEqual(payload["facts"]["HVN"]["status"], "valid")
+                self.assertEqual(payload["facts"]["LVN"]["status"], "valid")
+
+                self.assertEqual(await execute(conn, request), 0)
+                self.assertEqual(
+                    len(await persistence.fetch_family("volume_profile", symbol, timeframe, limit=10)),
+                    1,
+                )
+
+                with self.assertRaises(ValueError):
+                    VolumeProfileRequest(
+                        symbol=symbol,
+                        timeframe=timeframe,
+                        interval_start=end,
+                        interval_end=start,
+                        price_bin_size=Decimal("1"),
+                        hvn_threshold=Decimal("0.75"),
+                        lvn_threshold=Decimal("0.25"),
+                    )
+            finally:
+                await conn.close()
+        asyncio.run(run())
 
     def test_explicit_raw_venue_context_is_persisted_and_replayed_idempotently(self):
         async def run():
@@ -607,6 +740,339 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                             row["record_id"],
                         )
                         self.assertEqual(after, before, f"{table} row changed after rejected {operation}")
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+    def test_explicit_volume_profile_persists_real_canonical_trade_shape_and_replays_idempotently(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"], password=os.environ["MEYLUX_DB_PASSWORD"],
+                timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+
+                symbol = "TO-P4-014-CI:BTCUSDT"
+                start = datetime(2026, 2, 1, tzinfo=UTC)
+                end = start + timedelta(hours=1)
+                trades = tuple(
+                    CanonicalTrade(
+                        f"vp-trade-{i}", symbol, start + timedelta(minutes=10 * i),
+                        Decimal("100") + Decimal(i), Decimal("2") + Decimal(i),
+                        "BUY" if i == 0 else "SELL", provenance_id=f"vp-ci-provenance-{i}",
+                    ) for i in range(2)
+                )
+                for i, trade in enumerate(trades):
+                    source_record_id = f"vp-ci-raw-{i}"
+                    received = trade.timestamp + timedelta(seconds=3 + i)
+                    raw_payload = {"venue": "BINANCE"}
+                    raw_json = json.dumps(raw_payload, sort_keys=True, separators=(",", ":"))
+                    await conn.execute(
+                        "INSERT INTO meylux.raw_acquisition_events ("
+                        "event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,"
+                        "event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json,canonical_bytes,identity_hash"
+                        ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14::jsonb,$15,$16) ON CONFLICT (event_id) DO NOTHING",
+                        source_record_id, "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
+                        trade.timestamp, received, "AVAILABLE", str(i), trade.provenance_id, "CI_FIXTURE",
+                        raw_json, raw_json.encode(), hashlib.sha256(source_record_id.encode()).hexdigest(),
+                    )
+                    payload = {
+                        "trade_id": trade.trade_id, "instrument_id": trade.instrument_id,
+                        "timestamp": trade.timestamp.isoformat().replace("+00:00", "Z"),
+                        "price": str(trade.price), "quantity": str(trade.quantity),
+                        "aggressor_side": trade.aggressor_side, "quote_quantity": None,
+                        "provenance_id": trade.provenance_id,
+                    }
+                    canonical_json = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+                    await conn.execute(
+                        "INSERT INTO meylux.canonical_trades ("
+                        "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,"
+                        "quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
+                        ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT (record_id) DO NOTHING",
+                        f"vp-ci-record-{i}", source_record_id, symbol, trade.timestamp, trade.provenance_id,
+                        source_record_id, source_record_id, "VALID", Decimal("1.00"), canonical_json,
+                        canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
+                    )
+                    await conn.execute(
+                        "INSERT INTO meylux.quality_evidence ("
+                        "evidence_id,logical_fact_key,source_record_id,source_identity_hash,provider_id,adapter_id,"
+                        "adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,"
+                        "knowledge_time,acquisition_state,quality_state,lifecycle_state,quality_score,reason_codes,"
+                        "validation_result,provenance_id,lineage_parent_id,payload_fingerprint,timeframe,venue"
+                        ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)"
+                        " ON CONFLICT (evidence_id) DO NOTHING",
+                        f"vp-ci-evidence-{i}", f"vp-ci-logical-{i}", source_record_id, source_record_id,
+                        "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
+                        trade.timestamp, received, "AVAILABLE", "VALID", "CANONICAL", Decimal("1.00"),
+                        json.dumps([]), None, trade.provenance_id, source_record_id, hashlib.sha256(canonical_json.encode()).hexdigest(),
+                        "1h", "BINANCE",
+                    )
+
+                persistence = QuantitativePersistence(conn)
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="1h", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.50"), lvn_threshold=Decimal("0.10"),
+                )
+                inserted = await execute(conn, request)
+                self.assertEqual(inserted, 1)
+                rows = await persistence.fetch_family("volume_profile", symbol, "1h", limit=10)
+                self.assertEqual(len(rows), 1)
+                row = rows[0]
+                self.assertEqual((row["session_start"], row["session_end"]), (start, end))
+                self.assertEqual(row["status"], "valid")
+                self.assertEqual(row["venue_context"], "BINANCE")
+                self.assertEqual(row["knowledge_time"], max(t.timestamp + timedelta(seconds=3 + i) for i, t in enumerate(trades)))
+                payload = row["payload_json"] if isinstance(row["payload_json"], dict) else json.loads(row["payload_json"])
+                self.assertEqual(payload["profile_interval"]["start"], start.isoformat().replace("+00:00", "Z"))
+                self.assertEqual(payload["profile_interval"]["end"], end.isoformat().replace("+00:00", "Z"))
+                self.assertEqual(tuple(payload["source_record_ids"]), tuple(f"vp-ci-raw-{i}" for i in range(2)))
+                self.assertEqual(tuple(payload["provenance"]), tuple(t.provenance_id for t in trades))
+                self.assertEqual(payload["facts"]["POC"]["value"], "101")
+                replay = await execute(conn, request)
+                self.assertEqual(replay, 0)
+                self.assertEqual(len(await persistence.fetch_family("volume_profile", symbol, "1h", limit=10)), 1)
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+
+
+    async def _seed_s17_trade(self, conn, suffix: str, *, evidence_specs=()):
+        symbol = f"TO-P4-014-S17-CORRECTION:{suffix}"
+        start = datetime(2026, 3, 1, tzinfo=UTC)
+        end = start + timedelta(minutes=15)
+        event_time = start + timedelta(minutes=5)
+        source_record_id = f"to-p4-014-s17-correction-source-{suffix}"
+        provenance = f"binance:s17-correction:{suffix}"
+        payload = {
+            "trade_id": f"to-p4-014-s17-correction-trade-{suffix}",
+            "instrument_id": symbol,
+            "timestamp": event_time.isoformat().replace("+00:00", "Z"),
+            "price": "100.25",
+            "quantity": "2.5",
+            "aggressor_side": "BUY",
+            "quote_quantity": "250.625",
+            "provenance_id": provenance,
+        }
+        canonical_json = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+        await conn.execute(
+            "INSERT INTO meylux.canonical_trades "
+            "(record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,"
+            "lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash) "
+            "VALUES($1,$2,$3,$4,$5,$6,$7,'VALID',$8,$9::jsonb,$10,$11) "
+            "ON CONFLICT(record_id) DO NOTHING",
+            f"to-p4-014-s17-correction-record-{suffix}",
+            f"to-p4-014-s17-canonical-event-{suffix}",
+            symbol,
+            event_time,
+            provenance,
+            source_record_id,
+            f"lineage-{suffix}",
+            Decimal("1.00"),
+            canonical_json,
+            canonical_json.encode(),
+            hashlib.sha256(canonical_json.encode()).hexdigest(),
+        )
+        for index, spec in enumerate(evidence_specs):
+            received = event_time + timedelta(seconds=5 + index)
+            await conn.execute(
+                "INSERT INTO meylux.quality_evidence ("
+                "evidence_id,logical_fact_key,source_record_id,source_identity_hash,provider_id,adapter_id,"
+                "adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,"
+                "knowledge_time,acquisition_state,quality_state,lifecycle_state,quality_score,reason_codes,"
+                "validation_result,provenance_id,lineage_parent_id,payload_fingerprint,timeframe,venue) "
+                "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)"
+                " ON CONFLICT(evidence_id) DO NOTHING",
+                f"to-p4-014-s17-correction-evidence-{suffix}-{index}",
+                f"to-p4-014-s17-correction-logical-{suffix}",
+                spec.get("source_record_id", source_record_id),
+                spec.get("source_identity_hash", source_record_id),
+                "binance",
+                "binance-acquisition",
+                "1.0.0",
+                spec.get("canonical_instrument_id", symbol),
+                "BTCUSDT",
+                spec.get("event_type", "TRADE"),
+                spec.get("event_time", event_time),
+                received,
+                spec.get("acquisition_state", "AVAILABLE"),
+                spec.get("quality_state", "VALID"),
+                spec.get("lifecycle_state", "CANONICAL"),
+                Decimal("1.00"),
+                json.dumps([]),
+                None,
+                spec.get("provenance_id", provenance),
+                source_record_id,
+                hashlib.sha256(canonical_json.encode()).hexdigest(),
+                "15m",
+                "BINANCE",
+            )
+        return symbol, start, end, source_record_id
+
+    def test_s17_missing_quality_evidence_is_explicitly_unavailable(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"], timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+                symbol, start, end, _ = await self._seed_s17_trade(conn, "missing-quality")
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="15m", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.75"), lvn_threshold=Decimal("0.25"),
+                )
+                self.assertEqual(await execute(conn, request), 1)
+                row = await conn.fetchrow(
+                    "SELECT status,reason,knowledge_time,venue_context FROM meylux.volume_profile_sessions "
+                    "WHERE symbol=$1 AND timeframe=$2", symbol, "15m"
+                )
+                self.assertEqual(row["status"], "unavailable")
+                self.assertEqual(row["reason"], "missing_authoritative_quality_evidence")
+                self.assertIsNone(row["knowledge_time"])
+                self.assertIsNone(row["venue_context"])
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+    def test_s17_multiple_quality_evidence_identities_fail_closed(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"], timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+                symbol, start, end, _ = await self._seed_s17_trade(
+                    conn, "contradictory", evidence_specs=({}, {}),
+                )
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="15m", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.75"), lvn_threshold=Decimal("0.25"),
+                )
+                with self.assertRaises(ValueError) as caught:
+                    await execute(conn, request)
+                self.assertIn("multiple distinct authoritative evidence identities", str(caught.exception))
+                self.assertEqual(
+                    await conn.fetchval(
+                        "SELECT count(*) FROM meylux.volume_profile_sessions WHERE symbol=$1 AND timeframe=$2",
+                        symbol, "15m"
+                    ),
+                    0,
+                )
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+    def test_s17_mismatched_quality_evidence_fails_closed(self):
+        async def run():
+            cases = (
+                ("event-type", {"event_type": "CANDLE"}, "event_type"),
+                ("instrument", {"canonical_instrument_id": "BINANCE:OTHER"}, "canonical_instrument_id"),
+                ("provenance", {"provenance_id": "binance:other"}, "provenance_id"),
+                ("source-identity", {"source_identity_hash": "0" * 64}, "source_identity_hash"),
+                ("event-time", {"event_time": datetime(2026, 3, 1, 0, 6, tzinfo=UTC)}, "event_time"),
+                ("acquisition-state", {"acquisition_state": "REJECTED"}, "acquisition_state"),
+                ("quality-state", {"quality_state": "DEGRADED"}, "quality_state"),
+                ("lifecycle-state", {"lifecycle_state": "REJECTED"}, "lifecycle_state"),
+            )
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"], timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+                for suffix, spec, field in cases:
+                    symbol, start, end, _ = await self._seed_s17_trade(
+                        conn, suffix, evidence_specs=(spec,),
+                    )
+                    request = VolumeProfileRequest(
+                        symbol=symbol, timeframe="15m", interval_start=start, interval_end=end,
+                        price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.75"), lvn_threshold=Decimal("0.25"),
+                    )
+                    with self.assertRaises(ValueError) as caught:
+                        await execute(conn, request)
+                    self.assertIn(field, str(caught.exception))
+                    self.assertEqual(
+                        await conn.fetchval(
+                            "SELECT count(*) FROM meylux.volume_profile_sessions WHERE symbol=$1 AND timeframe=$2",
+                            symbol, "15m"
+                        ),
+                        0,
+                    )
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+
+    def test_s17_mismatched_quality_source_record_is_unavailable(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"], timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+                symbol, start, end, _ = await self._seed_s17_trade(
+                    conn,
+                    "source-mismatch",
+                    evidence_specs=({"source_record_id": "unrelated-source-record"},),
+                )
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="15m", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.75"), lvn_threshold=Decimal("0.25"),
+                )
+                self.assertEqual(await execute(conn, request), 1)
+                row = await conn.fetchrow(
+                    "SELECT status,reason,knowledge_time FROM meylux.volume_profile_sessions "
+                    "WHERE symbol=$1 AND timeframe=$2", symbol, "15m"
+                )
+                self.assertEqual(row["status"], "unavailable")
+                self.assertEqual(row["reason"], "missing_authoritative_quality_evidence")
+                self.assertIsNone(row["knowledge_time"])
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
+    def test_s17_append_only_volume_profile_behavior_remains_enforced(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"], port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"], user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"], timeout=10, command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+                symbol, start, end, _ = await self._seed_s17_trade(
+                    conn, "append-only", evidence_specs=({},),
+                )
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="15m", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.75"), lvn_threshold=Decimal("0.25"),
+                )
+                self.assertEqual(await execute(conn, request), 1)
+                before = await conn.fetchrow(
+                    "SELECT record_id,to_jsonb(s) AS row FROM meylux.volume_profile_sessions AS s "
+                    "WHERE symbol=$1 AND timeframe=$2", symbol, "15m"
+                )
+                self.assertIsNotNone(before)
+                for sql in (
+                    "UPDATE meylux.volume_profile_sessions SET status='invalid' WHERE record_id=$1",
+                    "DELETE FROM meylux.volume_profile_sessions WHERE record_id=$1",
+                ):
+                    with self.assertRaises(Exception):
+                        await conn.execute(sql, before["record_id"])
+                after = await conn.fetchrow(
+                    "SELECT to_jsonb(s) AS row FROM meylux.volume_profile_sessions AS s "
+                    "WHERE record_id=$1", before["record_id"]
+                )
+                self.assertEqual(after["row"], before["row"])
             finally:
                 await conn.close()
         asyncio.run(run())
