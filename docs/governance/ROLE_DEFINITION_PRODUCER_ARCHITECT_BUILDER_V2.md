@@ -1205,3 +1205,20 @@ It does not:
 * replace the Producer Relay.
 
 The Repository/development-environment permissions in `GOV-BOUNDARY-001` are part of the governed operating interpretation of this role. All higher-level authority remains with the applicable governed artifacts and controlled project workflow.
+
+# 36. REQUIRED CAPABILITY NO-DROP ENFORCEMENT
+
+ADR-GOVERNANCE-014 is the authoritative No-Drop rule; this section does not create a duplicate governance principle.
+
+When an authorized Task Order contains a required capability and execution cannot establish the capability because a prerequisite is missing or unresolved, the Producer must not represent the capability as complete merely because execution produced a truthful degraded result.
+
+The Build Report must make the unresolved condition traceable, as applicable, by identifying: affected capability; established and unestablished portions; exact limitation/reason; missing or unresolved prerequisite; resolution question/path or open question; responsible boundary; evidence needed to establish resolution; and consequence for the Task Order completion condition.
+
+Truthful runtime states such as PARTIAL, INSUFFICIENT_DATA, UNAVAILABLE, UNAVAILABLE_INPUT, and SKIPPED remain valid evidence states, but do not by themselves establish capability completion.
+
+Where the prerequisite is outside the Producer authorized implementation boundary, the Producer must surface the dependency through the governed Task Order / Build Report path rather than silently weakening the requirement, substituting unsupported evidence, or expanding scope.
+
+The Producer must preserve historical execution evidence and must not rewrite prior evidence to imply later resolution.
+
+This is an operational role requirement implementing ADR-GOVERNANCE-014 within the Producer existing authority; it does not authorize scope expansion, governance changes, or closure.
+
