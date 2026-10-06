@@ -335,3 +335,26 @@ records:
      liquidity_pool_rows: 0
      historical_snapshot: b4197da28bfea856fe9817f8bfe0cdf67ac4d85379078783f4a677dbea1d65f8
      control_audit: AR-P5-006
+
+- stable_id: RUN-P2-014
+  canonical_name: TO-P2-014 Real Binance Spot Trade Acquisition and Replay CI Runtime
+  entity_type: RUN
+  phase: PH-P2
+  step: STEP-P2-006
+  task_order: TO-P2-014
+  evidence:
+    mechanism: GitHub Actions Docker Foundation
+    implementation_revision: 41683d931a7cf4321f6655e173e8794af93f74d2
+    docker_run_id: 37519104091
+    docker_job_id: 112459533543
+    docker_result: SUCCESS
+    symbols: BTCUSDT,SOLUSDT
+    trade_limit_per_symbol: 100
+    observed_history_seconds: 21
+    replay_executed: true
+    replay_raw_duplicates: 200
+    replay_quality_duplicates: 200
+    replay_quality_contradictory: 0
+    replay_canonical_duplicates: 200
+    control_audit: AR-P2-AUDIT-014
+  status: VERIFIED
