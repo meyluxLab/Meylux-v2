@@ -1899,12 +1899,6 @@ records:
     traceability: Project Owner Ratification 2026-10-05 / ADR-GOVERNANCE-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: RATIFIED / AUTHORIZED
 
-  - stable_id: TO-P5-005-CORRECTIVE-001
-    canonical_name: S-12 Liquidity Causal-Resolution Investigation
-    entity_type: TO
-    artifact_path: docs/task-orders/TO-P5-005-CORRECTIVE-001.md
-    traceability: PH-P5 / STEP-P5-005 / TO-P5-005 / DOC-P5-003 / BR-P5-006 / AR-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner directive 2026-10-06
-    status: AUTHORIZED TO EXECUTE
 
   - stable_id: DOC-P5-003
     canonical_name: Retrospective / Corrective Assessment — P5-005 / S-12 Liquidity
