@@ -752,6 +752,8 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 timeout=10, command_timeout=30,
             )
             try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+
                 symbol = "TO-P4-014-CI:BTCUSDT"
                 start = datetime(2026, 2, 1, tzinfo=UTC)
                 end = start + timedelta(hours=1)
@@ -763,7 +765,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     ) for i in range(2)
                 )
                 for i, trade in enumerate(trades):
-                    event_id = f"vp-ci-raw-{i}"
+                    source_record_id = f"vp-ci-raw-{i}"
                     received = trade.timestamp + timedelta(seconds=3 + i)
                     raw_payload = {"venue": "BINANCE"}
                     raw_json = json.dumps(raw_payload, sort_keys=True, separators=(",", ":"))
@@ -772,28 +774,48 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         "event_id,provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,event_type,"
                         "event_time,received_at,acquisition_state,source_sequence,provenance_id,acquisition_method,payload_json,canonical_bytes,identity_hash"
                         ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14::jsonb,$15,$16) ON CONFLICT (event_id) DO NOTHING",
-                        event_id, "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
-                        trade.timestamp, received, "AVAILABLE", str(i), trade.provenance_id, "CI_FIXTURE", raw_json, raw_json.encode(),
-                        hashlib.sha256(event_id.encode()).hexdigest(),
+                        source_record_id, "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
+                        trade.timestamp, received, "AVAILABLE", str(i), trade.provenance_id, "CI_FIXTURE",
+                        raw_json, raw_json.encode(), hashlib.sha256(source_record_id.encode()).hexdigest(),
                     )
                     payload = {
-                        "trade_id": trade.trade_id, "instrument_id": trade.instrument_id, "timestamp": trade.timestamp.isoformat().replace("+00:00", "Z"),
-                        "price": str(trade.price), "quantity": str(trade.quantity), "aggressor_side": trade.aggressor_side,
-                        "quote_quantity": None, "provenance_id": trade.provenance_id,
+                        "trade_id": trade.trade_id, "instrument_id": trade.instrument_id,
+                        "timestamp": trade.timestamp.isoformat().replace("+00:00", "Z"),
+                        "price": str(trade.price), "quantity": str(trade.quantity),
+                        "aggressor_side": trade.aggressor_side, "quote_quantity": None,
+                        "provenance_id": trade.provenance_id,
                     }
                     canonical_json = json.dumps(payload, sort_keys=True, separators=(",", ":"))
                     await conn.execute(
                         "INSERT INTO meylux.canonical_trades ("
-                        "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
+                        "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,"
+                        "quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
                         ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT (record_id) DO NOTHING",
-                        f"vp-ci-record-{i}", f"vp-ci-event-{i}", symbol, trade.timestamp, trade.provenance_id, event_id, event_id,
-                        "VALID", Decimal("1.00"), canonical_json, canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
+                        f"vp-ci-record-{i}", f"vp-ci-event-{i}", symbol, trade.timestamp, trade.provenance_id,
+                        source_record_id, source_record_id, "VALID", Decimal("1.00"), canonical_json,
+                        canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
                     )
+                    await conn.execute(
+                        "INSERT INTO meylux.quality_evidence ("
+                        "evidence_id,logical_fact_key,source_record_id,source_identity_hash,provider_id,adapter_id,"
+                        "adapter_version,canonical_instrument_id,provider_instrument_id,event_type,event_time,received_at,"
+                        "knowledge_time,acquisition_state,quality_state,lifecycle_state,quality_score,reason_codes,"
+                        "validation_result,provenance_id,lineage_parent_id,payload_fingerprint,timeframe,venue"
+                        ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23)"
+                        " ON CONFLICT (evidence_id) DO NOTHING",
+                        f"vp-ci-evidence-{i}", f"vp-ci-logical-{i}", source_record_id, hashlib.sha256(source_record_id.encode()).hexdigest(),
+                        "binance", "binance-acquisition", "1.0.0", symbol, "BTCUSDT", "TRADE",
+                        trade.timestamp, received, "AVAILABLE", "VALID", "ACCEPTED", Decimal("1.00"),
+                        json.dumps([]), None, trade.provenance_id, source_record_id, hashlib.sha256(canonical_json.encode()).hexdigest(),
+                        "1h", "BINANCE",
+                    )
+
                 persistence = QuantitativePersistence(conn)
-                config = VolumeProfileConfig(Decimal("1"), Decimal("0.50"), Decimal("0.10"))
-                inserted = await persistence.persist_volume_profile(
-                    symbol=symbol, timeframe="1h", trades=trades, interval_start=start, interval_end=end, config=config,
+                request = VolumeProfileRequest(
+                    symbol=symbol, timeframe="1h", interval_start=start, interval_end=end,
+                    price_bin_size=Decimal("1"), hvn_threshold=Decimal("0.50"), lvn_threshold=Decimal("0.10"),
                 )
+                inserted = await execute(conn, request)
                 self.assertEqual(inserted, 1)
                 rows = await persistence.fetch_family("volume_profile", symbol, "1h", limit=10)
                 self.assertEqual(len(rows), 1)
@@ -805,17 +827,16 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 payload = row["payload_json"] if isinstance(row["payload_json"], dict) else json.loads(row["payload_json"])
                 self.assertEqual(payload["profile_interval"]["start"], start.isoformat().replace("+00:00", "Z"))
                 self.assertEqual(payload["profile_interval"]["end"], end.isoformat().replace("+00:00", "Z"))
-                self.assertEqual(tuple(payload["source_trade_ids"]), tuple(t.trade_id for t in trades))
-                self.assertEqual(tuple(payload["source_provenance"]), tuple(t.provenance_id for t in trades))
-                self.assertEqual(payload["poc"]["value"], "101")
-                replay = await persistence.persist_volume_profile(
-                    symbol=symbol, timeframe="1h", trades=trades, interval_start=start, interval_end=end, config=config,
-                )
+                self.assertEqual(tuple(payload["source_record_ids"]), tuple(f"vp-ci-raw-{i}" for i in range(2)))
+                self.assertEqual(tuple(payload["provenance"]), tuple(t.provenance_id for t in trades))
+                self.assertEqual(payload["facts"]["POC"]["value"], "101")
+                replay = await execute(conn, request)
                 self.assertEqual(replay, 0)
                 self.assertEqual(len(await persistence.fetch_family("volume_profile", symbol, "1h", limit=10)), 1)
             finally:
                 await conn.close()
         asyncio.run(run())
+
 
 
 if __name__ == "__main__":
