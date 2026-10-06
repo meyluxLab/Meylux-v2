@@ -358,7 +358,8 @@
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
     "OQ-P4-006-MEXC-RESOURCEWARNING",
     "OQ-GOV-CONSTITUTION-STABLE-ID",
-    "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control."
+    "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control.",
+    "OQ-P4-GROUPC-S17-SESSION-BOUNDARY: Authoritative P4/S-17 session-boundary semantics are not defined. Owner/governed authority must establish what explicit profile interval semantics the P4 runtime may use; CONTROL/Producer must not infer a calendar or rolling session."
   ],
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
@@ -413,7 +414,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "857020c80de4753727ee8fb51cbffb88369e4635",
-  "updated_at_utc": "2026-10-06T13:54:00Z",
+  "updated_at_utc": "2026-10-06T13:55:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
