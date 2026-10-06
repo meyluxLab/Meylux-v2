@@ -169,6 +169,16 @@ def _single_latest(facts: tuple[Any, ...], name: str) -> Any | None:
     return latest[0]
 
 
+def _candle_close_time(fact: Any) -> datetime:
+    close_time = _payload(fact).get("close_time")
+    if isinstance(close_time, str):
+        try:
+            close_time = datetime.fromisoformat(close_time.replace("Z", "+00:00"))
+        except ValueError as exc:
+            raise GroupCSemanticError("candle.close_time is not valid ISO-8601") from exc
+    return _utc(close_time, "candle.close_time")
+
+
 def _candle_facts(snapshot: InputSnapshot, symbol: str, timeframe: str, venue: str) -> tuple[Any, ...]:
     rows = []
     for fact in snapshot.facts:
@@ -178,14 +188,7 @@ def _candle_facts(snapshot: InputSnapshot, symbol: str, timeframe: str, venue: s
             continue
         if fact.knowledge_time > snapshot.as_of:
             raise GroupCSemanticError("post-boundary Group-C candle evidence reached specialist execution")
-        payload = _payload(fact)
-        close_time = payload.get("close_time")
-        if isinstance(close_time, str):
-            try:
-                close_time = datetime.fromisoformat(close_time.replace("Z", "+00:00"))
-            except ValueError as exc:
-                raise GroupCSemanticError("candle.close_time is not valid ISO-8601") from exc
-        close_time = _utc(close_time, "candle.close_time")
+        close_time = _candle_close_time(fact)
         if close_time <= snapshot.as_of:
             rows.append((close_time, fact))
     rows.sort(key=lambda item: (item[0], str((item[1].metadata or {}).get("record_id"))))
@@ -408,7 +411,7 @@ def analyze_s17(snapshot: InputSnapshot, config: Any) -> SpecialistOutput:
                 current_lvn = _profile_metric(current_payload, "LVN")
                 current_candles = tuple(
                     fact for fact in _candle_facts(snapshot, symbol, timeframe, venue)
-                    if current_start <= _utc(_payload(fact)["close_time"], "candle.close_time") < current_end
+                    if current_start <= _candle_close_time(fact) < current_end
                 )
                 price = _current_price(_candle_facts(snapshot, symbol, timeframe, venue))
                 session_refs = _refs((current,))
