@@ -18,13 +18,13 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P2-015",
-  "last_build_report": "BR-P2-014",
-  "last_audit_report": "AR-P2-AUDIT-014",
-  "last_execution_log": "EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006",
-  "active_task_order": "TO-P2-015",
-  "completed_task_order": "TO-P2-014",
-  "completion_audit": "AR-P2-AUDIT-014",
+  "last_approved_task_order": "TO-P4-015",
+  "last_build_report": "BR-P2-015",
+  "last_audit_report": "AR-P2-AUDIT-015",
+  "last_execution_log": "EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007",
+  "active_task_order": "TO-P4-015",
+  "completed_task_order": "TO-P2-015",
+  "completion_audit": "AR-P2-AUDIT-015",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -365,7 +365,14 @@
     "TST-P2-014",
     "DB-P2-014",
     "RUN-P2-014",
-    "CFG-P2-014"
+    "CFG-P2-014",
+    "BR-P2-015",
+    "AR-P2-AUDIT-015",
+    "TST-P2-015",
+    "DB-P2-015",
+    "RUN-P2-015",
+    "CFG-P2-015",
+    "EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -430,13 +437,14 @@
     "STEP-P5-006 is ACTIVE / AUTHORIZED under TO-P5-006; P5 specialist implementation is bounded to S-03/S-17 Group-C scope.",
     "Closure Synchronization for TO-P4-014 was performed by CONTROL under ADR-GOVERNANCE-012; active_task_order is null pending the next P5-006 activation determination.",
     "CONTROL activated TO-P2-014 on 2026-10-06 as a bounded post-closure P2-owned PRQ-2 trade capability delivery for STEP-P5-006; PH-P2/STEP-P2-006 historical closure remains preserved; PRQ-1 Group-C remains ESTABLISHED / VERIFIED; P5 specialist implementation remains inactive.",
-    "Project Owner explicitly authorized full root-cause continuation on 2026-10-06. TO-P2-015 is AUTHORIZED TO EXECUTE as the immediate owning-boundary correction for explicit Binance Spot trade venue evidence required by STEP-P5-006; TO-P4-015 is defined and pending its completion."
+    "Project Owner explicitly authorized full root-cause continuation on 2026-10-06. TO-P2-015 is AUTHORIZED TO EXECUTE as the immediate owning-boundary correction for explicit Binance Spot trade venue evidence required by STEP-P5-006; TO-P4-015 is defined and pending its completion.",
+    "CONTROL independently verified TO-P2-015 under AR-P2-AUDIT-015 after terminal CI success and bounded real Binance Spot runtime/read-back/replay evidence. TO-P2-015 is VERIFIED / COMPLETE; the explicit Binance venue prerequisite is established. TO-P4-015 is now AUTHORIZED TO EXECUTE as the next owning-boundary Group-C fact-population resolution."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "41683d931a7cf4321f6655e173e8794af93f74d2",
-  "updated_at_utc": "2026-10-07T00:00:00Z",
+  "last_verified_commit": "56bebeb4114aacd8d8999da3325b25c193db0b1a",
+  "updated_at_utc": "2026-10-07T00:30:00Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
