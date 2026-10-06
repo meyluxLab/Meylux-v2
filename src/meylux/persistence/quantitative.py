@@ -336,7 +336,7 @@ class QuantitativePersistence:
             "ORDER BY event_time,record_id", symbol, interval_start, interval_end,
         )
         trades = tuple(self._canonical_trade_from_row(row) for row in rows)
-        source_ids = tuple(row["source_record_id"] for row in rows)
+        source_ids = tuple(row["quality_source_record_id"] for row in rows)
         if any(not isinstance(value, str) or not value.strip() for value in source_ids):
             raise ValueError("canonical trade source_record_id is missing or malformed")
         if any(trade.instrument_id != symbol for trade in trades): raise ValueError("canonical trade query returned a cross-instrument row")
@@ -365,18 +365,18 @@ class QuantitativePersistence:
                    c.event_time AS canonical_event_time,
                    c.provenance_id AS canonical_provenance_id,
                    q.evidence_id,
-                   q.source_record_id,
-                   q.source_identity_hash,
-                   q.event_type,
-                   q.canonical_instrument_id,
-                   q.event_time,
-                   q.received_at,
-                   q.knowledge_time,
-                   q.acquisition_state,
-                   q.quality_state,
-                   q.lifecycle_state,
-                   q.provenance_id,
-                   q.venue
+                   q.source_record_id AS quality_source_record_id,
+                   q.source_identity_hash AS quality_source_identity_hash,
+                   q.event_type AS quality_event_type,
+                   q.canonical_instrument_id AS quality_canonical_instrument_id,
+                   q.event_time AS quality_event_time,
+                   q.received_at AS quality_received_at,
+                   q.knowledge_time AS quality_knowledge_time,
+                   q.acquisition_state AS quality_acquisition_state,
+                   q.quality_state AS quality_state,
+                   q.lifecycle_state AS quality_lifecycle_state,
+                   q.provenance_id AS quality_provenance_id,
+                   q.venue AS quality_venue
               FROM meylux.canonical_trades AS c
               LEFT JOIN meylux.quality_evidence AS q
                 ON q.source_record_id = c.source_record_id
@@ -432,15 +432,15 @@ class QuantitativePersistence:
 
             evidence = evidence_candidates[0]
             checks = (
-                (evidence["source_record_id"], source_id, "source_record_id"),
-                (evidence["source_identity_hash"], canonical_event_id, "source_identity_hash"),
-                (evidence["event_type"], "TRADE", "event_type"),
-                (evidence["canonical_instrument_id"], trade.instrument_id, "canonical_instrument_id"),
-                (evidence["event_time"], trade.timestamp, "event_time"),
-                (evidence["provenance_id"], trade.provenance_id, "provenance_id"),
-                (evidence["acquisition_state"], "AVAILABLE", "acquisition_state"),
+                (evidence["quality_source_record_id"], source_id, "source_record_id"),
+                (evidence["quality_source_identity_hash"], canonical_event_id, "source_identity_hash"),
+                (evidence["quality_event_type"], "TRADE", "event_type"),
+                (evidence["quality_canonical_instrument_id"], trade.instrument_id, "canonical_instrument_id"),
+                (evidence["quality_event_time"], trade.timestamp, "event_time"),
+                (evidence["quality_provenance_id"], trade.provenance_id, "provenance_id"),
+                (evidence["quality_acquisition_state"], "AVAILABLE", "acquisition_state"),
                 (evidence["quality_state"], "VALID", "quality_state"),
-                (evidence["lifecycle_state"], "ACCEPTED", "lifecycle_state"),
+                (evidence["quality_lifecycle_state"], "ACCEPTED", "lifecycle_state"),
             )
             for actual, expected, field in checks:
                 if actual != expected:
@@ -449,8 +449,8 @@ class QuantitativePersistence:
                         f"{field}={actual!r} does not match authoritative trade value {expected!r}"
                     )
 
-            received_at = evidence["received_at"]
-            knowledge = evidence["knowledge_time"]
+            received_at = evidence["quality_received_at"]
+            knowledge = evidence["quality_knowledge_time"]
             if (
                 received_at is None
                 or knowledge is None
@@ -463,7 +463,7 @@ class QuantitativePersistence:
                 )
             knowledge_times.append(knowledge)
 
-            venue = evidence["venue"]
+            venue = evidence["quality_venue"]
             if venue is not None:
                 if not isinstance(venue, str) or not venue.strip():
                     raise ValueError(
