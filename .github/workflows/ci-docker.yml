@@ -192,6 +192,26 @@ jobs:
             --entrypoint python api \
             -m unittest discover -s /app/tests -p 'test_p5_004_redis_postgresql.py' -v
 
+      - name: Run TO-P5-006 Group-C specialist PostgreSQL read-back and replay
+        env:
+          MEYLUX_DB_NAME: meylux_ci
+          MEYLUX_DB_USER: meylux_admin
+          MEYLUX_DB_PASSWORD: ci-admin-password
+          MEYLUX_APP_PASSWORD: ci-app-password
+          MEYLUX_BACKUP_PASSWORD: ci-backup-password
+        run: |
+          docker compose -f infrastructure/compose/docker-compose.yml run --rm --no-deps \
+            -v "$PWD/tests:/app/tests:ro" \
+            -e MEYLUX_DB_HOST=db \
+            -e MEYLUX_DB_PORT=5432 \
+            -e MEYLUX_DB_NAME="$MEYLUX_DB_NAME" \
+            -e MEYLUX_DB_USER=meylux_app \
+            -e MEYLUX_DB_PASSWORD="$MEYLUX_APP_PASSWORD" \
+            -e MEYLUX_REDIS_URL=redis://redis:6379/0 \
+            -e MEYLUX_RUN_P5006_POSTGRESQL=1 \
+            --entrypoint python api \
+            -m unittest discover -s /app/tests -p 'test_p5_006_group_c_postgresql.py' -v
+
       - name: Run TO-P2-014 real Binance Spot trade acquisition
         env:
           MEYLUX_DB_NAME: meylux_ci
