@@ -303,6 +303,65 @@ class QuantitativePersistence:
             value = json.loads(value)
         return json.dumps(_json(value), sort_keys=True, separators=(",", ":"))
 
+    @staticmethod
+    def _canonical_trade_from_row(row: Any) -> CanonicalTrade:
+        payload = row["payload_json"]
+        if isinstance(payload, str): payload = json.loads(payload)
+        if not isinstance(payload, Mapping): raise ValueError("canonical trade payload must be a mapping")
+        required = {"trade_id", "instrument_id", "timestamp", "price", "quantity", "provenance_id"}
+        if not required.issubset(payload): raise ValueError("canonical trade payload is missing required fields")
+        trade = CanonicalTrade(
+            trade_id=payload["trade_id"], instrument_id=payload["instrument_id"],
+            timestamp=datetime.fromisoformat(payload["timestamp"].replace("Z", "+00:00")),
+            price=Decimal(payload["price"]), quantity=Decimal(payload["quantity"]),
+            aggressor_side=payload.get("aggressor_side"),
+            quote_quantity=None if payload.get("quote_quantity") is None else Decimal(payload["quote_quantity"]),
+            provenance_id=payload["provenance_id"],
+        )
+        if trade.instrument_id != row["instrument_id"] or trade.provenance_id != row["provenance_id"]:
+            raise ValueError("canonical trade row/payload identity mismatch")
+        if trade.timestamp != row["event_time"]:
+            raise ValueError("canonical trade event_time/payload timestamp mismatch")
+        return trade
+
+    async def fetch_canonical_trade_lineage(self, symbol: str, interval_start: datetime, interval_end: datetime) -> tuple[tuple[CanonicalTrade, ...], tuple[str, ...]]:
+        if not isinstance(symbol, str) or not symbol.strip(): raise ValueError("symbol must be non-empty")
+        for value, name in ((interval_start, "interval_start"), (interval_end, "interval_end")):
+            if value.tzinfo is None or value.utcoffset() != timezone.utc.utcoffset(value): raise ValueError(f"{name} must be UTC")
+        if interval_end <= interval_start: raise ValueError("interval_end must be after interval_start")
+        rows = await self._connection.fetch(
+            "SELECT record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,payload_json "
+            "FROM meylux.canonical_trades WHERE instrument_id=$1 AND event_time >= $2 AND event_time < $3 "
+            "ORDER BY event_time,record_id", symbol, interval_start, interval_end,
+        )
+        trades = tuple(self._canonical_trade_from_row(row) for row in rows)
+        source_ids = tuple(row["source_record_id"] for row in rows)
+        if any(not isinstance(value, str) or not value.strip() for value in source_ids):
+            raise ValueError("canonical trade source_record_id is missing or malformed")
+        if any(trade.instrument_id != symbol for trade in trades): raise ValueError("canonical trade query returned a cross-instrument row")
+        return trades, source_ids
+
+    async def _profile_evidence_context(self, trades: tuple[CanonicalTrade, ...], source_record_ids: tuple[str, ...]) -> tuple[datetime | None, str | None, bool]:
+        if not trades: return None, None, False
+        if len(source_record_ids) != len(trades): raise ValueError("profile source-record lineage must align with canonical trades")
+        rows = await self._connection.fetch(
+            "SELECT source_record_id,knowledge_time,venue FROM meylux.quality_evidence WHERE source_record_id = ANY($1::text[])",
+            list(source_record_ids),
+        )
+        by_source = {row["source_record_id"]: row for row in rows}
+        if set(by_source) != set(source_record_ids): return None, None, False
+        knowledge_times: list[datetime] = []
+        venues: set[str] = set()
+        for source_id in source_record_ids:
+            row = by_source[source_id]; knowledge = row["knowledge_time"]
+            if knowledge is None or knowledge.tzinfo is None or knowledge.utcoffset() != timezone.utc.utcoffset(knowledge): return None, None, False
+            knowledge_times.append(knowledge)
+            venue = row["venue"]
+            if venue is not None:
+                if not isinstance(venue, str) or not venue.strip(): return None, None, False
+                venues.add(venue.strip())
+        if len(venues) > 1: raise ValueError("profile contributing trade evidence has contradictory venue context")
+        return max(knowledge_times), (next(iter(venues)) if venues else None), True
     async def _insert_structural_row(
         self,
         *,
