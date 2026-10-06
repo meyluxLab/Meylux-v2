@@ -336,7 +336,7 @@ class QuantitativePersistence:
             "ORDER BY event_time,record_id", symbol, interval_start, interval_end,
         )
         trades = tuple(self._canonical_trade_from_row(row) for row in rows)
-        source_ids = tuple(row["quality_source_record_id"] for row in rows)
+        source_ids = tuple(row["source_record_id"] for row in rows)
         if any(not isinstance(value, str) or not value.strip() for value in source_ids):
             raise ValueError("canonical trade source_record_id is missing or malformed")
         if any(trade.instrument_id != symbol for trade in trades): raise ValueError("canonical trade query returned a cross-instrument row")
