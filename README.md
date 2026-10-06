@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-005` — `COMPLETE / VERIFIED` under `AR-P5-005`; `TO-P5-005` is `VERIFIED / COMPLETE`; no later P5 Step is activated. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Latest completed Task Order:** `TO-P5-005` — Group B Market Structure / Price Action / Liquidity; independently verified under `AR-P5-005`; `active_task_order = null`; no later P5 Step is activated.
+- **Latest completed Task Order:** `TO-P5-005-CORRECTIVE-001` — S-12 Liquidity Causal-Resolution Investigation; independently verified under `AR-P5-006`; `active_task_order = null`; historical `STEP-P5-005 / TO-P5-005` closure remains preserved; no later P5 Step is activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
