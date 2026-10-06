@@ -3299,10 +3299,10 @@ entries:
 
   - ledger_id: CL-P5-005-CORRECTIVE-001-PREP-20261006
     date_utc: 2026-10-06
-    authority: Project Owner directive 2026-10-06 / CONTROL ROL-V2-001
+    authority: Project Owner explicit full-authority directive 2026-10-06 / CONTROL ROL-V2-001
     role: ROL-V2-001
-    action: CONTROL FORMALIZATION — DRAFT CAUSAL-RESOLUTION TASK ORDER
-    basis: ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / DOC-P5-003 / Project Owner explicit bounded-continuation authorization
+    action: CONTROL ACTIVATION — CAUSAL-RESOLUTION INVESTIGATION
+    basis: ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / DOC-P5-003 / Project Owner explicit full-authority activation authorization
     disposition:
       phase: PH-P5
       historical_step: STEP-P5-005
@@ -3315,9 +3315,9 @@ entries:
     exclusions: Historical P5-005 reopening; historical artifact mutation; STEP-P5-006 activation; technical solution selection; unrelated scope.
     evidence: DOC-P5-003; BR-P5-006; AR-P5-005; EXEC-LOG-TO-P5-005-CONTROL-RUNTIME-20261005; ADR-GOVERNANCE-014
     synchronization:
-      task_order_artifact: CREATED
-      artifacts_registry: UPDATED
-      checkpoint: UPDATED — unverified artifact recorded; active_task_order remains null
+      task_order_artifact: UPDATED — ACTIVATED
+      artifacts_registry: UPDATED — AUTHORIZED TO EXECUTE
+      checkpoint: UPDATED — active_task_order set to TO-P5-005-CORRECTIVE-001
       historical_evidence: UNCHANGED
-      producer_execution: NOT STARTED
-    stop_boundary: Owner authorization / formal activation of this concrete Task Order is the next governed boundary.
+      producer_execution: ACTIVATED
+    continuation: Producer execution is activated; CONTROL retains independent verification and closure synchronization authority.
