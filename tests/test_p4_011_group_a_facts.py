@@ -364,7 +364,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
         self.assertTrue(all(args[3] == result.knowledge_time for args in primary_rows))
         self.assertTrue(all(args[3] == result.higher_timeframe_facts["1h"].knowledge_time for args in higher_rows))
         self.assertTrue(all("knowledge_time" not in query.lower() for query, _ in indicator_rows))
-        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 38)
+        self.assertEqual(len({args[-1] for _, args in indicator_rows}), 46)
         self.assertTrue(all(args[4] == "source:15m:39" for args in primary_rows))
         self.assertTrue(all(args[4] == "source:1h:9" for args in higher_rows))
 
