@@ -8,7 +8,7 @@
 **Affected Capability:** `S-12 — Liquidity`
 **Issuing Role:** `ROL-V2-001 — CONTROL / REVIEWER`
 **Producer Role:** `ROL-V2-002 — PRODUCER / ARCHITECT-BUILDER`
-**Status:** DRAFT / PENDING OWNER AUTHORIZATION AND ACTIVATION
+**Status:** AUTHORIZED TO EXECUTE
 **Governance Basis:** `ADR-GOVERNANCE-012`, `ADR-GOVERNANCE-013`, `ADR-GOVERNANCE-014`
 **Assessment Basis:** `DOC-P5-003`
 
@@ -302,3 +302,16 @@ The actual causal state of the historical S-12 `LIQUIDITY_POOL = 0 / INSUFFICIEN
 The required outcome is truthful causal resolution, not manufactured liquidity data and not a predetermined technical patch.
 
 **Producer execution remains inactive until this Task Order is formally authorized and activated.**
+
+
+## CONTROL Activation Record — 2026-10-06
+
+Project Owner has explicitly granted CONTROL full authority to proceed within the stated project boundary and authorized continuation of this concrete corrective path.
+
+**Activation disposition:** AUTHORIZED TO EXECUTE  
+**Active Task Order:** `TO-P5-005-CORRECTIVE-001`  
+**Producer execution:** ACTIVATED  
+**Historical `STEP-P5-005` / `TO-P5-005` closure:** PRESERVED  
+**`STEP-P5-006`:** NOT ACTIVATED
+
+The Producer shall proceed through the complete causal-resolution investigation and evidence-generation boundary defined above. Producer shall deliver the required Build Report and shall not declare VERIFIED / COMPLETE / CLOSED. CONTROL retains independent verification, VPS/SentinelX, scope-control and closure-synchronization authority.
