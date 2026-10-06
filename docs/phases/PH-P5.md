@@ -1,7 +1,7 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-006` — DEFINED / INACTIVE; upstream prerequisite resolution active under `TO-P4-014`
+**Current Step Lifecycle:** `STEP-P5-006` — DEFINED / INACTIVE; upstream PRQ-2 trade prerequisite resolution active under `TO-P2-014`
 **Active Task Order:** `TO-P2-014`
 **Active Corrective Dependency:** `TO-P2-014` — bounded P2 PRQ-2 trade capability resolution for `STEP-P5-006`
 **Last Completed Task Order:** `TO-P5-005`  
@@ -137,7 +137,7 @@ VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation re
 **Authorization state:** NOT ACTIVATED  
 **Predecessor:** `STEP-P5-005` — COMPLETE / VERIFIED  
 **Activation basis:** Project Owner next governed-stage directive — 2026-10-06  
-**Active Task Order:** `TO-P4-014` — bounded upstream prerequisite resolution  
+**Active Task Order:** `TO-P2-014` — bounded upstream prerequisite resolution  
 **Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED`; `PRQ-2` trade capability is the active upstream resolution boundary under `TO-P2-014`. P5 specialist implementation remains inactive until CONTROL independently verifies the gate.
 
 Purpose: establish deterministic Group-C specialist capability for `S-03` Volume Analyst and `S-17` Volume Profile Reasoner using authoritative Stage-1 Input Snapshot facts and an independently verified P4 Group-C fact surface.
