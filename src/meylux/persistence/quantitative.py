@@ -572,9 +572,9 @@ class QuantitativePersistence:
         self,
         trades: tuple[CanonicalTrade, ...],
         source_record_ids: tuple[str, ...],
-    ) -> tuple[datetime | None, str | None]:
+    ) -> tuple[datetime | None, str | None, bool]:
         if not trades:
-            return None, None
+            return None, None, False
         if len(source_record_ids) != len(trades):
             raise ValueError("profile source-record lineage must align with canonical trades")
         rows = await self._connection.fetch(
@@ -585,24 +585,24 @@ class QuantitativePersistence:
         )
         by_source = {row["source_record_id"]: row for row in rows}
         if set(by_source) != set(source_record_ids):
-            return None, None
+            return None, None, False
         knowledge_times = []
         venues = set()
         for source_id in source_record_ids:
             row = by_source[source_id]
             knowledge = row["knowledge_time"]
             if knowledge is None or knowledge.tzinfo is None or knowledge.utcoffset() != timezone.utc.utcoffset(knowledge):
-                return None, None
+                return None, None, False
             knowledge_times.append(knowledge)
             venue = row["venue"]
             if venue is None:
-                return max(knowledge_times), None
+                continue
             if not isinstance(venue, str) or not venue.strip():
-                return None, None
+                return None, None, False
             venues.add(venue.strip())
         if len(venues) > 1:
             raise ValueError("profile contributing trade evidence has contradictory venue context")
-        return max(knowledge_times), (next(iter(venues)) if venues else None)
+        return max(knowledge_times), (next(iter(venues)) if venues else None), True
 
     async def persist_volume_profile(
         self,
@@ -636,7 +636,7 @@ class QuantitativePersistence:
         source_ref = provenance[0] if len(provenance) == 1 else (
             "canonical-provenance:" + "|".join(provenance) if provenance else None
         )
-        knowledge_time, venue_context = await self._profile_evidence_context(trades, source_record_ids) if trades else (None, None)
+        knowledge_time, venue_context, evidence_complete = await self._profile_evidence_context(trades, source_record_ids) if trades else (None, None, False)
 
         def metric(result: Any) -> dict[str, Any]:
             return {
@@ -676,18 +676,23 @@ class QuantitativePersistence:
             analysis.value_area_low.result.status,
             analysis.value_area_high.result.status,
         )
-        status = (
-            CalculationStatus.VALID.value
-            if all(value is CalculationStatus.VALID for value in core_statuses)
-            else (
-                CalculationStatus.INSUFFICIENT_HISTORY.value
-                if all(value is CalculationStatus.INSUFFICIENT_HISTORY for value in core_statuses)
-                else CalculationStatus.UNAVAILABLE.value
+        if not trades:
+            status = CalculationStatus.INSUFFICIENT_HISTORY.value
+            reason = "missing_or_insufficient_profile_trade_evidence"
+        elif not evidence_complete:
+            status = CalculationStatus.UNAVAILABLE.value
+            reason = "missing_authoritative_quality_evidence"
+        else:
+            status = (
+                CalculationStatus.VALID.value
+                if all(value is CalculationStatus.VALID for value in core_statuses)
+                else (
+                    CalculationStatus.INSUFFICIENT_HISTORY.value
+                    if all(value is CalculationStatus.INSUFFICIENT_HISTORY for value in core_statuses)
+                    else CalculationStatus.UNAVAILABLE.value
+                )
             )
-        )
-        reason = "volume_profile_analysis" if status == CalculationStatus.VALID.value else (
-            "missing_or_insufficient_profile_trade_evidence" if not trades else "volume_profile_core_fact_unavailable"
-        )
+            reason = "volume_profile_analysis" if status == CalculationStatus.VALID.value else "volume_profile_core_fact_unavailable"
         value_numeric = analysis.poc.result.value if status == CalculationStatus.VALID.value else None
         material = {
             "family": "volume_profile",
