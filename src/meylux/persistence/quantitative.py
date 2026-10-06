@@ -415,7 +415,7 @@ class QuantitativePersistence:
                 or canonical_event_time != trade.timestamp
                 or canonical_provenance_id != trade.provenance_id
             ):
-                raise ValueError("canonical trade lineage does not match the contributing CanonicalTrade")
+                raise ValueError(\n                    "canonical trade lineage does not match the contributing CanonicalTrade: " +\n                    f"canonical=({canonical_instrument_id!r},{canonical_event_time!r},{canonical_provenance_id!r}) " +\n                    f"trade=({trade.instrument_id!r},{trade.timestamp!r},{trade.provenance_id!r})"\n                )
 
             evidence_candidates = [row for row in candidates if row["evidence_id"] is not None]
             if not evidence_candidates:
