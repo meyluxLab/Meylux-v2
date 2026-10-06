@@ -128,7 +128,7 @@ The Group-A boundary includes configured technical facts (EMA, RSI-14, MACD 12/2
 
 Required evidence includes deterministic specialist behavior, boundary/golden-vector tests, no-lookahead, real `INSUFFICIENT_DATA` behavior where applicable, EvidenceRef resolution, replay/idempotency, append-only persistence/read-back, specialist independence, applicable runtime/VPS evidence and a reproducible performance/resource baseline.
 
-VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation remains within the authorized development workspace. `STEP-P5-006` and later Steps remain unauthorized and out of scope.
+VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation remains within the authorized development workspace. Later P5 Steps remain unauthorized and out of scope.
 
 ### `STEP-P5-006` — Group C: Volume, Volume Profile
 
