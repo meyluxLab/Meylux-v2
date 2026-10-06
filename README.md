@@ -16,8 +16,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
-- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `DEFINED / INACTIVE`; its upstream prerequisite resolution is active under `TO-P4-014`; `STEP-P5-005` remains `COMPLETE / VERIFIED` under `AR-P5-005`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Latest completed Task Order:** `TO-P4-014` — Group-C Volume / Volume-Profile upstream prerequisite resolution; `active_task_order = TO-P4-014`; historical `STEP-P5-005 / TO-P5-005` closure remains preserved; P5-006 specialist implementation is not activated.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `DEFINED / INACTIVE`; its upstream prerequisite resolution is active under `TO-P4-014-CORRECTIVE-001`; `STEP-P5-005` remains `COMPLETE / VERIFIED` under `AR-P5-005`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
+- **Latest completed Task Order:** `TO-P4-014-CORRECTIVE-001` — bounded S-03 Volume/RVOL continuation under `TO-P4-014`; `active_task_order = TO-P4-014-CORRECTIVE-001`; historical `STEP-P5-005 / TO-P5-005` closure remains preserved; P5-006 specialist implementation is not activated.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
