@@ -3514,3 +3514,20 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED — none requiring absorption
     conclusion: S-03 Volume/RVOL is independently verified and the corrective Task Order is complete; parent TO-P4-014 remains active solely for unresolved Group-C/S-17 prerequisite resolution.
+  - change_id: CHG-20261006-P4-014
+    date_utc: 2026-10-06
+    actor_role: ROL-V2-001
+    action: "CONTROL INDEPENDENT VERIFICATION AND ADR-GOVERNANCE-012 CLOSURE SYNCHRONIZATION — TO-P4-014"
+    basis: "AR-P4-022 + BR-P4-015 + TO-P4-014 + PR #68 + merged commit cda0982bcbe6304c6b1a0fcf1135b1699510472f + implementation revision 73b4d73c15f1ec0e35980c6c649a941b7c100450 + EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006 + CI Core retry job 112420916363 + Docker Foundation Run #885 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + ADR-GOVERNANCE-014"
+    affected_ids:
+      - TO-P4-014
+      - BR-P4-015
+      - AR-P4-022
+      - EXEC-LOG-TO-P4-014-CONTROL-RUNTIME-20261006
+      - TST-P4-014
+      - DB-P4-014
+      - RUN-P4-014
+      - PRQ-1-GROUP-C
+      - STEP-P5-006
+    outcome: "TO-P4-014 VERIFIED / COMPLETE; PRQ-1 Group-C P4 capability ESTABLISHED / VERIFIED; trade-input prerequisite for STEP-P5-006 ESTABLISHED / VERIFIED for the governed acceptance boundary. P5-006 specialist implementation remains inactive."
+
