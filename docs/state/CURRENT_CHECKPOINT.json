@@ -345,11 +345,13 @@
     "AR-P5-006",
     "RUN-P5-006",
     "DB-P5-006",
-    "TO-P5-005-CORRECTIVE-001"
+    "TO-P5-005-CORRECTIVE-001",
+    "DOC-P5-004",
+    "AR-P5-007",
+    "DOC-P5-003"
   ],
   "unverified_artifacts": [
-    "DOC-P5-002",
-    "DOC-P5-003"
+    "DOC-P5-002"
   ],
   "open_questions": [
     "Constitution Stable ID remains IDENTITY UNCONFIRMED; no speculative identity was created under STEP-P0-004. Governance/identity disposition remains required only if registry policy requires an explicit Constitution SID.",
@@ -408,7 +410,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "857020c80de4753727ee8fb51cbffb88369e4635",
-  "updated_at_utc": "2026-10-06T11:55:25Z",
+  "updated_at_utc": "2026-10-06T12:37:26Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -475,7 +477,7 @@
       "final_sync_commit": "1f3bb91606c0551ecb4c1b815c0966ae6bfbee2b"
     }
   },
-  "last_governance_sync_base_commit": "7674d625a8ac3c9f52ee7e27da7a4ac803c5ff4",
+  "last_governance_sync_base_commit": "37105a6b1b418e8e54ca7662ead54ef542a5d155",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -522,7 +524,8 @@
     "CONTROL activated STEP-P5-005 / TO-P5-005 on 2026-10-05 after independent SoT review. Group-B upstream dependency TO-P4-013 / AR-P4-020 is VERIFIED / COMPLETE; no unresolved prerequisite remains. 5m is explicitly out of the current governed acceptance boundary unless a real in-scope dependency is demonstrated.",
     "Project Owner ratified ADR-GOVERNANCE-014 on 2026-10-05 as the project-wide Required Capability Continuation & No-Drop Prerequisite Resolution rule. ADR index, Artifact Protocol, artifact registry, and Change Ledger were synchronized; PH-P5 / STEP-P5-005 historical closure remains unchanged and no corrective implementation is authorized by this ratification.",
     "DOC-P5-003 records the ADR-GOVERNANCE-014 retrospective assessment for P5-005/S-12: the liquidity fact/evaluation surface is genuinely required, but the absence of LIQUIDITY_POOL records is not causally resolved. No corrective mechanism, implementation, or P5-005 reopening is authorized.",
-    "CONTROL independently verified TO-P5-005-CORRECTIVE-001 under AR-P5-006: Branch A established — no qualifying liquidity pool existed in the authoritative P4 input/output boundary; no corrective implementation required; historical STEP-P5-005 / TO-P5-005 closure preserved; STEP-P5-006 not activated."
+    "CONTROL independently verified TO-P5-005-CORRECTIVE-001 under AR-P5-006: Branch A established — no qualifying liquidity pool existed in the authoritative P4 input/output boundary; no corrective implementation required; historical STEP-P5-005 / TO-P5-005 closure preserved; STEP-P5-006 not activated.",
+    "CONTROL self-audit under explicit Project Owner authorization 2026-10-06 verified and closed DOC-P5-003 and the project-wide No-Drop assessment (DOC-P5-004); AR-P5-007 records the self-audit; historical evidence and Phase/Step lifecycle remain unchanged."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
