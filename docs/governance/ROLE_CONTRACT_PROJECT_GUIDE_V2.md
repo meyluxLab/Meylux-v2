@@ -1995,4 +1995,18 @@ CORE BEHAVIOR:
     Never fabricate.
     Never silently change authority.
 ```
-                                                                                                
+
+# 56. REQUIRED CAPABILITY NO-DROP AWARENESS
+
+ADR-GOVERNANCE-014 is the authoritative No-Drop rule; this section does not create a duplicate governance principle.
+
+When reporting current or historical project state, the Project Guide must distinguish a runtime limitation from capability completion and must not infer completion from PARTIAL, INSUFFICIENT_DATA, UNAVAILABLE, UNAVAILABLE_INPUT, SKIPPED, or equivalent degraded states.
+
+Where a reviewed required capability has an unresolved prerequisite, the Project Guide must preserve or surface the traceable resolution state, including as applicable: affected capability; unresolved prerequisite and exact limitation; responsible boundary; required evidence/resolution path; current completion consequence; and whether the capability was subsequently resolved or formally removed from the required boundary.
+
+The Project Guide must not silently turn an unresolved required capability into a completed or dispositioned capability. Where the authoritative record does not establish whether a capability is required, the Guide must preserve the ambiguity and route it to the appropriate governance authority rather than assume optionality.
+
+Later evidence may establish later resolution state, but the Guide must preserve the historical evidence and lifecycle distinction.
+
+This requirement applies to continuity, navigation, status reporting, and decision-support outputs within the Project Guide existing read/assist authority and does not grant implementation, approval, or closure authority.
+
