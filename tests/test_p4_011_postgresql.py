@@ -791,7 +791,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                         "record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,lineage_parent_id,"
                         "quality_state,quality_score,payload_json,canonical_bytes,identity_hash"
                         ") VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12) ON CONFLICT (record_id) DO NOTHING",
-                        f"vp-ci-record-{i}", fsource_record_id, symbol, trade.timestamp, trade.provenance_id,
+                        f"vp-ci-record-{i}", source_record_id, symbol, trade.timestamp, trade.provenance_id,
                         source_record_id, source_record_id, "VALID", Decimal("1.00"), canonical_json,
                         canonical_json.encode(), hashlib.sha256(canonical_json.encode()).hexdigest(),
                     )
@@ -1022,7 +1022,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                 )
                 self.assertEqual(await execute(conn, request), 1)
                 before = await conn.fetchrow(
-                    "SELECT to_jsonb(s) AS row FROM meylux.volume_profile_sessions AS s "
+                    "SELECT record_id,to_jsonb(s) AS row FROM meylux.volume_profile_sessions AS s "
                     "WHERE symbol=$1 AND timeframe=$2", symbol, "15m"
                 )
                 self.assertIsNotNone(before)
@@ -1031,7 +1031,7 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
                     "DELETE FROM meylux.volume_profile_sessions WHERE record_id=$1",
                 ):
                     with self.assertRaises(Exception):
-                        await conn.execute(sql, before["row"]["record_id"])
+                        await conn.execute(sql, before["record_id"])
                 after = await conn.fetchrow(
                     "SELECT to_jsonb(s) AS row FROM meylux.volume_profile_sessions AS s "
                     "WHERE record_id=$1", before["row"]["record_id"]
