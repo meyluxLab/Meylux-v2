@@ -85,3 +85,8 @@ TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed u
 ## TO-P5-004 Closure
 
 `TO-P5-004` / `STEP-P5-004` — Group A Technical, Multi-Timeframe and Volatility — is independently verified and closed under `AR-P5-004`. The corrected implementation/test revision is `45915b9f4ceb4c84349835d4e47d00897ba74eca`, PR #63 merged as `8f014e216a03378853cd2d74b869ef03d65e907b`. CONTROL independently verified the authoritative EMA alias semantics, closed-candle temporal boundary, EvidenceRef provenance, Redis → specialist worker → PostgreSQL persistence/read-back, replay idempotency, append-only UPDATE/DELETE protection, and runtime performance/resource baseline. `STEP-P5-005` is complete and independently verified under `AR-P5-005`; no later Phase 5 Step is activated.
+
+
+## Post-Closure S-12 Causal Resolution
+
+`TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No corrective implementation is required by that investigation; historical `STEP-P5-005 / TO-P5-005` remains COMPLETE / VERIFIED and `STEP-P5-006` remains unactivated.
