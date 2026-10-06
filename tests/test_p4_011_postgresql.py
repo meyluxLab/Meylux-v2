@@ -187,6 +187,137 @@ class TestP4011PostgreSQLPersistence(unittest.TestCase):
         asyncio.run(run())
 
 
+    def test_s17_volume_profile_uses_explicit_interval_and_persists_canonical_trade_facts(self):
+        async def run():
+            conn = await self.asyncpg.connect(
+                host=os.environ["MEYLUX_DB_HOST"],
+                port=int(os.environ.get("MEYLUX_DB_PORT", "5432")),
+                database=os.environ["MEYLUX_DB_NAME"],
+                user=os.environ["MEYLUX_DB_USER"],
+                password=os.environ["MEYLUX_DB_PASSWORD"],
+                timeout=10,
+                command_timeout=30,
+            )
+            try:
+                from meylux.runtime.volume_profile import VolumeProfileRequest, execute
+
+                symbol = "TO-P4-014-S17-CI:BTCUSDT"
+                timeframe = "15m"
+                start = datetime(2026, 1, 1, tzinfo=UTC)
+                end = start + timedelta(minutes=15)
+                source_record_id = "to-p4-014-s17-source-001"
+                trade_payload = {
+                    "trade_id": "to-p4-014-s17-trade-001",
+                    "instrument_id": symbol,
+                    "timestamp": "2026-01-01T00:05:00Z",
+                    "price": "100.25",
+                    "quantity": "2.5",
+                    "aggressor_side": "BUY",
+                    "quote_quantity": "250.625",
+                    "provenance_id": "binance:s17-ci",
+                }
+                await conn.execute(
+                    "INSERT INTO meylux.canonical_trades "
+                    "(record_id,event_id,instrument_id,event_time,provenance_id,source_record_id,"
+                    "lineage_parent_id,quality_state,quality_score,payload_json,canonical_bytes,identity_hash) "
+                    "VALUES($1,$2,$3,$4,$5,$6,$7,'valid',$8,$9::jsonb,$10,$11) "
+                    "ON CONFLICT(record_id) DO NOTHING",
+                    "to-p4-014-s17-record-001",
+                    "to-p4-014-s17-event-001",
+                    symbol,
+                    datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
+                    "binance:s17-ci",
+                    source_record_id,
+                    "to-p4-014-s17-lineage-001",
+                    Decimal("1.00"),
+                    json.dumps(trade_payload, sort_keys=True, separators=(",", ":")),
+                    json.dumps(trade_payload, sort_keys=True, separators=(",", ":")).encode(),
+                    "a" * 64,
+                )
+                await conn.execute(
+                    "INSERT INTO meylux.quality_evidence "
+                    "(evidence_id,logical_fact_key,source_record_id,source_identity_hash,"
+                    "provider_id,adapter_id,adapter_version,canonical_instrument_id,provider_instrument_id,"
+                    "event_type,event_time,received_at,knowledge_time,acquisition_state,quality_state,"
+                    "lifecycle_state,quality_score,reason_codes,validation_result,provenance_id,"
+                    "lineage_parent_id,payload_fingerprint,timeframe,venue) "
+                    "VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,'TRADE',$10,$11,$11,'AVAILABLE','VALID',"
+                    "'ACCEPTED',$12,'[]'::jsonb,NULL,$13,$14,$15,$16,$17) "
+                    "ON CONFLICT(evidence_id) DO NOTHING",
+                    "to-p4-014-s17-evidence-001",
+                    "to-p4-014-s17-logical-001",
+                    source_record_id,
+                    "b" * 64,
+                    "binance",
+                    "binance-acquisition",
+                    "1.0.0",
+                    symbol,
+                    "BTCUSDT",
+                    datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
+                    datetime(2026, 1, 1, 0, 5, tzinfo=UTC),
+                    Decimal("1.00"),
+                    "binance:s17-ci",
+                    "to-p4-014-s17-lineage-001",
+                    "c" * 64,
+                    timeframe,
+                    "BINANCE",
+                )
+                request = VolumeProfileRequest(
+                    symbol=symbol,
+                    timeframe=timeframe,
+                    interval_start=start,
+                    interval_end=end,
+                    price_bin_size=Decimal("1"),
+                    hvn_threshold=Decimal("0.75"),
+                    lvn_threshold=Decimal("0.25"),
+                )
+                persistence = QuantitativePersistence(conn)
+                inserted = await execute(conn, request)
+                self.assertEqual(inserted, 1)
+
+                rows = await persistence.fetch_family(
+                    "volume_profile", symbol, timeframe, limit=10
+                )
+                self.assertEqual(len(rows), 1)
+                row = rows[0]
+                self.assertEqual(row["session_start"], start)
+                self.assertEqual(row["session_end"], end)
+                self.assertEqual(row["status"], "valid")
+                self.assertEqual(row["source_ref"], "binance:s17-ci")
+                self.assertEqual(row["venue_context"], "BINANCE")
+                self.assertEqual(row["knowledge_time"], datetime(2026, 1, 1, 0, 5, tzinfo=UTC))
+                self.assertEqual(row["identity_hash"], row["record_id"])
+                payload = row["payload_json"]
+                if isinstance(payload, str):
+                    payload = json.loads(payload)
+                self.assertEqual(payload["profile_interval"]["boundary"], "[start,end)")
+                self.assertEqual(payload["trade_count"], 1)
+                self.assertEqual(payload["facts"]["POC"]["value"], "100")
+                self.assertEqual(payload["facts"]["VAL"]["value"], "100")
+                self.assertEqual(payload["facts"]["VAH"]["value"], "101")
+                self.assertEqual(payload["facts"]["HVN"]["status"], "valid")
+                self.assertEqual(payload["facts"]["LVN"]["status"], "valid")
+
+                self.assertEqual(await execute(conn, request), 0)
+                self.assertEqual(
+                    len(await persistence.fetch_family("volume_profile", symbol, timeframe, limit=10)),
+                    1,
+                )
+
+                with self.assertRaises(ValueError):
+                    VolumeProfileRequest(
+                        symbol=symbol,
+                        timeframe=timeframe,
+                        interval_start=end,
+                        interval_end=start,
+                        price_bin_size=Decimal("1"),
+                        hvn_threshold=Decimal("0.75"),
+                        lvn_threshold=Decimal("0.25"),
+                    )
+            finally:
+                await conn.close()
+        asyncio.run(run())
+
     def test_explicit_raw_venue_context_is_persisted_and_replayed_idempotently(self):
         async def run():
             conn = await self.asyncpg.connect(
