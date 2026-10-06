@@ -358,3 +358,25 @@ records:
     replay_canonical_duplicates: 200
     control_audit: AR-P2-AUDIT-014
   status: VERIFIED
+
+
+- stable_id: RUN-P2-015
+  canonical_name: CONTROL Real Binance Spot Trade Venue-Evidence Runtime Acceptance
+  entity_type: RUN
+  phase: PH-P2
+  step: STEP-P2-006
+  task_order: TO-P2-015
+  runtime_target: server-l6rf
+  evidence:
+    implementation_head: 87b74954cd4fbd2d004a3212d965f42b97c3e870
+    merged_main_commit: 56bebeb4114aacd8d8999da3325b25c193db0b1a
+    real_provider: Binance Spot
+    symbol: BTCUSDT
+    explicit_venue: BINANCE
+    raw_quality_canonical_lineage: VERIFIED
+    direct_postgresql_readback: VERIFIED
+    deterministic_replay: VERIFIED
+    replay_contradictory_quality_rows: 0
+    execution_log: EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007
+    restoration: VERIFIED
+  status: VERIFIED
