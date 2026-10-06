@@ -67,8 +67,9 @@ async def main():
                 tuple(item for item in configured.split(",") if item.strip())
             )
             limit=int(os.environ.get("MEYLUX_BINANCE_TRADE_LIMIT","1000"))
-            pipeline=TradeAcquisitionPipeline(pool, trade_limit=limit)
-            result=await pipeline.acquire_once(symbols)
+            async with pool.acquire() as conn:
+                pipeline=TradeAcquisitionPipeline(conn, trade_limit=limit)
+                result=await pipeline.acquire_once(symbols)
             print(
                 "meylux-v2 bounded Binance trade acquisition completed: "
                 f"symbols={result.symbols} envelopes={result.envelopes} "
