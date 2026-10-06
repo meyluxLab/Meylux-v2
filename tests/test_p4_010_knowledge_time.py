@@ -205,7 +205,7 @@ class TestP4010KnowledgeTime(unittest.TestCase):
         result = QuantitativeOrchestrator().process(bars(), config())
         inserted = asyncio.run(QuantitativePersistence(db).persist_orchestration(result))
         expected_structural = _expected_structural_rows(result)
-        self.assertEqual(inserted, 21 + expected_structural)
+        self.assertEqual(inserted, 23 + expected_structural)
         self.assertEqual(len(db.sql), 21 + expected_structural)
         indicator_and_regime = [
             (query, args) for query, args in db.sql
