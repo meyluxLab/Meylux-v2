@@ -137,7 +137,7 @@ VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation re
 **Authorization state:** NOT ACTIVATED  
 **Predecessor:** `STEP-P5-005` — COMPLETE / VERIFIED  
 **Activation basis:** Project Owner next governed-stage directive — 2026-10-06  
-**Active Task Order:** `TO-P2-014` — bounded upstream prerequisite resolution  
+**Active Task Order:** `null`  
 **Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED`; `PRQ-2` trade capability is ESTABLISHED / VERIFIED under `TO-P2-014 / AR-P2-AUDIT-014`. P5 specialist implementation remains inactive until CONTROL independently verifies the gate.
 
 Purpose: establish deterministic Group-C specialist capability for `S-03` Volume Analyst and `S-17` Volume Profile Reasoner using authoritative Stage-1 Input Snapshot facts and an independently verified P4 Group-C fact surface.
@@ -146,7 +146,7 @@ The Step consumes authoritative upstream volume and Volume Profile facts. It doe
 
 The Step acceptance boundary includes deterministic S-03 volume/RVOL interpretation and S-17 Value Area / POC / VAH / VAL / HVN / LVN interpretation, with previous-session comparison only where the required persisted session history actually exists. Real unavailable/insufficient states remain explicit where evidence warrants them.
 
-`STEP-P5-006` is not executable until CONTROL independently verifies the required upstream gate. The current trade-gate resolution Task Order is `TO-P2-014`; later P5 specialist implementation remains unauthorized until CONTROL independently verifies that dependency.
+`STEP-P5-006` remains inactive pending a fresh CONTROL readiness determination after the upstream gates are established; no P5 specialist implementation is authorized by this closure.
 
 Required evidence includes deterministic specialist behavior, boundary/golden-vector tests, no-lookahead, EvidenceRef resolution, real persisted upstream facts, replay/idempotency, append-only persistence/read-back, specialist independence, applicable runtime/VPS evidence, and reproducible performance/resource evidence.
 
