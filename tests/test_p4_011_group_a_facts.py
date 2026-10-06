@@ -356,7 +356,7 @@ class TestP4011GroupAFacts(unittest.TestCase):
             args[0]: (query, args)
             for query, args in db.sql if "calculated_indicator_vectors" in query
         }.values())
-        self.assertEqual(len(indicator_rows), 38)
+        self.assertEqual(len(indicator_rows), 46)
         primary_rows = [args for _, args in indicator_rows if args[2] == "15m"]
         higher_rows = [args for _, args in indicator_rows if args[2] == "1h"]
         self.assertEqual(len(primary_rows), 23)
