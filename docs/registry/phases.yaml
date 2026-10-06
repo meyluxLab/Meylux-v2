@@ -545,13 +545,16 @@ records:
     order: 6
     predecessor: STEP-P5-005
     activation_basis: PROJECT-OWNER-NEXT-GOVERNED-STAGE-DIRECTIVE-2026-10-06
-    active_task_order: TO-P4-014
+    active_task_order: TO-P2-014
     completed_task_order: null
     completion_audit: null
     purpose: Establish deterministic Group-C specialist capability for S-03 Volume Analyst and S-17 Volume Profile Reasoner from authoritative Stage-1 Input Snapshot facts after the required upstream P4 Group-C and trade-input gate is independently established.
     repository_scope: P5 S-03/S-17 specialist implementation, evidence interpretation, EvidenceRef resolution, persistence/read-back, replay/idempotency, tests and required runtime evidence within STEP-P5-006 only.
     dependency_boundary:
       required: PRQ-1 Group-C / PRQ-2 trade capability
+      resolved: PRQ-1 Group-C / TO-P4-014 / AR-P4-022
+      active_resolution: TO-P2-014
+      status: PRQ-1 Group-C VERIFIED; PRQ-2 trade resolution ACTIVE
       resolved: PRQ-1 Group-C / TO-P4-014 / AR-P4-022
       active_resolution: null
       status: RESOLVED / VERIFIED — P4 Group-C prerequisite established; P5 specialist gate remains inactive
