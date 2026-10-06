@@ -20,6 +20,7 @@ from meylux.specialists.runtime import (
     specialist_policy,
 )
 from meylux.specialists.snapshot import InputSnapshotBuilder, SnapshotRecord
+from meylux.specialists.group_c import analyze_s03, analyze_s17
 
 
 RUN_INTEGRATION = os.environ.get("MEYLUX_RUN_P5006_POSTGRESQL") == "1"
@@ -145,6 +146,13 @@ class TestP5006GroupCPostgreSQL(unittest.TestCase):
             f"worker-{suffix}",
         )
         snapshot = _snapshot(suffix)
+        # Validate the exact integration snapshot through the semantic boundary before queue dispatch;
+        # this keeps any semantic defect observable with its precise diagnostic rather than only as a DLQ state.
+        for specialist_id, analyzer in (("S-03", analyze_s03), ("S-17", analyze_s17)):
+            try:
+                analyzer(snapshot, config)
+            except Exception as exc:
+                self.fail(f"{specialist_id} semantic preflight failed: {type(exc).__name__}: {exc}")
         handler = SpecialistWorkerHandler(pool, config)
         dispatcher = SpecialistDispatcher(queue, config)
         try:
