@@ -8,7 +8,7 @@
 **Affected Capability:** `S-12 — Liquidity`
 **Issuing Role:** `ROL-V2-001 — CONTROL / REVIEWER`
 **Producer Role:** `ROL-V2-002 — PRODUCER / ARCHITECT-BUILDER`
-**Status:** AUTHORIZED TO EXECUTE
+**Status:** VERIFIED / COMPLETE
 **Governance Basis:** `ADR-GOVERNANCE-012`, `ADR-GOVERNANCE-013`, `ADR-GOVERNANCE-014`
 **Assessment Basis:** `DOC-P5-003`
 
