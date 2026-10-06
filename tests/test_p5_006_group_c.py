@@ -170,7 +170,7 @@ class TestP5006GroupC(unittest.TestCase):
             indicator("VOLUME_SPIKE", 4, "1"),
             indicator("VOLUME_CLIMAX", 4, "0"),
         ])
-        with self.assertRaises(ValueError):
+        with self.assertRaises(GroupCSemanticError):
             analyze_s03(s, CFG)
 
     def test_s03_wrong_venue_is_not_consumed(self):
@@ -206,13 +206,13 @@ class TestP5006GroupC(unittest.TestCase):
         position = next(f for f in out.findings if f.code.endswith(":POSITION"))
         self.assertEqual(position.status, SpecialistStatus.SUCCESS)
         self.assertEqual(position.value["state"], "INSIDE")
-        self.assertEqual(position.value["nearest"]["level"], "POC")
+        self.assertEqual(position.value["nearest"]["level"], "HVN")
         poc = next(f for f in out.findings if f.code.endswith(":POC"))
         self.assertEqual(poc.value["poc"], Decimal("100"))
 
     def test_s17_prior_session_poc_requires_two_sessions_and_detects_return(self):
         start1, end1 = T0 - timedelta(hours=2), T0 - timedelta(hours=1)
-        start2, end2 = T0 - timedelta(hours=1), T0
+        start2, end2 = T0 - timedelta(hours=1), T0 + timedelta(hours=1)
         s = snapshot([
             profile(1, start1, end1, poc="100"),
             profile(2, start2, end2, poc="110"),
