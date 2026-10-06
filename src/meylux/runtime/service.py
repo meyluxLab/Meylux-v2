@@ -12,6 +12,7 @@ from meylux.queue import AsyncWorker,QueuePolicy,RedisQueue
 from meylux.orchestration import QuantOrchestrationConfig
 from meylux.quantitative.regime_venue import RegimeConfig
 from meylux.specialists.runtime import run_specialist_worker
+from meylux.acquisition.binance import BinanceAdapter
 from meylux.acquisition.trade_pipeline import AUTHORIZED_SYMBOLS, TradeAcquisitionPipeline
 
 def _required(n:str)->str:
@@ -67,8 +68,10 @@ async def main():
                 tuple(item for item in configured.split(",") if item.strip())
             )
             limit=int(os.environ.get("MEYLUX_BINANCE_TRADE_LIMIT","1000"))
+            rest_base_url=os.environ.get("MEYLUX_BINANCE_REST_BASE_URL","https://api.binance.com")
+            adapter=BinanceAdapter(rest_base_url=rest_base_url)
             async with pool.acquire() as conn:
-                pipeline=TradeAcquisitionPipeline(conn, trade_limit=limit)
+                pipeline=TradeAcquisitionPipeline(conn, adapter=adapter, trade_limit=limit)
                 result=await pipeline.acquire_once(symbols)
             print(
                 "meylux-v2 bounded Binance trade acquisition completed: "
