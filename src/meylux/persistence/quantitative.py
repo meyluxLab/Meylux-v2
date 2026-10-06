@@ -444,12 +444,12 @@ class QuantitativePersistence:
         xs = tuple(trades)
         if any(not isinstance(trade, CanonicalTrade) for trade in xs): raise TypeError("trades must contain CanonicalTrade instances")
         if xs and any(trade.instrument_id != symbol for trade in xs): raise ValueError("profile trades must match symbol")
-        provenance = tuple(dict.fromkeys(trade.provenance_id for trade in xs))
+        selected = tuple(trade for trade in xs if start <= trade.timestamp < end)
+        provenance = tuple(dict.fromkeys(trade.provenance_id for trade in selected))
         venue, knowledge_time = await self._resolve_trade_lineage(provenance) if provenance else (None, None)
         analysis: VolumeProfileAnalysis = VolumeProfileEngine().analyze(xs, start, end, config)
         source_ref = analysis.context.source_ref if analysis.context is not None else None
-        if xs and not source_ref: raise ValueError("non-empty Volume Profile requires canonical provenance")
-        selected = tuple(trade for trade in xs if start <= trade.timestamp < end)
+        if selected and not source_ref: raise ValueError("non-empty Volume Profile requires canonical provenance")
         payload = {
             "metric": "VOLUME_PROFILE", "profile_interval": {"start": start, "end": end},
             "price_bin_size": config.price_bin_size, "hvn_threshold": config.hvn_threshold, "lvn_threshold": config.lvn_threshold,
