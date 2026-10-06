@@ -229,6 +229,24 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(envelope.payload["venue"], "BINANCE")
         self.assertEqual(envelope.provider.provider_id, "binance")
 
+    def test_rest_trade_carries_explicit_binance_venue_context(self):
+        http = FakeHTTP([[{
+            "id": 99, "time": 1778155200000, "price": "100.0", "qty": "1.0"
+        }]])
+        envelope = self.make_adapter(http_get=http).fetch_trades("BTCUSDT")[0]
+        self.assertEqual(envelope.state, AcquisitionState.AVAILABLE)
+        self.assertEqual(envelope.payload["venue"], "BINANCE")
+        self.assertEqual(envelope.provider.provider_id, "binance")
+
+    def test_rest_trade_rejects_contradictory_venue_context(self):
+        http = FakeHTTP([[{
+            "id": 99, "time": 1778155200000, "price": "100.0", "qty": "1.0",
+            "venue": "MEXC"
+        }]])
+        envelope = self.make_adapter(http_get=http).fetch_trades("BTCUSDT")[0]
+        self.assertEqual(envelope.state, AcquisitionState.INVALID)
+        self.assertEqual(envelope.provider_error.code, "BINANCE_CONTRADICTORY_TRADE_VENUE")
+
     def test_stream_trade_mapping_and_provenance(self):
         connector = FakeConnector([
             json.dumps({"stream": "btcusdt@trade", "data": {
@@ -249,6 +267,7 @@ class BinanceAdapterTests(unittest.TestCase):
         self.assertEqual(result[0].event_type, EventType.TRADE)
         self.assertEqual(result[0].source_sequence, "12345")
         self.assertEqual(result[0].provenance.provider.provider_id, "binance")
+        self.assertEqual(result[0].payload["venue"], "BINANCE")
         # Validate the semantic query value; URL encoding of '@' as '%40' is
         # transport-equivalent and is produced by urllib.parse.urlencode.
         query = parse_qs(urlparse(connector.urls[0]).query)
