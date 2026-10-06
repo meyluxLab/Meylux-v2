@@ -193,12 +193,16 @@ class BinanceAdapter(ProviderAdapter):
                     ProviderError("BINANCE_INVALID_TRADE_TIMESTAMP", "INVALID_PAYLOAD", str(exc)),
                 )
                 return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, failure),)
+            try:
+                payload = self._trade_payload(row)
+            except _BinanceProviderFailure as exc:
+                return (self._failure_envelope(self._instrument(symbol), EventType.TRADE, exc),)
             envelopes.append(self._envelope(
                 instrument=self._instrument(symbol),
                 event_type=EventType.TRADE,
                 event_time=event_time,
                 received_at=received,
-                payload=row,
+                payload=payload,
                 source_sequence=str(row["id"]) if row.get("id") is not None else None,
                 state=AcquisitionState.AVAILABLE,
             ))
@@ -401,7 +405,9 @@ class BinanceAdapter(ProviderAdapter):
             "bookTicker": EventType.UPDATE,
         }.get(event, EventType.UPDATE)
         payload = data
-        if event == "kline":
+        if event in {"trade", "aggTrade"}:
+            payload = self._trade_payload(data)
+        elif event == "kline":
             # Binance Spot supplies the authoritative interval under k.i.
             # Preserve the wire fields and attach source-scoped venue context.
             payload = dict(data)
@@ -415,6 +421,37 @@ class BinanceAdapter(ProviderAdapter):
             source_sequence=sequence,
             state=AcquisitionState.AVAILABLE,
         )
+
+    @staticmethod
+    def _trade_payload(payload: Mapping[str, Any]) -> dict[str, Any]:
+        """Attach authoritative Binance Spot venue context to trade evidence.
+
+        Venue is source-scoped evidence, not a provider-id-derived fallback.
+        A pre-existing explicit venue is accepted only when it agrees with the
+        fixed Binance Spot source; contradictory or malformed context fails
+        closed before an AVAILABLE trade envelope is emitted.
+        """
+        if not isinstance(payload, Mapping):
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_INVALID_TRADE_PAYLOAD",
+                    "INVALID_PAYLOAD",
+                    "Binance trade payload must be a mapping",
+                ),
+            )
+        if "venue" in payload and payload["venue"] != "BINANCE":
+            raise _BinanceProviderFailure(
+                AcquisitionState.INVALID,
+                ProviderError(
+                    "BINANCE_CONTRADICTORY_TRADE_VENUE",
+                    "INVALID_PAYLOAD",
+                    "Binance Spot trade evidence carried contradictory venue context",
+                ),
+            )
+        result = dict(payload)
+        result["venue"] = "BINANCE"
+        return result
 
     @staticmethod
     def _validate_kline_stream_finality(data: Mapping[str, Any], symbol: str) -> None:

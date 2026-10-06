@@ -49,7 +49,7 @@ class TradePipelineBoundaryTests(unittest.TestCase):
             event_time=datetime(2026, 10, 6, 18, 0, tzinfo=timezone.utc),
             received_at=datetime(2026, 10, 6, 18, 0, 1, tzinfo=timezone.utc),
             state=AcquisitionState.AVAILABLE,
-            payload={"id": 123, "price": Decimal("100"), "qty": Decimal("2"), "time": 1791309600000},
+            payload={"id": 123, "price": Decimal("100"), "qty": Decimal("2"), "time": 1791309600000, "venue": "BINANCE"},
             source_sequence="123",
         )
         adapter = type("Adapter", (), {"fetch_trades": lambda self, symbol, limit: (envelope,)})()
@@ -82,7 +82,7 @@ class TradePipelineBoundaryTests(unittest.TestCase):
             event_time=datetime(2026, 10, 6, 18, 0, tzinfo=timezone.utc),
             received_at=datetime(2026, 10, 6, 18, 0, 1, tzinfo=timezone.utc),
             state=AcquisitionState.AVAILABLE,
-            payload={"id": 123, "price": Decimal("100"), "qty": Decimal("2"), "time": 1791309600000},
+            payload={"id": 123, "price": Decimal("100"), "qty": Decimal("2"), "time": 1791309600000, "venue": "BINANCE"},
             source_sequence="123",
         )
         adapter = type("Adapter", (), {"fetch_trades": lambda self, symbol, limit: (envelope,)})()
@@ -131,7 +131,7 @@ class TradePipelineBoundaryTests(unittest.TestCase):
             event_time=datetime(2026, 10, 6, 18, 0, tzinfo=timezone.utc),
             received_at=datetime(2026, 10, 6, 18, 0, 1, tzinfo=timezone.utc),
             state=AcquisitionState.AVAILABLE,
-            payload={"id": 123, "price": Decimal("100"), "qty": Decimal("2"), "time": 1791309600000},
+            payload={"id": 123, "price": Decimal("100"), "qty": Decimal("2"), "time": 1791309600000, "venue": "BINANCE"},
             source_sequence="123",
         )
         self.assertEqual(envelope.event_id, envelope.deduplication_key)

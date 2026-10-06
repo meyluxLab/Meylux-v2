@@ -175,6 +175,11 @@ def build_quality_evidence(
 
     timeframe = _timeframe_context(envelope.payload)
     venue = _optional_context(envelope.payload, "venue", "venue_context")
+    if envelope.event_type.value == "TRADE" and envelope.provider.provider_id == "binance":
+        if venue != "BINANCE":
+            raise ValueError("Binance Spot trade quality evidence requires explicit BINANCE venue context")
+    if venue == "BINANCE" and envelope.provider.provider_id != "binance":
+        raise ValueError("BINANCE venue context is authorized only for Binance provider evidence")
 
     source_identity_hash = envelope.event_id
     logical_material = {
