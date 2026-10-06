@@ -1779,6 +1779,12 @@ records:
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-005 / TO-P4-014 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner next governed-stage directive 2026-10-06
     status: DEFINED / INACTIVE
+  - stable_id: TO-P2-014
+    canonical_name: Governed Binance Spot Trade Acquisition Capability for P5-006
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-014.md
+    traceability: PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / PRQ-2 trade / TO-P4-014 / AR-P4-022 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: AUTHORIZED TO EXECUTE
   - stable_id: TO-P4-014
     canonical_name: Group-C Volume / Volume-Profile Upstream Capability for P5-006
     entity_type: TO
