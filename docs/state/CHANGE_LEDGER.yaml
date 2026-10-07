@@ -3712,3 +3712,36 @@ entries:
       machine_readback: COMPLETED
     continuation: "STEP-P5-006 remains active and authorized; TO-P5-006 is the resumed downstream implementation boundary. This closure does not verify or close the specialist capability."
 
+
+
+  - ledger_id: CL-REQ-P5-006-FORMALIZATION-20261008
+    date_utc: 2026-10-08
+    authority: Project Owner Confirmation — 5m Capability Trace and CONTROL formalization authorization 2026-10-08
+    role: ROL-V2-001
+    action: CONTROL GOVERNANCE FORMALIZATION — 5m SPOT + FUTURES PRODUCT CAPABILITY REQUIREMENT REGISTERED
+    basis: Owner Confirmation 2026-10-08 / 5m Capability Trace / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / docs/registry/requirements.yaml / docs/registry/artifacts.yaml
+    disposition:
+      requirement_stable_id: REQ-P5-006
+      canonical_name: 5m Spot + Futures Product Capability Requirement
+      product_requirement: REQUIRED
+      implementation_state: JIT — NOT AUTHORIZED BY THIS REGISTRATION
+      spot_5m: PARTIAL TECHNICAL SUPPORT — END-TO-END CAPABILITY NOT INDEPENDENTLY VERIFIED
+      futures_5m: ACQUISITION CAPABILITY NOT IMPLEMENTED — END-TO-END CAPABILITY NOT ESTABLISHED
+      step_p5_006: NOT BLOCKED — EXISTING 15m / 1h / 4h ACCEPTANCE BOUNDARY PRESERVED
+      prq3: NOT REDEFINED
+      architecture_contract_schema_p4_math: NO CHANGE AUTHORIZED OR IMPLIED
+      verification: AUTHORITATIVE EVIDENCE + INDEPENDENT VERIFICATION REQUIRED
+    synchronization:
+      requirements_registry: UPDATED — REQ-P5-006
+      artifacts_registry: UPDATED — REQ-P5-006
+      checkpoint: UNCHANGED — current phase/step/active Task Order unchanged
+      phase_registry: UNCHANGED — STEP-P5-006 remains ACTIVE / AUTHORIZED
+      phase_definition: UNCHANGED — no Step scope expansion
+      readme: UNCHANGED — no current-state lifecycle change
+      specialized_implementation_registries: UNCHANGED — no implementation/runtime/test evidence created
+      historical_evidence: UNCHANGED
+      collision_check: PASSED — one REQ-P5-006 record in each applicable registry
+    commits:
+      requirements_registry_commit: ab0b99870479bcd670d7cdee1ea637eadcfcd366
+      artifacts_registry_commit: c0b21c3b463c6662765897cee3a21d43dfc443a3
+    continuation: "Capability commitment is now formally registered. No 5m implementation is authorized by this registration; future resolution proceeds JIT at the owning P2/P3/P4/P5 boundaries when an actual governed dependency requires it."
