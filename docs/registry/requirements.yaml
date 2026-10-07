@@ -78,3 +78,23 @@ records:
       - append-only specialist persistence
       - explicit unavailable/insufficient behavior
       - no later P5 scope
+
+
+  - stable_id: REQ-P5-006
+    canonical_name: 5m Spot + Futures Product Capability Requirement
+    entity_type: REQUIREMENT
+    phase: PH-P5
+    traceability: Owner Confirmation — 5m Capability Trace / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    disposition: PRODUCT CAPABILITY REQUIRED — IMPLEMENTATION JIT / END-TO-END CAPABILITY NOT YET VERIFIED
+    status: REQUIRED
+    constraints_preserved:
+      - 5m market-intelligence capability is required for both Spot and Futures
+      - product requirement is distinct from implementation, execution, testing and independent verification state
+      - Spot 5m has partial technical support but no authoritative end-to-end independent verification
+      - Futures 5m acquisition capability is not currently implemented and therefore end-to-end capability is not established
+      - implementation shall occur at the correct owning boundary when an actual governed dependency requires it
+      - STEP-P5-006 remains bounded to its existing 15m / 1h / 4h acceptance scope and is not expanded by this requirement
+      - PRQ-3 is not redefined to absorb Futures candle acquisition
+      - no architecture, frozen-contract, schema or P4 mathematical change is implied by requirement registration alone
+      - no synthetic, fabricated or unjustified fallback evidence is permitted
+      - capability completion requires authoritative evidence and independent verification
