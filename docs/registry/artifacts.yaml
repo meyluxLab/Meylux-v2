@@ -2042,6 +2042,12 @@ records:
     artifact_path: docs/build-reports/BR-P4-015.md
     traceability: TO-P4-014 / PH-P4 / STEP-P4-006 / STEP-P5-006 dependency / S-17 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: VERIFIED
+  - stable_id: BR-P4-016
+    canonical_name: Producer Build Report — TO-P4-015 Group-C Authoritative Fact Population & Runtime Evidence Resolution
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P4-016.md
+    traceability: TO-P4-015 / PH-P4 post-closure corrective dependency / STEP-P5-006 / Group-C / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: ALLOCATED / PENDING PRODUCER DELIVERY
 
   - stable_id: TO-P2-015
     canonical_name: Binance Spot Trade Evidence Venue Semantics for Group-C Acceptance
