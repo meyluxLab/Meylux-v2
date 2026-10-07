@@ -1802,7 +1802,7 @@ records:
     canonical_name: Group C: Volume, Volume Profile Specialist Capability
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-006.md
-    traceability: PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / TO-P4-014 / AR-P4-022 / TO-P2-014 / AR-P2-AUDIT-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    traceability: PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / TO-P4-014 / AR-P4-022 / TO-P4-015 / AR-P4-023 / TO-P2-014 / AR-P2-AUDIT-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: AUTHORIZED TO EXECUTE
   - stable_id: TO-P4-014
     canonical_name: Group-C Volume / Volume-Profile Upstream Capability for P5-006
