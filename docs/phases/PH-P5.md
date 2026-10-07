@@ -133,12 +133,12 @@ VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation re
 ### `STEP-P5-006` — Group C: Volume, Volume Profile
 
 **Order:** 6  
-**Status:** DEFINED / INACTIVE  
-**Authorization state:** NOT ACTIVATED  
+**Status:** ACTIVE / AUTHORIZED  
+**Authorization state:** ACTIVE / AUTHORIZED  
 **Predecessor:** `STEP-P5-005` — COMPLETE / VERIFIED  
 **Activation basis:** Project Owner next governed-stage directive — 2026-10-06  
-**Active Task Order:** `null`  
-**Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED`; `PRQ-2` trade capability is ESTABLISHED / VERIFIED under `TO-P2-014 / AR-P2-AUDIT-014`. P5 specialist implementation is authorized under `TO-P5-006`.
+**Active Task Order:** `TO-P5-006`  
+**Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED` under `TO-P4-015 / AR-P4-023`; `PRQ-2` trade capability is ESTABLISHED / VERIFIED under `TO-P2-014 / AR-P2-AUDIT-014`. P5 specialist implementation remains bounded to `TO-P5-006`.
 
 Purpose: establish deterministic Group-C specialist capability for `S-03` Volume Analyst and `S-17` Volume Profile Reasoner using authoritative Stage-1 Input Snapshot facts and an independently verified P4 Group-C fact surface.
 
@@ -189,3 +189,14 @@ The Project Owner authorized full root-cause continuation on 2026-10-06 after bo
 ## TO-P2-015 Closure and TO-P4-015 Activation
 
 CONTROL independently verified `TO-P2-015` under `AR-P2-AUDIT-015` using terminal CI, real Binance Spot runtime acquisition, PostgreSQL persistence/read-back, and deterministic replay evidence. `TO-P2-015` is VERIFIED / COMPLETE. The explicit Binance venue prerequisite is established. The remaining Group-C prerequisite is authoritative P4 fact population/runtime evidence; `TO-P4-015` is AUTHORIZED TO EXECUTE. `STEP-P5-006` remains ACTIVE / AUTHORIZED and is not closed.
+
+## TO-P4-015 Closure / Group-C Upstream Resolution
+
+`TO-P4-015` / `BR-P4-016` is **VERIFIED / COMPLETE** under `AR-P4-023`.
+
+CONTROL independently verified the real persisted Group-C upstream boundary: 1,040,100 canonical trades, 22 closed BTCUSDT/15m candles, 23 persisted quantitative vectors including `VOLUME_SMA`, `RVOL`, `VOLUME_SPIKE` and `VOLUME_CLIMAX`, and two valid BTCUSDT/15m Volume Profile sessions with explicit Binance venue context and authoritative knowledge time. Replay remained idempotent and append-only mutation probes were rejected.
+
+The historical `BR-P4-015` registry/report status discrepancy remains preserved as historical evidence and is reconciled by `AR-P4-022`; no historical artifact was rewritten.
+
+The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. `STEP-P5-006` remains **ACTIVE / AUTHORIZED** and `TO-P5-006` is the resumed downstream implementation boundary. This closure does not verify or close the specialist capability.
+
