@@ -3676,3 +3676,39 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED — no unabsorbed staging record
     continuation: "TO-P4-015 is now the authorized next owning-boundary corrective Task Order; STEP-P5-006 remains active and is not closed."
+
+  - ledger_id: CL-P4-015-CLOSURE-20261007
+    date_utc: 2026-10-07
+    authority: CONTROL independent audit AR-P4-023 under TO-P4-015
+    role: ROL-V2-001
+    action: CONTROL CLOSURE — GROUP-C UPSTREAM FACT/EVIDENCE PREREQUISITE VERIFIED / COMPLETE
+    basis: BR-P4-016 / AR-P4-023 / TO-P4-015 / implementation 87b74954cd4fbd2d004a3212d965f42b97c3e870 / merged revision 56bebeb4114aacd8d8999da3325b25c193db0b1a / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    disposition:
+      task_order: TO-P4-015
+      task_order_status: VERIFIED / COMPLETE
+      build_report: BR-P4-016 VERIFIED
+      audit_report: AR-P4-023 APPROVED / VERIFIED
+      group_c_upstream_prerequisite: ESTABLISHED / VERIFIED
+      step_p5_006_status: ACTIVE / AUTHORIZED
+      resumed_active_task_order: TO-P5-006
+      historical_br_p4_015: PRESERVED — registry VERIFIED state reconciled by AR-P4-022; historical report unchanged
+    findings:
+      - "Independent clean-runtime read-back established 1,040,100 canonical trades, 22 closed BTCUSDT/15m candles, 2 valid BTCUSDT/15m S-17 sessions, and 23 quantitative vectors."
+      - "All 23 vectors carry explicit BINANCE venue context; no vector has null knowledge_time or knowledge_time greater than event_time."
+      - "Required VOLUME_SMA, RVOL, VOLUME_SPIKE and VOLUME_CLIMAX facts are genuinely persisted."
+      - "The accepted S-17 intervals retain explicit half-open boundaries, source provenance and authoritative knowledge_time."
+      - "Replay evidence remained 0 BEFORE 2 AFTER 2; append-only UPDATE/DELETE probes were rejected and final counts remained unchanged."
+      - "The historical Binance trade-coverage discontinuity remains explicitly non-claimed; no synthetic bridging or historical rewriting was introduced."
+    synchronization:
+      audit_artifact: CREATED — AR-P4-023
+      artifacts_registry: UPDATED — BR-P4-016 VERIFIED; AR-P4-023 registered; TO-P4-015 VERIFIED / COMPLETE
+      phase_registry: UPDATED — TO-P4-015 VERIFIED / COMPLETE; active_task_order TO-P5-006; no active corrective dependency
+      checkpoint: UPDATED — completion_audit AR-P4-023; active_task_order TO-P5-006
+      readme: UPDATED — Group-C prerequisite established; TO-P5-006 active downstream boundary
+      specialized_registries: CHECKED — no separate P4-015 test/database/runtime/security/configuration/performance/observability record was present or required for this corrective closure
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED — no unabsorbed TO-P4-015 staging record
+      historical_evidence: UNCHANGED
+      machine_readback: COMPLETED
+    continuation: "STEP-P5-006 remains active and authorized; TO-P5-006 is the resumed downstream implementation boundary. This closure does not verify or close the specialist capability."
+
