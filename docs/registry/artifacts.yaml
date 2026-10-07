@@ -2086,3 +2086,10 @@ records:
     artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007.md
     traceability: TO-P2-015 / AR-P2-AUDIT-015
     status: VERIFIED
+
+  - stable_id: REQ-P5-006
+    canonical_name: 5m Spot + Futures Product Capability Requirement
+    entity_type: REQUIREMENT
+    artifact_path: docs/registry/requirements.yaml
+    traceability: Owner Confirmation — 5m Capability Trace / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / PH-P5 / STEP-P5-006 (non-blocking)
+    status: REQUIRED — CAPABILITY NOT YET VERIFIED
