@@ -89,17 +89,17 @@ TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed u
 
 ## Post-Closure S-12 Causal Resolution
 
-`TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No corrective implementation is required by that investigation; historical `STEP-P5-005 / TO-P5-005` remains COMPLETE / VERIFIED and `STEP-P5-006` is ACTIVE / AUTHORIZED under `TO-P5-006`; `TO-P2-014` is VERIFIED / COMPLETE.
+`TO-P5-005-CORRECTIVE-001` is **VERIFIED / COMPLETE** under `AR-P5-006`. CONTROL established Branch A: no qualifying liquidity pool existed in the authoritative P4 input/output boundary for the historical S-12 case. No corrective implementation is required by that investigation; historical `STEP-P5-005 / TO-P5-005` remains COMPLETE / VERIFIED and `STEP-P5-006` is COMPLETE / VERIFIED under `AR-P5-009`; `TO-P2-014` is VERIFIED / COMPLETE.
 
 
 ## Current Group-C Resolution State
 
-`TO-P5-006` specialist runtime execution and final capability acceptance are established under `AR-P5-009`. The required authoritative Group-C fact/evidence population has now been established under `TO-P4-015 / AR-P4-023`, including persisted S-03 volume facts and authoritative S-17 BTCUSDT/15m profiles. `TO-P5-006` remains the active specialist implementation boundary; no specialist capability is declared VERIFIED / COMPLETE / CLOSED by this prerequisite-resolution closure.
+`TO-P5-006` specialist runtime execution and final capability acceptance are established under `AR-P5-009`. The required authoritative Group-C fact/evidence population was established under `TO-P4-015 / AR-P4-023`, including persisted S-03 volume facts and authoritative S-17 BTCUSDT/15m profiles. `TO-P5-006` is VERIFIED / COMPLETE and `STEP-P5-006` is COMPLETE / VERIFIED; Phase 5 remains ACTIVE / AUTHORIZED and later Steps remain unauthorized.
 
 
 ## TO-P2-015 Closure
 
-`TO-P2-015` — Binance Spot trade venue evidence semantics — is **VERIFIED / COMPLETE** under `AR-P2-AUDIT-015`. CONTROL independently established terminal CI success, real Binance Spot trade acquisition with explicit `BINANCE` venue, P3 quality evidence, canonical persistence/read-back, deterministic replay, and bounded SentinelX runtime restoration. `STEP-P5-006` remains active and unresolved; `TO-P4-015` is the active corrective boundary for the remaining authoritative Group-C fact population.
+`TO-P2-015` — Binance Spot trade venue evidence semantics — is **VERIFIED / COMPLETE** under `AR-P2-AUDIT-015`. CONTROL independently established terminal CI success, real Binance Spot trade acquisition with explicit `BINANCE` venue, P3 quality evidence, canonical persistence/read-back, deterministic replay, and bounded SentinelX runtime restoration. The later Group-C upstream boundary was subsequently verified under `AR-P4-023`, and `STEP-P5-006` was independently completed under `AR-P5-009`.
 
 
 ## TO-P5-006 Closure
