@@ -135,15 +135,14 @@ Before this audit was finalized, CONTROL detected and corrected the stale lifecy
 
 No Step/Phase lifecycle is being reopened. The active governed boundary remains a post-closure PRQ-2 continuation under `TO-P2-013`.
 
-CONTROL-owned closure synchronization must now reconcile:
+CONTROL-owned closure synchronization has now been completed and independently read back. The synchronized closure state confirms:
 
-- `CURRENT_CHECKPOINT.json`;
-- `README.md`;
-- `docs/registry/artifacts.yaml`;
-- `docs/phases/PH-P5.md` where applicable;
-- `docs/state/CHANGE_LEDGER.yaml`;
-- the new audit record `AR-P2-AUDIT-013`;
-- Build Report lifecycle status.
+- `CURRENT_CHECKPOINT.json` records `active_task_order = null`, `BR-P2-013`, `AR-P2-AUDIT-013`, and `TO-P2-013` as the completed governed boundary;
+- `README.md` reflects the cleared active Task Order and verified TO-P2-013 status;
+- `docs/registry/artifacts.yaml` records `TO-P2-013 VERIFIED / COMPLETE`, `BR-P2-013 VERIFIED`, and `AR-P2-AUDIT-013 APPROVED / VERIFIED`;
+- `docs/phases/PH-P5.md` records the post-closure prerequisite resolution without reopening `STEP-P5-006` or activating a later P5 Step;
+- `docs/state/CHANGE_LEDGER.yaml` records the complete CONTROL-owned closure synchronization;
+- the implementation and Build Report are present on authoritative `main` after PR #73 merge `4dcdf918bdb1cff027b0ceccca62949373cf6dcd`.
 
 ## 9. Final disposition
 
