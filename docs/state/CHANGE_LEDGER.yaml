@@ -3897,3 +3897,21 @@ entries:
       readme: UNCHANGED
       historical_evidence: UNCHANGED
     continuation: "No later Step is activated by this correction; next-boundary determination remains independent."
+
+  - ledger_id: CL-GROUP-D-PREREQ-CONTINUATION-20261008
+    date_utc: 2026-10-08
+    authority: Project Owner Directive — R1–R7 Operating Application and Full Authorization for Group-D Prerequisite Resolution
+    role: ROL-V2-001
+    action: CONTROL ACTIVATION — TO-P2-013
+    disposition:
+      P5_006: "historical COMPLETE / VERIFIED; not reopened"
+      phase: "PH-P5 ACTIVE / AUTHORIZED"
+      current_step: "STEP-P5-006 COMPLETE / VERIFIED"
+      active_task_order: "TO-P2-013"
+      boundary: "PRQ-2 / S-05 MEXC Spot order-book/depth capability"
+      PRQ-2_trade: "already ESTABLISHED / VERIFIED under TO-P2-014 / AR-P2-AUDIT-014"
+      PRQ-2_remaining: "MEXC/second-venue order-book/depth surface"
+      PRQ-3: "OPEN; subsequent governed dependency"
+    authorization: "Owner explicitly authorized full governed Group-D prerequisite resolution on 2026-10-08; this activation does not authorize PRQ-3, STEP-P5-007, trading, Futures, Forex, or unrelated scope."
+    R1_R7: "Applied from action initiation; finalization cycle remains mandatory."
+    closure_sync: "Activation synchronization only; no Step/Phase closure declared."
