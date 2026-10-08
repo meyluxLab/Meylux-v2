@@ -82,6 +82,41 @@ class MEXCOrderBookTests(unittest.TestCase):
         self.assertEqual(second.status, ReconstructionStatus.READY)
         self.assertEqual(second.version, 103)
 
+    def test_bootstrap_overlap_semantics_are_independent_of_evidence_retention(self):
+        r = MEXCOrderBookReconstructor("BTCUSDT", max_evidence_ids=1)
+        bootstrap = r.apply_snapshot(snapshot(100))
+        self.assertEqual(bootstrap.status, ReconstructionStatus.READY)
+        first = r.apply_depth(depth(99, 101, bids=(("100", "3"),)))
+        self.assertEqual(first.status, ReconstructionStatus.READY)
+        self.assertEqual(r.version, 101)
+        self.assertEqual(len(r.evidence_event_ids()), 1)
+
+        unsupported_overlap = r.apply_depth(depth(101, 102, bids=(("100", "4"),)))
+        self.assertEqual(unsupported_overlap.status, ReconstructionStatus.RECOVERY_REQUIRED)
+        self.assertIsNone(unsupported_overlap.canonical)
+        self.assertIsNone(r.canonical())
+
+        recovered = r.apply_depth_with_recovery(
+            depth(101, 102),
+            lambda: snapshot(200, bids=(("100", "5"),), asks=(("101", "2"),)),
+        )
+        self.assertEqual(recovered.status, ReconstructionStatus.RECOVERED)
+        self.assertEqual(recovered.version, 200)
+        self.assertEqual(r.canonical().bids, ((Decimal("100"), Decimal("5")),))
+        self.assertEqual(len(r.evidence_event_ids()), 1)
+
+    def test_bootstrap_overlap_failed_recovery_with_bounded_retention_remains_unavailable(self):
+        r = MEXCOrderBookReconstructor("BTCUSDT", max_evidence_ids=1)
+        r.apply_snapshot(snapshot(100))
+        self.assertEqual(r.apply_depth(depth(99, 101)).status, ReconstructionStatus.READY)
+        out = r.apply_depth_with_recovery(
+            depth(101, 102),
+            lambda: env({}, state=AcquisitionState.UNAVAILABLE),
+        )
+        self.assertEqual(out.status, ReconstructionStatus.UNAVAILABLE)
+        self.assertIsNone(r.canonical())
+        self.assertEqual(len(r.evidence_event_ids()), 0)
+
     def test_gap_requires_recovery_and_hides_stale_state(self):
         r = MEXCOrderBookReconstructor("BTCUSDT")
         r.apply_snapshot(snapshot(100))
