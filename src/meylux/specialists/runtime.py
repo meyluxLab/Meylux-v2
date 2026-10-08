@@ -13,6 +13,7 @@ from meylux.specialists.persistence import SpecialistPersistence
 from meylux.specialists.s10 import S10DataQualityAnalyst, S10SemanticError, snapshot_from_json
 from meylux.specialists.group_a import ANALYSTS, GroupASemanticError
 from meylux.specialists.group_b import ANALYSTS as GROUP_B_ANALYSTS, GroupBSemanticError
+from meylux.specialists.group_c import ANALYSTS as GROUP_C_ANALYSTS, GroupCSemanticError
 
 _LOG = configure_logging(logger_name="meylux.specialist")
 
@@ -20,7 +21,7 @@ PAYLOAD_CONTRACT = "CTR-P5-SPECIALIST-SNAPSHOT-1.0"
 QUEUE_NAME = "specialist-stage1"
 DLQ_NAME = "specialist-stage1"
 SPECIALIST_ID = "S-10"
-SUPPORTED_SPECIALIST_IDS = frozenset({"S-10", "S-01", "S-06", "S-08", "S-02", "S-11", "S-12"})
+SUPPORTED_SPECIALIST_IDS = frozenset({"S-10", "S-01", "S-06", "S-08", "S-02", "S-11", "S-12", "S-03", "S-17"})
 
 
 def specialist_policy(config: Any) -> QueuePolicy:
@@ -111,9 +112,11 @@ class SpecialistWorkerHandler:
                 output = analyst.analyze(snapshot)
             elif specialist_id in ANALYSTS:
                 output = ANALYSTS[specialist_id](snapshot, self.config)
-            else:
+            elif specialist_id in GROUP_B_ANALYSTS:
                 output = GROUP_B_ANALYSTS[specialist_id](snapshot, self.config)
-        except (S10SemanticError, GroupASemanticError, GroupBSemanticError):
+            else:
+                output = GROUP_C_ANALYSTS[specialist_id](snapshot, self.config)
+        except (S10SemanticError, GroupASemanticError, GroupBSemanticError, GroupCSemanticError):
             raise
         except Exception as exc:
             raise S10SemanticError("unexpected specialist semantic/contract failure") from exc
