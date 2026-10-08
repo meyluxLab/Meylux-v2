@@ -1777,8 +1777,8 @@ records:
     canonical_name: Group C: Volume, Volume Profile
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
-    traceability: PH-P5 / STEP-P5-005 / TO-P4-014 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner next governed-stage directive 2026-10-06
-    status: DEFINED / INACTIVE
+    traceability: PH-P5 / STEP-P5-005 / TO-P5-006 / TO-P4-015 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner resume directive 2026-10-08
+    status: ACTIVE / AUTHORIZED
   - stable_id: TO-P2-014
     canonical_name: Governed Binance Spot Trade Acquisition Capability for P5-006
     entity_type: TO
