@@ -57,6 +57,7 @@ class MEXCOrderBookReconstructor:
         self._max_evidence_ids = max_evidence_ids
         self._state: _BookState | None = None
         self._recovery_required = False
+        self._bootstrap_overlap_pending = False
         self._recovery_attempts = 0
         self._last_recovery_reason: str | None = None
 
@@ -79,6 +80,7 @@ class MEXCOrderBookReconstructor:
     def reset(self) -> None:
         self._state = None
         self._recovery_required = False
+        self._bootstrap_overlap_pending = False
         self._last_recovery_reason = None
 
     def apply_snapshot(self, envelope: AcquisitionEnvelope) -> ReconstructionResult:
@@ -102,6 +104,7 @@ class MEXCOrderBookReconstructor:
             envelope.provenance.provenance_id, (envelope.event_id,),
         )
         self._recovery_required = False
+        self._bootstrap_overlap_pending = True
         self._last_recovery_reason = None
         return ReconstructionResult(ReconstructionStatus.READY, version, self._canonical())
 
@@ -140,7 +143,7 @@ class MEXCOrderBookReconstructor:
             return ReconstructionResult(ReconstructionStatus.RECOVERY_REQUIRED, None, reason=self._last_recovery_reason)
         # MEXC snapshot bootstrap may be followed by an update spanning the snapshot boundary.
         # After the first accepted live update, overlap is not accepted as a substitute for exact continuity.
-        if start < required and len(self._state.evidence_event_ids) > 1:
+        if start < required and not self._bootstrap_overlap_pending:
             self._require_recovery("unsupported version overlap after established live state")
             return ReconstructionResult(ReconstructionStatus.RECOVERY_REQUIRED, None, reason=self._last_recovery_reason)
 
@@ -160,6 +163,7 @@ class MEXCOrderBookReconstructor:
             self.instrument_id, end, next_bids, next_asks, _utc(envelope.event_time),
             envelope.provenance.provenance_id, ids,
         )
+        self._bootstrap_overlap_pending = False
         return ReconstructionResult(ReconstructionStatus.READY, end, self._canonical())
 
     def apply_depth_with_recovery(self, envelope: AcquisitionEnvelope, snapshot_loader: Callable[[], AcquisitionEnvelope]) -> ReconstructionResult:
@@ -195,6 +199,7 @@ class MEXCOrderBookReconstructor:
     def _require_recovery(self, reason: str) -> None:
         self._state = None
         self._recovery_required = True
+        self._bootstrap_overlap_pending = False
         self._last_recovery_reason = reason
 
     def _invalidate(self, reason: str) -> ReconstructionResult:
