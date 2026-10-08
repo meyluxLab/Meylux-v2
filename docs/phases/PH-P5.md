@@ -1,8 +1,8 @@
 # PH-P5 — Specialist Market Intelligence Layer
 
 **Status:** ACTIVE / AUTHORIZED
-**Current Step Lifecycle:** `STEP-P5-006` — ACTIVE / AUTHORIZED under `TO-P5-006`
-**Active Task Order:** `TO-P5-006`
+**Current Step Lifecycle:** `STEP-P5-006` — COMPLETE / VERIFIED under `TO-P5-006`
+**Active Task Order:** `null`
 **Last Completed Upstream Dependency:** `TO-P4-015` — VERIFIED / COMPLETE under `AR-P4-023`
 **Last Completed Task Order:** `TO-P4-015`  
 **Last Completed Corrective Dependency:** `TO-P4-015` — VERIFIED / COMPLETE under `AR-P4-023`  
@@ -200,3 +200,8 @@ The historical `BR-P4-015` registry/report status discrepancy remains preserved 
 
 The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. `STEP-P5-006` remains **ACTIVE / AUTHORIZED** and `TO-P5-006` is the resumed downstream implementation boundary. This closure does not verify or close the specialist capability.
 
+
+
+## STEP-P5-006 Closure
+
+`STEP-P5-006` / `TO-P5-006` is **COMPLETE / VERIFIED** under `AR-P5-009`. CONTROL independently verified S-03 and S-17 on the governed BTCUSDT/BINANCE/15m primary slice using the authoritative Group-C fact surface established under `TO-P4-015 / AR-P4-023`, real Redis → worker → PostgreSQL execution, direct read-back, deterministic replay and append-only persistence. The overall specialist outputs remain `PARTIAL` only because configured combinations without authoritative facts remain explicitly `INSUFFICIENT_DATA`; no fallback was fabricated. Phase 5 remains ACTIVE / AUTHORIZED and no later Step is activated.
