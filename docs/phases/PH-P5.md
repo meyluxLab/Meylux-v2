@@ -183,12 +183,12 @@ The Group-C upstream gate is established under `TO-P4-014 / AR-P4-022`; `STEP-P5
 
 ## STEP-P5-006 Upstream Resolution Continuation
 
-The Project Owner authorized full root-cause continuation on 2026-10-06 after bounded runtime acceptance established that the specialist execution path is operational but the governed upstream Group-C fact/evidence population is incomplete. The immediate owning-boundary corrective Task Order is `TO-P2-015` (Binance Spot trade venue evidence), with `TO-P4-015` defined as the subsequent P4 fact-population/runtime-evidence resolution. `STEP-P5-006` remains ACTIVE / AUTHORIZED; no VERIFIED / COMPLETE / CLOSED claim is made for the Step.
+The Project Owner authorized full root-cause continuation on 2026-10-06 after bounded runtime acceptance established that the specialist execution path is operational but the governed upstream Group-C fact/evidence population is incomplete. The immediate owning-boundary corrective Task Order is `TO-P2-015` (Binance Spot trade venue evidence), with `TO-P4-015` defined as the subsequent P4 fact-population/runtime-evidence resolution. At that historical point, `STEP-P5-006` was ACTIVE / AUTHORIZED; the subsequent closure is recorded under `AR-P5-009`.
 
 
 ## TO-P2-015 Closure and TO-P4-015 Activation
 
-CONTROL independently verified `TO-P2-015` under `AR-P2-AUDIT-015` using terminal CI, real Binance Spot runtime acquisition, PostgreSQL persistence/read-back, and deterministic replay evidence. `TO-P2-015` is VERIFIED / COMPLETE. The explicit Binance venue prerequisite is established. The remaining Group-C prerequisite is authoritative P4 fact population/runtime evidence; `TO-P4-015` is AUTHORIZED TO EXECUTE. `STEP-P5-006` remains ACTIVE / AUTHORIZED and is not closed.
+CONTROL independently verified `TO-P2-015` under `AR-P2-AUDIT-015` using terminal CI, real Binance Spot runtime acquisition, PostgreSQL persistence/read-back, and deterministic replay evidence. `TO-P2-015` is VERIFIED / COMPLETE. The explicit Binance venue prerequisite is established. The remaining Group-C prerequisite is authoritative P4 fact population/runtime evidence; `TO-P4-015` is AUTHORIZED TO EXECUTE. At that historical point, `STEP-P5-006` remained ACTIVE / AUTHORIZED; it was subsequently closed under `AR-P5-009`.
 
 ## TO-P4-015 Closure / Group-C Upstream Resolution
 
@@ -198,7 +198,7 @@ CONTROL independently verified the real persisted Group-C upstream boundary: 1,0
 
 The historical `BR-P4-015` registry/report status discrepancy remains preserved as historical evidence and is reconciled by `AR-P4-022`; no historical artifact was rewritten.
 
-The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. `STEP-P5-006` remains **ACTIVE / AUTHORIZED** and `TO-P5-006` is the resumed downstream implementation boundary. This closure does not verify or close the specialist capability.
+The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. At that historical point, `STEP-P5-006` remained ACTIVE / AUTHORIZED and `TO-P5-006` was the resumed downstream implementation boundary; the specialist capability was subsequently independently verified under `AR-P5-009`.
 
 
 
