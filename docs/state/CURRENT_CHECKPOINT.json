@@ -4,7 +4,7 @@
   "phase": "PH-P5",
   "step": "STEP-P5-006",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; PRQ-2 GROUP-D PREREQUISITE RESOLUTION ACTIVE UNDER TO-P2-013",
+  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-013 VERIFIED / COMPLETE; PRQ-2 GROUP-D MEXC Spot order-book prerequisite resolved",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -19,12 +19,12 @@
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P2-013",
-  "last_build_report": "BR-P5-008",
-  "last_audit_report": "AR-P5-009",
+  "last_build_report": "BR-P2-013",
+  "last_audit_report": "AR-P2-AUDIT-013",
   "last_execution_log": "EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008",
-  "active_task_order": "TO-P2-013",
-  "completed_task_order": "TO-P5-006",
-  "completion_audit": "AR-P5-009",
+  "active_task_order": null,
+  "completed_task_order": "TO-P2-013",
+  "completion_audit": "AR-P2-AUDIT-013",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
     "AR-ARCH-CONTENT-001",
@@ -384,7 +384,10 @@
     "CMP-P5-006",
     "OBS-P5-006",
     "TO-P5-006",
-    "STEP-P5-006"
+    "STEP-P5-006",
+    "TO-P2-013",
+    "BR-P2-013",
+    "AR-P2-AUDIT-013"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -395,7 +398,7 @@
     "OQ-GOV-CONSTITUTION-STABLE-ID",
     "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control."
   ],
-    "Project Owner authorized full governed continuation of Group-D prerequisite resolution on 2026-10-08; R1–R7 apply from action initiation through finalization. CONTROL activated TO-P2-013 for the prepared MEXC Spot order-book/depth prerequisite boundary; P5-006 historical closure remains immutable and PRQ-3 remains a subsequent governed dependency.",
+  "active_continuation_note": "Project Owner authorized full governed continuation of Group-D prerequisite resolution on 2026-10-08; R1–R7 apply from action initiation through finalization. CONTROL activated TO-P2-013 for the MEXC Spot order-book/depth prerequisite boundary; P5-006 historical closure remains immutable and PRQ-3 remains a subsequent governed dependency.",
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
     "PH-P0 is CLOSED / VERIFIED; there is no subsequent Phase 0 Step.",
@@ -453,7 +456,8 @@
     "Project Owner explicitly authorized full root-cause continuation on 2026-10-06. TO-P2-015 is AUTHORIZED TO EXECUTE as the immediate owning-boundary correction for explicit Binance Spot trade venue evidence required by STEP-P5-006; TO-P4-015 is defined and pending its completion.",
     "CONTROL independently verified TO-P2-015 under AR-P2-AUDIT-015 after terminal CI success and bounded real Binance Spot runtime/read-back/replay evidence. TO-P2-015 is VERIFIED / COMPLETE; the explicit Binance venue prerequisite is established. TO-P4-015 is now AUTHORIZED TO EXECUTE as the next owning-boundary Group-C fact-population resolution.",
     "TO-P5-006 is VERIFIED / COMPLETE under AR-P5-009; STEP-P5-006 is COMPLETE / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; later P5 Steps remain unauthorized.",
-    "CONTROL independently verified S-03 and S-17 on the governed BTCUSDT/BINANCE/15m primary slice using the authoritative TO-P4-015 / AR-P4-023 Group-C fact surface, real Redis -> worker -> PostgreSQL execution, persistence/read-back and deterministic replay."
+    "CONTROL independently verified S-03 and S-17 on the governed BTCUSDT/BINANCE/15m primary slice using the authoritative TO-P4-015 / AR-P4-023 Group-C fact surface, real Redis -> worker -> PostgreSQL execution, persistence/read-back and deterministic replay.",
+    "TO-P2-013 is VERIFIED / COMPLETE under AR-P2-AUDIT-013; its implementation is merged into authoritative main; no P5 Step was activated; PRQ-3 remains a subsequent governed dependency."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
