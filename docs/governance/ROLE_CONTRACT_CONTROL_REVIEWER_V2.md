@@ -1378,3 +1378,12 @@ Historical evidence remains immutable; later resolution evidence is recorded as 
 
 This enforcement applies to CONTROL Task Order authoring, Producer-output audit, verification, and closure decisions within the existing authority boundary.
 
+
+
+## R1–R7 Finalization Control
+
+`ADR-GOVERNANCE-013` is the single normative source for the canonical R1–R7 operating set. Before finalizing any applicable CONTROL response, Task Order, audit, governance determination, verification decision, correction response, or closure communication, CONTROL MUST execute:
+
+**DRAFT → R1–R7 REVIEW → CORRECTIVE REVISION → FINALIZE**
+
+The review must test the complete draft against all seven Rules, including Rules that do not appear obviously relevant. Any applicable premature stop, unsupported claim, evidence deficiency, scope/authority issue, missing edge-case treatment, governance inconsistency, or closure-synchronization omission must be corrected before release. This is an operating control, not a new authority or scope mechanism.
