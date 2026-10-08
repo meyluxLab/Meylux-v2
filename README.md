@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `COMPLETE / VERIFIED`; the upstream Group-C prerequisite has been established under `TO-P4-015 / AR-P4-023`; the trade portion of `PRQ-2` remains `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Active Task Order:** `TO-P2-013` — authorized Group-D PRQ-2 prerequisite resolution; `TO-P5-006` remains VERIFIED / COMPLETE under `AR-P5-009`; `TO-P4-015` is VERIFIED / COMPLETE under `AR-P4-023`; `TO-P2-015` is VERIFIED / COMPLETE under `AR-P2-AUDIT-015`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
+- **Active Task Order:** `null` — `TO-P2-013` is VERIFIED / COMPLETE under `AR-P2-AUDIT-013`; `TO-P5-006` remains VERIFIED / COMPLETE under `AR-P5-009`; `TO-P4-015` is VERIFIED / COMPLETE under `AR-P4-023`; `TO-P2-015` is VERIFIED / COMPLETE under `AR-P2-AUDIT-015`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -27,7 +27,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 
 - Constitution Stable ID: `IDENTITY UNCONFIRMED`.
 - `OQ-P4-006-MEXC-RESOURCEWARNING` remains on record.
-- `OQ-P5-002-PRQ2-VENUE-ORDERFLOW` remains open and is actively being resolved under `TO-P2-013`.
+- `OQ-P5-002-PRQ2-VENUE-ORDERFLOW` is resolved for the MEXC Spot order-book/depth prerequisite under `TO-P2-013` / `AR-P2-AUDIT-013`; PRQ-3 remains a subsequent governed dependency.
 - `OQ-P5-002-PRQ3-DERIVATIVES` remains open and is a subsequent governed dependency after the current PRQ-2 boundary.
 - Futures acquisition capability is not present in the current Binance/MEXC adapters; the bounded dependency route remains through the owning P2 boundary when a concrete P5 need arises.
 
@@ -81,7 +81,7 @@ Phase 5 is established and authorized under the Project Owner Phase 5 Re-Directi
 `TO-P3-010` is `VERIFIED / COMPLETE` under `AR-P3-010`; PR #58 merged as `56ba10f5c964319e966b8272c008823c3128b765`. The corrected P3-009 Docker evidence harness now requires Timescale initialization completion plus final-server SQL readiness before migrations and preserves actionable subprocess/container diagnostics. Historical P3-009 failures remain preserved; no P3/P5 semantic boundary or Phase/Step closure was reopened. `STEP-P5-004` / `TO-P5-004` is independently verified and closed under `AR-P5-004`. `STEP-P5-005` / `TO-P5-005` is complete and independently verified under `AR-P5-005`; `TO-P5-005-CORRECTIVE-001` is also VERIFIED / COMPLETE under `AR-P5-006`, establishing the historical S-12 Branch-A causal result; `TO-P4-013` / `AR-P4-020` established the required Group-B upstream capability.
 
 
-TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed under `AR-P2-AUDIT-009`; `MEXC_FINALITY` remains `UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED`. `TO-P2-010` reached `VERIFIED / COMPLETE` under `AR-P2-AUDIT-010`; `TO-P2-011` and `TO-P2-012` are also `VERIFIED / COMPLETE`; `TO-P2-013` remains `PREPARED / NOT ACTIVATED`. These post-closure P2 records remain separate from the active `PH-P5 / STEP-P5-003` boundary.
+TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed under `AR-P2-AUDIT-009`; `MEXC_FINALITY` remains `UNAVAILABLE / NOT AUTHORITATIVELY ESTABLISHED`. `TO-P2-010` reached `VERIFIED / COMPLETE` under `AR-P2-AUDIT-010`; `TO-P2-011` and `TO-P2-012` are also `VERIFIED / COMPLETE`; `TO-P2-013` is `VERIFIED / COMPLETE` under `AR-P2-AUDIT-013` and remains a post-closure P2/Group-D prerequisite record; it does not activate or reopen any P5 Step. These post-closure P2 records remain separate from the `PH-P5 / STEP-P5-006` lifecycle.
 
 
 ## TO-P5-004 Closure
