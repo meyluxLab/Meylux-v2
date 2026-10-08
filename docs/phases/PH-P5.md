@@ -133,11 +133,11 @@ VPS/runtime work is CONTROL-owned and SentinelX-only. Producer implementation re
 ### `STEP-P5-006` — Group C: Volume, Volume Profile
 
 **Order:** 6  
-**Status:** ACTIVE / AUTHORIZED  
+**Status:** COMPLETE / VERIFIED  
 **Authorization state:** ACTIVE / AUTHORIZED  
 **Predecessor:** `STEP-P5-005` — COMPLETE / VERIFIED  
 **Activation basis:** Project Owner next governed-stage directive — 2026-10-06  
-**Active Task Order:** `TO-P5-006`  
+**Active Task Order:** `null`  
 **Upstream gate:** `PRQ-1 Group-C = ESTABLISHED / VERIFIED` under `TO-P4-015 / AR-P4-023`; `PRQ-2` trade capability is ESTABLISHED / VERIFIED under `TO-P2-014 / AR-P2-AUDIT-014`. P5 specialist implementation remains bounded to `TO-P5-006`.
 
 Purpose: establish deterministic Group-C specialist capability for `S-03` Volume Analyst and `S-17` Volume Profile Reasoner using authoritative Stage-1 Input Snapshot facts and an independently verified P4 Group-C fact surface.
@@ -146,7 +146,7 @@ The Step consumes authoritative upstream volume and Volume Profile facts. It doe
 
 The Step acceptance boundary includes deterministic S-03 volume/RVOL interpretation and S-17 Value Area / POC / VAH / VAL / HVN / LVN interpretation, with previous-session comparison only where the required persisted session history actually exists. Real unavailable/insufficient states remain explicit where evidence warrants them.
 
-`STEP-P5-006` is ACTIVE / AUTHORIZED under `TO-P5-006`; later P5 Steps remain unauthorized.
+`STEP-P5-006` is COMPLETE / VERIFIED under `TO-P5-006` and `AR-P5-009`; later P5 Steps remain unauthorized.
 
 Required evidence includes deterministic specialist behavior, boundary/golden-vector tests, no-lookahead, EvidenceRef resolution, real persisted upstream facts, replay/idempotency, append-only persistence/read-back, specialist independence, applicable runtime/VPS evidence, and reproducible performance/resource evidence.
 
