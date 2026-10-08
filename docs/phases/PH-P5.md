@@ -211,3 +211,11 @@ The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. At that historical 
 `TO-P2-013` was activated by CONTROL on 2026-10-08 as a bounded post-closure PRQ-2 prerequisite-resolution Task Order for MEXC Spot order-book snapshot and versioned aggregated depth. It was independently audited under `AR-P2-AUDIT-013` after the F-01 bounded-evidence-retention correction and is now **VERIFIED / COMPLETE**.
 
 This continuation does not reopen `STEP-P5-006`, does not create or activate a new P5 Step, and does not authorize PRQ-3 implementation. `PH-P5` remains ACTIVE / AUTHORIZED with `STEP-P5-006` COMPLETE / VERIFIED; no later P5 Step is activated by this prerequisite resolution.
+
+## Active PRQ-3 Group-D Prerequisite Resolution — TO-P2-017
+
+Following the Project Owner directive dated 2026-10-09, CONTROL determined that the next governed action is not activation of `STEP-P5-007`. The remaining executable dependency is the owning P2 boundary for `PRQ-3 / S-04 Derivatives`.
+
+`TO-P2-017` is therefore **AUTHORIZED TO EXECUTE — INVESTIGATION ONLY**. It establishes the bounded P2 assessment/change-control preparation needed to determine the defensible acquisition/persistence capability for funding/OI/basis and the exact ADR/ACR/change-control path, if any. It does not authorize derivatives implementation, provider runtime activity, VPS mutation, contract/schema/architecture change, or `STEP-P5-007` activation.
+
+`STEP-P5-006` and `TO-P2-013` remain historically `COMPLETE / VERIFIED`. Their closure is not reopened or rewritten. Expected next chain: `TO-P2-017 → BR-P2-017 → AR-P2-AUDIT-017 → CONTROL-owned closure synchronization`.
