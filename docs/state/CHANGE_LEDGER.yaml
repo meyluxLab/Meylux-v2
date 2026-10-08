@@ -3814,6 +3814,6 @@ entries:
       standalone_status_documents: CHECKED
       supplemental_staging_registry: CHECKED — no unabsorbed staging record
       historical_evidence: UNCHANGED
-      machine_readback: PENDING_FINAL_READBACK
+      machine_readback: COMPLETED
     conclusion: "TO-P5-006 and STEP-P5-006 are independently verified and complete; PH-P5 remains ACTIVE / AUTHORIZED and no later Step is activated."
 
