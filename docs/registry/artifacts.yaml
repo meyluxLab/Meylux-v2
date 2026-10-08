@@ -1463,8 +1463,8 @@ records:
     canonical_name: Task Order — MEXC Spot Order-Book Snapshot & Versioned Depth Capability
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-013.md
-    traceability: PH-P2 / STEP-P2-006 / TO-P2-012 / BR-P2-012 / AR-P2-AUDIT-012 / Owner Authorization 2026-09-27 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: PREPARED / NOT ACTIVATED
+    traceability: PH-P2 / STEP-P2-006 / TO-P2-012 / BR-P2-012 / AR-P2-AUDIT-012 / Owner Authorization 2026-09-27 / Owner Continuation Authorization 2026-10-08 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: AUTHORIZED TO EXECUTE
   - stable_id: BR-P2-012
     canonical_name: Build Report — MEXC Capability-Preservation Architectural Assessment
     entity_type: BR
