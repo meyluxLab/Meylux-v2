@@ -1464,7 +1464,20 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-013.md
     traceability: PH-P2 / STEP-P2-006 / TO-P2-012 / BR-P2-012 / AR-P2-AUDIT-012 / Owner Authorization 2026-09-27 / Owner Continuation Authorization 2026-10-08 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+    completion_audit: AR-P2-AUDIT-013
+  - stable_id: BR-P2-013
+    canonical_name: Build Report — MEXC Spot Order-Book Snapshot & Versioned Depth Capability
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-013.md
+    traceability: TO-P2-013 / PH-P5 / STEP-P5-006 / PRQ-2 Group-D / AR-P2-AUDIT-013 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: VERIFIED
+  - stable_id: AR-P2-AUDIT-013
+    canonical_name: CONTROL Independent Audit — TO-P2-013
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-013.md
+    traceability: BR-P2-013 / TO-P2-013 / PH-P5 / STEP-P5-006 / PRQ-2 Group-D / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: APPROVED / VERIFIED
   - stable_id: BR-P2-012
     canonical_name: Build Report — MEXC Capability-Preservation Architectural Assessment
     entity_type: BR
