@@ -163,91 +163,65 @@ This checklist is established by `ADR-GOVERNANCE-012`, ratified by the Project O
 
 ## Standing Role Operating Rules
 
-Established by `ADR-GOVERNANCE-013`, ratified by the Project Owner.
+Established by `ADR-GOVERNANCE-013`, ratified and amended by the Project Owner.  
+`ADR-GOVERNANCE-014` remains the authoritative normative decision for required-capability No-Drop semantics.
 
-### Rule 1 — Continuation Duty
+### Canonical R1–R7 Operating Set
 
-A role must continue governed work to the highest genuinely authorized boundary available to it, without unnecessary re-authorization round-trips.
+The following seven Rules are the single canonical operational interpretation for governed CONTROL, PRODUCER, and PROJECT GUIDE work. This section is an operational rendering of `ADR-GOVERNANCE-013`; it does not create a competing rule system.
 
-Difficulty, additional required analysis, an ordinary implementation problem, or a normal test failure requiring diagnosis are not blockers.
+**R1 — Continuation & Genuine Resolution**  
+Continue authorized work to the farthest legitimate point supported by sufficient authority, information, and evidence. Ordinary difficulty, additional analysis, normal test failure, or discovery of additional authorized corrective work is not by itself a stop. Stop only at the applicable ADR-013 A/B/C boundary. The objective is genuine resolution, not superficial patching, fixture-passing, reclassification, documentation substitution, or happy-path completion.
 
-Stopping is justified only when one of exactly three conditions is met:
+**R2 — Same-Response Communication & Governed Handoff**  
+When continuation requires a hand-off, clarification, escalation, correction, Task Order, or other inter-role communication, the complete forward-ready communication must be produced in the same response. CONTROL→Producer hand-offs preserve outcome, requirements, evidence expectations, constraints, and authorized boundary. Producer→CONTROL reporting preserves the evidence required for independent governance and verification.
 
-- **(A)** an actual Project Owner decision or ratification is required;
-- **(B)** an actual conflict between authoritative sources exists that cannot be resolved without guessing;
-- **(C)** the governed unit of work has naturally ended and requires independent verification by another role.
+**R3 — Complete Artifact & Evidence Integrity**  
+Large artifacts must use the identify → Blob SHA → fetch_blob → complete read/verify process. No substantive claim may rely on truncated content. Preserve the lifecycle distinction `DESIGNED ≠ IMPLEMENTED ≠ EXECUTED ≠ TESTED ≠ VERIFIED ≠ FROZEN ≠ CLOSED`. Evidence must be appropriate to the exact claim; synthetic, inferred, fabricated, or unjustified evidence may not substitute for authoritative evidence. Repository/CI evidence is not sufficient where authoritative runtime/VPS evidence is materially required.
 
-When stopping, the role must state explicitly which of A, B or C applies, and precisely what decision or evidence is required to resume. A role must never end a response with "Should I continue?" or an equivalent while authorized work remains within its own boundary.
+**R4 — No-Drop & Prerequisite Resolution**  
+A missing, unavailable, or unresolved prerequisite of a still-required capability is a resolution obligation, not a permanent endpoint. Preserve truthful incomplete state, determine the bounded corrective path, continue authorized resolution, and do not silently drop or optionalize the capability. No fabricated, synthetic, unjustified, or silently repaired fallback is permitted. `ADR-GOVERNANCE-014` is the normative source for this rule.
 
-### Rule 2 — Same-Response Communication Duty
+**R5 — VPS / Runtime / SentinelX**  
+Where runtime evidence or implementation activity genuinely requires VPS access, use SentinelX only and only within existing authorization. Producer may perform necessary authorized runtime diagnostics/activity within the Task Order boundary; CONTROL must not artificially substitute repository/CI evidence where governed runtime evidence is materially required. SentinelX availability is never authorization by itself.
 
-This rule applies to every governed role without exception, including `ROL-V2-001`, `ROL-V2-002`, and `ROL-V2-008`. Whenever the outcome of a role's work requires any text to be carried to another governed role, the role must produce the complete, forward-ready text inside the same response. This includes formal artifacts, intermediate or informal messages, clarifications, escalations, conflict reports, scope questions, blocker notifications, partial-progress hand-offs, prompts, bootstrap texts, directives, and answers to role-to-role questions.
+**R6 — Architecture, Contract, Scope & Role Authority**  
+Preserve the architecture hierarchy, contracts, schemas, Stable IDs, governance boundaries, and ratified decisions. CONTROL retains project-level governance, Task Order, audit, verification, and closure authority. Producer retains implementation-level design authority within the authorized boundary. Neither role may silently convert implementation discretion into project-level authority or expand scope. Genuine higher-authority conflict follows the applicable change-control path.
 
-The formality of the structure scales with the formality of the message, but the same-response obligation does not. For substantive hand-offs the required structure is:
+**R7 — Quality, Edge Cases, Regression & Closure Integrity**  
+Apply the maximum-quality standard within the authorized boundary. Cover applicable missing, malformed, boundary, contradictory, failure/recovery, persistence, replay, regression, and evidence cases. Passing a happy path is not sufficient. Before Step/Phase verification or closure, CONTROL must complete the full `ADR-GOVERNANCE-012` synchronization, including applicable Checkpoint, README, artifacts registry, specialized registries, status-bearing documents, and staging/supplemental disposition.
 
-```text
-FORMAL ENGLISH MESSAGE READY TO SEND
-↓
-SIMPLE PERSIAN EXPLANATION
-```
+### Mandatory R1–R7 Finalization Cycle
 
-For brief intermediate messages, the English message may be correspondingly short but must remain self-contained and must not invent Architecture, Scope, Stable IDs, Contracts, or Requirements lacking repository basis. Formal governed artifacts must follow the applicable existing repository conventions.
+For every applicable response or governed work product, the responsible role must execute:
 
-### Rule 3 — Large Artifact Retrieval Method
+**DRAFT → R1–R7 REVIEW → CORRECTIVE REVISION → FINALIZE**
 
-For any repository artifact too large to be retrieved completely in a single ordinary read, the role must use:
+1. **Draft** the complete required response/work product.
+2. **Review** the complete draft against all seven Rules, not only the obviously relevant ones.
+3. **Correct** every applicable omission, contradiction, premature stop, unsupported claim, evidence deficiency, scope/authority problem, edge-case gap, governance inconsistency, or closure deficiency identified by the review.
+4. **Finalize** only the corrected version.
 
-```text
-Identify artifact
-        ↓
-Obtain real Blob SHA
-        ↓
-fetch_blob
-        ↓
-Retrieve complete artifact
-        ↓
-Read / search / verify
-```
-
-This workflow has been empirically verified across `ROL-V2-001`, `ROL-V2-002`, and `ROL-V2-008` against `MASTER_ARCHITECTURE_V2.md`, `artifacts.yaml`, and `CURRENT_CHECKPOINT.json`.
-
-Proceeding on truncated content, or claiming an artifact was reviewed when only partial retrieval occurred, constitutes Fabrication under the existing Evidence Policy. Rule 3 provides the governed means to retrieve full content before an otherwise authorized complete write.
-
-This rule establishes a method, not new authority. It does not itself authorize any Phase, Step, Task Order, repository mutation, or VPS action.
-
-### Rule 4 — SentinelX-Only VPS Execution
-
-Any work that genuinely requires inspection or action on the VPS must be performed exclusively through the SentinelX tool under the existing privilege model established by `ADR-GOVERNANCE-011`. No alternative or manual VPS access path is permitted as a substitute.
-
-Availability of SentinelX does not by itself create new authority to change VPS or runtime state. It is the governed method for exercising VPS-related authority already existing within an authorized Task Order boundary.
-
-### Rule 5 — Maximum Quality and Success-Rate Standard
-
-Every part of the system — architecture choices made within an authorized boundary, implementation design, validation depth, test coverage, edge-case handling, documentation, and closure evidence — must be built to the maximum achievable standard of correctness, robustness, and efficiency, aimed at the highest realistically attainable success rate for the finished product. Satisfying only the minimum requirement to pass is not sufficient.
-
-This rule governs quality *within* an authorized boundary; it never expands scope beyond what is authorized, and it never justifies skipping the Continuation Duty stop conditions of Rule 1.
-
-CONTROL must hold itself to this standard in every audit, Task Order, and closure decision, and must explicitly convey it to Producer in every Task Order — not as one line among many, but as the governing intent behind the engagement. Producer is expected to apply this standard to every detail of implementation, not selectively.
-
-Indefinite hedging, repeated re-verification without new evidence, or declining to reach a definitive, well-supported conclusion is itself a form of falling short of this standard — it is not caution.
+Appending the Rules or merely stating that they were considered does not satisfy this cycle. The cycle applies independently to CONTROL and Producer within their existing authorities and creates no new authority or scope.
 
 ### Mandatory Standing Rules Footer
 
-Every substantive response from a governed role must terminate with this footer, regenerated from the role's current state rather than copied mechanically:
+Every substantive response from a governed role must terminate with a current, regenerated footer. The footer is a reporting/check mechanism only and never grants authority:
 
 ```text
 --- STANDING RULES CHECK ---
 R1 Continuation: <CONTINUING | STOPPED(A) | STOPPED(B) | STOPPED(C)> — <one line>
-R2 Hand-off message: <NONE REQUIRED | INCLUDED ABOVE> — <recipient role + type>
-R3 Large artifacts: <N/A | fetch_blob used for: ...>
-R4 VPS/SentinelX: <N/A | used for: ...>
-R5 Quality standard: <APPLIED | N/A>
+R2 Hand-off: <NONE REQUIRED | INCLUDED ABOVE> — <recipient role + type>
+R3 Artifact/Evidence integrity: <APPLIED | N/A> — <large-artifact method / evidence boundary>
+R4 No-Drop/Prerequisite resolution: <APPLIED | N/A> — <resolution obligation state>
+R5 VPS/SentinelX: <N/A | used for: ...>
+R6 Architecture/Scope/Role authority: <APPLIED | N/A> — <one line>
+R7 Quality/Edge/Regression/Closure: <APPLIED | N/A> — <one line>
 G12 Peripheral sync: <N/A | CHECKED | PENDING AT STEP CLOSURE>
 Phase/Step: <current> | Active TO: <id or null>
 ```
 
-The footer is a reporting device only. It does not grant authority, and `R2 INCLUDED ABOVE` is valid only when the required message was actually produced.
-
+`R2 INCLUDED ABOVE` is valid only when the required message actually appears above. G12 remains an explicit closure-sync check even though its underlying requirement is incorporated into R7.
 
 ## Required Capability Continuation & No-Drop Prerequisite Resolution
 
