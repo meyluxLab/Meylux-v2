@@ -1778,7 +1778,7 @@ records:
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-005 / TO-P5-006 / TO-P4-015 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner resume directive 2026-10-08
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
   - stable_id: TO-P2-014
     canonical_name: Governed Binance Spot Trade Acquisition Capability for P5-006
     entity_type: TO
@@ -1803,7 +1803,7 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-006.md
     traceability: PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / TO-P4-014 / AR-P4-022 / TO-P4-015 / AR-P4-023 / TO-P2-014 / AR-P2-AUDIT-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
   - stable_id: TO-P4-014
     canonical_name: Group-C Volume / Volume-Profile Upstream Capability for P5-006
     entity_type: TO
@@ -2100,3 +2100,16 @@ records:
     artifact_path: docs/build-reports/BR-P5-008.md
     traceability: TO-P5-006 / PH-P5 / STEP-P5-006 / PRQ-1 Group-C / PRQ-2 trade / TO-P4-014 / AR-P4-022 / TO-P2-014 / AR-P2-AUDIT-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: PRODUCED
+
+  - stable_id: AR-P5-009
+    canonical_name: CONTROL Independent Verification — TO-P5-006 Group-C Volume and Volume Profile Specialists
+    entity_type: AR
+    artifact_path: docs/audits/AR-P5-009.md
+    traceability: TO-P5-006 / BR-P5-008 / EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008 / TO-P4-015 / AR-P4-023 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: APPROVED / VERIFIED
+  - stable_id: EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008
+    canonical_name: CONTROL Runtime Execution Log — TO-P5-006
+    entity_type: EXEC-LOG
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008.md
+    traceability: TO-P5-006 / AR-P5-009 / SentinelX governed runtime
+    status: VERIFIED
