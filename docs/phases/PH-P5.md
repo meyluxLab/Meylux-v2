@@ -205,3 +205,9 @@ The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. At that historical 
 ## STEP-P5-006 Closure
 
 `STEP-P5-006` / `TO-P5-006` is **COMPLETE / VERIFIED** under `AR-P5-009`. CONTROL independently verified S-03 and S-17 on the governed BTCUSDT/BINANCE/15m primary slice using the authoritative Group-C fact surface established under `TO-P4-015 / AR-P4-023`, real Redis → worker → PostgreSQL execution, direct read-back, deterministic replay and append-only persistence. The overall specialist outputs remain `PARTIAL` only because configured combinations without authoritative facts remain explicitly `INSUFFICIENT_DATA`; no fallback was fabricated. Phase 5 remains ACTIVE / AUTHORIZED and no later Step is activated.
+
+## Post-Closure PRQ-2 Group-D Continuation — TO-P2-013
+
+`TO-P2-013` was activated by CONTROL on 2026-10-08 as a bounded post-closure PRQ-2 prerequisite-resolution Task Order for MEXC Spot order-book snapshot and versioned aggregated depth. It was independently audited under `AR-P2-AUDIT-013` after the F-01 bounded-evidence-retention correction and is now **VERIFIED / COMPLETE**.
+
+This continuation does not reopen `STEP-P5-006`, does not create or activate a new P5 Step, and does not authorize PRQ-3 implementation. `PH-P5` remains ACTIVE / AUTHORIZED with `STEP-P5-006` COMPLETE / VERIFIED; no later P5 Step is activated by this prerequisite resolution.
