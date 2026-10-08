@@ -1222,3 +1222,12 @@ The Producer must preserve historical execution evidence and must not rewrite pr
 
 This is an operational role requirement implementing ADR-GOVERNANCE-014 within the Producer existing authority; it does not authorize scope expansion, governance changes, or closure.
 
+
+
+## R1–R7 Finalization Control
+
+`ADR-GOVERNANCE-013` is the single normative source for the canonical R1–R7 operating set. Before finalizing any applicable Producer response, implementation hand-off, Build Report, correction response, or evidence report, Producer MUST execute:
+
+**DRAFT → R1–R7 REVIEW → CORRECTIVE REVISION → FINALIZE**
+
+The review must test the complete draft/work product against all seven Rules, including Rules that do not appear obviously relevant. Any unsupported claim, evidence deficiency, unauthorized scope/authority decision, unresolved prerequisite, insufficient edge-case treatment, regression omission, or premature completion claim must be corrected before release or explicitly surfaced through the governed communication path. This is an operating control, not new implementation or project authority.
