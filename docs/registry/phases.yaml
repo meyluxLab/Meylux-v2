@@ -750,6 +750,19 @@ records:
     closure_owner: ROL-V2-001
     producer_role: ROL-V2-002
 
+  - sid: TO-P2-013
+    logical_name: MEXC Spot Order-Book Snapshot & Versioned Depth Capability
+    entity_type: TO
+    phase: PH-P2
+    downstream_step: STEP-P5-007
+    status: AUTHORIZED TO EXECUTE
+    authorization_state: AUTHORIZED TO EXECUTE
+    lifecycle_context: POST-CLOSURE GOVERNED PRQ-2 CONTINUATION
+    predecessor_task_order: TO-P2-012
+    purpose: Resolve the MEXC Spot order-book/depth portion of PRQ-2 required by the future Group-D S-05 boundary without reopening PH-P2 or STEP-P2-006.
+    closure_owner: ROL-V2-001
+    producer_role: ROL-V2-002
+
   - sid: TO-P4-015
     logical_name: Group-C Authoritative Fact Population & Runtime Evidence Resolution
     entity_type: TO
