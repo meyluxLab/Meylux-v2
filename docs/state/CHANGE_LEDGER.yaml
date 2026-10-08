@@ -3962,3 +3962,31 @@ entries:
       control_closure_sync: "completed"
     continuation: "TO-P2-013 is closed as VERIFIED / COMPLETE. No later P5 Step is activated; PRQ-3 remains the subsequent governed dependency."
 
+
+  - id: CL-PRQ3-ASSESSMENT-ACTIVATION-20261009
+    date_utc: '2026-10-09'
+    change_type: GOVERNED_PREREQUISITE_CONTINUATION
+    subject: Activation of TO-P2-017 for PRQ-3 derivatives acquisition boundary and change-control assessment
+    basis: Project Owner directive 2026-10-09 + PH-P5 current authoritative state + PHASE5_ROADMAP PRQ-3 gate + OQ-P5-002-PRQ3-DERIVATIVES + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 + ADR-GOVERNANCE-014
+    affected_ids:
+      - TO-P2-013
+      - AR-P2-AUDIT-013
+      - TO-P2-017
+      - PH-P5
+      - STEP-P5-006
+      - STEP-P5-007
+      - PRQ-3
+      - OQ-P5-002-PRQ3-DERIVATIVES
+      - CURRENT_CHECKPOINT
+      - README
+      - artifacts.yaml
+      - phases.yaml
+    from_state: "STEP-P5-006 COMPLETE / VERIFIED; TO-P2-013 VERIFIED / COMPLETE; active_task_order null; PRQ-3 OPEN / subsequent governed dependency"
+    to_state: "STEP-P5-006 remains COMPLETE / VERIFIED; TO-P2-013 remains VERIFIED / COMPLETE; TO-P2-017 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; active_task_order TO-P2-017; STEP-P5-007 remains unactivated"
+    technical_determination: "PRQ-3 is an owning-P2 prerequisite and cannot be satisfied by activating STEP-P5-007. The correct next action is a bounded P2 assessment/change-control preparation boundary for derivatives acquisition/persistence sufficient for S-04 funding/OI/basis."
+    architecture_effect: "No architecture, canonical contract, schema, Stable ID, or mathematical change authorized by this activation."
+    runtime_effect: "No provider runtime activity or VPS mutation authorized. Any future runtime implementation requires a separate explicit boundary."
+    role_effect: "Producer is authorized only for investigation/change-control preparation under TO-P2-017; CONTROL retains independent audit and closure synchronization."
+    historical_preservation: "TO-P2-013, BR-P2-013, AR-P2-AUDIT-013 and STEP-P5-006 closure remain immutable."
+    registry_reconciliation: "During activation, phases.yaml was corrected from stale TO-P2-013 AUTHORIZED TO EXECUTE metadata to VERIFIED / COMPLETE so the phase registry matches the authoritative Checkpoint/artifacts closure state."
+    R1_R7: "Applied from action initiation; no-drop and architecture/scope/role controls remain binding."
