@@ -450,9 +450,9 @@ records:
     next_valid_step: null
     final_step: STEP-P5-012
     g4_status: ESTABLISHED / VERIFIED
-    active_task_order: TO-P2-017
+    active_task_order: null
     current_step: STEP-P5-006
-    active_corrective_dependency: PRQ-3 / TO-P2-017
+    active_corrective_dependency: null
 
     completed_task_order: TO-P5-006
     completion_audit: AR-P5-009
@@ -783,7 +783,7 @@ records:
     entity_type: TO
     phase: PH-P2
     downstream_step: STEP-P5-007
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
     authorization_state: AUTHORIZED TO EXECUTE
     lifecycle_context: POST-CLOSURE GOVERNED PRQ-3 CONTINUATION
     predecessor_task_order: TO-P2-013
