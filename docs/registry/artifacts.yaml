@@ -2132,4 +2132,4 @@ records:
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-017.md
     traceability: PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / PRQ-3 / OQ-P5-002-PRQ3-DERIVATIVES / TO-P2-013 / AR-P2-AUDIT-013 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Owner Directive 2026-10-09
-    status: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
