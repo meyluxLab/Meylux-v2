@@ -3770,3 +3770,50 @@ entries:
       specialized_registries: CHECKED — no new implementation evidence exists yet
       historical_audits: UNCHANGED
     continuation: "Producer continuation is authorized immediately under TO-P5-006. Producer must implement, test, generate real evidence and deliver BR-P5-008; CONTROL then independently verifies and performs closure synchronization."
+
+  - ledger_id: CL-P5-006-CLOSURE-20261008
+    date_utc: 2026-10-08
+    authority: CONTROL independent audit AR-P5-009 under Owner continuation directive / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    role: ROL-V2-001
+    action: CONTROL INDEPENDENT VERIFICATION AND FULL CLOSURE SYNCHRONIZATION — TO-P5-006
+    basis: BR-P5-008 / AR-P5-009 / EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008 / SoT merge 1c8a86a02b69abea4b19047c2ac746898fc43c87 / Producer implementation 59d62f4a95bc857a2584be361f2e32b360d6f744
+    disposition:
+      phase: PH-P5 ACTIVE / AUTHORIZED
+      step: STEP-P5-006 COMPLETE / VERIFIED
+      task_order: TO-P5-006 VERIFIED / COMPLETE
+      build_report: BR-P5-008 VERIFIED
+      audit_report: AR-P5-009 APPROVED / VERIFIED
+      active_task_order: null
+      completed_task_order: TO-P5-006
+      completion_audit: AR-P5-009
+      group_c_upstream: ESTABLISHED / VERIFIED under TO-P4-015 / AR-P4-023
+      group_c_primary_runtime: BTCUSDT / BINANCE / 15m
+      s03_primary: SUCCESS; overall specialist status PARTIAL due explicitly insufficient non-primary configured combinations
+      s17_primary: SUCCESS; overall specialist status PARTIAL due explicitly insufficient non-primary configured combinations
+    evidence:
+      snapshot_id: 35e2cebfa0db078433cb5069b37c9e1368270fca44f98476f53ed9a5c47664ae
+      s03_identity: 7f43c0c61768ad9b59f87dd3d4ad0117f7f984ab50cded4f3037eeb27f6fc9be
+      s17_identity: 25aa8b15bba6e9ead4f65116fe2db7a15c1b2b8cdd1c8e5e0040023feabb4cf3
+      s03_replay: inserted=false; readback=true; one row retained
+      s17_replay: inserted=false; readback=true; one row retained
+      ci_core: 37525181491 SUCCESS — 664 tests, 8 skipped
+      ci_docker: 37525181470 SUCCESS
+      governed_runtime_revision: 1c8a86a02b69abea4b19047c2ac746898fc43c87
+    bounded_deviations:
+      - "The governed VPS initially lacked the already verified AR-P4-023 acceptance population; CONTROL restored the exact authoritative P4 fact surface without overwrite/delete."
+      - "Bounded diagnostic prerequisite-resolution writes created additional real P4 indicator/profile rows during continuation; they were excluded from the acceptance Snapshot and are retained because the relevant P4 surfaces are append-only."
+      - "A bounded Binance WebSocket closed-15m acquisition attempt did not observe k.x=true within its message bound; no REST finality fallback or synthetic closure was used."
+    synchronization:
+      artifacts_registry: UPDATED — BR-P5-008 / AR-P5-009 / EXEC-LOG / STEP-P5-006 / TO-P5-006
+      phase_registry: UPDATED — STEP-P5-006 COMPLETE / VERIFIED; active_task_order null
+      task_order: UPDATED — TO-P5-006 VERIFIED / COMPLETE
+      phase_definition: UPDATED — STEP-P5-006 closure appended
+      checkpoint: UPDATED — completion_audit AR-P5-009; active_task_order null; last_verified_commit 1c8a86a02b69abea4b19047c2ac746898fc43c87
+      readme: UPDATED — current Phase-5 boundary synchronized
+      specialized_registries: UPDATED — tests/database/runtime/configuration/components/observability
+      standalone_status_documents: CHECKED
+      supplemental_staging_registry: CHECKED — no unabsorbed staging record
+      historical_evidence: UNCHANGED
+      machine_readback: PENDING_FINAL_READBACK
+    conclusion: "TO-P5-006 and STEP-P5-006 are independently verified and complete; PH-P5 remains ACTIVE / AUTHORIZED and no later Step is activated."
+
