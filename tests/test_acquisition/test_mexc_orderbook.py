@@ -80,7 +80,7 @@ class MEXCOrderBookTests(unittest.TestCase):
         self.assertEqual(out.version, 101)
         second = r.apply_depth(depth(102, 103, bids=(("100", "4"),)))
         self.assertEqual(second.status, ReconstructionStatus.READY)
-        self.assertEqual(second.version, 102)
+        self.assertEqual(second.version, 103)
 
     def test_gap_requires_recovery_and_hides_stale_state(self):
         r = MEXCOrderBookReconstructor("BTCUSDT")
