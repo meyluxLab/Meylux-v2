@@ -16,8 +16,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 2 — Data Acquisition & Market Data Foundation:** `CLOSED / VERIFIED` (final audit `AR-P2-AUDIT-007`).
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
-- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `ACTIVE / AUTHORIZED`; the upstream Group-C prerequisite has been established under `TO-P4-015 / AR-P4-023`; the trade portion of `PRQ-2` remains `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Active Task Order:** `TO-P5-006` — Group-C specialist capability, `AUTHORIZED TO EXECUTE`; `TO-P4-015` is VERIFIED / COMPLETE under `AR-P4-023`; `TO-P2-015` is VERIFIED / COMPLETE under `AR-P2-AUDIT-015`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
+- **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `COMPLETE / VERIFIED`; the upstream Group-C prerequisite has been established under `TO-P4-015 / AR-P4-023`; the trade portion of `PRQ-2` remains `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
+- **Active Task Order:** `null` — `TO-P5-006` is VERIFIED / COMPLETE under `AR-P5-009`; `TO-P4-015` is VERIFIED / COMPLETE under `AR-P4-023`; `TO-P2-015` is VERIFIED / COMPLETE under `AR-P2-AUDIT-015`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -71,7 +71,7 @@ V1 is frozen historical/reference material and remains outside V2. Nothing in th
 
 ## Phase 5 Current State
 
-Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current governed boundary: `STEP-P5-006` — `ACTIVE / AUTHORIZED`; Active Task Order: `TO-P5-006`; `TO-P4-014` Group-C prerequisite resolution is `VERIFIED / COMPLETE` under `AR-P4-022`; the trade portion of `PRQ-2` is `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. S-03 Volume/RVOL corrective integration `TO-P4-014-CORRECTIVE-001` is `VERIFIED / COMPLETE` under `AR-P4-021`; `TO-P5-005` is `VERIFIED / COMPLETE` under `AR-P5-005`; `TO-P4-013` remains `VERIFIED / COMPLETE` under `AR-P4-020`; Completion Audit: `AR-P5-005`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
+Phase 5 is established and authorized under the Project Owner Phase 5 Re-Direction Directive dated 2026-09-23. Current governed boundary: `STEP-P5-006` — `COMPLETE / VERIFIED`; Active Task Order: `null`; Completion Audit: `AR-P5-009`; `TO-P4-014` Group-C prerequisite resolution is `VERIFIED / COMPLETE` under `AR-P4-022`; the trade portion of `PRQ-2` is `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. S-03 Volume/RVOL corrective integration `TO-P4-014-CORRECTIVE-001` is `VERIFIED / COMPLETE` under `AR-P4-021`; `TO-P5-005` is `VERIFIED / COMPLETE` under `AR-P5-005`; `TO-P4-013` remains `VERIFIED / COMPLETE` under `AR-P4-020`; Completion Audit: `AR-P5-005`; `TO-P3-009` remains historically `VERIFIED / COMPLETE`; controlled reattachment `TO-P3-009-REATTACH-001` is `VERIFIED / COMPLETE` under `AR-P3-009-REATTACH-001`; PRQ-4 is `RESOLVED / VERIFIED`; `TO-P5-002` is `VERIFIED / COMPLETE` under `AR-P5-002`. `STEP-P5-003` was separately authorized by the Project Owner on 2026-09-29 and formalized/activated by CONTROL under `TO-P5-003`.
 
 
 ## Post-Closure Investigation State
@@ -94,9 +94,14 @@ TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed u
 
 ## Current Group-C Resolution State
 
-`TO-P5-006` specialist runtime execution is operational but final capability acceptance is not established yet. The required authoritative Group-C fact/evidence population has now been established under `TO-P4-015 / AR-P4-023`, including persisted S-03 volume facts and authoritative S-17 BTCUSDT/15m profiles. `TO-P5-006` remains the active specialist implementation boundary; no specialist capability is declared VERIFIED / COMPLETE / CLOSED by this prerequisite-resolution closure.
+`TO-P5-006` specialist runtime execution and final capability acceptance are established under `AR-P5-009`. The required authoritative Group-C fact/evidence population has now been established under `TO-P4-015 / AR-P4-023`, including persisted S-03 volume facts and authoritative S-17 BTCUSDT/15m profiles. `TO-P5-006` remains the active specialist implementation boundary; no specialist capability is declared VERIFIED / COMPLETE / CLOSED by this prerequisite-resolution closure.
 
 
 ## TO-P2-015 Closure
 
 `TO-P2-015` — Binance Spot trade venue evidence semantics — is **VERIFIED / COMPLETE** under `AR-P2-AUDIT-015`. CONTROL independently established terminal CI success, real Binance Spot trade acquisition with explicit `BINANCE` venue, P3 quality evidence, canonical persistence/read-back, deterministic replay, and bounded SentinelX runtime restoration. `STEP-P5-006` remains active and unresolved; `TO-P4-015` is the active corrective boundary for the remaining authoritative Group-C fact population.
+
+
+## TO-P5-006 Closure
+
+`TO-P5-006` / `STEP-P5-006` — Group C Volume and Volume Profile specialists — is independently verified and closed under `AR-P5-009`. CONTROL verified the Producer implementation, CI evidence, authoritative Group-C P4 fact surface, governed VPS deployment, Stage-1 Snapshot, S-03/S-17 primary-slice findings, PostgreSQL persistence/read-back, deterministic replay and append-only persistence. Phase 5 remains ACTIVE / AUTHORIZED; later Steps remain unauthorized.
