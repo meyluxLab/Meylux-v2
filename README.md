@@ -17,7 +17,7 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 - **Phase 3 — Validation, Normalization & Data Quality Engine:** `CLOSED / VERIFIED`. `STEP-P3-001` through `STEP-P3-008` are `COMPLETE / VERIFIED`; final audit `AR-P3-008` and G-3 evidence are established.
 - **Phase 4 — Deterministic Quantitative & Market Structure Engine:** `CLOSED / VERIFIED`. `STEP-P4-001` through `STEP-P4-006` are `COMPLETE / VERIFIED`; final Step audit `AR-P4-015`; **G-4: `ESTABLISHED / VERIFIED`**. Historical audits and correction cycles remain preserved for traceability.
 - **Phase 5 — Specialist Market Intelligence Layer:** `ACTIVE / AUTHORIZED`. `STEP-P5-006` — `COMPLETE / VERIFIED`; the upstream Group-C prerequisite has been established under `TO-P4-015 / AR-P4-023`; the trade portion of `PRQ-2` remains `ESTABLISHED / VERIFIED` under `TO-P2-014 / AR-P2-AUDIT-014`. Scope remains bounded by the authorized Phase-5 roadmap; Forex remains future intent only.
-- **Active Task Order:** `null` — `TO-P5-006` is VERIFIED / COMPLETE under `AR-P5-009`; `TO-P4-015` is VERIFIED / COMPLETE under `AR-P4-023`; `TO-P2-015` is VERIFIED / COMPLETE under `AR-P2-AUDIT-015`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
+- **Active Task Order:** `TO-P2-013` — authorized Group-D PRQ-2 prerequisite resolution; `TO-P5-006` remains VERIFIED / COMPLETE under `AR-P5-009`; `TO-P4-015` is VERIFIED / COMPLETE under `AR-P4-023`; `TO-P2-015` is VERIFIED / COMPLETE under `AR-P2-AUDIT-015`; `TO-P2-014` remains `VERIFIED / COMPLETE` under `AR-P2-AUDIT-014`; `TO-P4-014-CORRECTIVE-001` remains historically `VERIFIED / COMPLETE` under `AR-P4-021`.
 - **Registry:** `INITIALIZED_VERIFIED`.
 - **GitHub installation:** `INSTALLED_VERIFIED`. This repository is the live, populated V2 Source of Truth — it is not an empty baseline package.
 - **VPS:** `SET UP / VERIFIED`.
@@ -27,6 +27,8 @@ It is **not a trading bot** and has no authority to place, modify, cancel, or ex
 
 - Constitution Stable ID: `IDENTITY UNCONFIRMED`.
 - `OQ-P4-006-MEXC-RESOURCEWARNING` remains on record.
+- `OQ-P5-002-PRQ2-VENUE-ORDERFLOW` remains open and is actively being resolved under `TO-P2-013`.
+- `OQ-P5-002-PRQ3-DERIVATIVES` remains open and is a subsequent governed dependency after the current PRQ-2 boundary.
 - Futures acquisition capability is not present in the current Binance/MEXC adapters; the bounded dependency route remains through the owning P2 boundary when a concrete P5 need arises.
 
 The existence of any file in this repository does not, by itself, constitute implementation, execution, verification, ratification, or authorization of anything beyond what `CURRENT_CHECKPOINT.json` and the Registry explicitly record. When this README and `CURRENT_CHECKPOINT.json` ever appear to disagree, `CURRENT_CHECKPOINT.json` is authoritative and this file is stale and due for correction.
