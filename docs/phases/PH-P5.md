@@ -216,6 +216,6 @@ This continuation does not reopen `STEP-P5-006`, does not create or activate a n
 
 Following the Project Owner directive dated 2026-10-09, CONTROL determined that the next governed action is not activation of `STEP-P5-007`. The remaining executable dependency is the owning P2 boundary for `PRQ-3 / S-04 Derivatives`.
 
-`TO-P2-017` is therefore **AUTHORIZED TO EXECUTE — INVESTIGATION ONLY**. It establishes the bounded P2 assessment/change-control preparation needed to determine the defensible acquisition/persistence capability for funding/OI/basis and the exact ADR/ACR/change-control path, if any. It does not authorize derivatives implementation, provider runtime activity, VPS mutation, contract/schema/architecture change, or `STEP-P5-007` activation.
+`TO-P2-017` was therefore authorized and has now been **VERIFIED / COMPLETE** after independent CONTROL audit. It establishes the bounded P2 assessment/change-control preparation needed to determine the defensible acquisition/persistence capability for funding/OI/basis and the exact ADR/ACR/change-control path, if any. It does not authorize derivatives implementation, provider runtime activity, VPS mutation, contract/schema/architecture change, or `STEP-P5-007` activation.
 
-`STEP-P5-006` and `TO-P2-013` remain historically `COMPLETE / VERIFIED`. Their closure is not reopened or rewritten. Expected next chain: `TO-P2-017 → BR-P2-017 → AR-P2-AUDIT-017 → CONTROL-owned closure synchronization`.
+`STEP-P5-006` and `TO-P2-013` remain historically `COMPLETE / VERIFIED`. Their closure is not reopened or rewritten. Completed chain: `TO-P2-017 → BR-P2-017 → AR-P2-AUDIT-017 → CONTROL-owned closure synchronization`.
