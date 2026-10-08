@@ -3817,3 +3817,41 @@ entries:
       machine_readback: COMPLETED
     conclusion: "TO-P5-006 and STEP-P5-006 are independently verified and complete; PH-P5 remains ACTIVE / AUTHORIZED and no later Step is activated."
 
+  - ledger_id: CL-GOV-R1-R7-CANONICALIZATION-20261008
+    date_utc: 2026-10-08
+    authority: Project Owner Directive — Establish R1–R7 as the Permanent Operating Control for CONTROL and Producer Communications
+    role: ROL-V2-001
+    action: CONTROL GOVERNANCE AMENDMENT — CANONICAL R1–R7 OPERATING CONTROL AND PRE-FINALIZATION REVIEW CYCLE
+    basis: ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / ADR-GOVERNANCE-012 / ARTIFACT_PROTOCOL_V2 / Owner Directive 2026-10-08
+    disposition:
+      canonical_rule_set: R1–R7 ACCEPTED / ESTABLISHED
+      principle_loss_or_weakening: NONE IDENTIFIED
+      normative_location: docs/decisions/ADR/ADR-GOVERNANCE-013.md
+      operational_location: docs/governance/ARTIFACT_PROTOCOL_V2.md
+      no_parallel_adr: CONFIRMED
+      formal_change_control: COMPLETED THROUGH EXPLICIT OWNER-AMENDMENT AUTHORITY
+      pre_finalization_cycle: DRAFT → R1–R7 REVIEW → CORRECTIVE REVISION → FINALIZE
+      footer: UPDATED TO REFLECT R1–R7 PLUS G12
+      control_role_hook: UPDATED
+      producer_role_hook: UPDATED
+      project_guide_hook: UPDATED
+      continuation_bootstrap: UPDATED
+      historical_owner_prefixes: NOT AUTHORITATIVE; may be reduced/retired operationally once the canonical repository mechanism is relied upon
+    governance_protection:
+      - "ADR-GOVERNANCE-013 remains the single normative source for R1–R7; ARTIFACT_PROTOCOL_V2 is its operational rendering."
+      - "ADR-GOVERNANCE-014 remains the normative source for No-Drop required-capability semantics."
+      - "No new authority, artifact class, lifecycle state, architecture change, scope expansion, or implementation authority was created."
+      - "Historical ADR-013 and other historical evidence remain preserved through a controlled amendment."
+      - "The previously excluded concept of independently performing omitted work was not introduced."
+    changed_artifacts:
+      - docs/decisions/ADR/ADR-GOVERNANCE-013.md
+      - docs/governance/ARTIFACT_PROTOCOL_V2.md
+      - docs/governance/ROLE_CONTRACT_CONTROL_REVIEWER_V2.md
+      - docs/governance/ROLE_DEFINITION_PRODUCER_ARCHITECT_BUILDER_V2.md
+      - docs/governance/ROLE_CONTRACT_PROJECT_GUIDE_V2.md
+      - docs/governance/AI_CONTINUATION_PROTOCOL_V2.md
+      - docs/continuity/MEYLUX_V2_BOOTSTRAP.md
+      - docs/decisions/ADR_INDEX.md
+      - docs/registry/artifacts.yaml
+    continuation: "Canonical R1–R7 governance control is established. Future applicable work products must use the mandatory pre-finalization cycle before release. No further Owner decision is required for routine application within existing authority."
+
