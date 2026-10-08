@@ -2126,3 +2126,10 @@ records:
     artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008.md
     traceability: TO-P5-006 / AR-P5-009 / SentinelX governed runtime
     status: VERIFIED
+
+  - stable_id: TO-P2-017
+    canonical_name: Task Order — PRQ-3 Derivatives Acquisition Boundary & Change-Control Assessment
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-017.md
+    traceability: PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / PRQ-3 / OQ-P5-002-PRQ3-DERIVATIVES / TO-P2-013 / AR-P2-AUDIT-013 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Owner Directive 2026-10-09
+    status: AUTHORIZED TO EXECUTE
