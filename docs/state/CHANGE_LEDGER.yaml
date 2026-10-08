@@ -3990,3 +3990,20 @@ entries:
     historical_preservation: "TO-P2-013, BR-P2-013, AR-P2-AUDIT-013 and STEP-P5-006 closure remain immutable."
     registry_reconciliation: "During activation, phases.yaml was corrected from stale TO-P2-013 AUTHORIZED TO EXECUTE metadata to VERIFIED / COMPLETE so the phase registry matches the authoritative Checkpoint/artifacts closure state."
     R1_R7: "Applied from action initiation; no-drop and architecture/scope/role controls remain binding."
+
+  - id: CL-TO-P2-017-CLOSURE-20261009
+    date_utc: '2026-10-09'
+    change_type: TASK_ORDER_CLOSURE
+    subject: CONTROL closure of TO-P2-017 after independent audit
+    task_order: TO-P2-017
+    build_report: BR-P2-017
+    audit_report: AR-P2-AUDIT-017
+    status: VERIFIED / COMPLETE
+    audit_disposition: APPROVED / VERIFIED
+    implementation_status: NO IMPLEMENTATION — investigation/change-control preparation only
+    path_disposition: PATH A — IMPLEMENTABLE WITHIN EXISTING FROZEN CONTRACT/ARCHITECTURE
+    evidence: "Producer report independently read; repository acquisition/quality/canonical/persistence contracts verified; official Binance/MEXC provider semantics cross-checked; PR #74 merged as 1f60113f8ade41b86b35e42d09c8611de3745707."
+    next_dependency: "PRQ-3 remains subsequent governed dependency; no implementation Task Order active; STEP-P5-007 remains unactivated."
+    historical_preservation: "STEP-P5-006 and TO-P2-013 remain COMPLETE / VERIFIED; no historical closure reopened."
+    runtime: "No VPS/SentinelX/provider runtime operation."
+    closure_owner: ROL-V2-001
