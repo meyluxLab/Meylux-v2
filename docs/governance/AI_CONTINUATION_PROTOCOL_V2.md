@@ -272,3 +272,14 @@ Historical evidence MUST remain unchanged. Later evidence establishes later reso
 
 This check does not create authorization for implementation, corrective work, Phase/Step activation, or closure.
 
+
+
+## R1–R7 Successor Finalization Check
+
+The canonical operating control is `ADR-GOVERNANCE-013` as amended 2026-10-08. Successor-session reconstruction MUST load and apply the complete R1–R7 set before finalizing any governed continuation output.
+
+The mandatory sequence is:
+
+**DRAFT → R1–R7 REVIEW → CORRECTIVE REVISION → FINALIZE**
+
+The successor must review all seven Rules, preserve existing authority boundaries, carry unresolved No-Drop obligations forward, and never treat the presence of this section as authorization for new work. The operational rendering and footer are maintained in `docs/governance/ARTIFACT_PROTOCOL_V2.md`.
