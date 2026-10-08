@@ -4,10 +4,10 @@
 **Current Step Lifecycle:** `STEP-P5-006` — COMPLETE / VERIFIED under `TO-P5-006`
 **Active Task Order:** `null`
 **Last Completed Upstream Dependency:** `TO-P4-015` — VERIFIED / COMPLETE under `AR-P4-023`
-**Last Completed Task Order:** `TO-P4-015`  
+**Last Completed Task Order:** `TO-P5-006`  
 **Last Completed Corrective Dependency:** `TO-P4-015` — VERIFIED / COMPLETE under `AR-P4-023`  
 **Current Corrective Task Order:** `null`
-**Completion Audit:** `AR-P4-023`
+**Completion Audit:** `AR-P5-009`
 **Phase SID:** `PH-P5`
 **Architectural basis:** `DOC-V2-ARCH-001` RATIFIED / FROZEN; §16–§17
 **Predecessor:** `PH-P4` CLOSED / VERIFIED; `G-4` ESTABLISHED / VERIFIED
