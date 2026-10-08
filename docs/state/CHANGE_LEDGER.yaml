@@ -3855,3 +3855,24 @@ entries:
       - docs/registry/artifacts.yaml
     continuation: "Canonical R1–R7 governance control is established. Future applicable work products must use the mandatory pre-finalization cycle before release. No further Owner decision is required for routine application within existing authority."
 
+
+  - ledger_id: CL-P5-006-CLOSURE-PHASE-REGISTRY-RECONCILIATION-20261008
+    date_utc: 2026-10-08
+    authority: CONTROL closure synchronization correction under ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    role: ROL-V2-001
+    action: CONTROL RECONCILIATION — PH-P5 REGISTRY AFTER TO-P5-006 CLOSURE
+    basis: CURRENT_CHECKPOINT.json / AR-P5-009 / README.md / docs/registry/artifacts.yaml / docs/registry/phases.yaml
+    disposition:
+      historical_boundary: TO-P5-006 VERIFIED / COMPLETE; STEP-P5-006 COMPLETE / VERIFIED
+      active_task_order: null
+      phase: PH-P5 ACTIVE / AUTHORIZED
+      phase_registry_correction: active_task_order TO-P5-006 -> null; next_valid_step STEP-P5-006 -> null pending independent next-boundary determination
+      historical_evidence: UNCHANGED
+      p5_006_reopened: false
+    synchronization:
+      checkpoint: ALREADY CONSISTENT — unchanged
+      artifacts_registry: ALREADY CONSISTENT — unchanged
+      readme: ALREADY CONSISTENT — unchanged
+      phases_registry: CORRECTED — stale active-task metadata reconciled
+      specialized_registries: NO NEW IMPLEMENTATION EVIDENCE — unchanged
+    continuation: "No later Step is activated by this reconciliation. The next governed boundary remains subject to independent dependency/gate determination."
