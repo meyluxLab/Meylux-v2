@@ -540,14 +540,14 @@ records:
     logical_name: Group C: Volume, Volume Profile
     entity_type: STEP
     phase: PH-P5
-    status: ACTIVE / AUTHORIZED
+    status: COMPLETE / VERIFIED
     authorization_state: AUTHORIZED TO EXECUTE
     order: 6
     predecessor: STEP-P5-005
     activation_basis: PROJECT-OWNER-NEXT-GOVERNED-STAGE-DIRECTIVE-2026-10-06 / AR-P2-AUDIT-014
-    active_task_order: TO-P5-006
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P5-006
+    completion_audit: AR-P5-009
     purpose: Establish deterministic Group-C specialist capability for S-03 Volume Analyst and S-17 Volume Profile Reasoner from authoritative Stage-1 Input Snapshot facts.
     repository_scope: P5 S-03/S-17 specialist implementation, evidence interpretation, EvidenceRef resolution, persistence/read-back, replay/idempotency, tests and required runtime evidence within STEP-P5-006 only.
     dependency_boundary:
@@ -724,12 +724,12 @@ records:
     entity_type: TO
     phase: PH-P5
     downstream_step: STEP-P5-006
-    status: AUTHORIZED TO EXECUTE
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE
+    authorization_state: VERIFIED / COMPLETE
     activation_basis: PROJECT-OWNER-NEXT-GOVERNED-STAGE-DIRECTIVE-2026-10-06 / AR-P2-AUDIT-014
-    active_task_order: TO-P5-006
-    completed_task_order: null
-    completion_audit: null
+    active_task_order: null
+    completed_task_order: TO-P5-006
+    completion_audit: AR-P5-009
     dependency_boundary:
       prq1_group_c: ESTABLISHED / VERIFIED
       prq2_trade: ESTABLISHED / VERIFIED
