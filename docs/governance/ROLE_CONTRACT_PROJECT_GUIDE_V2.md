@@ -2010,3 +2010,12 @@ Later evidence may establish later resolution state, but the Guide must preserve
 
 This requirement applies to continuity, navigation, status reporting, and decision-support outputs within the Project Guide existing read/assist authority and does not grant implementation, approval, or closure authority.
 
+
+
+## R1–R7 Finalization Control
+
+`ADR-GOVERNANCE-013` is the single normative source for the canonical R1–R7 operating set. Before finalizing any governed Guide output intended to direct or continue CONTROL/Producer work, PROJECT GUIDE MUST execute:
+
+**DRAFT → R1–R7 REVIEW → CORRECTIVE REVISION → FINALIZE**
+
+The review is substantive and must not be satisfied by merely appending the Rules. This control does not create authority or permit the Guide to prescribe implementation outside the existing governed boundary.
