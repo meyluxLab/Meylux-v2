@@ -30,7 +30,7 @@ def depth(start, end, bids=(), asks=(), symbol="BTCUSDT"):
     return env({"symbol": symbol, "channel": "spot@public.aggre.depth.v3.api.pb@100ms@BTCUSDT",
                 "data": {"fromVersion": str(start), "toVersion": str(end),
                          "bidsList": [{"price": p, "quantity": q} for p, q in bids],
-                         "asksList": [{"price": p, "quantity": q} for p, q in asks}})
+                         "asksList": [{"price": p, "quantity": q} for p, q in asks]}})
 
 
 class MEXCOrderBookTests(unittest.TestCase):
