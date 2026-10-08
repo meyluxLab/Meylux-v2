@@ -462,7 +462,7 @@
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
-  "last_verified_commit": "1c8a86a02b69abea4b19047c2ac746898fc43c87",
+  "last_verified_commit": "3c66ac731658411e0c29451e61ad4d9f9c387ed8",
   "updated_at_utc": "2026-10-07T20:15:01.723Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
@@ -618,5 +618,6 @@
     "post_bringup_commits": "GOVERNANCE/EVIDENCE ONLY THROUGH LAST READ-BACK; current repository HEAD is authoritative for later read-backs",
     "last_governed_checkout_readback_revision": "9cd7ac8d35889f45573ff0e11162112e507bc9a4"
   },
-  "current_vps_runtime_implementation_revision": "87b74954cd4fbd2d004a3212d965f42b97c3e870"
+  "current_vps_runtime_implementation_revision": "87b74954cd4fbd2d004a3212d965f42b97c3e870",
+  "last_checkpoint_sync_commit": "3c66ac731658411e0c29451e61ad4d9f9c387ed8"
 }
