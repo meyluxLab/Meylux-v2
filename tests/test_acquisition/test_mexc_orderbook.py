@@ -78,7 +78,7 @@ class MEXCOrderBookTests(unittest.TestCase):
         out = r.apply_depth(depth(99, 101, bids=(("100", "3"),)))
         self.assertEqual(out.status, ReconstructionStatus.READY)
         self.assertEqual(out.version, 101)
-        second = r.apply_depth(depth(101, 102, bids=(("100", "4"),)))
+        second = r.apply_depth(depth(102, 103, bids=(("100", "4"),)))
         self.assertEqual(second.status, ReconstructionStatus.READY)
         self.assertEqual(second.version, 102)
 
@@ -127,13 +127,22 @@ class MEXCOrderBookTests(unittest.TestCase):
         self.assertEqual(r.version, 102)
         self.assertEqual(r.canonical().bids[0][1], Decimal("3"))
 
-    def test_version_regression_and_malformed_versions_are_rejected(self):
-        r = MEXCOrderBookReconstructor("BTCUSDT")
-        r.apply_snapshot(snapshot())
-        for start, end in (("bad", "102"), ("103", "102"), ("-1", "1")):
+    def test_malformed_versions_are_rejected_without_coercion(self):
+        for start, end in (("bad", "102"), ("103", "bad"), ("-1", "1")):
+            r = MEXCOrderBookReconstructor("BTCUSDT")
+            r.apply_snapshot(snapshot())
             out = r.apply_depth(depth(start, end))
             self.assertEqual(out.status, ReconstructionStatus.INVALID)
             self.assertIsNone(r.canonical())
+
+    def test_version_regression_is_stale_and_does_not_regress_state(self):
+        r = MEXCOrderBookReconstructor("BTCUSDT")
+        r.apply_snapshot(snapshot())
+        r.apply_depth(depth(101, 102, bids=(("100", "3"),)))
+        out = r.apply_depth(depth(101, 101, bids=(("100", "99"),)))
+        self.assertEqual(out.status, ReconstructionStatus.STALE_IGNORED)
+        self.assertEqual(r.version, 102)
+        self.assertEqual(r.canonical().bids[0][1], Decimal("3"))
 
     def test_provider_instrument_mismatch_is_rejected(self):
         r = MEXCOrderBookReconstructor("BTCUSDT")
