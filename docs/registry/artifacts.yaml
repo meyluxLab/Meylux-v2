@@ -605,11 +605,11 @@ records:
     traceability: PH-P4 / STEP-P4-003 / TO-P4-004 / DOC-P4-002 / OQ-P4-003-STRUCTURE-SEMANTICS / Project Owner Directive — Full Authority Delegated to CONTROL for Market-Structure Semantics / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: RATIFIED / AUTHORIZED
   - stable_id: ADR-GOVERNANCE-013
-    canonical_name: Standing Role Operating Rules & Session Anti-Drift Mechanism
+    canonical_name: Standing Role Operating Rules & Session Anti-Drift Mechanism — R1–R7
     entity_type: ADR
     artifact_path: docs/decisions/ADR/ADR-GOVERNANCE-013.md
-    traceability: Project Owner ratification / ADR-GOVERNANCE-001
-    status: RATIFIED / AMENDED — Rule 5 added 2026-09-18
+    traceability: Project Owner ratification / ADR-GOVERNANCE-001 / Owner Directive — R1–R7 Permanent Operating Control 2026-10-08 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-014
+    status: RATIFIED / AMENDED — R1–R7 canonical operating control 2026-10-08
   - stable_id: PH-P3
     canonical_name: Validation, Normalization & Data Quality Engine
     entity_type: PH
