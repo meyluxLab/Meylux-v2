@@ -3745,3 +3745,28 @@ entries:
       requirements_registry_commit: ab0b99870479bcd670d7cdee1ea637eadcfcd366
       artifacts_registry_commit: c0b21c3b463c6662765897cee3a21d43dfc443a3
     continuation: "Capability commitment is now formally registered. No 5m implementation is authorized by this registration; future resolution proceeds JIT at the owning P2/P3/P4/P5 boundaries when an actual governed dependency requires it."
+
+
+  - ledger_id: CL-P5-006-RESUME-STATUS-RECONCILIATION-20261008
+    date_utc: 2026-10-08
+    authority: Project Owner Resume TO-P5-006 Directive 2026-10-08 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    role: ROL-V2-001
+    action: CONTROL RECONCILIATION — RESUME STEP-P5-006 AND CORRECT CURRENT STATUS-BEARING REFERENCES
+    basis: TO-P5-006 / CURRENT_CHECKPOINT / AR-P4-023 / Project Owner resume directive
+    disposition:
+      phase: PH-P5 ACTIVE / AUTHORIZED
+      step: STEP-P5-006 ACTIVE / AUTHORIZED
+      active_task_order: TO-P5-006
+      upstream_group_c_prerequisite: ESTABLISHED / VERIFIED under TO-P4-015 / AR-P4-023
+      producer_boundary: implementation + tests + evidence + BR-P5-008 allocation/delivery
+      control_boundary: independent runtime acceptance + audit + closure synchronization
+      historical_br_p5_006: PRESERVED — BR-P5-006 belongs to TO-P5-005 / STEP-P5-005 and must not be repurposed
+      next_build_report_identity: BR-P5-008 — to be allocated by Producer under artifact protocol for TO-P5-006
+    synchronization:
+      phase_definition: UPDATED — current metadata reconciled to TO-P5-006
+      artifacts_registry: UPDATED — STEP-P5-006 ACTIVE / AUTHORIZED
+      checkpoint: UNCHANGED — authoritative current state already identifies TO-P5-006
+      readme: CHECKED — current active boundary already consistent
+      specialized_registries: CHECKED — no new implementation evidence exists yet
+      historical_audits: UNCHANGED
+    continuation: "Producer continuation is authorized immediately under TO-P5-006. Producer must implement, test, generate real evidence and deliver BR-P5-008; CONTROL then independently verifies and performs closure synchronization."
