@@ -4042,3 +4042,17 @@ entries:
     registry_reconciliation: "Added TO-P2-018 and reconciled missing TO-P2-017 Build/Audit registry entries; corrected stale phases.yaml lifecycle authorization metadata for completed STEP-P5-006 and TO-P2-017."
     R1_R7: "Applied; unresolved PRQ-3 remains an explicit No-Drop obligation; no implementation or provider/product selection delegated."
     closure_owner: ROL-V2-001
+  - id: CL-TO-P2-018-AUDIT-REQUEST-CHANGES-20261009
+    date_utc: '2026-10-09'
+    change_type: INDEPENDENT_AUDIT_CORRECTION_CYCLE
+    subject: CONTROL requests correction of BR-P2-018 after independent USDⓈ-M documentation retrieval
+    task_order: TO-P2-018
+    build_report: BR-P2-018
+    audit_report: AR-P2-AUDIT-018
+    status: REQUEST CHANGES — INVESTIGATION INCOMPLETE
+    audit_disposition: REQUEST CHANGES — INVESTIGATION INCOMPLETE
+    evidence: "CONTROL independently retrieved the official Binance USDⓈ-M Market Data reference documenting Funding, current/historical OI, and direct Basis endpoints with BTCUSDT examples; BR-P2-018 omitted this material route evidence. OI unit semantics, exact SOLUSDT scope, history windows, and evidence/persistence compatibility remain to be resolved."
+    next_action: "Producer corrects BR-P2-018 within TO-P2-018 investigation-only scope; CONTROL re-audits. No implementation, live API calls, provider selection, VPS/SentinelX, protected contract change, or STEP-P5-007 activation."
+    historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; PRQ-3 and S-04 remain unresolved; STEP-P5-007 remains not activated."
+    runtime: "No live provider API or VPS/SentinelX operation."
+    closure_owner: ROL-V2-001
