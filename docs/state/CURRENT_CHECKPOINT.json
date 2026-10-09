@@ -4,7 +4,7 @@
   "phase": "PH-P5",
   "step": "STEP-P5-006",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-013 VERIFIED / COMPLETE; TO-P2-017 VERIFIED / COMPLETE; PRQ-3 remains subsequent governed dependency; STEP-P5-007 not activated",
+  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-017 VERIFIED / COMPLETE; TO-P2-018 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; PRQ-3 remains unresolved; STEP-P5-007 not activated",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -18,11 +18,11 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P2-017",
+  "last_approved_task_order": "TO-P2-018",
   "last_build_report": "BR-P2-017",
   "last_audit_report": "AR-P2-AUDIT-017",
   "last_execution_log": "EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008",
-  "active_task_order": null,
+  "active_task_order": "TO-P2-018",
   "completed_task_order": "TO-P2-017",
   "completion_audit": "AR-P2-AUDIT-017",
   "verified_artifacts": [
@@ -398,7 +398,7 @@
     "OQ-GOV-CONSTITUTION-STABLE-ID",
     "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control."
   ],
-  "active_continuation_note": "TO-P2-017 independent audit APPROVED / VERIFIED. PRQ-3 remains unresolved as a future governed dependency; no implementation Task Order is active.",
+  "active_continuation_note": "TO-P2-017 independently approved under AR-P2-AUDIT-017 with PATH A. TO-P2-018 is active for provider/product route qualification of Funding/OI/Basis only; provider/product selection remains Owner-reserved for any later implementation; no implementation or STEP-P5-007 activation is authorized.",
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
     "PH-P0 is CLOSED / VERIFIED; there is no subsequent Phase 0 Step.",
@@ -457,7 +457,8 @@
     "CONTROL independently verified TO-P2-015 under AR-P2-AUDIT-015 after terminal CI success and bounded real Binance Spot runtime/read-back/replay evidence. TO-P2-015 is VERIFIED / COMPLETE; the explicit Binance venue prerequisite is established. TO-P4-015 is now AUTHORIZED TO EXECUTE as the next owning-boundary Group-C fact-population resolution.",
     "TO-P5-006 is VERIFIED / COMPLETE under AR-P5-009; STEP-P5-006 is COMPLETE / VERIFIED; PH-P5 remains ACTIVE / AUTHORIZED; later P5 Steps remain unauthorized.",
     "CONTROL independently verified S-03 and S-17 on the governed BTCUSDT/BINANCE/15m primary slice using the authoritative TO-P4-015 / AR-P4-023 Group-C fact surface, real Redis -> worker -> PostgreSQL execution, persistence/read-back and deterministic replay.",
-    "TO-P2-013 is VERIFIED / COMPLETE under AR-P2-AUDIT-013; its implementation is merged into authoritative main; no P5 Step was activated; PRQ-3 remains a subsequent governed dependency."
+    "TO-P2-013 is VERIFIED / COMPLETE under AR-P2-AUDIT-013; its implementation is merged into authoritative main; no P5 Step was activated; PRQ-3 remains a subsequent governed dependency.",
+    "CONTROL established and activated TO-P2-018 on 2026-10-09 under existing continuation/Task Order authority to qualify complete PRQ-3 provider/product routes; Owner selection is not required before investigation; no implementation, live provider activity, VPS operation, or STEP-P5-007 activation is authorized."
   ],
   "deferred_decisions": [
     "DD-V2-P4-006-PERFORMANCE-TARGET"
