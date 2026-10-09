@@ -4071,3 +4071,33 @@ entries:
     historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; PRQ-3 and S-04 remain unresolved; STEP-P5-007 remains not activated."
     runtime: "No live provider API or VPS/SentinelX operation."
     closure_owner: ROL-V2-001
+
+  - id: CL-TO-P2-018-AUDIT-APPROVED-20261009
+    date_utc: '2026-10-09'
+    change_type: INDEPENDENT_AUDIT_APPROVAL_AND_CLOSURE_SYNC
+    subject: CONTROL approves BR-P2-018 and completes TO-P2-018 investigation closure
+    task_order: TO-P2-018
+    build_report: BR-P2-018
+    audit_report: AR-P2-AUDIT-020
+    status: VERIFIED / COMPLETE — INVESTIGATION ONLY; PRIMARY DISPOSITION B
+    audit_disposition: APPROVED / VERIFIED
+    evidence: "CONTROL inspected current PR #75 head 163dfd24a5b2de07797cdb39d21a1db943bc23ad and report blob ec34008fad9cfa0e6d873a1579c30325d4f7f77b, independently checked exact canonical persistence, quality-evidence, Snapshot temporal-validation and specialist-contract source blobs, and accepted the report's documentation/runtime separation and exact unestablished canonical-to-quality-evidence joined-readback boundary. PR #75 merged as 6242991a2b5b58b96e519a7066dc98b7b7ce9603."
+    next_action: "Continue unresolved required PRQ-3 through TO-P2-019; no provider/product selection, implementation, live API, VPS/SentinelX, protected contract change, or STEP-P5-007 activation."
+    historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; PRQ-3 and S-04 remain unresolved; STEP-P5-007 remains not activated."
+    runtime: "No live provider API or VPS/SentinelX operation."
+    closure_owner: ROL-V2-001
+  - id: CL-TO-P2-019-ACTIVATED-20261009
+    date_utc: '2026-10-09'
+    change_type: GOVERNED_CONTINUATION_TASK_ORDER_ACTIVATION
+    subject: CONTROL activates TO-P2-019 for continued PRQ-3 authoritative route investigation
+    task_order: TO-P2-019
+    predecessor_task_order: TO-P2-018
+    build_report: null
+    audit_report: AR-P2-AUDIT-020
+    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
+    audit_disposition: "Predecessor BR-P2-018 accepted with B — NO QUALIFIED ROUTE ESTABLISHED; PRQ-3 remains unresolved."
+    evidence: "TO-P2-019 continues public authoritative-documentation and repository investigation, revisits Binance USDⓈ-M OI/SOLUSDT evidence gaps, and discovers additional compatible Funding/OI/Basis candidates without selecting a provider or authorizing implementation."
+    next_action: "Producer executes TO-P2-019 and submits BR-P2-019 for independent CONTROL audit."
+    historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; STEP-P5-007 not activated."
+    runtime: "No live provider API or VPS/SentinelX operation."
+    closure_owner: ROL-V2-001
