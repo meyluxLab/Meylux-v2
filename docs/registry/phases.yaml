@@ -795,10 +795,23 @@ records:
     entity_type: TO
     phase: PH-P2
     downstream_step: STEP-P5-007
-    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
-    authorization_state: AUTHORIZED TO EXECUTE
+    status: VERIFIED / COMPLETE — INVESTIGATION ONLY; PRIMARY DISPOSITION B; PRQ-3 REMAINS UNRESOLVED
+    authorization_state: VERIFIED / COMPLETE
     lifecycle_context: POST-CLOSURE GOVERNED PRQ-3 EVIDENCE-QUALIFICATION CONTINUATION
     predecessor_task_order: TO-P2-017
     purpose: Qualify concrete provider/product routes for Funding, OI, and Basis together using authoritative evidence and frozen-contract compatibility analysis; investigation only, no provider/product selection or implementation.
+    closure_owner: ROL-V2-001
+    producer_role: ROL-V2-002
+
+  - sid: TO-P2-019
+    logical_name: PRQ-3 Continued Authoritative Route Discovery & Qualification
+    entity_type: TO
+    phase: PH-P2
+    downstream_step: STEP-P5-007
+    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
+    authorization_state: AUTHORIZED TO EXECUTE
+    lifecycle_context: POST-CLOSURE GOVERNED PRQ-3 CONTINUATION AFTER B DISPOSITION UNDER TO-P2-018
+    predecessor_task_order: TO-P2-018
+    purpose: Continue public authoritative-documentation and repository investigation to discover and qualify additional compatible Funding/OI/Basis provider-product routes and resolve exact USDⓈ-M OI/SOLUSDT evidence gaps; no provider/product selection or implementation.
     closure_owner: ROL-V2-001
     producer_role: ROL-V2-002
