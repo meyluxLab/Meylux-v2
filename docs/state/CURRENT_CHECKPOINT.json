@@ -4,7 +4,7 @@
   "phase": "PH-P5",
   "step": "STEP-P5-006",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-017 VERIFIED / COMPLETE; TO-P2-018 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; BR-P2-018 REQUEST CHANGES under AR-P2-AUDIT-018; PRQ-3 remains unresolved; STEP-P5-007 not activated",
+  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-017 VERIFIED / COMPLETE; TO-P2-018 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; BR-P2-018 REQUEST CHANGES under AR-P2-AUDIT-019; PRQ-3 remains unresolved; STEP-P5-007 not activated",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -20,7 +20,7 @@
   "phase_3_definition": "docs/phases/PH-P3.md",
   "last_approved_task_order": "TO-P2-018",
   "last_build_report": "BR-P2-017",
-  "last_audit_report": "AR-P2-AUDIT-018",
+  "last_audit_report": "AR-P2-AUDIT-019",
   "last_execution_log": "EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008",
   "active_task_order": "TO-P2-018",
   "completed_task_order": "TO-P2-017",
@@ -397,9 +397,9 @@
     "OQ-P4-006-MEXC-RESOURCEWARNING",
     "OQ-GOV-CONSTITUTION-STABLE-ID",
     "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control.",
-    "AR-P2-AUDIT-018 requests correction of BR-P2-018: official Binance USDⓈ-M docs establish Funding, current/historical OI, and Basis endpoints; OI units, SOLUSDT exact scope, history-window sufficiency, and EvidenceRef/knowledge_time/persistence compatibility remain unresolved."
+    "AR-P2-AUDIT-019 requests further correction of BR-P2-018: separate documentation-level route qualification from prohibited runtime/listing verification; demonstrate actual S-04 EvidenceRef, knowledge_time <= snapshot.as_of, provenance linkage, and persistence/read-back enforcement or state the exact gap. PRQ-3 remains unresolved; STEP-P5-007 is not activated."
   ],
-  "active_continuation_note": "TO-P2-018 remains active and investigation-only. Producer must correct BR-P2-018 against official USDⓈ-M endpoint documentation; CONTROL must independently re-audit. No provider/product selection, implementation, live API calls, VPS/SentinelX, protected contract changes, or STEP-P5-007 activation.",
+  "active_continuation_note": "TO-P2-018 remains active and investigation-only. AR-P2-AUDIT-019 requests a further BR-P2-018 correction: separate documentation-level qualification from runtime verification and demonstrate actual S-04 EvidenceRef/knowledge_time/persistence enforcement or state the precise gap. CONTROL must independently re-audit. No provider/product selection, implementation, live API calls, VPS/SentinelX, protected contract changes, or STEP-P5-007 activation.",
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
     "PH-P0 is CLOSED / VERIFIED; there is no subsequent Phase 0 Step.",
