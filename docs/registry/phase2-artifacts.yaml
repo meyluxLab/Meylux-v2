@@ -187,4 +187,27 @@ records:
     artifact_path: docs/audits/AR-P2-AUDIT-014.md
     traceability: BR-P2-014 / TO-P2-014 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-006 / PRQ-2 trade
     status: APPROVED / VERIFIED
-
+  - stable_id: TO-P2-017
+    entity_type: TO
+    canonical_name: PRQ-3 Derivatives Acquisition Boundary & Change-Control Assessment
+    artifact_path: docs/task-orders/TO-P2-017.md
+    traceability: PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3
+    status: VERIFIED / COMPLETE
+  - stable_id: BR-P2-017
+    entity_type: BR
+    canonical_name: PRQ-3 Derivatives Acquisition Boundary & Change-Control Assessment Build Report
+    artifact_path: docs/build-reports/BR-P2-017.md
+    traceability: TO-P2-017 / PRQ-3 / S-04
+    status: PRODUCER EVIDENCE / CONTROL VERIFIED
+  - stable_id: AR-P2-AUDIT-017
+    entity_type: AR
+    canonical_name: CONTROL Independent Audit of TO-P2-017
+    artifact_path: docs/audits/AR-P2-AUDIT-017.md
+    traceability: TO-P2-017 / BR-P2-017 / PRQ-3 / S-04
+    status: APPROVED / VERIFIED
+  - stable_id: TO-P2-018
+    entity_type: TO
+    canonical_name: PRQ-3 Provider/Product Route Qualification & Decision Evidence
+    artifact_path: docs/task-orders/TO-P2-018.md
+    traceability: TO-P2-017 / BR-P2-017 / AR-P2-AUDIT-017 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04
+    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
