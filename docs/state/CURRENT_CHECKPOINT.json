@@ -554,7 +554,7 @@
       "machine_readback": "COMPLETED"
     }
   },
-  "last_governance_sync_base_commit": "e86828bea2e90db4ac3a574e28ed5a5570f96c36",
+  "last_governance_sync_base_commit": "6975bdad6882eb39d952aac5a701b14d5edc9a6d",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -608,7 +608,8 @@
     "CONTROL independently verified TO-P4-015 under AR-P4-023 after independent PostgreSQL read-back on the clean acceptance database. BR-P4-016 is VERIFIED; TO-P4-015 is VERIFIED / COMPLETE; Group-C upstream fact/evidence prerequisite is ESTABLISHED / VERIFIED; At that historical checkpoint, STEP-P5-006 remained ACTIVE / AUTHORIZED and TO-P5-006 was the resumed downstream active Task Order; it was subsequently closed under AR-P5-009. Historical BR-P4-015 remains unchanged; its registry VERIFIED state is reconciled by AR-P4-022 without rewriting the historical report.",
     "CONTROL independently audited and accepted BR-P2-018 under AR-P2-AUDIT-020. Official USDⓈ-M endpoint capability is documented, but the exact OI unit/quantity semantics remain unresolved; SOLUSDT product-specific documentation remains less specific; MEXC canonical OI/direct Basis remain unestablished; and the canonical-derivatives-to-quality-evidence joined read-back path is not established. PR #75 merged as 6242991a2b5b58b96e519a7066dc98b7b7ce9603. This is an investigation disposition only; PRQ-3 remains unresolved and available_persisted_claim remains NONE.",
     "TO-P2-018 is VERIFIED / COMPLETE as a bounded public-documentation/repository investigation with disposition B. CONTROL activated TO-P2-019 under the continuation obligation to continue evidence-supported public documentation research; STEP-P5-007 remains NOT ACTIVATED.",
-    "CONTROL synchronized docs/phases/PH-P5.md to record TO-P2-018 completion under AR-P2-AUDIT-020 and the active TO-P2-019 PRQ-3 continuation; historical Phase/Step closure remains unchanged."
+    "CONTROL synchronized docs/phases/PH-P5.md to record TO-P2-018 completion under AR-P2-AUDIT-020 and the active TO-P2-019 PRQ-3 continuation; historical Phase/Step closure remains unchanged.",
+    "CONTROL added official Bybit Funding/OI/ticker and OKX funding/OI documentation leads to TO-P2-019 as investigation starting points only; no complete route qualification or provider selection is implied."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
