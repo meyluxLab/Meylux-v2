@@ -4,7 +4,7 @@
   "phase": "PH-P5",
   "step": "STEP-P5-006",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-017 VERIFIED / COMPLETE; TO-P2-018 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; BR-P2-018 REQUEST CHANGES under AR-P2-AUDIT-019; PRQ-3 remains unresolved; STEP-P5-007 not activated",
+  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-018 VERIFIED / COMPLETE (INVESTIGATION ONLY; DISPOSITION B); TO-P2-019 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; PRQ-3 remains unresolved; STEP-P5-007 not activated",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -18,12 +18,12 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P2-018",
-  "last_build_report": "BR-P2-017",
-  "last_audit_report": "AR-P2-AUDIT-019",
+  "last_approved_task_order": "TO-P2-019",
+  "last_build_report": "BR-P2-018",
+  "last_audit_report": "AR-P2-AUDIT-020",
   "last_execution_log": "EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008",
-  "active_task_order": "TO-P2-018",
-  "completed_task_order": "TO-P2-017",
+  "active_task_order": "TO-P2-019",
+  "completed_task_order": "TO-P2-018",
   "completion_audit": "AR-P2-AUDIT-017",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
@@ -387,7 +387,10 @@
     "STEP-P5-006",
     "TO-P2-013",
     "BR-P2-013",
-    "AR-P2-AUDIT-013"
+    "AR-P2-AUDIT-013",
+    "BR-P2-018",
+    "AR-P2-AUDIT-020",
+    "TO-P2-018"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -397,9 +400,11 @@
     "OQ-P4-006-MEXC-RESOURCEWARNING",
     "OQ-GOV-CONSTITUTION-STABLE-ID",
     "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control.",
-    "AR-P2-AUDIT-019 requests further correction of BR-P2-018: separate documentation-level route qualification from prohibited runtime/listing verification; demonstrate actual S-04 EvidenceRef, knowledge_time <= snapshot.as_of, provenance linkage, and persistence/read-back enforcement or state the exact gap. PRQ-3 remains unresolved; STEP-P5-007 is not activated."
+    "PRQ-3 remains unresolved after TO-P2-018 disposition B; TO-P2-019 is active for continued public authoritative-documentation/repository investigation. STEP-P5-007 remains NOT ACTIVATED.",
+    "Official Binance USDⓈ-M OI units/quantity basis for openInterest, sumOpenInterest, and sumOpenInterestValue remains unestablished in the inspected schema; SOLUSDT exact product-specific documentation remains less specific.",
+    "No inspected repository path establishes a unique identity-checked join between a canonical derivatives row and its authoritative quality-evidence row followed by joined read-back with authoritative knowledge_time and EvidenceRef; available_persisted_claim remains NONE."
   ],
-  "active_continuation_note": "TO-P2-018 remains active and investigation-only. AR-P2-AUDIT-019 requests a further BR-P2-018 correction: separate documentation-level qualification from runtime verification and demonstrate actual S-04 EvidenceRef/knowledge_time/persistence enforcement or state the precise gap. CONTROL must independently re-audit. No provider/product selection, implementation, live API calls, VPS/SentinelX, protected contract changes, or STEP-P5-007 activation.",
+  "active_continuation_note": "TO-P2-018 is VERIFIED / COMPLETE as an investigation-only task with disposition B under AR-P2-AUDIT-020. PRQ-3 remains a required unresolved capability. TO-P2-019 is the active investigation-only continuation for additional official provider/product route research and exact Binance USDⓈ-M OI/SOLUSDT evidence gaps. No provider selection, implementation, live API calls, protected contract/schema changes, VPS/SentinelX/runtime operations, or STEP-P5-007 activation.",
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
     "PH-P0 is CLOSED / VERIFIED; there is no subsequent Phase 0 Step.",
@@ -465,7 +470,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "3c66ac731658411e0c29451e61ad4d9f9c387ed8",
-  "updated_at_utc": "2026-10-07T20:15:01.723Z",
+  "updated_at_utc": "2026-10-09T14:26:00.000Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -549,7 +554,7 @@
       "machine_readback": "COMPLETED"
     }
   },
-  "last_governance_sync_base_commit": "745cef51b2a0a1b74c74840e888fa57723d987d9",
+  "last_governance_sync_base_commit": "bffe8d90e42cd08361db1b2984d1b15751cd4183",
   "phase_5_status": "ACTIVE / AUTHORIZED",
   "current_phase_definition": "docs/phases/PH-P5.md",
   "current_step_definition": "docs/phases/PH-P5.md",
@@ -600,7 +605,9 @@
     "CONTROL self-audit under explicit Project Owner authorization 2026-10-06 verified and closed DOC-P5-003 and the project-wide No-Drop assessment (DOC-P5-004); AR-P5-007 records the self-audit; historical evidence and Phase/Step lifecycle remain unchanged.",
     "Project Owner Item 7 No-Drop workflow audit completed under AR-P5-008. A real operational enforcement gap was found and the minimum bounded correction was applied to the CONTROL, PRODUCER, PROJECT GUIDE, and AI Continuation workflow artifacts. ADR-GOVERNANCE-014 and ARTIFACT_PROTOCOL_V2 remain the normative source; no duplicate ADR was created.",
     "CONTROL independently verified TO-P4-014-CORRECTIVE-001 under AR-P4-021 after PR #67 merged as 08ae9a38d786aaa555c304ccc07c3a9cc5321f6c. S-03 Volume/RVOL operational integration is VERIFIED; the corrective Task Order is VERIFIED / COMPLETE. Parent TO-P4-014 remains active for unresolved S-17 Group-C prerequisite resolution; STEP-P5-006 remains DEFINED / INACTIVE.",
-    "CONTROL independently verified TO-P4-015 under AR-P4-023 after independent PostgreSQL read-back on the clean acceptance database. BR-P4-016 is VERIFIED; TO-P4-015 is VERIFIED / COMPLETE; Group-C upstream fact/evidence prerequisite is ESTABLISHED / VERIFIED; At that historical checkpoint, STEP-P5-006 remained ACTIVE / AUTHORIZED and TO-P5-006 was the resumed downstream active Task Order; it was subsequently closed under AR-P5-009. Historical BR-P4-015 remains unchanged; its registry VERIFIED state is reconciled by AR-P4-022 without rewriting the historical report."
+    "CONTROL independently verified TO-P4-015 under AR-P4-023 after independent PostgreSQL read-back on the clean acceptance database. BR-P4-016 is VERIFIED; TO-P4-015 is VERIFIED / COMPLETE; Group-C upstream fact/evidence prerequisite is ESTABLISHED / VERIFIED; At that historical checkpoint, STEP-P5-006 remained ACTIVE / AUTHORIZED and TO-P5-006 was the resumed downstream active Task Order; it was subsequently closed under AR-P5-009. Historical BR-P4-015 remains unchanged; its registry VERIFIED state is reconciled by AR-P4-022 without rewriting the historical report.",
+    "CONTROL independently audited and accepted BR-P2-018 under AR-P2-AUDIT-020. Official USDⓈ-M endpoint capability is documented, but the exact OI unit/quantity semantics remain unresolved; SOLUSDT product-specific documentation remains less specific; MEXC canonical OI/direct Basis remain unestablished; and the canonical-derivatives-to-quality-evidence joined read-back path is not established. PR #75 merged as 6242991a2b5b58b96e519a7066dc98b7b7ce9603. This is an investigation disposition only; PRQ-3 remains unresolved and available_persisted_claim remains NONE.",
+    "TO-P2-018 is VERIFIED / COMPLETE as a bounded public-documentation/repository investigation with disposition B. CONTROL activated TO-P2-019 under the continuation obligation to continue evidence-supported public documentation research; STEP-P5-007 remains NOT ACTIVATED."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
