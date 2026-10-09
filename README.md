@@ -107,3 +107,8 @@ TO-P2-009 (A-P2-MEXC investigation-only) was independently verified and closed u
 ## TO-P5-006 Closure
 
 `TO-P5-006` / `STEP-P5-006` — Group C Volume and Volume Profile specialists — is independently verified and closed under `AR-P5-009`. CONTROL verified the Producer implementation, CI evidence, authoritative Group-C P4 fact surface, governed VPS deployment, Stage-1 Snapshot, S-03/S-17 primary-slice findings, PostgreSQL persistence/read-back, deterministic replay and append-only persistence. Phase 5 remains ACTIVE / AUTHORIZED; later Steps remain unauthorized.
+
+
+## Current PRQ-3 Investigation State
+
+`TO-P2-018` remains active and authorized for public-documentation/repository investigation only. The corrected `BR-P2-018` on [PR #75](https://github.com/meyluxLab/Meylux-v2/pull/75) documents Binance USDⓈ-M Funding, current/historical OI, and direct Basis endpoint capability, but is still under independent correction review. `AR-P2-AUDIT-019` records **REQUEST CHANGES — INVESTIGATION INCOMPLETE** for (1) separating documentation qualification from prohibited runtime/listing verification and (2) demonstrating the actual S-04 EvidenceRef, `knowledge_time <= snapshot.as_of`, provenance-linkage, and persistence/read-back enforcement or stating the exact gap. PRQ-3 remains unresolved; S-04 is not established as `AVAILABLE_PERSISTED`; `STEP-P5-007` remains NOT ACTIVATED. No implementation, live provider API calls, provider selection, protected contract/schema change, or VPS/SentinelX/runtime operation is authorized by this investigation.
