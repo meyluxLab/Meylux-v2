@@ -2153,3 +2153,9 @@ records:
     artifact_path: docs/task-orders/TO-P2-018.md
     traceability: TO-P2-017 / BR-P2-017 / AR-P2-AUDIT-017 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
+  - stable_id: AR-P2-AUDIT-018
+    canonical_name: CONTROL Independent Audit of BR-P2-018 / TO-P2-018
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-018.md
+    traceability: TO-P2-018 / BR-P2-018 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: REQUEST CHANGES — INVESTIGATION INCOMPLETE
