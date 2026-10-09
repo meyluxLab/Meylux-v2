@@ -4056,3 +4056,18 @@ entries:
     historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; PRQ-3 and S-04 remain unresolved; STEP-P5-007 remains not activated."
     runtime: "No live provider API or VPS/SentinelX operation."
     closure_owner: ROL-V2-001
+
+  - id: CL-TO-P2-018-AUDIT-REQUEST-CHANGES-20261009-2
+    date_utc: '2026-10-09'
+    change_type: INDEPENDENT_AUDIT_CORRECTION_CYCLE
+    subject: CONTROL re-audit requests further correction of BR-P2-018
+    task_order: TO-P2-018
+    build_report: BR-P2-018
+    audit_report: AR-P2-AUDIT-019
+    status: REQUEST CHANGES — INVESTIGATION INCOMPLETE
+    audit_disposition: REQUEST CHANGES — INVESTIGATION INCOMPLETE
+    evidence: "The corrected report now documents official Binance USDⓈ-M Funding, current/historical OI and direct Basis endpoints, but conflates prohibited runtime/listing verification with documentation-level route qualification and does not demonstrate the existing S-04 EvidenceRef/knowledge_time <= snapshot.as_of enforcement and canonical-to-quality-evidence persistence/read-back linkage."
+    next_action: "Producer corrects BR-P2-018 within TO-P2-018 investigation-only scope; CONTROL independently re-audits. No implementation, live API calls, provider selection, VPS/SentinelX, protected contract change, or STEP-P5-007 activation."
+    historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; PRQ-3 and S-04 remain unresolved; STEP-P5-007 remains not activated."
+    runtime: "No live provider API or VPS/SentinelX operation."
+    closure_owner: ROL-V2-001
