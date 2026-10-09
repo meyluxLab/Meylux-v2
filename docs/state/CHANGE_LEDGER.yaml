@@ -4007,3 +4007,38 @@ entries:
     historical_preservation: "STEP-P5-006 and TO-P2-013 remain COMPLETE / VERIFIED; no historical closure reopened."
     runtime: "No VPS/SentinelX/provider runtime operation."
     closure_owner: ROL-V2-001
+  - id: CL-TO-P2-018-ACTIVATION-20261009
+    date_utc: '2026-10-09'
+    change_type: GOVERNED_PREREQUISITE_CONTINUATION
+    subject: Activation of TO-P2-018 for PRQ-3 provider/product route qualification
+    basis: CONTROL determination under ROLE_CONTRACT_CONTROL_REVIEWER_V2 §4A.2 + TO-P2-017 / BR-P2-017 / AR-P2-AUDIT-017 + ADR-GOVERNANCE-012 + ADR-GOVERNANCE-013 R1/R4 + ADR-GOVERNANCE-014
+    affected_ids:
+      - TO-P2-017
+      - BR-P2-017
+      - AR-P2-AUDIT-017
+      - TO-P2-018
+      - BR-P2-018
+      - AR-P2-AUDIT-018
+      - PH-P2
+      - STEP-P2-006
+      - PH-P5
+      - STEP-P5-006
+      - STEP-P5-007
+      - PRQ-3
+      - OQ-P5-002-PRQ3-DERIVATIVES
+      - CURRENT_CHECKPOINT
+      - README
+      - artifacts.yaml
+      - phases.yaml
+      - phase2-artifacts.yaml
+    from_state: "TO-P2-017 VERIFIED / COMPLETE under AR-P2-AUDIT-017; PRQ-3 remains unresolved; active_task_order null; STEP-P5-007 not activated"
+    to_state: "TO-P2-018 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; active_task_order TO-P2-018; PH-P2/STEP-P2-006 historical closure preserved; PH-P5/STEP-P5-006 remain unchanged; STEP-P5-007 not activated"
+    technical_determination: "Owner selection is not a prerequisite to route investigation. TO-P2-018 qualifies candidates and records evidence; any later provider/product selection for implementation remains a separate Owner-reserved decision."
+    acceptance_boundary: "Exactly one evidence-supported disposition: A qualified complete route; B no qualified route established with exact gaps and reconsideration conditions; or C a specific protected-boundary conflict requiring formal change control."
+    architecture_effect: "No architecture, contract, schema, migration, Stable ID, canonical truth boundary, or implementation change authorized."
+    runtime_effect: "No live provider calls, provider-runtime activity, VPS/SentinelX, deployment, restart, migration, or runtime mutation authorized."
+    role_effect: "Producer authorized only for public authoritative documentation and repository investigation under TO-P2-018; CONTROL retains independent audit and closure synchronization."
+    historical_preservation: "TO-P2-017, BR-P2-017, AR-P2-AUDIT-017, TO-P2-013 closure, PH-P2 closure, STEP-P5-006 closure, and G-4 remain historically unchanged."
+    registry_reconciliation: "Added TO-P2-018 and reconciled missing TO-P2-017 Build/Audit registry entries; corrected stale phases.yaml lifecycle authorization metadata for completed STEP-P5-006 and TO-P2-017."
+    R1_R7: "Applied; unresolved PRQ-3 remains an explicit No-Drop obligation; no implementation or provider/product selection delegated."
+    closure_owner: ROL-V2-001
