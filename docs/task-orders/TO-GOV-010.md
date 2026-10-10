@@ -416,7 +416,7 @@ The finding was reached without reading the file and is therefore withdrawn. No 
 
 F-08 asserted inconsistent text encoding (mojibake). A byte-level scan of every file under `docs/` shows the stored encoding is correct UTF-8: em dashes are stored as the correct three-byte sequence `e2 80 94` (334 occurrences in `CHANGE_LEDGER.yaml`, 246 in `artifacts.yaml`, 18 in `AR-P2-AUDIT-020.md`, 10 in `BR-P5-008.md`), and the mojibake lead sequence `c3 a2 e2 82 ac` does not occur in any pre-existing artifact.
 
-The `â€"` appearance was a rendering artefact of the reviewing tool chain, not file content. F-08 is withdrawn, and required work item §3.9 no longer applies.
+That three-character rendering sequence (U+00E2, U+20AC, U+0022) was an artefact of the reviewing tool chain, not file content. F-08 is withdrawn, and required work item §3.9 no longer applies.
 
 CONTROL further records that it had typed that mangled rendering into this document and has since repaired the occurrence, so this Task Order now contains correct UTF-8 throughout.
 
@@ -425,5 +425,124 @@ CONTROL further records that it had typed that mangled rendering into this docum
 `F-01`, `F-02` (as corrected in §12.2), `F-03.1`, `F-03.2`, `F-03.3`, `F-04`, `F-05`, `F-06` and `F-09` were executed. `F-07` and `F-08` were retracted.
 
 Full evidence, before/after disclosure, reconciliation reasoning and machine verification are recorded in `docs/build-reports/BR-GOV-010.md`.
+
+---END---
+
+## 13. OWNER-DIRECTIVE RECONCILIATION — 2026-10-10 (second amendment)
+
+Appended by CONTROL under the Project Owner directive of 2026-10-10. This section adds new findings and records evidence-based determinations. It does not rewrite sections 2 or 12.
+
+### 13.1 F-10 — NEW FINDING: artifacts existing in the repository with no registry record
+
+During the directive-driven lifecycle reconciliation, CONTROL scanned every file under `docs/audits/`, `docs/build-reports/` and `docs/task-orders/` against `docs/registry/artifacts.yaml`.
+
+**45 artifacts existed as files with no registry record at all.** Three of them belong to the post-freeze governance closure chain that TO-GOV-010 itself sits in, are referenced by existing registry traceability strings, and are listed in `CURRENT_CHECKPOINT.json.verified_artifacts`. CONTROL completed those three records as a traceability completion for Stable IDs that already existed — no Stable ID was created:
+
+| Stable ID | Entity | Artifact | Status recorded | Evidence |
+|---|---|---|---|---|
+| `AR-GOV-005` | AR | `docs/audits/AR-GOV-005.md` | `APPROVED / VERIFIED` | Its own header records `Status: APPROVED / VERIFIED`; listed in `CURRENT_CHECKPOINT.json.verified_artifacts`; referenced by the `TO-GOV-009` traceability string |
+| `BR-GOV-008` | BR | `docs/build-reports/BR-GOV-008.md` | `VERIFIED` | Its header records `Final CONTROL Verification: APPROVED / VERIFIED under AR-GOV-005`; listed in `CURRENT_CHECKPOINT.json.verified_artifacts` |
+| `BR-GOV-009` | BR | `docs/build-reports/BR-GOV-009.md` | `VERIFIED` | Its header records `CONTROL Verification: APPROVED / VERIFIED`; named as evidence basis by `AR-GOV-005` |
+
+**42 artifacts remain unregistered and are NOT actioned in this cycle:**
+
+- audits (17): `AR-P0-AUDIT-001` through `AR-P0-AUDIT-013`, `AR-P0-ENTRY-001`, `AR-P0-RECON-001`, `AR-P1-AUDIT-006`, `AR-P2-AUDIT-006`
+- build-reports (13): `BR-P0-001` through `BR-P0-011`, `BR-P1-006`, `BR-P5-003`
+- task-orders (12): `TO-P0-001` through `TO-P0-011`, `TO-P2-016`
+
+CONTROL's decision and its basis: `ADR-GOVERNANCE-012` section 4 states that the Mandatory Peripheral Synchronization Checklist is prospective and **does not retroactively reopen or re-execute P0, P1 or P2 closure work**. Populating 39 P0/P1/P2 records retroactively would therefore fall outside that decision and outside this Task Order's section 5 boundary, and would be a registry scope expansion rather than a repair.
+
+Two artifacts in the remaining list are **not** covered by that retroactivity exclusion and are explicitly flagged for a bounded future reconciliation: `BR-P5-003` (PH-P5) and `TO-P2-016` (PH-P2). They are Phase-scoped artifacts whose absence from the registry is a traceability gap of the same class as `BR-P4-010`.
+
+### 13.2 Item A — `docs/registry/tests.yaml` ambiguous values: DETERMINATION MADE
+
+Question: are `core_tests`, `docker_foundation_tests` and `core_foundation_tests` correctly represented as single quoted strings?
+
+**The intended semantics are established as two facts per value.** The authoritative source documents state them as a test count plus a skipped count:
+
+- `docs/audits/AR-P4-020.md` line 48: "CI Core Run `37264413892` / #1836 — SUCCESS; **637 tests**, `OK (skipped=5)`."
+- `docs/audits/AR-P4-020.md` line 49: "CI Docker Foundation Run `37264413930` / #777 — SUCCESS; **635 tests**, `OK (skipped=7)`."
+- `docs/audits/AR-P4-022.md` line 92: "executing **648 foundation tests** with `OK (skipped=5)`".
+- `docs/build-reports/BR-P4-013.md` lines 156 and 168, and `docs/build-reports/BR-P4-015.md` line 192, state the same facts in the same two-fact form.
+
+**No authorized representation of two facts per record exists.** The only skip-count keys attested anywhere in `tests.yaml` are `skipped` (line 432, paired with `foundation_tests: 591` on line 431) and `ci_skipped` (line 634, paired with `ci_foundation_tests: 664` on line 633).
+
+The record `TST-P4-013` (lines 508–530) carries **two** count/skip pairs on lines 525–526. A bare `skipped` key therefore cannot express both without a duplicate key within one mapping, and no scoped skip-key convention is attested. Introducing `core_skipped`, `docker_foundation_skipped` or `core_foundation_skipped` would create new registry fields, which section 5 of this Task Order prohibits.
+
+**Determination:** the lossless quoted string is the only representation available within existing authority. Both facts are preserved verbatim, and no consumer parses these values — a repository-wide search finds no reader of these three keys outside this registry and the two governance documents describing the repair. No correction is applied and no semantic change is made.
+
+**Smallest decision required, if the project wants numeric fields:** authorise one scoped skipped-count key convention, for example `<suite>_skipped`, as registry vocabulary. Until that exists, acting would require inventing vocabulary. Practical impact of deferring: none identified.
+
+### 13.3 Item B — `TO-P5-003-CORRECTIVE-001` canonical naming: CORRECTED FROM EVIDENCE
+
+The registry convention was established empirically by comparing each artifact's own H1 title with its registry `canonical_name`:
+
+| Stable ID | Artifact title | Registry canonical_name | Match |
+|---|---|---|---|
+| `TO-P4-014-CORRECTIVE-001` | Complete S-03 Volume/RVOL Operational Integration | same | yes |
+| `TO-P5-005-CORRECTIVE-001` | S-12 Liquidity Causal-Resolution Investigation | same | yes |
+| `TO-P5-003` | Runtime Harness & Reference Specialist (S-10) | `Task Order — ` plus same | yes |
+| `TO-P4-012` | Group-A Upstream Root-Cause Resolution for P5-004 | `Task Order — ` plus same | yes |
+| `TO-P5-006` | Group C: Volume, Volume Profile Specialist Capability | same | yes |
+| `TO-P5-003-CORRECTIVE-001` | Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot | `Corrective Task Order — Authoritative Evidence-Context and Snapshot Transport Resolution` | **no** |
+
+The prevailing convention is that `canonical_name` is the artifact's own title, optionally prefixed with `Task Order — `. The single exception was `TO-P5-003-CORRECTIVE-001`, whose descriptive name carried an additional clause, "and Snapshot Transport", not present in the artifact title.
+
+**Correction applied** — descriptive name only; the `Corrective Task Order — ` prefix was retained to minimise change:
+
+```
+before:  canonical_name: Corrective Task Order — Authoritative Evidence-Context and Snapshot Transport Resolution
+after:   canonical_name: Corrective Task Order — Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot
+```
+
+Verified: `artifacts.yaml` parses; 331 records; no duplicate Stable ID; the descriptive name now matches the artifact title.
+
+**Observation recorded, not actioned:** two of the three corrective Task Order records in the registry carry no entity prefix at all. Prefix consistency is a stylistic matter, the `entity_type` field already carries the type, and no rule requires either form. CONTROL did not change it.
+
+### 13.4 Item C — F-07 and F-08 retractions
+
+The retractions stand on the evidence recorded in sections 12.3 and 12.4. The original findings remain present in section 2 exactly as issued. No file was modified in order to make the original findings appear correct: `docs/registry/phase2-artifacts.yaml` was not touched at all, and no encoding change was made to any pre-existing artifact. The independent audit was directed to confirm both retractions from the artifacts themselves.
+
+---END---
+
+## 14. INDEPENDENT VERIFICATION OUTCOME AND AUDIT-DRIVEN CORRECTIONS — 2026-10-10
+
+Under the Project Owner directive of 2026-10-10, an independent verification review of `BR-GOV-010` was performed by a separate reviewer context that re-derived every claim from the artifacts and from `git` instead of accepting the Build Report's conclusions. Its verdict: **BR-GOV-010 is not acceptable as it stands**, with eight evidenced qualifications.
+
+This section records the corrections that follow and — applying to this document the same standard it imposes on others — the inaccuracies found in **this Task Order's own text**.
+
+### 14.1 Inaccuracies in this Task Order, disclosed
+
+1. **The section 12 preamble is false.** It states the amendment "does not rewrite any finding above. The issued findings remain historically as issued." In commit `25791d5`, **two finding lines were in fact edited in place**. The prior `4fd0932` text is preserved here so the historical record is complete:
+   - former section 2 line 68: `- \`docs/registry/artifacts.yaml\` line 1755 — \`canonical_name: Build Report [bytes c3 a2 e2 82 ac 22] TO-P5-005 Group B: Market Structure, Price Action, Liquidity\``
+   - former section 2 line 136: `Some governance artifacts store U+2014 (EM DASH) as mojibake (\`[bytes c3 a2 e2 82 ac 22]\`), while others store it correctly as UTF-8. Confirmed instances:`
+   Both are reproduced above with the corrupted sequence shown in escaped byte form rather than embedded, so that the historical text is preserved without re-introducing the sequence into the repository. Both were edited because they embedded the very rendering artefact being described. The edits were correct in substance but contradicted this document's own preservation claim, and the contradiction was not disclosed. It is disclosed now.
+2. **The file's trailing newline was removed** by commit `25791d5` (the parent ended with a newline; that revision did not). It has been restored.
+3. **Section 12.4 contains two false sub-claims.** It states that the mojibake sequence "does not occur in any pre-existing artifact" and that "this Task Order now contains correct UTF-8 throughout". Both were false at `25791d5`: this Task Order was itself pre-existing and contained the sequence **twice**, in the two lines listed above, and one occurrence remained inside section 12.4 itself. Both occurrences have since been removed; the repository now contains none.
+4. **Section 12.4's em-dash count for `artifacts.yaml` (246) matched neither revision.** The independent measurement is: parent 248, `25791d5` 247. The other three counts in that sentence were correct.
+5. **Finding F-01 overstated its own repair.** Seven quote-only repairs landed, not eight. The eighth was the intermediate quoting of the merged `AR-P3-009` line, which the same repair then split into two lines (section 3.2) and which therefore does not exist in the landed revision.
+6. **Finding F-01 also described the parent's line 1755 value as mojibake.** The parent bytes at that line were correct UTF-8 (`e2 80 94`). The defect there was the unquoted colon, not the encoding.
+
+### 14.2 Corrections applied following the independent review
+
+| # | Correction | Evidence |
+|---|---|---|
+| 1 | `artifacts.yaml`: `BR-P5-008` status `PRODUCED` → `VERIFIED` | Section 3.6 second requirement; `AR-P5-009` records `BR-P5-008` as `VERIFIED`; 55 of 64 BR records use `VERIFIED` |
+| 2 | `artifacts.yaml`: `TO-P5-003-CORRECTIVE-001` `canonical_name` set to `Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot` | This is the exact value the removed duplicate record carried, it matches the artifact's own H1 title, and it matches the prevailing convention (two of the three corrective Task Order records carry the bare title). See 14.3 |
+| 3 | `CHANGE_LEDGER.yaml`: a compliant reconciliation entry added carrying `affected_ids`, `from_state` and `to_state` | Section 6 item 8 requires all three; the earlier entry omitted them |
+| 4 | Fresh-checkout byte-identity demonstration performed | Section 3.11 and acceptance criterion 12; result recorded in `AR-GOV-010` |
+| 5 | `BR-GOV-010` corrected by an appended correction section | The refuted claims are listed there with their correct values; its original text is preserved |
+
+### 14.3 Item B correction superseded
+
+Section 13.3 replaced the unsupported label with `Corrective Task Order — Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot`. The independent review correctly observed that this is a **third** value present in neither competing record — a composed label — which section 3.4 does not authorise. Correction 2 above replaces it with the removed record's exact value, so no label is composed.
+
+### 14.4 Item A determination superseded
+
+Section 13.2 reached the same determination in substance — that the lossless quoted string is the only representation available within existing authority — but framed it alongside a possible future vocabulary decision. What section 14.4 supersedes is that framing, not the determination: the independent review established that no open semantic decision is required. The independent review produced stronger in-record evidence and determined that the **single quoted string is the correct representation**: the same evidence mapping already contains structurally identical scalars (`independent_full_suite: 633 tests; OK (skipped=7)`), the only segregated skip-count form uses different key names and a different scope (`ci_foundation_tests` / `ci_skipped`), a bare `skipped` key could not express the two pairs carried by `TST-P4-013`, and no consumer parses these keys. Section 13.2's framing is therefore superseded: no open semantic decision is required.
+
+### 14.5 Residual risk recorded
+
+The independent review observed that `* -text`, mandated by section 3.11, unsets only the `text` attribute. It does not set `-diff`, so content changes remain visible in diffs; but it also means git will never normalise or warn about line endings again, so a future contributor could commit CRLF blobs silently. The guard protects the existing LF blobs against checkout conversion; it does not prevent future drift. The alternative this Task Order did not choose, `* text=auto eol=lf`, would provide normalisation in addition to checkout fidelity. Recorded as a residual risk for a future governance decision, not actioned here.
 
 ---END---

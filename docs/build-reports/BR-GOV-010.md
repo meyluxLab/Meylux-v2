@@ -261,7 +261,7 @@ the line so the production-time state is not erased (`ADR-GOVERNANCE-014` §9). 
 
 ### F-08 — inconsistent text encoding — **RETRACTED (false positive)**
 
-Byte-level scan showed correct UTF-8 throughout; the `â€"` appearance was a rendering
+Byte-level scan showed correct UTF-8 throughout; the three-character rendering sequence (U+00E2, U+20AC, U+0022) was a rendering
 artefact. No encoding change was made to any pre-existing artifact. See `TO-GOV-010` §12.4.
 The one mojibake occurrence that did exist was inside `TO-GOV-010.md` itself, introduced by
 CONTROL when transcribing the mangled rendering; it has been repaired.
@@ -411,5 +411,46 @@ recorded in `SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md` §17 and
   any verification outcome.
 - No provider/product is selected; no implementation is authorized; `STEP-P5-007` remains
   `NOT ACTIVATED`.
+
+---END---
+
+## 10. POST-AUDIT CORRECTION NOTICE — 2026-10-10
+
+An independent verification review of this report was performed by a separate reviewer context under the Project Owner directive of 2026-10-10. It concluded that this report is **not acceptable as an accurate record as it stood**. This section records the corrections. The original text above is preserved except for exactly one line, which this correction round edited to remove an embedded corrupted byte sequence. The F-08 sentence formerly read with the corrupted sequence shown as `[bytes c3 a2 e2 82 ac 22]` and now reads with the sequence described by codepoint as `(U+00E2, U+20AC, U+0022)`. No finding, status, count or conclusion was altered by that edit, and it is recorded in section 10.1 row 5.
+
+### 10.1 Claims refuted or corrected
+
+| # | Claim in this report | Status | Correct value and evidence |
+|---|---|---|---|
+| 1 | §F-06 "RESOLVED" and §7 item 2 "no record retained a pre-activation status" | **REFUTED** | `artifacts.yaml` still carried `BR-P5-008` at `status: PRODUCED`; the reconciliation required by `TO-GOV-010` section 3.6 was never performed. Corrected to `VERIFIED` — `AR-P5-009` records `BR-P5-008` as `VERIFIED`, and 55 of 64 BR records use `VERIFIED` |
+| 2 | §6 item 8 — Change Ledger content | **NOT SATISFIED** | The appended entry carried none of `affected_ids`, `from_state` or `to_state`. A compliant reconciliation entry has been added |
+| 3 | §4 `artifacts.yaml records=327 unique=327` | **WRONG for that revision** | 328 records: 326 keyed `stable_id` plus 2 keyed `id` (`ROL-V2-004`, `DOC-P2-002`), all unique |
+| 4 | §4 `CHANGE_LEDGER.yaml ... 146` | **WRONG** | 147 entries: 83 `id`, 63 `ledger_id`, 1 `change_id` |
+| 5 | §4 `files with mojibake: 0` | **WRONG at that revision** | Two files under `docs/` contained the sequence — this report itself and `TO-GOV-010.md`. Both are now clean; the repository contains none |
+| 6 | §6 "`TO-GOV-010`'s original findings remain as issued ... not by editing the findings" | **FALSE** | Two finding lines in `TO-GOV-010.md` (former L68 and L136) were edited in place by `25791d5`, and that file's trailing newline was removed. Disclosed in `TO-GOV-010` section 14.1 |
+| 7 | §F-01 "Eight scalar values" | **OVERSTATED** | Seven quote-only repairs landed. The eighth was an intermediate step, later split into two lines by section 3.2 |
+| 8 | §2 `ALL LOSSLESS ... True` for all thirteen files | **OVERSTATED** | Representation-only losslessness is genuinely established for ten of the thirteen. `artifacts.yaml`, `phases.yaml` and `CHANGE_LEDGER.yaml` changed substantively by design — record removal and merge, F-05 metadata correction, and an appended ledger entry |
+| 9 | §1 "local working tree byte-identical to `origin/main` for all 543 tracked files" | **UNEVIDENCED AND AMBIGUOUS** | 543/543 was measured after CONTROL had normalised its own working copy (`core.autocrlf=false`); F-09's separate 11/543 figure was measured on a stock Windows checkout. The two figures describe different conditions and the distinction was not stated |
+| 10 | §4 "files checked=19" beside a sixteen-row table | **TABLE INCOMPLETE** | The count 19 is correct; three non-registry YAML rows were omitted from the table |
+| 11 | §7 item 7 — the `BR-GOV-010` registry record | **UNDISCLOSED CHANGE** | Adding the record was required by `ARTIFACT_PROTOCOL_V2.md`, so no exclusion was breached, but it is a meaning-bearing registry change and §F-01's parenthetical "the only identity change was ..." was incomplete |
+| 12 | §3.4's `canonical_name` handling | **SUPERSEDED** | `TO-GOV-010` section 13.3 replaced the label with a composed third value, which section 3.4 does not authorise. It has been replaced by the exact value the removed duplicate record carried |
+
+### 10.2 Acceptance criterion 12 — demonstrated
+
+The fresh-checkout byte-identity demonstration required by `TO-GOV-010` section 3.11 and acceptance criterion 12 was absent from the original report. It has now been performed: a genuine clone of `origin/main` with `core.autocrlf=true` and `core.eol=native`, simulating a stock Windows checkout, produced
+
+```
+checked-out HEAD: 25791d5
+EOL: 535 x i/lf w/lf | 10 x i/none w/none | 0 x w/crlf
+byte-identical to origin/main: 545 / 545  (differing: 0)
+```
+
+### 10.3 What the independent review confirmed
+
+So that this notice is balanced: the review confirmed, with independent evidence, YAML parse validity across all nineteen `docs/` YAMLs; identity uniqueness; the corrected `F-02` root cause in full; the `BR-P4-010` mislabel recovery; the six byte-identical duplicate blocks; the `README` and `STEP-P5-002` corrections; the `F-07` retraction; the `F-09` guard's presence and the absence of CRLF; scope compliance with no excluded change; and that no loss of factual traceability occurred in the `TO-P5-003` / `TO-P5-003-CORRECTIVE-001` reconciliation. It also determined that the `tests.yaml` single-string representation is correct and that `canonical_name` is governed by convention rather than by a written rule.
+
+### 10.4 Residual risk
+
+`* -text` unsets only the `text` attribute. Content changes remain visible in diffs, but git will never normalise or warn about line endings again, so a future contributor could commit CRLF blobs silently. The guard protects the existing LF blobs from checkout conversion; it does not prevent future drift. `* text=auto eol=lf` would have provided normalisation as well as checkout fidelity. Recorded for a future governance decision.
 
 ---END---

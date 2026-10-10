@@ -390,7 +390,10 @@
     "AR-P2-AUDIT-013",
     "BR-P2-018",
     "AR-P2-AUDIT-020",
-    "TO-P2-018"
+    "TO-P2-018",
+    "TO-GOV-010",
+    "BR-GOV-010",
+    "AR-GOV-010"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -470,7 +473,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "3c66ac731658411e0c29451e61ad4d9f9c387ed8",
-  "updated_at_utc": "2026-10-09T14:26:00.000Z",
+  "updated_at_utc": "2026-10-10T22:55:00.000Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",

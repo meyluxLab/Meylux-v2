@@ -4141,3 +4141,46 @@ entries:
     historical_preservation: "TO-GOV-010 findings remain as issued with corrections recorded as an appended amendment; BR-P5-008 body unchanged; removed duplicate records were exact copies or superseded activation-basis records whose facts were merged forward; phase2-artifacts.yaml untouched."
     runtime: "No VPS/SentinelX, provider, or runtime operation."
     closure_owner: ROL-V2-001
+  - id: CL-TO-GOV-010-INDEPENDENT-VERIFICATION-20261010
+    date_utc: '2026-10-10'
+    change_type: INDEPENDENT_VERIFICATION_AND_AUDIT_DRIVEN_CORRECTION
+    subject: Independent verification of BR-GOV-010 refutes several record claims; audit-driven corrections applied
+    task_order: TO-GOV-010
+    build_report: BR-GOV-010
+    audit_report: AR-GOV-010
+    status: "VERIFICATION PERFORMED — RECORD CLAIMS REFUTED IN PART; CORRECTIONS APPLIED"
+    affected_ids:
+      - BR-P5-008
+      - TO-P5-003-CORRECTIVE-001
+      - AR-GOV-005
+      - BR-GOV-008
+      - BR-GOV-009
+      - BR-GOV-010
+      - TO-GOV-010
+    from_state: "artifacts.yaml BR-P5-008 = PRODUCED; TO-P5-003-CORRECTIVE-001 canonical_name = a composed third value present in neither competing record; AR-GOV-005, BR-GOV-008 and BR-GOV-009 existing as files but unregistered; BR-GOV-010 = PRODUCED carrying refuted record claims; TO-GOV-010 = AUTHORIZED TO EXECUTE"
+    to_state: "artifacts.yaml BR-P5-008 = VERIFIED; TO-P5-003-CORRECTIVE-001 canonical_name = Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot, the exact value the removed duplicate record carried and matching the artifact title; AR-GOV-005, BR-GOV-008 and BR-GOV-009 registered; BR-GOV-010 corrected by an appended post-audit notice; TO-GOV-010 corrected by section 14"
+    evidence: "Independent verification performed by a separate reviewer context under the Project Owner directive of 2026-10-10; BR-GOV-010 refuted on eight evidenced qualifications. Corrections: BR-P5-008 status reconciled to VERIFIED per AR-P5-009 and TO-GOV-010 section 3.6; the composed canonical_name replaced by the removed record's exact value; the missing affected_ids/from_state/to_state content supplied by this entry; the missing fresh-checkout byte-identity demonstration performed (clone of origin/main with core.autocrlf=true produced 535 i/lf w/lf, 10 i/none w/none, 0 w/crlf, byte-identical 545/545); TO-GOV-010 section 14 and BR-GOV-010 section 10 record the inaccuracies including two finding lines edited in place by 25791d5, a removed trailing newline, two false F-08 sub-claims, an over-stated F-01 repair count, and three wrong machine-verification counts."
+    next_action: "Record the verification outcome in AR-GOV-010 and complete CONTROL-owned closure synchronization under ADR-GOVERNANCE-012."
+    historical_preservation: "BR-GOV-010 and TO-GOV-010 original text preserved in full; corrections appended as later state, not by rewriting. BR-P5-008.md body unchanged. No excluded artifact touched. The prior ledger entry CL-TO-GOV-010-EXECUTED-20261010 is preserved as issued."
+    runtime: "No VPS/SentinelX, provider, or runtime operation."
+    closure_owner: ROL-V2-001
+
+  - id: CL-TO-GOV-010-CLOSURE-20261010
+    date_utc: '2026-10-10'
+    change_type: INDEPENDENT_VERIFICATION_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL records the independent verification of BR-GOV-010 and closes TO-GOV-010
+    task_order: TO-GOV-010
+    build_report: BR-GOV-010
+    audit_report: AR-GOV-010
+    status: "VERIFIED / COMPLETE"
+    affected_ids:
+      - TO-GOV-010
+      - BR-GOV-010
+      - AR-GOV-010
+    from_state: "TO-GOV-010 = AUTHORIZED TO EXECUTE; BR-GOV-010 = PRODUCED with eight refuted record claims; AR-GOV-010 did not exist; CURRENT_CHECKPOINT verified_artifacts omitted all three governance artifacts"
+    to_state: "TO-GOV-010 = VERIFIED / COMPLETE; BR-GOV-010 = VERIFIED with an appended post-audit correction notice; AR-GOV-010 = APPROVED / VERIFIED and registered; CURRENT_CHECKPOINT verified_artifacts 365 -> 368"
+    evidence: "Independent verification performed by a separate reviewer context. First round refuted BR-GOV-010 on eight evidenced qualifications. All eight were corrected: BR-P5-008 reconciled to VERIFIED; the corrective canonical_name set to the removed record's exact byte-identical value; a compliant Change Ledger entry added with affected_ids, from_state and to_state; the absent fresh-checkout byte-identity demonstration performed and independently reproduced (535 i/lf w/lf, 10 i/none w/none, 0 w/crlf, 545/545 byte-identical); TO-GOV-010 section 14 and BR-GOV-010 section 10 appended as correction notices. The second round confirmed all eight resolved and found BR-GOV-010 acceptable once two prescribed wording defects in the notice were fixed and those fixes applied. Acceptance criteria 1-12 of TO-GOV-010 section 8 are met. Repository-wide: 19 of 19 docs YAML parse, zero duplicate Stable IDs, zero files containing CRLF, zero files containing the corrupted encoding sequence."
+    next_action: "None for TO-GOV-010. Outstanding governance item: 42 artifacts still carry no registry record - 39 P0/P1/P2 artifacts excluded from retroactive action by ADR-GOVERNANCE-012 section 4, plus BR-P5-003 (PH-P5) and TO-P2-016 (PH-P2) which require a bounded future reconciliation. Residual risk: '* -text' prevents checkout conversion but will not normalise future CRLF commits."
+    historical_preservation: "Original text of TO-GOV-010 and BR-GOV-010 preserved; corrections appended as later state. BR-P5-008.md body byte-identical. No Phase or Step reopened. BR-P2-019 and PRQ-3 untouched."
+    runtime: "No VPS/SentinelX, provider, or runtime operation."
+    closure_owner: ROL-V2-001
