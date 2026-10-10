@@ -271,7 +271,7 @@ records:
       control_audit: AR-P4-020
     status: VERIFIED
 
-- stable_id: RUN-P4-014
+  - stable_id: RUN-P4-014
     canonical_name: CONTROL Independent TO-P4-014 S-17 Runtime Verification
     entity_type: RUN
     phase: PH-P4
@@ -295,7 +295,7 @@ records:
       control_audit: AR-P4-022
     status: VERIFIED
 
-- stable_id: RUN-P5-005
+  - stable_id: RUN-P5-005
     canonical_name: CONTROL Independent TO-P5-005 Group-B Runtime Verification
     entity_type: RUN
     phase: PH-P5
@@ -316,67 +316,67 @@ records:
       control_audit: AR-P5-005
     status: VERIFIED
 
- - stable_id: RUN-P5-006
-   canonical_name: CONTROL SentinelX Causal Verification — TO-P5-005-CORRECTIVE-001
-   entity_type: RUN
-   phase: PH-P5
-   step: STEP-P5-005
-   task_order: TO-P5-005-CORRECTIVE-001
-   artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006.md
-   status: VERIFIED
-   evidence:
-     target: server-l6rf
-     mechanism: SentinelX-only read-only PostgreSQL inspection
-     repository_revision: 857020c80de4753727ee8fb51cbffb88369e4635
-     canonical_population: 158
-     canonical_timeframes: 117x15m; 31x1h; 10x4h
-     swing_population: 14
-     qualifying_same_side_duplicate_levels: 0
-     liquidity_pool_rows: 0
-     historical_snapshot: b4197da28bfea856fe9817f8bfe0cdf67ac4d85379078783f4a677dbea1d65f8
-     control_audit: AR-P5-006
+  - stable_id: RUN-P5-006
+    canonical_name: CONTROL SentinelX Causal Verification — TO-P5-005-CORRECTIVE-001
+    entity_type: RUN
+    phase: PH-P5
+    step: STEP-P5-005
+    task_order: TO-P5-005-CORRECTIVE-001
+    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P5-005-CORRECTIVE-001-CONTROL-20261006.md
+    status: VERIFIED
+    evidence:
+      target: server-l6rf
+      mechanism: SentinelX-only read-only PostgreSQL inspection
+      repository_revision: 857020c80de4753727ee8fb51cbffb88369e4635
+      canonical_population: 158
+      canonical_timeframes: 117x15m; 31x1h; 10x4h
+      swing_population: 14
+      qualifying_same_side_duplicate_levels: 0
+      liquidity_pool_rows: 0
+      historical_snapshot: b4197da28bfea856fe9817f8bfe0cdf67ac4d85379078783f4a677dbea1d65f8
+      control_audit: AR-P5-006
 
-- stable_id: RUN-P2-014
-  canonical_name: TO-P2-014 Real Binance Spot Trade Acquisition and Replay CI Runtime
-  entity_type: RUN
-  phase: PH-P2
-  step: STEP-P2-006
-  task_order: TO-P2-014
-  evidence:
-    mechanism: GitHub Actions Docker Foundation
-    implementation_revision: 41683d931a7cf4321f6655e173e8794af93f74d2
-    docker_run_id: 37519104091
-    docker_job_id: 112459533543
-    docker_result: SUCCESS
-    symbols: BTCUSDT,SOLUSDT
-    trade_limit_per_symbol: 100
-    observed_history_seconds: 21
-    replay_executed: true
-    replay_raw_duplicates: 200
-    replay_quality_duplicates: 200
-    replay_quality_contradictory: 0
-    replay_canonical_duplicates: 200
-    control_audit: AR-P2-AUDIT-014
-  status: VERIFIED
+  - stable_id: RUN-P2-014
+    canonical_name: TO-P2-014 Real Binance Spot Trade Acquisition and Replay CI Runtime
+    entity_type: RUN
+    phase: PH-P2
+    step: STEP-P2-006
+    task_order: TO-P2-014
+    evidence:
+      mechanism: GitHub Actions Docker Foundation
+      implementation_revision: 41683d931a7cf4321f6655e173e8794af93f74d2
+      docker_run_id: 37519104091
+      docker_job_id: 112459533543
+      docker_result: SUCCESS
+      symbols: BTCUSDT,SOLUSDT
+      trade_limit_per_symbol: 100
+      observed_history_seconds: 21
+      replay_executed: true
+      replay_raw_duplicates: 200
+      replay_quality_duplicates: 200
+      replay_quality_contradictory: 0
+      replay_canonical_duplicates: 200
+      control_audit: AR-P2-AUDIT-014
+    status: VERIFIED
 
 
-- stable_id: RUN-P2-015
-  canonical_name: CONTROL Real Binance Spot Trade Venue-Evidence Runtime Acceptance
-  entity_type: RUN
-  phase: PH-P2
-  step: STEP-P2-006
-  task_order: TO-P2-015
-  runtime_target: server-l6rf
-  evidence:
-    implementation_head: 87b74954cd4fbd2d004a3212d965f42b97c3e870
-    merged_main_commit: 56bebeb4114aacd8d8999da3325b25c193db0b1a
-    real_provider: Binance Spot
-    symbol: BTCUSDT
-    explicit_venue: BINANCE
-    raw_quality_canonical_lineage: VERIFIED
-    direct_postgresql_readback: VERIFIED
-    deterministic_replay: VERIFIED
-    replay_contradictory_quality_rows: 0
-    execution_log: EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007
-    restoration: VERIFIED
-  status: VERIFIED
+  - stable_id: RUN-P2-015
+    canonical_name: CONTROL Real Binance Spot Trade Venue-Evidence Runtime Acceptance
+    entity_type: RUN
+    phase: PH-P2
+    step: STEP-P2-006
+    task_order: TO-P2-015
+    runtime_target: server-l6rf
+    evidence:
+      implementation_head: 87b74954cd4fbd2d004a3212d965f42b97c3e870
+      merged_main_commit: 56bebeb4114aacd8d8999da3325b25c193db0b1a
+      real_provider: Binance Spot
+      symbol: BTCUSDT
+      explicit_venue: BINANCE
+      raw_quality_canonical_lineage: VERIFIED
+      direct_postgresql_readback: VERIFIED
+      deterministic_replay: VERIFIED
+      replay_contradictory_quality_rows: 0
+      execution_log: EXEC-LOG-TO-P2-015-CONTROL-RUNTIME-20261007
+      restoration: VERIFIED
+    status: VERIFIED

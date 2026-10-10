@@ -70,4 +70,25 @@ records:
     interpretation: resource observation only; not a production capacity or latency guarantee
     status: VERIFIED
     control_audit: AR-P5-003
-\n\n  - stable_id: PERF-P5-004\n    canonical_name: CONTROL TO-P5-004 Group-A Runtime Performance Baseline\n    entity_type: PERFORMANCE\n    phase: PH-P5\n    step: STEP-P5-004\n    task_order: TO-P5-004\n    evidence:\n      execution_log: EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004\n      revision: be6c9f434272e030e0cb7167ea230485b3929781\n      workload: authoritative Binance BTCUSDT Snapshot through S-01 worker handler; existing-output replay\n      samples: 30\n      p50_ms: 246.2099335\n      p95_ms: 270.70033\n      max_ms: 296.435471\n      user_cpu_delta_s: 6.857696\n      system_cpu_delta_s: 0.031379\n      peak_rss_bytes: 35307520\n      interpretation: runtime observation only; not a production capacity target\n      control_audit: AR-P5-004\n    status: VERIFIED\n
+
+
+  - stable_id: PERF-P5-004
+    canonical_name: CONTROL TO-P5-004 Group-A Runtime Performance Baseline
+    entity_type: PERFORMANCE
+    phase: PH-P5
+    step: STEP-P5-004
+    task_order: TO-P5-004
+    evidence:
+      execution_log: EXEC-LOG-TO-P5-004-CONTROL-RUNTIME-20261004
+      revision: be6c9f434272e030e0cb7167ea230485b3929781
+      workload: authoritative Binance BTCUSDT Snapshot through S-01 worker handler; existing-output replay
+      samples: 30
+      p50_ms: 246.2099335
+      p95_ms: 270.70033
+      max_ms: 296.435471
+      user_cpu_delta_s: 6.857696
+      system_cpu_delta_s: 0.031379
+      peak_rss_bytes: 35307520
+      interpretation: runtime observation only; not a production capacity target
+      control_audit: AR-P5-004
+    status: VERIFIED

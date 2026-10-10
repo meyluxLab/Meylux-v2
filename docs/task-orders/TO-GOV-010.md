@@ -65,7 +65,7 @@ Known value-level instances include:
 
 - `docs/registry/phases.yaml` lines 516, 541, 569, 724 — `logical_name: Group A|B|C: ...`
 - `docs/registry/tests.yaml` lines 525, 526, 551 — `core_tests: 637; skipped: 5` and similar
-- `docs/registry/artifacts.yaml` line 1755 — `canonical_name: Build Report â€" TO-P5-005 Group B: Market Structure, Price Action, Liquidity`
+- `docs/registry/artifacts.yaml` line 1755 — `canonical_name: Build Report — TO-P5-005 Group B: Market Structure, Price Action, Liquidity`
 
 Known indentation instances: `contracts.yaml` line 295 (`- stable_id: CTR-P5-005`), `runtime.yaml` line 274 (`- stable_id: RUN-P4-014`) and `CHANGE_LEDGER.yaml` line 2056 (`- ledger_id: CL-P5-STEP-002-CLOSURE-20260924`) each begin at column 1 while their sibling sequence entries are indented.
 
@@ -133,7 +133,7 @@ This contradicts:
 
 ### F-08 — Inconsistent text encoding
 
-Some governance artifacts store U+2014 (EM DASH) as mojibake (`â€"`), while others store it correctly as UTF-8. Confirmed instances:
+Some governance artifacts store U+2014 (EM DASH) as mojibake (`—`), while others store it correctly as UTF-8. Confirmed instances:
 
 - `docs/state/CHANGE_LEDGER.yaml` lines 498, 578, 600, 2238 and the closing entries
 - `docs/build-reports/BR-P5-008.md` line 1 and line 5
@@ -376,5 +376,54 @@ Deliver `BR-GOV-010` with the finding-by-finding before/after disclosure, the un
 
 Respectfully,
 ROL-V2-001 — CONTROL / REVIEWER
+
+---END---
+
+## 12. CONTROL EXECUTION AMENDMENT — 2026-10-10
+
+This section is appended by CONTROL and does not rewrite any finding above. The issued findings remain historically as issued; this amendment records corrections established during execution.
+
+### 12.1 Authority deviation — Project Owner one-time authorization
+
+By explicit Project Owner instruction dated 2026-10-10, CONTROL was authorized **for this single instance only** to execute TO-GOV-010 itself instead of routing it to `ROL-V2-002` (PRODUCER / ARCHITECT-BUILDER), so that the governance-artifact integrity defects are closed without an additional referral.
+
+This is an acknowledged, bounded deviation from the normal role separation:
+
+- `SHARED_ROLE_BOUNDARY_CONTROL_REVIEWER_PRODUCER_V2.md` §17 — NO SILENT ROLE TRANSFER;
+- `ROLE_CONTRACT_CONTROL_REVIEWER_V2.md` §8 — the Reviewer must not become the implementer.
+
+The deviation is limited to TO-GOV-010 and extends to no other Task Order. Because CONTROL executed the work, **no independent verification of `BR-GOV-010` was performed and none is claimed.** `BR-GOV-010` is recorded as executed evidence, not as independently verified work.
+
+### 12.2 Root cause of F-02 corrected
+
+F-02 described the seven affected files as "unquoted colon in value". Byte-level inspection during execution shows the actual defect was different: each of those seven files contained exactly one physical line holding a complete record, written with **literal backslash-n escape sequences instead of real newlines**. The repair prescribed by F-02 as written would not have repaired them.
+
+CONTROL applied the correct minimal repair — converting the literal escape sequences to real newlines — which is a representation-only change. It was verified lossless by whitespace-normalised comparison against the previous revision.
+
+Affected: `components.yaml`, `configuration.yaml`, `database.yaml`, `observability.yaml`, `performance.yaml`, `requirements.yaml`, `security.yaml`.
+
+### 12.3 F-07 RETRACTED — false positive
+
+F-07 asserted that `docs/registry/phase2-artifacts.yaml` had not been retired. Reading the file shows line 2 already records:
+
+```
+status: RETIRED / SUPERSEDED
+```
+
+The finding was reached without reading the file and is therefore withdrawn. No change was made to that file. Checklist item 5 of `ADR-GOVERNANCE-012` §2 is satisfied.
+
+### 12.4 F-08 RETRACTED — false positive
+
+F-08 asserted inconsistent text encoding (mojibake). A byte-level scan of every file under `docs/` shows the stored encoding is correct UTF-8: em dashes are stored as the correct three-byte sequence `e2 80 94` (334 occurrences in `CHANGE_LEDGER.yaml`, 246 in `artifacts.yaml`, 18 in `AR-P2-AUDIT-020.md`, 10 in `BR-P5-008.md`), and the mojibake lead sequence `c3 a2 e2 82 ac` does not occur in any pre-existing artifact.
+
+The `â€"` appearance was a rendering artefact of the reviewing tool chain, not file content. F-08 is withdrawn, and required work item §3.9 no longer applies.
+
+CONTROL further records that it had typed that mangled rendering into this document and has since repaired the occurrence, so this Task Order now contains correct UTF-8 throughout.
+
+### 12.5 Findings executed
+
+`F-01`, `F-02` (as corrected in §12.2), `F-03.1`, `F-03.2`, `F-03.3`, `F-04`, `F-05`, `F-06` and `F-09` were executed. `F-07` and `F-08` were retracted.
+
+Full evidence, before/after disclosure, reconciliation reasoning and machine verification are recorded in `docs/build-reports/BR-GOV-010.md`.
 
 ---END---

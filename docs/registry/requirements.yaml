@@ -58,9 +58,28 @@ records:
       - identity/provenance/replay
       - no P5 recomputation
       - STEP-P5-004 remains separately governed
-\n\n  - stable_id: REQ-P5-004\n    canonical_name: P5-004 Group-A Specialist Acceptance Requirements\n    entity_type: REQUIREMENT\n    phase: PH-P5\n    step: STEP-P5-004\n    task_order: TO-P5-004\n    traceability: TO-P5-004 / BR-P5-005 / AR-P5-004\n    disposition: VERIFIED\n    status: VERIFIED\n    constraints_preserved:\n      - P4 mathematical ownership\n      - explicit closed-candle temporal boundary\n      - knowledge_time separation\n      - venue-neutral EvidenceRef semantics\n      - append-only persistence\n      - deterministic replay/idempotency\n      - no trading/capital/custody capability\n
 
-- stable_id: REQ-P5-005
+
+  - stable_id: REQ-P5-004
+    canonical_name: P5-004 Group-A Specialist Acceptance Requirements
+    entity_type: REQUIREMENT
+    phase: PH-P5
+    step: STEP-P5-004
+    task_order: TO-P5-004
+    traceability: TO-P5-004 / BR-P5-005 / AR-P5-004
+    disposition: VERIFIED
+    status: VERIFIED
+    constraints_preserved:
+      - P4 mathematical ownership
+      - explicit closed-candle temporal boundary
+      - knowledge_time separation
+      - venue-neutral EvidenceRef semantics
+      - append-only persistence
+      - deterministic replay/idempotency
+      - no trading/capital/custody capability
+
+
+  - stable_id: REQ-P5-005
     canonical_name: TO-P5-005 Group-B Specialist Acceptance Requirements
     entity_type: REQUIREMENT
     phase: PH-P5

@@ -292,7 +292,7 @@ records:
     provenance: BR-P5-004 / AR-P5-003
     status: VERIFIED
 
-- stable_id: CTR-P5-005
+  - stable_id: CTR-P5-005
     canonical_name: TO-P5-005 Group-B Specialist Contract Acceptance
     entity_type: CONTRACT
     phase: PH-P5

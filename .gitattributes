@@ -1,0 +1,14 @@
+# Protect artifact byte-integrity for the Meylux V2 evidence model.
+#
+# The project's evidence chain cites exact Blob SHAs (see ADR-GOVERNANCE-013 Rule 3
+# and docs/verification/GATE_DEFINITIONS.md section 4). Git for Windows sets
+# core.autocrlf=true system-wide, so without this file an ordinary Windows checkout
+# materializes CRLF in the working tree while every canonical blob is LF, and a
+# local file no longer matches the SHA it is compared against.
+#
+# '* -text' disables all line-ending conversion, so a checkout on any platform
+# reproduces the stored bytes exactly.
+#
+# This file is additive. It does not rewrite, re-normalize, or re-commit any
+# existing artifact.
+* -text

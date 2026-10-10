@@ -931,32 +931,20 @@ records:
     artifact_path: docs/task-orders/TO-P5-001.md
     traceability: PH-P5 / STEP-P5-001 / PROJECT-OWNER-PHASE-5-REDIRECTION-AND-SIMPLIFIED-ESTABLISHMENT-2026-09-23 / BR-P5-001 / AR-P5-001
     status: VERIFIED / COMPLETE
-  - stable_id: TO-P5-003-CORRECTIVE-001
-    canonical_name: Authoritative Evidence-Context Resolution for Stage-1 Input Snapshot
-    entity_type: TO
-    artifact_path: docs/task-orders/TO-P5-003-CORRECTIVE-001.md
-    traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / PRQ-4 / P3 quality-evidence context / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-01
-    status: VERIFIED / COMPLETE
   - stable_id: STEP-P5-003
     canonical_name: Runtime Harness & Reference Specialist (S-10)
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-002 / TO-P5-003 / PRQ-4 / TO-P3-009 / AR-P3-009 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-09-29
     status: COMPLETE / VERIFIED
-  - stable_id: TO-P5-003
-    canonical_name: Runtime Harness & Reference Specialist (S-10)
-    entity_type: TO
-    artifact_path: docs/task-orders/TO-P5-003.md
-    traceability: PH-P5 / STEP-P5-003 / STEP-P5-002 / PRQ-4 / TO-P3-009 / AR-P3-009 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-09-29
-    status: VERIFIED / COMPLETE
   - stable_id: STEP-P5-004
-    canonical_name: Group A: Technical, Multi-Timeframe, Volatility
+    canonical_name: 'Group A: Technical, Multi-Timeframe, Volatility'
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-003 / TO-P5-004 / PRQ-1 Group-A / TO-P4-011 / AR-P4-018 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-02
     status: COMPLETE / VERIFIED
   - stable_id: TO-P5-004
-    canonical_name: Group A: Technical, Multi-Timeframe, Volatility
+    canonical_name: 'Group A: Technical, Multi-Timeframe, Volatility'
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-004.md
     traceability: PH-P5 / STEP-P5-004 / STEP-P5-003 / PRQ-1 Group-A / TO-P4-011 / AR-P4-018 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-10-02
@@ -1564,49 +1552,7 @@ records:
     status: APPROVED / VERIFIED
 
 
-  - stable_id: BR-P4-012
-    canonical_name: Build Report — Group-A Upstream Root-Cause Resolution for P5-004
-    entity_type: BR
-    artifact_path: docs/build-reports/BR-P4-012.md
-    traceability: TO-P4-012 / STEP-P5-004 / AR-P4-019 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: VERIFIED
-
-  - stable_id: TST-P4-012
-    canonical_name: TO-P4-012 Venue Provenance and EMA Coverage Regression Evidence
-    entity_type: TST
-    artifact_path: tests/test_p4_011_group_a_facts.py
-    traceability: TO-P4-012 / BR-P4-012 / AR-P4-019
-    status: VERIFIED
-
-  - stable_id: DB-P4-012
-    canonical_name: TO-P4-012 Governed Runtime Quantitative Persistence Evidence
-    entity_type: DB
-    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004.md
-    traceability: TO-P4-012 / AR-P4-019
-    status: VERIFIED
-
-  - stable_id: CFG-P4-012
-    canonical_name: TO-P4-012 EMA Period and Venue-Resolution Configuration Evidence
-    entity_type: CONFIGURATION
-    artifact_path: src/meylux/orchestration/engine.py
-    traceability: TO-P4-012 / BR-P4-012 / AR-P4-019
-    status: VERIFIED
-
-  - stable_id: RUN-P4-012
-    canonical_name: CONTROL Independent TO-P4-012 Runtime Acceptance Execution
-    entity_type: RUN
-    artifact_path: docs/operations/sentinelx/EXEC-LOG-TO-P4-012-CONTROL-RUNTIME-20261004.md
-    traceability: TO-P4-012 / AR-P4-019 / ADR-GOVERNANCE-011 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: VERIFIED
-
-  - stable_id: AR-P4-019
-    canonical_name: CONTROL Independent Audit — TO-P4-012 Group-A Upstream Root-Cause Resolution
-    entity_type: AR
-    artifact_path: docs/audits/AR-P4-019.md
-    traceability: TO-P4-012 / BR-P4-012 / TST-P4-012 / DB-P4-012 / CFG-P4-012 / RUN-P4-012 / PH-P5 / STEP-P5-004 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: APPROVED / VERIFIED
-
-  - stable_id: TO-P4-012
+  - stable_id: BR-P4-010
     canonical_name: Build Report — P4 Authoritative Knowledge-Time Semantic & Persistence Correction
     entity_type: BR
     artifact_path: docs/build-reports/BR-P4-010.md
@@ -1634,7 +1580,8 @@ records:
     entity_type: AR
     artifact_path: docs/audits/AR-P4-017.md
     traceability: TO-P4-010 / BR-P4-010 / TST-P4-010 / PH-P4 / STEP-P4-006 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
-    status: APPROVED / VERIFIED  - stable_id: AR-P3-009
+    status: APPROVED / VERIFIED
+  - stable_id: AR-P3-009
     canonical_name: CONTROL Final Independent Audit — Persisted Quality / Acquisition Evidence Corrective Resolution
     entity_type: AR
     artifact_path: docs/audits/AR-P3-009.md
@@ -1650,13 +1597,13 @@ records:
     canonical_name: Corrective Task Order — Authoritative Evidence-Context and Snapshot Transport Resolution
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-003-CORRECTIVE-001.md
-    traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / BR-P5-004 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive 2026-10-01
+    traceability: PH-P5 / STEP-P5-003 / TO-P5-003 / PRQ-4 / P3 quality-evidence context / BR-P5-004 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Directive 2026-10-01
     status: VERIFIED / COMPLETE
   - stable_id: TO-P5-003
     canonical_name: Task Order — Runtime Harness & Reference Specialist (S-10)
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-003.md
-    traceability: PH-P5 / STEP-P5-003 / BR-P5-004 / AR-P5-003 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    traceability: PH-P5 / STEP-P5-003 / STEP-P5-002 / PRQ-4 / TO-P3-009 / AR-P3-009 / BR-P5-004 / AR-P5-003 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner Authorization 2026-09-29
     status: VERIFIED / COMPLETE
 
   - stable_id: AR-P5-003
@@ -1752,7 +1699,7 @@ records:
     status: APPROVED / VERIFIED
 
   - stable_id: BR-P5-006
-    canonical_name: Build Report — TO-P5-005 Group B: Market Structure, Price Action, Liquidity
+    canonical_name: 'Build Report — TO-P5-005 Group B: Market Structure, Price Action, Liquidity'
     entity_type: BR
     artifact_path: docs/build-reports/BR-P5-006.md
     traceability: TO-P5-005 / PH-P5 / STEP-P5-005 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / 99c57cc002515220fa9fbd68933ead4f991fb1c9 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05 / AR-P5-005
@@ -1774,20 +1721,20 @@ records:
     status: APPROVED / VERIFIED
 
   - stable_id: STEP-P5-005
-    canonical_name: Group B: Market Structure, Price Action, Liquidity
+    canonical_name: 'Group B: Market Structure, Price Action, Liquidity'
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-004 / TO-P5-005 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / AR-P5-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
     status: COMPLETE / VERIFIED
   - stable_id: TO-P5-005
-    canonical_name: Group B: Market Structure, Price Action, Liquidity
+    canonical_name: 'Group B: Market Structure, Price Action, Liquidity'
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-005.md
     traceability: PH-P5 / STEP-P5-005 / STEP-P5-004 / PRQ-1 Group-B / TO-P4-013 / AR-P4-020 / AR-P5-005 / DOC-V2-ARCH-001 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner next-step determination 2026-10-05
     status: VERIFIED / COMPLETE
 
   - stable_id: STEP-P5-006
-    canonical_name: Group C: Volume, Volume Profile
+    canonical_name: 'Group C: Volume, Volume Profile'
     entity_type: STEP
     artifact_path: docs/phases/PH-P5.md
     traceability: PH-P5 / STEP-P5-006 / TO-P5-006 / AR-P5-009 / TO-P4-015 / AR-P4-023 / PRQ-1 Group-C / PRQ-2 trade / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner resume directive 2026-10-08
@@ -1812,7 +1759,7 @@ records:
     status: APPROVED / VERIFIED
 
   - stable_id: TO-P5-006
-    canonical_name: Group C: Volume, Volume Profile Specialist Capability
+    canonical_name: 'Group C: Volume, Volume Profile Specialist Capability'
     entity_type: TO
     artifact_path: docs/task-orders/TO-P5-006.md
     traceability: PH-P5 / STEP-P5-006 / TO-P5-006 / BR-P5-008 / AR-P5-009 / PRQ-1 Group-C / PRQ-2 trade / TO-P4-015 / AR-P4-023 / TO-P2-014 / AR-P2-AUDIT-014 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
@@ -2192,3 +2139,9 @@ records:
     artifact_path: docs/task-orders/TO-GOV-010.md
     traceability: TO-GOV-009 / AR-GOV-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
     status: AUTHORIZED TO EXECUTE
+  - stable_id: BR-GOV-010
+    canonical_name: Build Report — Governance Artifact Parse Integrity & Status-Drift Reconciliation
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-GOV-010.md
+    traceability: TO-GOV-010 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / Project Owner one-time CONTROL execution authorization 2026-10-10 / independent verification not performed
+    status: PRODUCED

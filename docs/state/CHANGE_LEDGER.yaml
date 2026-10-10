@@ -2053,7 +2053,7 @@ entries:
     runtime_effect: "READ-ONLY OBSERVATION ONLY — no VPS mutation, restart, deploy, migration, provider activation, database write, cleanup, or configuration mutation."
     architecture_effect: "DOC-V2-ARCH-001 remains RATIFIED / FROZEN and unchanged."
     lifecycle_effect: "STEP-P5-001 remains historically recorded COMPLETE / VERIFIED pending governed correction decision; STEP-P5-002 and TO-P5-002 remain ACTIVE / AUTHORIZED; no closure transition performed."
-- ledger_id: CL-P5-STEP-002-CLOSURE-20260924
+  - ledger_id: CL-P5-STEP-002-CLOSURE-20260924
     recorded_at: "2026-09-24"
     authority: CONTROL / REVIEWER
     action: "INDEPENDENT AUDIT AND CONTROL-OWNED CLOSURE SYNCHRONIZATION"
@@ -3125,17 +3125,17 @@ entries:
       machine_readback: COMPLETED
 
 
-- ledger_id: CL-TO-P4-013-ACTIVATION-20261004
-  date_utc: 2026-10-04
-  authority: Project Owner Directive 2026-10-04
-  role: ROL-V2-001
-  action: ACTIVATE_TASK_ORDER
-  task_order: TO-P4-013
-  purpose: Resolve the P4-owned Group-B structural event/zone persistence dependency required before STEP-P5-005 activation.
-  predecessor: TO-P4-012 / AR-P4-019
-  resulting_state: PH-P5 ACTIVE / AUTHORIZED; STEP-P5-004 COMPLETE / VERIFIED; active_task_order TO-P4-013; STEP-P5-005 NOT ACTIVATED
-  task_order_commit: 3656c81155eb58a97a348fb5370131d04d92372c
-  closure_status: OPEN — AUTHORIZED TO EXECUTE
+  - ledger_id: CL-TO-P4-013-ACTIVATION-20261004
+    date_utc: 2026-10-04
+    authority: Project Owner Directive 2026-10-04
+    role: ROL-V2-001
+    action: ACTIVATE_TASK_ORDER
+    task_order: TO-P4-013
+    purpose: Resolve the P4-owned Group-B structural event/zone persistence dependency required before STEP-P5-005 activation.
+    predecessor: TO-P4-012 / AR-P4-019
+    resulting_state: PH-P5 ACTIVE / AUTHORIZED; STEP-P5-004 COMPLETE / VERIFIED; active_task_order TO-P4-013; STEP-P5-005 NOT ACTIVATED
+    task_order_commit: 3656c81155eb58a97a348fb5370131d04d92372c
+    closure_status: OPEN — AUTHORIZED TO EXECUTE
 
 
   - ledger_id: CL-TO-P4-013-CLOSURE-20261005
@@ -4125,5 +4125,19 @@ entries:
     evidence: "An ordinary Windows checkout materialized CRLF for 533 tracked text files (git ls-files --eol reported i/lf w/crlf) because core.autocrlf is true system-wide and the repository has no .gitattributes; only 11 of 543 working files were byte-identical to origin/main. Stored blobs remain correct because the index reports i/lf. CONTROL added F-09 and required work item 3.11 before Producer execution began."
     next_action: "Producer executes TO-GOV-010 as amended and submits BR-GOV-010 for independent CONTROL audit."
     historical_preservation: "No historical evidence rewritten and no stored artifact re-normalized; the amendment is recorded as later state."
+    runtime: "No VPS/SentinelX, provider, or runtime operation."
+    closure_owner: ROL-V2-001
+  - id: CL-TO-GOV-010-EXECUTED-20261010
+    date_utc: '2026-10-10'
+    change_type: GOVERNED_CORRECTIVE_EXECUTION
+    subject: CONTROL executes TO-GOV-010 under a Project Owner one-time authorization and submits BR-GOV-010
+    task_order: TO-GOV-010
+    build_report: BR-GOV-010
+    audit_report: null
+    status: "EXECUTED — EVIDENCE SUBMITTED; INDEPENDENT VERIFICATION NOT PERFORMED"
+    authority_deviation: "Project Owner one-time instruction 2026-10-10 authorized ROL-V2-001 to execute this Task Order instead of ROL-V2-002, bounded to TO-GOV-010 only; recorded in TO-GOV-010 section 12.1 and BR-GOV-010 section 9."
+    evidence: "F-01, F-02 (root cause corrected to literal backslash-n escapes), F-03.1, F-03.2, F-03.3, F-04, F-05, F-06 and F-09 executed. F-07 and F-08 retracted as false positives established by byte-level reading and evidence. artifacts.yaml now parses with 327 records and 327 unique Stable IDs and no duplicates; BR-P4-010 and AR-P3-009 records restored; all 19 docs YAML files parse with zero failures; zero files contain CRLF; zero files contain mojibake. Repairs verified lossless by whitespace-normalised comparison against the prior revision."
+    next_action: "Governed decision required to record any verification outcome for BR-GOV-010; CONTROL did not and cannot independently verify its own execution."
+    historical_preservation: "TO-GOV-010 findings remain as issued with corrections recorded as an appended amendment; BR-P5-008 body unchanged; removed duplicate records were exact copies or superseded activation-basis records whose facts were merged forward; phase2-artifacts.yaml untouched."
     runtime: "No VPS/SentinelX, provider, or runtime operation."
     closure_owner: ROL-V2-001
