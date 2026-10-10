@@ -2185,3 +2185,10 @@ records:
     artifact_path: docs/task-orders/TO-P2-019.md
     traceability: TO-P2-018 / BR-P2-018 / AR-P2-AUDIT-020 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
     status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
+
+  - stable_id: TO-GOV-010
+    canonical_name: Governance Artifact Parse Integrity & Status-Drift Reconciliation
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-GOV-010.md
+    traceability: TO-GOV-009 / AR-GOV-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013
+    status: AUTHORIZED TO EXECUTE

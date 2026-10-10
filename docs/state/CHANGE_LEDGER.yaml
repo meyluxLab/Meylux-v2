@@ -4101,3 +4101,18 @@ entries:
     historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved; STEP-P5-007 not activated."
     runtime: "No live provider API or VPS/SentinelX operation."
     closure_owner: ROL-V2-001
+
+  - id: CL-TO-GOV-010-ACTIVATED-20261010
+    date_utc: '2026-10-10'
+    change_type: GOVERNED_CORRECTIVE_TASK_ORDER_ACTIVATION
+    subject: CONTROL activates TO-GOV-010 for governance artifact parse integrity and status-drift reconciliation
+    task_order: TO-GOV-010
+    predecessor_task_order: TO-GOV-009
+    build_report: null
+    audit_report: null
+    status: AUTHORIZED TO EXECUTE
+    evidence: "CONTROL continuity reconstruction found that docs/registry/artifacts.yaml does not parse as YAML (ScannerError at line 953) and twelve further registry/state files do not parse either; plus structural record corruption at line 1637, nine duplicate Stable IDs with differing metadata, an unregistered BR-P4-010 record mislabeled as TO-P4-012, README active-Task-Order drift, stale STEP-P5-002 lifecycle metadata, a superseded BR-P5-008 status, an unretired supplemental registry, and inconsistent em-dash encoding."
+    next_action: "Producer executes TO-GOV-010 and submits BR-GOV-010 for independent CONTROL audit."
+    historical_preservation: "PH-P0 through PH-P5, their Steps, and all closed Task Orders remain closed and unchanged; no historical evidence is rewritten."
+    runtime: "No VPS/SentinelX, provider, or runtime operation."
+    closure_owner: ROL-V2-001
