@@ -4116,3 +4116,14 @@ entries:
     historical_preservation: "PH-P0 through PH-P5, their Steps, and all closed Task Orders remain closed and unchanged; no historical evidence is rewritten."
     runtime: "No VPS/SentinelX, provider, or runtime operation."
     closure_owner: ROL-V2-001
+  - id: CL-TO-GOV-010-AMEND-20261010
+    date_utc: '2026-10-10'
+    change_type: GOVERNED_TASK_ORDER_SCOPE_AMENDMENT
+    subject: CONTROL adds the F-09 line-ending integrity finding and required item 3.11 to TO-GOV-010
+    task_order: TO-GOV-010
+    status: AUTHORIZED TO EXECUTE
+    evidence: "An ordinary Windows checkout materialized CRLF for 533 tracked text files (git ls-files --eol reported i/lf w/crlf) because core.autocrlf is true system-wide and the repository has no .gitattributes; only 11 of 543 working files were byte-identical to origin/main. Stored blobs remain correct because the index reports i/lf. CONTROL added F-09 and required work item 3.11 before Producer execution began."
+    next_action: "Producer executes TO-GOV-010 as amended and submits BR-GOV-010 for independent CONTROL audit."
+    historical_preservation: "No historical evidence rewritten and no stored artifact re-normalized; the amendment is recorded as later state."
+    runtime: "No VPS/SentinelX, provider, or runtime operation."
+    closure_owner: ROL-V2-001

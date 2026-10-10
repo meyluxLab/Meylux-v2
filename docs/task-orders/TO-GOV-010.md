@@ -142,6 +142,22 @@ Some governance artifacts store U+2014 (EM DASH) as mojibake (`â€"`), while o
 
 This corrupts searchability and display but, per §4, must not be used as an excuse to reword content.
 
+### F-09 — Line-ending conversion breaks working-tree versus blob fidelity repository-wide
+
+`core.autocrlf` is `true` at the **system** level (the Git for Windows default) and the repository contains **no `.gitattributes`**. A checkout on Windows therefore materializes CRLF in the working tree, while every canonical blob is LF.
+
+CONTROL measured this on the current `main` immediately after an ordinary checkout:
+
+```
+533 tracked text files : i/lf  w/crlf
+ 10 empty files        : i/none w/none
+byte-identical working files vs origin/main : 11 / 543
+```
+
+This is an **evidence-integrity** defect, not a cosmetic one. Every Blob SHA recorded in the project's evidence chain — for example those cited in `AR-P2-AUDIT-020` §2 and `BR-P2-018` §2 — refers to the LF blob. A role that compares a locally checked-out file against such a SHA is therefore comparing **different bytes**. `ADR-GOVERNANCE-013` Rule 3 and `GATE_DEFINITIONS.md` §4 both require evidence traceable to an exact content identifier.
+
+CONTROL also verified that the **stored** content is not itself corrupted: `git ls-files --eol` reports `i/lf` for every text file, so the repository content on GitHub is correct. The defect affects working-tree materialization and any verification performed against it.
+
 ## 3. Required work
 
 ### 3.1 Restore YAML parse validity (F-01, F-02)
@@ -225,6 +241,17 @@ Provide, as part of the evidence, a reproducible check demonstrating that:
 
 The check must be reproducible from the repository alone. Do not report a passing result without the actual command and its actual output.
 
+### 3.11 Protect artifact byte-integrity against line-ending conversion (F-09)
+
+Add a repository-level `.gitattributes` that disables line-ending conversion, so that a checkout on any platform materializes bytes identical to the canonical blobs.
+
+- Use the minimal additive form: `* -text`.
+- The file is **additive only**. It MUST NOT rewrite, re-normalize or re-commit any existing artifact's content.
+- Do not use `.gitattributes` to change encoding, filters, diff drivers or merge strategy.
+- Verify and report that, from a fresh checkout, every tracked file is byte-identical to `origin/main`.
+
+**Scope caution:** this changes contributor checkout behaviour repository-wide, although it changes no stored artifact. If you judge that any file class requires a different normalization policy (for example `* text=auto eol=lf`), STOP that part and report the specific class and its rationale rather than deciding unilaterally.
+
 ## 4. Reconciliation and evidence discipline
 
 1. **No guessing.** Every semantic correction (identity, status, traceability) must cite the authoritative artifact that establishes it.
@@ -257,7 +284,7 @@ If satisfying a finding appears to require any excluded change, STOP that item a
 Deliver **`BR-GOV-010`** containing:
 
 1. Exact repository baseline revision inspected (commit SHA) for each file changed.
-2. A finding-by-finding report, `F-01` through `F-08`, stating for each: what was changed, the exact before/after for every meaning-bearing line, and the authoritative evidence citation.
+2. A finding-by-finding report, `F-01` through `F-09`, stating for each: what was changed, the exact before/after for every meaning-bearing line, and the authoritative evidence citation.
 3. The complete unresolved-conflict list from §3.4 with exact competing values and the authoritative source that would resolve each.
 4. The machine-verification output required by §3.10.
 5. Explicit confirmation that §5 exclusions were respected.
@@ -306,6 +333,7 @@ CONTROL notes for the record that `docs/registry/artifacts.yaml` does not curren
 9. The `ADR-GOVERNANCE-012` checklist is individually confirmed, item by item.
 10. No §5 exclusion was violated.
 11. Every meaning-bearing change is disclosed with exact before/after text.
+12. From a fresh checkout, every tracked file is byte-identical to `origin/main`, demonstrated by actual output.
 
 ## 9. Audit, closure and lifecycle
 
@@ -342,6 +370,7 @@ Two constraints govern this work and are not negotiable:
 
 1. **Conflicting duplicate records must be resolved from authoritative evidence only.** `TO-P4-012`, `BR-P4-012`, `TST-P4-012`, `DB-P4-012`, `CFG-P4-012`, `RUN-P4-012`, `AR-P4-019`, `TO-P5-003` and `TO-P5-003-CORRECTIVE-001` each appear twice with **differing** metadata. Where the correct resolution cannot be established from the authoritative artifacts, STOP that item, keep both records untouched, and report the exact competing values. Do not choose a winner by plausibility or by position in the file.
 2. **`BR-P4-010` is currently unregistered** — its record was mislabeled with `stable_id: TO-P4-012`. Correct the label; do not remove the record.
+3. **F-09** is an evidence-integrity defect, not cosmetics. The repository has no `.gitattributes` while Git for Windows sets `core.autocrlf=true` system-wide, so an ordinary Windows checkout materializes CRLF and only 11 of 543 working files matched `origin/main` byte-for-byte. Add the minimal additive `.gitattributes` required by §3.11 and demonstrate byte-identity from a fresh checkout. Do not re-normalize or re-commit any existing artifact.
 
 Deliver `BR-GOV-010` with the finding-by-finding before/after disclosure, the unresolved-conflict list, the machine-verification output required by §3.10, and the `ADR-GOVERNANCE-012` checklist confirmed item by item. No historical evidence may be rewritten. Do not self-declare VERIFIED or COMPLETE; CONTROL audits independently and alone owns closure synchronization.
 
