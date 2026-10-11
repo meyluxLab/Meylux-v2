@@ -4184,3 +4184,50 @@ entries:
     historical_preservation: "Original text of TO-GOV-010 and BR-GOV-010 preserved; corrections appended as later state. BR-P5-008.md body byte-identical. No Phase or Step reopened. BR-P2-019 and PRQ-3 untouched."
     runtime: "No VPS/SentinelX, provider, or runtime operation."
     closure_owner: ROL-V2-001
+
+
+  - id: CL-TO-P2-019-CLOSURE-20261011
+    date_utc: '2026-10-11'
+    change_type: INDEPENDENT_INVESTIGATION_AUDIT_AND_CLOSURE_SYNCHRONIZATION
+    subject: CONTROL accepts BR-P2-019 under AR-P2-AUDIT-021 and completes TO-P2-019 investigation lifecycle
+    task_order: TO-P2-019
+    build_report: BR-P2-019
+    audit_report: AR-P2-AUDIT-021
+    status: "VERIFIED / COMPLETE — INVESTIGATION ONLY; PRIMARY DISPOSITION B; PRQ-3 REMAINS UNRESOLVED"
+    affected_ids:
+      - TO-P2-019
+      - BR-P2-019
+      - AR-P2-AUDIT-021
+      - PRQ-3
+      - S-04
+      - STEP-P5-007
+    from_state: "TO-P2-019 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; BR-P2-019 submitted as Producer evidence; PR #76 reconciled and mergeable; CONTROL audit pending."
+    to_state: "TO-P2-019 VERIFIED / COMPLETE as an investigation-only task; BR-P2-019 accepted under AR-P2-AUDIT-021 with primary disposition B; PR #76 merged as baa4398d99fea7ce2edb21ba17ab63ea2f759147; PRQ-3 remains unresolved; available_persisted_claim remains NONE; STEP-P5-007 remains NOT ACTIVATED; TO-P2-020 activated as the next investigation-only continuation."
+    evidence: "CONTROL retrieved the complete BR-P2-019 at Blob SHA de56cf74d65409cf961480b4ba50629204239a62; independently checked TO-P2-019, CURRENT_CHECKPOINT, governance protocol and ADRs; compared branch head 2e66932ac558b5925b26abab7cd80a95dc787df9 against main parent 99401df8c35494eaff49c1bc3c32e3bba6f1cb4c; confirmed one commit ahead, zero behind, and only BR-P2-019 plus a seven-line additive registry change; reviewed official Bybit OI and Gate Futures documentation as cross-checks; accepted disposition B; merged PR #76; created AR-P2-AUDIT-021 and synchronized Checkpoint, artifacts registry, phases registry, README, PH-P5, TO-P2-019, OPEN_QUESTIONS, and this ledger."
+    next_action: "Producer executes TO-P2-020 within its public-documentation/repository investigation-only boundary and submits BR-P2-020 for independent CONTROL audit. No implementation, provider selection, live provider API, protected contract/schema changes, VPS/SentinelX/runtime, or STEP-P5-007 activation."
+    historical_preservation: "PH-P2 / STEP-P2-006 and STEP-P5-006 historical closure preserved. No provider/product selected. No implementation or runtime activity. PRQ-3 and S-04 remain unresolved."
+    runtime: "No VPS/SentinelX, live provider API, or runtime operation."
+    closure_owner: ROL-V2-001
+
+  - id: CL-TO-P2-020-ACTIVATED-20261011
+    date_utc: '2026-10-11'
+    change_type: TASK_ORDER_ACTIVATION
+    subject: CONTROL activates TO-P2-020 for continued PRQ-3 candidate exhaustion and authoritative route qualification
+    task_order: TO-P2-020
+    predecessor_task_order: TO-P2-019
+    audit_report: AR-P2-AUDIT-021
+    status: "AUTHORIZED TO EXECUTE — INVESTIGATION ONLY"
+    affected_ids:
+      - TO-P2-020
+      - TO-P2-019
+      - PRQ-3
+      - S-04
+      - STEP-P5-007
+    from_state: "TO-P2-019 VERIFIED / COMPLETE under AR-P2-AUDIT-021 with disposition B; PRQ-3 remains unresolved; active_task_order was TO-P2-019 before closure synchronization."
+    to_state: "TO-P2-019 VERIFIED / COMPLETE; TO-P2-020 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY and active; PRQ-3 remains required and unresolved; available_persisted_claim remains NONE; STEP-P5-007 remains NOT ACTIVATED."
+    basis: "ADR-GOVERNANCE-013 continuation duty; ADR-GOVERNANCE-014 required capability continuation/no-drop rule; accepted BR-P2-019 and unresolved G1-G8 evidence gaps."
+    evidence: "TO-P2-020 authorizes only further official public-documentation research and read-only repository inspection of additional plausible provider/product routes and new authoritative evidence. It prohibits implementation, live provider API calls, provider selection, protected contract/schema changes, VPS/SentinelX/runtime operations, and STEP-P5-007 activation."
+    next_action: "Producer investigates additional plausible official provider/product candidates and submits BR-P2-020 for independent CONTROL audit."
+    historical_preservation: "No Phase or Step reopened. PH-P5 remains ACTIVE / AUTHORIZED; STEP-P5-006 remains COMPLETE / VERIFIED; STEP-P5-007 remains NOT ACTIVATED."
+    runtime: "No VPS/SentinelX or runtime operation authorized or performed."
+    closure_owner: ROL-V2-001
