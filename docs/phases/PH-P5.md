@@ -212,14 +212,16 @@ The Group-C upstream gate is now **ESTABLISHED / VERIFIED**. At that historical 
 
 This continuation does not reopen `STEP-P5-006`, does not create or activate a new P5 Step, and does not authorize PRQ-3 implementation. `PH-P5` remains ACTIVE / AUTHORIZED with `STEP-P5-006` COMPLETE / VERIFIED; no later P5 Step is activated by this prerequisite resolution.
 
-## Active PRQ-3 Group-D Prerequisite Resolution — TO-P2-019
+## Active PRQ-3 Group-D Prerequisite Resolution — TO-P2-020
 
 The Project Owner's 2026-10-09 direction requires the owning P2 boundary to continue resolving the still-required `PRQ-3 / S-04 Derivatives` capability before any activation of `STEP-P5-007`.
 
-`TO-P2-018` has been **VERIFIED / COMPLETE** as a bounded public-documentation/repository investigation under `AR-P2-AUDIT-020`. Its accepted primary disposition is **B — NO QUALIFIED ROUTE ESTABLISHED**. Official Binance USDⓈ-M endpoint capability is documented, but OI unit/quantity semantics remain unresolved; SOLUSDT product-specific evidence is less specific; MEXC canonical OI/direct Basis remain unestablished; and the canonical-derivatives-to-quality-evidence joined read-back path is not established. The current checkpoint's `available_persisted_claim: NONE` remains unchanged.
+`TO-P2-018` was **VERIFIED / COMPLETE** under `AR-P2-AUDIT-020` with disposition B. `TO-P2-019` has now been independently audited under `AR-P2-AUDIT-021` and is **VERIFIED / COMPLETE** as a bounded investigation-only task. Its report, `BR-P2-019`, was accepted as an accurate investigation report with primary disposition **B — NO QUALIFIED ROUTE ESTABLISHED**; PR #76 merged as `baa4398d99fea7ce2edb21ba17ab63ea2f759147`.
 
-`TO-P2-019` is now **AUTHORIZED TO EXECUTE — INVESTIGATION ONLY** to continue public authoritative-documentation and repository research, revisit the exact USDⓈ-M OI/SOLUSDT gaps, and assess additional provider/product candidates without selecting a provider or authorizing implementation. Runtime/listing availability remains unverified and outside this Task Order.
+The accepted report preserves the unresolved Binance USDⓈ-M OI unit/calculation/valuation semantics, exact SOLUSDT three-metric qualification gap, incomplete Bybit Basis semantics/coverage, incomplete OKX historical-OI response qualification/direct Basis, other candidate gaps, and the independent S-04 canonical-derivatives-to-quality-evidence joined read-back blocker. The Checkpoint's `available_persisted_claim: NONE` remains unchanged.
 
-`STEP-P5-007` remains **NOT ACTIVATED**. No derivatives implementation, live provider API call, provider/product selection, protected contract/schema change, or VPS/SentinelX/runtime operation is authorized by this investigation. `PH-P2` / `STEP-P2-006` and `STEP-P5-006` historical closure remain preserved.
+`TO-P2-020` is now **AUTHORIZED TO EXECUTE — INVESTIGATION ONLY** to continue candidate exhaustion and review additional official provider/product sources that may qualify Funding, OI, and direct Basis for the required BTCUSDT and SOLUSDT scopes. No provider/product selection, implementation, live API call, protected contract/schema change, VPS/SentinelX/runtime operation, or Phase/Step activation is authorized.
 
-Completed investigation chain: `TO-P2-018 → BR-P2-018 → AR-P2-AUDIT-020 → CONTROL-owned closure synchronization`. Active continuation: `TO-P2-019`.
+`STEP-P5-007` remains **NOT ACTIVATED**. `PH-P5` remains ACTIVE / AUTHORIZED; `STEP-P5-006` remains COMPLETE / VERIFIED. Historical `PH-P2` / `STEP-P2-006` and `STEP-P5-006` closure is preserved.
+
+Completed investigation chain: `TO-P2-019 → BR-P2-019 → AR-P2-AUDIT-021 → CONTROL-owned closure synchronization`. Active continuation: `TO-P2-020`.
