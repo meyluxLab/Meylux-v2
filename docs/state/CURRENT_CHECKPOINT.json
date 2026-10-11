@@ -4,7 +4,7 @@
   "phase": "PH-P5",
   "step": "STEP-P5-006",
   "gate": "Phase progression authority",
-  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-018 VERIFIED / COMPLETE (INVESTIGATION ONLY; DISPOSITION B); TO-P2-019 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; PRQ-3 remains unresolved; STEP-P5-007 not activated",
+  "status": "ACTIVE / AUTHORIZED — STEP-P5-006 COMPLETE / VERIFIED; TO-P2-019 VERIFIED / COMPLETE (INVESTIGATION ONLY; DISPOSITION B); TO-P2-020 AUTHORIZED TO EXECUTE — INVESTIGATION ONLY; PRQ-3 remains unresolved; STEP-P5-007 not activated",
   "formation_stage": "PP-12",
   "formation_status": "APPROVED_CLOSED",
   "g0_status": "CLOSED",
@@ -18,12 +18,12 @@
   "vps_status": "SET UP / VERIFIED",
   "phase_2_definition": "docs/phases/PH-P2.md",
   "phase_3_definition": "docs/phases/PH-P3.md",
-  "last_approved_task_order": "TO-P2-019",
-  "last_build_report": "BR-P2-018",
-  "last_audit_report": "AR-P2-AUDIT-020",
+  "last_approved_task_order": "TO-P2-020",
+  "last_build_report": "BR-P2-019",
+  "last_audit_report": "AR-P2-AUDIT-021",
   "last_execution_log": "EXEC-LOG-TO-P5-006-CONTROL-RUNTIME-20261008",
-  "active_task_order": "TO-P2-019",
-  "completed_task_order": "TO-P2-018",
+  "active_task_order": "TO-P2-020",
+  "completed_task_order": "TO-P2-019",
   "completion_audit": "AR-P2-AUDIT-017",
   "verified_artifacts": [
     "AR-ROLE-IDENTITY-001",
@@ -393,7 +393,10 @@
     "TO-P2-018",
     "TO-GOV-010",
     "BR-GOV-010",
-    "AR-GOV-010"
+    "AR-GOV-010",
+    "BR-P2-019",
+    "AR-P2-AUDIT-021",
+    "TO-P2-019"
   ],
   "unverified_artifacts": [
     "DOC-P5-002"
@@ -403,11 +406,11 @@
     "OQ-P4-006-MEXC-RESOURCEWARNING",
     "OQ-GOV-CONSTITUTION-STABLE-ID",
     "Futures acquisition capability is not present in the current Binance/MEXC adapters; route is bounded-additive-under-P2 unless concrete implementation facts require formal change control.",
-    "PRQ-3 remains unresolved after TO-P2-018 disposition B; TO-P2-019 is active for continued public authoritative-documentation/repository investigation. STEP-P5-007 remains NOT ACTIVATED.",
-    "Official Binance USDⓈ-M OI units/quantity basis for openInterest, sumOpenInterest, and sumOpenInterestValue remains unestablished in the inspected schema; SOLUSDT exact product-specific documentation remains less specific.",
+    "PRQ-3 remains unresolved after TO-P2-019 disposition B; TO-P2-020 is active for further official provider/product candidate exhaustion and exact Funding/OI/direct-Basis route qualification. STEP-P5-007 remains NOT ACTIVATED.",
+    "Official Binance USDⓈ-M OI unit/calculation/valuation semantics remain unresolved; exact SOLUSDT three-metric qualification remains incomplete; additional candidate routes require authoritative unit/timestamp/coverage evidence; the canonical-derivatives-to-quality-evidence joined read-back path remains unestablished and available_persisted_claim remains NONE.",
     "No inspected repository path establishes a unique identity-checked join between a canonical derivatives row and its authoritative quality-evidence row followed by joined read-back with authoritative knowledge_time and EvidenceRef; available_persisted_claim remains NONE."
   ],
-  "active_continuation_note": "TO-P2-018 is VERIFIED / COMPLETE as an investigation-only task with disposition B under AR-P2-AUDIT-020. PRQ-3 remains a required unresolved capability. TO-P2-019 is the active investigation-only continuation for additional official provider/product route research and exact Binance USDⓈ-M OI/SOLUSDT evidence gaps. No provider selection, implementation, live API calls, protected contract/schema changes, VPS/SentinelX/runtime operations, or STEP-P5-007 activation.",
+  "active_continuation_note": "TO-P2-019 is VERIFIED / COMPLETE as an investigation-only task with disposition B under AR-P2-AUDIT-021. PR #76 merged as baa4398d99fea7ce2edb21ba17ab63ea2f759147; BR-P2-019 accepted as an investigation report. PRQ-3 remains required and unresolved. TO-P2-020 is the active investigation-only continuation to assess additional official provider/product candidates and new authoritative evidence. STEP-P5-007 remains NOT ACTIVATED; available_persisted_claim remains NONE. No provider selection, implementation, live API calls, protected contract/schema changes, VPS/SentinelX/runtime operations, or STEP-P5-007 activation.",
   "active_assumptions": [
     "STEP-P0-010 remains COMPLETE / VERIFIED following Project Owner ratification/freeze recorded by ADR-GOVERNANCE-004 and final independent verification AR-P0-AUDIT-015.",
     "PH-P0 is CLOSED / VERIFIED; there is no subsequent Phase 0 Step.",
@@ -473,7 +476,7 @@
     "DD-V2-P4-006-PERFORMANCE-TARGET"
   ],
   "last_verified_commit": "3c66ac731658411e0c29451e61ad4d9f9c387ed8",
-  "updated_at_utc": "2026-10-10T22:55:00.000Z",
+  "updated_at_utc": "2026-10-11T15:22:49.968Z",
   "phase_4_status": "CLOSED / VERIFIED",
   "phase_4_definition": "docs/phases/PH-P4.md",
   "g4_status": "ESTABLISHED / VERIFIED",
@@ -612,7 +615,9 @@
     "CONTROL independently audited and accepted BR-P2-018 under AR-P2-AUDIT-020. Official USDⓈ-M endpoint capability is documented, but the exact OI unit/quantity semantics remain unresolved; SOLUSDT product-specific documentation remains less specific; MEXC canonical OI/direct Basis remain unestablished; and the canonical-derivatives-to-quality-evidence joined read-back path is not established. PR #75 merged as 6242991a2b5b58b96e519a7066dc98b7b7ce9603. This is an investigation disposition only; PRQ-3 remains unresolved and available_persisted_claim remains NONE.",
     "TO-P2-018 is VERIFIED / COMPLETE as a bounded public-documentation/repository investigation with disposition B. CONTROL activated TO-P2-019 under the continuation obligation to continue evidence-supported public documentation research; STEP-P5-007 remains NOT ACTIVATED.",
     "CONTROL synchronized docs/phases/PH-P5.md to record TO-P2-018 completion under AR-P2-AUDIT-020 and the active TO-P2-019 PRQ-3 continuation; historical Phase/Step closure remains unchanged.",
-    "CONTROL added official Bybit Funding/OI/ticker and OKX funding/OI documentation leads to TO-P2-019 as investigation starting points only; no complete route qualification or provider selection is implied."
+    "CONTROL added official Bybit Funding/OI/ticker and OKX funding/OI documentation leads to TO-P2-019 as investigation starting points only; no complete route qualification or provider selection is implied.",
+    "CONTROL independently audited BR-P2-019 under AR-P2-AUDIT-021 and accepted disposition B as an investigation report. PR #76 merged as baa4398d99fea7ce2edb21ba17ab63ea2f759147; registry and lifecycle records were synchronized. PRQ-3 remains unresolved, available_persisted_claim remains NONE, and STEP-P5-007 remains NOT ACTIVATED.",
+    "CONTROL activated TO-P2-020 as the investigation-only continuation after TO-P2-019 disposition B, to assess additional official provider/product candidates and new authoritative evidence without implementation or provider selection."
   ],
   "phase_5_definition": "docs/phases/PH-P5.md",
   "corrective_runtime_reconciliation": {
