@@ -123,8 +123,8 @@ items:
     affected_phase: PH-P5
     affected_step: STEP-P5-002
     authority: CONTROL / REVIEWER
-    current_disposition: "UNAVAILABLE_DISPOSITIONED for derivatives requirements not independently evidenced as delivered; owning boundary remains P2/P4."
-    trigger: "Reconsider when governed derivatives acquisition/persistence is implemented and independently verified."
+    current_disposition: "UNAVAILABLE_DISPOSITIONED for derivatives requirements not independently evidenced as delivered; owning boundary remains P2/P4. BR-P2-019 was accepted under AR-P2-AUDIT-021 with disposition B; TO-P2-020 continues official provider/product candidate investigation. available_persisted_claim remains NONE."
+    trigger: "Continue under TO-P2-020 to seek authoritative compatible Funding/OI/direct-Basis route evidence. Reconsider delivery only after separately authorized implementation and independent verification of the full acquisition/persistence path."
     constraints:
       - "No Futures/derivatives runtime implementation inside P5-002."
       - "Do not treat the existence of a derivatives table or engine as delivered runtime fact evidence."
