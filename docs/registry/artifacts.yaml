@@ -2130,8 +2130,8 @@ records:
     canonical_name: Task Order — PRQ-3 Continued Authoritative Route Discovery & Qualification
     entity_type: TO
     artifact_path: docs/task-orders/TO-P2-019.md
-    traceability: TO-P2-018 / BR-P2-018 / AR-P2-AUDIT-020 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
+    traceability: TO-P2-018 / BR-P2-018 / AR-P2-AUDIT-020 / BR-P2-019 / AR-P2-AUDIT-021 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: VERIFIED / COMPLETE — INVESTIGATION ONLY; PRIMARY DISPOSITION B; PRQ-3 REMAINS UNRESOLVED
 
   - stable_id: TO-GOV-010
     canonical_name: Governance Artifact Parse Integrity & Status-Drift Reconciliation
@@ -2177,5 +2177,19 @@ records:
     canonical_name: Build Report — PRQ-3 Continued Authoritative Route Discovery & Qualification
     entity_type: BR
     artifact_path: docs/build-reports/BR-P2-019.md
-    traceability: TO-P2-019 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
-    status: PRODUCER EVIDENCE / CONTROL AUDIT PENDING — PRIMARY DISPOSITION B; PRQ-3 REMAINS UNRESOLVED
+    traceability: TO-P2-019 / AR-P2-AUDIT-021 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: PRODUCER EVIDENCE / CONTROL VERIFIED — INVESTIGATION REPORT ACCEPTED; PRIMARY DISPOSITION B; PRQ-3 REMAINS UNRESOLVED
+
+  - stable_id: AR-P2-AUDIT-021
+    canonical_name: CONTROL Independent Audit of BR-P2-019
+    entity_type: AR
+    artifact_path: docs/audits/AR-P2-AUDIT-021.md
+    traceability: TO-P2-019 / BR-P2-019 / PR #76 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: APPROVED / VERIFIED
+
+  - stable_id: TO-P2-020
+    canonical_name: Task Order — PRQ-3 Continued Candidate Exhaustion & Authoritative Route Qualification
+    entity_type: TO
+    artifact_path: docs/task-orders/TO-P2-020.md
+    traceability: TO-P2-019 / BR-P2-019 / AR-P2-AUDIT-021 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: AUTHORIZED TO EXECUTE — INVESTIGATION ONLY
