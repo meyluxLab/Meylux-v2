@@ -2172,3 +2172,10 @@ records:
     artifact_path: docs/audits/AR-GOV-010.md
     traceability: TO-GOV-010 / BR-GOV-010 / TO-GOV-009 / AR-GOV-005 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014 / Project Owner directive 2026-10-10
     status: APPROVED / VERIFIED
+
+  - stable_id: BR-P2-019
+    canonical_name: Build Report — PRQ-3 Continued Authoritative Route Discovery & Qualification
+    entity_type: BR
+    artifact_path: docs/build-reports/BR-P2-019.md
+    traceability: TO-P2-019 / PH-P2 / STEP-P2-006 / PH-P5 / STEP-P5-007 / PRQ-3 / S-04 / ADR-GOVERNANCE-012 / ADR-GOVERNANCE-013 / ADR-GOVERNANCE-014
+    status: PRODUCER EVIDENCE / CONTROL AUDIT PENDING — PRIMARY DISPOSITION B; PRQ-3 REMAINS UNRESOLVED
